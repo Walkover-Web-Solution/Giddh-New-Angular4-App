@@ -11,7 +11,7 @@ import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
 import { takeUntil, filter, take, skip, debounceTime, tap, distinctUntilChanged } from "rxjs/operators";
 import * as dayjs from 'dayjs';
-import { Observable, ReplaySubject } from "rxjs";
+import { combineLatest, Observable, ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MMM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -130,7 +130,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public salesRegisterList$: Observable<any[]> = this.componentStore.salesPurchaseList$;
     /** Holds report form */
     public reportForm: FormGroup = new FormGroup({
-        groupBy: new FormControl<GroupBy>(GroupBy.Duration, Validators.required),
+        groupBy: new FormControl<GroupBy>(null, Validators.required),
         accountUniqueNames: new FormControl<string[]>([]),
         salesPersonUniqueNames: new FormControl<string[]>([]),
         interval: new FormControl<DurationEnum | null>(null),
@@ -261,7 +261,7 @@ constructor(
         });
 
         /** Search for sales person dropdown */
-        this.salesPerson.valueChanges.pipe(debounceTime(700),
+        this.salesPerson.valueChanges.pipe(debounceTime(200),
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 if (!search) {
                     this.salesPersonList$.pipe(take(1)).subscribe(res => {
@@ -276,7 +276,7 @@ constructor(
         this.getAccounts();
 
         /** Search for account dropdown */
-        this.account.valueChanges.pipe(debounceTime(700),
+        this.account.valueChanges.pipe(debounceTime(300),
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 this.getAccounts(search ? search : '');
             });
@@ -285,7 +285,7 @@ constructor(
         this.loadCountries();
 
         /** Search for country dropdown */
-        this.countrySearch.valueChanges.pipe(debounceTime(700),
+        this.countrySearch.valueChanges.pipe(debounceTime(200),
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 if (!search) {
                     this.filteredCountryList.set(this.countryList());
@@ -295,7 +295,7 @@ constructor(
             });
 
         /** Search for state dropdown */
-        this.stateSearch.valueChanges.pipe(debounceTime(700),
+        this.stateSearch.valueChanges.pipe(debounceTime(200),
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 if (!search) {
                     this.filteredStateList.set(this.stateList());
@@ -338,22 +338,6 @@ constructor(
             }
         });
 
-        this.activeRoute.queryParams.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(queryParams => {
-            if (queryParams?.interval || queryParams?.selectedMonth) { 
-                this.selectedType = queryParams.interval;
-                this.interval = queryParams.interval;
-                this.reportForm.get('interval').patchValue(queryParams.interval);
-                this.selectedMonth = queryParams.selectedMonth;
-
-                this.router.navigate(['pages', 'reports', 'purchase-register']);
-            }
-            // Handle groupBy parameter from sidebar navigation
-            if (queryParams?.groupBy && [GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(queryParams.groupBy)) {
-                this.reportForm.get('groupBy')?.patchValue(queryParams.groupBy);
-            } else {
-                this.reportForm.get('groupBy')?.patchValue(GroupBy.Duration);
-            }
-        });
     }
     /**
      * Handle group by change
@@ -361,10 +345,16 @@ constructor(
      * @param groupBy
      */
     public handleGroupByChange(groupBy: GroupBy): void {
-        this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
-        this.reportForm.get('countryCode')?.setValue(null);
-        this.reportForm.get('countryCodes')?.setValue([]);
-        this.reportForm.get('stateCodes')?.setValue([]);
+        if (GroupBy.SalesPerson !== groupBy) {
+            this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
+        }
+        if (GroupBy.State !== groupBy) {
+            this.reportForm.get('countryCode')?.setValue(null);
+            this.reportForm.get('stateCodes')?.setValue([]);
+        }
+        if (GroupBy.Country !== groupBy) {
+            this.reportForm.get('countryCodes')?.setValue([]);
+        }
 
         if ([GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(groupBy)) {
             this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
@@ -475,26 +465,36 @@ constructor(
         let currentBranchUniqueName = '';
         let currentTimeFilter: DurationEnum = this.selectedType;
         let currentGroupBy = '';
-        let currentSalesPersonUniqueNames = [];
-        let currentAccountUniqueNames = [];
-        let currentCountryCode = '';
-        let currentCountryCodes = [];
-        let currentStateCodes = [];
 
 
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
-            financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
-            currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
-            currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
-            currentSalesPersonUniqueNames = registerReportFilters?.salesPersonUniqueNames ?? [];
-            currentAccountUniqueNames = registerReportFilters?.accountUniqueNames ?? [];
-            currentGroupBy = registerReportFilters?.groupBy || GroupBy.Duration;
-            currentCountryCode = registerReportFilters?.countryCode ?? '';
-            currentCountryCodes = registerReportFilters?.countryCodes ?? [];
-            currentStateCodes = registerReportFilters?.stateCodes ?? [];
-            return activeCompany;
-        })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        combineLatest([
+            this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
+                financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
+                currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
+                currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
+                currentGroupBy = registerReportFilters?.groupBy || GroupBy.Duration;
+                this.reportForm.get('salesPersonUniqueNames').patchValue(registerReportFilters?.salesPersonUniqueNames ?? []);
+                this.reportForm.get('accountUniqueNames').patchValue(registerReportFilters?.accountUniqueNames ?? []);
+                this.reportForm.get('countryCodes').patchValue(registerReportFilters?.countryCodes ?? []);
+                this.reportForm.get('countryCode').patchValue(registerReportFilters?.countryCode ?? '');
+                this.reportForm.get('stateCodes').patchValue(registerReportFilters?.stateCodes ?? []);
+                return activeCompany;
+            }))),
+            this.activeRoute.queryParams.pipe(distinctUntilChanged()),
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(([activeCompany, queryParam]) => {
+            if (queryParam?.interval || queryParam?.selectedMonth) {
+                this.selectedType = queryParam.interval;
+                this.interval = queryParam.interval;
+                this.reportForm.get('interval').patchValue(queryParam.interval);
+                this.selectedMonth = queryParam.selectedMonth;
+                this.router.navigate(['pages', 'reports', 'purchase-register']);
+            }
+            // URL groupBy takes priority over store value
+            if (queryParam?.groupBy && [GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(queryParam.groupBy)) {
+                currentGroupBy = queryParam.groupBy;
+            }
+            this.reportForm.get('groupBy').patchValue(currentGroupBy, { emitEvent: false });
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
                 this.financialOptions = activeCompany.financialYears?.map(response => {
@@ -523,12 +523,6 @@ constructor(
                 const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
                 this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
                 this.selectedType = currentTimeFilter || this.selectedType;
-                this.reportForm.get('groupBy').patchValue(currentGroupBy);
-                this.reportForm.get('salesPersonUniqueNames').patchValue(currentSalesPersonUniqueNames);
-                this.reportForm.get('accountUniqueNames').patchValue(currentAccountUniqueNames);
-                this.reportForm.get('countryCode').patchValue(currentCountryCode);
-                this.reportForm.get('countryCodes').patchValue(currentCountryCodes);
-                this.reportForm.get('stateCodes').patchValue(currentStateCodes);
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.purchaseRegisterTotal.particular = this.getCustomParticular();
                 this.changeDetectorRef.detectChanges();
@@ -831,6 +825,18 @@ constructor(
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT, archive: '' } });
     }
 
+    /**
+     * Reset account dropdown 
+     * @returns void
+    */
+    public accountReset(): void {
+        this.accountList$.pipe(take(1)).subscribe((res: any) => {
+            if (!res?.results?.length) {
+                this.account.reset();
+            }
+        });
+    }
+    
     /**
      * Get accounts
      *
