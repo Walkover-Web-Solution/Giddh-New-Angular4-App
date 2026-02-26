@@ -740,6 +740,41 @@
                                             </div>
                                         </div>
 
+                                        <!-- Supply Fields Row - India only -->
+                                        @if (isIndianCompany) {
+                                            <!-- Place of Supply (Invoice / Credit Note / Estimate / Proforma) -->
+                                            @if (showPlaceOfSupply) {
+                                                <div class="col-6 mt-3" formGroupName="placeOfSupply">
+                                                    <reactive-dropdown-field
+                                                        appEnterNext
+                                                        [name]="'placeOfSupply'"
+                                                        [label]="localeData?.place_of_supply"
+                                                        [placeholder]="commonLocaleData?.app_state"
+                                                        formControlName="code"
+                                                        [options]="companyStateList$ | async"
+                                                        [forceClear]="forceClear"
+                                                        (selectedOption)="onSupplyStateSelect('placeOfSupply', $event)"
+                                                    ></reactive-dropdown-field>
+                                                </div>
+                                            }
+
+                                            <!-- Source of Supply (Purchase Bill / Debit Note / PO) -->
+                                            @if (showSourceDestinationOfSupply) {
+                                                <div class="col-6 mt-3" formGroupName="sourceOfSupply">
+                                                    <reactive-dropdown-field
+                                                        appEnterNext
+                                                        [name]="'sourceOfSupply'"
+                                                        [label]="localeData?.source_of_supply"
+                                                        [placeholder]="commonLocaleData?.app_state"
+                                                        formControlName="code"
+                                                        [options]="companyStateList$ | async"
+                                                        [forceClear]="forceClear"
+                                                        (selectedOption)="onSupplyStateSelect('sourceOfSupply', $event)"
+                                                    ></reactive-dropdown-field>
+                                                </div>
+                                            }
+                                        }
+
                                         <ng-container *ngIf="!invoiceType.isPurchaseOrder">
                                             <!-- Attention to -->
                                             <div class="col-6 mt-3">
@@ -1136,6 +1171,23 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if (isIndianCompany && showSourceDestinationOfSupply) {
+                                    <ng-container formGroupName="account">
+                                        <!-- Destination of Supply -->
+                                        <div class="col-6 mt-3 pl-0" formGroupName="destinationOfSupply">
+                                            <reactive-dropdown-field
+                                                appEnterNext
+                                                [name]="'destinationOfSupply'"
+                                                [label]="localeData?.destination_of_supply"
+                                                [placeholder]="commonLocaleData?.app_state"
+                                                formControlName="code"
+                                                [options]="companyStateList$ | async"
+                                                [forceClear]="forceClear"
+                                                (selectedOption)="onSupplyStateSelect('destinationOfSupply', $event)"
+                                            ></reactive-dropdown-field>
+                                        </div>
+                                    </ng-container>
+                                }
 
                                 <!-- Row 3 -->
                                 <div
