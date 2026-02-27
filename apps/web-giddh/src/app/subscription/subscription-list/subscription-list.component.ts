@@ -711,18 +711,4 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.getAllSubscriptions(false);
         this.changeDetection.detectChanges();
     }
-
-    /**
-     * Navigates to add extra transaction page for the given subscription
-     *
-     * @protected
-     * @param {*} element - Subscription element from the list
-     * @memberof SubscriptionListComponent
-     */
-    protected navigateToAddExtraTransaction(element: any): void {
-        this.router.navigate(
-            ['/pages/user-details/subscription/add-extra-transaction/' + element?.subscriptionId],
-            { state: { subscriptionData: element } }
-        );
-    }
 }

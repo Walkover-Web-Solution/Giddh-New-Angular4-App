@@ -432,7 +432,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
         // Set up initial UI state
         this.showDayThe.set(false);
         this.showWeekdayToggle.set(false);
-        // this.selectedRepeatOption.set(null);
         this.monthlyModeControl.setValue(RecurringMonthlyMode.DAY, { emitEvent: false });
 
         // Pre-populate repeat options and dependent controls based on today's date
@@ -571,11 +570,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
 
         const { dayOfMonth, weekday, weekOfMonth } = this.generalService.getDateMeta(date);
         const currentFrequencyUnit = this.activeForm.get('frequency.unit')?.value || 'MONTH';
-
-        // if (this.repeatOptions().length > 0 && !this.selectedRepeatOption()) {
-        //     const firstOption = this.repeatOptions()[0].value;
-            // this.selectedRepeatOption.set(firstOption);
-        // }
 
         this.ensureRepeatOnControls();
 

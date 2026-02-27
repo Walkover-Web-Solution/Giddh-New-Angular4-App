@@ -306,11 +306,6 @@
                                     >
                                         {{ localeData?.manage_payment }}
                                     </button>
-                                    @if (element?.period === planDuration.YEARLY && element?.status?.toLowerCase() === 'active') {
-                                        <button mat-menu-item (click)="navigateToAddExtraTransaction(element)">
-                                            {{ localeData?.add_extra_transaction }}
-                                        </button>
-                                    }
                                 </div>
                             </mat-menu>
                         </td>

@@ -112,20 +112,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isFormSubmitted = signal<boolean>(false);
     /** Hold selected plan*/
     public selectedPlan = signal<any>(null);
-    /** Computed ViewModel for plan summary card visibility and section flags */
-    protected readonly planUI = computed(() => {
-        const plan = this.selectedPlan();
-        const hasNew = (plan?.newInvoiceCount ?? 0) > 0 || (plan?.newBillCount ?? 0) > 0;
-        const hasExtra = (plan?.extraInvoicesUsed ?? 0) > 0 || (plan?.extraBillUsed ?? 0) > 0;
-        const hasCarry = (plan?.carryForwardInvoices ?? 0) > 0 || (plan?.carryForwardBills ?? 0) > 0;
-        return {
-            showCard: hasNew || hasExtra || hasCarry,
-            hasNew,
-            hasExtra,
-            hasCarry,
-            totalExtra: (plan?.extraInvoicesUsed ?? 0) + (plan?.extraBillUsed ?? 0)
-        };
-    });
     /** Hold session source observable*/
     public session$: Observable<SessionState>;
     /** Hold state source observable*/
@@ -1001,8 +987,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.thirdStepForm = this.formBuilder.group({
             userUniqueName: [''],
             paymentProvider: [''],
-            razorpayAuthType: [''],
-            autoPay: [true]
+            razorpayAuthType: ['']
         });
 
         this.subscriptionForm = this.formBuilder.group({
@@ -1613,9 +1598,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 subscriptionId: null
             }
 
-            if (this.isMonthly() || this.isDaily()) {
-                request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
-            }
             if ((this.isMonthly() || this.isDaily()) && this.selectedPlan()?.entityCode !== EntityCode.GBR) {
                 request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
             }
@@ -1633,14 +1615,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
 
             request['payNow'] = !isTrial;
-            if (isTrial) {
-                delete request.autoPay;
-                delete request.razorpayAuthType;
-                delete request.subscriptionId;
-                delete request.userUniqueName;
-                delete request.paymentProvider;
-                delete request.promoCode;
-            }
+            // if (isTrial) {
+            //     delete request.autoPay;
+            //     delete request.razorpayAuthType;
+            //     delete request.subscriptionId;
+            //     delete request.userUniqueName;
+            //     delete request.paymentProvider;
+            //     delete request.promoCode;
+            // }
             if (this.subscriptionId && this.isChangePlan) {
                 request.subscriptionId = this.subscriptionId;
                 this.subscriptionRequest = request;
