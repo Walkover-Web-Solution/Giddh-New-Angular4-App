@@ -10,7 +10,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
-import { PlanDuration } from '../../app.constant';
 
 @Component({
     selector: 'view-subscription',
