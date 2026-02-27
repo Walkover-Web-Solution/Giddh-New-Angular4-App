@@ -1461,16 +1461,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (entityCode === EntityCode.GBR) {
             // GBR: GoCardless/PayPal/PayU for recurring, Razorpay/PayU for yearly
             if (this.isMonthly() || this.isDaily()) {
-                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL, PaymentProvider.PAYU].includes(provider.value));
+                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
             } else if (this.isYearly()) {
-                filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
+                filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode !== EntityCode.IND) {
             // Non-IND: PayPal/PayU for recurring, Razorpay/PayU for yearly
-            filterProviders(this.isYearly() ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.PAYPAL, PaymentProvider.PAYU]);
+            filterProviders(this.isYearly() ? [PaymentProvider.RAZORPAY] : [PaymentProvider.PAYPAL]);
         } else {
             // IND: Razorpay + PayU for all durations
-            filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
+            filterProviders([PaymentProvider.RAZORPAY]);
         }
 
         // Auto-select CARD auth type when Razorpay is chosen for recurring plans
