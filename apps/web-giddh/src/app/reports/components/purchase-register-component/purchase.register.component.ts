@@ -481,6 +481,13 @@ constructor(
             }))),
             this.activeRoute.queryParams.pipe(distinctUntilChanged()),
         ]).pipe(takeUntil(this.destroyed$)).subscribe(([activeCompany, queryParam]) => {
+            // URL groupBy takes priority over store value
+            if (queryParam?.groupBy && [GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(queryParam.groupBy)) {
+                this.reportForm.get('groupBy').patchValue(queryParam.groupBy);
+            } else {
+                this.reportForm.get('groupBy').patchValue(GroupBy.Duration);
+            }
+
             if (queryParam?.interval || queryParam?.selectedMonth) {
                 this.selectedType = queryParam.interval;
                 this.interval = queryParam.interval;
@@ -489,12 +496,7 @@ constructor(
                 this.router.navigate(['pages', 'reports', 'purchase-register'], { 
                 queryParams: { groupBy: this.reportForm.get('groupBy').value } });
             }
-            // URL groupBy takes priority over store value
-            if (queryParam?.groupBy && [GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(queryParam.groupBy)) {
-                this.reportForm.get('groupBy').patchValue(queryParam.groupBy);
-            } else {
-                this.reportForm.get('groupBy').patchValue(GroupBy.Duration);
-            }
+            
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
                 this.financialOptions = activeCompany.financialYears?.map(response => {
