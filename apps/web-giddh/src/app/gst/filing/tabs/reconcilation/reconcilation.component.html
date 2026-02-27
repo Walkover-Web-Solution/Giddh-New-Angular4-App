@@ -358,7 +358,7 @@
         </td>
 
         <td>
-            <div>{{ item.invoice_date ? item.invoice_date : '-' }}</div>
+            <div>{{ item.invoice_date | giddhDate }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
 
@@ -451,7 +451,7 @@
 
         <td>
             <div>-</div>
-            <div class="unrecognized-value pt-1">{{ item.invoice_date ? item.invoice_date : '-' }}</div>
+            <div class="unrecognized-value pt-1">{{ item.invoice_date | giddhDate }}</div>
         </td>
 
         <td>

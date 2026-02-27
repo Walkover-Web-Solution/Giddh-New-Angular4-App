@@ -23,6 +23,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     imports: [
@@ -46,7 +47,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatExpansionModule,
         MatSlideToggleModule,
         WatchVideoModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        GiddhDatePipe
     ],
     exports: [
         CreateManufacturingComponent,
