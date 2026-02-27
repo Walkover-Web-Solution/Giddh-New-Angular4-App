@@ -634,48 +634,6 @@ export class SubscriptionsService {
     }
 
     /**
-     * Initiates purchase of extra vouchers (invoices/bills)
-     *
-     * @param {*} model - Payload with subscriptionId, paymentProvider, totalInvoicesToPurchase, totalBillsToPurchase, duration
-     * @return {*}  {Observable<BaseResponse<any, any>>}
-     * @memberof SubscriptionsService
-     */
-    public buyExtraVoucher(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.BUY_EXTRA_VOUCHER, model)
-            .pipe(
-                map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = model;
-                    data.queryString = {};
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {}))
-            );
-    }
-
-    /**
-     * Captures payment for extra vouchers once the payment provider confirms success
-     *
-     * @param {string} subscriptionId - Subscription ID
-     * @param {*} model - Payload with paymentProvider and provider-specific fields
-     * @return {*}  {Observable<BaseResponse<any, any>>}
-     * @memberof SubscriptionsService
-     */
-    public captureExtraVoucher(subscriptionId: string, model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.CAPTURE_EXTRA_VOUCHER
-            ?.replace(':subscriptionId', encodeURIComponent(subscriptionId ?? '')), model)
-            .pipe(
-                map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = model;
-                    data.queryString = {};
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {}))
-            );
-    }
-
-    /**
     * Get Paypal capture plan
     *
     * @param {*} model

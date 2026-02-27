@@ -73,14 +73,6 @@
                             <button aria-label="subscriptionid" mat-menu-item (click)="transferSubscription(subscriptionId)">
                                 {{ localeData?.request_transfer }}
                             </button>
-                            @if (
-                                viewSubscriptionData?.period === planDuration.YEARLY &&
-                                viewSubscriptionData?.status?.toLowerCase() === 'active'
-                            ) {
-                                <button aria-label="addextratransaction" mat-menu-item (click)="navigateToAddExtraTransaction()">
-                                    {{ localeData?.add_extra_transaction }}
-                                </button>
-                            }
                             <button
                                 *ngIf="viewSubscriptionData?.period?.toLowerCase() !== 'yearly'"
                                 aria-label="cancel"
