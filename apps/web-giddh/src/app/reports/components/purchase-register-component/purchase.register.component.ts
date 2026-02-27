@@ -464,7 +464,6 @@ constructor(
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
         let currentTimeFilter: DurationEnum = this.selectedType;
-        let currentGroupBy = '';
 
 
         // set financial years based on company financial year
@@ -473,7 +472,6 @@ constructor(
                 financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
                 currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
                 currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
-                currentGroupBy = registerReportFilters?.groupBy || GroupBy.Duration;
                 this.reportForm.get('salesPersonUniqueNames').patchValue(registerReportFilters?.salesPersonUniqueNames ?? []);
                 this.reportForm.get('accountUniqueNames').patchValue(registerReportFilters?.accountUniqueNames ?? []);
                 this.reportForm.get('countryCodes').patchValue(registerReportFilters?.countryCodes ?? []);
@@ -488,13 +486,15 @@ constructor(
                 this.interval = queryParam.interval;
                 this.reportForm.get('interval').patchValue(queryParam.interval);
                 this.selectedMonth = queryParam.selectedMonth;
-                this.router.navigate(['pages', 'reports', 'purchase-register']);
+                this.router.navigate(['pages', 'reports', 'purchase-register'], { 
+                queryParams: { groupBy: this.reportForm.get('groupBy').value } });
             }
             // URL groupBy takes priority over store value
             if (queryParam?.groupBy && [GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(queryParam.groupBy)) {
-                currentGroupBy = queryParam.groupBy;
+                this.reportForm.get('groupBy').patchValue(queryParam.groupBy);
+            } else {
+                this.reportForm.get('groupBy').patchValue(GroupBy.Duration);
             }
-            this.reportForm.get('groupBy').patchValue(currentGroupBy, { emitEvent: false });
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
                 this.financialOptions = activeCompany.financialYears?.map(response => {
