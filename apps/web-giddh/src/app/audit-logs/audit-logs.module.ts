@@ -18,6 +18,7 @@ import { AuditLogsTableComponent } from './components/audit-logs-table/audit-log
 import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
 import { AuditLogsServiceModule } from './services/audit-logs.service.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -50,7 +51,8 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         TranslateDirectiveModule,
         GiddhDatepickerModule,
         MatButtonModule,
-        FormFieldsModule
+        FormFieldsModule,
+        GiddhDatePipe
     ],
 })
 export class AuditLogsModule {

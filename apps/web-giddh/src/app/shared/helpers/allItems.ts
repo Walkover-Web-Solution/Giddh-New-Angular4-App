@@ -7,6 +7,12 @@ export interface AllItem {
     additional?: any;
     hide?: string;
     additionalRoutes?: any;
+    options?: Array<{
+        label: string;
+        link: string;
+        icon?: string;
+        additional?: any;
+    }>;
 }
 
 export interface AllItems {
@@ -21,4 +27,5 @@ export interface AllItems {
     isExpanded?: boolean;
     additionalRoutes?: any;
     additional?: any;
+    isOption?: boolean;
 }

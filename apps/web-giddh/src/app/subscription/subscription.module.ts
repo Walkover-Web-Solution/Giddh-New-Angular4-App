@@ -56,6 +56,8 @@ import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-me
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
 import { MobileNumberInputComponent } from '../shared/mobile-number-input';
 import { MoveCompanyComponent } from './move-company/move-company.component';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { PaymentProviderSelectorComponent } from './components/payment-provider-selector/payment-provider-selector.component';
 
 @NgModule({
     imports: [
@@ -105,8 +107,9 @@ import { MoveCompanyComponent } from './move-company/move-company.component';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        MobileNumberInputComponent
-
+        MobileNumberInputComponent,
+        GiddhDatePipe,
+        PaymentProviderSelectorComponent
     ],
     exports: [SubscriptionListComponent,
         UserDetailsPipe,

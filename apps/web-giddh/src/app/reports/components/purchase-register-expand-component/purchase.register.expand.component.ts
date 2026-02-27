@@ -191,10 +191,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             .subscribe((res: PurchaseRegisteDetailedResponse) => {
                 if (res) {
                     this.PurchaseRegisteDetailedItems = res;
-                    this.dataSource.data = this.PurchaseRegisteDetailedItems.items.map((obj: any) => {
-                        obj.date = this.getDateToDMY(obj.date);
-                        return obj;
-                    });
+                    this.dataSource.data = this.PurchaseRegisteDetailedItems.items;
                     if (this.voucherNumberInput?.value) {
                         setTimeout(() => {
                             if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
@@ -355,7 +352,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                     to: params.to,
                     branchUniqueName: params.branchUniqueName,
                     interval: params.interval,
-                    selectedMonth: params.selectedMonth
+                    selectedMonth: params.selectedMonth,
+                    groupBy: this.currentGroupBy()
                 },
             });
         });

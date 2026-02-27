@@ -80,6 +80,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { CompanyAuthKeyComponent } from './company-auth-key/company-auth-key.component';
 import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company-auth-key/create-company-auth-key.component';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -169,7 +170,8 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         TributeMentionModule,
         ReplaceAllPipeModule,
         TitleCasePipe,
-        MatPaginatorModule
+        MatPaginatorModule,
+        GiddhDatePipe
     ],
 })
 

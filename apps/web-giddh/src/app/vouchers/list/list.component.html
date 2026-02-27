@@ -266,7 +266,7 @@
                                                 {{ localeData?.estimate_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -310,7 +310,7 @@
                                                 {{ localeData?.expiry_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.expiryDate ?? '-' }}
+                                                {{ element.expiryDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -688,7 +688,7 @@
                                                 {{ localeData?.proforma_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.proformaDate ?? '-' }}
+                                                {{ element.proformaDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -732,7 +732,7 @@
                                                 {{ localeData?.expiry_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.expiryDate ?? '-' }}
+                                                {{ element.expiryDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -1166,7 +1166,7 @@
                                                 {{ commonLocaleData?.app_invoice_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.voucherDate ?? '-' }}
+                                                {{ element.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -1240,7 +1240,7 @@
                                                 {{ localeData?.due_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.dueDate ?? '-' }}
+                                                {{ element.dueDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -1656,7 +1656,7 @@
                                                 {{ commonLocaleData?.app_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -2091,7 +2091,7 @@
                                                 {{ commonLocaleData?.app_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -2367,7 +2367,7 @@
                                         {{ commonLocaleData?.app_date }}
                                     </th>
                                     <td mat-cell *matCellDef="let element">
-                                        {{ element?.entryDate }}
+                                        {{ element?.entryDate | giddhDate }}
                                     </td>
                                 </ng-container>
                                 <ng-container matColumnDef="particular">
@@ -2622,7 +2622,7 @@
                                                 {{ commonLocaleData?.app_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="table-date-width">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -2748,7 +2748,9 @@
                                                 >
                                                     {{ getDeliveryDaysText(element.dueDays) }}
                                                 </span>
-                                                <span *ngIf="element?.dueDays && element?.dueDays > 7">{{ element?.dueDate }}</span>
+                                                <span *ngIf="element?.dueDays && element?.dueDays > 7">
+                                                    {{ element?.dueDate | giddhDate }}
+                                                </span>
                                                 <span class="ontime-delivery" *ngIf="element?.dueDays === 0">
                                                     {{ commonLocaleData?.app_today }}
                                                 </span>
@@ -3091,7 +3093,7 @@
                                                 {{ localeData?.bill_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -3165,7 +3167,7 @@
                                                 {{ localeData?.due_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center">
-                                                {{ element?.dueDate ?? '-' }}
+                                                {{ element?.dueDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -3505,7 +3507,7 @@
                                                 {{ commonLocaleData?.app_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -3877,7 +3879,7 @@
                                                 {{ commonLocaleData?.app_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -4118,7 +4120,7 @@
                                         {{ commonLocaleData?.app_date }}
                                     </th>
                                     <td mat-cell *matCellDef="let element">
-                                        {{ element?.entryDate }}
+                                        {{ element?.entryDate | giddhDate }}
                                     </td>
                                 </ng-container>
                                 <ng-container matColumnDef="particular">
@@ -5757,7 +5759,7 @@
                             <ng-container matColumnDef="createdAt">
                                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.created_at }}</th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{ element?.createdAt }}
+                                    {{ element?.createdAt | giddhDate }}
                                 </td>
                             </ng-container>
 
@@ -5765,7 +5767,7 @@
                             <ng-container matColumnDef="lastRun">
                                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.last_run }}</th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{ element?.lastRun }}
+                                    {{ element?.lastRun | giddhDate }}
                                 </td>
                             </ng-container>
 
@@ -5773,7 +5775,7 @@
                             <ng-container matColumnDef="nextRun">
                                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.next_run }}</th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{ element?.nextRun }}
+                                    {{ element?.nextRun | giddhDate }}
                                 </td>
                             </ng-container>
 

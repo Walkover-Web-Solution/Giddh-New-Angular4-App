@@ -214,7 +214,7 @@
                                 </div>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let item">{{ item.date }}</td>
+                        <td mat-cell *matCellDef="let item">{{ item.date | giddhDate }}</td>
                     </ng-container>
 
                     <!-- Account Column -->

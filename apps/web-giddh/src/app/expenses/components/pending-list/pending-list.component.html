@@ -23,7 +23,7 @@
                 </th>
                 <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_date">
                     <span class="responsive-label" [hidden]="!expensesItems?.length">{{ commonLocaleData?.app_date }}</span>
-                    {{ expenses.entryDate }}
+                    {{ expenses.entryDate | giddhDate }}
                 </td>
             </div>
 

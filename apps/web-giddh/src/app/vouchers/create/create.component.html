@@ -262,7 +262,9 @@
                                                                     </span>
                                                                     <span>{{ voucher?.grandTotal?.amountForAccount }}</span>
                                                                 </div>
-                                                                <span>{{ voucher?.date }} ( {{ voucher?.account?.name }} )</span>
+                                                                <span>
+                                                                    {{ voucher?.date | giddhDate }} ( {{ voucher?.account?.name }} )
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </button>
@@ -1286,7 +1288,8 @@
                                                 <a *ngIf="option" href="javascript:;" aria-label="option" class="linking-item">
                                                     <div class="option-label">{{ option?.label }}</div>
                                                     <div class="option-value">
-                                                        ({{ commonLocaleData?.app_dated }}: {{ option.additional?.voucherDate }})
+                                                        ({{ commonLocaleData?.app_dated }}:
+                                                        {{ option.additional?.voucherDate | giddhDate }})
                                                     </div>
                                                     <div class="option-value-stock font-size-12">
                                                         ({{ commonLocaleData?.app_amount }}:
@@ -1731,7 +1734,7 @@
                                                                 <div class="mt-2 font-size-12">
                                                                     <span>{{ localeData?.entry_date }}</span>
                                                                     <div class="mt-1" *ngIf="activeEntryIndex !== entryIndex">
-                                                                        {{ entry.get('date')?.value }}
+                                                                        {{ entry.get('date')?.value | giddhDate }}
                                                                     </div>
                                                                     <div
                                                                         class="mt-1 d-flex align-items-baseline column-gap-05"

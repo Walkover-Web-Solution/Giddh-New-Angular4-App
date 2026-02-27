@@ -4,7 +4,7 @@
 <mat-dialog-content class="dialog-body petty-cash-reject-modal">
     <div class="clear-both modal-top">
         <p class="font-size-12 text-light mb-2">
-            <span>{{ selectedItem?.entryDate }}</span>
+            <span>{{ selectedItem?.entryDate | giddhDate }}</span>
             |
             <span>{{ byCreator }}</span>
         </p>

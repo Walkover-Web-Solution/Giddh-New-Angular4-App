@@ -14,6 +14,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config';
 import { GeneralService } from '../../services/general.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 import { SearchService } from '../../services/search.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { Router } from '@angular/router';
@@ -302,7 +303,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.dateToUpdate = dayjs(date).format(GIDDH_DATE_FORMAT);
         this.selectedAccount = cloneDeep(account);
         let message = this.localeData?.get_ledger_entries;
-        message = message?.replace("[DATE]", this.dateToUpdate);
+        message = message?.replace("[DATE]", GiddhDatePipe.formatDate(this.dateToUpdate));
         this.confirmationMessage = message;
         this.actionToPerform = 'UpdateDate';
         this.confirmationDialogRef = this.dialog.open(this.confirmationTemplate, {

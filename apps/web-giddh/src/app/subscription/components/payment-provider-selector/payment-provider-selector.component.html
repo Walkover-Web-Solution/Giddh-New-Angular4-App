@@ -1,0 +1,25 @@
+<div class="form-group mb-1">
+    <label class="d-block">
+        {{ label() }}
+        @if (required()) {
+            <span class="text-red">*</span>
+        }
+    </label>
+    <mat-radio-group
+        class="d-flex flex-column row-gap-2 mt-3"
+        aria-label="Payment Provider"
+        [value]="value()"
+        (change)="onProviderChange($event.value)"
+    >
+        @for (provider of providers(); track provider.value) {
+            <mat-radio-button color="primary" [value]="provider.value" [disabled]="disabled">
+                <img [src]="'assets/icon/' + provider.value + '.svg'" [alt]="provider.label" height="20" width="auto" class="pl-2" />
+            </mat-radio-button>
+        }
+    </mat-radio-group>
+    @if (showError() && !value()) {
+        <mat-error class="d-block mt-2 font-size-12 text-red">
+            {{ errorMessage() }}
+        </mat-error>
+    }
+</div>

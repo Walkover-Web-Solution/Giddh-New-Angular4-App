@@ -13,6 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../shared/helpers/defaultDateFormat';
+import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport, TaxServiceEnum, TaxServiceType } from '../constants/gst.constant';
 import { GeneralService } from '../../services/general.service';
@@ -744,7 +745,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      */
     public getGstReturnFieldText(): string {
         let text = this.localeData?.filing?.gst_filed_success;
-        text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
+        text = text?.replace("[PERIOD_FROM]", GiddhDatePipe.formatDate(this.currentPeriod?.from))?.replace("[PERIOD_TO]", GiddhDatePipe.formatDate(this.currentPeriod?.to));
         return text;
     }
 

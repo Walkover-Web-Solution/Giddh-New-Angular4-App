@@ -31,6 +31,7 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { NewConfirmationModalModule } from "../theme/new-confirmation-modal/confirmation-modal.module";
 import { MatInputModule } from "@angular/material/input";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
 
 @NgModule({
@@ -68,7 +69,8 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         GiddhPageLoaderModule,
         NewConfirmationModalModule,
         MatInputModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        GiddhDatePipe
     ],
     exports: [
         VatReportRoutingModule,
