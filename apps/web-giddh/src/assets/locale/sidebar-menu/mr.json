@@ -147,6 +147,52 @@
                     "description": "निव्वळ व संचयी विक्री",
                     "additionalRoutes": [
                         "/pages/reports/sales-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "कालावधीनुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-view",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "विक्री व्यक्तीनुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "राज्यानुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "देशानुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country"
+                                },
+                                "matchQueryParams": true
+                            }
+                        }
                     ]
                 },
                 {
@@ -337,6 +383,52 @@
                     "description": "निव्वळ आणि संचयी खरेदी",
                     "additionalRoutes": [
                         "/pages/reports/purchase-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "कालावधीनुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-view",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "विक्री व्यक्तीनुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "राज्यानुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "देशानुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country"
+                                },
+                                "matchQueryParams": true
+                            }
+                        }
                     ]
                 },
                 {
@@ -514,7 +606,8 @@
                         "queryParams": {
                             "tab": "balance-sheet",
                             "tabIndex": 2
-                        }
+                        },
+                        "matchQueryParams": true
                     }
                 },
                 {
@@ -532,7 +625,8 @@
                         "queryParams": {
                             "tab": "profit-loss",
                             "tabIndex": 1
-                        }
+                        },
+                        "matchQueryParams": true
                     }
                 },
                 {
@@ -550,7 +644,8 @@
                         "queryParams": {
                             "tab": "trial-balance",
                             "tabIndex": 0
-                        }
+                        },
+                        "matchQueryParams": true
                     }
                 },
                 {
@@ -738,6 +833,12 @@
                     "link": "/pages/email-forwarding",
                     "icon": "icon-mail",
                     "description": "बँक स्टेटमेंट ईमेलपासून ऑटो-वाउचर तयार करा।"
+                },
+                {
+                    "label": "बजेट अंदाज",
+                    "link": "/pages/budget-forecasting",
+                    "icon": "icon-audit-log",
+                    "description": "एआय-संचालित रोख प्रवाह अंदाज आणि भविष्यवाण्या"
                 }
             ]
         }

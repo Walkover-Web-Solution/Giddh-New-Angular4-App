@@ -151,5 +151,6 @@
         "trial": "Trial",
         "cancelled": "Cancelled",
         "expired": "Expired",
-        "select_status": "Select status"
+        "select_status": "Select status",
+        "please_select_payment_provider": "Please select a payment provider"
     }

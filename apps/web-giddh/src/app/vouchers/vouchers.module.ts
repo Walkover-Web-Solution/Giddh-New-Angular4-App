@@ -98,6 +98,7 @@ import { CommonTaxComponent } from "../shared/common-tax/common-tax.component";
 import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
 import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview.component";
 import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -199,7 +200,8 @@ import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring
         KeyboardNavigationModule,
         ResizableDirective,
         CommonTaxComponent,
-        AsideRecurrenceVoucherCreateComponent
+        AsideRecurrenceVoucherCreateComponent,
+        GiddhDatePipe
     ],
     exports: [
         VoucherCreateComponent,

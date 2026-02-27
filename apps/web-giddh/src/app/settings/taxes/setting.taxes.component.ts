@@ -88,11 +88,6 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.taxes) {
                 this.forceClear$ = observableOf({ status: true });
-                map(o.taxes, (tax) => {
-                    each(tax.taxDetail, (t) => {
-                        t.date = dayjs(t.date, GIDDH_DATE_FORMAT);
-                    });
-                });
                 this.availableTaxes = cloneDeep(o.taxes);
                 this.toggleTaxAuthority();
                 this.changeDetectionService.updateDataSourceWithChangeDetection(

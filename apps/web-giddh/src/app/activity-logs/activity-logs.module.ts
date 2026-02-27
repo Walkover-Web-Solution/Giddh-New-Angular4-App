@@ -19,6 +19,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -47,7 +48,8 @@ import { ActivityCompareJsonComponent } from './components/activity-compare-json
         SharedModule,
         MatCheckboxModule,
         MatInputModule,
-        MatMenuModule
+        MatMenuModule,
+        GiddhDatePipe
     ],
 })
 export class ActivityLogsModule {

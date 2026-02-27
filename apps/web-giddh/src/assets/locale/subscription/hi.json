@@ -151,5 +151,6 @@
         "trial": "परीक्षण",
         "cancelled": "रद्द",
         "expired": "समाप्त",
-        "select_status": "स्थिति का चयन करें"
+        "select_status": "स्थिति का चयन करें",
+        "please_select_payment_provider": "कृपया एक भुगतान प्रदाता चुनें"
 	}

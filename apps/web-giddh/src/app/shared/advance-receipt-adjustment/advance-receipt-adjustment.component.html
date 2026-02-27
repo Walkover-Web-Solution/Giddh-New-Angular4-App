@@ -147,7 +147,8 @@
                                                 </div>
                                                 <div class="item-unique">
                                                     <p class="option-value">
-                                                        ({{ commonLocaleData?.app_dated }}: {{ option?.additional.voucherDate }})
+                                                        ({{ commonLocaleData?.app_dated }}:
+                                                        {{ option?.additional.voucherDate | giddhDate }})
                                                     </p>
                                                     <p class="option-value-more">
                                                         ({{ commonLocaleData?.app_amount }}:

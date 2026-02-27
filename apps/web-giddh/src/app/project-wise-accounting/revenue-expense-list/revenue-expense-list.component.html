@@ -138,7 +138,7 @@
                                             <table class="w-100">
                                                 <tr>
                                                     <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_dated }}</td>
-                                                    <td class="option-extra-content">: {{ option?.additional?.entryDate }}</td>
+                                                    <td class="option-extra-content">: {{ option?.additional?.entryDate | giddhDate }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="option-extra-content" width="75px">
@@ -268,7 +268,9 @@
                                                                 <td class="option-extra-content" width="75px">
                                                                     {{ commonLocaleData?.app_dated }}
                                                                 </td>
-                                                                <td class="option-extra-content">: {{ option?.additional?.entryDate }}</td>
+                                                                <td class="option-extra-content">
+                                                                    : {{ option?.additional?.entryDate | giddhDate }}
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="option-extra-content" width="75px">

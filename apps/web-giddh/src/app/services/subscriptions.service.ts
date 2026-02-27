@@ -633,7 +633,6 @@ export class SubscriptionsService {
             );
     }
 
-
     /**
     * Get Paypal capture plan
     *

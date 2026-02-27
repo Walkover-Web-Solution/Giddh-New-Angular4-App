@@ -656,7 +656,7 @@
                 <tbody>
                     <tr *ngFor="let transaction of log?.log?.transactions; let i = index">
                         <td>{{ i + 1 }}</td>
-                        <td>{{ log?.log?.entryDate }}</td>
+                        <td>{{ log?.log?.entryDate | giddhDate }}</td>
                         <td>{{ transaction?.particular?.name }} ({{ transaction?.particular?.uniqueName }})</td>
                         <td>{{ transaction?.amount | number: '1.2-2' }}</td>
                         <td>{{ transaction?.type }}</td>
@@ -682,7 +682,7 @@
                 <tbody>
                     <tr *ngFor="let transaction of log.log.updated.transactions; let i = index">
                         <td>{{ i + 1 }}</td>
-                        <td>{{ log.log.updated.entryDate }}</td>
+                        <td>{{ log.log.updated.entryDate | giddhDate }}</td>
                         <td>{{ transaction.particular.name }} ({{ transaction.particular?.uniqueName }})</td>
                         <td>{{ transaction.amount }}</td>
                         <td>{{ transaction.type }}</td>
@@ -704,7 +704,7 @@
                 <tbody>
                     <tr *ngFor="let transaction of log.log.old.transactions; let i = index">
                         <td>{{ i + 1 }}</td>
-                        <td>{{ log.log.old.entryDate }}</td>
+                        <td>{{ log.log.old.entryDate | giddhDate }}</td>
                         <td>{{ transaction.particular.name }} ({{ transaction.particular?.uniqueName }})</td>
                         <td>{{ transaction.amount }}</td>
                         <td>{{ transaction.type }}</td>
@@ -736,7 +736,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ log.log.updated.openingBalanceDate }}</td>
+                        <td>{{ log.log.updated.openingBalanceDate | giddhDate }}</td>
                         <td>{{ log.log.updated.openingBalance }}</td>
                         <td>{{ log.log.updated.email }}</td>
                         <td>{{ log.log.updated.name }}</td>
@@ -758,7 +758,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ log.log.old.openingBalanceDate }}</td>
+                        <td>{{ log.log.old.openingBalanceDate | giddhDate }}</td>
                         <td>{{ log.log.old.openingBalance }}</td>
                         <td>{{ log.log.old.email }}</td>
                         <td>{{ log.log.old.name }}</td>

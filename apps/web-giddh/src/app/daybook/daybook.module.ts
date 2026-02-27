@@ -31,6 +31,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -65,7 +66,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         NgxMatSelectSearchModule,
         MatSelectModule,
         MatMenuModule,
-        FormFieldsModule
+        FormFieldsModule,
+        GiddhDatePipe
     ]
 })
 export class DaybookModule {

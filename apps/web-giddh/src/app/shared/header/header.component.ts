@@ -44,6 +44,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { ServiceConfig } from '../../services/service.config';
+import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -296,7 +297,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private socialAuthService: AuthService,
         @Inject(ServiceConfig) private serviceConfig,
         private elementRef: ElementRef,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private giddhDatePipe: GiddhDatePipe
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
@@ -332,6 +334,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.isSubscriptionPage =
                     this.router.url.includes("/pages/user-details/subscription/buy-plan") ||
                     this.router.url.includes("/pages/user-details/subscription/view-subscription") ||
+                    this.router.url.includes("/pages/user-details/subscription/add-extra-transaction") ||
                     this.router.url.includes("/pages/user-details/mobile-number") ||
                     this.router.url.includes("/pages/user-details/auth-key") ||
                     this.router.url.includes("/pages/user-details/session");
@@ -1737,7 +1740,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
             this.planVersion === 2 ? '' : this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
             this.subscribedPlan?.planDetails?.name,
-            this.subscribedPlan?.expiry
+            this.giddhDatePipe.transform(this.subscribedPlan?.expiry)
         ) ?? "";
     }
 
@@ -1756,7 +1759,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
             this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
             this.subscribedPlan?.planDetails?.name,
-            this.subscribedPlan?.expiry
+            this.giddhDatePipe.transform(this.subscribedPlan?.expiry)
         ) ?? "";
     }
 
@@ -1770,7 +1773,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let text = this.localeData?.subscription_transaction_limit_ended;
         text = text
             ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-            ?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt ?? '');
+            ?.replace("[PLAN_START_DATE]", this.giddhDatePipe.transform(this.subscribedPlan?.startedAt) ?? '');
         return text;
     }
 
@@ -1786,7 +1789,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
             this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
             this.subscribedPlan?.planDetails?.name,
-            this.subscribedPlan?.expiry
+            this.giddhDatePipe.transform(this.subscribedPlan?.expiry)
         ) ?? "";
     }
 
@@ -1800,7 +1803,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let text = this.localeData?.transaction_limit_crossed;
         text = text
             ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-            ?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt ?? '');
+            ?.replace("[PLAN_START_DATE]", this.giddhDatePipe.transform(this.subscribedPlan?.startedAt) ?? '');
         return text;
     }
 

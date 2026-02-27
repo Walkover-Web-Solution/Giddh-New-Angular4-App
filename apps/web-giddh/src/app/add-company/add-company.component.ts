@@ -1572,7 +1572,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.queryParams?.country) {
             const countryObject = this.countries.find((country) => country.value === this.queryParams.country);
             if (countryObject) {
-                 this.selectedCountry = countryObject.label;
+                this.selectedCountry = countryObject.label;
                 this.selectedCountryCode = countryObject.value;
                 this.firstStepForm.controls['country'].setValue(countryObject);
                 this.company.baseCurrency = countryObject?.additional?.currency?.code;

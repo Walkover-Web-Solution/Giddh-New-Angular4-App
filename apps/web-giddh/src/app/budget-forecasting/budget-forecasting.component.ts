@@ -455,7 +455,7 @@ export class BudgetForecastingComponent implements OnInit, OnDestroy {
             accountUniqueNames: [this.forecastForm.value.account],
             granularity: this.forecastForm.value.granularity,
             analysisPeriod: this.selectedPeriod(),
-            forecastLength: this.forecastForm.value.forecastLength
+            forecastLength: Number(this.forecastForm.value.forecastLength)
         };
 
         this.budgetForecastingService.getForecast(payload)

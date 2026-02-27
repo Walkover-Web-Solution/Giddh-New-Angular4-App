@@ -11,7 +11,7 @@ import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
 import { takeUntil, filter, take, skip, debounceTime, tap, distinctUntilChanged, groupBy } from "rxjs/operators";
 import * as dayjs from 'dayjs';
-import { Observable, ReplaySubject } from "rxjs";
+import { combineLatest, Observable, ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MMM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -128,7 +128,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public salesRegisterList$: Observable<any[]> = this.componentStore.salesPurchaseList$;
     /** Holds report form */
     public reportForm: FormGroup = new FormGroup({
-        groupBy: new FormControl<GroupBy>(GroupBy.Duration, Validators.required),
+        groupBy: new FormControl<GroupBy>(null, Validators.required),
         accountUniqueNames: new FormControl<string[]>([]),
         salesPersonUniqueNames: new FormControl<string[]>([]),
         interval: new FormControl<DurationEnum | null>(null),
@@ -258,7 +258,7 @@ constructor(
         });
 
         /** Search for sales person dropdown */
-        this.salesPerson.valueChanges.pipe(debounceTime(700),
+        this.salesPerson.valueChanges.pipe(debounceTime(200),
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 if (!search) {
                     this.salesPersonList$.pipe(take(1)).subscribe(res => {
@@ -273,16 +273,16 @@ constructor(
         this.getAccounts();
 
         /** Search for account dropdown */
-        this.account.valueChanges.pipe(debounceTime(700),
+        this.account.valueChanges.pipe(debounceTime(300),
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 this.getAccounts(search ? search : '');
             });
 
         /** Load countries on init */
-        // this.loadCountries();
+        this.loadCountries();
 
         /** Search for country dropdown */
-        this.countrySearch.valueChanges.pipe(debounceTime(700),
+        this.countrySearch.valueChanges.pipe(debounceTime(200),
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 if (!search) {
                     this.filteredCountryList.set(this.countryList());
@@ -292,7 +292,7 @@ constructor(
             });
 
         /** Search for state dropdown */
-        this.stateSearch.valueChanges.pipe(debounceTime(700),
+        this.stateSearch.valueChanges.pipe(debounceTime(200),
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 if (!search) {
                     this.filteredStateList.set(this.stateList());
@@ -308,11 +308,7 @@ constructor(
                 this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
-        this.store.pipe(
-            select(state => state.general.states),
-            filter(Boolean),
-            takeUntil(this.destroyed$)
-        ).subscribe(states => {
+        this.store.pipe(select(state => state.general.states), filter(Boolean), takeUntil(this.destroyed$)).subscribe(states => {
             if (states && (states.stateList ?? states.countyList)) {
                 this.stateList.set((states.stateList ?? states.countyList).map(state => ({
                     label: state.name,
@@ -323,10 +319,7 @@ constructor(
         });
 
         // Subscribe to countryCode changes to automatically load states
-        this.reportForm.get('countryCode')?.valueChanges.pipe(
-            filter(Boolean),
-            takeUntil(this.destroyed$)
-        ).subscribe(countryCode => {
+        this.reportForm.get('countryCode')?.valueChanges.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe(countryCode => {
             if (countryCode) {
                 this.loadStates(countryCode);
             } else {
@@ -334,27 +327,41 @@ constructor(
                 this.filteredStateList.set([]);
             }
         });
+
+        this.reportForm.get('groupBy')?.valueChanges.pipe(filter(Boolean), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(groupBy => {
+            if (groupBy) {
+                this.handleGroupByChange(groupBy);
+                this.generalService.updateActivatedRouteQueryParams({ groupBy });
+            }
+        });
+
     }
 
     /**
      * Handle group by change
      *
-     * @param response
+     * @param groupBy
      */
-    public handleGroupByChange(response: IOption): void {
-        this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
-        this.reportForm.get('countryCode')?.setValue(null);
-        this.reportForm.get('countryCodes')?.setValue([]);
-        this.reportForm.get('stateCodes')?.setValue([]);
+    public handleGroupByChange(groupBy: GroupBy): void {
+        if (GroupBy.SalesPerson !== groupBy) {
+            this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
+        }
+        if (GroupBy.State !== groupBy) {
+            this.reportForm.get('countryCode')?.setValue(null);
+            this.reportForm.get('stateCodes')?.setValue([]);
+        }
+        if (GroupBy.Country !== groupBy) {
+            this.reportForm.get('countryCodes')?.setValue([]);
+        }
 
-        if (response?.value && response.value !== GroupBy.Duration) {
+        if ([GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(groupBy)) {
             this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
-            if (response.value === GroupBy.State) {
+            if (groupBy === GroupBy.State && !this.reportForm.get('countryCode')?.value) {
                 this.reportForm.get('countryCode')?.setValue(this.activeCompany.countryV2?.alpha2CountryCode);
             }
             this.getSalesRegister(this.dateRange.from, this.dateRange.to);
-        } else if (response?.value === GroupBy.Duration) {
+        } else {
             this.populateRecords(this.interval, this.selectedMonth);
         }
     }
@@ -439,6 +446,18 @@ constructor(
         return reportModelArray;
     }
 
+    /** 
+     * Reset account dropdown 
+     * @returns void
+    */
+    public accountReset() : void {
+        this.accountList$.pipe(take(1)).subscribe((res: any) => {
+            if (!res?.results?.length) {
+                this.account.reset();
+            }
+        });
+    }
+
     // new Date("dateString") is browser-dependent and discouraged, so we'll write
     // a simple parse function for U.S. date format (which does no error checking)
     public parseDate(mdy) {
@@ -455,37 +474,39 @@ constructor(
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
         let currentTimeFilter: DurationEnum = this.selectedType;
-        let currentGroupBy = '';
-        let currentSalesPersonUniqueNames = [];
-        let currentAccountUniqueNames = [];
-        let currentCountryCodes = [];
-        let currentCountryCode = '';
-        let currentStateCodes = [];
 
-        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
-            if (params?.interval || params?.selectedMonth) {
-                this.selectedType = params.interval;
-                this.interval = params.interval;
-                this.reportForm.get('interval').patchValue(params.interval);
-                this.selectedMonth = params.selectedMonth;
-
-                this.router.navigate(['pages', 'reports', 'sales-register']);
-            }
-        });
 
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
-            financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
-            currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
-            currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
-            currentSalesPersonUniqueNames = registerReportFilters?.salesPersonUniqueNames ?? [];
-            currentAccountUniqueNames = registerReportFilters?.accountUniqueNames ?? [];
-            currentGroupBy = registerReportFilters?.groupBy || GroupBy.Duration;
-            currentCountryCodes = registerReportFilters?.countryCodes ?? [];
-            currentCountryCode = registerReportFilters?.countryCode ?? '';
-            currentStateCodes = registerReportFilters?.stateCodes ?? [];
-            return activeCompany;
-        })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        combineLatest([
+            this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
+                financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
+                currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
+                currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
+                this.reportForm.get('salesPersonUniqueNames').patchValue(registerReportFilters?.salesPersonUniqueNames ?? []);
+                this.reportForm.get('accountUniqueNames').patchValue(registerReportFilters?.accountUniqueNames ?? []);
+                this.reportForm.get('countryCodes').patchValue(registerReportFilters?.countryCodes ?? []);
+                this.reportForm.get('countryCode').patchValue(registerReportFilters?.countryCode ?? '');
+                this.reportForm.get('stateCodes').patchValue(registerReportFilters?.stateCodes ?? []);
+                return activeCompany;
+            }))),
+            this.activeRoute.queryParams.pipe(distinctUntilChanged()),
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(([activeCompany, queryParam]) => {
+            // URL groupBy takes priority over store value
+            if (queryParam?.groupBy && [GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(queryParam.groupBy)) {
+                this.reportForm.get('groupBy').patchValue(queryParam.groupBy);
+            } else {
+                this.reportForm.get('groupBy').patchValue(GroupBy.Duration);
+            }
+            
+            if (queryParam?.interval || queryParam?.selectedMonth) {
+                this.selectedType = queryParam.interval;
+                this.interval = queryParam.interval;
+                this.reportForm.get('interval').patchValue(queryParam.interval);
+                this.selectedMonth = queryParam.selectedMonth;
+                this.router.navigate(['pages', 'reports', 'sales-register'], { 
+                queryParams: { groupBy: this.reportForm.get('groupBy').value } });
+            }
+
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
                 this.financialOptions = activeCompany.financialYears?.map(response => {
@@ -514,12 +535,6 @@ constructor(
                 const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
                 this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
                 this.selectedType = currentTimeFilter || this.selectedType;
-                this.reportForm.get('groupBy').patchValue(currentGroupBy);
-                this.reportForm.get('salesPersonUniqueNames').patchValue(currentSalesPersonUniqueNames);
-                this.reportForm.get('accountUniqueNames').patchValue(currentAccountUniqueNames);
-                this.reportForm.get('countryCodes').patchValue(currentCountryCodes);
-                this.reportForm.get('countryCode').patchValue(currentCountryCode);
-                this.reportForm.get('stateCodes').patchValue(currentStateCodes);
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.salesRegisterTotal.particular = this.getCustomParticular();
                 this.changeDetectorRef.detectChanges();
@@ -688,8 +703,10 @@ constructor(
             this.setCurrentFY();
             this.getSelectedDuration();
             this.groupByOptions = [
-                { label: this.commonLocaleData?.app_duration?.duration, value: GroupBy.Duration },
-                { label: this.commonLocaleData?.app_sales_person, value: GroupBy.SalesPerson }
+                { label: this.localeData?.by_duration, value: GroupBy.Duration },
+                { label: this.localeData?.by_sales_person, value: GroupBy.SalesPerson },
+                { label: this.localeData?.by_state, value: GroupBy.State },
+                { label: this.localeData?.by_country, value: GroupBy.Country }
             ];
         }
     }

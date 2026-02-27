@@ -111,9 +111,9 @@
                                                 ({{ dayjs(selectedMonth).format(giddhDateFormatMonthYear) }})
                                             </ng-container>
                                             <ng-container *ngIf="!isMonthSelected">
-                                                ({{ dayjs(currentPeriod?.from, giddhDateFormat).format(giddhDateFormatWithSpace) }}
+                                                ({{ currentPeriod?.from | giddhDate }}
                                                 -
-                                                {{ dayjs(currentPeriod?.to, giddhDateFormat).format(giddhDateFormatWithSpace) }})
+                                                {{ currentPeriod?.to | giddhDate }})
                                             </ng-container>
                                         </b>
                                         &nbsp;&nbsp;
@@ -267,9 +267,9 @@
                                             ({{ dayjs(selectedMonth).format(giddhDateFormatMonthYear) }})
                                         </ng-container>
                                         <ng-container *ngIf="!isMonthSelected">
-                                            ({{ dayjs(currentPeriod?.from, giddhDateFormat).format(giddhDateFormatWithSpace) }}
+                                            ({{ currentPeriod?.from | giddhDate }}
                                             -
-                                            {{ dayjs(currentPeriod?.to, giddhDateFormat).format(giddhDateFormatWithSpace) }})
+                                            {{ currentPeriod?.to | giddhDate }})
                                         </ng-container>
                                     </b>
                                 </div>

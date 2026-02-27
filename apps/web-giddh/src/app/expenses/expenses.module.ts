@@ -31,6 +31,7 @@ import { LightboxModule } from 'ngx-lightbox';
 import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-petty-cash-entry-confirm-dialog/reject-petty-cash-entry-confirm-dialog.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -68,7 +69,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         LightboxModule,
         MatMenuModule,
         FormFieldsModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        GiddhDatePipe
     ],
     exports: [
         ExpensesComponent,

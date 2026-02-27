@@ -82,7 +82,8 @@ export class GiddhDatePipe implements PipeTransform {
     private parseDateString(dateString: string): Date | null {
         if (!dateString) return null;
 
-        const parts = dateString.split('-');
+        const separator = dateString.includes('/') ? '/' : '-';
+        const parts = dateString.split(separator);
         if (parts.length !== 3) return null;
 
         const [day, month, year] = parts;
@@ -101,7 +102,8 @@ export class GiddhDatePipe implements PipeTransform {
     static parseDate(dateString: string): Date | null {
         if (!dateString) return null;
 
-        const parts = dateString.split('-');
+        const separator = dateString.includes('/') ? '/' : '-';
+        const parts = dateString.split(separator);
         if (parts.length !== 3) return null;
 
         const [day, month, year] = parts;

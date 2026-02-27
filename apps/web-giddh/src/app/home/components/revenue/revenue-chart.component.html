@@ -205,13 +205,13 @@
                     <div class="pull-left about-date">
                         <div class="active-date">
                             <span></span>
-                            {{ getPreviousWeekStartEndDate[0] | date }} -
-                            {{ getPreviousWeekStartEndDate[1] | date }}
+                            {{ getPreviousWeekStartEndDate[0] | giddhDate }} -
+                            {{ getPreviousWeekStartEndDate[1] | giddhDate }}
                         </div>
                         <div class="in-active-date">
                             <span></span>
-                            {{ getCurrentWeekStartEndDate[0] | date }} -
-                            {{ getCurrentWeekStartEndDate[1] | date }}
+                            {{ getCurrentWeekStartEndDate[0] | giddhDate }} -
+                            {{ getCurrentWeekStartEndDate[1] | giddhDate }}
                         </div>
                         <div class="pull-right revenue-tabs">
                             <div class="total-sales-tabs">
@@ -251,7 +251,7 @@
                             <div>
                                 <p class="small-heading">
                                     {{ commonLocaleData?.app_total }} {{ activeGraphType['uniqueName'] }} ({{
-                                        getCurrentWeekStartEndDate[1] | date
+                                        getCurrentWeekStartEndDate[1] | giddhDate
                                     }})
                                 </p>
                                 <p>
@@ -269,7 +269,7 @@
                             <div>
                                 <p class="small-heading">
                                     {{ commonLocaleData?.app_total }} {{ activeGraphType['uniqueName'] }} ({{
-                                        getPreviousWeekStartEndDate[1] | date
+                                        getPreviousWeekStartEndDate[1] | giddhDate
                                     }})
                                 </p>
                                 <p>

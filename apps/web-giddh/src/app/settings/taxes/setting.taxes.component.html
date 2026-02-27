@@ -78,7 +78,7 @@
                         <td mat-cell *matCellDef="let element">
                             <ng-container *ngIf="element?.taxDetail?.length; else showDash">
                                 <div *ngFor="let tax of element.taxDetail">
-                                    {{ dayjs(tax?.date).format(giddhDateFormat) }}
+                                    {{ tax?.date | giddhDate }}
                                 </div>
                             </ng-container>
                         </td>
