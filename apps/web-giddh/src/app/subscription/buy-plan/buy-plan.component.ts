@@ -1561,7 +1561,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.isFormSubmitted.set(false);
         
         // If the plan is free else payment provider not selected, payment provider is not required
-        const isPaymentProviderRequired = !this.isFreePlan(this.selectedPlan, this.selectedDuration()) && (this.payType === 'buy' && !this.subscriptionForm.value.thirdStepForm?.paymentProvider);
+        const isPaymentProviderRequired = !this.isFreePlan(this.selectedPlan(), this.selectedDuration()) && (this.payType === 'buy' && !this.subscriptionForm.value.thirdStepForm?.paymentProvider);
         
         if (isPaymentProviderRequired) {
             this.thirdStepForm.get('paymentProvider')?.setErrors({ required: true });
