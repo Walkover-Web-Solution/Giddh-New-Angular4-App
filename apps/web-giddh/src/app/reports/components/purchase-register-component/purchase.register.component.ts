@@ -359,7 +359,7 @@ constructor(
         if ([GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(groupBy)) {
             this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
-            if (groupBy === GroupBy.State) {
+            if (groupBy === GroupBy.State && !this.reportForm.get('countryCode')?.value) {
                 this.reportForm.get('countryCode')?.setValue(this.activeCompany.countryV2?.alpha2CountryCode);
             }
             this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
