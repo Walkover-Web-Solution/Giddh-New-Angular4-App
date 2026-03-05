@@ -167,8 +167,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         });
 
         document.querySelector('body')?.classList?.add('master-page');
-        this.headerRect = this.header.nativeElement?.getBoundingClientRect();
-        this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
+        setTimeout(() => {
+            this.headerRect = this.header.nativeElement?.getBoundingClientRect();
+            this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
+        }, 100);
     }
 
     public ngAfterViewChecked() {
