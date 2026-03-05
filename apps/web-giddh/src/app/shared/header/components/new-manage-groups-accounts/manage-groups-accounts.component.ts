@@ -1,5 +1,5 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild, NgZone, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Angular21ChangeDetectionService } from '../../../../services/angular21-change-detection.service';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
@@ -46,7 +46,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     /** True if initial component load */
     public initialLoad: boolean = true;
     /** List of top shared groups */
-    public topSharedGroups: any[] = [];
+    public topSharedGroups = signal<any[]>([]);
     /** List of data searched */
     public searchedMasterData: any[] = [];
     /** True if account has unsaved changes */
@@ -86,6 +86,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public resizeEvent(e) {
         this.headerRect = this.header.nativeElement?.getBoundingClientRect();
         this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
+        this.cdRef.detectChanges();
     }
 
     /**
@@ -285,10 +286,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     private getTopSharedGroups(): void {
-        this.topSharedGroups = [];
+        this.topSharedGroups.set([]);
         this.groupService.getTopSharedGroups().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
-                this.topSharedGroups = response?.body?.results;
+                this.topSharedGroups.set(response?.body?.results);
                 this.changeDetectionService.triggerChangeDetection(this.cdRef, this.ngZone);
             } else {
                 this.changeDetectionService.safeChangeDetection(this.cdRef, this.ngZone);
