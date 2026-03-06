@@ -354,9 +354,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
-            const params = queryParams;
-            if (params.tab === 'customer' || params.tab === 'vendor') {
-                const restoredQ = params.searchText || '';
+            if (queryParams.tab === 'customer' || queryParams.tab === 'vendor') {
+                const restoredQ = queryParams.searchText || '';
                 this.searchStr = restoredQ;
                 this.searchedName.setValue(restoredQ, { emitEvent: false });
                 this.showNameSearch = restoredQ ? true : false;

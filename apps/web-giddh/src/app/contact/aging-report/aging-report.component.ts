@@ -270,16 +270,16 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
-            const params = queryParams;
-            if (params.tab === 'aging-report') {
-                const restoredQ = params.searchText || '';
+            if (queryParams.tab === 'aging-report') {
+                const restoredQ = queryParams.searchText || '';
                 this.searchStr = restoredQ;
                 this.searchedName.setValue(restoredQ, { emitEvent: false });
                 this.showNameSearch = restoredQ ? true : false;
-                if (params.category || params.amountType || params.amount) {
-                    this.commonRequest.category = params.category || '';
-                    this.commonRequest.amountType = params.amountType || '';
-                    this.commonRequest.amount = params.amount ? Number(params.amount) : null;
+                if (queryParams.category || queryParams.amountType || queryParams.amount) {
+                    this.commonRequest.category = queryParams.category || '';
+                    this.commonRequest.amountType = queryParams.amountType || '';
+                    this.commonRequest.amount = queryParams.amount ? Number(queryParams.amount) : null;
+                    this.dueAmountReportRequest.q = restoredQ;
                     this.applyAdvanceSearch(this.commonRequest, true);
                 } else {
                     this.searchStr$.next(restoredQ);
