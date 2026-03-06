@@ -36,7 +36,7 @@ import { PageEvent } from "@angular/material/paginator";
 import { BranchHierarchyType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG, Configuration } from "../../app.constant";
 import { AgingreportingService } from "../../services/agingreporting.service";
 import { ToasterService } from "../../services/toaster.service";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ReceiptService } from "../../services/receipt.service";
 import { InvoiceReceiptFilter } from "../../models/api-models/recipt";
@@ -149,6 +149,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private router: Router,
+        private route: ActivatedRoute,
         private agingReportService: AgingreportingService,
         private receiptService: ReceiptService,
         private scrollDispatcher: ScrollDispatcher,
@@ -215,12 +216,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(term => {
-            if (!this.defaultLoad) {
+            if (term!=undefined && term!=null) {
                 this.showClearFilter = (term) ? true : false;
                 this.dueAmountReportRequest.q = term;
                 this.getDueReport();
             }
-            this.defaultLoad = false;
         });
 
         this.store.pipe(
@@ -268,12 +268,31 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
+            const params = queryParams;
+            if (params.tab === 'aging-report') {
+                const restoredQ = params.searchText || '';
+                this.searchStr = restoredQ;
+                this.searchedName.setValue(restoredQ, { emitEvent: false });
+                this.showNameSearch = restoredQ ? true : false;
+                if (params.category || params.amountType || params.amount) {
+                    this.commonRequest.category = params.category || '';
+                    this.commonRequest.amountType = params.amountType || '';
+                    this.commonRequest.amount = params.amount ? Number(params.amount) : null;
+                    this.applyAdvanceSearch(this.commonRequest, true);
+                } else {
+                    this.searchStr$.next(restoredQ);
+                }
+            }
+        });
+
         this.searchedName?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.searchStr$.next(searchedText);
+            this.generalService.saveRouteQueryFilters({ searchText: searchedText || null });
         });
 
         this.store.pipe(select(state => state.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$)).subscribe(response => {
@@ -330,19 +349,29 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         if (this.agingReportAdvanceSearch) {
             this.agingReportAdvanceSearch.reset();
         }
-        this.searchStr$.next('');
-        this.searchedName?.reset();
-        this.searchStr = "";
-        this.showNameSearch = false;
         this.isAdvanceSearchApplied = false;
         this.dueAmountReportRequest.q = '';
-        this.sort("name", "asc");
         this.showClearFilter = false;
-        this.defaultLoad = true;
+        this.generalService.saveRouteQueryFilters(null, true);
+        this.sort("name", "asc");
     }
 
-    public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
+    /**
+     * Saves the current advance search filters and search text to localStorage and URL query params
+     *
+     * @private
+     * @memberof AgingReportComponent
+     */
+    private saveAgingReportFilters(): void {
+        const { category, amountType, amount } = this.commonRequest;
+        this.generalService.saveRouteQueryFilters({ category, amountType, amount });
+    }
+
+    public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal, skipSave: boolean = false) {
         this.commonRequest = request;
+        if (!skipSave) {
+            this.saveAgingReportFilters();
+        }
         this.agingAdvanceSearchModal.totalDueAmount = request.amount;
         if (request.category === "totalDue") {
             this.agingAdvanceSearchModal.includeTotalDueAmount = true;

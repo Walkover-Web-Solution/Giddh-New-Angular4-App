@@ -317,6 +317,58 @@ export class UiSettingsService {
     }
 
     /**
+     * Gets the saved query params for a specific route and company
+     *
+     * @public
+     * @param {string} companyUniqueName - The active company unique name
+     * @param {string} routePath - The route path (e.g. /pages/contact/customer)
+     * @returns {(Record<string, any> | null)} Saved query params or null if not found
+     * @memberof UiSettingsService
+     */
+    public getRouteQueryFilters(companyUniqueName: string, routePath: string): Record<string, any> | null {
+        try {
+            const allSettings = this.getAllSettings();
+            const routeFilters = allSettings['route-query-filters'];
+            return routeFilters?.[companyUniqueName]?.[routePath]?.queryParams ?? null;
+        } catch (error) {
+            console.warn('Error getting route query filters:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Saves query params for a specific route and company. Pass null to clear.
+     *
+     * @public
+     * @param {string} companyUniqueName - The active company unique name
+     * @param {string} routePath - The route path (e.g. /pages/contact/customer)
+     * @param {(Record<string, any> | null)} queryParams - Query params to save, or null to clear
+     * @returns {boolean} Success status
+     * @memberof UiSettingsService
+     */
+    public setRouteQueryFilters(companyUniqueName: string, routePath: string, queryParams: Record<string, any> | null): boolean {
+        try {
+            const allSettings = this.getAllSettings();
+            if (!allSettings['route-query-filters']) {
+                allSettings['route-query-filters'] = {};
+            }
+            if (!allSettings['route-query-filters'][companyUniqueName]) {
+                allSettings['route-query-filters'][companyUniqueName] = {};
+            }
+            if (queryParams === null) {
+                delete allSettings['route-query-filters'][companyUniqueName][routePath];
+            } else {
+                allSettings['route-query-filters'][companyUniqueName][routePath] = { queryParams };
+            }
+            localStorage.setItem(UI_SETTINGS_STORAGE_KEY, JSON.stringify(allSettings));
+            return true;
+        } catch (error) {
+            console.error('Error setting route query filters:', error);
+            return false;
+        }
+    }
+
+    /**
      * Checks if a value is a cached setting with expiry
      * 
      * @private

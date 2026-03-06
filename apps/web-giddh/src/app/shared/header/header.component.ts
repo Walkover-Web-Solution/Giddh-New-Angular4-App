@@ -618,6 +618,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isLedgerAccSelected = false;
             const lastState = s?.toLowerCase();
 
+            this.generalService.restoreRouteQueryFilters();
+
             let lastStateHaveParams: boolean = lastState.includes('?');
             if (lastStateHaveParams) {
                 let tempParams = lastState.substr(lastState.lastIndexOf('?'));

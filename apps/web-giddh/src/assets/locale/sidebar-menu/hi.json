@@ -23,6 +23,9 @@
                     "icon": "icon-customer",
                     "description": "ग्राहकों को प्रबंधित करें, एसएमएस/ईमेल के माध्यम से अनुस्मारक भेजें",
                     "additional": {
+                        "queryParams": {
+                            "tab": "customer"
+                        },
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/customer",
@@ -155,7 +158,8 @@
                             "icon": "icon-view",
                             "additional": {
                                 "queryParams": {
-                                    "groupBy": "duration"
+                                    "groupBy": "duration",
+                                    "required": "groupBy"
                                 },
                                 "matchQueryParams": true
                             }
@@ -166,7 +170,8 @@
                             "icon": "icon-export",
                             "additional": {
                                 "queryParams": {
-                                    "groupBy": "salesPerson"
+                                    "groupBy": "salesPerson",
+                                    "required": "groupBy"
                                 },
                                 "matchQueryParams": true
                             }
@@ -177,7 +182,8 @@
                             "icon": "icon-export",
                             "additional": {
                                 "queryParams": {
-                                    "groupBy": "state"
+                                    "groupBy": "state",
+                                    "required": "groupBy"
                                 },
                                 "matchQueryParams": true
                             }
@@ -188,7 +194,8 @@
                             "icon": "icon-export",
                             "additional": {
                                 "queryParams": {
-                                    "groupBy": "country"
+                                    "groupBy": "country",
+                                    "required": "groupBy"
                                 },
                                 "matchQueryParams": true
                             }
@@ -438,7 +445,8 @@
                     "description": "बल्क एसएमएस/ईमेल भेजें, रिमाइंडर सेट करें",
                     "additional": {
                         "queryParams": {
-                            "voucherVersion": 2
+                            "voucherVersion": 2,
+                            "tab": "vendor"
                         },
                         "createNew": {
                             "label": "+",
