@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { UI_SETTINGS_STORAGE_KEY, CACHE_DURATION } from '../app.constant';
 
+/** Storage key for persisted route query filter params */
+const ROUTE_QUERY_FILTERS_KEY = 'route-query-filters';
+
 /**
  * Interface for UI settings data structure
  */
@@ -328,7 +331,7 @@ export class UiSettingsService {
     public getRouteQueryFilters(companyUniqueName: string, routePath: string): Record<string, any> | null {
         try {
             const allSettings = this.getAllSettings();
-            const routeFilters = allSettings['route-query-filters'];
+            const routeFilters = allSettings[ROUTE_QUERY_FILTERS_KEY];
             return routeFilters?.[companyUniqueName]?.[routePath]?.queryParams ?? null;
         } catch (error) {
             console.warn('Error getting route query filters:', error);
@@ -349,16 +352,16 @@ export class UiSettingsService {
     public setRouteQueryFilters(companyUniqueName: string, routePath: string, queryParams: Record<string, any> | null): boolean {
         try {
             const allSettings = this.getAllSettings();
-            if (!allSettings['route-query-filters']) {
-                allSettings['route-query-filters'] = {};
+            if (!allSettings[ROUTE_QUERY_FILTERS_KEY]) {
+                allSettings[ROUTE_QUERY_FILTERS_KEY] = {};
             }
-            if (!allSettings['route-query-filters'][companyUniqueName]) {
-                allSettings['route-query-filters'][companyUniqueName] = {};
+            if (!allSettings[ROUTE_QUERY_FILTERS_KEY][companyUniqueName]) {
+                allSettings[ROUTE_QUERY_FILTERS_KEY][companyUniqueName] = {};
             }
             if (queryParams === null) {
-                delete allSettings['route-query-filters'][companyUniqueName][routePath];
+                delete allSettings[ROUTE_QUERY_FILTERS_KEY][companyUniqueName][routePath];
             } else {
-                allSettings['route-query-filters'][companyUniqueName][routePath] = { queryParams };
+                allSettings[ROUTE_QUERY_FILTERS_KEY][companyUniqueName][routePath] = { queryParams };
             }
             localStorage.setItem(UI_SETTINGS_STORAGE_KEY, JSON.stringify(allSettings));
             return true;

@@ -216,7 +216,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(term => {
-            if (term!=undefined && term!=null) {
+            if (term !== undefined && term !== null) {
                 this.showClearFilter = (term) ? true : false;
                 this.dueAmountReportRequest.q = term;
                 this.getDueReport();
