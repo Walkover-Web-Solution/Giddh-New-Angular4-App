@@ -17,6 +17,7 @@ import {
     Renderer2,
     TemplateRef,
     ViewChild,
+    signal,
 } from "@angular/core";
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -232,7 +233,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
-    public showClearFilter: boolean = false;
+    public showClearFilter = signal<boolean>(false);
     /** True if it's default load */
     public defaultLoad: boolean = true;
     /** This will use for displayed table columns */
@@ -326,34 +327,41 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         });
 
-        combineLatest([this.route.params, this.route.queryParams])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(([params, queryParams]) => {
-                const lastTabType = this.moduleType;
-                const typeParam = params?.type?.toLowerCase();
-                const tabQueryParam = queryParams?.tab?.toLowerCase();
-                this.moduleType = params.type?.toUpperCase();
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+            const lastTabType = this.moduleType;
+            const typeParam = params?.type?.toLowerCase();
+            this.moduleType = params?.type?.toUpperCase();
 
-                const isCustomer = typeParam?.includes('customer') || tabQueryParam === 'customer';
-                const isVendor = typeParam?.includes('vendor') || tabQueryParam === 'vendor';
+            const isCustomer = typeParam?.includes('customer');
+            const isVendor = typeParam?.includes('vendor');
 
-                const newTab = isCustomer ? 'customer'
-                    : isVendor ? 'vendor'
-                        : 'aging-report';
+            const newTab = isCustomer ? 'customer'
+                : isVendor ? 'vendor'
+                    : 'aging-report';
 
-                const previousTab = this.activeTab;
+            const previousTab = this.activeTab;
 
-                if (newTab !== previousTab) {
-                    this.displayedColumns = [];
-                    this.dynamicCustomColumns = [];
-                    this.setActiveTab(newTab);
-                    this.resetSearchIfSwitched(previousTab);
-                }
+            if (newTab !== previousTab) {
+                this.displayedColumns = [];
+                this.dynamicCustomColumns = [];
+                this.setActiveTab(newTab);
+                this.resetSearchIfSwitched(previousTab);
+            }
 
-                if (lastTabType) {
-                    this.translationComplete(true);
-                }
-            });
+            if (lastTabType) {
+                this.translationComplete(true);
+            }
+        });
+
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
+            if (queryParams.tab === 'customer' || queryParams.tab === 'vendor') {
+                const restoredQ = queryParams.searchText || '';
+                this.searchStr = restoredQ;
+                this.searchedName.setValue(restoredQ, { emitEvent: false });
+                this.showNameSearch = restoredQ ? true : false;
+                this.searchStr$.next(restoredQ);
+            }
+        });
 
         this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -448,13 +456,12 @@ export class ContactComponent implements OnInit, OnDestroy {
             debounceTime(1000),
             distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((term: any) => {
-                if (!this.defaultLoad) {
+                if (term != null && term != undefined) {
                     this.searchStr = term;
                     this.advanceFilters.q = term;
+                    this.showClearFilter.set(term ? true : false);
                     this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
-
-                this.defaultLoad = false;
             });
 
         if (this.activeCompany && this.activeCompany.countryV2) {
@@ -522,12 +529,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.searchedName?.valueChanges.pipe(
             debounceTime(700),
-            distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                this.showClearFilter = true;
-                this.searchStr$.next(searchedText);
+                this.generalService.saveRouteQueryFilters({ searchText: searchedText || null });
             }
         });
     }
@@ -690,11 +695,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
 
-            if (!this.hasNavigated) {
-                this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
-                this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
-                this.hasNavigated = true;
-            }
         }
     }
 
@@ -1079,19 +1079,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
-        this.showClearFilter = false;
+        this.showClearFilter.set(false);
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
         this.key = (this.activeTab === "vendor") ? "amountDue" : "name";
         this.order = (this.activeTab === "vendor") ? "desc" : "asc";
-        if (!this.searchedName?.value) {
-            this.getAccounts(this.fromDate, this.toDate,
-                null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-        }
-        this.searchedName?.reset();
-        this.searchStr = "";
-        this.showNameSearch = false;
+        this.generalService.saveRouteQueryFilters(null, true);
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -1547,7 +1541,6 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        this.showClearFilter = false;
         if (searchedFieldName === "name") {
             if (this.searchedName?.value) {
                 return;
@@ -1624,7 +1617,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public sort(key: string, ord = "asc") {
-        this.showClearFilter = true;
+        this.showClearFilter.set(true);
         this.key = key;
         this.order = ord;
         this.advanceFilters.sort = ord;

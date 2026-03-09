@@ -33,6 +33,7 @@ import { Configuration } from '../app.constant';
 import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, map, orderBy, remove, set, slice, some } from '../lodash-optimized';
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
+import { UiSettingsService } from './ui-settings.service';
 
 @Injectable({
     providedIn: 'root'
@@ -124,7 +125,8 @@ export class GeneralService {
         private http: HttpClient,
         @Optional() @Inject(ServiceConfig)
         private config: IServiceConfigArgs,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private uiSettingsService: UiSettingsService
     ) { }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -2228,6 +2230,125 @@ export class GeneralService {
             footerCssClass,
             buttons
         };
+    }
+
+    /**
+     * Parses a comma-separated query param string into a string array.
+     *
+     * @param {string} [value] - Raw query param value
+     * @returns {string[]} Parsed array, empty if no value
+     * @memberof GeneralService
+     */
+    public parseQueryParamArray(value?: string): string[] {
+        return value ? value.split(',').filter(Boolean) : [];
+    }
+
+    /**
+     * Normalizes query params by converting any array values to comma-separated strings.
+     *
+     * @private
+     * @param {Record<string, any>} queryParams - Raw query params
+     * @returns {Record<string, any>} Normalized params
+     * @memberof GeneralService
+     */
+    private normalizeQueryParams(queryParams: Record<string, any>): Record<string, any> {
+        const normalized: Record<string, any> = {};
+        for (const [key, value] of Object.entries(queryParams)) {
+            normalized[key] = Array.isArray(value) ? (value.length ? value.join(',') : null) : value;
+        }
+        return normalized;
+    }
+
+    /**
+     * Saves query params for a given route path scoped to the active company.
+     * Pass null as queryParams to clear the saved entry.
+     * When replaceOnly is true, saves exactly the provided params without merging with existing ones.
+     * When replaceOnly is false (default), merges the provided params with any existing saved params.
+     * Array values are automatically normalized to comma-separated strings.
+     *
+     * @public
+     * @param {(Record<string, any> | null)} queryParams - Params to save, or null to clear
+     * @param {boolean} [replaceOnly=false] - When true, replaces existing saved params entirely
+     * @memberof GeneralService
+     */
+    public saveRouteQueryFilters(queryParams: Record<string, any> | null, replaceOnly: boolean = false): void {
+        const companyUniqueName = this.companyUniqueName;
+        const { path, queryParams: forcedParams } = this.getCurrentPath(replaceOnly);
+        if (companyUniqueName && path) {
+            const normalized = queryParams ? this.normalizeQueryParams(queryParams) : {};
+            const existing = replaceOnly ? {} : (this.uiSettingsService.getRouteQueryFilters(companyUniqueName, path) ?? {});
+            const merged = { ...existing, ...forcedParams, ...normalized };
+            this.updateActivatedRouteQueryParams(merged ?? {}, replaceOnly ? 'replace' : 'merge');
+            this.uiSettingsService.setRouteQueryFilters(companyUniqueName, path, merged);
+        }
+    }
+
+    /**
+     * Gets the saved query params for a given route path scoped to the active company
+     *
+     * @public
+     * @param {string} routePath - Route path to look up (e.g. /pages/contact/customer)
+     * @returns {(Record<string, any> | null)} Saved query params or null
+     * @memberof GeneralService
+     */
+    public getRouteQueryFiltersForPath(): Record<string, any> | null {
+        const companyUniqueName = this.companyUniqueName;
+        const { path } = this.getCurrentPath();
+        if (!companyUniqueName || !path) {
+            return null;
+        }
+        return this.uiSettingsService.getRouteQueryFilters(companyUniqueName, path);
+    }
+
+    /**
+     * Restores saved query params for a given route path from localStorage only.
+     * Returns the saved params so the component can apply them to its own state and URL.
+     *
+     * @public
+     * @param {string} routePath - Explicit route path (e.g. /pages/contact/customer)
+     * @returns {(Record<string, any> | null)} Saved params or null if nothing found
+     * @memberof GeneralService
+     */
+    public restoreRouteQueryFilters(): void {
+        const { queryParams: forcedParams } = this.getCurrentPath();
+        const saved = this.getRouteQueryFiltersForPath() ?? {};
+        const merged: Record<string, any> = { ...saved, ...forcedParams };
+        this.updateActivatedRouteQueryParams(merged);
+    }
+
+    /**
+     * Returns the current route path scoped by required query params (for localStorage key)
+     * and the full current query params (for merging with saved filters).
+     * When replaceOnly is true, returns only the forced/required params as queryParams.
+     *
+     * @param {boolean} [replaceOnly] - When true, returns only required params in queryParams
+     * @returns {{ path: string; queryParams: Record<string, any> }} Scoped path and query params
+     * @memberof GeneralService
+     */
+    public getCurrentPath(replaceOnly: boolean = false): { path: string; queryParams: Record<string, any> } {
+        const currentUrlParams = this.activatedRoute.snapshot.queryParams;
+        const basePath = this.router.url.split('?')[0];
+        const forcedParams: Record<string, any> = {};
+
+        if (currentUrlParams?.required) {
+            const requiredKeys: string[] = currentUrlParams.required.split(',');
+            requiredKeys.forEach(key => {
+                if (currentUrlParams[key] != null) {
+                    forcedParams[key] = currentUrlParams[key];
+                }
+            });
+        } else if (currentUrlParams?.tab) {
+            forcedParams['tab'] = currentUrlParams['tab'];
+            if (currentUrlParams?.tabIndex) {
+                forcedParams['tabIndex'] = currentUrlParams['tabIndex'];
+            }
+        }
+        
+        const scopedPath = Object.keys(forcedParams).length
+            ? `${basePath}?${Object.entries(forcedParams).map(([k, v]) => `${k}=${v}`).join('&')}`
+            : basePath;
+
+        return { path: scopedPath, queryParams: replaceOnly ? forcedParams : currentUrlParams };
     }
 
     /**
