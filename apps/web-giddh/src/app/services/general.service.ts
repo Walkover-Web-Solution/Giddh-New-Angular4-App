@@ -876,12 +876,9 @@ export class GeneralService {
             return stockTaxes;
         } else if (stockGroupTaxes?.length) {
             return stockGroupTaxes;
-        } else if (accountTaxes?.length) {
-            return accountTaxes?.filter((tax) => !(accountGroupTaxes ?? []).includes(tax)) ?? [];
-        } else if (accountGroupTaxes?.length) {
-            return accountGroupTaxes;
         } else {
-            return [];
+            const filteredAccountTaxes = accountTaxes?.filter((tax) => !(accountGroupTaxes ?? []).includes(tax)) ?? [];
+            return filteredAccountTaxes?.length ? filteredAccountTaxes : accountGroupTaxes ?? [];
         }
     }
 
