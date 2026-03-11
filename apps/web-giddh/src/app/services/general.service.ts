@@ -872,12 +872,13 @@ export class GeneralService {
      */
     public fetchTaxesOnPriority(stockTaxes?: Array<string>, stockGroupTaxes?: Array<string>,
         accountTaxes?: Array<string>, accountGroupTaxes?: Array<string>): Array<string> {
+        accountTaxes = accountTaxes?.filter((tax) => !(accountGroupTaxes ?? []).includes(tax)) ?? [];
         if (stockTaxes?.length) {
             return stockTaxes;
         } else if (stockGroupTaxes?.length) {
             return stockGroupTaxes;
         } else if (accountTaxes?.length) {
-            return accountTaxes?.filter((tax) => !(accountGroupTaxes ?? []).includes(tax)) ?? [];
+            return accountTaxes;
         } else if (accountGroupTaxes?.length) {
             return accountGroupTaxes;
         } else {

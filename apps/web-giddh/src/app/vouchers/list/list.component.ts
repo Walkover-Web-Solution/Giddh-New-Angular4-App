@@ -2515,9 +2515,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public setInitialAdvanceFilter(onlyResetValue: boolean = false): void {
         let universalDate;
         // get application date
-        this.componentStore.universalDate$.pipe(take(1)).subscribe(date => {
+        this.componentStore.universalDate$.pipe(filter(Boolean) ,take(1)).subscribe(date => {
             universalDate = date;
-        });
 
         // set date picker date as application date
         if (universalDate?.length > 1) {
@@ -2551,8 +2550,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getRecurringVouchers();
             } else {
                 this.getVouchers(false);
+                this.getVoucherBalances();
             }
         }
+        });
     }
 
     /**

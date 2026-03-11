@@ -1,5 +1,5 @@
 import { BankIntegrationDialogComponent } from './../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, OnDestroy, OnInit, QueryList, signal, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
@@ -66,6 +66,7 @@ import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
 import { LedgerDropdownTypeEnum } from '../models/api-models/Ledger';
 import { IOption } from '../app.constant';
 import { environment } from '../../environments/environment.generated';
+import { SettingsDiscountService } from '../services/settings.discount.service';
 
 @Component({
     selector: 'ledger',
@@ -412,6 +413,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public forceClear$: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
     /** Tracks if account unique name should be shown in dropdowns */
     public showAccountUniqueName: boolean = false;
+    /** List of discounts */
+    public discountsList = signal<any[]>([]);
 
     constructor(
         private store: Store<AppState>,
@@ -441,7 +444,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
         private ledgerComponentStore: LedgerComponentStore,
-        private breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver,
+        private settingsDiscountService: SettingsDiscountService
     ) {
         if (window.localStorage) {
             localStorage.setItem('refNo', null);
@@ -1224,6 +1228,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.cdRf.detectChanges();
             }
         });
+        this.getAllDiscounts();
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -3714,6 +3719,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse.salesPerson?.name || this.lc.blankLedger.salesPersonName || '';
                     }
                 }
+                this.preparePreAppliedDiscounts(txn);
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
                 txn.showOtherTax = this.showOtherTax(txn);
@@ -3726,6 +3732,70 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.cdRf.detectChanges();
                 }
                 this.getTransactionCountConvertToEntries();
+            }
+        });
+    }
+
+    /**
+     * To prepare pre applied discount for current transactions
+     *
+     * @memberof LedgerComponent
+     */
+    public preparePreAppliedDiscounts(txn: any): void {
+        if (!txn?.duplicateEntry) {
+            txn.discounts = [];
+        }
+        const stockDiscounts = txn.selectedAccount?.stock?.variant?.variantDiscount?.discounts
+        if (stockDiscounts?.length && !txn.isMrpDiscountApplied) {
+            stockDiscounts?.forEach(variantDiscount => {
+                this.discountsList()?.forEach(item => {
+                    if (variantDiscount?.discount?.uniqueName === item?.uniqueName) {
+                        txn.discounts.push(item);
+                    }
+                    return item;
+                });
+            });
+        } else {
+            if (txn?.selectedAccount?.accountApplicableDiscounts?.length) {
+                txn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
+                (Array.isArray(txn?.selectedAccount.accountApplicableDiscounts) ? txn?.selectedAccount.accountApplicableDiscounts : []).forEach(element => {
+                    this.discountsList()?.forEach(item => {
+                        if (element?.uniqueName === item?.uniqueName) {
+                            txn.discounts.push(item);
+                        }
+                    });
+                });
+            } else if (this.lc.activeAccount.applicableDiscounts.length) {
+                this.lc.activeAccount.applicableDiscounts.forEach(element => {
+                    this.discountsList()?.forEach(item => {
+                        if (element?.uniqueName === item?.uniqueName) {
+                            txn.discounts.push(item);
+                        }
+                    });
+                });
+            } else if (!txn?.duplicateEntry) {
+                if (txn) {
+                    txn.discount = 0;
+                }
+            }
+        }
+    }
+
+    /**
+     * Get all discounts API call
+     *
+     * @private
+     * @memberof LedgerComponent
+     */
+    private getAllDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                let discounts = response?.body;
+                discounts.map((discount: any) => {
+                    discount.amount = discount.discountValue;
+                    discount.discountUniqueName = discount.uniqueName;
+                })
+                this.discountsList.set(discounts);
             }
         });
     }

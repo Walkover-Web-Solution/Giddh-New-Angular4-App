@@ -497,8 +497,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
             if (callback) {
                 callback();
-            } else {
-                this.preparePreAppliedDiscounts();
             }
         });
     }
@@ -551,7 +549,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.selectedWarehouse = this.currentTxn.inventory?.warehouse?.uniqueName ?? this.blankLedger.transactions[0].inventory?.warehouse?.uniqueName;
             }
             this.calculatePreAppliedTax();
-            this.preparePreAppliedDiscounts();
             if (this.blankLedger?.otherTaxModal?.appliedOtherTax?.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
@@ -607,7 +604,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.needToReCalculate.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.setTaxCalculationMethodForStock();
-                this.preparePreAppliedDiscounts();
                 this.calculatePreAppliedTax();
                 this.detectChanges();
                 setTimeout(() => {
@@ -1216,6 +1212,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (!event.relatedTarget || !this.entryContent?.nativeElement.contains(event.relatedTarget)) {
+            this.currentTxn.selectedAccount.applicableTaxes = this.currentTxn.taxesVm;
             this.clickedOutsideEvent.emit(event);
         }
     }
@@ -1808,62 +1805,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (accountDetails.country && accountDetails.country.countryName) {
             this.activeAccountCountryName = accountDetails.country.countryName;
         }
-        if (accountDetails.applicableDiscounts && accountDetails.applicableDiscounts.length) {
-            this.accountOtherApplicableDiscount = accountDetails.applicableDiscounts;
-        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount?.length)) {
-            this.accountOtherApplicableDiscount.push(...accountDetails.inheritedDiscounts[0].applicableDiscounts);
-        }
-        if (!accountDetails.applicableTaxes?.length && accountDetails.otherApplicableTaxes?.length) {
-            accountDetails.applicableTaxes = [...accountDetails.otherApplicableTaxes];
-        }
-        this.preparePreAppliedDiscounts();
         this.calculatePreAppliedTax();
 
-    }
-
-    /**
-     * To prepare pre applied discount for current transactions
-     *
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public preparePreAppliedDiscounts(): void {
-        if (!this.currentTxn?.duplicateEntry) {
-            this.currentTxn.discounts = [];
-        }
-        const stockDiscounts = this.currentTxn.selectedAccount?.stock?.variant?.variantDiscount?.discounts
-        if (stockDiscounts?.length && !this.currentTxn.isMrpDiscountApplied) {
-            stockDiscounts?.forEach(variantDiscount => {
-                this.discountsList()?.forEach(item => {
-                    if (variantDiscount?.discount?.uniqueName === item?.uniqueName) {
-                        this.currentTxn.discounts.push(item);
-                    }
-                    return item;
-                });
-            });
-        } else {
-            if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
-                this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
-                (Array.isArray(this.currentTxn?.selectedAccount.accountApplicableDiscounts) ? this.currentTxn?.selectedAccount.accountApplicableDiscounts : []).forEach(element => {
-                    this.discountsList()?.forEach(item => {
-                        if (element?.uniqueName === item?.uniqueName) {
-                            this.currentTxn.discounts.push(item);
-                        }
-                    });
-                });
-            } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
-                (Array.isArray(this.accountOtherApplicableDiscount) ? this.accountOtherApplicableDiscount : []).forEach(element => {
-                    this.discountsList()?.forEach(item => {
-                        if (element?.uniqueName === item?.uniqueName) {
-                            this.currentTxn.discounts.push(item);
-                        }
-                    });
-                });
-            } else if (!this.currentTxn?.duplicateEntry) {
-                if (this.currentTxn) {
-                    this.currentTxn.discount = 0;
-                }
-            }
-        }
     }
 
     /**
