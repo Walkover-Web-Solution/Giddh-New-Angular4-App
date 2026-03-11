@@ -545,6 +545,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.generalService.restoreRouteQueryFilters();
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -617,8 +618,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(s => s.session.lastState), takeUntil(this.destroyed$)).subscribe(s => {
             this.isLedgerAccSelected = false;
             const lastState = s?.toLowerCase();
-
-            this.generalService.restoreRouteQueryFilters();
 
             let lastStateHaveParams: boolean = lastState.includes('?');
             if (lastStateHaveParams) {
