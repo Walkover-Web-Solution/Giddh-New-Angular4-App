@@ -5344,6 +5344,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         }
 
+        if (this.isIndianCompany) {
+            if (this.showPlaceOfSupply && !this.invoiceForm.get('account.placeOfSupply.code')?.value) {
+                this.invoiceForm.get('account.placeOfSupply.code')?.markAsTouched();
+                return false;
+            }
+            if (this.showSourceDestinationOfSupply) {
+                if (!this.invoiceForm.get('account.sourceOfSupply.code')?.value) {
+                    this.invoiceForm.get('account.sourceOfSupply.code')?.markAsTouched();
+                    return false;
+                }
+                if (!this.invoiceForm.get('account.destinationOfSupply.code')?.value) {
+                    this.invoiceForm.get('account.destinationOfSupply.code')?.markAsTouched();
+                    return false;
+                }
+            }
+        }
+
         if (invoiceForm.isRcmEntry) {
             let hasTaxes = true;
             const entriesArray = this.invoiceForm.get("entries") as FormArray;

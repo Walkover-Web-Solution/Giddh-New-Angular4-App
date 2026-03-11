@@ -753,6 +753,11 @@
                                                         formControlName="code"
                                                         [options]="companyStateList$ | async"
                                                         [forceClear]="forceClear"
+                                                        [required]="true"
+                                                        [showError]="
+                                                            invoiceForm.controls['account'].get('placeOfSupply.code')?.touched &&
+                                                            invoiceForm.controls['account'].get('placeOfSupply.code')?.invalid
+                                                        "
                                                         (selectedOption)="onSupplyStateSelect('placeOfSupply', $event)"
                                                     ></reactive-dropdown-field>
                                                 </div>
@@ -769,6 +774,11 @@
                                                         formControlName="code"
                                                         [options]="companyStateList$ | async"
                                                         [forceClear]="forceClear"
+                                                        [required]="true"
+                                                        [showError]="
+                                                            invoiceForm.controls['account'].get('sourceOfSupply.code')?.touched &&
+                                                            invoiceForm.controls['account'].get('sourceOfSupply.code')?.invalid
+                                                        "
                                                         (selectedOption)="onSupplyStateSelect('sourceOfSupply', $event)"
                                                     ></reactive-dropdown-field>
                                                 </div>
@@ -1183,6 +1193,11 @@
                                                 formControlName="code"
                                                 [options]="companyStateList$ | async"
                                                 [forceClear]="forceClear"
+                                                [required]="true"
+                                                [showError]="
+                                                    invoiceForm.controls['account'].get('destinationOfSupply.code')?.touched &&
+                                                    invoiceForm.controls['account'].get('destinationOfSupply.code')?.invalid
+                                                "
                                                 (selectedOption)="onSupplyStateSelect('destinationOfSupply', $event)"
                                             ></reactive-dropdown-field>
                                         </div>
