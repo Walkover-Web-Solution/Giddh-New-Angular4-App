@@ -686,13 +686,13 @@ constructor(
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
             financialYear: this.currentActiveFinacialYear?.value, 
             branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), 
-            timeFilter: null, 
-            salesPersonUniqueNames: [], 
-            accountUniqueNames: [], 
-            groupBy: null, 
-            countryCodes: [],
-            countryCode: null,
-            stateCodes: []
+            timeFilter: this.selectedType, 
+            salesPersonUniqueNames: this.reportForm?.get('salesPersonUniqueNames')?.value, 
+            accountUniqueNames: this.reportForm?.get('accountUniqueNames')?.value, 
+            groupBy: this.reportForm?.get('groupBy')?.value, 
+            countryCodes: this.reportForm?.get('countryCodes')?.value,
+            countryCode: this.reportForm?.get('countryCode')?.value,
+            stateCodes: this.reportForm?.get('stateCodes')?.value
         }));
     }
 
