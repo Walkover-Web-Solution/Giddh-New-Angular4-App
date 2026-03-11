@@ -26,12 +26,14 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     @ViewChild('master', { static: false }) public master: MasterComponent;
     @ViewChild('header', { static: true }) public header: ElementRef;
     @ViewChild('grpSrch', { static: true }) public groupSrch: ElementRef;
-    public headerRect: any;
+    /** Bounding rect of the header element, used to calculate scrollable body height */
+    public headerRect = signal<any>(null);
     public showForm: boolean = false;
     @ViewChild('myModel', { static: true }) public myModel: ElementRef;
     public breadcrumbPath: string[] = [];
     public breadcrumbUniquePath: string[] = [];
-    public myModelRect: any;
+    /** Bounding rect of the modal container element, used to calculate scrollable body height */
+    public myModelRect = signal<any>(null);
     public searchLoad: Observable<boolean>;
     public groupAndAccountSearchString$: Observable<string>;
     private groupSearchTerms = new Subject<string>();
@@ -84,8 +86,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
     @HostListener('window:resize', ['$event'])
     public resizeEvent(e) {
-        this.headerRect = this.header.nativeElement?.getBoundingClientRect();
-        this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
+        this.headerRect.set(this.header.nativeElement?.getBoundingClientRect());
+        this.myModelRect.set(this.myModel.nativeElement?.getBoundingClientRect());
         this.cdRef.detectChanges();
     }
 
@@ -168,8 +170,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
         document.querySelector('body')?.classList?.add('master-page');
         setTimeout(() => {
-            this.headerRect = this.header.nativeElement?.getBoundingClientRect();
-            this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
+            this.headerRect.set(this.header.nativeElement?.getBoundingClientRect());
+            this.myModelRect.set(this.myModel.nativeElement?.getBoundingClientRect());
         }, 100);
     }
 
