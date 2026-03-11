@@ -478,9 +478,7 @@ constructor(
                 this.selectedType = queryParam.interval ?? this.durationEnum.Monthly;
                 this.interval = this.selectedType;
                 this.reportForm.get('interval').patchValue(this.selectedType);
-                if (queryParam?.selectedMonth) {
-                    this.selectedMonth = queryParam.selectedMonth;
-                }
+                this.selectedMonth = queryParam.selectedMonth ?? '';
             }
 
             this.reportForm.get('accountUniqueNames').patchValue(this.generalService.parseQueryParamArray(queryParam?.accountUniqueNames));
