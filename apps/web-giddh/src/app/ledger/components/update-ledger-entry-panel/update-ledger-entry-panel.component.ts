@@ -31,6 +31,7 @@ import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/a
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { DownloadLedgerRequest, IVariant, LedgerResponse } from '../../../models/api-models/Ledger';
 import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { OtherTaxTypeEnum } from '../../../vouchers/utility/vouchers.const';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
@@ -227,6 +228,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public totalAdjustedAmount: number = 0;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
+    /** Enum for Other tax types */
+    public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
     /** Rate should have precision up to 4 digits for better calculation */
     public ratePrecision = RATE_FIELD_PRECISION;
     /** Clear selected invoice */
@@ -961,7 +964,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if (this.isAdvanceReceipt) {
             requestObj.voucherType = 'rcpt';
-            requestObj.transactions[0].amount = this.vm.advanceReceiptAmount;
+            requestObj.transactions[0].amount = this.vm.grandTotal;
         }
 
         if (this.voucherApiVersion === 2) {
