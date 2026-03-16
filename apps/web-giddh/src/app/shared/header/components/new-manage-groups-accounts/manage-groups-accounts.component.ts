@@ -1,5 +1,5 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild, NgZone, ChangeDetectionStrategy, AfterViewChecked } from '@angular/core';
 import { Angular21ChangeDetectionService } from '../../../../services/angular21-change-detection.service';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
@@ -20,7 +20,7 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
     standalone: false,
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class ManageGroupsAccountsComponent implements OnInit, OnDestroy {
+export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Instance of master component */
     @ViewChild('master', { static: false }) public master: MasterComponent;
