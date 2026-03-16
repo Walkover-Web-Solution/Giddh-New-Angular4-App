@@ -180,7 +180,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     public ngAfterViewInit(): void {
-        this.updateBodyHeight();
+        setTimeout(() => {
+            this.updateBodyHeight();
+        }, 100);
     }
 
     /**
