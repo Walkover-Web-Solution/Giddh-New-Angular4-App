@@ -79,7 +79,7 @@
             <div
                 class="grp-col p-0"
                 [ngStyle]="{
-                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px',
+                    'height': (myModelRect() ? myModelRect().height : 0) - (headerRect() ? headerRect().height : 0) + 'px',
                 }"
             >
                 <div class="search-loading" *ngIf="searchLoad | async">
@@ -105,9 +105,9 @@
                                 [topSharedGroups]="topSharedGroups()"
                                 [searchedMasterData]="searchedMasterData"
                                 [ngStyle]="{
-                                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px',
+                                    'height': (myModelRect() ? myModelRect().height : 0) - (headerRect() ? headerRect().height : 0) + 'px',
                                 }"
-                                [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                                [height]="(myModelRect() ? myModelRect().height : 0) - (headerRect() ? headerRect().height : 0)"
                                 [isSearchingGroups]="!(grpSrch?.value === '')"
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
@@ -124,7 +124,7 @@
             <div class="form-box height-in-vh">
                 <account-operations
                     [topSharedGroups]="topSharedGroups()"
-                    [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                    [height]="(myModelRect() ? myModelRect().height : 0) - (headerRect() ? headerRect().height : 0)"
                     [breadcrumbPath]="breadcrumbPath"
                     [breadcrumbUniquePath]="breadcrumbUniquePath"
                     [localeData]="localeData"

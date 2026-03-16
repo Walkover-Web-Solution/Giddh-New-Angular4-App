@@ -1978,10 +1978,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 blankTransactionObj = this.adjustmentUtilityService.getAdjustmentObject(blankTransactionObj);
             }
             const model = cloneDeep(blankTransactionObj);
-            if (model.transactions[0]?.subVoucher === "ADVANCE_RECEIPT") {
-                /** Here key 'taxInclusiveAmount' represents the amount of the advance receipt, exclusive of tax (if tax is applied) */
-                model.transactions[0].amount = model.transactions[0].taxInclusiveAmount;
-            }
             if (eWayBillResponse && Object.keys(eWayBillResponse).length > 0) {
                 model.ewayBillDetails = eWayBillResponse;
             }

@@ -935,6 +935,9 @@ constructor(
             this.removeKeysFromObject(requestObject, keysToRemove);
         }
         this.currentGroupBy.set(requestObject.groupBy);
+        if (requestObject.groupBy === GroupBy.State && !this.reportForm.get('countryCode')?.value) {
+            this.reportForm.get('countryCode')?.setValue(this.activeCompany.countryV2?.alpha2CountryCode);
+        }
         this.componentStore.getSalesPurchaseList({
             payload: requestObject,
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },

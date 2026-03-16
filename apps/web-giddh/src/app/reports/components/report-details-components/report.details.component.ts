@@ -327,13 +327,6 @@ constructor(
                 this.filteredStateList.set([]);
             }
         });
-
-        this.reportForm.get('groupBy')?.valueChanges.pipe(filter(Boolean), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(groupBy => {
-            if (groupBy) {
-                this.generalService.updateActivatedRouteQueryParams({ groupBy, required: "groupBy" }, "replace");
-            }
-        });
-
     }
 
     public goToDashboard() {
@@ -456,9 +449,9 @@ constructor(
 
             // URL groupBy takes priority over store value
             if (queryParam?.groupBy && [GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(queryParam.groupBy)) {
-                this.reportForm.get('groupBy').patchValue(queryParam.groupBy, {emitevent: false});
+                this.reportForm.get('groupBy').patchValue(queryParam.groupBy);
             } else {
-                this.reportForm.get('groupBy').patchValue(GroupBy.Duration, {emitevent: false});
+                this.reportForm.get('groupBy').patchValue(GroupBy.Duration);
             }
             
             if (this.reportForm.get('groupBy').value === GroupBy.SalesPerson) {
@@ -478,9 +471,7 @@ constructor(
                 this.selectedType = queryParam.interval ?? this.durationEnum.Monthly;
                 this.interval = this.selectedType;
                 this.reportForm.get('interval').patchValue(this.selectedType);
-                if (queryParam?.selectedMonth) {
-                    this.selectedMonth = queryParam.selectedMonth;
-                }
+                this.selectedMonth = queryParam.selectedMonth ?? '';
             }
 
             this.reportForm.get('accountUniqueNames').patchValue(this.generalService.parseQueryParamArray(queryParam?.accountUniqueNames));
@@ -517,6 +508,15 @@ constructor(
                 this.changeDetectorRef.detectChanges();
             }
         });
+    }
+
+    /**
+     * Handle group by change
+     *
+     * @param groupBy
+     */
+    public handleGroupByChange(groupBy: string) {
+        this.generalService.updateActivatedRouteQueryParams({ groupBy, required: "groupBy" }, "replace");
     }
 
     public selectFinancialYearOption(event: IOption) {
