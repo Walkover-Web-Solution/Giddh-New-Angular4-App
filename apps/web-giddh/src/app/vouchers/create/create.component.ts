@@ -671,6 +671,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return this.company.countryCode === 'IN' && this.account.countryCode === 'IN';
     }
 
+    
+
+    /**
+     * True if voucher is a cash sales invoice (not purchase, debit note, or credit note)
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get isCashSalesInvoice(): boolean {
+        return this.invoiceType.isCashInvoice && !this.invoiceType.isPurchaseInvoice && !this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote;
+    }
+
     /**
      * True if Place of Supply field should be shown (invoice / credit note / estimate / proforma)
      *
@@ -681,7 +694,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get showPlaceOfSupply(): boolean {
         return (
             this.invoiceType.isSalesInvoice ||
-            (this.invoiceType.isCashInvoice && !this.invoiceType.isPurchaseInvoice && !this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) ||
+            this.isCashSalesInvoice ||
             this.invoiceType.isCreditNote ||
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice

@@ -753,7 +753,7 @@
                                                         formControlName="code"
                                                         [options]="companyStateList$ | async"
                                                         [forceClear]="forceClear"
-                                                        [required]="branchCurrentAddressInfo.taxNumber"
+                                                        [required]="!!branchCurrentAddressInfo.taxNumber"
                                                         [showError]="
                                                             invoiceForm.controls['account'].get('placeOfSupply.code')?.touched &&
                                                             invoiceForm.controls['account'].get('placeOfSupply.code')?.invalid
@@ -774,7 +774,7 @@
                                                         formControlName="code"
                                                         [options]="companyStateList$ | async"
                                                         [forceClear]="forceClear"
-                                                        [required]="branchCurrentAddressInfo.taxNumber"
+                                                        [required]="!!branchCurrentAddressInfo.taxNumber"
                                                         [showError]="
                                                             invoiceForm.controls['account'].get('sourceOfSupply.code')?.touched &&
                                                             invoiceForm.controls['account'].get('sourceOfSupply.code')?.invalid
@@ -1193,7 +1193,7 @@
                                                 formControlName="code"
                                                 [options]="companyStateList$ | async"
                                                 [forceClear]="forceClear"
-                                                [required]="branchCurrentAddressInfo.taxNumber"
+                                                [required]="!!branchCurrentAddressInfo.taxNumber"
                                                 [showError]="
                                                     invoiceForm.controls['account'].get('destinationOfSupply.code')?.touched &&
                                                     invoiceForm.controls['account'].get('destinationOfSupply.code')?.invalid
