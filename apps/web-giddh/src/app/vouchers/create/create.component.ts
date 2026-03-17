@@ -570,6 +570,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public isAccountChanged: boolean = false;
     /** True if recurring voucher */
     public isRecurringVoucher: any;
+    /** store branch current address information */
+    public branchCurrentAddressInfo: any = {};
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -665,8 +667,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @type {boolean}
      * @memberof VoucherCreateComponent
      */
-    public get isIndianCompany(): boolean {
-        return this.company.countryCode === 'IN';
+    public get isIndianCompanyAndAccount(): boolean {
+        return this.company.countryCode === 'IN' && this.account.countryCode === 'IN';
+    }
+
+    
+
+    /**
+     * True if voucher is a cash sales invoice (not purchase, debit note, or credit note)
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get isCashSalesInvoice(): boolean {
+        return this.invoiceType.isCashInvoice && !this.invoiceType.isPurchaseInvoice && !this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote;
     }
 
     /**
@@ -679,7 +694,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get showPlaceOfSupply(): boolean {
         return (
             this.invoiceType.isSalesInvoice ||
-            this.invoiceType.isCashInvoice ||
+            this.isCashSalesInvoice ||
             this.invoiceType.isCreditNote ||
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice
@@ -2359,6 +2374,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     // Find the HO branch
                     this.company.branch = response.find((branch) => !branch.parentBranch);
                 }
+                this.branchCurrentAddressInfo = this.company.branch.addresses.find((address)=>address.isDefault);
             }
         });
     }
@@ -2944,6 +2960,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (defaultAddress) {
             this.fillBillingShippingAddress("account", "billingDetails", defaultAddress, index);
             this.fillBillingShippingAddress("account", "shippingDetails", defaultAddress, index);
+            if (!this.isUpdateMode) {
+                this.setDefaultSupplyFields();
+            }
         }
     }
 
@@ -2960,7 +2979,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return '';
         }
         const defaultAddr = addresses.find((a) => a.isDefault);
-        return defaultAddr?.gstNumber || '';
+        return defaultAddr?.gstNumber;
     }
 
     /**
@@ -2972,11 +2991,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private setDefaultSupplyFields(): void {
-        if (!this.isIndianCompany || !this.invoiceForm) {
+        if (!this.isIndianCompanyAndAccount || !this.invoiceForm) {
             return;
         }
 
-        const isB2C = this.getDefaultAddressGstNumber(this.account?.addresses) ? false : true;
+        const isB2C = !!this.getDefaultAddressGstNumber(this.account?.addresses);
 
         if (this.showPlaceOfSupply) {
             const stateSource = isB2C
@@ -3100,7 +3119,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"]?.get("mobileNumber").setValue(accountData?.mobileNo ?? "");
             this.account.mobileNumber = accountData?.mobileNo ?? "";
             this.updateDueDate();
-            this.setDefaultSupplyFields();
         } else {
             if (
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
@@ -3191,9 +3209,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         this.invoiceForm.controls[entityType]?.get(addressType).get("state").get("name").patchValue(state.name);
         this.invoiceForm.controls[entityType]?.get(addressType).get("state").get("code").patchValue(state.code);
-        if (!this.isUpdateMode && (entityType === 'company' || entityType === 'account')) {
-            this.setDefaultSupplyFields();
-        }
     }
 
     /**
@@ -5344,7 +5359,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         }
 
-        if (this.isIndianCompany) {
+        if (this.isIndianCompanyAndAccount && !!this.branchCurrentAddressInfo.taxNumber) {
             if (this.showPlaceOfSupply && !this.invoiceForm.get('account.placeOfSupply.code')?.value) {
                 this.invoiceForm.get('account.placeOfSupply.code')?.markAsTouched();
                 return false;
@@ -5528,7 +5543,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
-        if (!this.isIndianCompany) {
+        if (!this.isIndianCompanyAndAccount) {
             delete invoiceForm.account?.placeOfSupply;
             delete invoiceForm.account?.sourceOfSupply;
             delete invoiceForm.account?.destinationOfSupply;

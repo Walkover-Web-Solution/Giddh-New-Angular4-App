@@ -741,7 +741,7 @@
                                         </div>
 
                                         <!-- Supply Fields Row - India only -->
-                                        @if (isIndianCompany) {
+                                        @if (isIndianCompanyAndAccount) {
                                             <!-- Place of Supply (Invoice / Credit Note / Estimate / Proforma) -->
                                             @if (showPlaceOfSupply) {
                                                 <div class="col-6 mt-3" formGroupName="placeOfSupply">
@@ -753,7 +753,7 @@
                                                         formControlName="code"
                                                         [options]="companyStateList$ | async"
                                                         [forceClear]="forceClear"
-                                                        [required]="true"
+                                                        [required]="!!branchCurrentAddressInfo.taxNumber"
                                                         [showError]="
                                                             invoiceForm.controls['account'].get('placeOfSupply.code')?.touched &&
                                                             invoiceForm.controls['account'].get('placeOfSupply.code')?.invalid
@@ -774,7 +774,7 @@
                                                         formControlName="code"
                                                         [options]="companyStateList$ | async"
                                                         [forceClear]="forceClear"
-                                                        [required]="true"
+                                                        [required]="!!branchCurrentAddressInfo.taxNumber"
                                                         [showError]="
                                                             invoiceForm.controls['account'].get('sourceOfSupply.code')?.touched &&
                                                             invoiceForm.controls['account'].get('sourceOfSupply.code')?.invalid
@@ -1181,7 +1181,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if (isIndianCompany && showSourceDestinationOfSupply) {
+                                @if (isIndianCompanyAndAccount && showSourceDestinationOfSupply) {
                                     <ng-container formGroupName="account">
                                         <!-- Destination of Supply -->
                                         <div class="col-6 mt-3 pl-0" formGroupName="destinationOfSupply">
@@ -1193,7 +1193,7 @@
                                                 formControlName="code"
                                                 [options]="companyStateList$ | async"
                                                 [forceClear]="forceClear"
-                                                [required]="true"
+                                                [required]="!!branchCurrentAddressInfo.taxNumber"
                                                 [showError]="
                                                     invoiceForm.controls['account'].get('destinationOfSupply.code')?.touched &&
                                                     invoiceForm.controls['account'].get('destinationOfSupply.code')?.invalid
