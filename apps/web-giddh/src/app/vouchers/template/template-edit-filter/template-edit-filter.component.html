@@ -374,7 +374,8 @@
                                             <div
                                                 *ngIf="
                                                     sectionSettings?.header.displayPlaceOfSupply &&
-                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
+                                                    (templateType === voucherTypeEnum.invoice || templateType === voucherTypeEnum.voucher)
                                                 "
                                             >
                                                 <mat-checkbox
@@ -384,6 +385,42 @@
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
                                                     <span class="ml-2">{{ localeData?.place_of_supply }}</span>
+                                                </mat-checkbox>
+                                            </div>
+                                            <div
+                                                *ngIf="
+                                                    sectionSettings?.header.sourceOfSupply &&
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
+                                                    (templateType === voucherTypeEnum.purchase_order ||
+                                                        templateType === voucherTypeEnum.purchase_bill ||
+                                                        templateType === voucherTypeEnum.voucher)
+                                                "
+                                            >
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="sourceOfSupplyCheckbox"
+                                                    [(ngModel)]="customTemplate.sections['header'].data['sourceOfSupply'].display"
+                                                    (ngModelChange)="onChangeFieldVisibility()"
+                                                >
+                                                    <span class="ml-2">{{ localeData?.source_of_supply }}</span>
+                                                </mat-checkbox>
+                                            </div>
+                                            <div
+                                                *ngIf="
+                                                    sectionSettings?.header.destinationOfSupply &&
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
+                                                    (templateType === voucherTypeEnum.purchase_order ||
+                                                        templateType === voucherTypeEnum.purchase_bill ||
+                                                        templateType === voucherTypeEnum.voucher)
+                                                "
+                                            >
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="destinationOfSupplyCheckbox"
+                                                    [(ngModel)]="customTemplate.sections['header'].data['destinationOfSupply'].display"
+                                                    (ngModelChange)="onChangeFieldVisibility()"
+                                                >
+                                                    <span class="ml-2">{{ localeData?.destination_of_supply }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <!-- place of country -->
