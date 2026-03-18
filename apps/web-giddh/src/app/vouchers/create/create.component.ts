@@ -3110,6 +3110,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (defaultAddress) {
                     this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
                     this.fillBillingShippingAddress("company", "shippingDetails", defaultAddress, index);
+                    if (!this.isUpdateMode) {
+                        this.setDefaultSupplyFields();
+                    }
                 }
             }
 
