@@ -1015,13 +1015,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.showClearFilter.set(true);
-            // this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            // this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.generalService.saveRouteQueryFilters({ fromDate: this.fromDate, toDate: this.toDate });
-            // this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-            this.detectChanges();
         }
     }
 

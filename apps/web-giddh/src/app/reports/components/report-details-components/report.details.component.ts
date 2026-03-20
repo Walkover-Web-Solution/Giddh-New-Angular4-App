@@ -441,7 +441,7 @@ constructor(
         ]).pipe(takeUntil(this.destroyed$)).subscribe(([activeCompany, queryParam]) => {
 
             this.reportForm.get('accountUniqueNames').patchValue(this.generalService.parseQueryParamArray(queryParam?.accountUniqueNames));
-            this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
+            this.currentBranch.uniqueName = currentBranchUniqueName || this.currentBranch?.uniqueName || "";
             const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
             this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
             // URL groupBy takes priority over store value
@@ -453,7 +453,7 @@ constructor(
                 }
 
                 if (this.reportForm.get('groupBy').value === GroupBy.State) {
-                    this.reportForm.get('countryCode').patchValue(queryParam.countryCode ?? this.activeCompany.countryV2?.alpha2CountryCode);
+                    this.reportForm.get('countryCode').patchValue(queryParam.countryCode ?? (this.activeCompany || activeCompany)?.countryV2?.alpha2CountryCode);
                     this.reportForm.get('stateCodes').patchValue(this.generalService.parseQueryParamArray(queryParam?.stateCodes));
                 }
 
