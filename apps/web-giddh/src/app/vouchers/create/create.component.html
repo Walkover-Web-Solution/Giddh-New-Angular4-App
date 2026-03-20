@@ -1181,39 +1181,38 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if (isIndianCompanyAndAccount && showSourceDestinationOfSupply) {
-                                    <ng-container formGroupName="account">
-                                        <!-- Destination of Supply -->
-                                        <div class="col-6 mt-3 pl-0" formGroupName="destinationOfSupply">
-                                            <reactive-dropdown-field
-                                                appEnterNext
-                                                [name]="'destinationOfSupply'"
-                                                [label]="localeData?.destination_of_supply"
-                                                [placeholder]="commonLocaleData?.app_state"
-                                                formControlName="code"
-                                                [options]="companyStateList$ | async"
-                                                [forceClear]="forceClear"
-                                                [required]="!!branchCurrentAddressInfo.taxNumber"
-                                                [showError]="
-                                                    invoiceForm.controls['account'].get('destinationOfSupply.code')?.touched &&
-                                                    invoiceForm.controls['account'].get('destinationOfSupply.code')?.invalid
-                                                "
-                                                (selectedOption)="onSupplyStateSelect('destinationOfSupply', $event)"
-                                            ></reactive-dropdown-field>
-                                        </div>
-                                    </ng-container>
-                                }
-
                                 <!-- Row 3 -->
-                                <div
-                                    class="row row-gap-15 mt-3 mb-3"
-                                    *ngIf="
-                                        invoiceType.isPurchaseInvoice &&
-                                        ((vendorPurchaseOrders$ | async)?.length || fieldFilteredOptions?.length)
-                                    "
-                                >
+                                <div class="row row-gap-15 mt-3 mb-3">
+                                    @if (isIndianCompanyAndAccount && showSourceDestinationOfSupply) {
+                                        <ng-container formGroupName="account">
+                                            <!-- Destination of Supply -->
+                                            <div class="col-6" formGroupName="destinationOfSupply">
+                                                <reactive-dropdown-field
+                                                    appEnterNext
+                                                    [name]="'destinationOfSupply'"
+                                                    [label]="localeData?.destination_of_supply"
+                                                    [placeholder]="commonLocaleData?.app_state"
+                                                    formControlName="code"
+                                                    [options]="companyStateList$ | async"
+                                                    [forceClear]="forceClear"
+                                                    [required]="!!branchCurrentAddressInfo.taxNumber"
+                                                    [showError]="
+                                                        invoiceForm.controls['account'].get('destinationOfSupply.code')?.touched &&
+                                                        invoiceForm.controls['account'].get('destinationOfSupply.code')?.invalid
+                                                    "
+                                                    (selectedOption)="onSupplyStateSelect('destinationOfSupply', $event)"
+                                                ></reactive-dropdown-field>
+                                            </div>
+                                        </ng-container>
+                                    }
                                     <!-- Purchase Order -->
-                                    <div class="col-6">
+                                    <div
+                                        class="col-6"
+                                        *ngIf="
+                                            invoiceType.isPurchaseInvoice &&
+                                            ((vendorPurchaseOrders$ | async)?.length || fieldFilteredOptions?.length)
+                                        "
+                                    >
                                         <mat-select
                                             name="linkedPO"
                                             formControlName="linkedPo"

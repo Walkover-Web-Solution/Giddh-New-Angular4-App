@@ -888,6 +888,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getCreatedTemplates();
                         this.getAccountOnboardingFormData();
                         this.searchStock();
+                        this.setDefaultSupplyFields();
 
                         if (!this.invoiceType.isPaymentInvoice && !this.invoiceType.isReceiptInvoice) {
                             this.getWarehouses();
@@ -2375,6 +2376,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.company.branch = response.find((branch) => !branch.parentBranch);
                 }
                 this.branchCurrentAddressInfo = this.company.branch.addresses.find((address)=>address.isDefault);
+                this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
+                    name: this.branchCurrentAddressInfo.stateName || '',
+                    code: this.branchCurrentAddressInfo.stateCode || '',
+                });
             }
         });
     }
@@ -3008,18 +3013,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         } else if (this.showSourceDestinationOfSupply) {
             const sourceStateKey = isB2C ? 'account.billingDetails.state' : 'account.shippingDetails.state';
-            const destStateKey = isB2C ? 'company.billingDetails.state' : 'company.shippingDetails.state';
 
             const sourceState = this.invoiceForm.get(sourceStateKey);
-            const destState = this.invoiceForm.get(destStateKey);
 
             this.invoiceForm.get('account.sourceOfSupply')?.patchValue({
                 name: sourceState?.get('name')?.value || '',
                 code: sourceState?.get('code')?.value || '',
             });
             this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
-                name: destState?.get('name')?.value || '',
-                code: destState?.get('code')?.value || '',
+                name: this.branchCurrentAddressInfo.stateName || '',
+                code: this.branchCurrentAddressInfo.stateCode || '',
             });
         }
     }
@@ -3178,6 +3181,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
         }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -5555,10 +5559,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             delete invoiceForm.account?.destinationOfSupply;
         } else if (this.showSourceDestinationOfSupply) {
             delete invoiceForm.account?.placeOfSupply;
-        } else {
-            delete invoiceForm.account?.placeOfSupply;
-            delete invoiceForm.account?.sourceOfSupply;
-            delete invoiceForm.account?.destinationOfSupply;
+        }
+        if (this.isIndianCompanyAndAccount && !this.branchCurrentAddressInfo.taxNumber) {
+            if (this.showPlaceOfSupply && !invoiceForm.account?.placeOfSupply.code) {
+                delete invoiceForm.account?.placeOfSupply;
+            } else if (this.showSourceDestinationOfSupply) {
+                if (!invoiceForm.account?.sourceOfSupply.code) {
+                    delete invoiceForm.account?.sourceOfSupply;
+                }
+                if (!invoiceForm.account?.destinationOfSupply.code) {
+                    delete invoiceForm.account?.destinationOfSupply;
+                }
+            }
         }
 
         if (!this.currentVoucherFormDetails?.depositAllowed) {
