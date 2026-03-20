@@ -974,7 +974,7 @@
                                                                         loadDetails(selectedAccountDetails, txn, $event)
                                                                     "
                                                                     [selectedAccountDetails]="selectedAccountDetails"
-                                                                    [(selectedStockVariant)]="selectedStockVariant"
+                                                                    [selectedStockVariant]="selectedStockVariant"
                                                                     [(isTotalChanged)]="isTotalChanged"
                                                                     [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                                                 ></new-ledger-entry-panel>
@@ -1219,7 +1219,7 @@
                                                                         loadDetails(selectedAccountDetails, txn, $event)
                                                                     "
                                                                     [selectedAccountDetails]="selectedAccountDetails"
-                                                                    [(selectedStockVariant)]="selectedStockVariant"
+                                                                    [selectedStockVariant]="selectedStockVariant"
                                                                     [(isTotalChanged)]="isTotalChanged"
                                                                     [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                                                 ></new-ledger-entry-panel>
@@ -1863,7 +1863,7 @@
                                                     [entrySide]="'dr'"
                                                     (stockVariantSelected)="loadDetails(selectedAccountDetails, txn, $event)"
                                                     [selectedAccountDetails]="selectedAccountDetails"
-                                                    [(selectedStockVariant)]="selectedStockVariant"
+                                                    [selectedStockVariant]="selectedStockVariant"
                                                     [(isTotalChanged)]="isTotalChanged"
                                                     [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                                 ></new-ledger-entry-panel>
@@ -2259,7 +2259,7 @@
                                                     [entrySide]="'cr'"
                                                     (stockVariantSelected)="loadDetails(selectedAccountDetails, txn, $event)"
                                                     [selectedAccountDetails]="selectedAccountDetails"
-                                                    [(selectedStockVariant)]="selectedStockVariant"
+                                                    [selectedStockVariant]="selectedStockVariant"
                                                     [(isTotalChanged)]="isTotalChanged"
                                                     [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                                 ></new-ledger-entry-panel>
@@ -3428,7 +3428,7 @@
                                 [entrySide]="txn.type === transactionType.Debit ? 'dr' : 'cr'"
                                 (stockVariantSelected)="loadDetails(selectedAccountDetails, txn, $event)"
                                 [selectedAccountDetails]="selectedAccountDetails"
-                                [(selectedStockVariant)]="selectedStockVariant"
+                                [selectedStockVariant]="selectedStockVariant"
                                 [(isTotalChanged)]="isTotalChanged"
                                 [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                             ></new-ledger-entry-panel>
