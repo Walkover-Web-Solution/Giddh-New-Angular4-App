@@ -1596,6 +1596,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 toDate: this.toDate,
             };
             this.isTodaysDateSelected = false;
+            if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+                this.generalService.saveRouteQueryFilters({ fromDate: this.fromDate, toDate: this.toDate });
+            }
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         } else {
             this.isTodaysDateSelected = true;
@@ -1611,6 +1614,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 period: null,
                 noOfTransactions: null
             };
+            if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+                this.generalService.saveRouteQueryFilters({ fromDate: dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT), toDate: dayjs().format(GIDDH_DATE_FORMAT) });
+            }
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
     }

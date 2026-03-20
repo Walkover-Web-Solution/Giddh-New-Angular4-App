@@ -585,7 +585,12 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public redirectToGetAllPage(): void {
-        this.router.navigate([`/pages/contact/${this.contactActiveTab}`]);
+        this.router.navigate([`/pages/contact/${this.contactActiveTab}`, {
+            queryParams: {
+                tab: this.contactActiveTab,
+                tabIndex: 1
+            }
+        }]);
     }
 
     /**

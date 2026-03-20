@@ -305,11 +305,11 @@
                     <div class="contact-main customer-page on-mobile-view overflow-visible">
                         <div class="pb-4 mb-2 overflow-visible">
                             <div class="overflow-visible">
-                                <div *ngIf="!isGetAccountsInProcess">
+                                <div *ngIf="!isGetAccountsInProcess()">
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>
 
-                                <giddh-page-loader *ngIf="isGetAccountsInProcess"></giddh-page-loader>
+                                <giddh-page-loader *ngIf="isGetAccountsInProcess()"></giddh-page-loader>
                             </div>
                         </div>
                     </div>

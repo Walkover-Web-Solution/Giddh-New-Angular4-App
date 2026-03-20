@@ -269,7 +269,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
+        this.route.queryParams.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe(queryParams => {
             if (queryParams.tab === 'aging-report') {
                 const restoredQ = queryParams.searchText || '';
                 this.searchStr = restoredQ;

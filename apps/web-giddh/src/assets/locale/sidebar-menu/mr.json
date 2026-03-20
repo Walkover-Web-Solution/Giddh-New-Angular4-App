@@ -24,7 +24,8 @@
                     "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा",
                     "additional": {
                         "queryParams": {
-                            "tab": "customer"
+                            "tab": "customer",
+                            "tabIndex": 1
                         },
                         "createNew": {
                             "label": "+",
@@ -446,7 +447,8 @@
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2,
-                            "tab": "vendor"
+                            "tab": "vendor",
+                            "tabIndex": 1
                         },
                         "createNew": {
                             "label": "+",
