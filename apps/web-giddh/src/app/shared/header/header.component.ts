@@ -1874,6 +1874,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private saveLastState(): void {
         let companyUniqueName = null;
         let lastState = this.router.url;
+        if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+            lastState = this.generalService.getCurrentPath(true).path;
+        }
         lastState = lastState?.replace("/pages", "pages");
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
         let stateDetailsRequest = new StateDetailsRequest();

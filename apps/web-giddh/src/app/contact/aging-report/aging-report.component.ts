@@ -8,7 +8,8 @@ import {
     Input,
     OnDestroy,
     TemplateRef,
-    Inject
+    Inject,
+    signal
 } from "@angular/core";
 import {
     AgingAdvanceSearchModal,
@@ -112,7 +113,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Mat menu instance reference */
     @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
-    public showClearFilter: boolean = false;
+    public showClearFilter = signal<boolean>(false);
     /** Holds images folder path */
     public imgPath: string = "";
     /** False for on init call */
@@ -202,7 +203,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        this.getDueReport();
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -217,7 +217,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(term => {
             if (term !== undefined && term !== null) {
-                this.showClearFilter = (term) ? true : false;
                 this.dueAmountReportRequest.q = term;
                 this.getDueReport();
             }
@@ -280,10 +279,14 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     this.commonRequest.amountType = queryParams.amountType || '';
                     this.commonRequest.amount = queryParams.amount ? Number(queryParams.amount) : null;
                     this.dueAmountReportRequest.q = restoredQ;
+                    this.showClearFilter.set(true);
                     this.applyAdvanceSearch(this.commonRequest, true);
                 } else {
+                    this.showClearFilter.set(restoredQ ? true : false);
                     this.searchStr$.next(restoredQ);
                 }
+            } else {
+                this.generalService.saveRouteQueryFilters({ tab: 'aging-report', tabIndex: 1 });
             }
         });
 
@@ -351,7 +354,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         }
         this.isAdvanceSearchApplied = false;
         this.dueAmountReportRequest.q = '';
-        this.showClearFilter = false;
+        this.showClearFilter.set(false);
         this.generalService.saveRouteQueryFilters(null, true);
         this.sort("name", "asc");
     }
@@ -413,12 +416,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         }
 
         this.isAdvanceSearchApplied = true;
-        this.showClearFilter = false;
+        this.showClearFilter.set(false);
         this.getDueReport();
     }
 
     public sort(key: string, ord: "asc" | "desc" = "asc") {
-        this.showClearFilter = true;
+        this.showClearFilter.set(true);
         if (key.includes("range")) {
             this.dueAmountReportRequest.rangeCol = parseInt(key?.replace("range", ""));
             this.dueAmountReportRequest.sortBy = "range";
