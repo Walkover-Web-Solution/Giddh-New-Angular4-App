@@ -24,7 +24,8 @@
                     "description": "ग्राहकों को प्रबंधित करें, एसएमएस/ईमेल के माध्यम से अनुस्मारक भेजें",
                     "additional": {
                         "queryParams": {
-                            "tab": "customer"
+                            "tab": "customer",
+                            "tabIndex": 1
                         },
                         "createNew": {
                             "label": "+",
@@ -446,7 +447,8 @@
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2,
-                            "tab": "vendor"
+                            "tab": "vendor",
+                            "tabIndex": 1
                         },
                         "createNew": {
                             "label": "+",

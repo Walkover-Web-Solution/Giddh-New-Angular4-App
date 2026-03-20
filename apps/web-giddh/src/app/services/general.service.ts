@@ -2352,6 +2352,15 @@ export class GeneralService {
         return { path: scopedPath, queryParams: replaceOnly ? forcedParams : currentUrlParams };
     }
 
+    /** List of scoped route paths that support fromDate/toDate query param persistence */
+    public readonly currentSupportedQueryParam: string[] = [
+        '/pages/contact/customer?tab=customer&tabIndex=1',
+        '/pages/contact/vendor?tab=vendor&tabIndex=1',
+        '/pages/reports/sales-register?groupBy=salesPerson',
+        '/pages/reports/sales-register?groupBy=state',
+        '/pages/reports/sales-register?groupBy=country'
+    ];
+
     /**
      * Update current page query params
      *

@@ -24,7 +24,8 @@
                     "description": "Manage customers, send reminders via SMS/Email",
                     "additional": {
                         "queryParams": {
-                            "tab": "customer"
+                            "tab": "customer",
+                            "tabIndex": 1
                         },
                         "createNew": {
                             "label": "+",
@@ -446,7 +447,8 @@
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2,
-                            "tab": "vendor"
+                            "tab": "vendor",
+                            "tabIndex": 1
                         },
                         "createNew": {
                             "label": "+",
