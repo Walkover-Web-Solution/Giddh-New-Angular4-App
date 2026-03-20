@@ -570,6 +570,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public isAccountChanged: boolean = false;
     /** True if recurring voucher */
     public isRecurringVoucher: any;
+    /** store branch current address information */
+    public branchCurrentAddressInfo: any = {};
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -656,6 +658,62 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public get isUkAccount(): boolean {
         return this.account.countryName === "United Kingdom";
+    }
+
+    /**
+     * True if company country is India
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get isIndianCompanyAndAccount(): boolean {
+        return this.company.countryCode === 'IN' && this.account.countryCode === 'IN';
+    }
+
+    
+
+    /**
+     * True if voucher is a cash sales invoice (not purchase, debit note, or credit note)
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get isCashSalesInvoice(): boolean {
+        return this.invoiceType.isCashInvoice && !this.invoiceType.isPurchaseInvoice && !this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote;
+    }
+
+    /**
+     * True if Place of Supply field should be shown (invoice / credit note / estimate / proforma)
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get showPlaceOfSupply(): boolean {
+        return (
+            this.invoiceType.isSalesInvoice ||
+            this.isCashSalesInvoice ||
+            this.invoiceType.isCreditNote ||
+            this.invoiceType.isEstimateInvoice ||
+            this.invoiceType.isProformaInvoice
+        );
+    }
+
+    /**
+     * True if Source of Supply and Destination of Supply fields should be shown (purchase bill / debit note / PO)
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get showSourceDestinationOfSupply(): boolean {
+        return (
+            this.invoiceType.isPurchaseInvoice ||
+            this.invoiceType.isDebitNote ||
+            this.invoiceType.isPurchaseOrder
+        );
     }
 
     /**
@@ -830,6 +888,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getCreatedTemplates();
                         this.getAccountOnboardingFormData();
                         this.searchStock();
+                        this.setDefaultSupplyFields();
 
                         if (!this.invoiceType.isPaymentInvoice && !this.invoiceType.isReceiptInvoice) {
                             this.getWarehouses();
@@ -1267,6 +1326,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                     voucherDetails.company?.shippingDetails
                                 );
                             }
+                            this.invoiceForm.get('account.placeOfSupply.name')?.setValue(voucherDetails.account?.placeOfSupply?.name || '');
+                            this.invoiceForm.get('account.placeOfSupply.code')?.setValue(voucherDetails.account?.placeOfSupply?.code || '');
+                            this.invoiceForm.get('account.sourceOfSupply.name')?.setValue(voucherDetails.account?.sourceOfSupply?.name || '');
+                            this.invoiceForm.get('account.sourceOfSupply.code')?.setValue(voucherDetails.account?.sourceOfSupply?.code || '');
+                            this.invoiceForm.get('account.destinationOfSupply.name')?.setValue(voucherDetails.account?.destinationOfSupply?.name || '');
+                            this.invoiceForm.get('account.destinationOfSupply.code')?.setValue(voucherDetails.account?.destinationOfSupply?.code || '');
 
                             this.invoiceForm.get("exchangeRate")?.patchValue(voucherDetails.exchangeRate);
                             this.invoiceForm.get("number")?.patchValue(this.isCopyMode ? null : voucherDetails.number);
@@ -2310,6 +2375,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     // Find the HO branch
                     this.company.branch = response.find((branch) => !branch.parentBranch);
                 }
+                this.branchCurrentAddressInfo = this.company.branch.addresses.find((address)=>address.isDefault);
+                this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
+                    name: this.branchCurrentAddressInfo.stateName || '',
+                    code: this.branchCurrentAddressInfo.stateCode || '',
+                });
             }
         });
     }
@@ -2895,7 +2965,79 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (defaultAddress) {
             this.fillBillingShippingAddress("account", "billingDetails", defaultAddress, index);
             this.fillBillingShippingAddress("account", "shippingDetails", defaultAddress, index);
+            if (!this.isUpdateMode) {
+                this.setDefaultSupplyFields();
+            }
         }
+    }
+
+    /**
+     * Returns the gstNumber of the default address (lowercased), or empty string if not found
+     *
+     * @private
+     * @param {any[]} addresses
+     * @returns {string}
+     * @memberof VoucherCreateComponent
+     */
+    private getDefaultAddressGstNumber(addresses: any[]): string {
+        if (!addresses?.length) {
+            return '';
+        }
+        const defaultAddr = addresses.find((a) => a.isDefault);
+        return defaultAddr?.gstNumber;
+    }
+
+    /**
+     * Sets default values for placeOfSupply, sourceOfSupply, destinationOfSupply
+     * based on account gstNumber (B2B vs B2C) and billing/shipping address states.
+     * Only applies when company country is India.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setDefaultSupplyFields(): void {
+        if (!this.isIndianCompanyAndAccount || !this.invoiceForm) {
+            return;
+        }
+
+        const isB2C = !!this.getDefaultAddressGstNumber(this.account?.addresses);
+
+        if (this.showPlaceOfSupply) {
+            const stateSource = isB2C
+                ? this.invoiceForm.get('account.billingDetails.state')
+                : this.invoiceForm.get('account.shippingDetails.state');
+
+            this.invoiceForm.get('account.placeOfSupply')?.patchValue({
+                name: stateSource?.get('name')?.value || '',
+                code: stateSource?.get('code')?.value || '',
+            });
+        } else if (this.showSourceDestinationOfSupply) {
+            const sourceStateKey = isB2C ? 'account.billingDetails.state' : 'account.shippingDetails.state';
+
+            const sourceState = this.invoiceForm.get(sourceStateKey);
+
+            this.invoiceForm.get('account.sourceOfSupply')?.patchValue({
+                name: sourceState?.get('name')?.value || '',
+                code: sourceState?.get('code')?.value || '',
+            });
+            this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
+                name: this.branchCurrentAddressInfo.stateName || '',
+                code: this.branchCurrentAddressInfo.stateCode || '',
+            });
+        }
+    }
+
+    /**
+     * Callback when user selects a state from Place of Supply / Source of Supply / Destination of Supply dropdown
+     *
+     * @param {string} fieldName - 'placeOfSupply' | 'sourceOfSupply' | 'destinationOfSupply'
+     * @param {any} selectedOption
+     * @memberof VoucherCreateComponent
+     */
+    public onSupplyStateSelect(fieldName: string, selectedOption: any): void {
+        this.invoiceForm.get(`account.${fieldName}`)?.patchValue({
+            name: selectedOption?.label || ''
+        });
     }
 
     /**
@@ -2971,6 +3113,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (defaultAddress) {
                     this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
                     this.fillBillingShippingAddress("company", "shippingDetails", defaultAddress, index);
+                    if (!this.isUpdateMode) {
+                        this.setDefaultSupplyFields();
+                    }
                 }
             }
 
@@ -3036,6 +3181,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
         }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -3092,7 +3238,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 email: ["", Validators.email],
                 billingDetails: this.getAddressFormGroup(),
                 shippingDetails: this.getAddressFormGroup(),
-                customFields: this.formBuilder.array([])
+                customFields: this.formBuilder.array([]),
+                placeOfSupply: this.formBuilder.group({
+                    name: [''],
+                    code: [''],
+                }),
+                sourceOfSupply: this.formBuilder.group({
+                    name: [''],
+                    code: [''],
+                }),
+                destinationOfSupply: this.formBuilder.group({
+                    name: [''],
+                    code: [''],
+                })
             }),
             company: this.formBuilder.group({
                 billingDetails: this.getAddressFormGroup(),
@@ -5208,6 +5366,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         }
 
+        if (this.isIndianCompanyAndAccount && !!this.branchCurrentAddressInfo.taxNumber) {
+            if (this.showPlaceOfSupply && !this.invoiceForm.get('account.placeOfSupply.code')?.value) {
+                this.invoiceForm.get('account.placeOfSupply.code')?.markAsTouched();
+                return false;
+            }
+            if (this.showSourceDestinationOfSupply) {
+                if (!this.invoiceForm.get('account.sourceOfSupply.code')?.value) {
+                    this.invoiceForm.get('account.sourceOfSupply.code')?.markAsTouched();
+                    return false;
+                }
+                if (!this.invoiceForm.get('account.destinationOfSupply.code')?.value) {
+                    this.invoiceForm.get('account.destinationOfSupply.code')?.markAsTouched();
+                    return false;
+                }
+            }
+        }
+
         if (invoiceForm.isRcmEntry) {
             let hasTaxes = true;
             const entriesArray = this.invoiceForm.get("entries") as FormArray;
@@ -5374,6 +5549,29 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
+
+        if (!this.isIndianCompanyAndAccount) {
+            delete invoiceForm.account?.placeOfSupply;
+            delete invoiceForm.account?.sourceOfSupply;
+            delete invoiceForm.account?.destinationOfSupply;
+        } else if (this.showPlaceOfSupply) {
+            delete invoiceForm.account?.sourceOfSupply;
+            delete invoiceForm.account?.destinationOfSupply;
+        } else if (this.showSourceDestinationOfSupply) {
+            delete invoiceForm.account?.placeOfSupply;
+        }
+        if (this.isIndianCompanyAndAccount && !this.branchCurrentAddressInfo.taxNumber) {
+            if (this.showPlaceOfSupply && !invoiceForm.account?.placeOfSupply.code) {
+                delete invoiceForm.account?.placeOfSupply;
+            } else if (this.showSourceDestinationOfSupply) {
+                if (!invoiceForm.account?.sourceOfSupply.code) {
+                    delete invoiceForm.account?.sourceOfSupply;
+                }
+                if (!invoiceForm.account?.destinationOfSupply.code) {
+                    delete invoiceForm.account?.destinationOfSupply;
+                }
+            }
+        }
 
         if (!this.currentVoucherFormDetails?.depositAllowed) {
             delete invoiceForm.deposits;

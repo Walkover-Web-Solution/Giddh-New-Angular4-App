@@ -473,6 +473,8 @@
     "exchange_conversion_rate": "Exchange/Conversion Rate",
     "place_of_supply": "Place Of Supply",
     "country_of_supply": "Country of Supply",
+    "source_of_supply": "Source of Supply",
+    "destination_of_supply": "Destination of Supply",
     "failed_to_get_template_preview": "Failed to get template preview",
     "please_enter_template_name": "Please enter template name.",
     "template_saved_successfully": "Template Saved Successfully.",

@@ -17,6 +17,7 @@ import {
     Renderer2,
     TemplateRef,
     ViewChild,
+    signal,
 } from "@angular/core";
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -186,7 +187,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public universalDate: any;
     public selectedRangeLabel: any = "";
     /**True, if get accounts request in process */
-    public isGetAccountsInProcess: boolean = false;
+    public isGetAccountsInProcess = signal(false);
     /** This will hold the current page number */
     public currentPage: number = 1;
     /** Observable to store the branches of current company */
@@ -232,7 +233,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
-    public showClearFilter: boolean = false;
+    public showClearFilter = signal<boolean>(false);
     /** True if it's default load */
     public defaultLoad: boolean = true;
     /** This will use for displayed table columns */
@@ -326,34 +327,72 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         });
 
-        combineLatest([this.route.params, this.route.queryParams])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(([params, queryParams]) => {
-                const lastTabType = this.moduleType;
-                const typeParam = params?.type?.toLowerCase();
-                const tabQueryParam = queryParams?.tab?.toLowerCase();
-                this.moduleType = params.type?.toUpperCase();
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+            const lastTabType = this.moduleType;
+            const typeParam = params?.type?.toLowerCase();
+            this.moduleType = params?.type?.toUpperCase();
 
-                const isCustomer = typeParam?.includes('customer') || tabQueryParam === 'customer';
-                const isVendor = typeParam?.includes('vendor') || tabQueryParam === 'vendor';
+            const isCustomer = typeParam?.includes('customer');
+            const isVendor = typeParam?.includes('vendor');
 
-                const newTab = isCustomer ? 'customer'
-                    : isVendor ? 'vendor'
-                        : 'aging-report';
+            const newTab = isCustomer ? 'customer'
+                : isVendor ? 'vendor'
+                    : 'aging-report';
 
-                const previousTab = this.activeTab;
+            const previousTab = this.activeTab;
 
-                if (newTab !== previousTab) {
-                    this.displayedColumns = [];
-                    this.dynamicCustomColumns = [];
-                    this.setActiveTab(newTab);
-                    this.resetSearchIfSwitched(previousTab);
+            if (newTab !== previousTab) {
+                this.selectedRangeLabel = "";
+                this.displayedColumns = [];
+                this.dynamicCustomColumns = [];
+                this.setActiveTab(newTab);
+                this.resetSearchIfSwitched(previousTab);
+            }
+
+            if (lastTabType) {
+                this.translationComplete(true);
+            }
+        });
+
+        this.route.queryParams.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe(queryParams => {
+            if (queryParams.tab === 'customer' || queryParams.tab === 'vendor') {
+                if (queryParams.fromDate && queryParams.toDate) {
+                    this.fromDate = queryParams.fromDate;
+                    this.toDate = queryParams.toDate;
+                    this.selectedDateRange = {
+                        startDate: dayjs(this.fromDate, GIDDH_DATE_FORMAT),
+                        endDate: dayjs(this.toDate, GIDDH_DATE_FORMAT),
+                    };
+                    this.selectedDateRangeUi = dayjs(this.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + ' - ' + dayjs(this.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    const restoredQ = queryParams.searchText || '';
+                    this.searchStr = restoredQ;
+                    this.searchedName.setValue(restoredQ, { emitEvent: false });
+                    this.showNameSearch = restoredQ ? true : false;
+                    this.showClearFilter.set(true);
+                    this.searchStr$.next(restoredQ);
+                } else {
+                    this.universalDate$.pipe(filter(Boolean),take(1)).subscribe(response => {
+                        if (response) {
+                            this.fromDate = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                            this.selectedDateRange = {
+                                startDate: dayjs(response[0]),
+                                endDate: dayjs(response[1]),
+                            };
+                            this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            const restoredQ = queryParams.searchText || '';
+                            this.searchStr = restoredQ;
+                            this.searchedName.setValue(restoredQ, { emitEvent: false });
+                            this.showNameSearch = restoredQ ? true : false;
+                            this.showClearFilter.set(restoredQ ? true : false);
+                            this.searchStr$.next(restoredQ);
+                        }
+                    });
                 }
-
-                if (lastTabType) {
-                    this.translationComplete(true);
-                }
-            });
+            } else if (queryParams.tab !== this.moduleType.toLowerCase()) {
+                this.generalService.saveRouteQueryFilters({ tab: this.moduleType.toLowerCase(), tabIndex: 1 });
+            }
+        });
 
         this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -401,35 +440,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.cdRef.detectChanges();
         });
 
-        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
-            if (dateObj) {
-                this.universalDate = cloneDeep(dateObj);
-
-                setTimeout(() => {
-
-                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
-                        this.todaySelected = response;
-
-                        if (this.universalDate && !this.todaySelected) {
-                            this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                            this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-                            this.selectedDateRange = {
-                                startDate: dayjs(this.universalDate[0]),
-                                endDate: dayjs(this.universalDate[1]),
-                            };
-                            this.advanceFilters.from = this.fromDate;
-                            this.advanceFilters.to = this.toDate;
-                            this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                        } else {
-                            this.universalDate = [];
-                            this.fromDate = "";
-                            this.toDate = "";
-                        }
-                        this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-                    });
-                }, 100);
-            }
-        });
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -445,16 +455,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
 
         this.searchStr$.pipe(
-            debounceTime(1000),
-            distinctUntilChanged(), takeUntil(this.destroyed$))
+            takeUntil(this.destroyed$))
             .subscribe((term: any) => {
-                if (!this.defaultLoad) {
+                if (term != null && term != undefined) {
                     this.searchStr = term;
                     this.advanceFilters.q = term;
                     this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
-
-                this.defaultLoad = false;
             });
 
         if (this.activeCompany && this.activeCompany.countryV2) {
@@ -522,12 +529,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.searchedName?.valueChanges.pipe(
             debounceTime(700),
-            distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                this.showClearFilter = true;
-                this.searchStr$.next(searchedText);
+                this.generalService.saveRouteQueryFilters({ searchText: searchedText || null });
             }
         });
     }
@@ -690,11 +695,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
 
-            if (!this.hasNavigated) {
-                this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
-                this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
-                this.hasNavigated = true;
-            }
         }
     }
 
@@ -1016,13 +1016,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
-            this.todaySelected = false;
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.showClearFilter.set(true);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-            this.detectChanges();
+            this.generalService.saveRouteQueryFilters({ fromDate: this.fromDate, toDate: this.toDate });
         }
     }
 
@@ -1079,19 +1076,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
-        this.showClearFilter = false;
+        this.showClearFilter.set(false);
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
         this.key = (this.activeTab === "vendor") ? "amountDue" : "name";
         this.order = (this.activeTab === "vendor") ? "desc" : "asc";
-        if (!this.searchedName?.value) {
-            this.getAccounts(this.fromDate, this.toDate,
-                null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-        }
-        this.searchedName?.reset();
-        this.searchStr = "";
-        this.showNameSearch = false;
+        this.generalService.saveRouteQueryFilters(null, true);
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -1209,7 +1200,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     private getAccounts(fromDate: string, toDate: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
         sortBy: string = "", order: string = "asc", branchUniqueName?: string): void {
-        this.isGetAccountsInProcess = true;
+        this.isGetAccountsInProcess.set(true);
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : "false";
         fromDate = (fromDate) ? fromDate : "";
@@ -1306,7 +1297,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             }
             if (headerColumns && res) {
-                this.isGetAccountsInProcess = false;
+                this.isGetAccountsInProcess.set(false);
                 this.detectChanges();
             }
         });
@@ -1547,7 +1538,6 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        this.showClearFilter = false;
         if (searchedFieldName === "name") {
             if (this.searchedName?.value) {
                 return;
@@ -1624,7 +1614,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public sort(key: string, ord = "asc") {
-        this.showClearFilter = true;
+        this.showClearFilter.set(true);
         this.key = key;
         this.order = ord;
         this.advanceFilters.sort = ord;

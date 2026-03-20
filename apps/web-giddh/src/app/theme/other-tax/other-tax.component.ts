@@ -133,7 +133,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof OtherTaxComponent
      */
     public createTaxDialog(): void {
-        this.taxAsideMenuRef = this.dialog.open(this.createTax, ASIDE_PANE_CONFIG);
+        this.taxAsideMenuRef = this.dialog.open(this.createTax, { ...ASIDE_PANE_CONFIG, autoFocus: false});
         this.openAccountDropdown = false; 
         this.taxAsideMenuRef.afterClosed().subscribe(() => {
             this.taxAsideMenuRef = null;

@@ -1069,6 +1069,7 @@
                                                         [readonly]="true"
                                                         [(ngModel)]="txn.particular.name"
                                                         [cssClass]="'transaction-particular-name border-none bg-transparent'"
+                                                        class="w-100"
                                                     />
                                                 </ng-template>
 
@@ -1798,32 +1799,19 @@
                                         >
                                             <div class="mr-2">
                                                 <div class="form-group">
-                                                    <label>
-                                                        {{ localeData?.adjustment_vouchers }}
-                                                        <span class="text-danger">*</span>
-                                                    </label>
                                                     <input-field
                                                         [id]="'update-ledger-adjust-voucher'"
                                                         [type]="'text'"
                                                         class="mb-2"
                                                         [(ngModel)]="item.voucherNumber"
                                                         [readonly]="true"
+                                                        [label]="localeData?.adjustment_vouchers"
+                                                        [required]="true"
                                                     ></input-field>
                                                 </div>
                                             </div>
                                             <div class="mr-2">
                                                 <div class="form-group amount-width">
-                                                    <label>
-                                                        {{ commonLocaleData?.app_amount }}
-                                                        <span class="text-danger">*</span>
-                                                        <span
-                                                            *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt"
-                                                            class="text-light font-size-12 ml-1"
-                                                            class="text-light font-size-12 ml-1"
-                                                        >
-                                                            ({{ commonLocaleData?.app_inclusive_tax }})
-                                                        </span>
-                                                    </label>
                                                     <input-field
                                                         [id]="'update-ledger-inclusive-tax-edit-mode'"
                                                         [type]="'text'"
@@ -1834,6 +1822,9 @@
                                                         decimalDigitsDirective
                                                         [(ngModel)]="item.adjustmentAmount.amountForAccount"
                                                         [readonly]="true"
+                                                        [label]="
+                                                            `${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`
+                                                        "
                                                     ></input-field>
                                                     <input-field
                                                         [readonly]="isEinvoiceGenerated"
@@ -1848,6 +1839,9 @@
                                                         (blur)="adjustedInvoiceAmountChange()"
                                                         *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
                                                         [(ngModel)]="item.adjustmentAmount.amountForAccount"
+                                                        [label]="
+                                                            `${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`
+                                                        "
                                                     ></input-field>
                                                 </div>
                                             </div>
