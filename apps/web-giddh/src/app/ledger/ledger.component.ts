@@ -289,6 +289,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public enableAutopaid: boolean = false;
     /** Selected account details to load the details after variant is selected */
     public selectedAccountDetails: IOption;
+    /** Selected stock variant passed down to new-ledger-entry-panel, reset on account change */
+    public selectedStockVariant: IOption = { label: '', value: '' };
     /** True, if the total was changed explicitly by the user in case of inclusive tax */
     public isTotalChanged: boolean;
     /* Observable to check if account prediction api call has completed */
@@ -546,6 +548,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.keydownClassAdded = false;
         this.selectedTxnAccUniqueName = '';
         this.selectedAccountDetails = e;
+        this.selectedStockVariant = { label: '', value: '' };
         if (!e?.value || clearAccount) {
             if (clearAccount) {
                 this.getTransactionCountConvertToEntries(txn);
@@ -3507,6 +3510,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string, allowChangeDetection?: boolean, isBankTransaction?: boolean, transactionType?: string): void {
         let requestObject;
         if (event.additional?.stock) {
+            this.selectedStockVariant.value = variantUniqueName;
             requestObject = {
                 stockUniqueName: event.additional.stock?.uniqueName,
                 oppositeAccountUniqueName: event.additional.uniqueName,

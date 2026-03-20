@@ -279,8 +279,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public salesTaxInclusive: boolean;
     /** True, if stock category is 'assets' and inclusive tax is applied */
     public fixedAssetTaxInclusive: boolean;
-    /** Stores the value of selected stock variant */
-    public selectedStockVariant: IOption = { label: '', value: '' };
+    /** Stores the value of selected stock variant, provided by the parent */
+    @Input() public selectedStockVariant: IOption;
     /** Holds Aside Menu State For Other Taxes DialogRef */
     public asideMenuStateForOtherTaxesDialogRef: MatDialogRef<any>;
     /** Holds Tooltip is opend/close status */
@@ -456,9 +456,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     opens the new ledger.
                 */
                 const currentSelectedVariant = res.find(variant => variant.value === this.currentTxn?.inventory?.variant?.uniqueName);
-                this.selectedStockVariant = Object.assign({}, currentSelectedVariant ?? res[0]);
+                const newVariant = Object.assign({}, currentSelectedVariant ?? res[0]);
+                const variantChanged = newVariant.value !== this.selectedStockVariant?.value;
+                this.selectedStockVariant = newVariant;
                 this.cdRef.detectChanges();
-                this.stockVariantSelected.emit(currentSelectedVariant?.value ?? res[0].value);
+                if (variantChanged) {
+                    this.stockVariantSelected.emit(newVariant.value);
+                }
             }
         });
 
@@ -1945,6 +1949,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public variantChanged(event: IOption): void {
         if (event.value) {
+            this.selectedStockVariant = event;
             // Must not call the variant API when stock is changed
             this.stockVariantSelected.emit(event.value);
         }
