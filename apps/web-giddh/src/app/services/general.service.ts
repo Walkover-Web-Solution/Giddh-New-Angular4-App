@@ -2356,6 +2356,7 @@ export class GeneralService {
     public readonly currentSupportedQueryParam: string[] = [
         '/pages/contact/customer?tab=customer&tabIndex=1',
         '/pages/contact/vendor?tab=vendor&tabIndex=1',
+        '/pages/contact/aging-report?tab=aging-report&tabIndex=1',
         '/pages/reports/sales-register?groupBy=salesPerson',
         '/pages/reports/sales-register?groupBy=state',
         '/pages/reports/sales-register?groupBy=country',
