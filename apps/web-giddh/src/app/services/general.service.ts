@@ -2358,7 +2358,8 @@ export class GeneralService {
         '/pages/contact/vendor?tab=vendor&tabIndex=1',
         '/pages/reports/sales-register?groupBy=salesPerson',
         '/pages/reports/sales-register?groupBy=state',
-        '/pages/reports/sales-register?groupBy=country'
+        '/pages/reports/sales-register?groupBy=country',
+        '/pages/reports/sales-register?groupBy=duration'
     ];
 
     /**
