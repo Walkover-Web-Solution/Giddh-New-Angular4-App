@@ -41,6 +41,7 @@
                         [options]="groupByOptions"
                         formControlName="groupBy"
                         [required]="true"
+                        (selectedOption)="handleGroupByChange($event.value)"
                     ></reactive-dropdown-field>
                 </div>
                 @if (reportForm?.get('groupBy')?.value === groupByEnum.Duration) {
@@ -58,15 +59,15 @@
                     <div class="mr-3">
                         <mat-form-field appearance="outline" class="duration-dropdown w-100">
                             <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
-                            <mat-select #durationMatSelect [value]="getSelectedDuration()">
+                            <mat-select #durationMatSelect [value]="selectedType">
                                 <mat-option
-                                    (click)="populateRecords(durationEnum.Monthly)"
+                                    (click)="saveDurationFilter(durationEnum.Monthly)"
                                     [value]="commonLocaleData?.app_duration?.monthly"
                                 >
                                     {{ commonLocaleData?.app_duration?.monthly }}
                                 </mat-option>
                                 <mat-option
-                                    (click)="populateRecords(durationEnum.Quarterly)"
+                                    (click)="saveDurationFilter(durationEnum.Quarterly)"
                                     [value]="commonLocaleData?.app_duration?.quarterly"
                                 >
                                     {{ commonLocaleData?.app_duration?.quarterly }}
@@ -95,7 +96,7 @@
                                 @for (month of monthNames; track month) {
                                     <button
                                         mat-menu-item
-                                        (click)="durationMatSelect.close(); populateRecords(durationEnum.Weekly, month)"
+                                        (click)="durationMatSelect.close(); saveDurationFilter(durationEnum.Weekly, month)"
                                         aria-label="Select month"
                                     >
                                         {{ month | slice: 0 : 3 }}
@@ -114,7 +115,7 @@
                                     panelClass="py-0"
                                     name="salesPerson"
                                     [multiple]="true"
-                                    (selectionChange)="getSalesRegister(dateRange.from, dateRange.to)"
+                                    (selectionChange)="saveSalesPersonFilter()"
                                     (closed)="!filteredSalesPersonList()?.length ? salesPerson.reset() : null"
                                     formControlName="salesPersonUniqueNames"
                                 >
@@ -157,7 +158,7 @@
                                     name="state"
                                     [multiple]="true"
                                     formControlName="stateCodes"
-                                    (selectionChange)="getSalesRegister(dateRange.from, dateRange.to)"
+                                    (selectionChange)="saveStateCodesFilter()"
                                     (closed)="!filteredStateList().length ? stateSearch.reset() : null"
                                 >
                                     <ngx-mat-select-search
@@ -187,7 +188,7 @@
                                 name="country"
                                 [multiple]="true"
                                 formControlName="countryCodes"
-                                (selectionChange)="getSalesRegister(dateRange.from, dateRange.to)"
+                                (selectionChange)="saveCountryCodesFilter()"
                                 (closed)="!filteredCountryList()?.length ? countrySearch.reset() : null"
                             >
                                 <ngx-mat-select-search
@@ -237,7 +238,7 @@
                             name="account"
                             [multiple]="true"
                             formControlName="accountUniqueNames"
-                            (selectionChange)="getSalesRegister(dateRange.from, dateRange.to)"
+                            (selectionChange)="saveAccountFilter()"
                             (closed)="accountReset()"
                         >
                             <ngx-mat-select-search

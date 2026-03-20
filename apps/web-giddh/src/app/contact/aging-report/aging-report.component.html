@@ -4,7 +4,7 @@
             *ngIf="
                 (dueAmountReportData$ | async)?.results?.length ||
                 (getAgingReportRequestInProcess$ | async) ||
-                showClearFilter ||
+                showClearFilter() ||
                 isAdvanceSearchApplied
             "
             class="top-bar aging-top-bar d-flex align-items-center justify-content-between"
@@ -33,7 +33,7 @@
             </div>
             <div
                 class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start"
-                *ngIf="showClearFilter || isAdvanceSearchApplied"
+                *ngIf="showClearFilter() || isAdvanceSearchApplied"
             >
                 <button matButton="outlined" class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
                     <span class="icon-cross"></span>
@@ -127,7 +127,7 @@
                 *ngIf="
                     !(dueAmountReportData$ | async)?.results?.length &&
                     !(getAgingReportRequestInProcess$ | async) &&
-                    !showClearFilter &&
+                    !showClearFilter() &&
                     !isAdvanceSearchApplied
                 "
             >
@@ -148,7 +148,7 @@
                 *ngIf="
                     !(dueAmountReportData$ | async)?.results?.length &&
                     !(getAgingReportRequestInProcess$ | async) &&
-                    (showClearFilter || isAdvanceSearchApplied)
+                    (showClearFilter() || isAdvanceSearchApplied)
                 "
             >
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>

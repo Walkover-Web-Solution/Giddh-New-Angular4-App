@@ -12,7 +12,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization, StateDetailsRequest, OrganizationDetails } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
@@ -298,7 +298,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         @Inject(ServiceConfig) private serviceConfig,
         private elementRef: ElementRef,
         private renderer: Renderer2,
-        private giddhDatePipe: GiddhDatePipe
+        private giddhDatePipe: GiddhDatePipe,
+        private activeRoute: ActivatedRoute
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
@@ -545,6 +546,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.activeRoute.queryParams.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response.tab || response.required) {
+                this.generalService.restoreRouteQueryFilters();
+            }
+        });
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1590,6 +1596,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 toDate: this.toDate,
             };
             this.isTodaysDateSelected = false;
+            if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+                this.generalService.saveRouteQueryFilters({ fromDate: this.fromDate, toDate: this.toDate });
+            }
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         } else {
             this.isTodaysDateSelected = true;
@@ -1605,6 +1614,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 period: null,
                 noOfTransactions: null
             };
+            if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+                this.generalService.saveRouteQueryFilters({ fromDate: dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT), toDate: dayjs().format(GIDDH_DATE_FORMAT) });
+            }
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
     }
@@ -1862,6 +1874,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private saveLastState(): void {
         let companyUniqueName = null;
         let lastState = this.router.url;
+        if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+            lastState = this.generalService.getCurrentPath(true).path;
+        }
         lastState = lastState?.replace("/pages", "pages");
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
         let stateDetailsRequest = new StateDetailsRequest();
