@@ -375,6 +375,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.getCountryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                console.info("getCountryList$", response);
                 this.countrySource = [];
                 Object.keys(response).forEach(key => {
                     this.countrySource.push({
@@ -387,6 +388,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (!this.isSubscriptionRegion) {
                     if (this.countrySource?.length) {
                         this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
+                        console.log("currentCountry", this.currentCountry.value);
                     }
                 }
             } else {
@@ -815,6 +817,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             .subscribe(result => {
                 if (result) {
                     const { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse } = this.determineCountryCodes(result);
+                    console.info("setUserCountry()", alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse);
                     this.detectUserInfoByIp = { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse };
                     const isRegionCode = this.isRegionCountryCode(alpha3CountryCode);
                     this.newUserSelectCountry({
@@ -829,6 +832,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                     this.secondStepForm.get("country")?.setValue(alpha2CountryCode);
                     const countryObject = this.commonCountrySource.find(item => item.label.includes(alpha2CountryCode));
+                    console.info("countryObject", countryObject);
                     if (countryObject) {
                         this.selectCountry(countryObject);
                         this.selectedCountry = countryObject.label;
@@ -1152,9 +1156,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public getStates(): void {
+        console.info("getStates() Called");
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
             if (response) {
+                console.info("getStates() Response", response);
                 this.states = [];
                 this.countyList = [];
 
@@ -1182,6 +1187,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
                 const stateCountyObj = response?.[response.stateList ? "stateList" : "countyList"]?.find((state: { name: string, code: string }) => state.name === this.detectUserInfoByIp.stateName);
                 if (stateCountyObj) {
+                    console.info("stateCountyObj Response", stateCountyObj);
                     const label = stateCountyObj.code + ' - ' + stateCountyObj.name;
                     this.secondStepForm.get("state").patchValue({
                         label: label,
@@ -1189,6 +1195,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                     this.selectedState = label;
                 }
+                console.info("secondStepForm -> state", this.secondStepForm.get("state").value);
             }
         });
     }
@@ -1506,6 +1513,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public newUserSelectCountry(event: any): void {
+        console.info("newUserSelectCountry", event);
         if (event?.value) {
             this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
             this.newUserSelectedCountry = event.label;
@@ -1515,6 +1523,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.getAllPlans();
                 if (this.isSubscriptionRegion) {
                     this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
+                    console.info("currentCountry - ",this.currentCountry.value);
                 }
             }, 200);
         }
