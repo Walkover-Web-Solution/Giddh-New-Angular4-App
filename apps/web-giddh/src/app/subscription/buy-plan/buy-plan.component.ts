@@ -1179,12 +1179,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                const stateCountyObj = response?.[response.stateList ? "stateList" : "countyList"]?.find((state: { name: string, code: string }) => state.name === this.detectUserInfoByIp.stateName);
+                const useStateList = response.stateList && Object.keys(response.stateList).length > 0;
+                const stateCountyObj = useStateList
+                    ? Object.values(response.stateList).find((state: any) => state.name === this.detectUserInfoByIp.stateName)
+                    : response.countyList?.find((county: any) => county.name === this.detectUserInfoByIp.stateName);
                 if (stateCountyObj) {
-                    const label = stateCountyObj.code + ' - ' + stateCountyObj.name;
+                    const label = useStateList
+                        ? (stateCountyObj as any).code + ' - ' + (stateCountyObj as any).name
+                        : (stateCountyObj as any).name;
                     this.secondStepForm.get("state").patchValue({
                         label: label,
-                        value: stateCountyObj.code,
+                        value: (stateCountyObj as any).code,
                     });
                     this.selectedState = label;
                 }
