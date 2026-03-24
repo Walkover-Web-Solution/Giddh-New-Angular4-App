@@ -80,7 +80,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     readonly getAllPlans = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ planListInProgress: true });
+                this.patchState({ planListInProgress: true, planList: null });
                 return this.subscriptionService.getAllPlans(req.params).pipe(
                     tap(
                         (res: BaseResponse<any, any>) => {
