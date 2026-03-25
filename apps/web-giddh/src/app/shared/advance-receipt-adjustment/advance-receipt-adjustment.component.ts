@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, signal, input, output } from '@angular/core';
 import { VoucherAdjustments, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -31,26 +31,33 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public newAdjustVoucherOptions: IOption[] = [];
     public adjustVoucherOptions: IOption[];
     public allAdvanceReceiptResponse: Adjustment[] = [];
-    public isTaxDeducted: boolean = false;
-    public availableTdsTaxes: IOption[] = [];
+    /** Whether TDS tax is deducted */
+    protected isTaxDeducted = signal<boolean>(false);
+    /** Available TDS tax options */
+    protected availableTdsTaxes = signal<IOption[]>([]);
     public tdsAmount: number;
     public balanceDueAmount: number = 0;
     public offset: number = 0;
-    public companyCurrency: string;
-    public baseCurrencySymbol: string;
-    public currencySymbol: string = '';
-    public inputMaskFormat: string = '';
-    public isInvalidForm: boolean = false;
+    /** Company base currency code */
+    protected companyCurrency = signal<string>('');
+    /** Company base currency symbol */
+    protected baseCurrencySymbol = signal<string>('');
+    /** Current account currency symbol */
+    protected currencySymbol = signal<string>('');
+    /** Input mask format from company settings */
+    protected inputMaskFormat = signal<string>('');
+    /** Whether the adjustment form is invalid */
+    protected isInvalidForm = signal<boolean>(false);
     /** Message for toaster when due amount get negative  */
     public exceedDueErrorMessage: string = 'The adjusted amount of the linked invoice is more than this receipt due amount';
     /** Exceed Amount from invoice amount after adjustment */
-    public exceedDueAmount: number = 0;
+    protected exceedDueAmount = signal<number>(0);
     /** True, if form is reset, used to avoid calculation as required sh-select auto-fills the value if only single option is present  */
-    public isFormReset: boolean;
+    protected isFormReset = signal<boolean>(false);
     /** True, if account currency is different than company currency */
-    public isMultiCurrencyAccount: boolean;
+    protected isMultiCurrencyAccount = signal<boolean>(false);
     /** Stores the multi-lingual label of current voucher */
-    public currentVoucherLabel: string;
+    protected currentVoucherLabel = signal<string>('');
     @ViewChild('tdsTypeBox', { static: true }) public tdsTypeBox: ElementRef;
     @ViewChild('tdsAmountBox', { static: true }) public tdsAmountBox: ElementRef;
 
@@ -77,22 +84,25 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     };
     public advanceReceiptAdjustmentPreUpdatedData: VoucherAdjustments;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    @Input() public isModal: boolean = true;
+    /** Whether the component is displayed inside a modal */
+    readonly isModal = input<boolean>(true);
     @Input() public invoiceFormDetails;
-    @Input() public isUpdateMode;
-    @Input() public depositAmount = 0;
+    /** Whether the component is in update mode */
+    readonly isUpdateMode = input<boolean>(false);
+    /** Deposit amount applied to the voucher */
+    readonly depositAmount = input<number>(0);
     // To use pre adjusted data which was adjusted earlier or in other trasaction by user
     @Input() public advanceReceiptAdjustmentUpdatedData: VoucherAdjustments;
     /** Stores the type of voucher adjustment */
     @Input() public adjustedVoucherType: AdjustedVoucherType;
     /** True if the current module is voucher module required as all voucher adjustments are not supported from API */
-    @Input() public isVoucherModule: boolean;
+    readonly isVoucherModule = input<boolean>(false);
     /** Stores the voucher eligible for adjustment */
     @Input() public voucherForAdjustment: Array<Adjustment>;
     /** Holds input to get invoice list request params */
     @Input() public invoiceListRequestParams: any;
     /** True if it's payment or receipt entry */
-    @Input() public isPaymentReceipt: boolean = false;
+    readonly isPaymentReceipt = input<boolean>(false);
     /** Close modal event emitter */
     @Output() public closeModelEvent: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
     /** Submit modal event emitter */
@@ -102,21 +112,21 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True, if multi-currency support to voucher adjustment is enabled */
-    public enableVoucherAdjustmentMultiCurrency: boolean;
+    protected enableVoucherAdjustmentMultiCurrency = signal<boolean>(false);
     /** Stores the voucher API version of current company */
     public voucherApiVersion: number;
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
-    /** Invoice list observable */
-    public adjustVoucherOptions$: Observable<any[]>;
+    /** Invoice list for the adjustment dropdown */
+    protected adjustVoucherOptions$ = signal<IOption[]>([]);
     /** Holds index of current adjustment row */
     private currentAdjustmentRowIndex: number = 0;
     /** Pagination Limit */
     private paginationLimit: number = PAGINATION_LIMIT;
     /** Decimal places from company settings */
-    public giddhBalanceDecimalPlaces: number = 2;
+    protected giddhBalanceDecimalPlaces = signal<number>(2);
 
     /**
      * Determines if dropdown should open automatically
@@ -150,24 +160,25 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         this.adjustVoucherForm = new VoucherAdjustments();
         this.onClear();
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
-            this.companyCurrency = profile?.baseCurrency || 'INR';
-            this.baseCurrencySymbol = profile.baseCurrencySymbol;
-            this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            this.companyCurrency.set(profile?.baseCurrency || 'INR');
+            this.baseCurrencySymbol.set(profile.baseCurrencySymbol);
+            this.inputMaskFormat.set(profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '');
             if (this.invoiceFormDetails && this.invoiceFormDetails.accountDetails && this.invoiceFormDetails.accountDetails.currencySymbol) {
-                this.currencySymbol = this.invoiceFormDetails.accountDetails.currencySymbol;
+                this.currencySymbol.set(this.invoiceFormDetails.accountDetails.currencySymbol);
             } else {
-                this.currencySymbol = this.baseCurrencySymbol;
+                this.currencySymbol.set(this.baseCurrencySymbol());
             }
-            this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            this.giddhBalanceDecimalPlaces.set(profile.balanceDecimalPlaces);
+            this.changeDetectionRef.detectChanges();
         });
 
         if (this.advanceReceiptAdjustmentUpdatedData) {
             this.advanceReceiptAdjustmentPreUpdatedData = cloneDeep(this.advanceReceiptAdjustmentUpdatedData);
             this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length ? cloneDeep(this.advanceReceiptAdjustmentUpdatedData) : this.adjustVoucherForm;
             if (this.advanceReceiptAdjustmentUpdatedData && this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length && this.advanceReceiptAdjustmentUpdatedData.tdsTaxUniqueName) {
-                this.isTaxDeducted = true;
+                this.isTaxDeducted.set(true);
             } else {
-                this.isTaxDeducted = false;
+                this.isTaxDeducted.set(false);
             }
         } else {
             this.onClear();
@@ -183,11 +194,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         }
 
         if (this.invoiceFormDetails?.accountDetails) {
-            this.invoiceFormDetails.accountDetails.currencyCode = this.invoiceFormDetails?.accountDetails?.currencyCode || this.companyCurrency;
-            this.isMultiCurrencyAccount = this.invoiceFormDetails?.accountDetails?.currencyCode !== this.companyCurrency;
+            this.invoiceFormDetails.accountDetails.currencyCode = this.invoiceFormDetails?.accountDetails?.currencyCode || this.companyCurrency();
+            this.isMultiCurrencyAccount.set(this.invoiceFormDetails?.accountDetails?.currencyCode !== this.companyCurrency());
         }
 
-        if (!this.isVoucherModule) {
+        if (!this.isVoucherModule()) {
             this.getInvoiceList();
         } else {
             if (!this.voucherForAdjustment) {
@@ -201,7 +212,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                                 item.adjustmentAmount = cloneDeep(item.balanceDue);
                             }
                             item.voucherDate = item.voucherDate?.replace(/-/g, '/');
-                            item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
+                            item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol(), code: this.companyCurrency() };
                             item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
                             this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                             this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
@@ -209,26 +220,28 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     });
                     this.assignCurrencyInAdjustVoucherForm();
                 } else {
-                    if ((!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) && this.isVoucherModule) {
+                    if ((!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) && this.isVoucherModule()) {
                         this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                     }
                 }
             }
         }
-        if (this.isUpdateMode) {
+        if (this.isUpdateMode()) {
             this.calculateBalanceDue();
         }
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
-                this.availableTdsTaxes = [];
+                const taxes: IOption[] = [];
                 (Array.isArray(obj.taxes) ? obj.taxes : []).forEach(item => {
                     if (item && (item.taxType === 'tdsrc' || item.taxType === 'tdspay')) {
-                        this.availableTdsTaxes.push({ value: item.uniqueName, label: item.name, additional: item })
+                        taxes.push({ value: item.uniqueName, label: item.name, additional: item })
                     }
                 });
+                this.availableTdsTaxes.set(taxes);
+                this.changeDetectionRef.detectChanges();
             }
         });
-        this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
+        this.enableVoucherAdjustmentMultiCurrency.set((window as any).enableVoucherAdjustmentMultiCurrency || false);
     }
 
     /**
@@ -255,7 +268,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public onClear(isFormReset?: boolean): void {
-        this.isFormReset = isFormReset;
+        this.isFormReset.set(isFormReset ?? false);
         this.adjustVoucherForm = {
             tdsTaxUniqueName: '',
             tdsAmount: {
@@ -269,7 +282,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
         if (isFormReset) {
             setTimeout(() => {
-                this.isFormReset = false;
+                this.isFormReset.set(false);
             });
         }
     }
@@ -280,7 +293,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public assignVoucherDetails(): void {
-        if (!this.isVoucherModule) {
+        if (!this.isVoucherModule()) {
             const customerDetails = this.adjustmentUtilityService.getAdjustedCustomer(this.invoiceListRequestParams);
             if (customerDetails?.customerName) {
                 this.invoiceFormDetails.voucherDetails.customerName = customerDetails.customerName;
@@ -299,7 +312,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             tdsTotal: Number(this.invoiceFormDetails.voucherDetails.tdsTotal)
         });
         if (this.getBalanceDue() > 0) {
-            this.isInvalidForm = true;
+            this.isInvalidForm.set(true);
         }
         this.balanceDueAmount = this.invoiceFormDetails.voucherDetails.balanceDue;
         this.offset = this.adjustPayment.balanceDue;
@@ -342,7 +355,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         (Array.isArray(this.adjustVoucherForm.adjustments) ? this.adjustVoucherForm.adjustments : []).forEach(item => {
                             if (item && item.uniqueName) {
                                 item.voucherDate = item.voucherDate?.replace(/-/g, '/');
-                                item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
+                                item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol(), code: this.companyCurrency() };
                                 item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
                                 this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                 this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
@@ -363,20 +376,21 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                                         item.adjustmentAmount = cloneDeep(item.balanceDue);
                                     }
                                     item.voucherDate = item.voucherDate?.replace(/-/g, '/');
-                                    item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
+                                    item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol(), code: this.companyCurrency() };
                                     item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
                                     this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                     this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                 }
                             });
                         } else {
-                            if ((!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) && this.isVoucherModule) {
+                            if ((!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) && this.isVoucherModule()) {
                                 this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                             }
                         }
                     }
 
-                    this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+                    this.adjustVoucherOptions$.set(this.adjustVoucherOptions);
+                    this.changeDetectionRef.detectChanges();
                 }
             });
         }
@@ -399,15 +413,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
 
             if (isAnyBlankEntry) {
-                this.isInvalidForm = false;
+                this.isInvalidForm.set(false);
                 return;
             } else {
                 this.adjustVoucherForm.adjustments.push(new Adjustment());
-                this.isInvalidForm = false;
+                this.isInvalidForm.set(false);
             }
         } else {
             this.toaster.warningToast(this.exceedDueErrorMessage);
-            this.isInvalidForm = true;
+            this.isInvalidForm.set(true);
         }
         this.checkValidations();
     }
@@ -505,7 +519,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         let amount: number = 0;
         amount = cloneDeep(Number(productAmount));
         taxAmount = Number((amount * rate) / (rate + 100));
-        return Number(taxAmount.toFixed(this.giddhBalanceDecimalPlaces));
+        return Number(taxAmount.toFixed(this.giddhBalanceDecimalPlaces()));
     }
 
 
@@ -522,7 +536,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         let amount: number = 0;
         amount = cloneDeep(Number(productAmount));
         taxAmount = Number((amount * rate) / 100);
-        return Number(taxAmount.toFixed(this.giddhBalanceDecimalPlaces));
+        return Number(taxAmount.toFixed(this.giddhBalanceDecimalPlaces()));
     }
 
     /**
@@ -562,7 +576,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 return item?.voucherNumber !== '' || item?.adjustmentAmount?.amountForAccount > 0;
             });
         }
-        if (this.isTaxDeducted) {
+        if (this.isTaxDeducted()) {
             if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
                 if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
                     this.tdsTypeBox.nativeElement.classList.add('error-box');
@@ -594,7 +608,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
-        if (event && entry && !this.isFormReset) {
+        if (event && entry && !this.isFormReset()) {
             entry = cloneDeep(event.additional);
             if (entry?.uniqueName) {
                 this.adjustVoucherForm.adjustments.splice(index, 1, entry);
@@ -633,7 +647,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+        this.adjustVoucherOptions$.set(this.adjustVoucherOptions);
     }
 
     /**
@@ -686,7 +700,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      */
     public calculateTax(entryData: Adjustment, index: number): void {
         if (this.voucherApiVersion === 2) {
-            if (this.isMultiCurrencyAccount) {
+            if (this.isMultiCurrencyAccount()) {
                 entryData.adjustmentAmount.amountForCompany = this.getConvertedCompanyAmount(entryData?.adjustmentAmount?.amountForAccount, entryData?.exchangeRate);
             } else {
                 entryData.adjustmentAmount.amountForCompany = entryData?.adjustmentAmount?.amountForAccount;
@@ -783,11 +797,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
         this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
         this.adjustPayment.convertedTotalAdjustedAmount = Number(convertedTotalAmount);
-        this.exceedDueAmount = this.getBalanceDue();
-        if (this.exceedDueAmount < 0) {
-            this.isInvalidForm = true;
+        this.exceedDueAmount.set(this.getBalanceDue());
+        if (this.exceedDueAmount() < 0) {
+            this.isInvalidForm.set(true);
         } else {
-            this.isInvalidForm = false;
+            this.isInvalidForm.set(false);
         }
     }
 
@@ -798,10 +812,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getBalanceDue(): number {
-        if (this.isPaymentReceipt) {
-            return parseFloat(Number(this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount).toFixed(this.giddhBalanceDecimalPlaces));
+        if (this.isPaymentReceipt()) {
+            return parseFloat(Number(this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount()).toFixed(this.giddhBalanceDecimalPlaces()));
         } else {
-            return parseFloat(Number(this.adjustPayment.grandTotal + this.adjustPayment.tcsTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal).toFixed(this.giddhBalanceDecimalPlaces));
+            return parseFloat(Number(this.adjustPayment.grandTotal + this.adjustPayment.tcsTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount() - this.adjustPayment.tdsTotal).toFixed(this.giddhBalanceDecimalPlaces()));
         }
     }
 
@@ -814,7 +828,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public getConvertedBalanceDue(): number {
         return parseFloat(Number(
             this.getConvertedCompanyAmount(this.adjustPayment?.grandTotal, this.invoiceFormDetails?.voucherDetails?.exchangeRate) +
-            this.adjustPayment.tcsTotal - this.adjustPayment.convertedTotalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal).toFixed(this.giddhBalanceDecimalPlaces));
+            this.adjustPayment.tcsTotal - this.adjustPayment.convertedTotalAdjustedAmount - this.depositAmount() - this.adjustPayment.tdsTotal).toFixed(this.giddhBalanceDecimalPlaces()));
     }
 
     /**
@@ -823,15 +837,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public checkValidations(): void {
-        this.isInvalidForm = false;
+        this.isInvalidForm.set(false);
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             (Array.isArray(this.adjustVoucherForm.adjustments) ? this.adjustVoucherForm.adjustments : []).forEach((item, key) => {
                 if ((!item?.voucherNumber && item?.adjustmentAmount?.amountForAccount) || (item?.voucherNumber && !item?.adjustmentAmount?.amountForAccount) || (!item?.voucherNumber && !item?.adjustmentAmount?.amountForAccount && this.adjustVoucherForm.adjustments.length > 0)) {
-                    this.isInvalidForm = true;
+                    this.isInvalidForm.set(true);
                 }
             });
         } else {
-            this.isInvalidForm = true;
+            this.isInvalidForm.set(true);
         }
     }
 
@@ -843,7 +857,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public shouldDisableEdit(item: Adjustment): boolean {
-        return this.isVoucherModule && item.voucherType && !(item.voucherType === 'receipt' && item.subVoucher === SubVoucher.AdvanceReceipt);
+        return this.isVoucherModule() && item.voucherType && !(item.voucherType === 'receipt' && item.subVoucher === SubVoucher.AdvanceReceipt);
     }
 
     /**
@@ -854,7 +868,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     private resetAdjustments(): Adjustment[] {
-        if (!this.isVoucherModule) {
+        if (!this.isVoucherModule()) {
             // Operation performed in Ledger
             const linkedAdjustments = this.adjustVoucherForm.adjustments?.filter(adjustment => adjustment.linkingAdjustment);
             return linkedAdjustments?.length ? linkedAdjustments : [
@@ -934,7 +948,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public getExchangeGainLossText(): string {
         const isProfit = this.isExchangeProfitable();
         const profitType = isProfit ? this.commonLocaleData?.app_exchange_gain : this.commonLocaleData?.app_exchange_loss;
-        const text = `${this.localeData?.exchange_gain_loss_label?.replace('[PROFIT_TYPE]', profitType)} ${this.baseCurrencySymbol}${Math.abs(this.invoiceFormDetails?.voucherDetails?.gainLoss)}`;
+        const text = `${this.localeData?.exchange_gain_loss_label?.replace('[PROFIT_TYPE]', profitType)} ${this.baseCurrencySymbol()}${Math.abs(this.invoiceFormDetails?.voucherDetails?.gainLoss)}`;
         return text;
     }
 
@@ -954,7 +968,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public translationComplete(): void {
-        this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.adjustedVoucherType, this.commonLocaleData);
+        this.currentVoucherLabel.set(this.generalService.getCurrentVoucherLabel(this.adjustedVoucherType, this.commonLocaleData));
     }
 
     /**
@@ -1012,7 +1026,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     private assignCurrencyInAdjustVoucherForm(): void {
         if (this.adjustVoucherForm?.adjustments?.length > 0) {
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.map(item => {
-                item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
+                item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol(), code: this.companyCurrency() };
                 return item;
             });
 
@@ -1036,7 +1050,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public loadVouchers(): void {
-        if (!this.isVoucherModule) {
+        if (!this.isVoucherModule()) {
             this.getInvoiceList();
         } else {
             if (!this.voucherForAdjustment) {
@@ -1174,7 +1188,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         if (item && item.voucherDate) {
                             item.voucherDate = item.voucherDate?.replace(/-/g, '/');
                             item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
-                            item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
+                            item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol(), code: this.companyCurrency() };
                             this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                             this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                         }
@@ -1183,7 +1197,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     this.assignCurrencyInAdjustVoucherForm();
                 } else {
                     if (!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) {
-                        if (this.isVoucherModule) {
+                        if (this.isVoucherModule()) {
                             this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                         } else {
                             this.toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
@@ -1196,13 +1210,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     this.pushExistingAdjustments();
                 }
 
-                this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+                this.adjustVoucherOptions$.set(this.adjustVoucherOptions);
             } else {
                 if (this.voucherApiVersion === 2 && requestObject.page === 1) {
                     this.adjustVoucherOptions = [];
                     // Since no vouchers available for adjustment, fill the suggestions with already adjusted vouchers
                     this.pushExistingAdjustments();
-                    this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+                    this.adjustVoucherOptions$.set(this.adjustVoucherOptions);
 
                 }
             }
