@@ -247,15 +247,9 @@
                         <th mat-header-cell *matHeaderCellDef>{{ localeData()?.uploaded_file }}</th>
                         <td mat-cell *matCellDef="let element">
                             @if (element.uploadFilePath) {
-                                <a
-                                    [href]="element.uploadFilePath"
-                                    target="_blank"
-                                    matButton="filled"
-                                    class="import-button-status"
-                                    [matTooltip]="element.fileName"
-                                    matTooltipPosition="above"
-                                >
+                                <a matButton [href]="element.uploadFilePath" [matTooltip]="element.fileName" matTooltipPosition="above">
                                     {{ commonLocaleData()?.app_download }}
+                                    <i class="icon-download1 pl-1"></i>
                                 </a>
                             } @else {
                                 <span>—</span>
@@ -276,8 +270,9 @@
                                     {{ element.status }}
                                 </div>
                             } @else if (element.resultFilePath) {
-                                <a [href]="element.resultFilePath" matButton="filled" class="import-button-status">
+                                <a matButton [href]="element.resultFilePath">
                                     {{ commonLocaleData()?.app_download }}
+                                    <i class="icon-download1 pl-1"></i>
                                 </a>
                             } @else {
                                 <span>—</span>
