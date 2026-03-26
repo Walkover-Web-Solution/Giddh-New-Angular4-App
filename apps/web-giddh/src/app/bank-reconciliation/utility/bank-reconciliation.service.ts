@@ -40,16 +40,10 @@ export class BankReconciliationService {
      * @memberof BankReconciliationService
      */
     public getAll(page: number, count: number, from: string, to: string): Observable<BaseResponse<ReconciliationListResponse, unknown>> {
-        const companyUniqueName = encodeURIComponent(this.generalService.companyUniqueName);
-        let url = this.config.apiUrl + BANK_RECONCILIATION_API.GET_ALL
-            .replace(':companyUniqueName', companyUniqueName);
-
-        const params: string[] = [];
-        if (from) params.push(`from=${from}`);
-        if (to) params.push(`to=${to}`);
-        params.push(`page=${page}`);
-        params.push(`count=${count}`);
-        if (params.length) url += `?${params.join('&')}`;
+        const queryParams = new URLSearchParams({ page: String(page), count: String(count) });
+        if (from) queryParams.set('from', from);
+        if (to) queryParams.set('to', to);
+        const url = this.generalService.replaceUrlPlaceholders(BANK_RECONCILIATION_API.GET_ALL, {}) + `?${queryParams}`;
 
         return this.http.get(url).pipe(
             map((res) => {
@@ -81,11 +75,15 @@ export class BankReconciliationService {
         branchUniqueName: string = '',
         sameDebitCreditColumn: boolean = false
     ): Observable<BaseResponse<ReconciliationUploadResponse, unknown>> {
-        const companyUniqueName = encodeURIComponent(this.generalService.companyUniqueName);
-        let url = this.config.apiUrl + BANK_RECONCILIATION_API.UPLOAD
-            .replace(':companyUniqueName', companyUniqueName);
-
-        url += `?branchUniqueName=${branchUniqueName || this.generalService.currentBranchUniqueName ||''}&from=${from}&to=${to}&password=${password || ''}&accountUniqueName=${accountUniqueName}&sameDebitCreditColumn=${sameDebitCreditColumn}`;
+        const queryParams = new URLSearchParams({
+            branchUniqueName: branchUniqueName || this.generalService.currentBranchUniqueName || '',
+            from,
+            to,
+            password: password || '',
+            accountUniqueName,
+            sameDebitCreditColumn: String(sameDebitCreditColumn)
+        });
+        const url = this.generalService.replaceUrlPlaceholders(BANK_RECONCILIATION_API.UPLOAD, {}) + `?${queryParams}`;
 
         const formData = new FormData();
         formData.append('file', file);
@@ -109,9 +107,7 @@ export class BankReconciliationService {
      * @memberof BankReconciliationService
      */
     public process(requestData: ReconciliationProcessRequest): Observable<BaseResponse<unknown, ReconciliationProcessRequest>> {
-        const companyUniqueName = encodeURIComponent(this.generalService.companyUniqueName);
-        const url = this.config.apiUrl + BANK_RECONCILIATION_API.PROCESS
-            .replace(':companyUniqueName', companyUniqueName);
+        const url = this.generalService.replaceUrlPlaceholders(BANK_RECONCILIATION_API.PROCESS, {});
 
         return this.http.post(url, requestData).pipe(
             map((res) => {

@@ -110,7 +110,7 @@ export interface ReconciliationListItem {
     /** Auto-detected to date in the statement */
     detectedToDate: string;
     /** URL to download the reconciled output file */
-    reconciledFilePath?: string;
+    resultFilePath?: string;
 }
 
 /**

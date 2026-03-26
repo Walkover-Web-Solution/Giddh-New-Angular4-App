@@ -1,0 +1,91 @@
+<div class="p-3 d-flex flex-column flex-grow-1 overflow-hidden">
+    <!-- Page title -->
+    <div class="mb-3">
+        <p class="font-size-16 font-weight-medium mb-1">{{ localeData()?.column_mapping }}</p>
+        <p class="font-size-13 text-muted">{{ localeData()?.column_mapping_description }}</p>
+    </div>
+
+    <!-- Account + date range info bar -->
+    <div class="d-flex align-items-center column-gap-3 mb-3 p-2 border rounded">
+        <span class="font-size-13">
+            <strong>{{ commonLocaleData()?.app_account }}:</strong>
+            {{ accountUniqueName() || '—' }}
+        </span>
+        <span class="font-size-13">
+            <strong>{{ localeData()?.from_date }}:</strong>
+            {{ fromDate() || '—' }}
+        </span>
+        <span class="font-size-13">
+            <strong>{{ localeData()?.to_date }}:</strong>
+            {{ toDate() || '—' }}
+        </span>
+    </div>
+
+    <!-- Mapping + preview table -->
+    <div class="border flex-grow-1 overflow-auto">
+        <table class="table table-layout-fixed table-border-separate">
+            <!-- Row 1: Giddh field mapping dropdowns -->
+            <thead class="position-sticky top-0 z-index-10">
+                <tr>
+                    @for (row of mappingRows(); track row.columnNumber; let i = $index) {
+                        <th class="border-right">
+                            <reactive-dropdown-field
+                                [options]="row.availableOptions"
+                                [placeholder]="commonLocaleData()?.app_select_field"
+                                [name]="'mappingField_' + row.columnNumber"
+                                [labelValue]="row.selectedGiddhField"
+                                (selectedOption)="onFieldSelected($event?.value, i)"
+                            ></reactive-dropdown-field>
+                        </th>
+                    }
+                </tr>
+                <!-- Row 2: Original column header names -->
+                <tr>
+                    @for (row of mappingRows(); track row.columnNumber) {
+                        <th class="border-right">
+                            {{ row.columnHeader }}
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <!-- Rows 3–12: Sample data rows -->
+            <tbody>
+                @for (dataRow of previewRows(); track $index) {
+                    <tr>
+                        @for (row of mappingRows(); track row.columnNumber) {
+                            <td
+                                class="border-right border-bottom"
+                                [matTooltip]="getCellValue(dataRow, row.columnNumber)"
+                                matTooltipPosition="above"
+                                matTooltipShowDelay="500"
+                            >
+                                {{ getCellValue(dataRow, row.columnNumber) }}
+                            </td>
+                        }
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td [attr.colspan]="mappingRows().length" class="text-center p-3 text-muted font-size-13">
+                            {{ localeData()?.no_data }}
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="d-flex justify-content-end column-gap-2 mt-3">
+        <button matButton="outlined" type="button" (click)="cancel.emit()">
+            {{ commonLocaleData()?.app_cancel }}
+        </button>
+        <button matButton="filled" color="primary" [disabled]="isLoading()" (click)="reconcile.emit()">
+            @if (isLoading()) {
+                <mat-spinner diameter="18" class="d-inline-block mr-1"></mat-spinner>
+                {{ localeData()?.reconciling }}
+            } @else {
+                {{ localeData()?.reconcile }}
+            }
+        </button>
+    </div>
+</div>

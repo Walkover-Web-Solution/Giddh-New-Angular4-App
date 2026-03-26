@@ -47,6 +47,7 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { ColumnMappingTableComponent } from '../shared/column-mapping-table/column-mapping-table.component';
 
 @Component({
     selector: 'app-bank-reconciliation',
@@ -65,6 +66,7 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
         MatProgressSpinnerModule,
         MatSlideToggleModule,
         MatDialogModule,
+        ColumnMappingTableComponent,
         TranslateDirectiveModule,
         HamburgerMenuModule,
         FormFieldsModule,
@@ -73,7 +75,6 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
         GiddhPageLoaderModule,
     ],
     templateUrl: './bank-reconciliation.component.html',
-    styles: ``,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BankReconciliationComponent implements OnInit, OnDestroy {
@@ -324,6 +325,16 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
             this.toasterService.showSnackBar('error', this.localeData()?.invalid_file_type);
             this.resetFileSelection();
             return;
+        }
+
+        const isSpreadsheetFile = [
+            ReconciliationFileType.XLSX,
+            ReconciliationFileType.XLS,
+            ReconciliationFileType.CSV
+        ].includes(ext as ReconciliationFileType);
+
+        if (!isSpreadsheetFile) {
+            this.sameDebitCreditColumn.set(false);
         }
 
         this.selectedFile.set(file);
@@ -598,19 +609,6 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
      */
     private getFileExtension(fileName: string): string {
         return fileName.split('.').pop()?.toLowerCase() ?? '';
-    }
-
-    /**
-     * Returns the cell value for a given column number from a data row
-     *
-     * @protected
-     * @param {Array<{ columnNumber: string; columnValue: string }>} dataRow - A single data row from the preview
-     * @param {number} columnNumber - Zero-based column number to look up
-     * @returns {string} The cell value or empty string if not found
-     * @memberof BankReconciliationComponent
-     */
-    protected getCellValue(dataRow: Array<{ columnNumber: string; columnValue: string }>, columnNumber: number): string {
-        return dataRow?.find(cell => cell.columnNumber === String(columnNumber))?.columnValue ?? '';
     }
 
     /**
