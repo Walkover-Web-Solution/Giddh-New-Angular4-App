@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
@@ -78,7 +78,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
         private salesService: SalesService,
         private generalService: GeneralService,
         private componentStore: TaxAuthorityComponentStore,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.initForm();
         this.store.dispatch(this.settingsTaxesActions.CreateTaxResponse(null));
@@ -145,9 +146,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
      * @memberof AsideMenuCreateTaxComponent
      */
     public ngAfterViewInit(): void {
-        setTimeout(() => {
-            this.dropdownRef?.openDropdownPanel();
-        }, 200);
+        if (!this.tax?.uniqueName){
+            setTimeout(() => {
+                this.dropdownRef?.openDropdownPanel();
+            }, 200);
+        }
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -328,6 +331,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
                     }
 
                     this.taxList.push({ label: res.taxes[key]?.label, value: res.taxes[key]?.value });
+                    this.changeDetectorRef.detectChanges();
                 });
                 this.taxListSource$ = observableOf(this.taxList);
             } else {
