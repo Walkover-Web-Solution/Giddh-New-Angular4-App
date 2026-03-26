@@ -10,7 +10,8 @@
         <span>{{ localeData?.page_heading }}</span>
     </div>
     <mat-dialog-content class="dialog-body font-size-15 adjustments-list">
-        <div class="row h-100">
+        <giddh-page-loader *ngIf="showLoader()"></giddh-page-loader>
+        <div class="row h-100" [hidden]="showLoader()">
             <div class="col-md-12 d-flex flex-column">
                 <span class="theme-foreground-color" *ngIf="isUpdateMode && isVoucherModule">
                     {{ localeData?.adjusted_amount_error }}

@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, signal } from '@angular/core';
 import { VoucherAdjustments, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -117,6 +117,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     private paginationLimit: number = PAGINATION_LIMIT;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Show/hide page loader */
+    public showLoader = signal<boolean>(false);
 
     /**
      * Determines if dropdown should open automatically
@@ -334,7 +336,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.referenceVouchersCurrentPage++;
 
             apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, this.paginationLimit);
-
+            this.showLoader.set(true);
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res?.status === 'success') {
                     this.adjustVoucherOptions = [];
@@ -378,6 +380,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
                     this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
                 }
+                this.showLoader.set(false);
             });
         }
     }
@@ -1155,6 +1158,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             requestObject.voucherBalanceType = this.invoiceFormDetails?.type;
         }
 
+        this.showLoader.set(true);
         this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, this.paginationLimit).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && (this.voucherApiVersion === 2 && response.body.page === requestObject.page)) {
                 let results = (response.body.results || response.body.items);
@@ -1207,6 +1211,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 }
             }
             
+            this.showLoader.set(false);
             this.changeDetectionRef.detectChanges();
         });
     }
