@@ -6,7 +6,8 @@ import {
     OnInit,
     signal,
     computed,
-    ViewChild
+    ViewChild,
+    TemplateRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +21,7 @@ import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -31,7 +33,6 @@ import {
     ReconciliationFileType,
     ReconciliationUploadResponse,
     ReconciliationListItem,
-    ReconciliationListResponse,
     MappingRowModel,
     ReconciliationMapping
 } from './utility/bank-reconciliation.model';
@@ -63,6 +64,7 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
         MatTooltipModule,
         MatProgressSpinnerModule,
         MatSlideToggleModule,
+        MatDialogModule,
         TranslateDirectiveModule,
         HamburgerMenuModule,
         FormFieldsModule,
@@ -71,7 +73,7 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
         GiddhPageLoaderModule,
     ],
     templateUrl: './bank-reconciliation.component.html',
-    styleUrls: ['./bank-reconciliation.component.scss'],
+    styles: ``,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BankReconciliationComponent implements OnInit, OnDestroy {
@@ -81,6 +83,7 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
     private readonly searchService = inject(SearchService);
     private readonly fb = inject(FormBuilder);
     private readonly store = inject<Store<AppState>>(Store);
+    private readonly dialog = inject(MatDialog);
 
     /** Locale data for translations */
     protected localeData = signal<any>({});
@@ -187,6 +190,13 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger })
     protected universalDatepickerTrigger: MatMenuTrigger;
 
+    /** Template ref for the upload form dialog */
+    @ViewChild('uploadDialogTemplate')
+    private uploadDialogTemplate: TemplateRef<unknown>;
+
+    /** Reference to the currently open upload dialog */
+    private uploadDialogRef: MatDialogRef<unknown> | null = null;
+
     /** Parent group names for account filtering */
     private readonly PARENT_GROUP_NAMES = "shareholdersfunds, noncurrentliabilities, currentliabilities, fixedassets, noncurrentassets, currentassets, revenuefromoperations, otherincome, operatingcost, indirectexpenses";
 
@@ -240,12 +250,10 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
     private loadList(): void {
         this.isListLoading.set(true);
         const req = this.paginationRequest();
-        console.log("loadList()");
         this.reconciliationService.getAll(req.page, req.count, req.from, req.to)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (response) => {
-                    console.log("loadList()", response);
                     if (response?.status === 'success' && response.body) {
                         this.listItems.set(response.body.items ?? []);
                         this.paginationRequest.update(r => ({ ...r, totalItems: response.body.totalItems }));
@@ -350,6 +358,9 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
                 next: (response) => {
                     this.isLoading.set(false);
                     if (response?.status === 'success' && response.body) {
+                        this.uploadDialogRef?.close();
+                        this.uploadDialogRef = null;
+
                         const body = response.body;
                         this.uploadResponse.set(body);
 
@@ -491,7 +502,11 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
      */
     protected onCancelMapping(): void {
         this.resetUploadState();
-        this.currentView.set(ReconciliationView.Upload);
+        this.uploadDialogRef?.close();
+        this.uploadDialogRef = null;
+        if (!this.hasListData()) {
+            this.currentView.set(ReconciliationView.Upload);
+        }
     }
 
     /**
@@ -499,8 +514,16 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
      *
      * @memberof BankReconciliationComponent
      */
-    protected goToUpload(): void {
-        this.currentView.set(ReconciliationView.Upload);
+    protected openUploadDialog(): void {
+        if (this.hasListData()) {
+            this.uploadDialogRef = this.dialog.open(this.uploadDialogTemplate, {
+                panelClass: "mat-dialog-md",
+                maxWidth: '95vw',
+                disableClose: true
+            });
+        } else {
+            this.currentView.set(ReconciliationView.Upload);
+        }
     }
 
     /**

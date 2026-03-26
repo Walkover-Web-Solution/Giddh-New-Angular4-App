@@ -17,109 +17,129 @@
     }
 
     <!-- ─────────────────────────────────────────────────────────────────── -->
-    <!-- VIEW: UPLOAD — shown when no data exists yet                        -->
+    <!-- SHARED: Upload form body (reused inline and inside dialog)          -->
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <ng-template #uploadFormBody let-dialogMode="dialogMode">
+        <div class="border-radius-8 w-100" [class]="dialogMode ? 'p-3' : 'max-w-600 p-4 box-shadow'">
+            <!-- Card header -->
+            <p class="font-size-20 font-weight-semibold mb-2">{{ localeData()?.title }}</p>
+            <p class="font-size-14 text-muted mb-1">{{ localeData()?.upload_description }}</p>
+            <p class="font-size-12 text-muted mb-4">{{ localeData()?.supported_formats }}</p>
+            <!-- File picker -->
+            <div class="d-flex align-items-center column-gap-3 mb-4">
+                <input #fileInput type="file" accept=".pdf,.xlsx,.xls,.csv" class="d-none" (change)="onFileChange($event)" />
+                <button matButton="filled" color="primary" type="button" aria-label="choose file" (click)="fileInput.click()">
+                    {{ localeData()?.choose_file }}
+                </button>
+                <span class="font-size-14 text-muted text-truncate">
+                    @if (selectedFileName()) {
+                        {{ selectedFileName() }}
+                    } @else {
+                        {{ localeData()?.no_file_chosen }}
+                    }
+                </span>
+            </div>
+
+            <!-- Password — only for PDF -->
+            @if (fileType() === reconciliationFileType.PDF) {
+                <div class="w-100 mb-3">
+                    <input-field
+                        class="w-100"
+                        [label]="commonLocaleData()?.app_password"
+                        [placeholder]="localeData()?.password_placeholder"
+                        [type]="'password'"
+                        [autocomplete]="'new-password'"
+                        [defaultValue]="password()"
+                        (onChange)="password.set($event)"
+                    ></input-field>
+                </div>
+            }
+
+            <!-- Same debit/credit column toggle — only for Excel/CSV -->
+            @if (
+                fileType() === reconciliationFileType.XLSX ||
+                fileType() === reconciliationFileType.XLS ||
+                fileType() === reconciliationFileType.CSV
+            ) {
+                <div class="d-flex align-items-center justify-content-between w-100 mb-3">
+                    <span class="font-size-14">{{ localeData()?.same_debit_credit_column }}</span>
+                    <div class="d-flex align-items-center column-gap-2">
+                        <mat-slide-toggle
+                            [checked]="sameDebitCreditColumn()"
+                            (change)="sameDebitCreditColumn.set($event.checked)"
+                            aria-label="same column for debit and credit amount"
+                        ></mat-slide-toggle>
+                        <span class="font-size-13 text-muted">
+                            {{ sameDebitCreditColumn() ? commonLocaleData()?.app_yes : commonLocaleData()?.app_no }}
+                        </span>
+                    </div>
+                </div>
+            }
+
+            <!-- Account selection -->
+            <div class="w-100 mb-3">
+                <reactive-dropdown-field
+                    [options]="accountOptions()"
+                    [label]="commonLocaleData()?.app_account"
+                    [placeholder]="commonLocaleData()?.app_account"
+                    [name]="'reconciliationAccount'"
+                    [labelValue]="accountLabel()"
+                    [enableDynamicSearch]="true"
+                    (dynamicSearchedQuery)="loadAccounts($event)"
+                    (selectedOption)="accountUniqueName.set($event?.value); accountLabel.set($event?.label)"
+                    (onClear)="accountUniqueName.set(''); accountLabel.set(''); loadAccounts()"
+                ></reactive-dropdown-field>
+            </div>
+
+            <!-- Date range -->
+            <mat-form-field appearance="outline" class="w-100 mb-4" (click)="uploadDatepicker.open()">
+                <mat-label>{{ localeData()?.from_date }} - {{ localeData()?.to_date }}</mat-label>
+                <mat-date-range-input [formGroup]="dateRangeForm" [rangePicker]="uploadDatepicker">
+                    <input matStartDate formControlName="from" [placeholder]="localeData()?.from_date" />
+                    <input matEndDate formControlName="to" [placeholder]="localeData()?.to_date" />
+                </mat-date-range-input>
+                <mat-date-range-picker #uploadDatepicker></mat-date-range-picker>
+            </mat-form-field>
+
+            <!-- Upload button -->
+            <div class="d-flex justify-content-end column-gap-15">
+                @if (dialogMode) {
+                    <button matButton="outlined" type="button" aria-label="close upload dialog" (click)="onCancelMapping()">
+                        {{ commonLocaleData()?.app_cancel }}
+                    </button>
+                }
+                <button
+                    matButton="filled"
+                    aria-label="upload bank statement"
+                    [disabled]="!selectedFile() || isLoading()"
+                    (click)="onUpload()"
+                >
+                    @if (isLoading()) {
+                        <mat-spinner diameter="18" class="d-inline-block mr-1"></mat-spinner>
+                        {{ localeData()?.uploading }}
+                    } @else {
+                        {{ localeData()?.upload_statement }}
+                    }
+                </button>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <!-- DIALOG TEMPLATE: Upload form opened as a dialog when list has data  -->
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <ng-template #uploadDialogTemplate>
+        <mat-dialog-content class="p-0">
+            <ng-container [ngTemplateOutlet]="uploadFormBody" [ngTemplateOutletContext]="{ dialogMode: true }"></ng-container>
+        </mat-dialog-content>
+    </ng-template>
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <!-- VIEW: UPLOAD — shown inline (centered) only when list is empty      -->
     <!-- ─────────────────────────────────────────────────────────────────── -->
     @if (!isListLoading() && currentView() === reconciliationView.Upload) {
         <div class="flex-grow-1 d-flex align-items-center justify-content-center p-4">
-            <div class="border-radius-8 p-4 w-100 max-w-600" style="box-shadow: var(--mat-menu-box-shadow)">
-                <!-- Card header -->
-                <p class="font-size-20 font-weight-semibold mb-2">{{ localeData()?.title }}</p>
-                <p class="font-size-14 text-muted mb-1">{{ localeData()?.upload_description }}</p>
-                <p class="font-size-12 text-muted mb-4">{{ localeData()?.supported_formats }}</p>
-
-                <!-- File picker -->
-                <div class="d-flex align-items-center column-gap-3 mb-4">
-                    <input #fileInput type="file" accept=".pdf,.xlsx,.xls,.csv" class="d-none" (change)="onFileChange($event)" />
-                    <button matButton="filled" color="primary" type="button" aria-label="choose file" (click)="fileInput.click()">
-                        {{ localeData()?.choose_file }}
-                    </button>
-                    <span class="font-size-14 text-muted text-truncate">
-                        @if (selectedFileName()) {
-                            {{ selectedFileName() }}
-                        } @else {
-                            {{ localeData()?.no_file_chosen }}
-                        }
-                    </span>
-                </div>
-
-                <!-- Password — only for PDF -->
-                @if (fileType() === reconciliationFileType.PDF) {
-                    <div class="w-100 mb-3">
-                        <input-field
-                            class="w-100"
-                            [label]="commonLocaleData()?.app_password"
-                            [placeholder]="localeData()?.password_placeholder"
-                            [type]="'password'"
-                            [autocomplete]="'new-password'"
-                            [defaultValue]="password()"
-                            (onChange)="password.set($event)"
-                        ></input-field>
-                    </div>
-                }
-                <!-- Same debit/credit column toggle — only for Excel/CSV -->
-                @if (
-                    fileType() === reconciliationFileType.XLSX ||
-                    fileType() === reconciliationFileType.XLS ||
-                    fileType() === reconciliationFileType.CSV
-                ) {
-                    <div class="d-flex align-items-center justify-content-between w-100 mb-3">
-                        <span class="font-size-14">{{ localeData()?.same_debit_credit_column }}</span>
-                        <div class="d-flex align-items-center column-gap-2">
-                            <mat-slide-toggle
-                                [checked]="sameDebitCreditColumn()"
-                                (change)="sameDebitCreditColumn.set($event.checked)"
-                                aria-label="same column for debit and credit amount"
-                            ></mat-slide-toggle>
-                            <span class="font-size-13 text-muted">
-                                {{ sameDebitCreditColumn() ? commonLocaleData()?.app_yes : commonLocaleData()?.app_no }}
-                            </span>
-                        </div>
-                    </div>
-                }
-
-                <!-- Account selection -->
-                <div class="w-100 mb-3">
-                    <reactive-dropdown-field
-                        [options]="accountOptions()"
-                        [label]="commonLocaleData()?.app_account"
-                        [placeholder]="commonLocaleData()?.app_account"
-                        [name]="'reconciliationAccount'"
-                        [labelValue]="accountLabel()"
-                        [enableDynamicSearch]="true"
-                        (dynamicSearchedQuery)="loadAccounts($event)"
-                        (selectedOption)="accountUniqueName.set($event?.value); accountLabel.set($event?.label)"
-                        (onClear)="accountUniqueName.set(''); accountLabel.set(''); loadAccounts()"
-                    ></reactive-dropdown-field>
-                </div>
-
-                <!-- Date range -->
-                <mat-form-field appearance="outline" class="w-100 mb-4" (click)="uploadDatepicker.open()">
-                    <mat-label>{{ localeData()?.from_date }} - {{ localeData()?.to_date }}</mat-label>
-                    <mat-date-range-input [formGroup]="dateRangeForm" [rangePicker]="uploadDatepicker">
-                        <input matStartDate formControlName="from" [placeholder]="localeData()?.from_date" />
-                        <input matEndDate formControlName="to" [placeholder]="localeData()?.to_date" />
-                    </mat-date-range-input>
-                    <mat-date-range-picker #uploadDatepicker></mat-date-range-picker>
-                </mat-form-field>
-
-                <!-- Upload button -->
-                <div class="d-flex justify-content-end">
-                    <button
-                        matButton="filled"
-                        color="primary"
-                        aria-label="upload bank statement"
-                        [disabled]="!selectedFile() || isLoading()"
-                        (click)="onUpload()"
-                    >
-                        @if (isLoading()) {
-                            <mat-spinner diameter="18" class="d-inline-block mr-1"></mat-spinner>
-                            {{ localeData()?.uploading }}
-                        } @else {
-                            {{ localeData()?.upload_statement }}
-                        }
-                    </button>
-                </div>
-            </div>
+            <ng-container [ngTemplateOutlet]="uploadFormBody" [ngTemplateOutletContext]="{ dialogMode: false }"></ng-container>
         </div>
     }
 
@@ -151,13 +171,13 @@
             </div>
 
             <!-- Mapping + preview table -->
-            <div class="mapping-table-wrapper flex-grow-1 overflow-auto">
-                <table class="mapping-preview-table">
+            <div class="border flex-grow-1 overflow-auto">
+                <table class="table table-layout-fixed table-border-separate">
                     <!-- Row 1: Giddh field mapping dropdowns -->
-                    <thead>
-                        <tr class="mapping-row">
+                    <thead class="position-sticky top-0 z-index-10">
+                        <tr>
                             @for (row of mappingRows(); track row.columnNumber; let i = $index) {
-                                <th class="mapping-cell">
+                                <th class="border-right">
                                     <reactive-dropdown-field
                                         [options]="row.availableOptions"
                                         [placeholder]="commonLocaleData()?.app_select_field"
@@ -169,9 +189,9 @@
                             }
                         </tr>
                         <!-- Row 2: Original column header names -->
-                        <tr class="column-header-row">
+                        <tr>
                             @for (row of mappingRows(); track row.columnNumber) {
-                                <th class="column-header-cell font-size-13 font-weight-medium">
+                                <th class="border-right">
                                     {{ row.columnHeader }}
                                 </th>
                             }
@@ -180,10 +200,10 @@
                     <!-- Rows 3–12: Sample data rows -->
                     <tbody>
                         @for (dataRow of previewRows(); track $index) {
-                            <tr class="data-row">
+                            <tr>
                                 @for (row of mappingRows(); track row.columnNumber) {
                                     <td
-                                        class="data-cell font-size-13"
+                                        class="border-right border-bottom"
                                         [matTooltip]="getCellValue(dataRow, row.columnNumber)"
                                         matTooltipPosition="above"
                                         matTooltipShowDelay="500"
@@ -280,7 +300,7 @@
                 </div>
 
                 <!-- Upload statement button -->
-                <button matButton="filled" color="primary" aria-label="upload new bank statement" (click)="goToUpload()">
+                <button matButton="filled" color="primary" aria-label="upload new bank statement" (click)="openUploadDialog()">
                     {{ localeData()?.upload_statement }}
                 </button>
             </div>
