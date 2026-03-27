@@ -417,12 +417,30 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
         const allGiddhOptions = (body.giddhHeaders ?? []).map(h => ({ label: h, value: h }));
         this.giddhFieldOptions.set(allGiddhOptions);
 
-        const rows: MappingRowModel[] = (body.headers?.items ?? []).map(col => ({
-            columnHeader: col.columnHeader,
-            columnNumber: parseInt(col.columnNumber, 10),
-            selectedGiddhField: '',
-            availableOptions: [...allGiddhOptions]
-        }));
+        const mappedFields: string[] = [];
+        const rows: MappingRowModel[] = (body.headers?.items ?? []).map(col => {
+            const normalizedHeader = col.columnHeader.replace(/\s+/g, '').toLowerCase();
+            const matched = allGiddhOptions.find(
+                opt => !mappedFields.includes(opt.value) &&
+                    opt.label.replace(/\s+/g, '').toLowerCase() === normalizedHeader
+            );
+            if (matched) {
+                mappedFields.push(matched.value);
+            }
+            return {
+                columnHeader: col.columnHeader,
+                columnNumber: parseInt(col.columnNumber, 10),
+                selectedGiddhField: matched?.value ?? '',
+                availableOptions: [...allGiddhOptions]
+            };
+        });
+
+        rows.forEach(row => {
+            row.availableOptions = allGiddhOptions.filter(
+                opt => !mappedFields.includes(opt.value) || opt.value === row.selectedGiddhField
+            );
+        });
+
         this.mappingRows.set(rows);
 
         const dataItems = (body.data?.items ?? []).slice(0, 10);
