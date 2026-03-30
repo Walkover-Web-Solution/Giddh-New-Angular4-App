@@ -2,20 +2,6 @@
     padding: 0;
 }
 
-:host ::ng-deep {
-    .table-container {
-        .profit-loss {
-            section {
-                > div {
-                    > div {
-                        min-width: 275px;
-                    }
-                }
-            }
-        }
-    }
-}
-
 :host ::ng-deep .basic {
     margin-bottom: 0;
 }
