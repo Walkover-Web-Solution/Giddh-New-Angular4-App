@@ -210,6 +210,8 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         this.data = data;
+        console.log("Data:", data?.headers?.length);
+        
     }
 
     /**

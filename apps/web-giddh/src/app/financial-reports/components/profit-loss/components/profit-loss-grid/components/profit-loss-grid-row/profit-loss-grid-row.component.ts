@@ -1,3 +1,5 @@
+/* OLD IMPLEMENTATION COMMENTED OUT - Row logic is now inlined in ProfitLossGridComponent */
+/*
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
@@ -24,26 +26,16 @@ export class ProfitLossGridRowComponent implements OnInit, OnChanges, OnDestroy 
     @Input() public incomeStatement: any;
     @Input() public from: string = '';
     @Input() public to: string = '';
-    /** Profit loss headers array */
     @Input() public plHeaders: any[];
-    /** True, if all items are expanded  */
     @Input() public expandAll: boolean;
-    /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
-    /** Hold current url */
     private currentUrl: string = "";
-    /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore, private tlPlService: TlPlService, private generalService: GeneralService) {
         this.currentUrl = this.router.url;
     }
 
-    /**
-     * Component lifecycle hook
-     *
-     * @memberof ProfitLossGridRowComponent
-     */
     public ngOnInit(): void {
         this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
@@ -61,119 +53,23 @@ export class ProfitLossGridRowComponent implements OnInit, OnChanges, OnDestroy 
         }
     }
 
-    /**
-     *  This will be redirect to ledger
-     *
-     * @param {*} acc
-     * @return {*}  {void}
-     * @memberof ProfitLossGridRowComponent
-     */
-    public entryClicked(acc: any): void {
-        if (!acc?.uniqueName) return;
+    public entryClicked(acc: any): void { }
+    public trackByFn(index, item: Account): string { return item?.uniqueName; }
+    public getKeys(obj: Record<string, any> | null | undefined): string[] | [] { return obj ? Object.keys(obj) : []; }
+    public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void { }
+    public ngOnDestroy(): void { this.destroyed$.next(true); this.destroyed$.complete(); }
+}
+*/
 
-        // Construct direct ledger URL with redirectUrl parameter
-        let url = `${location.origin}/pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
-        const separator = url.includes('?') ? '&' : '?';
-        url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
+import { Component } from '@angular/core';
+import { ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 
-        if (Configuration.isElectron) {
-            try {
-                let electronIpcAvailable = false;
-
-                // Try electronAPI first (secure context)
-                if ((window as any).electronAPI && (window as any).electronAPI.send) {
-                    try {
-                        const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
-                        (window as any).electronAPI.send('open-url', electronUrl);
-                        electronIpcAvailable = true;
-                    } catch (ipcError) {
-
-                    }
-                }
-
-                // Try legacy electron require (fallback)
-                if (!electronIpcAvailable && (window as any).require) {
-                    try {
-                        const electron = (window as any).require('electron');
-                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
-                            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
-                            electron.ipcRenderer.send('open-url', electronUrl);
-                            electronIpcAvailable = true;
-                        }
-                    } catch (requireError) {
-
-                    }
-                }
-
-                // Fallback to regular window.open if IPC not available
-                if (!electronIpcAvailable) {
-
-                    (window as any).open(url, '_blank');
-                }
-            } catch (error) {
-
-                (window as any).open(url, '_blank');
-            }
-        } else {
-            (window as any).open(url, '_blank');
-        }
-    }
-
-    /**
-     * Track by function for profit loss item
-     *
-     * @param {*} index Index of the item
-     * @param {Account} item Current item
-     * @return {string} Item uniquename
-     * @memberof ProfitLossGridRowComponent
-     */
-    public trackByFn(index, item: Account): string {
-        return item?.uniqueName;
-    }
-
-    /**
-     * Retrieves the keys of an object.
-     *
-     * @param obj The object whose keys are to be retrieved.
-     * @returns An array of strings representing the keys of the object, or an empty array if the input is null or undefined.
-     * @memberof ProfitLossGridRowComponent
-     */
-    public getKeys(obj: Record<string, any> | null | undefined): string[] | [] {
-        if (obj) {
-            return Object.keys(obj);
-        } else {
-            return [];
-        }
-    }
-
-    /**
-     * Call tailed report api with given account/group unique name
-     *
-     * @param event MatCheckboxChange event
-     * @param accountGroupUniqueName Unique name of account/group
-     * @param entityType Type of the entity, either 'account' or 'group'
-     * @memberof ProfitLossGridRowComponent
-     */
-    public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
-        const model = {
-            request: {
-                reportType: ReportType.PROFIT_LOSS,
-                from: this.from,
-                to: this.to,
-                branchUniqueName: this.generalService.currentBranchUniqueName
-            },
-            payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
-        };
-        this.financialReportsComponentStore.tailedReportAccountGroup(model);
-    }
-
-    /**
-     * Releases memory
-     *
-     * @memberof ProfitLossGridRowComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
+/** Stub component - kept for module compatibility. All row rendering is now handled by ProfitLossGridComponent. */
+@Component({
+    selector: '[profit-loss-grid-row]',
+    template: '',
+    standalone: false
+})
+export class ProfitLossGridRowComponent {
+    public groupDetail: ChildGroup;
 }

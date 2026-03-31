@@ -48,6 +48,7 @@ import { FinancialReportsComponent } from './financial-reports.component';
 import { FinancialReportsRoutingModule } from './financial-reports.routing.module';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date-range-picker/compare-with-date-range-picker.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -121,7 +122,8 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
         MatDatepickerModule,
         MatNativeDateModule,
         NewConfirmationModalModule,
-        GiddhDatePipe
+        GiddhDatePipe,
+        MatTableModule
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
