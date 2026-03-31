@@ -1,8 +1,25 @@
 <div class="p-3 d-flex flex-column flex-grow-1 overflow-hidden">
     <!-- Page title -->
-    <div class="mb-3">
-        <p class="font-size-16 font-weight-medium mb-1">{{ localeData()?.column_mapping }}</p>
-        <p class="font-size-13 text-muted">{{ localeData()?.column_mapping_description }}</p>
+    <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex flex-column">
+            <p class="font-size-16 font-weight-medium mb-1">{{ localeData()?.column_mapping }}</p>
+            <p class="font-size-13 text-muted">{{ localeData()?.column_mapping_description }}</p>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="d-flex column-gap-2 mt-3">
+            <button matButton="outlined" type="button" (click)="cancel.emit()">
+                {{ commonLocaleData()?.app_back }}
+            </button>
+            <button matButton="filled" color="primary" [disabled]="isLoading()" (click)="reconcile.emit()">
+                @if (isLoading()) {
+                    <mat-spinner diameter="18" class="d-inline-block mr-1"></mat-spinner>
+                    {{ localeData()?.reconciling }}
+                } @else {
+                    {{ localeData()?.reconcile }}
+                }
+            </button>
+        </div>
     </div>
 
     <!-- Account + date range info bar -->
@@ -35,6 +52,7 @@
                                 [name]="'mappingField_' + row.columnNumber"
                                 [labelValue]="row.selectedGiddhField"
                                 (selectedOption)="onFieldSelected($event?.value, i)"
+                                (onClear)="onFieldSelected(null, i)"
                             ></reactive-dropdown-field>
                         </th>
                     }
@@ -72,20 +90,5 @@
                 }
             </tbody>
         </table>
-    </div>
-
-    <!-- Action buttons -->
-    <div class="d-flex justify-content-end column-gap-2 mt-3">
-        <button matButton="outlined" type="button" (click)="cancel.emit()">
-            {{ commonLocaleData()?.app_cancel }}
-        </button>
-        <button matButton="filled" color="primary" [disabled]="isLoading()" (click)="reconcile.emit()">
-            @if (isLoading()) {
-                <mat-spinner diameter="18" class="d-inline-block mr-1"></mat-spinner>
-                {{ localeData()?.reconciling }}
-            } @else {
-                {{ localeData()?.reconcile }}
-            }
-        </button>
     </div>
 </div>

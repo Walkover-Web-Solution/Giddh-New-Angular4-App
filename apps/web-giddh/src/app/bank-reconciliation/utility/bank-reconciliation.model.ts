@@ -74,6 +74,8 @@ export interface ReconciliationProcessRequest {
     requestId: string;
     /** Column mappings configured by the user */
     mappings: ReconciliationMapping[];
+    /** Account unique name */
+    accountUniqueName: string;
 }
 
 /**

@@ -107,7 +107,7 @@ export class BankReconciliationService {
      * @memberof BankReconciliationService
      */
     public process(requestData: ReconciliationProcessRequest): Observable<BaseResponse<unknown, ReconciliationProcessRequest>> {
-        const url = this.generalService.replaceUrlPlaceholders(BANK_RECONCILIATION_API.PROCESS, {});
+        const url = this.generalService.replaceUrlPlaceholders(BANK_RECONCILIATION_API.PROCESS, { accountUniqueName: requestData.accountUniqueName });
 
         return this.http.post(url, requestData).pipe(
             map((res) => {

@@ -119,7 +119,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** False for on init call */
     public defaultLoad: boolean = true;
     /** True if api call in progress */
-    public isLoading: boolean = false;
+    public isLoading = signal<boolean>(false);
     /** Stores the voucher API version of company */
     public voucherApiVersion: number;
     /** Holds Unpaid invoice Dailog ref */
@@ -162,15 +162,19 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.dueAmountReportRequest.count = PAGINATION_LIMIT;
         this.setDueRangeOpen$ = this.store.pipe(select(s => s.agingreport.setDueRangeOpen), takeUntil(this.destroyed$));
         this.getAgingReportRequestInProcess$ = this.store.pipe(select(s => s.agingreport.getAgingReportRequestInFlight), takeUntil(this.destroyed$));
+        this.store.dispatch(this.agingReportActions.GetDueReportResponse(null));
     }
 
     public getDueAmountreportData() {
         this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
+                this.isLoading.set(false);
                 this.agingReportDataSource.data = data.results;
                 this.dueAmountReportRequest.page = data.page;
                 this.totalDueAmounts = data.overAllDueAmount;
                 this.totalFutureDueAmounts = data.overAllFutureDueAmount;
+            } else {
+                this.isLoading.set(true);
             }
             this.dueAmountReportData$ = of(data);
             if (data) {
@@ -268,7 +272,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.route.queryParams.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe(queryParams => {
+        this.route.queryParams.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(queryParams => {
             if (queryParams.tab === 'aging-report') {
                 const restoredQ = queryParams.searchText || '';
                 this.searchStr = restoredQ;
@@ -374,6 +378,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.commonRequest = request;
         if (!skipSave) {
             this.saveAgingReportFilters();
+            return;
         }
         this.agingAdvanceSearchModal.totalDueAmount = request.amount;
         if (request.category === "totalDue") {
@@ -416,7 +421,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         }
 
         this.isAdvanceSearchApplied = true;
-        this.showClearFilter.set(false);
         this.getDueReport();
     }
 
@@ -541,7 +545,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public exportReport(): void {
-        if (this.isLoading) {
+        if (this.isLoading()) {
             return;
         }
         let exportData = {
@@ -558,9 +562,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             rangeCol: this.dueAmountReportRequest.rangeCol,
             q: this.dueAmountReportRequest.q
         }
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.agingReportService.exportAgingReport(exportData, this.currentBranch ? this.currentBranch.uniqueName : "").pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;
+            this.isLoading.set(false);
             if (response?.status === 'success') {
                 this.toaster.showSnackBar("success", response?.body);
                 this.router.navigate(['pages', 'downloads', 'exports']);
