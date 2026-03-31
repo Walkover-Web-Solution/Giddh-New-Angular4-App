@@ -204,6 +204,41 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
     /** Subject to unsubscribe all observables */
     private readonly destroyed$ = new Subject<void>();
 
+    private readonly FIELD_ALIASES: Record<string, string[]> = {
+        transactiondate: [
+            'transactiondate', 'transaction date', 'txn date', 'txndate',
+            'date', 'value date', 'posting date', 'post date',
+            'entry date', 'effective date', 'transaction dt',
+            'date of transaction', 'tran date'
+        ],
+
+        description: [
+            'description', 'narration', 'remarks', 'details',
+            'transaction details', 'transaction description',
+            'particulars', 'narration details', 'transaction remarks',
+            'info', 'reference details', 'payment details',
+            'transaction info', 'remarks description'
+        ],
+
+        debitamount: [
+            'debitamount', 'debit amount', 'debit',
+            'withdrawal', 'withdrawal amount',
+            'dr', 'dr amount', 'debit amt',
+            'outflow', 'money out', 'paid',
+            'payment', 'debit value', 'withdrawn',
+            'debit (inr)', 'debit(rs)', 'dr amt'
+        ],
+
+        creditamount: [
+            'creditamount', 'credit amount', 'credit',
+            'deposit', 'deposit amount',
+            'cr', 'cr amount', 'credit amt',
+            'inflow', 'money in', 'received',
+            'receipt', 'credit value', 'credited',
+            'credit (inr)', 'credit(rs)', 'cr amt'
+        ]
+    };
+
     /**
      * Initializes the component and loads the reconciliation list
      *
@@ -407,6 +442,72 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Normalizes a string for fuzzy matching by lowercasing and removing all non-alphanumeric characters
+     *
+     * @private
+     * @param {string} value - The string to normalize
+     * @returns {string} Lowercased string with only alphanumeric characters
+     * @memberof BankReconciliationComponent
+     */
+    private normalize(value: string): string {
+        return (value || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, ''); // remove space, _, -, ()
+    }
+
+    /**
+     * Finds the best matching Giddh field for a given column header using exact, alias, and partial matching strategies
+     *
+     * @private
+     * @param {string} header - The column header from the uploaded file
+     * @param {{ label: string; value: string }[]} options - Available Giddh field options to match against
+     * @param {string[]} used - List of already-mapped field values to avoid duplicate assignments
+     * @returns {string | null} The matched Giddh field value, or null if no match is found
+     * @memberof BankReconciliationComponent
+     */
+    private findBestMatch(
+        header: string,
+        options: { label: string; value: string }[],
+        used: string[]
+    ): string | null {
+
+        const normalizedHeader = this.normalize(header);
+
+        for (const opt of options) {
+            const key = this.normalize(opt.value);
+            const aliases = this.FIELD_ALIASES[key] || [];
+
+            // 1️⃣ Exact match
+            if (normalizedHeader === key && !used.includes(opt.value)) {
+                return opt.value;
+            }
+
+            // 2️⃣ Alias exact match
+            const exactAlias = aliases.find(
+                alias => this.normalize(alias) === normalizedHeader
+            );
+            if (exactAlias && !used.includes(opt.value)) {
+                return opt.value;
+            }
+
+            // 3️⃣ Partial match (fallback)
+            const partialAlias = aliases.find(alias => {
+                const normAlias = this.normalize(alias);
+                return (
+                    normalizedHeader.includes(normAlias) ||
+                    normAlias.includes(normalizedHeader)
+                );
+            });
+
+            if (partialAlias && !used.includes(opt.value)) {
+                return opt.value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Builds the MappingRowModel array from upload response headers and giddhHeaders
      *
      * @private
@@ -414,35 +515,46 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
      * @memberof BankReconciliationComponent
      */
     private buildMappingRows(body: ReconciliationUploadResponse): void {
-        const allGiddhOptions = (body.giddhHeaders ?? []).map(h => ({ label: h, value: h }));
+        const allGiddhOptions = (body.giddhHeaders ?? []).map(h => ({
+            label: h,
+            value: h
+        }));
+
         this.giddhFieldOptions.set(allGiddhOptions);
 
         const mappedFields: string[] = [];
+
         const rows: MappingRowModel[] = (body.headers?.items ?? []).map(col => {
-            const normalizedHeader = col.columnHeader.replace(/\s+/g, '').toLowerCase();
-            const matched = allGiddhOptions.find(
-                opt => !mappedFields.includes(opt.value) &&
-                    opt.label.replace(/\s+/g, '').toLowerCase() === normalizedHeader
+            const matchedValue = this.findBestMatch(
+                col.columnHeader,
+                allGiddhOptions,
+                mappedFields
             );
-            if (matched) {
-                mappedFields.push(matched.value);
+
+            if (matchedValue) {
+                mappedFields.push(matchedValue);
             }
+
             return {
                 columnHeader: col.columnHeader,
                 columnNumber: parseInt(col.columnNumber, 10),
-                selectedGiddhField: matched?.value ?? '',
+                selectedGiddhField: matchedValue ?? '',
                 availableOptions: [...allGiddhOptions]
             };
         });
 
+        // Remove already mapped options from dropdown (except self)
         rows.forEach(row => {
             row.availableOptions = allGiddhOptions.filter(
-                opt => !mappedFields.includes(opt.value) || opt.value === row.selectedGiddhField
+                opt =>
+                    !mappedFields.includes(opt.value) ||
+                    opt.value === row.selectedGiddhField
             );
         });
 
         this.mappingRows.set(rows);
 
+        // Preview (first 10 rows)
         const dataItems = (body.data?.items ?? []).slice(0, 10);
         this.previewRows.set(dataItems.map((item: any) => item.row ?? []));
     }
@@ -456,30 +568,16 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
      * @memberof BankReconciliationComponent
      */
     protected onGiddhFieldSelected(selectedValue: string, rowIndex: number): void {
-        const previousValue = this.mappingRows()[rowIndex]?.selectedGiddhField;
+        const currentRows = this.mappingRows();
+        currentRows[rowIndex].selectedGiddhField = selectedValue;
+        this.mappingRows.set(currentRows);
+
+        const allSelected = currentRows.filter(r => r.selectedGiddhField).map(r => r.selectedGiddhField);
 
         this.mappingRows.update(rows =>
-            rows.map((row, idx) => {
-                if (idx === rowIndex) {
-                    return { ...row, selectedGiddhField: selectedValue };
-                }
-
+            rows.map((row) => {
                 let options = [...(this.giddhFieldOptions())];
-
-                const allSelected = rows
-                    .filter((r, i) => i !== rowIndex && r.selectedGiddhField)
-                    .map(r => r.selectedGiddhField);
-
-                if (previousValue && previousValue !== selectedValue) {
-                    allSelected.push(previousValue);
-                }
-
                 options = options.filter(o => !allSelected.includes(o.value) || o.value === row.selectedGiddhField);
-
-                if (selectedValue) {
-                    options = options.filter(o => o.value !== selectedValue || o.value === row.selectedGiddhField);
-                }
-
                 return { ...row, availableOptions: options };
             })
         );
@@ -503,7 +601,7 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
             }));
 
         this.isLoading.set(true);
-        this.reconciliationService.process({ requestId: uploadResp.requestId, mappings })
+        this.reconciliationService.process({ requestId: uploadResp.requestId, mappings, accountUniqueName: this.accountUniqueName() })
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (response) => {
@@ -535,6 +633,8 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
         this.uploadDialogRef = null;
         if (!this.hasListData()) {
             this.currentView.set(ReconciliationView.Upload);
+        } else {
+            this.currentView.set(ReconciliationView.List);
         }
     }
 
