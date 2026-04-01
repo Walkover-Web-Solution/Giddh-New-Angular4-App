@@ -204,6 +204,9 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
     /** Subject to unsubscribe all observables */
     private readonly destroyed$ = new Subject<void>();
 
+    /** Sentinel label used to mark a column as explicitly unmapped; excluded from the final reconciliation payload */
+    public unmapHeader: string = "Don't Map";
+
     private readonly FIELD_ALIASES: Record<string, string[]> = {
         transactiondate: [
             'transactiondate', 'transaction date', 'txn date', 'txndate',
@@ -520,6 +523,7 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
             value: h
         }));
 
+        allGiddhOptions.unshift({ label: this.unmapHeader, value: this.unmapHeader });
         this.giddhFieldOptions.set(allGiddhOptions);
 
         const mappedFields: string[] = [];
@@ -538,7 +542,7 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
             return {
                 columnHeader: col.columnHeader,
                 columnNumber: parseInt(col.columnNumber, 10),
-                selectedGiddhField: matchedValue ?? '',
+                selectedGiddhField: matchedValue ?? this.unmapHeader,
                 availableOptions: [...allGiddhOptions]
             };
         });
@@ -577,7 +581,7 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
         this.mappingRows.update(rows =>
             rows.map((row) => {
                 let options = [...(this.giddhFieldOptions())];
-                options = options.filter(o => !allSelected.includes(o.value) || o.value === row.selectedGiddhField);
+                options = options.filter(o => !allSelected.includes(o.value) || o.value === row.selectedGiddhField || o.value === this.unmapHeader);
                 return { ...row, availableOptions: options };
             })
         );
@@ -593,7 +597,7 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
         if (!uploadResp?.requestId) return;
 
         const mappings: ReconciliationMapping[] = this.mappingRows()
-            .filter(row => row.selectedGiddhField)
+            .filter(row => row.selectedGiddhField && row.selectedGiddhField !== this.unmapHeader)
             .map(row => ({
                 columnHeader: row.columnHeader,
                 columnNumber: row.columnNumber,

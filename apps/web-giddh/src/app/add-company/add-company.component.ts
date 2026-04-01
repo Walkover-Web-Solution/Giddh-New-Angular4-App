@@ -341,6 +341,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                             this.formFields[response.fields[key].name] = response.fields[key];
                         }
                     });
+                    this.validateGstNumber();
                     this.changeDetection.detectChanges();
                 }
                 if (response.applicableTaxes) {
@@ -1548,10 +1549,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (queryParams.pincode) {
             this.secondStepForm.get('pincode')?.patchValue(queryParams.pincode);
-        }
-
-        if (queryParams.taxNumber) {
-            this.secondStepForm.get('gstin')?.patchValue(queryParams.taxNumber);
         }
 
         if (queryParams.taxNumber) {
