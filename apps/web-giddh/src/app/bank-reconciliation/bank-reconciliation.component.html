@@ -80,13 +80,15 @@
             <div class="w-100 mb-3">
                 <reactive-dropdown-field
                     [options]="accountOptions()"
+                    [required]="true"
+                    [showError]="showAccountError()"
                     [label]="commonLocaleData()?.app_account"
                     [placeholder]="commonLocaleData()?.app_account"
                     [name]="'reconciliationAccount'"
                     [labelValue]="accountLabel()"
                     [enableDynamicSearch]="true"
                     (dynamicSearchedQuery)="loadAccounts($event)"
-                    (selectedOption)="accountUniqueName.set($event?.value); accountLabel.set($event?.label)"
+                    (selectedOption)="accountUniqueName.set($event?.value); accountLabel.set($event?.label); showAccountError.set(false)"
                     (onClear)="accountUniqueName.set(''); accountLabel.set(''); loadAccounts()"
                 ></reactive-dropdown-field>
             </div>
@@ -319,13 +321,14 @@
             </div>
 
             <!-- Paginator -->
-            @if (paginationRequest().totalItems > paginationRequest().count) {
+            @if (paginationRequest().totalItems > pageSizeOptions[0]) {
                 <mat-paginator
                     [length]="paginationRequest().totalItems"
                     [pageSize]="paginationRequest().count"
                     [pageIndex]="pageIndex()"
                     [pageSizeOptions]="pageSizeOptions"
                     [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
                     (page)="handlePageEvent($event)"
                 ></mat-paginator>
             }

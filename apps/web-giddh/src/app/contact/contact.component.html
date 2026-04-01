@@ -107,24 +107,6 @@
                                 <div class="d-flex justify-content-between">
                                     <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->
                                     <div class="d-flex justify-content-between">
-                                        <div
-                                            class="pull-left header-left d-none"
-                                            [ngClass]="{ 'on-company': currentCompanyBranches?.length >= 2 }"
-                                        >
-                                            <div class="form-group max-width-250 search-field mb-0" *ngIf="activeTab !== 'aging'">
-                                                <text-field
-                                                    type="text"
-                                                    name="searchStr"
-                                                    [placeholder]="localeData?.name_email_mobile"
-                                                    [cssClass]="'form-control'"
-                                                    [(ngModel)]="searchStr"
-                                                    (ngModelChange)="searchStr$.next($event)"
-                                                ></text-field>
-                                                <span class="input-addon">
-                                                    <i class="icon-search"></i>
-                                                </span>
-                                            </div>
-                                        </div>
                                         <div class="customer-footer-box pull-right">
                                             <button
                                                 matButton="outlined"

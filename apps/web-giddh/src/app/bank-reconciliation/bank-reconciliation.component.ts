@@ -22,7 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { cloneDeep } from '../lodash-optimized';
@@ -127,6 +127,9 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
 
     /** Selected account label for display */
     protected accountLabel = signal<string>('');
+
+    /** Flag to show error on account dropdown when upload is attempted without selecting an account */
+    protected showAccountError = signal<boolean>(false);
 
     /** Reactive form for upload date range */
     protected dateRangeForm: FormGroup = this.fb.group({ from: [null], to: [null] });
@@ -388,6 +391,10 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
      */
     protected onUpload(): void {
         const file = this.selectedFile();
+        if (!this.accountUniqueName()) {
+            this.showAccountError.set(true);
+            return;
+        }
         if (!file) return;
 
         this.isLoading.set(true);
@@ -697,12 +704,24 @@ export class BankReconciliationComponent implements OnInit, OnDestroy {
      * @memberof BankReconciliationComponent
      */
     protected resetFilter(): void {
-        this.selectedDateRange.set(null);
-        this.selectedDateRangeUi.set('');
-        this.selectedRangeLabel.set('');
-        this.showClearFilter.set(false);
-        this.paginationRequest.update(r => ({ ...r, from: '', to: '', page: 1 }));
-        this.loadList();
+        this.store.pipe(select(state => state.session.applicationDate), take(1)).subscribe(dateObj => {
+            if (dateObj) {
+                const universalDate = cloneDeep(dateObj);
+                this.selectedDateRange.set({ startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) });
+                this.selectedDateRangeUi.set(
+                    dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + ' - ' + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI)
+                );
+                this.paginationRequest.update(r => ({
+                    ...r,
+                    page: 1,
+                    from: dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT),
+                    to: dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT)
+                }));
+                this.selectedRangeLabel.set('');
+                this.showClearFilter.set(false);
+                this.loadList();
+            }
+        });
     }
 
     /**
