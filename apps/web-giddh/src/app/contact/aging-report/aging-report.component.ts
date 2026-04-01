@@ -22,8 +22,8 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../store";
 import { AgingReportActions } from "../../actions/aging-report.actions";
 import { cloneDeep, map as lodashMap } from "../../lodash-optimized";
-import { Observable, of, ReplaySubject, Subject } from "rxjs";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { merge, Observable, of, ReplaySubject, Subject } from "rxjs";
+import { debounceTime, distinctUntilChanged, skip, take, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
 import { GeneralService } from "../../services/general.service";
@@ -216,7 +216,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
 
         this.searchStr$.pipe(
-            debounceTime(1000),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(term => {
@@ -272,7 +271,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.route.queryParams.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(queryParams => {
+        const queryParams$ = this.route.queryParams.pipe(distinctUntilChanged());
+        merge(
+            queryParams$.pipe(take(1)),
+            queryParams$.pipe(skip(1), debounceTime(700))
+        ).pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
             if (queryParams.tab === 'aging-report') {
                 const restoredQ = queryParams.searchText || '';
                 this.searchStr = restoredQ;
