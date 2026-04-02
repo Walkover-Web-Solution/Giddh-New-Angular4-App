@@ -362,8 +362,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.isAdvanceSearchApplied = false;
         this.dueAmountReportRequest.q = '';
         this.showClearFilter.set(false);
+        this.dueAmountReportRequest.sortBy = 'name';
+        this.dueAmountReportRequest.sort = 'asc';
         this.generalService.saveRouteQueryFilters(null, true);
-        this.sort("name", "asc");
     }
 
     /**

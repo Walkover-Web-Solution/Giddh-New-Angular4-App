@@ -964,7 +964,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if (this.isAdvanceReceipt) {
             requestObj.voucherType = 'rcpt';
-            requestObj.transactions[0].amount = this.vm.grandTotal;
+            requestObj.transactions[0].amount = requestObj.isOtherTaxesApplicable ? this.vm.grandTotal : this.vm.advanceReceiptAmount;
         }
 
         if (this.voucherApiVersion === 2) {

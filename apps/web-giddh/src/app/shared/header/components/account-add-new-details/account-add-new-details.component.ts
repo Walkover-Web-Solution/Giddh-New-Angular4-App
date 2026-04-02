@@ -772,7 +772,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * Removes GST details form at specified index and focuses on submit button
+     * Removes GST details form at specified index and moves focus to the save button.
      * @param i - Index of the form to remove
      * @memberof AccountAddNewDetailsComponent
      */
@@ -780,17 +780,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
 
-        // Focus on submit button after removing address
         setTimeout(() => {
-            try {
-                const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[aria-label="save"]', true);
-                if (submitBtn) {
-                    submitBtn.focus();
-                }
-            } catch (error) {
-                // Silently handle case where submit button doesn't exist
-
-            }
+            document.querySelector<HTMLButtonElement>('button[aria-label="save"]')?.focus();
         }, 100);
     }
 
