@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <form class="create-acc-form" [formGroup]="addAccountForm" (ngSubmit)="submit()">
+    <form class="create-acc-form" [formGroup]="addAccountForm">
         <div>
             <div class="upper-form">
                 <div class="row pb-4">
@@ -966,7 +966,7 @@
 <ng-template #templateForSaveButton>
     <div class="row pt-4" *ngIf="voucherApiVersion === 2">
         <div class="col-sm-12">
-            <button matButton="filled" aria-label="save" type="submit">
+            <button matButton="filled" aria-label="save" (click)="submit()">
                 {{ commonLocaleData?.app_save }}
             </button>
         </div>
