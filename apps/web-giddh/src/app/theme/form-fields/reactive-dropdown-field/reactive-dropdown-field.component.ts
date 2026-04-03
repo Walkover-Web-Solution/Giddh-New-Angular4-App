@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef, inject } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef, inject, signal } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil, take, filter } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
@@ -129,6 +129,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private isKeyboardTriggeredPagination: boolean = false;
     /** Previous options count for pagination detection */
     private previousOptionsCount: number = 0;
+    /** Flag to clear the displayed label on the first keystroke after a value is selected */
+    private isFirstKeystroke = signal<boolean>(false);
 
     constructor(
         private changeDetection: ChangeDetectorRef
@@ -157,7 +159,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
                 this.dynamicSearchedQuery.emit(search);
-                if (!search) {
+                if (!search && this.isFirstKeystroke()) {
+                    this.isFirstKeystroke.set(true);
                     this.clearDropdownValue();
                     this.writeValue("", false);
                 }
@@ -175,7 +178,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 }),
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
-                if (!search) {
+                if (!search && this.isFirstKeystroke()) {
+                    this.isFirstKeystroke.set(true);
                     this.clearDropdownValue();
                     this.writeValue("", false);
                 }
@@ -257,7 +261,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
 
             // Always try to set label value when options change, regardless of previous value
-            if (changes?.options) {
+            if (changes?.options && this.isFirstKeystroke()) {
                 // Use setTimeout to ensure the value is properly set before trying to find the label
                 setTimeout(() => {
                     this.setLabelValue(null);
@@ -518,6 +522,48 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
+     * Handles input event on the search field.
+     * On the first keystroke after a value is selected, clears the displayed label so the user
+     * can search without manually deleting the previous value. Subsequent keystrokes work normally.
+     *
+     * @param {Event} event - The native input event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public onInput(event: Event): void {
+        if (this.isFirstKeystroke()) {
+            this.isFirstKeystroke.set(false);
+            const inputValue: string = (event.target as HTMLInputElement).value.slice(-1);
+            const inputEl = event.target as HTMLInputElement;
+            inputEl.value = inputValue;
+            this.changeDetection.detectChanges();
+            this.searchFormControl.next(inputValue);
+        } else {
+            const inputValue: string = (event.target as HTMLInputElement).value;
+            this.searchFormControl.next(inputValue);
+        }
+    }
+
+    /**
+     * Handles paste event on the search field.
+     * If this is the first interaction after a value is selected, clears the input before
+     * the pasted text lands so the full pasted content is used as the search query.
+     *
+     * @param {ClipboardEvent} event - The native paste event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public onPaste(event: ClipboardEvent): void {
+        if (this.isFirstKeystroke()) {
+            this.isFirstKeystroke.set(false);
+            const pastedText = event.clipboardData?.getData('text') ?? '';
+            const inputEl = event.target as HTMLInputElement;
+            event.preventDefault();
+            inputEl.value = pastedText;
+            this.changeDetection.detectChanges();
+            this.searchFormControl.next(pastedText);
+        }
+    }
+
+    /**
      * Handles option selection from autocomplete
      *
      * @param {*} event
@@ -526,15 +572,16 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public optionSelected(event: any): void {
         const newValue = event?.option?.value?.value;
         const previousValue = this.value;
-        
+        this.isFirstKeystroke.set(true);
+
         if (this.allowCustomDropdownValue) {
             this.searchFormControl.next('');
         }
-        
+
         this.writeValue(newValue, false);
         this.setLabelValue(event?.option?.value);
         this.onTouched();
-        
+
         if (!isEqual(previousValue, newValue) || this.useCustomLabelValue) {
             this.selectedOption.emit(event?.option?.value);
         }
@@ -651,6 +698,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public onInputKeyDown(event: KeyboardEvent): void {
         if (event.key === 'Enter' && this.trigger?.panelOpen) {
             this.closeDropdownPanel();
+        }
+
+        if (event.key === 'Backspace') {
+            if (this.isFirstKeystroke()) {
+                const inputEl = event.target as HTMLInputElement;
+                inputEl.value = '';
+                this.changeDetection.detectChanges();
+                this.searchFormControl.next('');
+            }
         }
 
         // Handle down arrow key for keyboard-triggered pagination
@@ -773,6 +829,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.enableDynamicSearch) {
             this.fieldFilteredOptions$ = this.filterOptions("");
         }
+        this.isFirstKeystroke.set(!!this.controlLabelValue);
 
         // Reset pagination tracking when panel opens
         this.activeOptionIndex = -1;
@@ -807,7 +864,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public onBlur(): void {
+        if (!this.isFirstKeystroke()) {
+            const inputEl = this.selectField?.nativeElement as HTMLInputElement;
+            inputEl.value = this.controlLabelValue ?? '';
+        }
         setTimeout(() => {
+
             if (this.allowCustomDropdownValue) {
                 if (!this.searchFormControl?.value && !this.controlLabelValue) {
                     this.selectedOption.emit({ label: '', value: '' });
