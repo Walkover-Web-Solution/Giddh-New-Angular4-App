@@ -3325,4 +3325,30 @@ export class GeneralService {
         const delimiter = url.includes('?') ? '&' : '?';
         return `${url}${delimiter}${paramName}=${paramValue}`;
     }
+
+    /**
+     * Returns the country-specific label for the postal/pin code field.
+     * Different countries use different names for their postal code:
+     * India uses "PIN Code", US uses "ZIP Code", UK uses "Postcode", Canada uses "Postal Code", etc.
+     *
+     * @param {string} countryCode - ISO alpha-2 country code (e.g. 'IN', 'US', 'GB', 'CA')
+     * @returns {string} The localized label for the postal code field
+     * @memberof GeneralService
+     */
+    public getPostalCodeLabel(countryCode: string): string {
+        switch (countryCode?.toUpperCase()) {
+            case 'IN': return 'PIN Code';
+            case 'US': return 'ZIP Code';
+            case 'GB': return 'Postcode';
+            case 'CA': return 'Postal Code';
+            case 'AU': return 'Postcode';
+            case 'NZ': return 'Postcode';
+            case 'IE': return 'Eircode';
+            case 'NL': return 'Postcode';
+            case 'DE': return 'Postleitzahl';
+            case 'FR': return 'Code Postal';
+            case 'AE': return 'P.O. Box';
+            default: return 'Postal Code';
+        }
+    }
 }

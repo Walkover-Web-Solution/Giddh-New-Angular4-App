@@ -550,13 +550,7 @@
                                                             [type]="'text'"
                                                             [name]="'billingPinCode'"
                                                             (keyup)="copyAccountBillingAddressToShippingAddress()"
-                                                            [placeholder]="
-                                                                zipCodeSupportedCountryList.includes(
-                                                                    activeCompany?.countryV2?.alpha2CountryCode
-                                                                )
-                                                                    ? commonLocaleData?.app_zip_code
-                                                                    : commonLocaleData?.app_pin_code
-                                                            "
+                                                            [placeholder]="generalService.getPostalCodeLabel(account?.countryCode)"
                                                             [cssClass]="'border-none w-100'"
                                                             formControlName="pincode"
                                                         ></text-field>
@@ -725,13 +719,7 @@
                                                             appEnterNext
                                                             [type]="'text'"
                                                             [name]="'shippingPinCode'"
-                                                            [placeholder]="
-                                                                zipCodeSupportedCountryList.includes(
-                                                                    activeCompany?.countryV2?.alpha2CountryCode
-                                                                )
-                                                                    ? commonLocaleData?.app_zip_code
-                                                                    : commonLocaleData?.app_pin_code
-                                                            "
+                                                            [placeholder]="generalService.getPostalCodeLabel(account?.countryCode)"
                                                             [cssClass]="'border-none w-100'"
                                                             formControlName="pincode"
                                                         ></text-field>
@@ -1016,13 +1004,7 @@
                                                         [type]="'text'"
                                                         [name]="'companyBillingPinCode'"
                                                         (keyup)="copyCompanyBillingAddressToShippingAddress()"
-                                                        [placeholder]="
-                                                            zipCodeSupportedCountryList.includes(
-                                                                activeCompany?.countryV2?.alpha2CountryCode
-                                                            )
-                                                                ? commonLocaleData?.app_zip_code
-                                                                : commonLocaleData?.app_pin_code
-                                                        "
+                                                        [placeholder]="generalService.getPostalCodeLabel(company?.countryCode)"
                                                         [cssClass]="'border-none w-100'"
                                                         formControlName="pincode"
                                                     ></text-field>
@@ -1166,13 +1148,7 @@
                                                         appEnterNext
                                                         [type]="'text'"
                                                         [name]="'companyShippingPinCode'"
-                                                        [placeholder]="
-                                                            zipCodeSupportedCountryList.includes(
-                                                                activeCompany?.countryV2?.alpha2CountryCode
-                                                            )
-                                                                ? commonLocaleData?.app_zip_code
-                                                                : commonLocaleData?.app_pin_code
-                                                        "
+                                                        [placeholder]="generalService.getPostalCodeLabel(company?.countryCode)"
                                                         [cssClass]="'border-none w-100'"
                                                         formControlName="pincode"
                                                     ></text-field>

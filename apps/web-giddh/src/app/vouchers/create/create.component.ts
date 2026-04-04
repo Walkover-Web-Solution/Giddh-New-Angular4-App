@@ -93,7 +93,6 @@ import {
     KeyCodesEnum,
     RATE_FIELD_PRECISION,
     SubVoucher,
-    ZIP_CODE_SUPPORTED_COUNTRIES,
     ASIDE_PANE_CONFIG,
     IOption,
     API_BULK_FETCH_LIMIT,
@@ -518,8 +517,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public isPendingEntries: boolean = false;
     /** Holds deposit account name */
     public depositAccountName: string = "";
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Total Deposit Amount  */
     private totalDepositAmount: number = 0;
     /** Holds current route query parameters */
@@ -762,7 +759,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private componentStore: VoucherComponentStore,
         private aiOcrStore: AiOcrStore,
         private store: Store<AppState>,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private uiSettingsService: UiSettingsService,
         private vouchersUtilityService: VouchersUtilityService,
         private commonActions: CommonActions,

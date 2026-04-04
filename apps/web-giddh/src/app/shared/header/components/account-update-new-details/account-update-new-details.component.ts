@@ -45,7 +45,7 @@ import { AppState } from '../../../../store';
 import { digitsOnly } from '../../../helpers';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, TCS_TDS_TAXES_TYPES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -241,8 +241,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public voucherApiVersion: number;
     /** This will hold is portal default */
     public isPortalDefault: boolean;
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current currency is not company currency */
     public isForeignCurrency: boolean = false;
     /** Hold all temporary save bulk balance data */
@@ -325,7 +323,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private groupService: GroupService,
         private invoiceService: InvoiceService,
         private changeDetectorRef: ChangeDetectorRef,

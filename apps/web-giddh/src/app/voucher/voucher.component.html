@@ -580,14 +580,15 @@
                                                 <div class="pin-code-field">
                                                     <text-field
                                                         [id]="'billingPinCode'"
-                                                        [type]="'number'"
+                                                        [type]="'text'"
                                                         [cssClass]="'border-none'"
                                                         autocomplete="false"
                                                         [name]="'billingPinCode'"
                                                         (change)="autoFillShippingDetails()"
-                                                        [placeholder]="commonLocaleData?.app_pin_code"
+                                                        [placeholder]="
+                                                            generalService.getPostalCodeLabel(selectedCompany?.countryV2?.alpha2CountryCode)
+                                                        "
                                                         [(ngModel)]="invFormData.accountDetails.billingDetails.pincode"
-                                                        [allowDecimalDigitsOnly]="true"
                                                         [readonly]="isEinvoiceGenerated"
                                                     ></text-field>
                                                 </div>
@@ -790,13 +791,14 @@
                                                 <div class="pin-code-field">
                                                     <text-field
                                                         [id]="'shippingPinCode'"
-                                                        [type]="'number'"
+                                                        [type]="'text'"
                                                         [cssClass]="'border-none'"
                                                         autocomplete="false"
                                                         [name]="'shippingPinCode'"
-                                                        [placeholder]="commonLocaleData?.app_pin_code"
+                                                        [placeholder]="
+                                                            generalService.getPostalCodeLabel(selectedCompany?.countryV2?.alpha2CountryCode)
+                                                        "
                                                         [(ngModel)]="invFormData.accountDetails.shippingDetails.pincode"
-                                                        [allowDecimalDigitsOnly]="true"
                                                         [readonly]="isEinvoiceGenerated"
                                                     ></text-field>
                                                 </div>
