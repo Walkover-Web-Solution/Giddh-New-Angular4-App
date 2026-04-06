@@ -360,9 +360,16 @@ constructor(
             this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
             if (groupBy === GroupBy.State && !this.reportForm.get('countryCode')?.value) {
-                this.reportForm.get('countryCode')?.setValue(this.activeCompany.countryV2?.alpha2CountryCode);
+                this.store.pipe(select(state => state.session.activeCompany), filter(Boolean), take(1)).subscribe(response => {
+                    const countryCode = response?.countryV2?.alpha2CountryCode;
+                    if (countryCode) {
+                        this.reportForm.get('countryCode')?.setValue(countryCode);
+                        this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
+                    }
+                });
+            } else {
+                this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
             }
-            this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
         } else {
             this.populateRecords(this.interval, this.selectedMonth);
         }

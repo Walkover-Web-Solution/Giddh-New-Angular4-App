@@ -82,8 +82,10 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     public setYearRange() {
         let endYear = dayjs().year();
         let startYear = dayjs().subtract(7, 'year').year();
-        let yearArray = range(startYear, endYear);
-        this.yearOptions = yearArray?.map(year => {
+        const currentMonth = dayjs().month() + 1;
+        const financialYearStartMonth = this.FYPeriodOptions.find(option => option.value === this.selectedFYPeriod)?.additional?.startMonth;
+        let yearArray = range(startYear, endYear + (currentMonth >= financialYearStartMonth ? 1 : 0));
+        this.yearOptions = yearArray?.map((year: number) => {
             return { label: String(year), value: year };
         });
     }
@@ -201,9 +203,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
             this.options.placeholder = this.commonLocaleData?.app_select_option;
 
             this.FYPeriodOptions = [
-                { label: this.localeData?.financial_year_period_options?.jan_dec, value: 'JAN-DEC' },
-                { label: this.localeData?.financial_year_period_options?.apr_mar, value: 'APR-MAR' },
-                { label: this.localeData?.financial_year_period_options?.july_july, value: 'JULY-JULY' }
+                { label: this.localeData?.financial_year_period_options?.jan_dec, value: 'JAN-DEC', additional: { startMonth: 1, endMonth: 12 } },
+                { label: this.localeData?.financial_year_period_options?.apr_mar, value: 'APR-MAR', additional: { startMonth: 4, endMonth: 3 } },
+                { label: this.localeData?.financial_year_period_options?.july_july, value: 'JULY-JULY', additional: { startMonth: 7, endMonth: 6 } }
             ];
 
             if (this.financialYearObj?.financialYearPeriod) {

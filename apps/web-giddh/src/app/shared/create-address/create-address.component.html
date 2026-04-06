@@ -86,12 +86,11 @@
                                 <div class="form-group mb-1">
                                     <input-field
                                         [label]="generalService.getPostalCodeLabel(activeCompanyCountryCode)"
-                                        [placeholder]="generalService.getPostalCodeLabel(activeCompanyCountryCode)"
+                                        [placeholder]="generalService.getPostalCodePlaceholder(activeCompanyCountryCode)"
                                         [type]="'text'"
                                         [autocomplete]="'false'"
                                         [name]="'pinCodeNum'"
                                         formControlName="pincode"
-                                        [allowDecimalDigitsOnly]="activeCompanyCountryCode === 'IN'"
                                     ></input-field>
                                 </div>
                             </div>

@@ -550,7 +550,7 @@
                                                             [type]="'text'"
                                                             [name]="'billingPinCode'"
                                                             (keyup)="copyAccountBillingAddressToShippingAddress()"
-                                                            [placeholder]="generalService.getPostalCodeLabel(account?.countryCode)"
+                                                            [placeholder]="generalService.getPostalCodePlaceholder(account?.countryCode)"
                                                             [cssClass]="'border-none w-100'"
                                                             formControlName="pincode"
                                                         ></text-field>
@@ -719,7 +719,7 @@
                                                             appEnterNext
                                                             [type]="'text'"
                                                             [name]="'shippingPinCode'"
-                                                            [placeholder]="generalService.getPostalCodeLabel(account?.countryCode)"
+                                                            [placeholder]="generalService.getPostalCodePlaceholder(account?.countryCode)"
                                                             [cssClass]="'border-none w-100'"
                                                             formControlName="pincode"
                                                         ></text-field>
@@ -1004,7 +1004,7 @@
                                                         [type]="'text'"
                                                         [name]="'companyBillingPinCode'"
                                                         (keyup)="copyCompanyBillingAddressToShippingAddress()"
-                                                        [placeholder]="generalService.getPostalCodeLabel(company?.countryCode)"
+                                                        [placeholder]="generalService.getPostalCodePlaceholder(company?.countryCode)"
                                                         [cssClass]="'border-none w-100'"
                                                         formControlName="pincode"
                                                     ></text-field>
@@ -1148,7 +1148,7 @@
                                                         appEnterNext
                                                         [type]="'text'"
                                                         [name]="'companyShippingPinCode'"
-                                                        [placeholder]="generalService.getPostalCodeLabel(company?.countryCode)"
+                                                        [placeholder]="generalService.getPostalCodePlaceholder(company?.countryCode)"
                                                         [cssClass]="'border-none w-100'"
                                                         formControlName="pincode"
                                                     ></text-field>

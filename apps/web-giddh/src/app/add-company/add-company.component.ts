@@ -1211,6 +1211,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
                 this.generalService.companyUniqueName = response?.body?.uniqueName;
+                this.generalService.activeCompany = response?.body;
 
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;

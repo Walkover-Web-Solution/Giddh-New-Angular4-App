@@ -586,7 +586,9 @@
                                                         [name]="'billingPinCode'"
                                                         (change)="autoFillShippingDetails()"
                                                         [placeholder]="
-                                                            generalService.getPostalCodeLabel(selectedCompany?.countryV2?.alpha2CountryCode)
+                                                            generalService.getPostalCodePlaceholder(
+                                                                selectedCompany?.countryV2?.alpha2CountryCode
+                                                            )
                                                         "
                                                         [(ngModel)]="invFormData.accountDetails.billingDetails.pincode"
                                                         [readonly]="isEinvoiceGenerated"
@@ -796,7 +798,9 @@
                                                         autocomplete="false"
                                                         [name]="'shippingPinCode'"
                                                         [placeholder]="
-                                                            generalService.getPostalCodeLabel(selectedCompany?.countryV2?.alpha2CountryCode)
+                                                            generalService.getPostalCodePlaceholder(
+                                                                selectedCompany?.countryV2?.alpha2CountryCode
+                                                            )
                                                         "
                                                         [(ngModel)]="invFormData.accountDetails.shippingDetails.pincode"
                                                         [readonly]="isEinvoiceGenerated"

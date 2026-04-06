@@ -746,17 +746,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
-            this.selectedTabLabel = event.tab.textLabel;
+            const tabLabel = event.tab.textLabel || event.tab.ariaLabel;
+            this.selectedTabLabel = tabLabel;
             this.selectedTabIndex = event.index;
-            this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
-            if (event.tab.textLabel === this.localeData?.tabs?.others) {
+            this.isCustomSelectedTab = tabLabel === this.localeData?.tabs?.custom;
+            if (tabLabel === this.localeData?.tabs?.others) {
                 this.isOtherSelectedTab = true;
             } else {
                 this.isOtherSelectedTab = false;
             }
 
             // Mark this tab as activated
-            this.activatedTabs.add(event.tab.textLabel);
+            this.activatedTabs.add(tabLabel);
             this.changeDetectorRef.detectChanges();
         }
     }
@@ -1119,11 +1120,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
-
-            // If duplicate contact errors exist, navigate to portal tab
-            if (this.hasDuplicateContactErrors) {
-                this.goToPortalTab();
-            }
+            this.navigateToFirstErrorTab();
             return;
         }
 
@@ -2683,6 +2680,43 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public goToPortalTab(): void {
         this.goToTab(2); // Portal tab is at index 2
+    }
+
+    /**
+     * Checks whether the given form control names contain at least one invalid control
+     *
+     * @param {string[]} controlNames - List of top-level form control names belonging to a tab
+     * @returns {boolean} True if any control in the list is invalid
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public tabHasError(controlNames: string[]): boolean {
+        if (!this.isValidForm) {
+            return controlNames.some(name => this.addAccountForm.get(name)?.invalid);
+        }
+        return false;
+    }
+
+    /**
+     * Navigates to the first tab that contains validation errors
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private navigateToFirstErrorTab(): void {
+        const tabControlMap: { controlNames: string[]; index: number }[] = [
+            { controlNames: ['addresses'], index: 0 },
+            { controlNames: ['attentionTo', 'mobileNo', 'email'], index: 1 },
+            { controlNames: ['portalDomain'], index: 2 },
+            { controlNames: ['accountBankDetails'], index: 3 },
+            { controlNames: ['uniqueName', 'closingBalanceTriggerAmount', 'hsnOrSac', 'hsnNumber', 'sacNumber'], index: 4 },
+            { controlNames: ['customFields'], index: 5 },
+        ];
+        const firstErrorTab = tabControlMap.find(tab =>
+            tab.controlNames.some(name => this.addAccountForm.get(name)?.invalid)
+        );
+        if (firstErrorTab) {
+            this.goToTab(firstErrorTab.index);
+        }
     }
 
     /**

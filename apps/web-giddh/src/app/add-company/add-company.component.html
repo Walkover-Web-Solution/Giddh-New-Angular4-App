@@ -317,9 +317,8 @@
                                 <input-field
                                     [name]="'pincode'"
                                     [label]="generalService.getPostalCodeLabel(selectedCountryCode)"
-                                    [placeholder]="generalService.getPostalCodeLabel(selectedCountryCode)"
+                                    [placeholder]="generalService.getPostalCodePlaceholder(selectedCountryCode)"
                                     [type]="'text'"
-                                    [allowDecimalDigitsOnly]="selectedCountryCode === 'IN'"
                                     formControlName="pincode"
                                 ></input-field>
                             </div>
