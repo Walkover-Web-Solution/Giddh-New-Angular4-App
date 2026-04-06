@@ -616,9 +616,11 @@
                                                 <input-field
                                                     [type]="'text'"
                                                     [name]="'subscriptionPincode' + currentTimeStamp"
-                                                    [label]="generalService.getPostalCodeLabel(company?.countryCode)"
+                                                    [label]="generalService.getPostalCodeLabel(secondStepForm.get('country')?.value?.value)"
                                                     formControlName="pincode"
-                                                    [placeholder]="generalService.getPostalCodePlaceholder(company?.countryCode)"
+                                                    [placeholder]="
+                                                        generalService.getPostalCodePlaceholder(secondStepForm.get('country')?.value?.value)
+                                                    "
                                                     [autocomplete]="'subscriptionPincode' + currentTimeStamp"
                                                 ></input-field>
                                             </div>
