@@ -93,7 +93,6 @@ import {
     KeyCodesEnum,
     RATE_FIELD_PRECISION,
     SubVoucher,
-    ZIP_CODE_SUPPORTED_COUNTRIES,
     ASIDE_PANE_CONFIG,
     IOption,
     API_BULK_FETCH_LIMIT,
@@ -518,8 +517,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public isPendingEntries: boolean = false;
     /** Holds deposit account name */
     public depositAccountName: string = "";
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Total Deposit Amount  */
     private totalDepositAmount: number = 0;
     /** Holds current route query parameters */
@@ -762,7 +759,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private componentStore: VoucherComponentStore,
         private aiOcrStore: AiOcrStore,
         private store: Store<AppState>,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private uiSettingsService: UiSettingsService,
         private vouchersUtilityService: VouchersUtilityService,
         private commonActions: CommonActions,
@@ -5331,7 +5328,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return false;
         }
 
-        if (dayjs(invoiceForm.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(invoiceForm.date, GIDDH_DATE_FORMAT), "d")) {
+        const parsedDate = invoiceForm.date instanceof Date ? dayjs(invoiceForm.date) : dayjs(invoiceForm.date, GIDDH_DATE_FORMAT);
+        const parsedDueDate = invoiceForm.dueDate instanceof Date ? dayjs(invoiceForm.dueDate) : dayjs(invoiceForm.dueDate, GIDDH_DATE_FORMAT);
+        if (parsedDate.isValid() && parsedDueDate.isValid() && parsedDueDate.isBefore(parsedDate, "d")) {
             let dateText = this.commonLocaleData?.app_invoice;
 
             if (this.invoiceType.isProformaInvoice) {
@@ -5345,6 +5344,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             let dueDateError = this.localeData?.due_date_error;
             dueDateError = dueDateError?.replace("[INVOICE_TYPE]", dateText);
             this.toasterService.showSnackBar("error", dueDateError);
+            this.invoiceForm.get('dueDate')?.setErrors({ dueDateBeforeVoucherDate: true });
             return false;
         }
 
@@ -5362,6 +5362,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.localeData?.no_product_error) {
             if (!hasTransactions) {
                 this.toasterService.showSnackBar("warning", this.localeData?.no_product_error);
+                this.invoiceForm.get('entries')?.setErrors({ noProduct: true });
                 return false;
             }
         }
@@ -5404,6 +5405,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         return true;
+    }
+
+    /**
+     * Scrolls the #content-wrapper to the first invalid form element in the DOM
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private scrollToFirstInvalidElement(): void {
+        const contentWrapper = document.getElementById('content-wrapper');
+        const allInvalid = contentWrapper?.querySelectorAll<HTMLElement>(
+            'input.ng-invalid, select.ng-invalid, textarea.ng-invalid, table.ng-invalid, mat-select.ng-invalid, reactive-dropdown-field.ng-invalid, ng-select.ng-invalid, text-field.ng-invalid, input-field.ng-invalid, select-field.ng-invalid, select-multiple-fields.ng-invalid, giddh-datepicker.ng-invalid'
+        );
+        const firstInvalid = allInvalid?.[0];
+        if (firstInvalid && contentWrapper) {
+            const top = firstInvalid.getBoundingClientRect().top
+                - contentWrapper.getBoundingClientRect().top
+                + contentWrapper.scrollTop;
+            contentWrapper.scrollTo({ top: top - 20, behavior: 'smooth' });
+        }
     }
 
     /**
@@ -5545,6 +5566,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!this.isFormValid(invoiceForm)) {
             this.startLoader(false);
+            this.invoiceForm.markAllAsTouched();
+            this.changeDetection.detectChanges();
+            this.scrollToFirstInvalidElement();
             return;
         }
 

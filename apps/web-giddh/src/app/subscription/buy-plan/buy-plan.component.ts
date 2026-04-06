@@ -276,7 +276,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private location: Location,
         private elementRef: ElementRef,
         private viewSubscriptionComponentStore: ViewSubscriptionComponentStore,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig
     ) {
         this.session$ = this.store.pipe(select(p => p.session), distinctUntilChanged(), takeUntil(this.destroyed$));

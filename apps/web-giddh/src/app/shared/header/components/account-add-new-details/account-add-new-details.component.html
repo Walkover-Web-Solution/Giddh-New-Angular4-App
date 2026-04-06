@@ -284,7 +284,10 @@
             [selectedIndex]="selectedTabIndex"
             (selectedTabChange)="tabChanged($event)"
         >
-            <mat-tab [label]="localeData?.tabs?.address" class="gstin-address" *ngIf="!isHsnSacEnabledAcc">
+            <mat-tab class="gstin-address" *ngIf="!isHsnSacEnabledAcc" [aria-label]="localeData?.tabs?.address">
+                <ng-template mat-tab-label>
+                    <span [class.text-red]="tabHasError(['addresses'])">{{ localeData?.tabs?.address }}</span>
+                </ng-template>
                 <div class="pt-3 px-1 pb-1 overflow-hidden" formArrayName="addresses" *ngIf="addAccountForm.get('addresses')?.length">
                     <ng-container
                         *ngFor="
@@ -354,11 +357,12 @@
                                     formControlName="stateCode"
                                     [required]="isStateRequired"
                                     [showError]="
-                                        !isValidForm &&
+                                        isStateRequired &&
                                         !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value &&
-                                        isStateRequired
+                                        (!isValidForm || addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.touched)
                                     "
                                     (selectedOption)="selectedState(gst, $event); openConfirmLeaveDialog()"
+                                    (onClear)="addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.markAsTouched()"
                                     [disabled]="isGstValid && gst.value.gstNumber?.length >= 2"
                                     [readonly]="isGstValid && gst.value.gstNumber?.length >= 2"
                                     [matTooltip]="
@@ -405,17 +409,11 @@
                                 <input-field
                                     appEnterNext
                                     [name]="'pinCodeNum'"
-                                    [label]="
-                                        zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode)
-                                            ? commonLocaleData?.app_zip_code
-                                            : commonLocaleData?.app_pin_code
-                                    "
+                                    [label]="generalService.getPostalCodeLabel(addAccountForm.get('country').get('countryCode')?.value)"
                                     [placeholder]="
-                                        zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode)
-                                            ? commonLocaleData?.app_enter_zip_code
-                                            : commonLocaleData?.app_enter_pin_code
+                                        generalService.getPostalCodePlaceholder(addAccountForm.get('country').get('countryCode')?.value)
                                     "
-                                    [type]="'number'"
+                                    [type]="'text'"
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.pincode"
                                     [allowDecimalDigitsOnly]="true"
                                     (change)="openConfirmLeaveDialog()"
@@ -459,7 +457,10 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.tabs?.contact" class="contact-form-wrap">
+            <mat-tab class="contact-form-wrap" [aria-label]="localeData?.tabs?.contact">
+                <ng-template mat-tab-label>
+                    <span [class.text-red]="tabHasError(['attentionTo', 'mobileNo', 'email'])">{{ localeData?.tabs?.contact }}</span>
+                </ng-template>
                 <div class="pt-3 px-1 pb-1 overflow-hidden pb-5 px-1">
                     <div class="row pb-4">
                         <div class="col-sm-6">
@@ -508,10 +509,13 @@
                 </div>
             </mat-tab>
             <mat-tab
-                [label]="localeData?.tabs?.portal"
                 class="contact-form-wrap"
                 *ngIf="voucherApiVersion === 2 && (activeGroupUniqueName === accountingGroupEnum.SundryDebtors || isParentSundrydebtors)"
+                [aria-label]="localeData?.tabs?.portal"
             >
+                <ng-template mat-tab-label>
+                    <span [class.text-red]="tabHasError(['portalDomain'])">{{ localeData?.tabs?.portal }}</span>
+                </ng-template>
                 <div formArrayName="portalDomain" class="pt-3 px-1 pb-1 overflow-hidden pb-5 px-1">
                     <div
                         class="row pb-4 align-items-center"
@@ -626,7 +630,10 @@
                 </div>
             </mat-tab>
             <!-- bank details visible when sundry credtiors selected , right now is hide -->
-            <mat-tab [label]="localeData?.tabs?.bank_details" class="bank-details-form" *ngIf="showBankDetail">
+            <mat-tab class="bank-details-form" *ngIf="showBankDetail" [aria-label]="localeData?.tabs?.bank_details">
+                <ng-template mat-tab-label>
+                    <span [class.text-red]="tabHasError(['accountBankDetails'])">{{ localeData?.tabs?.bank_details }}</span>
+                </ng-template>
                 <div class="pt-3 px-1 pb-1 overflow-hidden">
                     <div formArrayName="accountBankDetails">
                         <div
@@ -732,7 +739,14 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.tabs?.others" class="other-form-wrap">
+            <mat-tab class="other-form-wrap" [aria-label]="localeData?.tabs?.others">
+                <ng-template mat-tab-label>
+                    <span
+                        [class.text-red]="tabHasError(['uniqueName', 'closingBalanceTriggerAmount', 'hsnOrSac', 'hsnNumber', 'sacNumber'])"
+                    >
+                        {{ localeData?.tabs?.others }}
+                    </span>
+                </ng-template>
                 <div class="pt-3 px-1 pb-1 overflow-hidden">
                     <div class="row">
                         <div class="col-sm-6">
@@ -855,7 +869,10 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.tabs?.custom">
+            <mat-tab [aria-label]="localeData?.tabs?.custom">
+                <ng-template mat-tab-label>
+                    <span [class.text-red]="tabHasError(['customFields'])">{{ localeData?.tabs?.custom }}</span>
+                </ng-template>
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <div class="pt-3 px-1 pb-1 overflow-hidden" *ngIf="addAccountForm.get('customFields')?.length">
                     <ng-container formArrayName="customFields">

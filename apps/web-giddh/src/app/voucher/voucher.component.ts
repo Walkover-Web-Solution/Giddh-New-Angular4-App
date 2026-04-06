@@ -816,7 +816,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private salesService: SalesService,
         private toaster: ToasterService,
         private generalActions: GeneralActions,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         public route: ActivatedRoute,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceActions: InvoiceActions,

@@ -99,7 +99,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         private componentStore: ChangeBillingComponentStore,
         private commonActions: CommonActions,
         private toasterService: ToasterService,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private subscriptionService: SubscriptionsService,
         private store: Store<AppState>,
         private changeDetection: ChangeDetectorRef,

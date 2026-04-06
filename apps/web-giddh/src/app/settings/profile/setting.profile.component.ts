@@ -1025,6 +1025,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             name: addressDetails.formValue.name,
             pincode: addressDetails.formValue.pincode,
             county: { code: addressDetails.formValue.county },
+            isDefault: addressDetails.formValue.isDefault,
             linkEntity
         };
 
@@ -1088,6 +1089,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             pincode: addressDetails.formValue.pincode,
             uniqueName: addressDetails.formValue?.uniqueName,
             county: { code: addressDetails.formValue.county },
+            isDefault: addressDetails.formValue.isDefault,
             linkEntity
         };
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {

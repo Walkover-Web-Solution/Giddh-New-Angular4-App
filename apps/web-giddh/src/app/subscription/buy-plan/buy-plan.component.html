@@ -614,11 +614,11 @@
                                             </div>
                                             <div class="form-group">
                                                 <input-field
-                                                    [type]="'number'"
+                                                    [type]="'text'"
                                                     [name]="'subscriptionPincode' + currentTimeStamp"
-                                                    [label]="localeData?.pincode"
+                                                    [label]="generalService.getPostalCodeLabel(company?.countryCode)"
                                                     formControlName="pincode"
-                                                    [placeholder]="localeData?.pincode"
+                                                    [placeholder]="generalService.getPostalCodePlaceholder(company?.countryCode)"
                                                     [autocomplete]="'subscriptionPincode' + currentTimeStamp"
                                                 ></input-field>
                                             </div>
