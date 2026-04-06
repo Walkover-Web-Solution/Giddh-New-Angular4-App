@@ -759,6 +759,7 @@ export interface IOption {
     isHilighted?: boolean;
     additional?: any;
     subVoucher?: string;
+    tooltip?: string;
 }
 
 /** Number Format Locale Mapping for GiddhNumberFormatPipe */

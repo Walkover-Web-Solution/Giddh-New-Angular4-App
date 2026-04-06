@@ -52,7 +52,7 @@
                     <ng-container *ngFor="let option of fieldFilteredOptions$ | async; trackBy: trackByOption">
                         <mat-option
                             [value]="option"
-                            [matTooltip]="option?.label"
+                            [matTooltip]="option?.tooltip || option?.label"
                             matTooltipPosition="right"
                             (click)="$event.stopPropagation()"
                             [disabled]="option?.additional?.disabled"
@@ -138,7 +138,7 @@
             <mat-option
                 *ngFor="let option of fieldFilteredOptions$ | async; trackBy: trackByOption"
                 [value]="option"
-                [matTooltip]="option?.label"
+                [matTooltip]="option?.tooltip || option?.label"
                 matTooltipPosition="right"
                 (click)="$event.stopPropagation()"
             >
