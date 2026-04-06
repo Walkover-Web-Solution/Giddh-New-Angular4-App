@@ -172,7 +172,7 @@
                     <ng-container matColumnDef="defaultAddress">
                         <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.default_address }}</th>
                         <td mat-cell *matCellDef="let element" class="text-center text-middle">
-                            <i *ngIf="element?.isDefault" class="fa fa-check pd-t1 default-address"></i>
+                            <i *ngIf="element?.isDefault" class="fa fa-check pd-t1 text-green"></i>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="linked">

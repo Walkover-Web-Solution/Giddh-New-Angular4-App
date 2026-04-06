@@ -286,7 +286,7 @@
         >
             <mat-tab class="gstin-address" *ngIf="!isHsnSacEnabledAcc" [aria-label]="localeData?.tabs?.address">
                 <ng-template mat-tab-label>
-                    <span [class.tab-error-label]="tabHasError(['addresses'])">{{ localeData?.tabs?.address }}</span>
+                    <span [class.text-red]="tabHasError(['addresses'])">{{ localeData?.tabs?.address }}</span>
                 </ng-template>
                 <div class="pt-3 px-1 pb-1 overflow-hidden" formArrayName="addresses" *ngIf="addAccountForm.get('addresses')?.length">
                     <ng-container
@@ -459,7 +459,7 @@
 
             <mat-tab class="contact-form-wrap" [aria-label]="localeData?.tabs?.contact">
                 <ng-template mat-tab-label>
-                    <span [class.tab-error-label]="tabHasError(['attentionTo', 'mobileNo', 'email'])">{{ localeData?.tabs?.contact }}</span>
+                    <span [class.text-red]="tabHasError(['attentionTo', 'mobileNo', 'email'])">{{ localeData?.tabs?.contact }}</span>
                 </ng-template>
                 <div class="pt-3 px-1 pb-1 overflow-hidden pb-5 px-1">
                     <div class="row pb-4">
@@ -514,7 +514,7 @@
                 [aria-label]="localeData?.tabs?.portal"
             >
                 <ng-template mat-tab-label>
-                    <span [class.tab-error-label]="tabHasError(['portalDomain'])">{{ localeData?.tabs?.portal }}</span>
+                    <span [class.text-red]="tabHasError(['portalDomain'])">{{ localeData?.tabs?.portal }}</span>
                 </ng-template>
                 <div formArrayName="portalDomain" class="pt-3 px-1 pb-1 overflow-hidden pb-5 px-1">
                     <div
@@ -632,7 +632,7 @@
             <!-- bank details visible when sundry credtiors selected , right now is hide -->
             <mat-tab class="bank-details-form" *ngIf="showBankDetail" [aria-label]="localeData?.tabs?.bank_details">
                 <ng-template mat-tab-label>
-                    <span [class.tab-error-label]="tabHasError(['accountBankDetails'])">{{ localeData?.tabs?.bank_details }}</span>
+                    <span [class.text-red]="tabHasError(['accountBankDetails'])">{{ localeData?.tabs?.bank_details }}</span>
                 </ng-template>
                 <div class="pt-3 px-1 pb-1 overflow-hidden">
                     <div formArrayName="accountBankDetails">
@@ -742,9 +742,7 @@
             <mat-tab class="other-form-wrap" [aria-label]="localeData?.tabs?.others">
                 <ng-template mat-tab-label>
                     <span
-                        [class.tab-error-label]="
-                            tabHasError(['uniqueName', 'closingBalanceTriggerAmount', 'hsnOrSac', 'hsnNumber', 'sacNumber'])
-                        "
+                        [class.text-red]="tabHasError(['uniqueName', 'closingBalanceTriggerAmount', 'hsnOrSac', 'hsnNumber', 'sacNumber'])"
                     >
                         {{ localeData?.tabs?.others }}
                     </span>
@@ -873,7 +871,7 @@
 
             <mat-tab [aria-label]="localeData?.tabs?.custom">
                 <ng-template mat-tab-label>
-                    <span [class.tab-error-label]="tabHasError(['customFields'])">{{ localeData?.tabs?.custom }}</span>
+                    <span [class.text-red]="tabHasError(['customFields'])">{{ localeData?.tabs?.custom }}</span>
                 </ng-template>
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <div class="pt-3 px-1 pb-1 overflow-hidden" *ngIf="addAccountForm.get('customFields')?.length">
