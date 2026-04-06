@@ -2569,7 +2569,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.voucherStockResults$.subscribe((res) => (voucherStockResults = res));
                     }
                     const newResults = response?.body?.results?.map((res) => {
-                        return { label: res.name, value: res.uniqueName, additional: res };
+                        return { label: res.name, value: res.uniqueName, additional: res, tooltip: `${res.stock?.name ? res.name + ' (' + res.stock.name + ')' : res.name}` };
                     });
                     this.voucherStockResults$ = observableOf(voucherStockResults.concat(...newResults));
                 } else {
@@ -2751,7 +2751,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const stockName = transaction?.get('stock.name')?.value;
             
             if (accountName) {
-                return stockName ? `${accountName} (${stockName})` : accountName;
+                return stockName ? stockName : accountName;
             }
             return '';
         } catch (error) {

@@ -1617,10 +1617,7 @@
                                                                             {{
                                                                                 transaction.get('account.name')?.value
                                                                                     ? transaction.get('stock.name')?.value
-                                                                                        ? transaction.get('account.name')?.value +
-                                                                                          ' (' +
-                                                                                          transaction.get('stock.name')?.value +
-                                                                                          ')'
+                                                                                        ? transaction.get('stock.name')?.value
                                                                                         : transaction.get('account.name')?.value
                                                                                     : localeData?.select_account
                                                                             }}
@@ -1678,13 +1675,12 @@
                                                                             @if (option.additional?.stock) {
                                                                                 <a href="javascript:;" class="d-block py-1 flex-column">
                                                                                     <div class="option-label">
-                                                                                        {{ option?.label | titlecase }}
                                                                                         @if (option?.additional?.stock) {
                                                                                             <span>
-                                                                                                ({{
+                                                                                                {{
                                                                                                     option?.additional?.stock?.name
                                                                                                         | titlecase
-                                                                                                }})
+                                                                                                }}
                                                                                             </span>
                                                                                         }
                                                                                     </div>
