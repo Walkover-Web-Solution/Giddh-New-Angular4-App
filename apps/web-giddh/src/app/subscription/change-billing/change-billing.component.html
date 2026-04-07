@@ -49,12 +49,12 @@
                         </div>
                         <div class="form-group">
                             <input-field
-                                [type]="'number'"
+                                [type]="'text'"
                                 [name]="'billingPincode' + currentTimeStamp"
                                 [autocomplete]="'billingPincode' + currentTimeStamp"
-                                [label]="localeData?.pincode"
+                                [label]="generalService.getPostalCodeLabel(changeBillingForm.get('country')?.value?.code)"
                                 formControlName="pincode"
-                                [placeholder]="localeData?.pincode"
+                                [placeholder]="generalService.getPostalCodePlaceholder(changeBillingForm.get('country')?.value?.code)"
                             ></input-field>
                         </div>
                         <div class="form-group">

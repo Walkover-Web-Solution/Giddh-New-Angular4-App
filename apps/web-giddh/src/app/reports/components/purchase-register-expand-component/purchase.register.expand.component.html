@@ -265,13 +265,7 @@
 
                         <!-- Pincode Column -->
                         <ng-container matColumnDef="pincode">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{
-                                    zipCodeSupportedCountryList.includes(activeCompanyCountryCode)
-                                        ? commonLocaleData?.app_zip_code
-                                        : commonLocaleData?.app_pin_code
-                                }}
-                            </th>
+                            <th mat-header-cell *matHeaderCellDef>{{ generalService.getPostalCodeLabel(activeCompanyCountryCode) }}</th>
                             <td mat-cell *matCellDef="let item">{{ item?.pincode ? item?.pincode : '-' }}</td>
                         </ng-container>
 

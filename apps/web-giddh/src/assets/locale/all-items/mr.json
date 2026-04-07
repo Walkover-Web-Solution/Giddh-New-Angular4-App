@@ -1027,6 +1027,12 @@
                     "link": "/pages/budget-forecasting",
                     "icon": "icon-audit-log",
                     "description": "एआय-संचालित रोख प्रवाह अंदाज आणि भविष्यवाण्या"
+                },
+                {
+                    "label": "बँक जुळवणी",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "आपली नोंदी बँक स्टेटमेंटशी जुळवा"
                 }
             ]
         },

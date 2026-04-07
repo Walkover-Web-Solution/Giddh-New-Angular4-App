@@ -1216,7 +1216,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (!event.relatedTarget || !this.entryContent?.nativeElement.contains(event.relatedTarget)) {
-            this.currentTxn.selectedAccount.applicableTaxes = this.currentTxn.taxesVm;
+            if (this.currentTxn?.selectedAccount?.applicableTaxes) {
+                this.currentTxn.selectedAccount.applicableTaxes = this.currentTxn.taxesVm;
+            }
             this.clickedOutsideEvent.emit(event);
         }
     }

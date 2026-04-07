@@ -8,7 +8,7 @@ import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
 import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -92,8 +92,6 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public isDefaultLoaded: boolean = false;
     /** Hold active company country code */
     public activeCompanyCountryCode: string = '';
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Datasource of Sales Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     /** Holds page size options for pagination */
@@ -115,7 +113,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         private activeRoute: ActivatedRoute,
         private router: Router,
         private _cd: ChangeDetectorRef,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private dialog: MatDialog,
         private companyActions: CompanyActions
     ) {
@@ -486,7 +484,8 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             q: this.voucherNumberInput?.value,
             branchUniqueName: this.getDetailedsalesRequestFilter?.branchUniqueName,
             commonLocaleData: this.commonLocaleData,
-            localeData: this.localeData
+            localeData: this.localeData,
+            activeCompanyCountryCode: this.activeCompanyCountryCode
         }
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
                     width: '630px',

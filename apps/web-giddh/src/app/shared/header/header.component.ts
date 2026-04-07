@@ -464,6 +464,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
+                this.generalService.activeCompany = selectedCmp;
                 // for voucher company message
                 this.voucherApiVersion = this.generalService.voucherApiVersion;
                 if (this.voucherApiVersion === 2) {

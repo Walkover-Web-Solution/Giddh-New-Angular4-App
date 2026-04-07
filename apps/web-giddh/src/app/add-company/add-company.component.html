@@ -316,16 +316,8 @@
                             <div class="col-lg-12">
                                 <input-field
                                     [name]="'pincode'"
-                                    [label]="
-                                        zipCodeSupportedCountryList.includes(selectedCountryCode)
-                                            ? commonLocaleData?.app_zip_code
-                                            : commonLocaleData?.app_pin_code
-                                    "
-                                    [placeholder]="
-                                        zipCodeSupportedCountryList.includes(selectedCountryCode)
-                                            ? commonLocaleData?.app_enter_zip_code
-                                            : commonLocaleData?.app_enter_pin_code
-                                    "
+                                    [label]="generalService.getPostalCodeLabel(selectedCountryCode)"
+                                    [placeholder]="generalService.getPostalCodePlaceholder(selectedCountryCode)"
                                     [type]="'text'"
                                     formControlName="pincode"
                                 ></input-field>
