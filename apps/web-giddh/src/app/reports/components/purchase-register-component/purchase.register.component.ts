@@ -482,7 +482,7 @@ constructor(
                 this.reportForm.get('salesPersonUniqueNames').patchValue(registerReportFilters?.salesPersonUniqueNames ?? []);
                 this.reportForm.get('accountUniqueNames').patchValue(registerReportFilters?.accountUniqueNames ?? []);
                 this.reportForm.get('countryCodes').patchValue(registerReportFilters?.countryCodes ?? []);
-                this.reportForm.get('countryCode').patchValue(registerReportFilters?.countryCode || activeCompany.countryV2?.alpha2CountryCode);
+                this.reportForm.get('countryCode').patchValue(registerReportFilters?.countryCode || activeCompany?.countryV2?.alpha2CountryCode || '');
                 this.reportForm.get('stateCodes').patchValue(registerReportFilters?.stateCodes ?? []);
                 return activeCompany;
             }))),
@@ -943,7 +943,11 @@ constructor(
         }
         this.currentGroupBy.set(requestObject.groupBy);
         if (requestObject.groupBy === GroupBy.State && !this.reportForm.get('countryCode')?.value) {
-            this.reportForm.get('countryCode')?.setValue(this.activeCompany.countryV2?.alpha2CountryCode);
+            if (this.activeCompany.countryV2?.alpha2CountryCode) {
+                this.reportForm.get('countryCode')?.setValue(this.activeCompany.countryV2?.alpha2CountryCode);
+            } else {
+                return;
+            }
         }
         this.componentStore.getSalesPurchaseList({
             payload: requestObject,
