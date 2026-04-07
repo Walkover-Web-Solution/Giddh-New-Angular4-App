@@ -6,9 +6,9 @@ export enum FileTypeEnum {
 }
 
 export enum CopyType {
-    ORIGINAL = "ORIGINAL",
-    CUSTOMER = "CUSTOMER",
-    TRANSPORT = "TRANSPORT"
+    ORIGINAL = "Original",
+    CUSTOMER = "Customer",
+    TRANSPORT = "Transport"
 }
 
 // Enum representing country names.
