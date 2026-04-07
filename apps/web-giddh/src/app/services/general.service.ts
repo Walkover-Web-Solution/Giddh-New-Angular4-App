@@ -10,7 +10,7 @@ import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eve
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
-import { CompanyCreateRequest } from '../models/api-models/Company';
+import { CompanyCreateRequest, CompanyResponse } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
@@ -65,6 +65,8 @@ export class GeneralService {
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     /** Stores the version number for new voucher APIs (1 for old APIs and 2 for new APIs) */
     public voucherApiVersion: number;
+    /** Stores the active company object, used for company-level fallbacks such as postal code label resolution */
+    public activeCompany: CompanyResponse;
 
     get user(): UserDetails {
         return this._user;
@@ -3324,5 +3326,43 @@ export class GeneralService {
     public appendQueryParam(url: string, paramName: string, paramValue: string | number | boolean): string {
         const delimiter = url.includes('?') ? '&' : '?';
         return `${url}${delimiter}${paramName}=${paramValue}`;
+    }
+
+    /**
+     * Returns the country-specific label for the postal/pin code field.
+     * Different countries use different names for their postal code:
+     * India uses "PIN Code", US uses "ZIP Code", UK uses "Postcode", Canada uses "Postal Code", etc.
+     *
+     * @param {string} countryCode - ISO alpha-2 country code (e.g. 'IN', 'US', 'GB', 'CA')
+     * @returns {string} The localized label for the postal code field
+     * @memberof GeneralService
+     */
+    public getPostalCodeLabel(countryCode: string): string {
+        const resolvedCode = countryCode || this.activeCompany?.countryV2?.alpha2CountryCode;
+        switch (resolvedCode?.toUpperCase()) {
+            case 'IN': return 'PIN Code';
+            case 'US': return 'ZIP Code';
+            case 'GB': return 'Postcode';
+            case 'CA': return 'Postal Code';
+            case 'AU': return 'Postcode';
+            case 'NZ': return 'Postcode';
+            case 'IE': return 'Eircode';
+            case 'NL': return 'Postcode';
+            case 'DE': return 'Postleitzahl';
+            case 'FR': return 'Code Postal';
+            case 'AE': return 'P.O. Box';
+            default: return 'Postal Code';
+        }
+    }
+
+    /**
+     * Returns the placeholder text for the postal/pin code field (e.g. "Enter PIN Code", "Enter ZIP Code").
+     *
+     * @param {string} countryCode - ISO alpha-2 country code (e.g. 'IN', 'US', 'GB', 'CA')
+     * @returns {string} The placeholder string for the postal code input field
+     * @memberof GeneralService
+     */
+    public getPostalCodePlaceholder(countryCode: string): string {
+        return `Enter ${this.getPostalCodeLabel(countryCode)}`;
     }
 }

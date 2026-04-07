@@ -276,7 +276,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private location: Location,
         private elementRef: ElementRef,
         private viewSubscriptionComponentStore: ViewSubscriptionComponentStore,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig
     ) {
         this.session$ = this.store.pipe(select(p => p.session), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -384,11 +384,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.countrySource$ = observableOf(this.countrySource);
-                if (!this.isSubscriptionRegion) {
-                    if (this.countrySource?.length) {
-                        this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
-                    }
-                }
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -406,6 +401,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.commonCountrySource$ = observableOf(this.commonCountrySource);
+                if (this.countrySource?.length && this.newUserSelectedCountry) {
+                    this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
+                }
+                if (this.detectUserInfoByIp?.alpha2CountryCode) {
+                    const countryObject = this.commonCountrySource.find(item => item.label.includes(this.detectUserInfoByIp.alpha2CountryCode));
+                    if (countryObject) {
+                        this.selectCountry(countryObject);
+                        this.selectedCountry = countryObject.label;
+                    }
+                }
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -828,11 +833,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         }
                     });
                     this.secondStepForm.get("country")?.setValue(alpha2CountryCode);
-                    const countryObject = this.commonCountrySource.find(item => item.label.includes(alpha2CountryCode));
-                    if (countryObject) {
-                        this.selectCountry(countryObject);
-                        this.selectedCountry = countryObject.label;
-                    }
                 } else {
                     this.newUserSelectCountry({
                         "label": "GLB - Global",
@@ -1153,7 +1153,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getStates(): void {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
             if (response) {
                 this.states = [];
                 this.countyList = [];
@@ -1180,12 +1179,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                const stateObject = response?.stateList?.find(state => state.name === this.detectUserInfoByIp.stateName);
-                if (stateObject) {
-                    const label = stateObject.code + ' - ' + stateObject.name;
+                const useStateList = response.stateList && Object.keys(response.stateList).length > 0;
+                const stateCountyObj = useStateList
+                    ? Object.values(response.stateList).find((state: any) => state.name === this.detectUserInfoByIp.stateName)
+                    : response.countyList?.find((county: any) => county.name === this.detectUserInfoByIp.stateName);
+                if (stateCountyObj) {
+                    const label = useStateList
+                        ? (stateCountyObj as any).code + ' - ' + (stateCountyObj as any).name
+                        : (stateCountyObj as any).name;
                     this.secondStepForm.get("state").patchValue({
                         label: label,
-                        value: stateObject.code,
+                        value: (stateCountyObj as any).code,
                     });
                     this.selectedState = label;
                 }

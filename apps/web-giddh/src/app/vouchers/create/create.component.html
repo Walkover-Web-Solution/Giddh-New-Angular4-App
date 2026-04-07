@@ -550,13 +550,7 @@
                                                             [type]="'text'"
                                                             [name]="'billingPinCode'"
                                                             (keyup)="copyAccountBillingAddressToShippingAddress()"
-                                                            [placeholder]="
-                                                                zipCodeSupportedCountryList.includes(
-                                                                    activeCompany?.countryV2?.alpha2CountryCode
-                                                                )
-                                                                    ? commonLocaleData?.app_zip_code
-                                                                    : commonLocaleData?.app_pin_code
-                                                            "
+                                                            [placeholder]="generalService.getPostalCodePlaceholder(account?.countryCode)"
                                                             [cssClass]="'border-none w-100'"
                                                             formControlName="pincode"
                                                         ></text-field>
@@ -725,13 +719,7 @@
                                                             appEnterNext
                                                             [type]="'text'"
                                                             [name]="'shippingPinCode'"
-                                                            [placeholder]="
-                                                                zipCodeSupportedCountryList.includes(
-                                                                    activeCompany?.countryV2?.alpha2CountryCode
-                                                                )
-                                                                    ? commonLocaleData?.app_zip_code
-                                                                    : commonLocaleData?.app_pin_code
-                                                            "
+                                                            [placeholder]="generalService.getPostalCodePlaceholder(account?.countryCode)"
                                                             [cssClass]="'border-none w-100'"
                                                             formControlName="pincode"
                                                         ></text-field>
@@ -1016,13 +1004,7 @@
                                                         [type]="'text'"
                                                         [name]="'companyBillingPinCode'"
                                                         (keyup)="copyCompanyBillingAddressToShippingAddress()"
-                                                        [placeholder]="
-                                                            zipCodeSupportedCountryList.includes(
-                                                                activeCompany?.countryV2?.alpha2CountryCode
-                                                            )
-                                                                ? commonLocaleData?.app_zip_code
-                                                                : commonLocaleData?.app_pin_code
-                                                        "
+                                                        [placeholder]="generalService.getPostalCodePlaceholder(company?.countryCode)"
                                                         [cssClass]="'border-none w-100'"
                                                         formControlName="pincode"
                                                     ></text-field>
@@ -1166,13 +1148,7 @@
                                                         appEnterNext
                                                         [type]="'text'"
                                                         [name]="'companyShippingPinCode'"
-                                                        [placeholder]="
-                                                            zipCodeSupportedCountryList.includes(
-                                                                activeCompany?.countryV2?.alpha2CountryCode
-                                                            )
-                                                                ? commonLocaleData?.app_zip_code
-                                                                : commonLocaleData?.app_pin_code
-                                                        "
+                                                        [placeholder]="generalService.getPostalCodePlaceholder(company?.countryCode)"
                                                         [cssClass]="'border-none w-100'"
                                                         formControlName="pincode"
                                                     ></text-field>
@@ -1641,10 +1617,7 @@
                                                                             {{
                                                                                 transaction.get('account.name')?.value
                                                                                     ? transaction.get('stock.name')?.value
-                                                                                        ? transaction.get('account.name')?.value +
-                                                                                          ' (' +
-                                                                                          transaction.get('stock.name')?.value +
-                                                                                          ')'
+                                                                                        ? transaction.get('stock.name')?.value
                                                                                         : transaction.get('account.name')?.value
                                                                                     : localeData?.select_account
                                                                             }}
@@ -1702,13 +1675,12 @@
                                                                             @if (option.additional?.stock) {
                                                                                 <a href="javascript:;" class="d-block py-1 flex-column">
                                                                                     <div class="option-label">
-                                                                                        {{ option?.label | titlecase }}
                                                                                         @if (option?.additional?.stock) {
                                                                                             <span>
-                                                                                                ({{
+                                                                                                {{
                                                                                                     option?.additional?.stock?.name
                                                                                                         | titlecase
-                                                                                                }})
+                                                                                                }}
                                                                                             </span>
                                                                                         }
                                                                                     </div>

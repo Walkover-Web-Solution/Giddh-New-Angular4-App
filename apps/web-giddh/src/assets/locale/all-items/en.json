@@ -1031,6 +1031,12 @@
                     "link": "/pages/budget-forecasting",
                     "icon": "icon-audit-log",
                     "description": "AI-powered cashflow forecasting and predictions"
+                },
+                {
+                    "label": "Bank Reconciliation",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "Reconcile your books with bank statements"
                 }
             ]
         },
