@@ -4,6 +4,7 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
+    ElementRef,
     EventEmitter,
     Input,
     OnChanges,
@@ -241,6 +242,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
         private changeDetectorRef: ChangeDetectorRef,
+        private elementRef: ElementRef,
         protected generalService: GeneralService,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
@@ -1505,6 +1507,23 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (firstErrorTab) {
             this.goToTab(firstErrorTab.index);
         }
+        this.scrollToFirstInvalidField();
+    }
+
+    /**
+     * Scrolls the sidebar panel to the first invalid form field
+     *
+     * @private
+     * @memberof AccountAddNewDetailsComponent
+     */
+    private scrollToFirstInvalidField(): void {
+        setTimeout(() => {
+            const hostEl: HTMLElement = this.elementRef.nativeElement;
+            const firstInvalid = hostEl.querySelector<HTMLElement>(
+                'input.ng-invalid, mat-select.ng-invalid, reactive-dropdown-field.ng-invalid, input-field.ng-invalid, select-field.ng-invalid, textarea.ng-invalid'
+            );
+            firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
     }
 
     /**

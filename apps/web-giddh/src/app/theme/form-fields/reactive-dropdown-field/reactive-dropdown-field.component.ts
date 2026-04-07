@@ -261,7 +261,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
 
             // Always try to set label value when options change, regardless of previous value
-            if (changes?.options && this.isFirstKeystroke()) {
+            if (changes?.options && !this.isFirstKeystroke()) {
                 // Use setTimeout to ensure the value is properly set before trying to find the label
                 setTimeout(() => {
                     this.setLabelValue(null);

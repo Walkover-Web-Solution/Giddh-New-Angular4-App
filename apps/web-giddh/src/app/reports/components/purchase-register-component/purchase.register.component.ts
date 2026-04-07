@@ -482,7 +482,7 @@ constructor(
                 this.reportForm.get('salesPersonUniqueNames').patchValue(registerReportFilters?.salesPersonUniqueNames ?? []);
                 this.reportForm.get('accountUniqueNames').patchValue(registerReportFilters?.accountUniqueNames ?? []);
                 this.reportForm.get('countryCodes').patchValue(registerReportFilters?.countryCodes ?? []);
-                this.reportForm.get('countryCode').patchValue(registerReportFilters?.countryCode ?? '');
+                this.reportForm.get('countryCode').patchValue(registerReportFilters?.countryCode || activeCompany.countryV2?.alpha2CountryCode);
                 this.reportForm.get('stateCodes').patchValue(registerReportFilters?.stateCodes ?? []);
                 return activeCompany;
             }))),
