@@ -330,7 +330,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                         rate: 0,
                         stockUnitCode: '',
                         uniqueName: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
-                        name: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                        name: result.stock ? result.stock.name : result.name,
                         additional: result
                     };
                 }) || [];

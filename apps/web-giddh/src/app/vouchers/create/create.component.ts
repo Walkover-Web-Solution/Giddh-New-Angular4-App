@@ -4875,16 +4875,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(totalTaxWithoutCess));
             entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(cessPercentage));
 
-            if (this.invoiceForm.get("isAdvanceReceipt").value && taxes?.[0]?.taxDetail?.[0]?.taxValue > 0) {
+            if (this.invoiceForm.get("isAdvanceReceipt").value) {
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-                transactionFormGroup
-                    .get("amount.amountForAccount")
-                    .patchValue(
-                        transactionFormGroup.get("amount.amountForAccount").value -
-                        (transactionFormGroup.get("amount.amountForAccount").value *
-                            (taxes?.[0]?.taxDetail?.[0]?.taxValue ?? 1)) /
-                        100
-                    );
+                const amount = this.vouchersUtilityService.calculateInclusiveRate(
+                    entryFormGroup?.value,
+                    this.companyTaxes,
+                    this.company.giddhBalanceDecimalPlaces,
+                    Number(entryFormGroup.get("total.amountForAccount")?.value)
+                );
+                transactionFormGroup.get("amount.amountForAccount").patchValue(amount);
             }
         }
 
