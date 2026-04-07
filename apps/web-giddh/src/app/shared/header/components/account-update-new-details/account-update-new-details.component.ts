@@ -327,6 +327,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private groupService: GroupService,
         private invoiceService: InvoiceService,
         private changeDetectorRef: ChangeDetectorRef,
+        private elementRef: ElementRef,
         private settingsDiscountService: SettingsDiscountService,
         private customFieldsService: CustomFieldsService,
         private http: HttpClient,
@@ -2717,6 +2718,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (firstErrorTab) {
             this.goToTab(firstErrorTab.index);
         }
+        this.scrollToFirstInvalidField();
+    }
+
+    /**
+     * Scrolls the sidebar panel to the first invalid form field
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private scrollToFirstInvalidField(): void {
+        setTimeout(() => {
+            const hostEl: HTMLElement = this.elementRef.nativeElement;
+            const firstInvalid = hostEl.querySelector<HTMLElement>(
+                'input.ng-invalid, mat-select.ng-invalid, reactive-dropdown-field.ng-invalid, input-field.ng-invalid, select-field.ng-invalid, textarea.ng-invalid'
+            );
+            firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
     }
 
     /**
