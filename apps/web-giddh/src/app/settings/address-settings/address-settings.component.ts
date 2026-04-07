@@ -126,7 +126,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds Table Columns */
-    public displayedColumns: string[] = ['no', 'name', 'address', 'defaultAddress', 'gstin', 'state', 'linked'];
+    public displayedColumns: string[] = ['no', 'name', 'address', 'gstin', 'state', 'linked'];
     /** Holds Delete Address Confirmation Dialog Reference */
     private deleteAddressConfirmationModalRef: MatDialogRef<any>;
     /** Holds Aside Account AsidePane Dialog Reference */
