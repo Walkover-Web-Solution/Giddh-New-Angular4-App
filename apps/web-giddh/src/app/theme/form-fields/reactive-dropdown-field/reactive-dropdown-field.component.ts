@@ -130,7 +130,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     /** Previous options count for pagination detection */
     private previousOptionsCount: number = 0;
     /** Flag to clear the displayed label on the first keystroke after a value is selected */
-    private isFirstKeystroke = signal<boolean>(false);
+    private isFirstKeystroke = signal<boolean>(true);
 
     constructor(
         private changeDetection: ChangeDetectorRef
@@ -160,7 +160,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             ).subscribe((search: string) => {
                 this.dynamicSearchedQuery.emit(search);
                 if (!search && this.isFirstKeystroke()) {
-                    this.isFirstKeystroke.set(true);
+                    this.isFirstKeystroke.set(false);
                     this.clearDropdownValue();
                     this.writeValue("", false);
                 }
@@ -179,7 +179,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
                 if (!search && this.isFirstKeystroke()) {
-                    this.isFirstKeystroke.set(true);
+                    this.isFirstKeystroke.set(false);
                     this.clearDropdownValue();
                     this.writeValue("", false);
                 }
@@ -706,6 +706,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 inputEl.value = '';
                 this.changeDetection.detectChanges();
                 this.searchFormControl.next('');
+                this.handleDropdownPanelOperation('open');
             }
         }
 
@@ -829,7 +830,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.enableDynamicSearch) {
             this.fieldFilteredOptions$ = this.filterOptions("");
         }
-        this.isFirstKeystroke.set(!!this.controlLabelValue);
+        this.isFirstKeystroke.set(!!this.value);
 
         // Reset pagination tracking when panel opens
         this.activeOptionIndex = -1;
@@ -866,7 +867,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public onBlur(): void {
         if (!this.isFirstKeystroke()) {
             const inputEl = this.selectField?.nativeElement as HTMLInputElement;
-            inputEl.value = this.controlLabelValue ?? '';
+            inputEl.value = this.value ? (this.controlLabelValue ?? '') : '';
         }
         setTimeout(() => {
 

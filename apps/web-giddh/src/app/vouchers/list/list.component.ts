@@ -3652,6 +3652,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         template.isDefault = (template.uniqueName === templateUniqueName);
                     }
                 });
+                this.changeDetectorRef.detectChanges();
             } else {
                 this.toasterService.showSnackBar('error', res?.message);
             }

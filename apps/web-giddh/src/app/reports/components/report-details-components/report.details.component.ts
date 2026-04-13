@@ -947,6 +947,14 @@ constructor(
             this.removeKeysFromObject(requestObject, keysToRemove);
         }
         this.currentGroupBy.set(requestObject.groupBy);
+        if (requestObject.groupBy === GroupBy.State && !requestObject.countryCode) {
+            if (this.activeCompany?.countryV2?.alpha2CountryCode) {
+                this.reportForm.get('countryCode')?.setValue(this.activeCompany.countryV2.alpha2CountryCode);
+                requestObject.countryCode = this.activeCompany.countryV2.alpha2CountryCode;
+            } else {
+                return;
+            }
+        }
         this.componentStore.getSalesPurchaseList({
             payload: requestObject,
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },

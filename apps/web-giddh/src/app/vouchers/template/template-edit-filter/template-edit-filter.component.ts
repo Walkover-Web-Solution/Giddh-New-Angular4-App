@@ -79,8 +79,6 @@ export class TemplateEditFilterComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True, if delete button should be shown */
     public showDeleteButton: boolean = false;
-    /** Name of the selected font */
-    public selectedFont: string = "";
     /** Size of the selected font */
     public selectedFontSize: string = "";
     /** Default image size */
@@ -597,9 +595,6 @@ export class TemplateEditFilterComponent implements OnInit {
             } else {
                 this.presetFonts = this.templateFonts;
             }
-            (Array.isArray(this.templateFonts) ? this.templateFonts : []).forEach(font => {
-                if (font?.value === this.customTemplate?.font) this.selectedFont = font?.label;
-            });
         }
         if (this.customTemplate?.fontSize) {
             this.customTemplate.fontSize = this.customTemplate?.fontSize.toString();
