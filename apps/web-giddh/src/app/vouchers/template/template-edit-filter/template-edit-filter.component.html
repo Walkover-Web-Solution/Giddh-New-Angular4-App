@@ -164,8 +164,6 @@
                                     [options]="presetFonts"
                                     (selectedOption)="onFontSelect($event)"
                                     [(ngModel)]="customTemplate.font"
-                                    (onClear)="selectedFont = ''"
-                                    [labelValue]="selectedFont"
                                     [placeholder]="localeData?.choose_font"
                                 ></reactive-dropdown-field>
                             </div>
