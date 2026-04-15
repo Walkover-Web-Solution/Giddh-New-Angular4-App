@@ -118,7 +118,7 @@
                                     [placeholder]="commonLocaleData?.app_select_region"
                                     [options]="countyList"
                                     formControlName="code"
-                                    (selectedOption)="changeBillingForm.get('state')?.patchValue($event)"
+                                    (selectedOption)="selectState($event)"
                                 ></reactive-dropdown-field>
                             </div>
                         </div>
