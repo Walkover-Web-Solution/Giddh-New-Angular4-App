@@ -16,6 +16,7 @@ import { VouchersUtilityService } from '../utility/vouchers.utility.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { TributeConfig } from '../../shared/helpers/directives/tributeMention/tributeType';
+import { Router } from '@angular/router';
 
 type ExportType = 'SINGLE_PDF' | 'MULTIPLE_PDF' | 'EXCEL' | 'CSV';
 enum ExportTypeEnum {
@@ -79,6 +80,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private generalService: GeneralService,
         private componentStore: VoucherComponentStore,
+        private router: Router,
         private vouchersUtilityService: VouchersUtilityService
     ) { }
 
@@ -132,6 +134,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                         let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
                         return saveAs(blob, this.inputData?.voucherType + `.zip`);
                     } else {
+                        this.router.navigate(["/pages/downloads/exports"]);
                         this.dialogRef?.close();
                     }
                 } else {

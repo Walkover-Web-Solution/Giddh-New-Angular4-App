@@ -66,7 +66,7 @@
                                 [useImageFlags]="true"
                             ></mobile-number-input>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" formGroupName="country">
                             <div class="w-100">
                                 <reactive-dropdown-field
                                     [name]="'billingCountry' + currentTimeStamp"
@@ -76,7 +76,7 @@
                                     class="mb-3 d-block"
                                     [options]="countrySource"
                                     (selectedOption)="selectCountry($event)"
-                                    [labelValue]="selectedCountry"
+                                    formControlName="code"
                                     [showError]="isFormSubmitted && !changeBillingForm.get('country')?.value"
                                 ></reactive-dropdown-field>
                             </div>
@@ -94,7 +94,7 @@
                                 (change)="validateGstNumber()"
                             ></input-field>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" formGroupName="state">
                             <div *ngIf="!countyList?.length">
                                 <reactive-dropdown-field
                                     [name]="'billingState' + currentTimeStamp"
@@ -104,7 +104,7 @@
                                     [options]="states"
                                     [showError]="isFormSubmitted && changeBillingForm.get('state')?.invalid"
                                     [readonly]="disabledState"
-                                    [labelValue]="selectedState"
+                                    formControlName="code"
                                     (selectedOption)="selectState($event)"
                                     [ngClass]="{ 'readonly-field': disabledState }"
                                     [required]="true"
@@ -117,7 +117,7 @@
                                     [label]="commonLocaleData?.app_region"
                                     [placeholder]="commonLocaleData?.app_select_region"
                                     [options]="countyList"
-                                    [labelValue]="selectedState"
+                                    formControlName="code"
                                     (selectedOption)="changeBillingForm.get('state')?.patchValue($event)"
                                 ></reactive-dropdown-field>
                             </div>
