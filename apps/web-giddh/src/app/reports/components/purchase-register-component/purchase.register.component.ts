@@ -322,7 +322,7 @@ constructor(
         });
 
         // Subscribe to countryCode changes to automatically load states
-        this.reportForm.get('countryCode')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(countryCode => {
+        this.reportForm.get('countryCode')?.valueChanges.pipe(filter(Boolean), debounceTime(500), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(countryCode => {
             if (countryCode) {
                 this.loadStates(countryCode);
             } else {
@@ -942,10 +942,10 @@ constructor(
             this.removeKeysFromObject(requestObject, keysToRemove);
         }
         this.currentGroupBy.set(requestObject.groupBy);
-        if (requestObject.groupBy === GroupBy.State && !requestObject.countryCode) {
+        if (requestObject.groupBy === GroupBy.State && !requestObject.country?.code) {
             if (this.activeCompany?.countryV2?.alpha2CountryCode) {
-                this.reportForm.get('countryCode')?.setValue(this.activeCompany.countryV2.alpha2CountryCode);
-                requestObject.countryCode = this.activeCompany.countryV2.alpha2CountryCode;
+                this.reportForm.get('countryCode')?.patchValue(this.activeCompany.countryV2.alpha2CountryCode, { emitEvent: false });
+                requestObject.country = { code: this.activeCompany.countryV2.alpha2CountryCode };
             } else {
                 return;
             }
