@@ -60,11 +60,11 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** Holds Liabilities Payment Formgroup  */
     public searchForm: FormGroup;
     /** Holds table data source */
-    public dataSource: any[] = [];
+    public dataSource = signal<any[]>([]);
     /** Holds Payment table columns */
     public paymentColumns: string[] = ["index", "received", "amount"];
     /** Holds Liability table columns */
-    public liabilityColumns: string[] = ["index", "from", "to", "originalAmount", "outstandingAmount", "type", "due"];
+    public liabilityColumns: string[] = ["index", "from", "to", "originalAmount", "outstandingAmount", "type", "due", "action"];
     /** Holds current table columns */
     public displayColumns: string[] = [];
     /** Holds true if user in vat-payment */
@@ -85,10 +85,14 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public isLoading = signal<boolean>(false);
     /** Observable to store the HMRC portal url */
     public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
+    /** Observable to store the initiate payment in progress status */
+    public initiatePaymentInProgress$ = this.componentStore.select(state => state.initiatePaymentInProgress);
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
     /** True if tax modules is restricted */
     public isTaxRestrictedModule: boolean = true;
+    /** Holds pending payment row */
+    public pendingPayRow: any = null;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -129,7 +133,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         });
         this.liabilityPaymentList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if ((this.isPaymentMode && response?.body?.payments) || ((!this.isPaymentMode) && response?.body?.liabilities)) {
-                this.dataSource = this.isPaymentMode ? response.body.payments : response.body.liabilities;
+                this.dataSource.set(this.isPaymentMode ? response.body.payments : response.body.liabilities);
             } else if (response?.body?.message) {
                 this.toaster.showSnackBar('error', response.body.message);
             } else if (response?.message) {
@@ -196,6 +200,46 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading.set(response);
             });
+
+        this.componentStore.initiatePaymentResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success' && response?.body?.nextUrl) {
+                const currentData = [...this.dataSource()];
+                const rowIndex = currentData.findIndex(r => r?.taxPeriod?.from === this.pendingPayRow?.taxPeriod?.from && r?.taxPeriod?.to === this.pendingPayRow?.taxPeriod?.to);
+                if (rowIndex !== -1) {
+                    currentData[rowIndex] = { ...currentData[rowIndex], paymentStatus: response.body.status };
+                    this.dataSource.set(currentData);
+                }
+                window.location.href = response.body.nextUrl;
+                setTimeout(() => {
+                    this.isLoading.set(true);
+                }, 200);
+            }
+        });
+    }
+
+    /**
+     * Initiates VAT payment for a liability row
+     *
+     * @param {*} row Liability row data
+     * @memberof VatLiabilitiesPayments
+     */
+    public payNow(row: any): void {
+        this.pendingPayRow = row;
+        const taxNumber = this.getFormControl('taxNumber').value;
+        let payload = this.generalService.getUserAgentData();
+        payload = {
+            ...payload,
+            reference: taxNumber,
+            amountInPence: Math.round((row?.outstandingAmount || 10)),
+            vrn: taxNumber,
+            friendlyName: 'GIDDH',
+            periodFrom: row?.taxPeriod?.from,
+            periodTo: row?.taxPeriod?.to
+        };
+        if (!this.isProdMode) {
+            payload["Gov-Test-Scenario"] = "MULTIPLE_PAYMENTS_2018_19";
+        }
+        this.componentStore.initiatePayment({ companyUniqueName: this.activeCompany.uniqueName, payload });
     }
 
     /**
