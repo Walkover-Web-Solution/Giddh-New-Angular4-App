@@ -146,6 +146,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 if (response.message) {
+                    this.router.navigate(["/pages/downloads/exports"]);
                     this.toasterService.showSnackBar("success", response.message);
                 } else {
                     const mimeType = this.exportForm.get('exportType').value === ExportTypeEnum.csv
