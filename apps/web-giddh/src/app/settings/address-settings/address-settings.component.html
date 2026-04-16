@@ -169,12 +169,6 @@
                             <div *ngIf="!addressConfiguration.countyList?.length">{{ element?.stateCode }} - {{ element?.stateName }}</div>
                         </td>
                     </ng-container>
-                    <ng-container matColumnDef="defaultAddress">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.default_address }}</th>
-                        <td mat-cell *matCellDef="let element" class="text-center text-middle">
-                            <i *ngIf="element?.isDefault" class="fa fa-check pd-t1 text-green"></i>
-                        </td>
-                    </ng-container>
                     <ng-container matColumnDef="linked">
                         <th width="25%" class="td-search-box" mat-header-cell *matHeaderCellDef>
                             <div *ngIf="!hideLinkEntity">
@@ -335,7 +329,6 @@
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
             [hideLinkEntity]="(addressToUpdate && hideLinkEntity) || (!addressToUpdate && addresses?.length <= 0 && hideLinkEntity)"
-            [isAddress]="addresses?.length >= 1"
         ></create-address>
     </div>
 </ng-template>
