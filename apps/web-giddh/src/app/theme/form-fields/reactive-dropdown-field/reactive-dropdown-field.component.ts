@@ -159,8 +159,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
                 this.dynamicSearchedQuery.emit(search);
-                if (!search && this.isFirstKeystroke()) {
-                    this.isFirstKeystroke.set(false);
+                if (!search) {
                     this.clearDropdownValue();
                     this.writeValue("", false);
                 }
@@ -178,8 +177,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 }),
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
-                if (!search && this.isFirstKeystroke()) {
-                    this.isFirstKeystroke.set(false);
+                if (!search) {
                     this.clearDropdownValue();
                     this.writeValue("", false);
                 }
@@ -700,14 +698,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.closeDropdownPanel();
         }
 
-        if (event.key === 'Backspace') {
-            if (this.isFirstKeystroke()) {
-                const inputEl = event.target as HTMLInputElement;
-                inputEl.value = '';
-                this.changeDetection.detectChanges();
-                this.searchFormControl.next('');
-                this.handleDropdownPanelOperation('open');
-            }
+        if (event.key === 'Backspace' || event.key === ' ') {
+            this.isFirstKeystroke.set(false);
         }
 
         // Handle down arrow key for keyboard-triggered pagination
@@ -830,7 +822,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.enableDynamicSearch) {
             this.fieldFilteredOptions$ = this.filterOptions("");
         }
-        this.isFirstKeystroke.set(!!this.value);
 
         // Reset pagination tracking when panel opens
         this.activeOptionIndex = -1;
@@ -868,6 +859,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.isFirstKeystroke()) {
             const inputEl = this.selectField?.nativeElement as HTMLInputElement;
             inputEl.value = this.value ? (this.controlLabelValue ?? '') : '';
+            this.isFirstKeystroke.set(true);
         }
         setTimeout(() => {
 
