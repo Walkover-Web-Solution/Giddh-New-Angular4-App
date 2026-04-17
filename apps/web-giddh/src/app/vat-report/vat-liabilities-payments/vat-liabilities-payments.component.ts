@@ -230,6 +230,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         payload = {
             ...payload,
             reference: taxNumber,
+            vrn: taxNumber,
             amountInPence: row?.outstandingAmount ?? 0,
             periodFrom: row?.taxPeriod?.from,
             periodTo: row?.taxPeriod?.to
