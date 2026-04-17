@@ -110,7 +110,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     /** Search field form control */
     public searchFormControl = new BehaviorSubject<any>('');
     /** Filtered options to show in autocomplete list */
-    public fieldFilteredOptions$: Observable<IOption[]>;
+    public fieldFilteredOptions = signal<IOption[]>([]);
     /** Flag to track if component is destroyed */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Flag to track if component is destroyed */
@@ -181,7 +181,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     this.clearDropdownValue();
                     this.writeValue("", false);
                 }
-                this.fieldFilteredOptions$ = this.filterOptions(String(search));
+                this.filterOptions(String(search)).pipe(take(1)).subscribe(opts => this.fieldFilteredOptions.set(opts));
                 this.changeDetection.detectChanges();
             });
         }
@@ -242,7 +242,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.isPaginationInProgress = this.previousOptionsCount > 0 && currentOptionsCount > this.previousOptionsCount;
             this.previousOptionsCount = currentOptionsCount;
 
-            this.fieldFilteredOptions$ = of(this.options);
+            this.fieldFilteredOptions.set(this.options ?? []);
+
 
             // Only focus second option if NOT during pagination (to prevent scroll jumping)
             if (this.showCreateNew && !this.isPaginationInProgress) {
@@ -294,9 +295,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.writeValue("", false);
         this.controlLabelValue = "";
         this.clearDropdownValue();
-        this.fieldFilteredOptions$ = of([]);
+        this.fieldFilteredOptions.set([]);
         setTimeout(() => {
-            this.fieldFilteredOptions$ = of(this.options);
+            this.fieldFilteredOptions.set(this.options ?? []);
         }, 100);
     }
 
@@ -820,7 +821,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public panelOpened(): void {
         if (!this.enableDynamicSearch) {
-            this.fieldFilteredOptions$ = this.filterOptions("");
+            this.filterOptions("").pipe(take(1)).subscribe(opts => this.fieldFilteredOptions.set(opts));
         }
 
         // Reset pagination tracking when panel opens
