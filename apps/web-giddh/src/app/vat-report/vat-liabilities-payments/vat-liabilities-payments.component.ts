@@ -230,9 +230,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         payload = {
             ...payload,
             reference: taxNumber,
-            amountInPence: Math.round((row?.outstandingAmount || 10)),
-            vrn: taxNumber,
-            friendlyName: 'GIDDH',
+            amountInPence: row?.outstandingAmount ?? 0,
             periodFrom: row?.taxPeriod?.from,
             periodTo: row?.taxPeriod?.to
         };
