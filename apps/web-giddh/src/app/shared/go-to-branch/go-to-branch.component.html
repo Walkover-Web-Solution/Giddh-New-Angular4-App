@@ -3,11 +3,11 @@
         <div class="d-flex align-items-center column-gap-2">
             <div class="d-flex flex-column">
                 <div class="d-flex align-items-center column-gap-1">
-                    <i class="go-to-branch-banner__icon">&#9888;</i>
+                    <i class="banner-icon">&#9888;</i>
                     <span [class]="'font-weight-bold font-size-16 text-black ' + messageCss()">{{ title() }}</span>
                 </div>
                 @if (message()) {
-                    <span class="banner-subtitle font-size-16">{{ message() }}</span>
+                    <span class="banner-subtitle font-size-16 text-black">{{ message() }}</span>
                 }
             </div>
         </div>
