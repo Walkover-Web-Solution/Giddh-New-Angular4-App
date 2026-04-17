@@ -57,12 +57,14 @@
             <button *ngIf="!isCompany" matButton="filled" (click)="openCreateProjectDialog(true)">
                 + {{ localeData?.create_project }}
             </button>
-            <div class="d-flex justify-content-center align-items-center" *ngIf="isCompany">
-                <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }}</span>
-                <button matButton="filled" (click)="gotToBranchTab()">
-                    {{ localeData?.go_to_branch }}
-                </button>
-            </div>
+            @if (isCompany) {
+                <go-to-branch
+                    variant="inline"
+                    [message]="localeData?.go_to_branch_information"
+                    [buttonLabel]="localeData?.go_to_branch"
+                    [messageCss]="'font-size-24 mr-2'"
+                ></go-to-branch>
+            }
         </div>
         <div
             class="mt-5 overflow-visible table-header-sticky"
@@ -208,15 +210,14 @@
                     [primaryMessage]="commonLocaleData?.app_no_data_found"
                     [secondaryMessage]="' '"
                 ></no-data>
-                <div
-                    *ngIf="!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)"
-                    class="d-flex justify-content-center align-items-center"
-                >
-                    <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }}</span>
-                    <button matButton="filled" (click)="gotToBranchTab()">
-                        {{ localeData?.go_to_branch }}
-                    </button>
-                </div>
+                @if (!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)) {
+                    <go-to-branch
+                        variant="inline"
+                        [message]="localeData?.go_to_branch_information"
+                        [buttonLabel]="localeData?.go_to_branch"
+                        [messageCss]="'font-size-24 mr-2'"
+                    ></go-to-branch>
+                }
             </div>
             <mat-paginator
                 *ngIf="totalResults > pageSizeOptions[0]"

@@ -1,0 +1,26 @@
+@if (variant() === 'banner') {
+    <div [class]="'banner w-100 d-flex align-items-center justify-content-between ' + cssClass()">
+        <div class="d-flex align-items-center column-gap-2">
+            <div class="d-flex flex-column">
+                <div class="d-flex align-items-center column-gap-1">
+                    <i class="go-to-branch-banner__icon">&#9888;</i>
+                    <span [class]="'font-weight-bold font-size-16 text-black ' + messageCss()">{{ title() }}</span>
+                </div>
+                @if (message()) {
+                    <span class="banner-subtitle font-size-16">{{ message() }}</span>
+                }
+            </div>
+        </div>
+        <button matButton="filled" (click)="goToBranch()">
+            {{ buttonLabel() }}
+            <span>&gt;</span>
+        </button>
+    </div>
+} @else {
+    <div [class]="'d-flex align-items-center justify-content-center column-gap-1 ' + cssClass()">
+        <span [class]="messageCss()">{{ message() }}</span>
+        <button matButton="filled" (click)="goToBranch()">
+            {{ buttonLabel() }}
+        </button>
+    </div>
+}

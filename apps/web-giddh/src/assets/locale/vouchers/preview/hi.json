@@ -545,5 +545,7 @@
     "select_custom_fields": "कस्टम फ़ील्ड्स चुनें",
     "apply_estimate_round_off": "अनुमान वाउचर पर राउंड ऑफ लागू करें",
     "apply_proforma_round_off": "प्रोफार्मा वाउचर पर राउंड ऑफ लागू करें",
-    "apply_purchase_order_round_off": "खरीद आदेश वाउचर पर राउंड ऑफ लागू करें"
+    "apply_purchase_order_round_off": "खरीद आदेश वाउचर पर राउंड ऑफ लागू करें",
+    "go_to_branch_message": "वाउचर बनाने के लिए, शाखा मोड में जाएं",
+    "go_to_branch": "शाखा में जाएं"
 }

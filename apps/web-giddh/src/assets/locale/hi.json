@@ -818,5 +818,7 @@
     "app_field_validation_error": "[FIELD_NAME] खाली नहीं हो सकता या [MAX_LENGTH] अक्षरों से अधिक नहीं हो सकता",
     "app_resume": "रिसमूल",
     "app_stop": "रोका",
-    "app_create_recurring_voucher": "सामान्य वाउचर बनाएं"
+    "app_create_recurring_voucher": "सामान्य वाउचर बनाएं",
+    "app_you_in_company_mode": "आप कंपनी मोड में हैं",
+    "app_you_in_consolidate_mode": "आप समेकित मोड में हैं"
 }
