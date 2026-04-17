@@ -5468,7 +5468,7 @@
                                 </button>
                             </mat-card-content>
                         </mat-card>
-                        <ng-container *ngFor="let template of createdTemplatesList">
+                        <ng-container *ngFor="let template of createdTemplatesList()">
                             <mat-card
                                 class="outline-card add-template-wrapper text-center"
                                 *ngIf="
@@ -5491,6 +5491,7 @@
                                         *ngIf="!template.isDefault"
                                         class="default-wrap font-size-12 p-2 cursor-pointer"
                                         (click)="
+                                            template.isDefault = true;
                                             setTemplateAsDefault(
                                                 template.uniqueName,
                                                 template.type === voucherTypeEnum.invoice
