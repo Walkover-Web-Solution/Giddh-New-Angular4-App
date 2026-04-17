@@ -312,7 +312,7 @@ constructor(
         });
 
         // Subscribe to countryCode changes to automatically load states
-        this.reportForm.get('countryCode')?.valueChanges.pipe(filter(Boolean), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(countryCode => {
+        this.reportForm.get('countryCode')?.valueChanges.pipe(filter(Boolean), debounceTime(500), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(countryCode => {
             if (countryCode) {
                 this.loadStates(countryCode);
             } else {
@@ -947,6 +947,14 @@ constructor(
             this.removeKeysFromObject(requestObject, keysToRemove);
         }
         this.currentGroupBy.set(requestObject.groupBy);
+        if (requestObject.groupBy === GroupBy.State && !requestObject.country?.code) {
+            if (this.activeCompany?.countryV2?.alpha2CountryCode) {
+                this.reportForm.get('countryCode')?.patchValue(this.activeCompany.countryV2.alpha2CountryCode, { emitEvent: false });
+                requestObject.country = { code: this.activeCompany.countryV2.alpha2CountryCode };
+            } else {
+                return;
+            }
+        }
         this.componentStore.getSalesPurchaseList({
             payload: requestObject,
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },
@@ -1031,7 +1039,6 @@ constructor(
                 countryCode: event.value,
                 stateCodes: null,
             });
-            this.getSalesRegister(this.dateRange.from, this.dateRange.to);
         }
     }
 }

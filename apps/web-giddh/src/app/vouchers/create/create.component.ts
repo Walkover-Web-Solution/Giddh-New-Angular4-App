@@ -1517,8 +1517,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                     }
                                 });
 
+                                if (this.invoiceForm.get("isAdvanceReceipt")?.value) {
+                                    let totalAmount = entry.transactions[0]?.amount.amountForAccount + normalTaxes[0]?.amount.amountForAccount + (([TaxCollectionDeductionType.TCS_RECEIVABLE, TaxCollectionDeductionType.TCS_PAYABLE].includes(otherTax?.taxType) ? 1 : -1) * (otherTax?.amount.amountForAccount ?? 0));
+                                    if (totalAmount > 0) {
+                                        this.getEntryFormGroup(index).get('total.amountForAccount')?.patchValue(totalAmount);
+                                    }
+                                }
+
                                 if (normalTaxes?.length) {
-                                    this.getSelectedTaxes(index, normalTaxes);
+                                    this.getSelectedTaxes(index, normalTaxes, false);
                                 }
 
                                 if (!otherTax && this.account?.otherApplicableTaxes?.length) {
@@ -2064,7 +2071,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
                     this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomInvoiceNumber;
-                } else if (this.voucherType === VoucherTypeEnum.purchase) {
+                } else if (this.voucherType === VoucherTypeEnum.purchase || this.voucherType === VoucherTypeEnum.cashBill) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
                     this.useCustomVoucherNumber = true;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
@@ -4851,9 +4858,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @param {number} entryIndex
      * @param {*} [taxes]
+     * @param {*} [amountCalculate]
      * @memberof VoucherCreateComponent
      */
-    public getSelectedTaxes(entryIndex: number, taxes?: any): void {
+    public getSelectedTaxes(entryIndex: number, taxes?: any, amountCalculate = true): void {
         const entryFormGroup = this.getEntryFormGroup(entryIndex);
         const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
 
@@ -4875,7 +4883,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(totalTaxWithoutCess));
             entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(cessPercentage));
 
-            if (this.invoiceForm.get("isAdvanceReceipt").value) {
+            if (this.invoiceForm.get("isAdvanceReceipt").value && amountCalculate) {
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
                 const amount = this.vouchersUtilityService.calculateInclusiveRate(
                     entryFormGroup?.value,
@@ -7634,7 +7642,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 let totalAmount: number = null;
                 if (this.invoiceForm.get("isAdvanceReceipt").value) {
                     if (isUpdate) {
-                        totalAmount = Number(entryFormGroup.get("total.amountForAccount")?.value);
+                        let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+                        totalAmount = transactionFormGroup.get("amount.amountForAccount").value;
                         if (entryFormGroup.get("otherTax")?.value?.amount) {
                             let totalTaxRate = 0;
                             const taxesArray = entryFormGroup.get("taxes") as FormArray;
@@ -7745,10 +7754,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .patchValue(((taxAmount ?? taxableValue) * +entryFormGroup.get("otherTax.taxValue")?.value) / 100);
 
                 let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-                transactionFormGroup.get("amount.amountForAccount").patchValue(taxableValue);
+                transactionFormGroup.get("amount.amountForAccount").patchValue(taxableValue || totalAmount);
                 transactionFormGroup
                     .get("amount.amountForCompany")
-                    .patchValue(taxableValue * (this.invoiceForm.get("exchangeRate")?.value ?? 1));
+                    .patchValue((taxableValue || totalAmount)* (this.invoiceForm.get("exchangeRate")?.value ?? 1));
 
                 entryFormGroup.get("total.amountForAccount").patchValue(totalAmount);
                 entryFormGroup

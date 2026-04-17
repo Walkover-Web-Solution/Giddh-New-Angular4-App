@@ -164,8 +164,6 @@
                                     [options]="presetFonts"
                                     (selectedOption)="onFontSelect($event)"
                                     [(ngModel)]="customTemplate.font"
-                                    (onClear)="selectedFont = ''"
-                                    [labelValue]="selectedFont"
                                     [placeholder]="localeData?.choose_font"
                                 ></reactive-dropdown-field>
                             </div>
@@ -184,8 +182,6 @@
                                     [options]="presetFontsSize"
                                     (selectedOption)="onFontSizeSelect($event)"
                                     [(ngModel)]="customTemplate.fontSize"
-                                    (onClear)="selectedFontSize = ''"
-                                    [labelValue]="selectedFontSize"
                                     [placeholder]="localeData?.select_different_fonts_size"
                                 ></reactive-dropdown-field>
                             </div>

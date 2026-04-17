@@ -15,7 +15,8 @@
                     [name]="name"
                     [autocomplete]="autocomplete"
                     [required]="required"
-                    (input)="searchFormControl.next($event.target.value)"
+                    (input)="onInput($event)"
+                    (paste)="onPaste($event)"
                     (blur)="onBlur()"
                     (keydown)="onInputKeyDown($event)"
                     #trigger="matAutocompleteTrigger"
@@ -48,7 +49,7 @@
                             </div>
                         </div>
                     </mat-option>
-                    <ng-container *ngFor="let option of fieldFilteredOptions$ | async; trackBy: trackByOption">
+                    <ng-container *ngFor="let option of fieldFilteredOptions(); trackBy: trackByOption">
                         <mat-option
                             [value]="option"
                             [matTooltip]="option?.tooltip || option?.label"
@@ -63,7 +64,7 @@
                         </mat-option>
                         <mat-divider *ngIf="showOptionDivider || sidebarListView"></mat-divider>
                     </ng-container>
-                    <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
+                    <mat-option disabled *ngIf="!fieldFilteredOptions().length">
                         {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
                     </mat-option>
                 </mat-autocomplete>
@@ -101,7 +102,8 @@
             [autocomplete]="autocomplete"
             [required]="required"
             [attr.aria-expanded]="readonly ? false : true"
-            (input)="searchFormControl.next($event.target.value)"
+            (input)="onInput($event)"
+            (paste)="onPaste($event)"
             (blur)="onBlur()"
             (keydown)="onInputKeyDown($event)"
             #trigger="matAutocompleteTrigger"
@@ -134,7 +136,7 @@
                 </div>
             </mat-option>
             <mat-option
-                *ngFor="let option of fieldFilteredOptions$ | async; trackBy: trackByOption"
+                *ngFor="let option of fieldFilteredOptions(); trackBy: trackByOption"
                 [value]="option"
                 [matTooltip]="option?.tooltip || option?.label"
                 matTooltipPosition="right"
@@ -142,7 +144,7 @@
             >
                 {{ option?.label }}
             </mat-option>
-            <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
+            <mat-option disabled *ngIf="!fieldFilteredOptions().length">
                 {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
             </mat-option>
         </mat-autocomplete>
