@@ -1,0 +1,291 @@
+// ── Main mat-table ────────────────────────────────────────
+.sbp-mat-table {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+        border: 1px solid #e0e0e0;
+        padding: 8px 12px;
+        font-size: 13px;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    .mat-mdc-row:hover .mat-mdc-cell {
+        background-color: var(--color-light-gray);
+    }
+}
+
+// ── Group header row: 80px — visually acts as two rows ─────────
+.sbp-group-header-row {
+    height: 80px;
+    background-color: var(--color-light-gray);
+}
+
+.sbp-group-header-cell {
+    height: 80px !important;
+
+    &.mat-mdc-header-cell {
+        padding: 0 !important;
+        border: none !important;
+    }
+}
+
+// Full-width flex container
+.sbp-group-header-inner {
+    height: 80px;
+    align-items: stretch;
+}
+
+// Base group cell styles
+.sbp-group-th {
+    flex-shrink: 0;
+    flex-grow: 0;
+    border: 1px solid #e0e0e0;
+    background-color: var(--color-white);
+    font-weight: var(--font-weight-semibold);
+    font-size: 13px;
+
+    // Sales Person: single label, vertically centered, full 80px height
+    &--leaf {
+        justify-content: flex-start;
+        padding: 8px 12px;
+    }
+
+    // Group cell: label on top half, children row on bottom half
+    &--group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+// Group label (top 40px)
+.sbp-group-th__label {
+    height: 40px;
+    padding: 0 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+// Children row (bottom 40px)
+.sbp-group-th__children {
+    height: 40px;
+    align-items: stretch;
+}
+
+// Each child label cell
+.sbp-group-th__child {
+    flex: 1;
+    padding: 0 8px;
+    font-size: 13px;
+    font-weight: var(--font-weight-semibold);
+    border-left: 1px solid #e0e0e0;
+
+    &:first-child {
+        border-left: none;
+    }
+}
+
+// ── Leaf header row: collapsed (only for column registration) ────
+.sbp-leaf-header-row {
+    height: 0;
+    overflow: hidden;
+
+    .mat-mdc-header-cell {
+        height: 0 !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        overflow: hidden;
+    }
+}
+
+.sbp-leaf-th {
+    font-weight: var(--font-weight-semibold);
+    font-size: 13px;
+    background-color: var(--color-light-gray);
+
+    &--left {
+        text-align: left !important;
+    }
+
+    &--right {
+        text-align: right !important;
+    }
+}
+
+// ── Data cells ────────────────────────────────────────────
+.sbp-td {
+    &--left {
+        text-align: left;
+        font-weight: var(--font-weight-medium);
+    }
+
+    &--right {
+        text-align: right;
+    }
+}
+
+// ── Expandable data rows ──────────────────────────────────
+.sbp-data-row--expandable {
+    cursor: pointer;
+
+    &:hover .mat-mdc-cell {
+        filter: brightness(0.95);
+    }
+}
+
+// ── Expand detail row ─────────────────────────────────────
+.sbp-expand-detail-row {
+    &--hidden {
+        display: none;
+
+        .mat-mdc-cell {
+            height: 0;
+            padding: 0 !important;
+            overflow: hidden;
+            border: none;
+        }
+    }
+}
+
+.sbp-expand-detail-td {
+    padding: 12px 16px 16px !important;
+    background-color: #f4f6f9;
+    border-top: none !important;
+}
+
+.sbp-expand-loading {
+    padding: 16px;
+    text-align: center;
+}
+
+.sbp-expand-empty {
+    padding: 10px 14px;
+    color: #aaa;
+    font-size: 12px;
+}
+
+// ── Expand panel (flat design) ────────────────────────────
+.sbp-expand-panel {
+    background: var(--color-white);
+    border: 1px solid #e2e6ea;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 4px 0;
+
+    // ── Breadcrumb header ─────────────────────────────────
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 16px;
+        background: #f7f9fc;
+        border-bottom: 1px solid #e2e6ea;
+    }
+
+    &__crumb-person {
+        font-size: 13px;
+        font-weight: var(--font-weight-semibold);
+        color: #4a5568;
+    }
+
+    &__crumb-sep {
+        font-size: 14px;
+        color: #b0b8c4;
+        line-height: 1;
+    }
+
+    &__crumb-title {
+        font-size: 12px;
+        font-weight: var(--font-weight-bold);
+        color: #2d3748;
+        letter-spacing: 0.5px;
+    }
+}
+
+// ── Shared grid layout (4 columns: period flex, 3 fixed num) ─
+%sbp-expand-grid {
+    display: grid;
+    grid-template-columns: 1fr 120px 160px 120px;
+    align-items: center;
+    padding: 0 16px;
+}
+
+// ── Column header row ─────────────────────────────────────
+.sbp-expand-col-header {
+    @extend %sbp-expand-grid;
+    height: 36px;
+    background: #f0f4f8;
+    border-bottom: 1px solid #e2e6ea;
+
+    &__period {
+        font-size: 12px;
+        font-weight: var(--font-weight-semibold);
+        color: #6b7a8d;
+        letter-spacing: 0.3px;
+    }
+
+    &__num {
+        font-size: 12px;
+        font-weight: var(--font-weight-semibold);
+        color: #6b7a8d;
+        letter-spacing: 0.3px;
+        text-align: right;
+    }
+}
+
+// ── Data row ──────────────────────────────────────────────
+.sbp-expand-row {
+    @extend %sbp-expand-grid;
+    min-height: 44px;
+    border-bottom: 1px solid #f0f2f5;
+    transition: background 0.12s;
+
+    &:last-of-type {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: #f7fbff;
+    }
+
+    &__period {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 0;
+    }
+
+    &__label {
+        font-size: 13px;
+        font-weight: var(--font-weight-semibold);
+    }
+
+    &__dates {
+        font-size: 11px;
+        color: #9aa5b4;
+    }
+
+    &__num {
+        font-size: 13px;
+        color: #2d3748;
+        text-align: right;
+
+        &--zero {
+            color: #c8cdd5;
+        }
+
+        &--link {
+            color: var(--primary-color, #1976d2);
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
