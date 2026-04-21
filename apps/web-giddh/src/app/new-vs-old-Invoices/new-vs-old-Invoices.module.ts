@@ -74,7 +74,7 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         MatTooltipModule,
         MatCardModule
     ],
-    providers: [SalesPersonComponentStore, SalesPersonService]
+    providers: []
 })
 
 export class NewVsOldInvoicesModule {

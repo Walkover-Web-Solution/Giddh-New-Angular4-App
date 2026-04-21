@@ -7,9 +7,9 @@
                     mat-header-cell
                     *matHeaderCellDef
                     #leafHeader
-                    class="sbp-leaf-th"
-                    [class.sbp-leaf-th--right]="!col.isLeaf"
-                    [class.sbp-leaf-th--left]="col.isLeaf"
+                    class="sbp-leaf-th text-ellipsis vertical-align-middle"
+                    [class.text-right]="!col.isLeaf"
+                    [class.text-left]="col.isLeaf"
                     [style.width.%]="col.widthPct"
                 >
                     {{ col.label }}
@@ -17,9 +17,9 @@
                 <td
                     mat-cell
                     *matCellDef="let sentinel"
-                    class="sbp-td"
-                    [class.sbp-td--left]="col.isLeaf"
-                    [class.sbp-td--right]="!col.isLeaf"
+                    class="sbp-td text-ellipsis vertical-align-middle"
+                    [class.text-left]="col.isLeaf"
+                    [class.text-right]="!col.isLeaf"
                 >
                     @if (col.clickable) {
                         <a
@@ -90,10 +90,10 @@
 
         <!-- ── Expand detail spanning column ─────────────────────────── -->
         <ng-container matColumnDef="expandDetail">
-            <td mat-cell *matCellDef="let sentinel" [attr.colspan]="totalColspan()" class="sbp-expand-detail-td">
+            <td mat-cell *matCellDef="let sentinel" [attr.colspan]="totalColspan()" class="sbp-expand-detail-td border-top-none">
                 @if (sentinel.row?.expandable && isExpanded(sentinel.row?.id)) {
                     @if (!isExpandDataLoaded(sentinel.row?.id)) {
-                        <div class="sbp-expand-loading">
+                        <div class="sbp-expand-loading text-center">
                             <giddh-page-loader></giddh-page-loader>
                         </div>
                     } @else if (getExpandRows(sentinel.row?.id).length > 0) {
@@ -111,9 +111,13 @@
                             <!-- ── Column headings ──────────────────────────── -->
                             <div class="sbp-expand-col-header">
                                 <span class="sbp-expand-col-header__period text-uppercase">{{ localeData()?.period }}</span>
-                                <span class="sbp-expand-col-header__num text-uppercase">{{ commonLocaleData()?.app_client }}</span>
-                                <span class="sbp-expand-col-header__num text-uppercase">{{ commonLocaleData()?.app_amount }}</span>
-                                <span class="sbp-expand-col-header__num text-uppercase">{{ localeData()?.no_invoices }}</span>
+                                <span class="sbp-expand-col-header__num text-right text-uppercase">
+                                    {{ commonLocaleData()?.app_client }}
+                                </span>
+                                <span class="sbp-expand-col-header__num text-right text-uppercase">
+                                    {{ commonLocaleData()?.app_amount }}
+                                </span>
+                                <span class="sbp-expand-col-header__num text-right text-uppercase">{{ localeData()?.no_invoices }}</span>
                             </div>
                             <!-- ── Data rows ────────────────────────────────── -->
                             @for (r of getExpandRows(sentinel.row?.id); track r.label) {
@@ -125,17 +129,17 @@
                                         }
                                     </span>
                                     <span
-                                        class="sbp-expand-row__num"
+                                        class="sbp-expand-row__num text-right"
                                         [class.sbp-expand-row__num--link]="r.clients > 0"
                                         (click)="r.clients > 0 && expandClientClick.emit({ row: sentinel.row, expandRow: r })"
                                     >
                                         {{ r.clients }}
                                     </span>
-                                    <span class="sbp-expand-row__num" [class.sbp-expand-row__num--zero]="r.amount === 0">
+                                    <span class="sbp-expand-row__num text-right" [class.sbp-expand-row__num--zero]="r.amount === 0">
                                         <amount-field [amount]="r.amount" [currencyCode]="false" [matTooltip]="r.amount"></amount-field>
                                     </span>
                                     <span
-                                        class="sbp-expand-row__num"
+                                        class="sbp-expand-row__num text-right"
                                         [class.sbp-expand-row__num--zero]="r.invoices === 0"
                                         [class.sbp-expand-row__num--link]="r.invoices > 0"
                                         (click)="r.invoices > 0 && expandInvoiceClick.emit({ row: sentinel.row, expandRow: r })"
@@ -165,6 +169,7 @@
             class="sbp-data-row"
             (click)="onRowClick(row)"
             [class.sbp-data-row--expandable]="row.row?.expandable"
+            [class.cursor-pointer]="row.row?.expandable"
         ></tr>
 
         <!-- ── Expand detail rows ─────────────────────────────────────── -->

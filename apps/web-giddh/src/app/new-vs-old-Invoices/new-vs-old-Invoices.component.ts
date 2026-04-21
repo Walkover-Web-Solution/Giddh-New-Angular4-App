@@ -19,7 +19,8 @@ import { ASIDE_PANE_CONFIG, GetBifurcationType, IOption } from '../app.constant'
 import { GeneralService } from '../services/general.service';
 import { find, slice } from '../lodash-optimized';
 import { SalesPersonComponentStore } from '../shared/sales-person/utility/sales-person.store';
-import { SalesByPersonResponse, SalesByPersonRow } from './sales-by-person/sales-by-person.component';
+import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
+import { SalesByPersonResponse, SalesByPersonRow } from './sales-by-person/sales-by-person.models';
 
 
 @Component({
@@ -27,7 +28,8 @@ import { SalesByPersonResponse, SalesByPersonRow } from './sales-by-person/sales
     templateUrl: './new-vs-old-Invoices.component.html',
     styleUrls: [`./new-vs-old-Invoices.component.scss`],
     standalone: false,
-    changeDetection: ChangeDetectionStrategy.Default
+    changeDetection: ChangeDetectionStrategy.Default,
+    providers: [SalesPersonComponentStore, SalesPersonService]
 })
 
 export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
@@ -347,7 +349,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.reportYear = this.selectedYear;
 
         const realPersonSelections = (this.selectedSalesPersonUniqueNames ?? []).filter(v => v !== this.ALL_SALES_PERSONS);
-        const hasSalesPersonFilter = this.selectedSalesPersonUniqueNames.length > 0;
+        const hasSalesPersonFilter = this.selectedSalesPersonUniqueNames.length > 0 && this.filteredSalesPersonList().length > 0;
         this.NewVsOldInvoicesQueryRequest.salesPersonUniqueNames = hasSalesPersonFilter ? realPersonSelections : undefined;
 
         const apiCall$ = hasSalesPersonFilter
