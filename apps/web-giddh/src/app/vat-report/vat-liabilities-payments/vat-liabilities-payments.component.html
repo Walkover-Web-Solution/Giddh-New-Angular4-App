@@ -154,13 +154,17 @@
                                     @if (element?.paymentStatus) {
                                         <span class="text-green text-uppercase">{{ element.paymentStatus }}</span>
                                     } @else {
-                                        <button
-                                            matButton="filled"
-                                            [disabled]="initiatePaymentInProgress$ | async"
-                                            (click)="payNow(element)"
-                                        >
-                                            {{ localeData?.pay_now }}
-                                        </button>
+                                        @if (element?.outstandingAmount) {
+                                            <button
+                                                matButton="filled"
+                                                [disabled]="initiatePaymentInProgress$ | async"
+                                                (click)="payNow(element)"
+                                            >
+                                                {{ localeData?.pay_now }}
+                                            </button>
+                                        } @else {
+                                            <span>-</span>
+                                        }
                                     }
                                 </td>
                             </ng-container>
