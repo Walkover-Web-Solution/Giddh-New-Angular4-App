@@ -94,14 +94,7 @@
                             ></select-table-column>
                         </div>
                     </div>
-                    <go-to-branch
-                        [hidden]="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                        [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
-                        [message]="localeData?.go_to_branch_message"
-                        [messageCss]="'mr-2 font-size-16'"
-                        [cssClass]="'border-radius-8'"
-                        [buttonLabel]="localeData?.go_to_branch"
-                    ></go-to-branch>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -527,14 +520,7 @@
                             ></select-table-column>
                         </div>
                     </div>
-                    <go-to-branch
-                        [hidden]="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                        [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
-                        [message]="localeData?.go_to_branch_message"
-                        [messageCss]="'mr-2 font-size-16'"
-                        [cssClass]="'border-radius-8'"
-                        [buttonLabel]="localeData?.go_to_branch"
-                    ></go-to-branch>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -1006,14 +992,7 @@
                             </span>
                         </div>
                     </div>
-                    <go-to-branch
-                        [hidden]="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                        [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
-                        [message]="localeData?.go_to_branch_message"
-                        [messageCss]="'mr-2 font-size-16'"
-                        [cssClass]="'border-radius-8'"
-                        [buttonLabel]="localeData?.go_to_branch"
-                    ></go-to-branch>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -1512,14 +1491,7 @@
                             </span>
                         </div>
                     </div>
-                    <go-to-branch
-                        [hidden]="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                        [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
-                        [message]="localeData?.go_to_branch_message"
-                        [messageCss]="'mr-2 font-size-16'"
-                        [cssClass]="'border-radius-8'"
-                        [buttonLabel]="localeData?.go_to_branch"
-                    ></go-to-branch>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -1960,14 +1932,7 @@
                             </span>
                         </div>
                     </div>
-                    <go-to-branch
-                        [hidden]="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                        [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
-                        [message]="localeData?.go_to_branch_message"
-                        [messageCss]="'mr-2 font-size-16'"
-                        [cssClass]="'border-radius-8'"
-                        [buttonLabel]="localeData?.go_to_branch"
-                    ></go-to-branch>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -2613,14 +2578,7 @@
                             ></select-table-column>
                         </div>
                     </div>
-                    <go-to-branch
-                        [hidden]="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                        [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
-                        [message]="localeData?.go_to_branch_message"
-                        [messageCss]="'mr-2 font-size-16'"
-                        [cssClass]="'border-radius-8'"
-                        [buttonLabel]="localeData?.go_to_branch"
-                    ></go-to-branch>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -3002,14 +2960,7 @@
                             </span>
                         </div>
                     </div>
-                    <go-to-branch
-                        [hidden]="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                        [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
-                        [message]="localeData?.go_to_branch_message"
-                        [messageCss]="'mr-2 font-size-16'"
-                        [cssClass]="'border-radius-8'"
-                        [buttonLabel]="localeData?.go_to_branch"
-                    ></go-to-branch>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -3427,14 +3378,7 @@
                             ></select-table-column>
                         </div>
                     </div>
-                    <go-to-branch
-                        [hidden]="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                        [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
-                        [message]="localeData?.go_to_branch_message"
-                        [messageCss]="'mr-2 font-size-16'"
-                        [cssClass]="'border-radius-8'"
-                        [buttonLabel]="localeData?.go_to_branch"
-                    ></go-to-branch>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="total-wrapper d-flex column-gap-05 w-100 mb-3">
                         <div class="total-sale opening-box p-2 w-25">
                             <p class="font-size-12">{{ localeData?.advanced_receipts }}</p>
@@ -3833,14 +3777,7 @@
                             ></select-table-column>
                         </div>
                     </div>
-                    <go-to-branch
-                        [hidden]="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                        [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
-                        [message]="localeData?.go_to_branch_message"
-                        [messageCss]="'mr-2 font-size-16'"
-                        [cssClass]="'border-radius-8 mb-3'"
-                        [buttonLabel]="localeData?.go_to_branch"
-                    ></go-to-branch>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate; context: { cssClass: 'border-radius-8 mb-3' }"></ng-container>
                     <div class="total-wrapper d-flex column-gap-05 w-100 mb-3">
                         <div class="total-sale payment-receipt p-2 w-50">
                             <p class="font-size-12">{{ localeData?.total_payments }}:</p>
@@ -6100,3 +6037,16 @@
         ></app-datepicker-wrapper>
     </ng-template>
 </mat-menu>
+
+<!-- Reusable go-to-branch template -->
+<ng-template #goToBranchTemplate let-cssClass="cssClass">
+    @if (isCompany || isConsolidatedBranch) {
+        <go-to-branch
+            [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
+            [message]="localeData?.go_to_branch_message"
+            [messageCss]="'mr-2 font-size-16'"
+            [cssClass]="cssClass || 'border-radius-8'"
+            [buttonLabel]="commonLocaleData?.switch_to_branch"
+        ></go-to-branch>
+    }
+</ng-template>

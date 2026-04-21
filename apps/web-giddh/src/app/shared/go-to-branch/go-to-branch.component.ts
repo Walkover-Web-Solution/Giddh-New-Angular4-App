@@ -1,4 +1,13 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+
+/** Display variants for the GoToBranchComponent */
+export enum GoToBranchVariant {
+    /** Inline placement next to other controls in a header bar */
+    Inline = 'inline',
+    /** Full-width amber info card with icon, title and optional subtitle */
+    Banner = 'banner'
+}
 
 /**
  * A reusable component that displays an informational message with a "Go to Branch" action button.
@@ -11,7 +20,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     selector: 'go-to-branch',
     templateUrl: './go-to-branch.component.html',
     styleUrls: ['./go-to-branch.component.scss'],
-    standalone: false,
+    imports: [MatButtonModule],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GoToBranchComponent {
@@ -22,7 +31,10 @@ export class GoToBranchComponent {
     readonly message = input<string>('');
 
     /** Display variant: 'inline' (default) for header bars, 'banner' for full-width amber card */
-    readonly variant = input<'inline' | 'banner'>('banner');
+    readonly variant = input<GoToBranchVariant>(GoToBranchVariant.Banner);
+
+    /** Expose enum to template */
+    protected readonly GoToBranchVariant = GoToBranchVariant;
 
     /** CSS classes for the container */
     readonly cssClass = input<string>('');

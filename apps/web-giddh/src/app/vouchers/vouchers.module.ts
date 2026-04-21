@@ -99,7 +99,7 @@ import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-nex
 import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview.component";
 import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
-import { GoToBranchModule } from '../shared/go-to-branch/go-to-branch.module';
+import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 
 @NgModule({
     declarations: [
@@ -203,7 +203,7 @@ import { GoToBranchModule } from '../shared/go-to-branch/go-to-branch.module';
         CommonTaxComponent,
         AsideRecurrenceVoucherCreateComponent,
         GiddhDatePipe,
-        GoToBranchModule
+        GoToBranchComponent
     ],
     exports: [
         VoucherCreateComponent,

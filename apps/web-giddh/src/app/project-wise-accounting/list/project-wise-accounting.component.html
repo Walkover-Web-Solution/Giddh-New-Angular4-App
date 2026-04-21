@@ -59,9 +59,9 @@
             </button>
             @if (isCompany) {
                 <go-to-branch
-                    [variant]="inline"
+                    [variant]="GoToBranchVariant.Inline"
                     [message]="localeData?.go_to_branch_information"
-                    [buttonLabel]="localeData?.go_to_branch"
+                    [buttonLabel]="commonLocaleData?.go_to_branch"
                     [messageCss]="'font-size-24 mr-2'"
                 ></go-to-branch>
             }
@@ -212,9 +212,9 @@
                 ></no-data>
                 @if (!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)) {
                     <go-to-branch
-                        [variant]="inline"
+                        [variant]="GoToBranchVariant.Inline"
                         [message]="localeData?.go_to_branch_information"
-                        [buttonLabel]="localeData?.go_to_branch"
+                        [buttonLabel]="commonLocaleData?.go_to_branch"
                         [messageCss]="'font-size-24 mr-2'"
                     ></go-to-branch>
                 }

@@ -70,7 +70,7 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { CommonTaxComponent } from '../shared/common-tax/common-tax.component';
 import { CommonDiscountComponent } from '../shared/common-discount/common-discount.component';
-import { GoToBranchModule } from '../shared/go-to-branch/go-to-branch.module';
+import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 
 @NgModule({
     declarations: [
@@ -159,7 +159,7 @@ import { GoToBranchModule } from '../shared/go-to-branch/go-to-branch.module';
         GiddhNumberFormatModule,
         KeyboardShortutModule,
         GiddhDatePipe,
-        GoToBranchModule
+        GoToBranchComponent
     ]
 })
 export class LedgerModule {

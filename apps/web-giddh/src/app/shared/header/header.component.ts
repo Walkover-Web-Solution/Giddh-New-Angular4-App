@@ -45,6 +45,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { ServiceConfig } from '../../services/service.config';
 import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
+import { GoToBranchVariant } from '../go-to-branch/go-to-branch.component';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -62,6 +63,8 @@ interface SubscriptionErrorFlags {
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
+    /** Expose GoToBranchVariant enum to template */
+    protected readonly GoToBranchVariant = GoToBranchVariant;
     public userIsSuperUser: boolean = true; // Protect permission module
     public session$: Observable<userLoginStateEnum>;
     public accountSearchValue: string = '';
@@ -525,12 +528,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
 
-        this.aiOcrBroadcast = new BroadcastChannel("ai-ocr");
-        this.aiOcrBroadcast.onmessage = (event) => {
-            if (event?.data?.success) {
-                this.gotToBranchTab();
-            }
-        };
+        // this.aiOcrBroadcast = new BroadcastChannel("ai-ocr");
+        // this.aiOcrBroadcast.onmessage = (event) => {
+        //     if (event?.data?.success) {
+        //         this.gotToBranchTab();
+        //     }
+        // };
 
         this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

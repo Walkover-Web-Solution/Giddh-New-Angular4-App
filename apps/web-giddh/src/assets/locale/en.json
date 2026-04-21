@@ -822,5 +822,7 @@
     "app_stop": "Stop",
     "app_create_recurring_voucher": "Create Recurring Voucher",
     "app_you_in_company_mode": "You are in Company Mode",
-    "app_you_in_consolidate_mode": "You are in Consolidated Mode"
+    "app_you_in_consolidate_mode": "You are in Consolidated Mode",
+    "go_to_branch": "Go to Branch",
+    "switch_to_branch": "Switch to Branch Mode"
 }

@@ -9,7 +9,7 @@ import { ProjectWiseAccountingRoutingModule } from './project-wise-accounting.ro
 import { ProjectWiseAccountingListComponent } from './list/project-wise-accounting.component';
 import { RevenueExpenseListComponent } from './revenue-expense-list/revenue-expense-list.component';
 import { CreateProjectComponent } from './components/create-project/create-project.component';
-import { GoToBranchModule } from '../shared/go-to-branch/go-to-branch.module';
+import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 import { MainComponent } from './main.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
@@ -71,7 +71,7 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
         MatMenuModule,
         FinancialReportsModule,
         GiddhDatePipe,
-        GoToBranchModule
+        GoToBranchComponent
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]

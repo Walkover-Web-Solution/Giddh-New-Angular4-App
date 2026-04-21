@@ -546,6 +546,5 @@
     "apply_estimate_round_off": "Apply round off on estimate voucher",
     "apply_proforma_round_off": "Apply round off on proforma voucher",
     "apply_purchase_order_round_off": "Apply round off on purchase order voucher",
-    "go_to_branch_message": "To access create voucher, go to branch mode",
-    "go_to_branch": "Switch to Branch Mode"
+    "go_to_branch_message": "To access create voucher, go to branch mode"
 }
