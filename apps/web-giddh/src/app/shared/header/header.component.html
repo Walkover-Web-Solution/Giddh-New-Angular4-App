@@ -292,18 +292,17 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div
-                                            class="mt-4 mb-1 align-items-center"
-                                            *ngIf="
-                                                currentCompanyBranches?.length > 1 &&
-                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                                            "
-                                        >
-                                            <span>{{ localeData?.go_to_branch_information }}</span>
-                                            <button matButton="filled" class="mt-4" (click)="gotToBranchTab()">
-                                                {{ localeData?.go_to_branch }}
-                                            </button>
-                                        </div>
+                                        @if (
+                                            currentCompanyBranches?.length > 1 &&
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                        ) {
+                                            <go-to-branch
+                                                [variant]="GoToBranchVariant.Inline"
+                                                [message]="localeData?.go_to_branch_information"
+                                                [buttonLabel]="commonLocaleData?.go_to_branch"
+                                                [cssClass]="'mt-4 mb-1'"
+                                            ></go-to-branch>
+                                        }
                                         <ng-container
                                             *ngIf="
                                                 (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||

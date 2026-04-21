@@ -19,7 +19,10 @@
                     <giddh-progress-spinner *ngIf="ocrUploadInProgress$ | async" [diameter]="20"></giddh-progress-spinner>
                     <span *ngIf="!(ocrUploadInProgress$ | async)"><i class="icon-upload lh-0"></i></span>
                 </button>
-                <div class="position-absolute notification-badge z-index-1 circle d-flex align-items-center justify-content-center font-size-12 text-white" *ngIf="countVariable > 0">
+                <div
+                    class="position-absolute notification-badge z-index-1 circle d-flex align-items-center justify-content-center font-size-12 text-white"
+                    *ngIf="countVariable > 0"
+                >
                     {{ countVariable }}
                 </div>
                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
@@ -146,15 +149,15 @@
                             >
                                 {{ localeData?.upload_button }}
                             </button>
-                            <div
-                                class="m-t1 d-flex justify-content-center align-items-center"
-                                *ngIf="!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)"
-                            >
-                                <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }}</span>
-                                <button matButton="filled" (click)="gotToBranchTab()">
-                                    {{ localeData?.go_to_branch }}
-                                </button>
-                            </div>
+                            @if (!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)) {
+                                <go-to-branch
+                                    [variant]="GoToBranchVariant.Inline"
+                                    [message]="localeData?.go_to_branch_information"
+                                    [buttonLabel]="commonLocaleData?.go_to_branch"
+                                    [messageCss]="'font-size-24 mr-2'"
+                                    [cssClass]="'m-t1 justify-content-center'"
+                                ></go-to-branch>
+                            }
                         </div>
                     </ng-container>
                     <ng-container *ngIf="listCount > 0 || showClearFilter">

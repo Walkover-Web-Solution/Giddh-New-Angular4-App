@@ -14,6 +14,7 @@ import { cloneDeep } from "../lodash-optimized";
 import { ActivatedRoute, Router } from "@angular/router";
 import { environment } from '../../environments/environment.generated';
 import { ServiceConfig } from "../services/service.config";
+import { GoToBranchVariant } from "../shared/go-to-branch/go-to-branch.component";
 dayjs.extend(duration);
 
 export enum OcrAction {
@@ -32,6 +33,8 @@ export enum OcrAction {
     standalone:false
 })
 export class AiOcrComponent implements OnInit, OnDestroy {
+    /** Expose GoToBranchVariant enum to template */
+    protected readonly GoToBranchVariant = GoToBranchVariant;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
     /** This will store selected date range to use in api */

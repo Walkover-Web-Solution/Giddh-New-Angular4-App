@@ -177,25 +177,25 @@
                 [primaryMessage]="commonLocaleData?.app_no_data_found"
                 [secondaryMessage]="' '"
             ></no-data>
-            <div
-                *ngIf="
-                    isCompany &&
-                    !(
-                        showClearFilter ||
-                        !dataSource?.filteredData?.length ||
-                        ocrDocumentListForm?.controls['user']?.value ||
-                        ocrDocumentListForm?.controls['fileName']?.value ||
-                        ocrDocumentListForm?.controls['status']?.value ||
-                        ocrDocumentListForm?.controls['convertedStatus']?.value
-                    )
-                "
-                class="d-flex justify-content-center align-items-center"
-            >
-                <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }}</span>
-                <button matButton="filled" (click)="gotToBranchTab()">
-                    {{ localeData?.go_to_branch }}
-                </button>
-            </div>
+            @if (
+                isCompany &&
+                !(
+                    showClearFilter ||
+                    !dataSource?.filteredData?.length ||
+                    ocrDocumentListForm?.controls['user']?.value ||
+                    ocrDocumentListForm?.controls['fileName']?.value ||
+                    ocrDocumentListForm?.controls['status']?.value ||
+                    ocrDocumentListForm?.controls['convertedStatus']?.value
+                )
+            ) {
+                <go-to-branch
+                    [variant]="GoToBranchVariant.Inline"
+                    [message]="localeData?.go_to_branch_information"
+                    [buttonLabel]="commonLocaleData?.go_to_branch"
+                    [messageCss]="'font-size-24 mr-2'"
+                    [cssClass]="'justify-content-center'"
+                ></go-to-branch>
+            }
         </div>
         <mat-paginator
             *ngIf="ocrDocumentsRequestParams.totalItems > pageSizeOptions[0] && showData && !(ocrListInProgress$ | async)"
