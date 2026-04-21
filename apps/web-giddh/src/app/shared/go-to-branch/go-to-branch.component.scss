@@ -1,16 +1,8 @@
-.banner {
-    background: #fff3e0;
-    padding: 16px 20px;
+.go-to-branch-banner {
+    background: var(--banner-bg);
 }
 
-.banner-icon {
+.go-to-branch-banner-icon {
     font-style: normal;
-    font-size: 22px;
-    color: #f59e0b;
-    flex-shrink: 0;
-    line-height: 1;
-}
-
-.banner-subtitle {
-    padding-left: 30px;
+    color: var(--color-orange);
 }

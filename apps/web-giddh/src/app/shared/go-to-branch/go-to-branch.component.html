@@ -1,17 +1,17 @@
 @if (variant() === GoToBranchVariant.Banner) {
-    <div [class]="'banner w-100 d-flex align-items-center justify-content-between ' + cssClass()">
+    <div [class]="'go-to-branch-banner p-3 w-100 d-flex align-items-center justify-content-between ' + cssClass()">
         <div class="d-flex align-items-center column-gap-2">
-            <div class="d-flex flex-column">
-                <div class="d-flex align-items-center column-gap-1">
-                    <i class="banner-icon">&#9888;</i>
-                    <span [class]="'font-weight-bold font-size-16 text-black ' + messageCss()">{{ title() }}</span>
+            <div class="d-flex flex-row">
+                <i class="go-to-branch-banner-icon d-flex font-size-24 align-items-center">&#9888;</i>
+                <div class="column-gap-1 d-flex flex-column ml-2">
+                    <span [class]="'font-size-16 font-weight-bold text-black ' + messageCss()">{{ title() }}</span>
+                    @if (message()) {
+                        <span class="font-size-16 text-black">{{ message() }}</span>
+                    }
                 </div>
-                @if (message()) {
-                    <span class="banner-subtitle font-size-16 text-black">{{ message() }}</span>
-                }
             </div>
         </div>
-        <button matButton="filled" (click)="goToBranch()">
+        <button matButton="filled" class="nowrap" (click)="goToBranch()">
             {{ buttonLabel() }}
             <span>&gt;</span>
         </button>
@@ -19,7 +19,7 @@
 } @else {
     <div [class]="'d-flex align-items-center justify-content-center column-gap-1 ' + cssClass()">
         <span [class]="messageCss()">{{ message() }}</span>
-        <button matButton="filled" (click)="goToBranch()">
+        <button matButton="filled" class="nowrap" (click)="goToBranch()">
             {{ buttonLabel() }}
         </button>
     </div>
