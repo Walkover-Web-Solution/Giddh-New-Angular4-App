@@ -4,13 +4,12 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
-    class="nvo-page-wrap"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid" *ngIf="monthOptions?.length > 0">
         <div class="top-bar clear-both">
             <div class="form-inline">
-                <form #salesByPersonForm="ngForm" (ngSubmit)="getSalesBifurcation()">
+                <form #carried="ngForm" (ngSubmit)="getSalesBifurcation()">
                     <div class="d-flex align-items-center column-gap-1 select-fields pb-4">
                         <div class="max-width-500">
                             <reactive-dropdown-field
@@ -53,6 +52,7 @@
                                 <div class="text-danger">{{ localeData?.invalid_month }}</div>
                             </div>
                         </div>
+
                         <div class="max-width-500 flex-column" *ngIf="selectedType === selectedTypeEnum.QUATER">
                             <reactive-dropdown-field
                                 [placeholder]="localeData?.select_quarter_placeholder"
@@ -67,47 +67,8 @@
                                 <div class="text-danger">{{ localeData?.invalid_quarter }}</div>
                             </div>
                         </div>
-                        @if (filteredSalesPersonList()?.length) {
-                            <div class="max-width-500">
-                                <mat-form-field appearance="outline" class="w-100">
-                                    <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
-                                    <mat-select
-                                        panelClass="py-0"
-                                        name="sbpSalesPerson"
-                                        [multiple]="true"
-                                        [(ngModel)]="selectedSalesPersonUniqueNames"
-                                        (ngModelChange)="onSalesPersonSelectionChange($event)"
-                                        (closed)="!filteredSalesPersonList()?.length ? salesPersonSearch.reset() : null"
-                                    >
-                                        <ngx-mat-select-search
-                                            [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                            [formControl]="salesPersonSearch"
-                                            [clearSearchInput]="false"
-                                        >
-                                            <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                        </ngx-mat-select-search>
-                                        <mat-select-trigger *ngIf="isAllSalesPersonSelected()">
-                                            <span>{{ commonLocaleData?.app_all }}</span>
-                                        </mat-select-trigger>
-                                        <mat-option
-                                            class="sbp-all-option"
-                                            [value]="ALL_SALES_PERSONS"
-                                            [selected]="isAllSalesPersonSelected()"
-                                        >
-                                            {{ commonLocaleData?.app_all }}
-                                        </mat-option>
-                                        @for (person of filteredSalesPersonList(); track person?.value) {
-                                            <mat-option [value]="person?.value">
-                                                {{ person?.label }}
-                                            </mat-option>
-                                        }
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                        }
                         <div class="btn-group">
-                            <button matButton="filled" type="submit" [disabled]="salesByPersonForm.invalid">
+                            <button matButton="filled" type="submit" [disabled]="carried.invalid">
                                 {{ commonLocaleData?.app_go }}
                             </button>
                         </div>
@@ -115,7 +76,7 @@
                 </form>
             </div>
         </div>
-        <ng-container *ngIf="!isLoading && !NewVsOldInvoicesQueryRequest.salesPersonUniqueNames">
+        <ng-container *ngIf="!isLoading">
             <div class="d-flex month-wrapper" *ngIf="selectedType === selectedTypeEnum.MONTH">
                 <div class="div-table">
                     <div class="d-flex">
@@ -1201,111 +1162,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </ng-container>
-        <ng-container *ngIf="!isLoading && NewVsOldInvoicesQueryRequest.salesPersonUniqueNames">
-            <div>
-                <!-- ── KPI Cards ─────────────────────────────────────────────── -->
-                <div class="card-grid d-grid mb-3 column-gap-2">
-                    <mat-card>
-                        <mat-card-content>
-                            <p class="text-light font-weight-medium font-size-14 mb-1">{{ localeData?.sales_from }}</p>
-                            <p class="font-size-16 mr-0">{{ salesByPersonData?.salesFrom?.label ?? '—' }}</p>
-                        </mat-card-content>
-                    </mat-card>
-                    <mat-card>
-                        <mat-card-content>
-                            <p class="text-light font-weight-medium font-size-14 mb-1">{{ commonLocaleData?.app_client }}</p>
-                            <p class="font-size-16 mr-0">
-                                <a
-                                    class="d-inline-flex cursor-pointer"
-                                    href="javascript:void(0)"
-                                    (click)="
-                                        showClientList(
-                                            salesByPersonData?.salesFrom,
-                                            'total',
-                                            'client',
-                                            salesByPersonData?.salesFrom?.fromDate
-                                        )
-                                    "
-                                >
-                                    <amount-field
-                                        [amount]="salesByPersonData?.salesFrom?.clients"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    ></amount-field>
-                                </a>
-                            </p>
-                        </mat-card-content>
-                    </mat-card>
-                    <mat-card>
-                        <mat-card-content>
-                            <p class="text-light font-weight-medium font-size-14 mb-1">{{ commonLocaleData?.app_amount }}</p>
-                            <p class="font-size-16 mr-0">
-                                <amount-field
-                                    [amount]="salesByPersonData?.salesFrom?.amount"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                ></amount-field>
-                            </p>
-                        </mat-card-content>
-                    </mat-card>
-                    <mat-card>
-                        <mat-card-content>
-                            <p class="text-light font-weight-medium font-size-14 mb-1">{{ localeData?.no_invoices }}</p>
-                            <p class="font-size-16 mr-0">
-                                <a
-                                    class="d-inline-flex cursor-pointer"
-                                    href="javascript:void(0)"
-                                    (click)="
-                                        showClientList(
-                                            salesByPersonData?.salesFrom,
-                                            'total',
-                                            'invoice',
-                                            salesByPersonData?.salesFrom?.fromDate
-                                        )
-                                    "
-                                >
-                                    <amount-field
-                                        [amount]="salesByPersonData?.salesFrom?.invoices"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    ></amount-field>
-                                </a>
-                            </p>
-                        </mat-card-content>
-                    </mat-card>
-                </div>
-
-                <!-- ── Charts Row ─────────────────────────────────────────────── -->
-                <div class="charts-grid d-grid mb-3 column-gap-2">
-                    <mat-card>
-                        <mat-card-header>
-                            <mat-card-title>{{ localeData?.top_salespersons }}</mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content class="chart-height">
-                            <canvas #sbpTopCanvas></canvas>
-                        </mat-card-content>
-                    </mat-card>
-                    <mat-card>
-                        <mat-card-header>
-                            <mat-card-title>{{ localeData?.new_vs_old_sales }}</mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content class="chart-height">
-                            <canvas #sbpNvoCanvas></canvas>
-                        </mat-card-content>
-                    </mat-card>
-                </div>
-
-                <sales-by-person
-                    [data]="salesByPersonData"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                    (clientClick)="onSbpClientClick($event)"
-                    (invoiceClick)="onSbpInvoiceClick($event)"
-                    (expandClientClick)="onSbpExpandClientClick($event)"
-                    (expandInvoiceClick)="onSbpExpandInvoiceClick($event)"
-                ></sales-by-person>
             </div>
         </ng-container>
     </div>
