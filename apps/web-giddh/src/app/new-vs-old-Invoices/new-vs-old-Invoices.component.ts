@@ -353,7 +353,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.NewVsOldInvoicesQueryRequest.salesPersonUniqueNames = hasSalesPersonFilter ? realPersonSelections : undefined;
 
         const apiCall$ = hasSalesPersonFilter
-            ? this.newVsOldInvoicesService.PostNewVsOldInvoices(this.NewVsOldInvoicesQueryRequest)
+            ? this.newVsOldInvoicesService.GetNewVsOldInvoicesBySalesPerson(this.NewVsOldInvoicesQueryRequest)
             : this.newVsOldInvoicesService.GetNewVsOldInvoices(this.NewVsOldInvoicesQueryRequest);
 
         apiCall$.pipe(takeUntil(this.destroyed$)).subscribe(response => {

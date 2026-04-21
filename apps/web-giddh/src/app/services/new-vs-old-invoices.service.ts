@@ -52,17 +52,12 @@ export class NewVsOldInvoicesService {
      * @returns {Observable<BaseResponse<NewVsOldInvoicesResponse, string>>}
      * @memberof NewVsOldInvoicesService
      */
-    public PostNewVsOldInvoices(queryRequest: NewVsOldInvoicesRequest): Observable<BaseResponse<NewVsOldInvoicesResponse, string>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        const url = this.config.apiUrl + NEWVSOLDINVOICE_API.POST
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':type', queryRequest.type?.toString())
-            ?.replace(':value', queryRequest?.value?.toString());
+    public GetNewVsOldInvoicesBySalesPerson(queryRequest: NewVsOldInvoicesRequest): Observable<BaseResponse<NewVsOldInvoicesResponse, string>> {
         const body = {
             duration: 'salesPerson',
-            salesPersonUniqueNames: queryRequest.salesPersonUniqueNames ?? []
+            salesPersonUniqueNames: queryRequest.salesPersonUniqueNames || []
         };
-        return this.http.post(url, body)
+        return this.http.post(this.generalService.replaceUrlPlaceholders(NEWVSOLDINVOICE_API.GET, queryRequest), body)
             .pipe(map((res) => {
                 let data: BaseResponse<NewVsOldInvoicesResponse, string> = res;
                 data.queryString = queryRequest;
