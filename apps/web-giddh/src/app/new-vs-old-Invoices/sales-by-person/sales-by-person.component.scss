@@ -2,25 +2,20 @@
 .sbp-mat-table {
     .mat-mdc-header-cell,
     .mat-mdc-cell {
-        border: 1px solid #e0e0e0;
+        background-color: var(--table-background-color);
+        border: 1px solid var(--border-color);
         padding: 8px 12px;
-        font-size: 13px;
         box-sizing: border-box;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         vertical-align: middle;
     }
-
-    .mat-mdc-row:hover .mat-mdc-cell {
-        background-color: var(--color-light-gray);
-    }
 }
 
 // ── Group header row: 80px — visually acts as two rows ─────────
 .sbp-group-header-row {
     height: 80px;
-    background-color: var(--color-light-gray);
 }
 
 .sbp-group-header-cell {
@@ -42,10 +37,14 @@
 .sbp-group-th {
     flex-shrink: 0;
     flex-grow: 0;
-    border: 1px solid #e0e0e0;
-    background-color: var(--color-white);
+    border-right: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
+    background-color: var(--table-background-color);
     font-weight: var(--font-weight-semibold);
-    font-size: 13px;
+
+    &:first-child {
+        border-left: 1px solid var(--border-color);
+    }
 
     // Sales Person: single label, vertically centered, full 80px height
     &--leaf {
@@ -64,7 +63,7 @@
 .sbp-group-th__label {
     height: 40px;
     padding: 0 12px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--border-color);
 }
 
 // Children row (bottom 40px)
@@ -77,9 +76,8 @@
 .sbp-group-th__child {
     flex: 1;
     padding: 0 8px;
-    font-size: 13px;
     font-weight: var(--font-weight-semibold);
-    border-left: 1px solid #e0e0e0;
+    border-left: 1px solid var(--border-color);
 
     &:first-child {
         border-left: none;
@@ -104,8 +102,7 @@
 
 .sbp-leaf-th {
     font-weight: var(--font-weight-semibold);
-    font-size: 13px;
-    background-color: var(--color-light-gray);
+    background-color: var(--theme-primary-light);
 
     &--left {
         text-align: left !important;
@@ -153,7 +150,7 @@
 
 .sbp-expand-detail-td {
     padding: 12px 16px 16px !important;
-    background-color: #f4f6f9;
+    background-color: var(--table-background-color);
     border-top: none !important;
 }
 
@@ -164,14 +161,12 @@
 
 .sbp-expand-empty {
     padding: 10px 14px;
-    color: #aaa;
-    font-size: 12px;
 }
 
 // ── Expand panel (flat design) ────────────────────────────
 .sbp-expand-panel {
-    background: var(--color-white);
-    border: 1px solid #e2e6ea;
+    background: var(--table-background-color);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     overflow: hidden;
     margin: 4px 0;
@@ -182,26 +177,20 @@
         align-items: center;
         gap: 6px;
         padding: 10px 16px;
-        background: #f7f9fc;
-        border-bottom: 1px solid #e2e6ea;
+        background: var(--table-background-color);
+        border-bottom: 1px solid var(--border-color);
     }
 
     &__crumb-person {
-        font-size: 13px;
         font-weight: var(--font-weight-semibold);
-        color: #4a5568;
     }
 
     &__crumb-sep {
-        font-size: 14px;
-        color: #b0b8c4;
         line-height: 1;
     }
 
     &__crumb-title {
-        font-size: 12px;
         font-weight: var(--font-weight-bold);
-        color: #2d3748;
         letter-spacing: 0.5px;
     }
 }
@@ -218,20 +207,16 @@
 .sbp-expand-col-header {
     @extend %sbp-expand-grid;
     height: 36px;
-    background: #f0f4f8;
-    border-bottom: 1px solid #e2e6ea;
+    background: var(--table-background-color);
+    border-bottom: 1px solid var(--border-color);
 
     &__period {
-        font-size: 12px;
         font-weight: var(--font-weight-semibold);
-        color: #6b7a8d;
         letter-spacing: 0.3px;
     }
 
     &__num {
-        font-size: 12px;
         font-weight: var(--font-weight-semibold);
-        color: #6b7a8d;
         letter-spacing: 0.3px;
         text-align: right;
     }
@@ -241,15 +226,11 @@
 .sbp-expand-row {
     @extend %sbp-expand-grid;
     min-height: 44px;
-    border-bottom: 1px solid #f0f2f5;
+    border-bottom: 1px solid var(--border-color);
     transition: background 0.12s;
 
     &:last-of-type {
         border-bottom: none;
-    }
-
-    &:hover {
-        background: #f7fbff;
     }
 
     &__period {
@@ -261,26 +242,14 @@
     }
 
     &__label {
-        font-size: 13px;
         font-weight: var(--font-weight-semibold);
     }
 
-    &__dates {
-        font-size: 11px;
-        color: #9aa5b4;
-    }
-
     &__num {
-        font-size: 13px;
-        color: #2d3748;
         text-align: right;
 
-        &--zero {
-            color: #c8cdd5;
-        }
-
         &--link {
-            color: var(--primary-color, #1976d2);
+            color: var(--theme-primary-color);
             cursor: pointer;
 
             &:hover {
