@@ -1274,19 +1274,21 @@
                                     </div>
 
                                     <!-- Due Date -->
-                                    <div class="col-3 pl-2" *ngIf="showDueDate">
-                                        <giddh-datepicker
-                                            (keydown.enter)="$event.preventDefault()"
-                                            [label]="voucherDueDateLabel"
-                                            [closeDatepickerOnFocus]="true"
-                                            [placeholder]="voucherDueDateLabel"
-                                            name="voucherDueDate"
-                                            [showToggleIcon]="false"
-                                            [appearance]="'outline'"
-                                            formControlName="dueDate"
-                                            appEnterNext
-                                        ></giddh-datepicker>
-                                    </div>
+                                    @if (showDueDate) {
+                                        <div class="col-3 pl-2">
+                                            <giddh-datepicker
+                                                (keydown.enter)="$event.preventDefault()"
+                                                [label]="voucherDueDateLabel"
+                                                [closeDatepickerOnFocus]="true"
+                                                [placeholder]="voucherDueDateLabel"
+                                                name="voucherDueDate"
+                                                [showToggleIcon]="false"
+                                                [appearance]="'outline'"
+                                                formControlName="dueDate"
+                                                appEnterNext
+                                            ></giddh-datepicker>
+                                        </div>
+                                    }
 
                                     <!-- Select Voucher -->
                                     <div
