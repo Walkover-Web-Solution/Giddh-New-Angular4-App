@@ -1274,18 +1274,7 @@
                                     </div>
 
                                     <!-- Due Date -->
-                                    <div
-                                        class="col-3 pl-2"
-                                        *ngIf="
-                                            (currentVoucherFormDetails?.dueDate ||
-                                                invoiceType.isSalesInvoice ||
-                                                invoiceType.isPurchaseInvoice ||
-                                                invoiceType.isPurchaseOrder ||
-                                                invoiceType.isProformaInvoice ||
-                                                invoiceType.isEstimateInvoice) &&
-                                            !invoiceType.isCashInvoice
-                                        "
-                                    >
+                                    <div class="col-3 pl-2" *ngIf="showDueDate">
                                         <giddh-datepicker
                                             (keydown.enter)="$event.preventDefault()"
                                             [label]="voucherDueDateLabel"
