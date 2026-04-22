@@ -8,12 +8,14 @@
         </div>
         <mat-dialog-content>
             <div class="help-aside-body">
-                <div class="faq-block">
-                    <a href="https://giddh.com/help" target="_blank" aria-label="faq">
-                        <p>{{ localeData?.faq }}</p>
-                        <small>{{ localeData?.have_questions }}</small>
-                    </a>
-                </div>
+                @if (generalService.isGiddhDomain()) {
+                    <div class="faq-block">
+                        <a [href]="helpDocUrl" target="_blank" aria-label="faq">
+                            <p>{{ localeData?.faq }}</p>
+                            <small>{{ localeData?.have_questions }}</small>
+                        </a>
+                    </div>
+                }
                 <div class="feature-block">
                     <mat-list role="list">
                         <mat-list-item role="listitem">
@@ -31,67 +33,71 @@
                         </mat-list-item>
                     </mat-list>
                 </div>
-                <div class="download-block">
-                    <p>{{ commonLocaleData?.app_download }}</p>
-                    <mat-list role="list">
-                        <div class="d-flex">
-                            <mat-list-item role="listitem">
-                                <a
-                                    href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en"
-                                    target="_blank"
-                                    [title]="localeData?.android_app"
-                                    aria-label="android"
-                                >
-                                    <i class="icon-android"></i>
-                                    {{ localeData?.android }}
-                                </a>
-                            </mat-list-item>
-                            <mat-list-item role="listitem">
-                                <a [href]="macDownloadUrl" target="_blank" [title]="localeData?.macos_app" aria-label="mac">
-                                    <i class="icon-mac"></i>
-                                    {{ localeData?.macos }}
-                                </a>
-                            </mat-list-item>
-                        </div>
-                        <div class="d-flex">
-                            <mat-list-item role="listitem">
-                                <a
-                                    href="https://apps.apple.com/in/app/giddh-books-that-make-sense/id1491003438"
-                                    target="_blank"
-                                    [title]="localeData?.ios_app"
-                                    aria-label="ios"
-                                >
-                                    <i class="icon-mac"></i>
-                                    {{ localeData?.ios }}
-                                </a>
-                            </mat-list-item>
-                            <mat-list-item role="listitem">
-                                <a [href]="windowsDownloadUrl" target="_blank" [title]="localeData?.windows_app" aria-label="windows">
-                                    <i class="icon-windows"></i>
-                                    {{ localeData?.windows }}
-                                </a>
-                            </mat-list-item>
-                        </div>
-                    </mat-list>
-                </div>
-                <div class="request-demo">
-                    <div class="file-image">
-                        <img src="{{ imgPath }}request-demo.svg" alt="request img" />
-                        <p class="text-light">{{ localeData?.request_demo }}:</p>
-                        <button matButton="filled" (click)="scheduleNow($event)" aria-label="schedule img">
-                            {{ commonLocaleData?.app_schedule_now }}
-                        </button>
-                        <br />
-                        <p class="text-light">{{ localeData?.contact }}:</p>
+                @if (generalService.isGiddhDomain()) {
+                    <div class="download-block">
+                        <p>{{ commonLocaleData?.app_download }}</p>
+                        <mat-list role="list">
+                            <div class="d-flex">
+                                <mat-list-item role="listitem">
+                                    <a
+                                        href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en"
+                                        target="_blank"
+                                        [title]="localeData?.android_app"
+                                        aria-label="android"
+                                    >
+                                        <i class="icon-android"></i>
+                                        {{ localeData?.android }}
+                                    </a>
+                                </mat-list-item>
+                                <mat-list-item role="listitem">
+                                    <a [href]="macDownloadUrl" target="_blank" [title]="localeData?.macos_app" aria-label="mac">
+                                        <i class="icon-mac"></i>
+                                        {{ localeData?.macos }}
+                                    </a>
+                                </mat-list-item>
+                            </div>
+                            <div class="d-flex">
+                                <mat-list-item role="listitem">
+                                    <a
+                                        href="https://apps.apple.com/in/app/giddh-books-that-make-sense/id1491003438"
+                                        target="_blank"
+                                        [title]="localeData?.ios_app"
+                                        aria-label="ios"
+                                    >
+                                        <i class="icon-mac"></i>
+                                        {{ localeData?.ios }}
+                                    </a>
+                                </mat-list-item>
+                                <mat-list-item role="listitem">
+                                    <a [href]="windowsDownloadUrl" target="_blank" [title]="localeData?.windows_app" aria-label="windows">
+                                        <i class="icon-windows"></i>
+                                        {{ localeData?.windows }}
+                                    </a>
+                                </mat-list-item>
+                            </div>
+                        </mat-list>
                     </div>
+                }
+                <div class="request-demo">
+                    @if (generalService.isGiddhDomain()) {
+                        <div class="file-image">
+                            <img src="{{ imgPath }}request-demo.svg" alt="request img" />
+                            <p class="text-light">{{ localeData?.request_demo }}:</p>
+                            <button matButton="filled" (click)="scheduleNow($event)" aria-label="schedule img">
+                                {{ commonLocaleData?.app_schedule_now }}
+                            </button>
+                            <br />
+                            <p class="text-light">{{ localeData?.contact }}:</p>
+                        </div>
+                    }
                     <div class="contact-block">
                         <p class="d-flex align-items-center mb-1 support-mail-tel">
                             <i class="icon-mail mr-2"></i>
-                            <a href="mailto:support@giddh.com" aria-label="mail">{{ localeData?.contact1 }}</a>
+                            <a [href]="'mailto:' + supportEmail" aria-label="mail">{{ supportEmail }}</a>
                         </p>
                         <p class="d-flex align-items-center support-mail-tel">
                             <i class="icon-mobile mr-2"></i>
-                            <a href="tel:9188188 88768" aria-label="contact">+91-88188 88768</a>
+                            <a [href]="'tel:' + supportPhoneNumber" aria-label="contact">{{ supportPhoneNumber }}</a>
                         </p>
                         <br />
                     </div>

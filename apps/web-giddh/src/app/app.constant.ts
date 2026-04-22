@@ -45,9 +45,12 @@ export const IPV4_REGEX = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0
 
 
 export const APP_DEFAULT_TITLE = '';
-export const SYNC_TALLY_HELP_DOC_URL = 'https://giddh.com/help/sync-with-tally-1591360375828781';
-export const BANK_STATEMENT_HELP_DOC_URL = 'https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh';
+export const GIDDH_HELP_DOC_URL = 'https://giddh.com/help';
+export const SYNC_TALLY_HELP_DOC_URL = `${GIDDH_HELP_DOC_URL}/sync-with-tally-1591360375828781`;
+export const BANK_STATEMENT_HELP_DOC_URL = `${GIDDH_HELP_DOC_URL}/how-to-integrate-icici-bank-account-with-giddh`;
 export const SOCKET_FLOW_API = 'https://flow.sokt.io/func/CMEQnVPyk2a8';
+export const GIDDH_SUPPORT_PHONE_NUMBER = '+918818888768';
+export const GIDDH_SUPPORT_EMAIL = 'support@giddh.com';
 
 /** Restricted modules */
 export enum RestrictedModules {

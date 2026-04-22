@@ -20,7 +20,7 @@ export class TallyIntegrationComponent implements OnInit, OnDestroy {
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
+    public syncWithTallyHelpDocUrl: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -35,6 +35,7 @@ export class TallyIntegrationComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         let companyUniqueName = this.generalService.companyUniqueName;
         this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
+        this.syncWithTallyHelpDocUrl = this.generalService.isGiddhDomain() ? SYNC_TALLY_HELP_DOC_URL : '';
     }
 
     /**

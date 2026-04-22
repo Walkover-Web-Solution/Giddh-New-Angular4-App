@@ -23,11 +23,13 @@
                         {{ localeData?.email?.auth_key_label }}
                     </a>
                 </li>
-                <li>
-                    <a target="_blank" class="btn link-color" [href]="syncWithTallyHelpDocUrl">
-                        {{ localeData?.tally?.help_documentation }}
-                    </a>
-                </li>
+                @if (syncWithTallyHelpDocUrl) {
+                    <li>
+                        <a target="_blank" class="btn link-color" [href]="syncWithTallyHelpDocUrl">
+                            {{ localeData?.tally?.help_documentation }}
+                        </a>
+                    </li>
+                }
             </ul>
         </div>
     </div>

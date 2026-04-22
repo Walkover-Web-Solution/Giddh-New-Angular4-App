@@ -47,14 +47,20 @@
                     </mat-list>
                     <p class="border-btm mt-5">{{ localeData?.have_data_tally }}</p>
                     <p [innerHTML]="localeData?.giddh_usage"></p>
-                    <div class="d-flex column-gap-15">
-                        <a matButton="filled" class="mt-2" target="_blank" [href]="syncWithTallyHelpDocUrl">
-                            {{ localeData?.sync_with_tally }}
-                        </a>
-                        <a matButton="filled" class="mt-2" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
-                            {{ localeData?.download_tcp }}
-                        </a>
-                    </div>
+                    @if (generalService.isGiddhDomain()) {
+                        <div class="d-flex column-gap-15">
+                            <a matButton="filled" class="mt-2" target="_blank" [href]="syncWithTallyHelpDocUrl">
+                                {{ localeData?.sync_with_tally }}
+                            </a>
+                            <a
+                                matButton="filled"
+                                class="mt-2"
+                                href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp"
+                            >
+                                {{ localeData?.download_tcp }}
+                            </a>
+                        </div>
+                    }
 
                     <div class="right-section">
                         <p class="border-btm mt-5">{{ localeData?.ask_question }}</p>
@@ -63,15 +69,17 @@
                             {{ commonLocaleData?.app_schedule_now }}
                         </button>
                         <br />
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <span class="mt-5 mb-2">{{ localeData?.visit }}</span>
-                                <a href="https://giddh.com/help" target="_blank" class="text-underline font-size-16">giddh.com/help</a>
+                        @if (generalService.isGiddhDomain()) {
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <span class="mt-5 mb-2">{{ localeData?.visit }}</span>
+                                    <a [href]="helpDocUrl" target="_blank" class="text-underline font-size-16">{{ helpDocUrl }}</a>
+                                </div>
+                                <div class="col-sm-6 schedule-img">
+                                    <img src="{{ imgPath }}Schedule.png" alt="" />
+                                </div>
                             </div>
-                            <div class="col-sm-6 schedule-img">
-                                <img src="{{ imgPath }}Schedule.png" alt="" />
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div>
                 <div class="col-xl-7 col-lg-12 order-0 order-xl-1">

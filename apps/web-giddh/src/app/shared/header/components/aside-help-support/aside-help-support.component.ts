@@ -1,8 +1,9 @@
 import { Component, EventEmitter, OnInit, Output, OnDestroy, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, GIDDH_HELP_DOC_URL, GIDDH_SUPPORT_PHONE_NUMBER, GIDDH_SUPPORT_EMAIL } from 'apps/web-giddh/src/app/app.constant';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
@@ -28,6 +29,12 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public windowsDownloadUrl: string;
     /** Mac app download URL */
     public macDownloadUrl: string;
+    /** Holds Giddh help documentation url */
+    public helpDocUrl: string = '';
+    /** Holds Giddh support phone number */
+    public supportPhoneNumber: string = GIDDH_SUPPORT_PHONE_NUMBER;
+    /** Holds Giddh support email */
+    public supportEmail: string = GIDDH_SUPPORT_EMAIL;
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -39,10 +46,9 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
         private authService: AuthenticationService,
         @Inject(ServiceConfig) private serviceConfig,
         private generalActions: GeneralActions,
-        private store: Store<AppState>
-    ) {
-
-    }
+        private store: Store<AppState>,
+        public generalService: GeneralService
+    ) { }
 
     /**
      * Initialize the component
@@ -53,6 +59,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
         this.setDownloadUrls();
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
+        this.helpDocUrl = this.generalService.isGiddhDomain() ? GIDDH_HELP_DOC_URL : '';
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
     }
 
