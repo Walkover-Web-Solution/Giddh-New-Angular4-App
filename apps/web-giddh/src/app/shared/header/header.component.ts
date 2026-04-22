@@ -528,13 +528,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
 
-        // this.aiOcrBroadcast = new BroadcastChannel("ai-ocr");
-        // this.aiOcrBroadcast.onmessage = (event) => {
-        //     if (event?.data?.success) {
-        //         this.gotToBranchTab();
-        //     }
-        // };
-
         this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsProfileAction.handleFreePlanSubscribed(false));
@@ -1326,7 +1319,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public gotToBranchTab(): void {
         this.trigger?.closeMenu();
-        this.expandSidebar(false);
+        this.sideBarStateChange(false);
+        this.sidebarForcelyExpanded = false;
+        this.isSidebarExpanded = true;
+        this.generalService.expandSidebar();
         this.isGoToBranch = true;
     }
 
