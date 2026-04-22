@@ -29,6 +29,7 @@ import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { GiddhNumberFormatModule } from '../../../shared/helpers/pipes/number-format/number-format.module';
 import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
+import { GoToBranchComponent } from '../../../shared/go-to-branch/go-to-branch.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -55,7 +56,8 @@ import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
         TranslateDirectiveModule,
         AsideMenuProductServiceModule,
         MatPaginatorModule,
-        GiddhDatePipe
+        GiddhDatePipe,
+        GoToBranchComponent
     ],
     exports: [
         AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent

@@ -29,5 +29,6 @@
     "leave_comment": "Leave a comment",
     "adjust_inventory": "Adjust inventory",
     "create_reason": "Create Reason",
-    "select_reason": "Select Reason"
+    "select_reason": "Select Reason",
+    "info_message": "To create or edit inventory adjustments, go to branch mode."
 }

@@ -35,5 +35,6 @@
         "transport_company": "परिवहन कंपनी",
         "variant_name": "प्रकाराचे नाव",
         "delete_transporter": "आपण परिवहक काढून टाकायचं आहे का?",
-        "search_field": "शोधा [FIELD]"
+        "search_field": "शोधा [FIELD]",
+        "info_message": "शाखा हस्तांतरण तयार करण्यासाठी किंवा संपादित करण्यासाठी, शाखा मोडवर जा."
     }

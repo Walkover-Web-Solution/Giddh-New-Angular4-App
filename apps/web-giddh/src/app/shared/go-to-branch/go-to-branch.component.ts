@@ -40,7 +40,7 @@ export class GoToBranchComponent {
     readonly cssClass = input<string>('');
 
     /** CSS classes for the message span */
-    readonly messageCss = input<string>('');
+    readonly messageClass = input<string>('');
 
     /** Label text for the action button */
     readonly buttonLabel = input<string>('');
