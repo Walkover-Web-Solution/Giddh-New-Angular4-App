@@ -1,42 +1,45 @@
-<span appTranslate [file]="'watch-video'" (localeData)="localeData = $event" (translationComplete)="translationComplete($event)">
-    <span *ngIf="translatedText">
-        <div *ngIf="showIcon">
-            <i
-                class="icon-info1"
-                tabindex="0"
-                cdkMonitorElementFocus
-                (click)="openVideoTutorialDialog()"
-                (keydown.enter)="$event.preventDefault(); openVideoTutorialDialog()"
-                (keydown.space)="$event.preventDefault(); openVideoTutorialDialog()"
-                [ngClass]="iconCssClass"
-                [matTooltip]="translatedText"
-                matTooltipPosition="above"
-            ></i>
-        </div>
-        <span
-            *ngIf="!showIcon"
-            tabindex="0"
-            cdkMonitorElementFocus
-            (click)="openVideoTutorialDialog()"
-            (keydown.enter)="$event.preventDefault(); openVideoTutorialDialog()"
-            (keydown.space)="$event.preventDefault(); openVideoTutorialDialog()"
-            [ngClass]="iconCssClass"
-        >
-            {{ translatedText }}
-        </span>
+@if (isGiddhDomain()) {
+    <span appTranslate [file]="'watch-video'" (localeData)="localeData = $event" (translationComplete)="translationComplete($event)">
+        @if (translatedText) {
+            @if (showIcon) {
+                <i
+                    class="icon-info1 cursor-pointer"
+                    tabindex="0"
+                    cdkMonitorElementFocus
+                    (click)="openVideoTutorialDialog()"
+                    (keydown.enter)="$event.preventDefault(); openVideoTutorialDialog()"
+                    (keydown.space)="$event.preventDefault(); openVideoTutorialDialog()"
+                    [class]="iconCssClass"
+                    [matTooltip]="translatedText"
+                    matTooltipPosition="above"
+                ></i>
+            } @else {
+                <span
+                    class="cursor-pointer"
+                    tabindex="0"
+                    cdkMonitorElementFocus
+                    (click)="openVideoTutorialDialog()"
+                    (keydown.enter)="$event.preventDefault(); openVideoTutorialDialog()"
+                    (keydown.space)="$event.preventDefault(); openVideoTutorialDialog()"
+                    [class]="iconCssClass"
+                >
+                    {{ translatedText }}
+                </span>
+            }
+        }
     </span>
-</span>
 
-<ng-template #videoTutorial>
-    <div class="video-wrapper">
-        <iframe
-            title="Video Link"
-            width="100%"
-            height="100%"
-            [src]="videoLink"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-        ></iframe>
-    </div>
-</ng-template>
+    <ng-template #videoTutorial>
+        <div class="video-wrapper overflow-hidden">
+            <iframe
+                title="Video Link"
+                width="100%"
+                height="100%"
+                [src]="videoLink"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+            ></iframe>
+        </div>
+    </ng-template>
+}

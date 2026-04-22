@@ -5,7 +5,7 @@
  */
 
 import { environment } from './../../environments/environment.generated';
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Inject, Injectable, Optional, signal } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, GiddhUiDomain, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
 import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -30,7 +30,7 @@ import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
 import { Configuration } from '../app.constant';
-import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, map, orderBy, remove, set, slice, some } from '../lodash-optimized';
+import { cloneDeep, find,orderBy } from '../lodash-optimized';
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
 import { UiSettingsService } from './ui-settings.service';
@@ -120,6 +120,9 @@ export class GeneralService {
     private _currencyType = '1,00,00,000';   // there will be four type of currencyType a.1,00,00,000 (INR),b.10,000,000,c.10\'000\'000,d.10 000 000
 
     private _sessionId: string;
+
+    /** Signal indicating whether the current app URL is a Giddh domain */
+    public readonly isGiddhDomain = signal<boolean>(this.config?.IS_GIDDH_DOMAIN ?? window.location.href.includes(GiddhUiDomain.PRODUCTION));
 
     constructor(
         private router: Router,
@@ -667,16 +670,6 @@ export class GeneralService {
             return cookieValue.toUpperCase();
         }
         return null;
-    }
-
-    /**
-     * Checks whether the current URL belongs to the Giddh domain
-     *
-     * @returns {boolean} True if the current URL contains 'books.giddh.com', false otherwise
-     * @memberof GeneralService
-     */
-    public isGiddhDomain(): boolean {
-        return window.location.href.includes('books.giddh.com');
     }
 
     /**

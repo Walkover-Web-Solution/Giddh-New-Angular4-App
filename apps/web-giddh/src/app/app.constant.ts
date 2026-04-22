@@ -1032,3 +1032,10 @@ export enum FormFieldsType {
 
 /** Round off threshold for 4 decimal place precision */
 export const ROUND_OFF_THRESHOLD = 0.5555; 
+
+/** Giddh UI domains */
+export enum GiddhUiDomain {
+    LOCAL = 'http://localhost:3000/',
+    TEST = 'https://test.giddh.com/',
+    PRODUCTION = 'https://books.giddh.com/'
+}

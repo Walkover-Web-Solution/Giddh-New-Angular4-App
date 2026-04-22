@@ -4,7 +4,7 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
-import { Configuration } from '../app.constant';
+import { Configuration, GiddhUiDomain } from '../app.constant';
 import { environment } from '../../environments/environment.generated';
 
 @Component({
@@ -40,7 +40,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
-        this.giddhDomainUrl = this.serviceConfig.AppUrl ||  'https://books.giddh.com/';
+        this.giddhDomainUrl = this.serviceConfig.AppUrl ||  GiddhUiDomain.PRODUCTION;
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.url) {

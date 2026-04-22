@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EnvironmentService } from './environment.service';
-import { Configuration } from '../app.constant';
+import { GiddhUiDomain } from '../app.constant';
 
 export interface WhiteLabelConfig {
     body?: {
@@ -199,7 +199,10 @@ export class WhiteLabelService {
 
             // Legacy support for hardcoded Electron values
             OTP_WIDGET_ID_NEW: this.whiteLabelConfig?.body?.otpWidgetIdElectron || '33686b716134333831313239',
-            OTP_TOKEN_AUTH_NEW: this.whiteLabelConfig?.body?.otpWidgetTokenElectron || '205968TmXguUAwoD633af103P1'
+            OTP_TOKEN_AUTH_NEW: this.whiteLabelConfig?.body?.otpWidgetTokenElectron || '205968TmXguUAwoD633af103P1',
+            
+            // Is Giddh domain
+            IS_GIDDH_DOMAIN: [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].includes(this.getAppUrl() as GiddhUiDomain)
         };
     }
 

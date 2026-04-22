@@ -14,6 +14,7 @@ export interface IServiceConfigArgs {
     OTP_WIDGET_ID_NEW: string;
     OTP_TOKEN_AUTH_NEW: string;
     RAZORPAY_KEY: string;
+    IS_GIDDH_DOMAIN: boolean;
     _: any;
 }
 
