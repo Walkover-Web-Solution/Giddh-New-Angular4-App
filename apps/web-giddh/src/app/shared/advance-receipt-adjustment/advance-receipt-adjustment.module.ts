@@ -14,6 +14,7 @@ import { NgxMaskModule } from '../helpers/directives/ngx-mask';
 import { ReplacePipeModule } from '../helpers/pipes/replace/replace.module';
 import { AdvanceReceiptAdjustmentComponent } from './advance-receipt-adjustment.component';
 import { GiddhNumberFormatModule } from '../helpers/pipes/number-format/number-format.module';
+import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
 
 @NgModule({
     declarations: [AdvanceReceiptAdjustmentComponent],
@@ -35,7 +36,8 @@ import { GiddhNumberFormatModule } from '../helpers/pipes/number-format/number-f
         MatInputModule,
         MatRadioModule,
         FormFieldsModule,
-        GiddhDatePipe
+        GiddhDatePipe,
+        GiddhPageLoaderModule
     ],
     exports: [AdvanceReceiptAdjustmentComponent]
 })

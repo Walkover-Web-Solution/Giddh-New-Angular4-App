@@ -457,3 +457,12 @@
 .custom-mat-form-field-height {
     height: var(--custom-mat-form-field-height) !important;
 }
+.table-border-collapse {
+    border-collapse: collapse !important;
+}
+.table-border-separate {
+    border-collapse: separate !important;
+}
+.box-shadow {
+    box-shadow: var(--mat-menu-box-shadow) !important;
+}

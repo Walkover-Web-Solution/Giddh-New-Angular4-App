@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from '../../services/general.service';
 import { API_BULK_FETCH_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
@@ -62,7 +62,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** Form for managing the account entry list */
     public accountEntryListForm: FormGroup;
     /** Stores the search results for accounts */
-    public accountSearchResponse: any[] = [];
+    public accountSearchResponse = signal<any[]>([]);
     /** Stores the search results for entries */
     public accountAndEntryList: any = {};
     /** Pagination options for the table */
@@ -111,7 +111,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         private componentStore: ProjectWiseAccountingComponentStore,
         private formBuilder: FormBuilder,
         private router: Router,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        public changeDetectorRef: ChangeDetectorRef
     ) { }
 
     /**
@@ -143,7 +144,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     this.defaultParamsValue.projectUniqueName = params.uniqueName;
                     this.defaultParamsValue.companyUniqueName = activeCompany.uniqueName;
                     this.defaultParamsValue.branchUniqueName = this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
-                    this.accountSearchResponse = [];
+                    this.accountSearchResponse.set([]);
                     this.defaultParamsValue.category = params.module;
                     this.accountSearchRequest.group = this.defaultParamsValue.category === this.projectWiseAccountingType.Income ? this.incomeGroup : this.expenseGroup;
                     this.activeCompany = activeCompany;
@@ -166,9 +167,10 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.componentStore.accountSearch$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
+                const newItems: any[] = [];
                 accountSearchResponse.results?.forEach(result => {
                     if (result?.uniqueName) {
-                        this.accountSearchResponse.push({
+                        newItems.push({
                             value: result.uniqueName,
                             label: result.name,
                             additional: result
@@ -179,6 +181,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                         this.accountAndEntryList[result.uniqueName]['page'] = 1;
                     }
                 });
+                this.accountSearchResponse.update(prev => [...prev, ...newItems]);
                 this.accountSearchRequest.isLoading = false;
             }
         });
@@ -195,6 +198,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.entrySearchRequest.isLoading = false;
+                this.changeDetectorRef.detectChanges();
             }
         });
 
@@ -403,7 +407,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      */
     public searchAccount(query: string = '', page: number = 1): void {
         if (page === 1) {
-            this.accountSearchResponse = [];
+            this.accountSearchResponse.set([]);
         }
         this.accountSearchRequest.q = query;
         this.accountSearchRequest.page = page;
@@ -602,7 +606,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public tabChanged(event: MatTabChangeEvent): void {
         this.totalResults = 0;
         this.createAccountEntryForm.reset();
-        this.accountSearchResponse = [];
+        this.accountSearchResponse.set([]);
         const tab = event.tab.textLabel === this.localeData?.revenue ? this.projectWiseAccountingType.Income : event.tab.textLabel === this.localeData?.expense ? this.projectWiseAccountingType.Expenses : this.projectWiseAccountingType.ProfitLoss;
         this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }
