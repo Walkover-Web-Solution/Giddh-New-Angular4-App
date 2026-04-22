@@ -11,7 +11,7 @@ import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/he
 import { ClipboardService } from 'ngx-clipboard';
 import { LoginActions } from '../actions/login.action';
 import { SessionActions } from '../actions/session.action';
-import { API_POSTMAN_DOC_URL } from '../app.constant';
+import { GIDDH_API_DOC_URL } from '../app.constant';
 import { cloneDeep } from '../lodash-optimized';
 import { AuthenticationService } from '../services/authentication.service';
 import * as dayjs from 'dayjs';
@@ -67,7 +67,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public userSessionId: any = null;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
-    public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
+    public apiPostmanDocUrl: String = GIDDH_API_DOC_URL;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
     public localeData: any = {};

@@ -118,8 +118,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         public dialog: MatDialog
     ) {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
+        this.iciciAllowedCompanies = this.serviceConfig.ICICI_SUPPORTED_COMPANIES || ICICI_ALLOWED_COMPANIES;
     }
 
     /**

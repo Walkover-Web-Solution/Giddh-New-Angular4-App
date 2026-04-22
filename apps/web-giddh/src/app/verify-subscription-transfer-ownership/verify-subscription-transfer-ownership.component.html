@@ -2,7 +2,7 @@
     <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="verifyOwnershipInProgress$ | async"></giddh-page-loader>
     <div class="flex-col" *ngIf="!(verifyOwnershipInProgress$ | async)">
         <div class="inner">
-            <img src="{{ imgPath }}giddh-big-logo.svg" />
+            <img [src]="giddhLogoSrc" alt="brand-logo" />
             <div class="flex-column d-flex justify-content-center align-items-center" *ngIf="acceptedSubscription">
                 <p>{{ localeData?.request_accepted_successfully }}</p>
                 <a

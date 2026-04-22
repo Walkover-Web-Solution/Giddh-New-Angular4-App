@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, OnDestroy, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
-import { Configuration, GIDDH_HELP_DOC_URL, GIDDH_SUPPORT_PHONE_NUMBER, GIDDH_SUPPORT_EMAIL } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, GIDDH_HELP_DOC_URL, GIDDH_SUPPORT_PHONE_NUMBER, GIDDH_SUPPORT_EMAIL, GIDDH_ANDROID_APP_URL, GIDDH_IOS_APP_URL } from 'apps/web-giddh/src/app/app.constant';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
@@ -35,6 +35,10 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public supportPhoneNumber: string = GIDDH_SUPPORT_PHONE_NUMBER;
     /** Holds Giddh support email */
     public supportEmail: string = GIDDH_SUPPORT_EMAIL;
+    /** Android app URL */
+    public androidAppUrl: string = GIDDH_ANDROID_APP_URL;
+    /** iOS app URL */
+    public iosAppUrl: string = GIDDH_IOS_APP_URL;
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */

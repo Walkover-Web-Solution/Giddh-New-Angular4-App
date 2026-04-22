@@ -43,8 +43,17 @@
 
 <script src="../assets/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
+    function getWhiteLabelData() {
+        try {
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
+        } catch (error) {
+            return null;
+        }
+    }
+
     var companyUniqueName = getQueryStringValue('companyUniqueName');
-    const whiteLabel = this.generalService.getDecodedWhiteLabel();
+    const whiteLabel = getWhiteLabelData();
     var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || 'https://books.giddh.com/';
     var domainName = whiteLabel?.giddhWhiteLabel?.domainName || 'Giddh.com';
     var search = '';
@@ -55,7 +64,7 @@
     }
 
     function getApi() {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        const whiteLabel = getWhiteLabelData();
         this.giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || 'https://books.giddh.com/';
         if (whiteLabel) {
             apiBaseUrl = `${whiteLabel?.giddhWhiteLabel?.apiDomain}/`;

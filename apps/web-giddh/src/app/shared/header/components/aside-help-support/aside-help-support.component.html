@@ -15,36 +15,29 @@
                             <small>{{ localeData?.have_questions }}</small>
                         </a>
                     </div>
-                }
-                <div class="feature-block">
-                    <mat-list role="list">
-                        <mat-list-item role="listitem">
-                            <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank" aria-label="upcoming">
-                                {{ localeData?.upcoming }}
-                            </a>
-                        </mat-list-item>
-                        <mat-list-item role="listitem">
-                            <a href="https://giddh.canny.io/feature-requests" target="_blank" aria-label="feaure request">
-                                {{ localeData?.feature_request }}
-                            </a>
-                        </mat-list-item>
-                        <mat-list-item role="listitem">
-                            <a href="https://changelog.giddh.com" target="_blank" aria-label="changelog">{{ localeData?.changelog }}</a>
-                        </mat-list-item>
-                    </mat-list>
-                </div>
-                @if (generalService.isGiddhDomain()) {
+                    <div class="feature-block">
+                        <mat-list role="list">
+                            <mat-list-item role="listitem">
+                                <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank" aria-label="upcoming">
+                                    {{ localeData?.upcoming }}
+                                </a>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <a href="https://giddh.canny.io/feature-requests" target="_blank" aria-label="feaure request">
+                                    {{ localeData?.feature_request }}
+                                </a>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <a href="https://changelog.giddh.com" target="_blank" aria-label="changelog">{{ localeData?.changelog }}</a>
+                            </mat-list-item>
+                        </mat-list>
+                    </div>
                     <div class="download-block">
                         <p>{{ commonLocaleData?.app_download }}</p>
                         <mat-list role="list">
                             <div class="d-flex">
                                 <mat-list-item role="listitem">
-                                    <a
-                                        href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en"
-                                        target="_blank"
-                                        [title]="localeData?.android_app"
-                                        aria-label="android"
-                                    >
+                                    <a [href]="androidAppUrl" target="_blank" [title]="localeData?.android_app" aria-label="android">
                                         <i class="icon-android"></i>
                                         {{ localeData?.android }}
                                     </a>
@@ -58,12 +51,7 @@
                             </div>
                             <div class="d-flex">
                                 <mat-list-item role="listitem">
-                                    <a
-                                        href="https://apps.apple.com/in/app/giddh-books-that-make-sense/id1491003438"
-                                        target="_blank"
-                                        [title]="localeData?.ios_app"
-                                        aria-label="ios"
-                                    >
+                                    <a [href]="iosAppUrl" target="_blank" [title]="localeData?.ios_app" aria-label="ios">
                                         <i class="icon-mac"></i>
                                         {{ localeData?.ios }}
                                     </a>

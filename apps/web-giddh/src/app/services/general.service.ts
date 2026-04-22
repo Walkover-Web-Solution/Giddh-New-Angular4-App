@@ -404,10 +404,9 @@ export class GeneralService {
      */
     public checkIfEmailDomainAllowed(email: string): boolean {
         let isAllowed = false;
-        const whiteLabelDomainsAllowed = this.getDecodedWhiteLabel();
         if (email) {
             let emailSplit = email.split("@");
-            if ((whiteLabelDomainsAllowed?.emailDomains || JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
+            if ((this.config?.EMAIL_DOMAINS || JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }
@@ -682,7 +681,7 @@ export class GeneralService {
         if (this.isGiddhDomain()){
             const countryRegion = localStorage.getItem('Country-Region');
             const region = COUNTRY_REGION_MAP[countryRegion] || null;
-            return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+            return region === 'gl' ? `${GiddhUiDomain.WEBSITE}login` : `${GiddhUiDomain.WEBSITE}${region}/login`;
         } else {
             return `${window.location.origin}/login`;
         }
@@ -923,6 +922,7 @@ export class GeneralService {
     public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
         const voucherApiVersion = this.voucherApiVersion || 2;
+        const isGiddhDomain = this.isGiddhDomain();
         let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
@@ -934,6 +934,11 @@ export class GeneralService {
             }
 
             menuItem.items?.forEach(item => {
+                // Filter out Petty Cash menu item if not on Giddh domain
+                if (!isGiddhDomain && item.link === '/pages/expenses-manager') {
+                    return;
+                }
+
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
                 if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
@@ -2394,22 +2399,6 @@ export class GeneralService {
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
 
-    /**
-     * Retrieves the decoded white label data from the local storage.
-     *
-     * @returns {any} The decoded white label data or null if the data is not available or cannot be parsed.
-     *
-     * @throws {Error} If there is an error parsing the white label data from the local storage.
-     */
-    public getDecodedWhiteLabel(): any {
-        try {
-            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
-            return whiteLabelData?.body || null;
-        } catch (error) {
-
-            return null;
-        }
-    }
 
     /**
      * Replaces placeholders in a URL with corresponding values from a model object.

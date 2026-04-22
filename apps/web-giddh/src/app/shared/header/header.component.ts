@@ -301,10 +301,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private giddhDatePipe: GiddhDatePipe,
         private activeRoute: ActivatedRoute
     ) {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
-        const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
+        this.giddhLogoSrc = this.serviceConfig.LOGOS.light;
+        const calendlyWhiteLabelUrl = this.serviceConfig.CALENDLY_URL || CALENDLY_URL
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());

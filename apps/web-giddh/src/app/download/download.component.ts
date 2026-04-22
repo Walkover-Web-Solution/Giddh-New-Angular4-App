@@ -38,8 +38,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
+        this.giddhLogoSrc = this.serviceConfig.LOGOS.light;
         this.giddhDomainUrl = this.serviceConfig.AppUrl ||  GiddhUiDomain.PRODUCTION;
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
