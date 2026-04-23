@@ -7,7 +7,7 @@
     class="nvo-page-wrap"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="container-fluid" *ngIf="monthOptions?.length > 0">
+    <div class="container-fluid mb-5" *ngIf="monthOptions?.length > 0">
         <div class="top-bar clear-both">
             <div class="form-inline">
                 <form #salesByPersonForm="ngForm" (ngSubmit)="getSalesBifurcation()">
@@ -67,7 +67,7 @@
                                 <div class="text-danger">{{ localeData?.invalid_quarter }}</div>
                             </div>
                         </div>
-                        @if (filteredSalesPersonList()?.length) {
+                        @if (fullSalesPersonList?.length) {
                             <div class="max-width-500">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
@@ -90,11 +90,7 @@
                                         <mat-select-trigger *ngIf="isAllSalesPersonSelected()">
                                             <span>{{ commonLocaleData?.app_all }}</span>
                                         </mat-select-trigger>
-                                        <mat-option
-                                            class="sbp-all-option"
-                                            [value]="ALL_SALES_PERSONS"
-                                            [selected]="isAllSalesPersonSelected()"
-                                        >
+                                        <mat-option [value]="ALL_SALES_PERSONS" [selected]="isAllSalesPersonSelected()">
                                             {{ commonLocaleData?.app_all }}
                                         </mat-option>
                                         @for (person of filteredSalesPersonList(); track person?.value) {
@@ -167,8 +163,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.totalSales,
-                                        'total',
-                                        'client',
+                                        SbpDataType.Total,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.totalSales.month
                                     )
                                 "
@@ -210,8 +206,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.totalSales,
-                                        'total',
-                                        'invoice',
+                                        SbpDataType.Total,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.totalSales.month
                                     )
                                 "
@@ -245,7 +241,12 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(newVsOldInvoicesData?.newSales, 'new', 'client', newVsOldInvoicesData?.newSales.month)
+                                    showClientList(
+                                        newVsOldInvoicesData?.newSales,
+                                        SbpDataType.New,
+                                        SbpSubType.Client,
+                                        newVsOldInvoicesData?.newSales.month
+                                    )
                                 "
                             >
                                 <amount-field
@@ -283,7 +284,12 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(newVsOldInvoicesData?.newSales, 'new', 'invoice', newVsOldInvoicesData?.newSales.month)
+                                    showClientList(
+                                        newVsOldInvoicesData?.newSales,
+                                        SbpDataType.New,
+                                        SbpSubType.Invoice,
+                                        newVsOldInvoicesData?.newSales.month
+                                    )
                                 "
                             >
                                 <amount-field
@@ -308,7 +314,12 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(newVsOldInvoicesData?.oldSales, 'old', 'client', newVsOldInvoicesData?.oldSales.month)
+                                    showClientList(
+                                        newVsOldInvoicesData?.oldSales,
+                                        SbpDataType.Old,
+                                        SbpSubType.Client,
+                                        newVsOldInvoicesData?.oldSales.month
+                                    )
                                 "
                             >
                                 <amount-field
@@ -346,7 +357,12 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(newVsOldInvoicesData?.oldSales, 'old', 'invoice', newVsOldInvoicesData?.oldSales.month)
+                                    showClientList(
+                                        newVsOldInvoicesData?.oldSales,
+                                        SbpDataType.Old,
+                                        SbpSubType.Invoice,
+                                        newVsOldInvoicesData?.oldSales.month
+                                    )
                                 "
                             >
                                 <amount-field
@@ -373,8 +389,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[0],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[0].month
                                     )
                                 "
@@ -416,8 +432,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[0],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[0].month
                                     )
                                 "
@@ -446,8 +462,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[1],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[1].month
                                     )
                                 "
@@ -489,8 +505,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[1],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[1].month
                                     )
                                 "
@@ -519,8 +535,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[2],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[2].month
                                     )
                                 "
@@ -562,8 +578,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[2],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[2].month
                                     )
                                 "
@@ -592,8 +608,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[3],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[3].month
                                     )
                                 "
@@ -635,8 +651,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[3],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[3].month
                                     )
                                 "
@@ -667,8 +683,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[4],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[4].month
                                     )
                                 "
@@ -710,8 +726,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[4],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[4].month
                                     )
                                 "
@@ -784,8 +800,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.totalSales,
-                                        'total',
-                                        'client',
+                                        SbpDataType.Total,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.totalSales.month
                                     )
                                 "
@@ -827,8 +843,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.totalSales,
-                                        'total',
-                                        'invoice',
+                                        SbpDataType.Total,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.totalSales?.month
                                     )
                                 "
@@ -869,7 +885,12 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(newVsOldInvoicesData?.newSales, 'new', 'client', newVsOldInvoicesData?.newSales.month)
+                                    showClientList(
+                                        newVsOldInvoicesData?.newSales,
+                                        SbpDataType.New,
+                                        SbpSubType.Client,
+                                        newVsOldInvoicesData?.newSales.month
+                                    )
                                 "
                             >
                                 <amount-field
@@ -907,7 +928,12 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(newVsOldInvoicesData?.newSales, 'new', 'invoice', newVsOldInvoicesData?.newSales.month)
+                                    showClientList(
+                                        newVsOldInvoicesData?.newSales,
+                                        SbpDataType.New,
+                                        SbpSubType.Invoice,
+                                        newVsOldInvoicesData?.newSales.month
+                                    )
                                 "
                             >
                                 <amount-field
@@ -932,7 +958,12 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(newVsOldInvoicesData?.oldSales, 'old', 'client', newVsOldInvoicesData?.oldSales.month)
+                                    showClientList(
+                                        newVsOldInvoicesData?.oldSales,
+                                        SbpDataType.Old,
+                                        SbpSubType.Client,
+                                        newVsOldInvoicesData?.oldSales.month
+                                    )
                                 "
                             >
                                 <amount-field
@@ -970,7 +1001,12 @@
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
                                 (click)="
-                                    showClientList(newVsOldInvoicesData?.oldSales, 'old', 'invoice', newVsOldInvoicesData?.oldSales.month)
+                                    showClientList(
+                                        newVsOldInvoicesData?.oldSales,
+                                        SbpDataType.Old,
+                                        SbpSubType.Invoice,
+                                        newVsOldInvoicesData?.oldSales.month
+                                    )
                                 "
                             >
                                 <amount-field
@@ -997,8 +1033,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[0],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[0].month
                                     )
                                 "
@@ -1040,8 +1076,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[0],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[0].month
                                     )
                                 "
@@ -1070,8 +1106,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[1],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[1].month
                                     )
                                 "
@@ -1113,8 +1149,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[1],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[1].month
                                     )
                                 "
@@ -1143,8 +1179,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[2],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[2].month
                                     )
                                 "
@@ -1186,8 +1222,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[2],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[2].month
                                     )
                                 "
@@ -1204,77 +1240,188 @@
             </div>
         </ng-container>
         <ng-container *ngIf="!isLoading && NewVsOldInvoicesQueryRequest.salesPersonUniqueNames">
-            <div>
-                <!-- ── KPI Cards ─────────────────────────────────────────────── -->
+            @if (salesByPersonData) {
                 <div class="card-grid d-grid mb-3 column-gap-2">
-                    <mat-card>
-                        <mat-card-content>
-                            <p class="text-light font-weight-medium font-size-14 mb-1">{{ localeData?.sales_from }}</p>
-                            <p class="font-size-16 mr-0">{{ salesByPersonData?.salesFrom?.label ?? '—' }}</p>
-                        </mat-card-content>
-                    </mat-card>
-                    <mat-card>
-                        <mat-card-content>
-                            <p class="text-light font-weight-medium font-size-14 mb-1">{{ commonLocaleData?.app_client }}</p>
-                            <p class="font-size-16 mr-0">
-                                <a
-                                    class="d-inline-flex cursor-pointer"
-                                    href="javascript:void(0)"
-                                    (click)="
-                                        showClientList(
-                                            salesByPersonData?.salesFrom,
-                                            'total',
-                                            'client',
-                                            salesByPersonData?.salesFrom?.fromDate
-                                        )
-                                    "
-                                >
+                    <!-- Total -->
+                    @if (salesByPersonData?.salesFrom) {
+                        <mat-card>
+                            <mat-card-content>
+                                <p class="text-light font-weight-medium font-size-14 mb-2">{{ salesByPersonData?.salesFrom?.label }}</p>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="text-light font-size-12">{{ commonLocaleData?.app_client }}</span>
+                                    <a
+                                        class="cursor-pointer"
+                                        href="javascript:void(0)"
+                                        (click)="
+                                            showClientList(
+                                                salesByPersonData?.salesFrom,
+                                                SbpDataType.Total,
+                                                SbpSubType.Client,
+                                                salesByPersonData?.salesFrom?.month,
+                                                NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                            )
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="salesByPersonData?.salesFrom?.clients"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        ></amount-field>
+                                    </a>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="text-light font-size-12">{{ commonLocaleData?.app_amount }}</span>
                                     <amount-field
-                                        [amount]="salesByPersonData?.salesFrom?.clients"
+                                        [amount]="salesByPersonData?.salesFrom?.amount"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
                                     ></amount-field>
-                                </a>
-                            </p>
-                        </mat-card-content>
-                    </mat-card>
-                    <mat-card>
-                        <mat-card-content>
-                            <p class="text-light font-weight-medium font-size-14 mb-1">{{ commonLocaleData?.app_amount }}</p>
-                            <p class="font-size-16 mr-0">
-                                <amount-field
-                                    [amount]="salesByPersonData?.salesFrom?.amount"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                ></amount-field>
-                            </p>
-                        </mat-card-content>
-                    </mat-card>
-                    <mat-card>
-                        <mat-card-content>
-                            <p class="text-light font-weight-medium font-size-14 mb-1">{{ localeData?.no_invoices }}</p>
-                            <p class="font-size-16 mr-0">
-                                <a
-                                    class="d-inline-flex cursor-pointer"
-                                    href="javascript:void(0)"
-                                    (click)="
-                                        showClientList(
-                                            salesByPersonData?.salesFrom,
-                                            'total',
-                                            'invoice',
-                                            salesByPersonData?.salesFrom?.fromDate
-                                        )
-                                    "
-                                >
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-light font-size-12">{{ localeData?.no_invoices }}</span>
+                                    <a
+                                        class="cursor-pointer"
+                                        href="javascript:void(0)"
+                                        (click)="
+                                            showClientList(
+                                                salesByPersonData?.salesFrom,
+                                                SbpDataType.Total,
+                                                SbpSubType.Invoice,
+                                                salesByPersonData?.salesFrom?.month,
+                                                NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                            )
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="salesByPersonData?.salesFrom?.invoices"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        ></amount-field>
+                                    </a>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    }
+                    <!-- New Clients -->
+                    @if (salesByPersonData?.newSales) {
+                        <mat-card>
+                            <mat-card-content>
+                                <p class="text-light font-weight-medium font-size-14 mb-2">{{ salesByPersonData?.newSales?.label }}</p>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="text-light font-size-12">{{ commonLocaleData?.app_client }}</span>
+                                    <a
+                                        class="cursor-pointer"
+                                        href="javascript:void(0)"
+                                        (click)="
+                                            showClientList(
+                                                salesByPersonData?.newSales,
+                                                SbpDataType.New,
+                                                SbpSubType.Client,
+                                                salesByPersonData?.newSales?.month,
+                                                NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                            )
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="salesByPersonData?.newSales?.clients"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        ></amount-field>
+                                    </a>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="text-light font-size-12">{{ commonLocaleData?.app_amount }}</span>
                                     <amount-field
-                                        [amount]="salesByPersonData?.salesFrom?.invoices"
+                                        [amount]="salesByPersonData?.newSales?.amount"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
                                     ></amount-field>
-                                </a>
-                            </p>
-                        </mat-card-content>
-                    </mat-card>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-light font-size-12">{{ localeData?.no_invoices }}</span>
+                                    <a
+                                        class="cursor-pointer"
+                                        href="javascript:void(0)"
+                                        (click)="
+                                            showClientList(
+                                                salesByPersonData?.newSales,
+                                                SbpDataType.New,
+                                                SbpSubType.Invoice,
+                                                salesByPersonData?.newSales?.month,
+                                                NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                            )
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="salesByPersonData?.newSales?.invoices"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        ></amount-field>
+                                    </a>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    }
+                    <!-- Old Clients -->
+                    @if (salesByPersonData?.oldSales) {
+                        <mat-card>
+                            <mat-card-content>
+                                <p class="text-light font-weight-medium font-size-14 mb-2">{{ salesByPersonData?.oldSales?.label }}</p>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="text-light font-size-12">{{ commonLocaleData?.app_client }}</span>
+                                    <a
+                                        class="cursor-pointer"
+                                        href="javascript:void(0)"
+                                        (click)="
+                                            showClientList(
+                                                salesByPersonData?.oldSales,
+                                                SbpDataType.Old,
+                                                SbpSubType.Client,
+                                                salesByPersonData?.oldSales?.month,
+                                                NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                            )
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="salesByPersonData?.oldSales?.clients"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        ></amount-field>
+                                    </a>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="text-light font-size-12">{{ commonLocaleData?.app_amount }}</span>
+                                    <amount-field
+                                        [amount]="salesByPersonData?.oldSales?.amount"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    ></amount-field>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-light font-size-12">{{ localeData?.no_invoices }}</span>
+                                    <a
+                                        class="cursor-pointer"
+                                        href="javascript:void(0)"
+                                        (click)="
+                                            showClientList(
+                                                salesByPersonData?.oldSales,
+                                                SbpDataType.Old,
+                                                SbpSubType.Invoice,
+                                                salesByPersonData?.oldSales?.month,
+                                                NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                            )
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="salesByPersonData?.oldSales?.invoices"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        ></amount-field>
+                                    </a>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    }
                 </div>
 
                 <!-- ── Charts Row ─────────────────────────────────────────────── -->
@@ -1306,7 +1453,24 @@
                     (expandClientClick)="onSbpExpandClientClick($event)"
                     (expandInvoiceClick)="onSbpExpandInvoiceClick($event)"
                 ></sales-by-person>
-            </div>
+
+                @if (missingSalesPersonNames().length > 0) {
+                    <div class="missing-salesperson-notice mt-3 border-radius-4 px-2 py-2 d-flex align-items-center column-gap-1">
+                        <span class="text-light font-size-12">{{ localeData?.no_data_salespersons }}</span>
+                        <mat-chip-set>
+                            @for (name of missingSalesPersonNames(); track name) {
+                                <mat-chip>{{ name }}</mat-chip>
+                            }
+                        </mat-chip-set>
+                    </div>
+                }
+            } @else {
+                <no-data
+                    [primaryMessage]="localeData?.no_sales_data_salesperson"
+                    [primaryMessageClass]="'no-data'"
+                    [secondaryMessage]="' '"
+                ></no-data>
+            }
         </ng-container>
     </div>
     <ng-container *ngIf="isLoading || monthOptions?.length === 0">

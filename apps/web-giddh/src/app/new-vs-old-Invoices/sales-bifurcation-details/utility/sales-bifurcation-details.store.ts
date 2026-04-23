@@ -44,7 +44,10 @@ export class SalesBifurcationDetailsStore extends ComponentStore<SalesBifurcatio
         return data.pipe(
             switchMap(({ params }) => {
                 this.patchState({ salesBifurcationDetailsList: null, salesBifurcationDetailsListInProgress: true });
-                return this.salesBifurcationDetailsService.salesBifurcationDetails(params).pipe(
+                const apiCall$ = Array.isArray(params.salesPersonUniqueNames)
+                    ? this.salesBifurcationDetailsService.salesBifurcationDetailsBySalesPerson(params)
+                    : this.salesBifurcationDetailsService.salesBifurcationDetails(params);
+                return apiCall$.pipe(
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

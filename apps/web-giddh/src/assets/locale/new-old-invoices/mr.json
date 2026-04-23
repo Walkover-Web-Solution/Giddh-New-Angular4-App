@@ -30,5 +30,8 @@
     "get_type_options": {
         "month": "महिना",
         "quarter": "तिमाहीत"
-    }
+    },
+    "others": "इतर",
+    "no_data_salespersons": "यासाठी कोणताही डेटा उपलब्ध नाही:",
+    "no_sales_data_salesperson": "निवडलेल्या विक्रेत्यासाठी कोणताही विक्री डेटा उपलब्ध नाही"
 }

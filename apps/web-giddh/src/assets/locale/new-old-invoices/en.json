@@ -30,5 +30,8 @@
     "get_type_options": {
         "month": "Month",
         "quarter": "Quarter"
-    }
+    },
+    "others": "Others",
+    "no_data_salespersons": "No data available for:",
+    "no_sales_data_salesperson": "No sales data available for the selected salesperson"
 }
