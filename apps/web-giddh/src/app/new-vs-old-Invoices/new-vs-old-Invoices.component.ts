@@ -20,7 +20,7 @@ import { GeneralService } from '../services/general.service';
 import { find, slice } from '../lodash-optimized';
 import { SalesPersonComponentStore } from '../shared/sales-person/utility/sales-person.store';
 import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
-import { SalesByPersonResponse, SalesByPersonRow } from './sales-by-person/sales-by-person.models';
+import { SalesByPersonResponse, SalesByPersonRow, SbpDataType, SbpSubType } from './sales-by-person/sales-by-person.models';
 
 
 @Component({
@@ -67,16 +67,24 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public salesBifurcationDetailsDialogRef: MatDialogRef<any>;
     /** Selected type enum */
     public selectedTypeEnum: any = GetBifurcationType;
-    /** Sales person list for dropdown */
+    /** Exposed for template access */
+    protected readonly SbpDataType = SbpDataType;
+    /** Exposed for template access */
+    protected readonly SbpSubType = SbpSubType;
+    /** Sales person list for dropdown (raw observable from store, never search-filtered) */
     public salesPersonList$: any;
+    /** Full unfiltered sales person list — used for label resolution only */
+    private fullSalesPersonList: IOption[] = [];
     /** Filtered sales person list for dropdown */
     public filteredSalesPersonList = signal<IOption[]>([]);
     /** Search control for sales person multi-select */
     public salesPersonSearch: FormControl = new FormControl();
     /** Sentinel value representing the "All" pseudo-option in the sales person dropdown */
     public readonly ALL_SALES_PERSONS = '__ALL__';
+    /** Sentinel value representing the "Others" (no sales person assigned) option */
+    public readonly NO_SALES_PERSON = '__no_sales_person__';
     /** Selected sales person unique names (real unique names only, no sentinel) */
-    public selectedSalesPersonUniqueNames: string[] = [this.ALL_SALES_PERSONS];
+    public selectedSalesPersonUniqueNames: string[] = [];
     /** Whether the "All" pseudo-option is selected in the sales person dropdown */
     public isAllSalesPersonSelected = signal<boolean>(false);
     /** Canvas for the Top Salespersons vertical bar chart */
@@ -87,6 +95,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     private sbpTopChart: Chart | null = null;
     /** New vs Old Sales Chart.js instance */
     private sbpNvoChart: Chart | null = null;
+    /** Base currency symbol of the active company */
+    public baseCurrencySymbol: string;
 
     
     /** Sales-by-person response passed to the child table component */
@@ -96,6 +106,12 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public get salesByPersonRows(): SalesByPersonRow[] {
         return this.salesByPersonData?.rows ?? [];
     }
+
+    /**
+     * Display labels of salespersons that were requested but have no row in the API response.
+     * Populated after each API response via computeMissingSalesPersonNames().
+     */
+    public missingSalesPersonNames = signal<string[]>([]);
 
     constructor(
         private store: Store<AppState>,
@@ -139,7 +155,13 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         /** Resolve the amount value from a row for a given group header key */
         const getAmount = (r: SalesByPersonRow, key: string): number => (r[key] as any)?.amount ?? 0;
 
-        const labels = rows.map(getLabel);
+        /** Top chart: sort all rows by total amount desc and take top 5 */
+        const totalHeader = groupHeaders[groupHeaders.length - 1];
+        const top5Rows = totalHeader
+            ? [...rows].sort((a, b) => getAmount(b, totalHeader.key) - getAmount(a, totalHeader.key)).slice(0, 5)
+            : rows.slice(0, 5);
+
+        const labels = top5Rows.map(getLabel);
 
         const chartScaleOptions = {
             x: { border: { display: false }, grid: { display: false }, ticks: { color: '#555', font: { size: 11 } } },
@@ -149,13 +171,11 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 ticks: {
                     color: '#666',
                     font: { size: 11 },
-                    callback: (v: any) => v >= 1000 ? '₹' + (v / 1000).toFixed(0) + 'k' : '₹' + v
+                    callback: (v: any) => v >= 1000 ? this.baseCurrencySymbol + (v / 1000).toFixed(0) + 'k' : this.baseCurrencySymbol + v
                 }
             }
         };
 
-        /** Top chart: use the last group header (typically "Total") */
-        const totalHeader = groupHeaders[groupHeaders.length - 1];
         if (this.sbpTopCanvas?.nativeElement && totalHeader) {
             this.sbpTopChart?.destroy();
             this.sbpTopChart = new Chart(this.sbpTopCanvas.nativeElement, {
@@ -164,7 +184,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                     labels,
                     datasets: [{
                         label: totalHeader.label,
-                        data: rows.map(r => getAmount(r, totalHeader.key)),
+                        data: top5Rows.map(r => getAmount(r, totalHeader.key)),
                         backgroundColor: 'rgba(12, 177, 175, 0.85)',
                         borderColor: 'rgb(12, 177, 175)',
                         borderWidth: 1,
@@ -210,7 +230,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                     labels,
                     datasets: nvoHeaders.map((h, i) => ({
                         label: h.label,
-                        data: rows.map(r => getAmount(r, h.key)),
+                        data: top5Rows.map(r => getAmount(r, h.key)),
                         backgroundColor: (nvoColors[i] ?? nvoColors[0]).bg,
                         borderColor: (nvoColors[i] ?? nvoColors[0]).border,
                         borderWidth: 1,
@@ -244,17 +264,25 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 1000, archive: false } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 1000, archive: '' } });
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((list: any) => {
             const options: IOption[] = Array.isArray(list) ? list : [];
-            this.filteredSalesPersonList.set(options);
+            this.fullSalesPersonList = [{ label: this.localeData?.others, value: this.NO_SALES_PERSON }, ...options];
+            this.filteredSalesPersonList.set(this.fullSalesPersonList);
         });
         this.salesPersonSearch.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((search: string) => {
             this.salesPersonList$.pipe(take(1)).subscribe((list: any) => {
                 const options: IOption[] = Array.isArray(list) ? list : [];
                 const term = (search ?? '').toLowerCase();
-                this.filteredSalesPersonList.set(term ? options.filter(o => o.label.toLowerCase().includes(term)) : options);
+                const othersOption: IOption = { label: this.localeData?.others, value: this.NO_SALES_PERSON };
+                const allOptions: IOption[] = [othersOption, ...options];
+                this.filteredSalesPersonList.set(term ? allOptions.filter(o => o.label?.toLowerCase().includes(term)) : allOptions);
             });
+        });
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile?.baseCurrencySymbol) {
+                this.baseCurrencySymbol = profile.baseCurrencySymbol;
+            }
         });
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
 
@@ -282,13 +310,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                     this.selectedYear = universalEndDate;
                     this.selectedmonth = ("0" + (dayjs(response[1]).format("M"))).slice(-2)?.toString();
                 }
-
-                this.salesPersonList$.pipe(filter(Boolean), take(1)).subscribe((list: any) => {
-                    if (list) {
-                        this.onSalesPersonSelectionChange(this.selectedSalesPersonUniqueNames);
-                        this.getSalesBifurcation();
-                    }
-                });
+                this.getSalesBifurcation();
                 this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
             }
         });
@@ -357,21 +379,22 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
             : this.newVsOldInvoicesService.GetNewVsOldInvoices(this.NewVsOldInvoicesQueryRequest);
 
         apiCall$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body) {
-                if(hasSalesPersonFilter){
+            if (response?.status === "success") {
+                if (hasSalesPersonFilter) {
                     this.salesByPersonData = response?.body;
+                    this.computeMissingSalesPersonNames();
                     setTimeout(() => {
                         this.renderSbpCharts();
                     }, 200);
-                }else {
-                this.newVsOldInvoicesData = response?.body;
-                this.newSalesClientTotal = this.newVsOldInvoicesData?.newSales?.uniqueCount;
-                this.totalSalesClientTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
-                this.newSalesAmount = this.newVsOldInvoicesData?.newSales?.total;
-                this.totalSalesAmount = this.newVsOldInvoicesData?.totalSales?.total;
-                this.newSalesInvCount = this.newVsOldInvoicesData?.newSales?.invoiceCount;
-                this.totalSalesInvCount = this.newVsOldInvoicesData?.totalSales?.invoiceCount;
-                this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
+                } else {
+                    this.newVsOldInvoicesData = response?.body;
+                    this.newSalesClientTotal = this.newVsOldInvoicesData?.newSales?.uniqueCount;
+                    this.totalSalesClientTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
+                    this.newSalesAmount = this.newVsOldInvoicesData?.newSales?.total;
+                    this.totalSalesAmount = this.newVsOldInvoicesData?.totalSales?.total;
+                    this.newSalesInvCount = this.newVsOldInvoicesData?.newSales?.invoiceCount;
+                    this.totalSalesInvCount = this.newVsOldInvoicesData?.totalSales?.invoiceCount;
+                    this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
                 }
             } else {
                 this.changeDetectionService.safeChangeDetection(this.changeDetectorRef, this.ngZone);
@@ -380,6 +403,23 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
             this.getBifurcationClientsString();
         });
+    }
+
+    /**
+     * Computes missingSalesPersonNames by comparing requested salesPersonUniqueNames
+     * against the row ids returned by the API. Excludes the NO_SALES_PERSON sentinel.
+     *
+     * @memberof NewVsOldInvoicesComponent
+     */
+    private computeMissingSalesPersonNames(): void {
+        const rows = this.salesByPersonData?.rows ?? [];
+        const returnedIds = new Set(rows.map(r => r.id as string));
+        const list = this.fullSalesPersonList;
+        this.missingSalesPersonNames.set(
+            (this.NewVsOldInvoicesQueryRequest.salesPersonUniqueNames ?? [])
+                .filter(u => u !== this.NO_SALES_PERSON && !returnedIds.has(u))
+                .map(u => list.find(o => o.value === u)?.label ?? u)
+        );
     }
 
     /**
@@ -481,26 +521,26 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     /** Handles client-cell click from the sales-by-person table */
     public onSbpClientClick(event: { row: any; group: string }): void {
         const rowData = event.row?.[event.group];
-        this.showClientList(rowData, event.group, 'client', rowData?.fromDate);
+        this.showClientList(rowData, event.group, SbpSubType.Client, rowData?.month, event.row?.id ? [event.row.id] : undefined);
     }
 
     /** Handles invoice-cell click from the sales-by-person table */
     public onSbpInvoiceClick(event: { row: any; group: string }): void {
         const rowData = event.row?.[event.group];
-        this.showClientList(rowData, event.group, 'invoice', rowData?.fromDate);
+        this.showClientList(rowData, event.group, SbpSubType.Invoice, rowData?.month, event.row?.id ? [event.row.id] : undefined);
     }
 
     /** Handles client-cell click from the expand breakdown row */
     public onSbpExpandClientClick(event: { row: any; expandRow: any }): void {
-        this.showClientList(event.expandRow, 'old', 'client', event.expandRow?.fromDate);
+        this.showClientList(event.expandRow, SbpDataType.Old, SbpSubType.Client, event.expandRow?.month, event.row?.id ? [event.row.id] : undefined);
     }
 
     /** Handles invoice-cell click from the expand breakdown row */
     public onSbpExpandInvoiceClick(event: { row: any; expandRow: any }): void {
-        this.showClientList(event.expandRow, 'old', 'invoice', event.expandRow?.fromDate);
+        this.showClientList(event.expandRow, SbpDataType.Old, SbpSubType.Invoice, event.expandRow?.month, event.row?.id ? [event.row.id] : undefined);
     }
 
-    public showClientList(newVsOldInvoicesData: any, type: string, subType: string, salesFrom: string): void {
+    public showClientList(newVsOldInvoicesData: any, type: string, subType: string, salesFrom: string, salesPersonUniqueNames?: string[]): void {
         const goToLedgerDateRange = this.generalService.getStartAndEndDateOfMonthOrQuater(this.NewVsOldInvoicesQueryRequest.type === GetBifurcationType.QUATER ? GetBifurcationType.QUARTER : GetBifurcationType.MONTH, this.NewVsOldInvoicesQueryRequest.value);
         const reportType = this.NewVsOldInvoicesQueryRequest.type == GetBifurcationType.QUATER ? GetBifurcationType.QUARTER : GetBifurcationType.MONTH;
         const reportReq = {
@@ -514,6 +554,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
             type,
             subType,
             salesFrom,
+            salesPersonUniqueNames,
             newVsOldInvoicesQueryRequest: reportReq
         };
         ASIDE_PANE_CONFIG.data = data;

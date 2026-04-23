@@ -54,6 +54,8 @@ export interface SalesByPersonResponse {
     headers: SalesByPersonHeader[];
     rows: SalesByPersonRow[];
     salesFrom?: SalesByPersonSalesFrom;
+    newSales?: SalesByPersonSalesFrom;
+    oldSales?: SalesByPersonSalesFrom;
 }
 
 /** Internal flat column definition used by mat-table */
@@ -74,6 +76,20 @@ export interface SbpColumnDef {
     isLeaf: boolean;
     /** Percentage width for this column (e.g. 10 = 10%) */
     widthPct: number;
+}
+
+/** Data group type passed to showClientList — identifies which sales group a cell belongs to */
+export enum SbpDataType {
+    New = 'new',
+    Old = 'old',
+    Total = 'total',
+    Carried = 'carried'
+}
+
+/** Sub-type passed to showClientList — identifies whether the click was on a client or invoice cell */
+export enum SbpSubType {
+    Client = 'client',
+    Invoice = 'invoice'
 }
 
 /** Discriminator for the two virtual row types in the flat datasource */

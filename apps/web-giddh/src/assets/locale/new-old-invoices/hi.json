@@ -30,5 +30,8 @@
     "get_type_options": {
         "month": "महीना",
         "quarter": "तिमाही"
-    }
+    },
+    "others": "अन्य",
+    "no_data_salespersons": "इसके लिए कोई डेटा उपलब्ध नहीं है:",
+    "no_sales_data_salesperson": "चयनित सेल्सपर्सन के लिए कोई बिक्री डेटा उपलब्ध नहीं है"
 }
