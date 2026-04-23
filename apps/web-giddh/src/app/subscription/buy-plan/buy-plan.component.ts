@@ -22,7 +22,7 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { Configuration, EntityCode, GIDDH_PRIMARY_LOGO_BASE64, IOption, PaymentProvider, PlanDuration } from '../../app.constant';
+import { EntityCode, GIDDH_PRIMARY_LOGO_BASE64, IOption, PaymentProvider, PlanDuration } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { SessionState } from '../../store/authentication/authentication.reducer';
@@ -281,7 +281,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     ) {
         this.session$ = this.store.pipe(select(p => p.session), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
-        this.razorpayKey = this.serviceConfig.RAZORPAY_KEY || Configuration.RAZORPAY_KEY;
+        this.razorpayKey = this.serviceConfig.RAZORPAY_KEY;
     }
 
     /**
@@ -1763,8 +1763,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             },
             amount: request.dueAmount,
             currency: request.planDetails?.currency?.code || this.activeCompany?.baseCurrency,
-            name: 'GIDDH',
-            description: 'Walkover Technologies Private Limited.',
+            name: this.serviceConfig.BRAND_NAME,
+            description: this.serviceConfig.LEGAL_NAME
         };
 
         try {

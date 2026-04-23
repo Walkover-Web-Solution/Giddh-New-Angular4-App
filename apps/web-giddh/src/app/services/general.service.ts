@@ -16,7 +16,7 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, GiddhUiDomain, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, GiddhUiDomain, IOption, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
 import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -406,7 +406,7 @@ export class GeneralService {
         let isAllowed = false;
         if (email) {
             let emailSplit = email.split("@");
-            if ((this.config?.EMAIL_DOMAINS || JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
+            if ((this.config?.EMAIL_DOMAINS).includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }

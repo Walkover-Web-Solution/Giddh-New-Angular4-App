@@ -6,7 +6,7 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of as observableOf, ReplaySubject } from "rxjs";
-import { BANK_STATEMENT_HELP_DOC_URL, BROADCAST_CHANNELS, Configuration, ICICI_ALLOWED_COMPANIES, IOption } from "../../app.constant";
+import { BROADCAST_CHANNELS, Configuration, ICICI_ALLOWED_COMPANIES, IOption } from "../../app.constant";
 import { SalesService } from "../../services/sales.service";
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
@@ -100,7 +100,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
     /** Bank statement help doc url */
-    public bankStatementHelpDocUrl = BANK_STATEMENT_HELP_DOC_URL;
+    public bankStatementHelpDocUrl = '';
 
     /** @ignore */
     constructor(
@@ -119,6 +119,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         public dialog: MatDialog
     ) {
         this.iciciAllowedCompanies = this.serviceConfig.ICICI_SUPPORTED_COMPANIES || ICICI_ALLOWED_COMPANIES;
+        this.bankStatementHelpDocUrl = this.serviceConfig.BANK_STATEMENT_HELP_DOC_URL ?? '';
     }
 
     /**

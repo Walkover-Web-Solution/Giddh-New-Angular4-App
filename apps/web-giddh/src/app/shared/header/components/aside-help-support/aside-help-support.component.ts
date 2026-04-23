@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, OnDestroy, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
-import { Configuration, GIDDH_HELP_DOC_URL, GIDDH_SUPPORT_PHONE_NUMBER, GIDDH_SUPPORT_EMAIL, GIDDH_ANDROID_APP_URL, GIDDH_IOS_APP_URL } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
@@ -32,13 +32,13 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     /** Holds Giddh help documentation url */
     public helpDocUrl: string = '';
     /** Holds Giddh support phone number */
-    public supportPhoneNumber: string = GIDDH_SUPPORT_PHONE_NUMBER;
+    public supportPhoneNumber: string = '';
     /** Holds Giddh support email */
-    public supportEmail: string = GIDDH_SUPPORT_EMAIL;
+    public supportEmail: string = '';
     /** Android app URL */
-    public androidAppUrl: string = GIDDH_ANDROID_APP_URL;
+    public androidAppUrl: string = '';
     /** iOS app URL */
-    public iosAppUrl: string = GIDDH_IOS_APP_URL;
+    public iosAppUrl: string = '';
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -63,8 +63,12 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
         this.setDownloadUrls();
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
-        this.helpDocUrl = this.generalService.isGiddhDomain() ? GIDDH_HELP_DOC_URL : '';
+        this.helpDocUrl = this.serviceConfig.HELP_DOC_URL ?? '';
+        this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL ?? '';
+        this.iosAppUrl = this.serviceConfig.IOS_APP_URL ?? '';
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.supportPhoneNumber = this.serviceConfig.SUPPORT_PHONE ?? '';
+        this.supportEmail = this.serviceConfig.SUPPORT_EMAIL ?? '';
     }
 
     /**

@@ -5,8 +5,7 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
-import { BREAKPOINT_SCREEN_SIZE, GIDDH_ANDROID_APP_URL, GIDDH_IOS_APP_URL } from "../app.constant";
-import { Configuration } from '../app.constant';
+import { BREAKPOINT_SCREEN_SIZE, Configuration } from '../app.constant';
 import { environment } from '../../environments/environment.generated';
 
 @Component({
@@ -23,9 +22,9 @@ export class MobileRestrictedComponent {
     /* Hold giddh logo source */
     public giddhLogoSrc: string = '';
     /* Android app URL */
-    public androidAppUrl: string = GIDDH_ANDROID_APP_URL;
+    public androidAppUrl: string = '';
     /* iOS app URL */
-    public iosAppUrl: string = GIDDH_IOS_APP_URL;
+    public iosAppUrl: string = '';
     /* Check if current domain is Giddh domain */
     public isGiddhDomain: boolean = false;
 
@@ -33,6 +32,8 @@ export class MobileRestrictedComponent {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.giddhLogoSrc = this.serviceConfig.LOGOS.primary;
         this.isGiddhDomain = this.serviceConfig.IS_GIDDH_DOMAIN;
+        this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL ?? '';
+        this.iosAppUrl = this.serviceConfig.IOS_APP_URL ?? '';
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {

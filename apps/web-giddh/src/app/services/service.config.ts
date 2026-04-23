@@ -31,6 +31,8 @@ export interface IServiceConfigArgs {
     WEBSITE_DOMAIN?: string;
     BRAND_NAME?: string;
     LEGAL_NAME?: string;
+    SUPPORT_EMAIL?: string;
+    SUPPORT_PHONE?: string;
     GST_CREDENTIALS?: any;
     VAYANA_CREDENTIALS?: any;
     LOGOS: {
@@ -41,6 +43,7 @@ export interface IServiceConfigArgs {
         dark: string;
     };
     GIDDH_WHITE_LABEL?: {
+        id?: number;
         uniqueName?: string;
         baseDomain?: string;
         certificateRequired?: boolean;
@@ -51,8 +54,20 @@ export interface IServiceConfigArgs {
         adminDomain?: string;
         uiDomains?: string[];
         theme?: any;
+        isActive?: number;
+        isDefault?: boolean;
+        createdAt?: string;
+        updatedAt?: string;
     };
-    
+
+    // Giddh-only URLs - empty string on white label domains
+    ANDROID_APP_URL?: string;
+    IOS_APP_URL?: string;
+    HELP_DOC_URL?: string;
+    API_DOC_URL?: string;
+    SYNC_TALLY_HELP_DOC_URL?: string;
+    BANK_STATEMENT_HELP_DOC_URL?: string;
+
     _: any;
 }
 

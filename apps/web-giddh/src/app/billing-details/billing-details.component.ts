@@ -357,7 +357,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => activeCompany = activeCompany);
 
         let options = {
-            key: this.serviceConfig.RAZORPAY_KEY ||  RAZORPAY_KEY,
+            key: this.serviceConfig.RAZORPAY_KEY,
             handler: function (res) {
                 that.createPaidPlanCompany(res);
             },

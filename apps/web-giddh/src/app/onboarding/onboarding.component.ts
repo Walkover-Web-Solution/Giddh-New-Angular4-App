@@ -8,7 +8,7 @@ import { SettingsProfileActions } from '../actions/settings/profile/settings.pro
 import { Observable, ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
 import { OnboardingComponentStore } from './utility/onboarding.store';
-import { ASIDE_PANE_CONFIG, SYNC_TALLY_HELP_DOC_URL, GIDDH_HELP_DOC_URL } from '../app.constant';
+import { ASIDE_PANE_CONFIG } from '../app.constant';
 import { ServiceConfig } from '../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Configuration } from '../app.constant';
@@ -66,8 +66,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private componentStore: OnboardingComponentStore,
         private dialog: MatDialog
     ) {
-        this.syncWithTallyHelpDocUrl = this.generalService.isGiddhDomain() ? SYNC_TALLY_HELP_DOC_URL : '';
-        this.helpDocUrl = this.generalService.isGiddhDomain() ? GIDDH_HELP_DOC_URL : '';
+        this.syncWithTallyHelpDocUrl = this.serviceConfig.SYNC_TALLY_HELP_DOC_URL ?? '';
+        this.helpDocUrl = this.serviceConfig.HELP_DOC_URL ?? '';
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 

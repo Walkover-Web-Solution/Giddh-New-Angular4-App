@@ -1,6 +1,6 @@
 {
-    "page_heading": "All Features",
-    "money_back_guarantee": "All the plan come with all the features with <strong>90 days money back guarantee</strong>. Following are the available features in Giddh - Accounting Software.",
+    "page_heading": "[BRAND_NAME] All Features",
+    "money_back_guarantee": "All the plan come with all the features with <strong>90 days money back guarantee</strong>. Following are the available features in [BRAND_NAME] - Accounting Software.",
     "shortcut_key": "Shortcut Key",
     "command_control_g": "Command+g or Control+g",
     "unique_code": "Unique Code",
@@ -147,7 +147,7 @@
     "delete_company": "Delete Company",
     "feature_request": "Feature Request",
     "changelog": "Changelog",
-    "tally_giddh_plugin": "Tally to Giddh Plugin",
+    "tally_giddh_plugin": "Tally to [BRAND_NAME] Plugin",
     "support": "Support",
     "talk_to_sales": "Talk to Sales",
     "help_doc": "Help Doc",
