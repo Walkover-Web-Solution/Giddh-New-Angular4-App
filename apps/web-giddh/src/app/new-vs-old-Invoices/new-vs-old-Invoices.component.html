@@ -1455,8 +1455,10 @@
                 ></sales-by-person>
 
                 @if (missingSalesPersonNames().length > 0) {
-                    <div class="missing-salesperson-notice mt-3 border-radius-4 px-2 py-2 d-flex align-items-center column-gap-1">
-                        <span class="text-light font-size-12">{{ localeData?.no_data_salespersons }}</span>
+                    <div
+                        class="missing-salesperson-notice mt-3 border-radius-4 d-flex align-items-center column-gap-1 flex-column px-2 py-5 row-gap-15"
+                    >
+                        <span class="text-light">{{ localeData?.no_data_salespersons }}</span>
                         <mat-chip-set>
                             @for (name of missingSalesPersonNames(); track name) {
                                 <mat-chip>{{ name }}</mat-chip>
