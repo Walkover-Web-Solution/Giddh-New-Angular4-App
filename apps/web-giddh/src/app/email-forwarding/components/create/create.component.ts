@@ -100,7 +100,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         private salesAction: SalesActions,
         @Inject(ServiceConfig) private serviceConfig: IServiceConfigArgs
     ) {
-        this.bankStatementHelpDocUrl = this.serviceConfig.BANK_STATEMENT_HELP_DOC_URL ?? '';
+        this.bankStatementHelpDocUrl = this.serviceConfig.BANK_STATEMENT_HELP_DOC_URL;
         this.initializeForms();
     }
 

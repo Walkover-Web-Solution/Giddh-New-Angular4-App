@@ -209,7 +209,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         }
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.imgPath = this.serviceConfig.IMG_PATH.replace('images/', 'icon/');
+        this.imgPath = this.serviceConfig.IMG_PATH + 'icon/';
         if (!this.showLabels) {
             this.filterForm?.patchValue({ selectedDateOption: '0' });
         }

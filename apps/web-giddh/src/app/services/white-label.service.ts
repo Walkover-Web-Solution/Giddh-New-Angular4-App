@@ -247,10 +247,10 @@ export class WhiteLabelService {
             // OTP Configuration (Web and Electron)
             OTP_WIDGET_ID: this.getOtpWidgetId(),
             OTP_TOKEN_AUTH: this.getOtpTokenAuth(),
-            OTP_WIDGET_ID_WEB: this.getValueWithFallback(body.otpWidgetIdWeb, this.environmentService.otpWidgetId, '33686b716134333831313239'),
-            OTP_WIDGET_TOKEN_WEB: this.getValueWithFallback(body.otpWidgetTokenWeb, this.environmentService.otpTokenAuth, '205968TmXguUAwoD633af103P1'),
-            OTP_WIDGET_ID_ELECTRON: this.getValueWithFallback(body.otpWidgetIdElectron, this.environmentService.otpWidgetId, '33686b716134333831313239'),
-            OTP_WIDGET_TOKEN_ELECTRON: this.getValueWithFallback(body.otpWidgetTokenElectron, this.environmentService.otpTokenAuth, '205968TmXguUAwoD633af103P1'),
+            OTP_WIDGET_ID_WEB: this.getValueWithFallback(body.otpWidgetIdWeb, this.environmentService.otpWidgetId, ''),
+            OTP_WIDGET_TOKEN_WEB: this.getValueWithFallback(body.otpWidgetTokenWeb, this.environmentService.otpTokenAuth, ''),
+            OTP_WIDGET_ID_ELECTRON: this.getValueWithFallback(body.otpWidgetIdElectron, this.environmentService.otpWidgetId, ''),
+            OTP_WIDGET_TOKEN_ELECTRON: this.getValueWithFallback(body.otpWidgetTokenElectron, this.environmentService.otpTokenAuth, ''),
 
             // Payment
             RAZORPAY_KEY: this.getRazorpayKey(),

@@ -118,7 +118,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         public dialog: MatDialog
     ) {
         this.iciciAllowedCompanies = this.serviceConfig.ICICI_SUPPORTED_COMPANIES;
-        this.bankStatementHelpDocUrl = this.serviceConfig.BANK_STATEMENT_HELP_DOC_URL ?? '';
+        this.bankStatementHelpDocUrl = this.serviceConfig.BANK_STATEMENT_HELP_DOC_URL;
     }
 
     /**

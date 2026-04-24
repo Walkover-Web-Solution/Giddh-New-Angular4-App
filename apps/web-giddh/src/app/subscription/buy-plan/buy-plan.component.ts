@@ -22,7 +22,7 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { EntityCode, GIDDH_PRIMARY_LOGO_BASE64, IOption, PaymentProvider, PlanDuration } from '../../app.constant';
+import { EntityCode, IOption, PaymentProvider, PlanDuration } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { SessionState } from '../../store/authentication/authentication.reducer';
@@ -1746,8 +1746,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             name: this.serviceConfig.BRAND_NAME,
             description: this.serviceConfig.LEGAL_NAME,
         };
-        if (this.serviceConfig.IS_GIDDH_DOMAIN) {
-            options["image"] = GIDDH_PRIMARY_LOGO_BASE64;
+        if (this.serviceConfig?.logos?.primary) {
+            options["image"] = this.serviceConfig.logos.primary;
         }
         const razorpayRecurringSubscriptionConfig = {
             key: this.razorpayKey,

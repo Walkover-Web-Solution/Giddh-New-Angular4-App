@@ -46,7 +46,7 @@ export class MapExcelDataComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.imgPath = this.serviceConfig.IMG_PATH.replace('images/', 'icon/');
+        this.imgPath = this.serviceConfig.IMG_PATH + 'icon/';
     }
 
     public mapExcelData() {

@@ -79,7 +79,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -304,7 +304,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private activeRoute: ActivatedRoute
     ) {
         this.imgPath = this.serviceConfig.IMG_PATH;
-        this.giddhLogoSrc = this.serviceConfig.LOGOS.light;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.light;
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.serviceConfig.CALENDLY_URL);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());

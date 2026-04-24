@@ -16,7 +16,7 @@ import { SettingsProfileActions } from '../actions/settings/profile/settings.pro
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import { CommonActions } from '../actions/common.actions';
 import { SettingsProfileService } from '../services/settings.profile.service';
-import { EMAIL_VALIDATION_REGEX, GIDDH_PRIMARY_LOGO_BASE64, IOption } from '../app.constant';
+import { EMAIL_VALIDATION_REGEX, IOption } from '../app.constant';
 import { SalesService } from '../services/sales.service';
 import { StateCode } from '../models/api-models/Sales';
 import { ServiceConfig } from '../services/service.config';
@@ -370,8 +370,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
             name: this.serviceConfig.BRAND_NAME,
             description: this.serviceConfig.LEGAL_NAME
         };
-        if (this.serviceConfig.IS_GIDDH_DOMAIN) {
-            options["image"] = GIDDH_PRIMARY_LOGO_BASE64;
+        if (this.serviceConfig?.logos?.primary) {
+            options["image"] = this.serviceConfig.logos.primary;
         }
         try {
             this.razorpay = new window['Razorpay'](options);

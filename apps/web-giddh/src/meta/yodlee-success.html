@@ -38,7 +38,7 @@
             All right are reserved &copy;
             <span id="year"></span>
             <span id="legal-name"></span>
-            <a id="domain-link" href="#" target="_blank"></a>
+            <a href="/" target="_blank"></a>
         </p>
     </div>
 </div>
@@ -56,9 +56,10 @@
 
     var companyUniqueName = getQueryStringValue('companyUniqueName');
     const whiteLabel = getWhiteLabelData();
-    const legalName = whiteLabel?.legalName || 'Walkover Technologies Private Limited.';
-    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName || 'https://books.giddh.com'}/`;
-    var domainName = whiteLabel?.giddhWhiteLabel?.domainName || 'Giddh.com';
+    const GIDDH_DOMAINS = ['localhost', 'test.giddh.com', 'books.giddh.com'];
+    const isGiddhDomain = GIDDH_DOMAINS.includes(window.location.hostname);
+    const legalName = whiteLabel?.legalName || (isGiddhDomain ? 'Walkover Technologies Private Limited.' : '');
+    var domainName = whiteLabel?.giddhWhiteLabel?.domainName || (isGiddhDomain ? 'Giddh.com' : '');
     const currentYear = new Date().getFullYear();
     var search = '';
     var status = getQueryStringValue('status');
@@ -69,7 +70,6 @@
 
     function getApi() {
         const whiteLabel = getWhiteLabelData();
-        this.giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName || 'https://books.giddh.com'}/`;
         if (whiteLabel) {
             apiBaseUrl = `${whiteLabel?.giddhWhiteLabel?.apiDomain}/`;
         } else {
@@ -117,7 +117,6 @@
         // Update DOM elements with white-label data
         document.getElementById('year').textContent = currentYear;
         document.getElementById('legal-name').textContent = legalName;
-        document.getElementById('domain-link').href = giddhDomainUrl;
         document.getElementById('domain-link').textContent = domainName;
 
         $('#failed').hide();

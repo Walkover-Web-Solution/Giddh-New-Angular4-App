@@ -19,7 +19,7 @@ export class MobileRestrictedComponent {
     public imgPath: string = "";
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
     /* Android app URL */
     public androidAppUrl: string = '';
     /* iOS app URL */
@@ -29,10 +29,10 @@ export class MobileRestrictedComponent {
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  private breakpointObserver: BreakpointObserver, private router: Router, private generalService: GeneralService) {
         this.imgPath = this.serviceConfig.IMG_PATH;
-        this.giddhLogoSrc = this.serviceConfig.LOGOS.primary;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.primary;
         this.isGiddhDomain = this.serviceConfig.IS_GIDDH_DOMAIN;
-        this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL ?? '';
-        this.iosAppUrl = this.serviceConfig.IOS_APP_URL ?? '';
+        this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL;
+        this.iosAppUrl = this.serviceConfig.IOS_APP_URL;
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {

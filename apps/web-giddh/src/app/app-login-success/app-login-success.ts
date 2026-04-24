@@ -11,8 +11,8 @@ import { environment } from '../../environments/environment.generated';
 })
 export class AppLoginSuccessComponent {
     /* Hold logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
     constructor(@Inject(ServiceConfig) private serviceConfig) {
-        this.giddhLogoSrc = this.serviceConfig.LOGOS.primary;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.primary;
     }
 }

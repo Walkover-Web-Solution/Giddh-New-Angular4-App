@@ -44,7 +44,7 @@ export class DnsRecordsComponent implements OnInit {
     /* it will store company uniquename */
     public companyUniqueName: string = '';
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
 
 
     constructor(private route: ActivatedRoute,
@@ -63,7 +63,7 @@ export class DnsRecordsComponent implements OnInit {
    * @memberof DnsRecordsComponent
    */
     public ngOnInit(): void {
-        this.giddhLogoSrc = this.serviceConfig.LOGOS.primary;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.primary;
 
         combineLatest([
             this.route.queryParams.pipe(takeUntil(this.destroyed$)),

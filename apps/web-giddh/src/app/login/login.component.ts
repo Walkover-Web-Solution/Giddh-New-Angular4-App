@@ -11,7 +11,7 @@ import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angula
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { TemplateRef } from "@angular/core";
-import { Configuration, ELECTRON_OTP_PROVIDER_URL, GiddhUiDomain, IOption, KeyCodesEnum, OTP_PROVIDER_URL } from "../app.constant";
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, KeyCodesEnum, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -36,7 +36,7 @@ import { AuthenticationService } from "../services/authentication.service";
 import { CommonActions } from "../actions/common.actions";
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
-import { cloneDeep, filter, get, indexOf, map, set } from '../lodash-optimized';
+import { cloneDeep } from '../lodash-optimized';
 
 declare var initSendOTP: any;
 
@@ -105,9 +105,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     /** Show apple login if electron app and mac user */
     public showAppleLogin: boolean = false;
     /* Hold logo source */
-    public giddhLogoSrc: string = '';
-    /* Hold domain url */
-    public giddhDomainUrl: string = "";
+    public brandLogoUrl: string = '';
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,
@@ -126,8 +124,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     ) {
         // Use relative paths for assets to avoid port/domain issues in Electron
         this.urlPath = Configuration.isElectron ? "" : "";
-        this.giddhDomainUrl = this.serviceConfig.AppUrl || environment.AppUrl || GiddhUiDomain.PRODUCTION;
-        this.giddhLogoSrc = this.serviceConfig.LOGOS.light;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.light;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -596,11 +593,12 @@ export class LoginComponent implements OnInit, OnDestroy {
      * @memberof LoginComponent
      */
     public async appleLogin(): Promise<void> {
-        const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = environment.production || Configuration.isElectron ? 'https://api.giddh.com' : this.serviceConfig.GIDDH_WHITE_LABEL?.apiDomain ? `${this.serviceConfig.GIDDH_WHITE_LABEL.apiDomain}` : 'https://apitest.giddh.com';
-        const REDIRECT_API_URL = url + "/v2/apple-login-callback";
+        // NOT IN USE HENCE COMMENTED THIS CODE
+        // const CLIENT_ID = "com.giddh.appsignin.client"
+        // const url = environment.production || Configuration.isElectron ? 'https://api.giddh.com' : this.serviceConfig.GIDDH_WHITE_LABEL?.apiDomain ? `${this.serviceConfig.GIDDH_WHITE_LABEL.apiDomain}` : 'https://apitest.giddh.com';
+        // const REDIRECT_API_URL = url + "/v2/apple-login-callback";
 
-        window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');
+        // window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');
     }
 
     /**

@@ -28,7 +28,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
     /** Instance of modal */
     public modalDialogRef: any;
     /** Instance of reject modal */
@@ -66,7 +66,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
    * @memberof VerifySubscriptionTransferOwnershipComponent
    */
     public ngOnInit(): void {
-        this.giddhLogoSrc = this.serviceConfig.LOGOS.primary;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.primary;
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.requestId) {

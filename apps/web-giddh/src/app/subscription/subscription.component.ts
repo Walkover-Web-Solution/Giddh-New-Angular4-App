@@ -101,7 +101,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private clipboardService: ClipboardService,
         @Inject(ServiceConfig) private serviceConfig: IServiceConfigArgs
     ) {
-        this.apiPostmanDocUrl = this.serviceConfig.API_DOC_URL ?? '';
+        this.apiPostmanDocUrl = this.serviceConfig.API_DOC_URL;
         this.contactNo$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
                 return appState.session.user.user.contactNo;
