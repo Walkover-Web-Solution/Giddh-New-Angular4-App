@@ -23,7 +23,6 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { ActionMenuComponent } from '../shared/action-menu/action-menu.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -69,7 +68,6 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         FroalaTemplateEditorModule,
         MatFormFieldModule,
         MatInputModule,
-        MatIconModule,
         GiddhDatePipe,
         MatSelectModule,
         NgxMatSelectSearchModule,

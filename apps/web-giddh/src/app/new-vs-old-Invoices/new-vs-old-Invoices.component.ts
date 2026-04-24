@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef, NgZone, ChangeDetectionStrategy, signal, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, NgZone, ChangeDetectionStrategy, signal, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import { FormControl } from '@angular/forms';
@@ -91,10 +91,22 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     @ViewChild('sbpTopCanvas') private sbpTopCanvas!: ElementRef<HTMLCanvasElement>;
     /** Canvas for the New vs Old Sales grouped bar chart */
     @ViewChild('sbpNvoCanvas') private sbpNvoCanvas!: ElementRef<HTMLCanvasElement>;
+    /** Template reference for the top-salesperson expand dialog */
+    @ViewChild('topSalesPersonDialogTemplate') private topSalesPersonDialogTemplate!: TemplateRef<unknown>;
+    /** Template reference for the new-vs-old expand dialog */
+    @ViewChild('nvoSalesDialogTemplate') private nvoSalesDialogTemplate!: TemplateRef<unknown>;
+    /** Canvas for the expanded top-salesperson dialog chart */
+    @ViewChild('topSalesPersonDialogCanvas') private topSalesPersonDialogCanvas!: ElementRef<HTMLCanvasElement>;
+    /** Canvas for the expanded new-vs-old dialog chart */
+    @ViewChild('nvoSalesDialogCanvas') private nvoSalesDialogCanvas!: ElementRef<HTMLCanvasElement>;
     /** Top Salespersons Chart.js instance */
     private sbpTopChart: Chart | null = null;
     /** New vs Old Sales Chart.js instance */
     private sbpNvoChart: Chart | null = null;
+    /** Expanded Top Salespersons Chart.js instance */
+    private topSalesPersonDialogChart: Chart | null = null;
+    /** Expanded New vs Old Sales Chart.js instance */
+    private nvoSalesDialogChart: Chart | null = null;
     /** Base currency symbol of the active company */
     public baseCurrencySymbol: string;
 
@@ -106,6 +118,27 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public get salesByPersonRows(): SalesByPersonRow[] {
         return this.salesByPersonData?.rows ?? [];
     }
+
+    /** Maximum salesperson bars shown in the top-salesperson chart */
+    public readonly topSalesPersonDisplayLimit: number = 5;
+    /** Full sorted top-salesperson rows shown in the expand dialog */
+    public topSalesPersonDialogRows: Array<{ label: string; clients: number; amount: number; invoices: number }> = [];
+    /** True when expand action for top-salesperson chart should be visible */
+    public showTopSalesPersonExpandButton = signal<boolean>(false);
+    /** True when expand action for new-vs-old chart should be visible */
+    public showNvoSalesExpandButton = signal<boolean>(false);
+    /** Dialog reference for top-salesperson popup */
+    public topSalesPersonDialogRef: MatDialogRef<any>;
+    /** Dialog reference for new-vs-old popup */
+    public nvoSalesDialogRef: MatDialogRef<any>;
+    /** Expanded new-vs-old chart labels (all salespersons) */
+    public nvoSalesDialogLabels: string[] = [];
+    /** Expanded new-vs-old chart datasets keyed by group header */
+    public nvoSalesDialogDatasets: Array<{ label: string; key: string }> = [];
+    /** Shared width for chart popups. */
+    private readonly chartDialogWidth: string = '60vw';
+    /** Shared height for chart popups. */
+    private readonly chartDialogHeight: string = '60vh';
 
     /**
      * Display labels of salespersons that were requested but have no row in the API response.
@@ -157,9 +190,22 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
         /** Top chart: sort all rows by total amount desc and take top 5 */
         const totalHeader = groupHeaders[groupHeaders.length - 1];
-        const top5Rows = totalHeader
-            ? [...rows].sort((a, b) => getAmount(b, totalHeader.key) - getAmount(a, totalHeader.key)).slice(0, 5)
-            : rows.slice(0, 5);
+        const sortedRows = totalHeader
+            ? [...rows].sort((a, b) => getAmount(b, totalHeader.key) - getAmount(a, totalHeader.key))
+            : [...rows];
+        const top5Rows = sortedRows.slice(0, this.topSalesPersonDisplayLimit);
+
+        this.showTopSalesPersonExpandButton.set(sortedRows.length > this.topSalesPersonDisplayLimit);
+        this.showNvoSalesExpandButton.set(sortedRows.length > this.topSalesPersonDisplayLimit);
+        this.topSalesPersonDialogRows = totalHeader
+            ? sortedRows.map((row) => ({
+                label: getLabel(row),
+                clients: Number((row[totalHeader.key] as any)?.clients ?? 0),
+                amount: Number((row[totalHeader.key] as any)?.amount ?? 0),
+                invoices: Number((row[totalHeader.key] as any)?.invoices ?? 0)
+            }))
+            : [];
+        this.nvoSalesDialogLabels = sortedRows.map(getLabel);
 
         const labels = top5Rows.map(getLabel);
 
@@ -215,6 +261,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
         /** NvO chart: use all group headers except the last (Total) as separate datasets */
         const nvoHeaders = groupHeaders.slice(0, -1);
+        this.nvoSalesDialogDatasets = nvoHeaders.map((header) => ({ label: header.label, key: header.key }));
         const nvoColors = [
             { bg: 'rgba(12, 177, 175, 0.85)', border: 'rgb(12, 177, 175)' },
             { bg: 'rgba(94, 189, 185, 0.45)', border: 'rgba(94, 189, 185, 0.8)' },
@@ -465,6 +512,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.sbpTopChart?.destroy();
         this.sbpNvoChart?.destroy();
+        this.topSalesPersonDialogChart?.destroy();
+        this.nvoSalesDialogChart?.destroy();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -562,5 +611,229 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.salesBifurcationDetailsDialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {
             this.getSalesBifurcation(); this.salesBifurcationDetailsDialogRef = undefined;
         })).subscribe();
+    }
+
+    /** 
+     * Opens popup with complete sorted salesperson list for the top-salesperson chart 
+     * 
+     * @memberof NewVsOldInvoicesComponent
+    */
+    public openTopSalesPersonDialog(): void {
+        if (!this.topSalesPersonDialogTemplate || this.topSalesPersonDialogRows.length === 0) {
+            return;
+        }
+
+        this.topSalesPersonDialogRef = this.openChartDialog(
+            this.topSalesPersonDialogTemplate,
+            () => this.renderTopSalesPersonDialogChart(),
+            () => {
+                this.topSalesPersonDialogChart?.destroy();
+                this.topSalesPersonDialogChart = null;
+                this.topSalesPersonDialogRef = undefined;
+            }
+        );
+    }
+
+    /** 
+     * Opens popup with complete new-vs-old chart for all salesperson rows 
+     * 
+     * @memberof NewVsOldInvoicesComponent
+    */
+    public openNvoSalesDialog(): void {
+        if (!this.nvoSalesDialogTemplate || this.nvoSalesDialogLabels.length === 0 || this.nvoSalesDialogDatasets.length === 0) {
+            return;
+        }
+
+        this.nvoSalesDialogRef = this.openChartDialog(
+            this.nvoSalesDialogTemplate,
+            () => this.renderNvoSalesDialogChart(),
+            () => {
+                this.nvoSalesDialogChart?.destroy();
+                this.nvoSalesDialogChart = null;
+                this.nvoSalesDialogRef = undefined;
+            }
+        );
+    }
+
+    /**
+     * Opens a chart dialog with shared dimensions and binds one-time open/close lifecycle callbacks.
+     *
+     * @param {TemplateRef<unknown>} template Dialog template reference
+     * @param {() => void} onOpened Callback executed once after dialog is opened
+     * @param {() => void} onClosed Callback executed once after dialog is closed
+     * @memberof NewVsOldInvoicesComponent
+     * @returns {MatDialogRef<any>} Opened dialog reference
+     */
+    private openChartDialog(template: TemplateRef<unknown>, onOpened: () => void, onClosed: () => void): MatDialogRef<any> {
+        const dialogRef = this.dialog.open(template, {
+            width: this.chartDialogWidth,
+            height: this.chartDialogHeight
+        });
+
+        dialogRef.afterOpened().pipe(take(1)).subscribe(onOpened);
+        dialogRef.afterClosed().pipe(take(1)).subscribe(onClosed);
+
+        return dialogRef;
+    }
+
+    /** 
+     * Renders the expanded top-salesperson bar chart with all salesperson rows 
+     * 
+     * @memberof NewVsOldInvoicesComponent
+    */
+    private renderTopSalesPersonDialogChart(): void {
+        const canvas = this.topSalesPersonDialogCanvas?.nativeElement;
+
+        if (!canvas || this.topSalesPersonDialogRows.length === 0) {
+            return;
+        }
+
+        this.topSalesPersonDialogChart?.destroy();
+        this.topSalesPersonDialogChart = new Chart(canvas, {
+            type: 'bar',
+            data: {
+                labels: this.topSalesPersonDialogRows.map((row) => row.label),
+                datasets: [
+                    {
+                        label: this.localeData?.top_salespersons,
+                        data: this.topSalesPersonDialogRows.map((row) => row.amount),
+                        backgroundColor: 'rgba(12, 177, 175, 0.85)',
+                        borderColor: 'rgb(12, 177, 175)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(255,255,255,0.95)',
+                        borderColor: 'rgb(12,177,175)',
+                        borderWidth: 1,
+                        bodyColor: '#333',
+                        titleColor: '#333',
+                        displayColors: false,
+                        padding: 8,
+                        callbacks: {
+                            label: (ctx) => `${this.baseCurrencySymbol}${(ctx.parsed?.y ?? 0).toLocaleString()}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        border: { display: false },
+                        grid: { display: false },
+                        ticks: {
+                            color: '#555',
+                            font: { size: 11 },
+                            maxRotation: 45,
+                            minRotation: 20
+                        }
+                    },
+                    y: {
+                        border: { display: false },
+                        grid: { color: 'rgba(0,0,0,0.06)' },
+                        ticks: {
+                            color: '#666',
+                            font: { size: 11 },
+                            callback: (v: any) => v >= 1000 ? this.baseCurrencySymbol + (v / 1000).toFixed(0) + 'k' : this.baseCurrencySymbol + v
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /** 
+     * Renders the expanded new-vs-old grouped bar chart with all salesperson rows 
+     * 
+     * @memberof NewVsOldInvoicesComponent
+    */
+    private renderNvoSalesDialogChart(): void {
+        const canvas = this.nvoSalesDialogCanvas?.nativeElement;
+
+        if (!canvas || this.nvoSalesDialogLabels.length === 0 || this.nvoSalesDialogDatasets.length === 0) {
+            return;
+        }
+
+        const rows = this.salesByPersonRows;
+        const headers = this.salesByPersonData?.headers ?? [];
+        const nameHeader = headers.find(h => !(h as any).children);
+        const nameKey = nameHeader?.key;
+        const resolvePath = (obj: unknown, path: string): unknown => path.split('.').reduce((acc, part) => (acc as any)?.[part], obj);
+        const getLabel = (r: SalesByPersonRow): string => (resolvePath(r, nameKey) as string) ?? '';
+        const getAmount = (r: SalesByPersonRow, key: string): number => (r[key] as any)?.amount ?? 0;
+        const groupHeaders = headers.filter(h => !!(h as any).children);
+        const totalHeader = groupHeaders[groupHeaders.length - 1];
+        const sortedRows = totalHeader ? [...rows].sort((a, b) => getAmount(b, totalHeader.key) - getAmount(a, totalHeader.key)) : [...rows];
+
+        const nvoColors = [
+            { bg: 'rgba(12, 177, 175, 0.85)', border: 'rgb(12, 177, 175)' },
+            { bg: 'rgba(94, 189, 185, 0.45)', border: 'rgba(94, 189, 185, 0.8)' },
+            { bg: 'rgba(255, 159, 64, 0.45)', border: 'rgba(255, 159, 64, 0.8)' },
+            { bg: 'rgba(153, 102, 255, 0.45)', border: 'rgba(153, 102, 255, 0.8)' }
+        ];
+
+        this.nvoSalesDialogChart?.destroy();
+        this.nvoSalesDialogChart = new Chart(canvas, {
+            type: 'bar',
+            data: {
+                labels: sortedRows.map(getLabel),
+                datasets: this.nvoSalesDialogDatasets.map((dataset, index) => ({
+                    label: dataset.label,
+                    data: sortedRows.map((row) => getAmount(row, dataset.key)),
+                    backgroundColor: (nvoColors[index] ?? nvoColors[0]).bg,
+                    borderColor: (nvoColors[index] ?? nvoColors[0]).border,
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    barPercentage: 0.7
+                }))
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: { boxWidth: 12, font: { size: 11 }, color: '#555' }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255,255,255,0.95)',
+                        borderColor: 'rgb(12,177,175)',
+                        borderWidth: 1,
+                        bodyColor: '#333',
+                        titleColor: '#333',
+                        displayColors: true,
+                        padding: 8
+                    }
+                },
+                scales: {
+                    x: {
+                        border: { display: false },
+                        grid: { display: false },
+                        ticks: {
+                            color: '#555',
+                            font: { size: 11 },
+                            maxRotation: 45,
+                            minRotation: 20
+                        }
+                    },
+                    y: {
+                        border: { display: false },
+                        grid: { color: 'rgba(0,0,0,0.06)' },
+                        ticks: {
+                            color: '#666',
+                            font: { size: 11 },
+                            callback: (v: any) => v >= 1000 ? this.baseCurrencySymbol + (v / 1000).toFixed(0) + 'k' : this.baseCurrencySymbol + v
+                        }
+                    }
+                }
+            }
+        });
     }
 }
