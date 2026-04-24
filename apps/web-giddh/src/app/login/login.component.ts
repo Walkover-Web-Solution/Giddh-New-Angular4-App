@@ -11,7 +11,7 @@ import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angula
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { TemplateRef } from "@angular/core";
-import { Configuration, ELECTRON_OTP_PROVIDER_URL, GiddhUiDomain, IOption, KeyCodesEnum, OTP_PROVIDER_URL } from "../app.constant";
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, KeyCodesEnum, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -36,7 +36,7 @@ import { AuthenticationService } from "../services/authentication.service";
 import { CommonActions } from "../actions/common.actions";
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
-import { cloneDeep, filter, get, indexOf, map, set } from '../lodash-optimized';
+import { cloneDeep } from '../lodash-optimized';
 
 declare var initSendOTP: any;
 
@@ -106,8 +106,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     public showAppleLogin: boolean = false;
     /* Hold logo source */
     public brandLogoUrl: string = '';
-    /* Hold domain url */
-    public giddhDomainUrl: string = "";
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,
@@ -126,7 +124,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     ) {
         // Use relative paths for assets to avoid port/domain issues in Electron
         this.urlPath = Configuration.isElectron ? "" : "";
-        this.giddhDomainUrl = this.serviceConfig.AppUrl || environment.AppUrl || GiddhUiDomain.PRODUCTION;
         this.brandLogoUrl = this.serviceConfig.LOGOS.light;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;

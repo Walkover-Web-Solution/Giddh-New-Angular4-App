@@ -4,7 +4,6 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
-import { GiddhUiDomain } from '../app.constant';
 
 @Component({
 selector: 'download',
@@ -24,8 +23,6 @@ export class DownloadComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* Hold giddh logo source */
     public brandLogoUrl: string = '';
-    /* Hold giddh domain url */
-    public giddhDomainUrl: string = '';
 
     constructor(@Inject(ServiceConfig) private serviceConfig, private route: ActivatedRoute, private generalService: GeneralService) {
     }
@@ -38,7 +35,6 @@ export class DownloadComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.imgPath = this.serviceConfig.IMG_PATH;
         this.brandLogoUrl = this.serviceConfig.LOGOS.light;
-        this.giddhDomainUrl = this.serviceConfig.AppUrl ||  GiddhUiDomain.PRODUCTION;
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.url) {

@@ -5,7 +5,7 @@ import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angula
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateRef } from '@angular/core';
-import { Configuration, ELECTRON_OTP_PROVIDER_URL, GiddhUiDomain, IOption, OTP_PROVIDER_URL } from "../app.constant";
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -84,8 +84,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
     /* Hold giddh logo source */
     public brandLogoUrl: string = '';
-    /* Hold domain url */
-    public giddhDomainUrl: string = "";
     /** Holds images folder path */
     public imgPath: string = "";
 
@@ -105,7 +103,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         private environmentService: EnvironmentService
     ) {
         this.urlPath = this.environmentService.isElectron ? "" : (this.serviceConfig.AppUrl || this.environmentService.appUrl) + this.environmentService.appFolder;
-        this.giddhDomainUrl = this.serviceConfig.AppUrl || GiddhUiDomain.PRODUCTION;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -154,7 +151,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         // Use EnvironmentService for consistent asset path handling
         this.imgPath = this.environmentService.getImagePath('');
         this.urlPath = this.environmentService.isElectron ? "" : "";
-        this.giddhDomainUrl = this.serviceConfig.AppUrl || this.environmentService.appUrl || GiddhUiDomain.PRODUCTION;
         this.brandLogoUrl = this.serviceConfig.LOGOS.light;
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
