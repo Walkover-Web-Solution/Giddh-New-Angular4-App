@@ -1274,30 +1274,21 @@
                                     </div>
 
                                     <!-- Due Date -->
-                                    <div
-                                        class="col-3 pl-2"
-                                        *ngIf="
-                                            (currentVoucherFormDetails?.dueDate ||
-                                                invoiceType.isSalesInvoice ||
-                                                invoiceType.isPurchaseInvoice ||
-                                                invoiceType.isPurchaseOrder ||
-                                                invoiceType.isProformaInvoice ||
-                                                invoiceType.isEstimateInvoice) &&
-                                            !invoiceType.isCashInvoice
-                                        "
-                                    >
-                                        <giddh-datepicker
-                                            (keydown.enter)="$event.preventDefault()"
-                                            [label]="voucherDueDateLabel"
-                                            [closeDatepickerOnFocus]="true"
-                                            [placeholder]="voucherDueDateLabel"
-                                            name="voucherDueDate"
-                                            [showToggleIcon]="false"
-                                            [appearance]="'outline'"
-                                            formControlName="dueDate"
-                                            appEnterNext
-                                        ></giddh-datepicker>
-                                    </div>
+                                    @if (showDueDate) {
+                                        <div class="col-3 pl-2">
+                                            <giddh-datepicker
+                                                (keydown.enter)="$event.preventDefault()"
+                                                [label]="voucherDueDateLabel"
+                                                [closeDatepickerOnFocus]="true"
+                                                [placeholder]="voucherDueDateLabel"
+                                                name="voucherDueDate"
+                                                [showToggleIcon]="false"
+                                                [appearance]="'outline'"
+                                                formControlName="dueDate"
+                                                appEnterNext
+                                            ></giddh-datepicker>
+                                        </div>
+                                    }
 
                                     <!-- Select Voucher -->
                                     <div
@@ -2992,7 +2983,7 @@
                                                                     </ng-container>
                                                                     <ng-container formGroupName="templateDetails">
                                                                         <ng-container formGroupName="other">
-                                                                            <div class="col-12 px-2" *ngIf="!invoiceType.isPurchaseInvoice">
+                                                                            <div class="col-12 px-2">
                                                                                 <mat-form-field
                                                                                     class="initial-height w-100"
                                                                                     appearance="outline"

@@ -16,6 +16,8 @@ export interface VatReportState {
     getHMRCInProgress: boolean;
     obligationList: any;
     getObligationListInProgress: boolean;
+    initiatePaymentInProgress: boolean;
+    initiatePaymentResponse: any;
 }
 
 const DEFAULT_STATE: VatReportState = {
@@ -26,7 +28,9 @@ const DEFAULT_STATE: VatReportState = {
     connectToHMRCUrl: null,
     getHMRCInProgress: false,
     obligationList: null,
-    getObligationListInProgress: false
+    getObligationListInProgress: false,
+    initiatePaymentInProgress: false,
+    initiatePaymentResponse: null
 };
 
 @Injectable()
@@ -44,6 +48,8 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
     public getObligationListInProgress$ = this.select(state => state.getObligationListInProgress);
     public getTaxNumberInProgress$ = this.select(state => state.getTaxNumberInProgress);
     public getHMRCInProgress$ = this.select(state => state.getHMRCInProgress);
+    public initiatePaymentInProgress$ = this.select(state => state.initiatePaymentInProgress);
+    public initiatePaymentResponse$ = this.select(state => state.initiatePaymentResponse);
 
     public currentCompanyBranches$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -131,6 +137,36 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({ connectToHMRCUrl: null, getHMRCInProgress: false });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Initiates VAT payment for UK liabilities
+     *
+     * @memberof VatReportComponentStore
+     */
+    readonly initiatePayment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ initiatePaymentResponse: null, initiatePaymentInProgress: true });
+                return this.vatService.initiatePayment(req.companyUniqueName, req.payload).pipe(
+                    tap(
+                        (res: any) => {
+                            if (res?.status === "success") {
+                                return this.patchState({ initiatePaymentResponse: res, initiatePaymentInProgress: false });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ initiatePaymentResponse: null, initiatePaymentInProgress: false });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ initiatePaymentResponse: null, initiatePaymentInProgress: false });
                         }
                     ),
                     catchError((err) => EMPTY)

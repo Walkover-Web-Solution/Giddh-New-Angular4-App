@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef, inject } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef, inject, signal } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil, take, filter } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
@@ -110,7 +110,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     /** Search field form control */
     public searchFormControl = new BehaviorSubject<any>('');
     /** Filtered options to show in autocomplete list */
-    public fieldFilteredOptions$: Observable<IOption[]>;
+    public fieldFilteredOptions = signal<IOption[]>([]);
     /** Flag to track if component is destroyed */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Flag to track if component is destroyed */
@@ -129,6 +129,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private isKeyboardTriggeredPagination: boolean = false;
     /** Previous options count for pagination detection */
     private previousOptionsCount: number = 0;
+    /** Flag to clear the displayed label on the first keystroke after a value is selected */
+    private isFirstKeystroke = signal<boolean>(true);
 
     constructor(
         private changeDetection: ChangeDetectorRef
@@ -179,7 +181,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     this.clearDropdownValue();
                     this.writeValue("", false);
                 }
-                this.fieldFilteredOptions$ = this.filterOptions(String(search));
+                this.filterOptions(String(search)).pipe(take(1)).subscribe(opts => this.fieldFilteredOptions.set(opts));
                 this.changeDetection.detectChanges();
             });
         }
@@ -240,7 +242,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.isPaginationInProgress = this.previousOptionsCount > 0 && currentOptionsCount > this.previousOptionsCount;
             this.previousOptionsCount = currentOptionsCount;
 
-            this.fieldFilteredOptions$ = of(this.options);
+            this.fieldFilteredOptions.set(this.options ?? []);
+
 
             // Only focus second option if NOT during pagination (to prevent scroll jumping)
             if (this.showCreateNew && !this.isPaginationInProgress) {
@@ -257,7 +260,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
 
             // Always try to set label value when options change, regardless of previous value
-            if (changes?.options) {
+            if (changes?.options && this.isFirstKeystroke()) {
                 // Use setTimeout to ensure the value is properly set before trying to find the label
                 setTimeout(() => {
                     this.setLabelValue(null);
@@ -292,9 +295,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.writeValue("", false);
         this.controlLabelValue = "";
         this.clearDropdownValue();
-        this.fieldFilteredOptions$ = of([]);
+        this.fieldFilteredOptions.set([]);
         setTimeout(() => {
-            this.fieldFilteredOptions$ = of(this.options);
+            this.fieldFilteredOptions.set(this.options ?? []);
         }, 100);
     }
 
@@ -653,6 +656,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.closeDropdownPanel();
         }
 
+        if (event.key === 'Backspace' || event.key === ' ') {
+            this.isFirstKeystroke.set(false);
+        }
+
         // Handle down arrow key for keyboard-triggered pagination
         if (event.key === 'ArrowDown' && this.trigger?.panelOpen) {
             this.handleKeyboardNavigation();
@@ -771,7 +778,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public panelOpened(): void {
         if (!this.enableDynamicSearch) {
-            this.fieldFilteredOptions$ = this.filterOptions("");
+            this.filterOptions("").pipe(take(1)).subscribe(opts => this.fieldFilteredOptions.set(opts));
         }
 
         // Reset pagination tracking when panel opens
@@ -807,6 +814,11 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public onBlur(): void {
+        if (!this.isFirstKeystroke()) {
+            const inputEl = this.selectField?.nativeElement as HTMLInputElement;
+            inputEl.value = this.value ? (this.controlLabelValue ?? '') : '';
+            this.isFirstKeystroke.set(true);
+        }
         setTimeout(() => {
             if (this.allowCustomDropdownValue) {
                 if (!this.searchFormControl?.value && !this.controlLabelValue) {

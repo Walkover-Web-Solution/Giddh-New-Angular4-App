@@ -366,7 +366,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** List of all templates fetched from the service */
     public templatesList: any[] = [];
     /** List of all created templates for a given type */
-    public createdTemplatesList: any[] = [];
+    public createdTemplatesList = signal<any[]>([]);
     /** True if datepicker menu is open */
     public isDatepickerMenuOpen: boolean = false;
     /** List of all created templates for a given type */
@@ -1047,9 +1047,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         let searchingFieldIsEmpty: boolean = false;
 
         if (this.voucherType === VoucherTypeEnum.purchase) {
-            searchingFieldIsEmpty = (this.purchaseOrderUniqueNameInput.value?.length > 0) || (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value.length > 0);
+            searchingFieldIsEmpty = (this.purchaseOrderUniqueNameInput.value?.length > 0) || (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value?.length > 0);
         } else {
-            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value.length > 0);
+            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value?.length > 0);
         }
 
         this.advanceFiltersApplied = this.isSearching = searchingFieldIsEmpty;
@@ -3623,12 +3623,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param templateType The type of template to fetch
      */
     public fetchAllCreatedTemplates(templateType: string): void {
-        this.createdTemplatesList = [];
+        this.createdTemplatesList.set([]);
         this.invoiceTemplatesService.getAllCreatedTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
-                this.createdTemplatesList = res?.body || [];
+                this.createdTemplatesList.set(res?.body || []);
             } else {
-                this.createdTemplatesList = [];
+                this.createdTemplatesList.set([]);
             }
             this.changeDetectorRef.detectChanges();
         });
@@ -3645,13 +3645,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (res?.status === 'success') {
                 this.toasterService.showSnackBar('success', this.localeData?.template_set_as_default_successfully);
                 // Update the UI immediately
-                this.createdTemplatesList.forEach(template => {
-                    if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
-                        template.isDefaultForVoucher = (template.uniqueName === templateUniqueName);
-                    } else {
-                        template.isDefault = (template.uniqueName === templateUniqueName);
-                    }
-                });
+                this.createdTemplatesList.update(list => list.map(template => ({
+                    ...template,
+                    ...(this.voucherType === 'credit note' || this.voucherType === 'debit note'
+                        ? { isDefaultForVoucher: template.uniqueName === templateUniqueName }
+                        : { isDefault: template.uniqueName === templateUniqueName })
+                })));
+                this.changeDetectorRef.detectChanges();
             } else {
                 this.toasterService.showSnackBar('error', res?.message);
             }
@@ -3730,7 +3730,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             templateList: this.templatesList,
             voucherType: voucherType,
             templateType: templatesType,
-            createTemplateList: this.createdTemplatesList,
+            createTemplateList: this.createdTemplatesList(),
             updateTemplate: type === TemplateModeEnum.Edit ? template : null,
             mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create,
             localeData: this.localeData,
