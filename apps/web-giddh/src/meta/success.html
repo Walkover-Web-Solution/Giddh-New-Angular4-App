@@ -29,14 +29,33 @@
     </div>
 
     <div class="copy-right">
-        <p>
-            All right are reserved &copy; 2020 Walkover
-            <a [href]="giddhDomainUrl" target="_Blank">{{ domainName }}</a>
+        <p id="copyright-text">
+            All right are reserved &copy;
+            <span id="year"></span>
+            <span id="legal-name"></span>
+            <a id="domain-link" href="#" target="_blank"></a>
         </p>
     </div>
 </div>
 <script type="text/javascript">
-    const whiteLabel = this.generalService.getDecodedWhiteLabel();
-    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || 'https://books.giddh.com/';
-    var domainName = whiteLabel?.giddhWhiteLabel?.domainName || 'Giddh.com';
+    function getWhiteLabelData() {
+        try {
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    const whiteLabel = getWhiteLabelData();
+    const legalName = whiteLabel?.legalName || 'Walkover Technologies Private Limited.';
+    const domainUrl = whiteLabel?.giddhWhiteLabel?.domainName || 'https://books.giddh.com';
+    const domainName = whiteLabel?.giddhWhiteLabel?.domainName || 'https://giddh.com';
+    const currentYear = new Date().getFullYear();
+
+    // Update DOM elements
+    document.getElementById('year').textContent = currentYear;
+    document.getElementById('legal-name').textContent = legalName;
+    document.getElementById('domain-link').href = domainUrl;
+    document.getElementById('domain-link').textContent = domainName;
 </script>

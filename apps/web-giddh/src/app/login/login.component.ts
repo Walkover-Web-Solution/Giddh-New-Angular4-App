@@ -11,7 +11,7 @@ import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angula
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { TemplateRef } from "@angular/core";
-import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, KeyCodesEnum, OTP_PROVIDER_URL } from "../app.constant";
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, GiddhUiDomain, IOption, KeyCodesEnum, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -108,8 +108,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     public giddhLogoSrc: string = '';
     /* Hold domain url */
     public giddhDomainUrl: string = "";
-    /* Hold image path */
-    public imgPath: string = '';
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,
@@ -127,11 +125,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         private dialog: MatDialog
     ) {
         // Use relative paths for assets to avoid port/domain issues in Electron
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.urlPath = Configuration.isElectron ? "" : "";
-        this.giddhDomainUrl = this.serviceConfig.AppUrl || environment.AppUrl || 'https://giddh.com';
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
+        this.giddhDomainUrl = this.serviceConfig.AppUrl || environment.AppUrl || GiddhUiDomain.PRODUCTION;
+        this.giddhLogoSrc = this.serviceConfig.LOGOS.light;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -600,9 +596,8 @@ export class LoginComponent implements OnInit, OnDestroy {
      * @memberof LoginComponent
      */
     public async appleLogin(): Promise<void> {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
         const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = environment.production || Configuration.isElectron ? 'https://api.giddh.com' : whiteLabel?.giddhWhiteLabel?.apiDomain ? `${whiteLabel.giddhWhiteLabel.apiDomain}` : 'https://apitest.giddh.com';
+        const url = environment.production || Configuration.isElectron ? 'https://api.giddh.com' : this.serviceConfig.GIDDH_WHITE_LABEL?.apiDomain ? `${this.serviceConfig.GIDDH_WHITE_LABEL.apiDomain}` : 'https://apitest.giddh.com';
         const REDIRECT_API_URL = url + "/v2/apple-login-callback";
 
         window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');

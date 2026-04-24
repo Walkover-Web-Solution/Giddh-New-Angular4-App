@@ -96,13 +96,13 @@
                             class="ml-auto d-flex align-items-center"
                             *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice || ocrDataEnabled"
                         >
-                            <div *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
+                            @if (invoiceType.isSalesInvoice || invoiceType.isCashInvoice) {
                                 <watch-video
                                     [showIcon]="true"
-                                    [iconCssClass]="'text-primary mr-2 cursor-pointer'"
+                                    [iconCssClass]="'text-primary mr-2'"
                                     [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"
                                 ></watch-video>
-                            </div>
+                            }
                             <button
                                 matButton="outlined"
                                 *ngIf="ocrDataEnabled && !(invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice)"

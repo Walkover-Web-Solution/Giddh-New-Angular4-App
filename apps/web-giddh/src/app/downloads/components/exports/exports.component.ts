@@ -19,7 +19,6 @@ import { download } from '@giddh-workspaces/utils';
 import { exportTypeEnum } from '../../../new-inventory/inventory.enum';
 import { ServiceConfig } from '../../../services/service.config';
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep } from '../../../lodash-optimized';
 
 /** Hold information of Download  */
@@ -102,7 +101,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
      * @memberof ExportsComponent
      */
     public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         document.querySelector('body')?.classList?.add('download-page');
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {

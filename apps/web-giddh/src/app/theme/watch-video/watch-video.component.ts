@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef, ViewChi
 import { MatDialog } from '@angular/material/dialog';
 import { VIDEOLINK } from './video-link.const';
 import { DomSanitizer } from '@angular/platform-browser';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'watch-video',
@@ -33,6 +34,8 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
     @Input() public showIcon: boolean = false;
     /** Holds final youtube video link  */
     public videoLink: string = '';
+    /** Signal indicating whether the current domain is a Giddh domain */
+    protected readonly isGiddhDomain = this.generalService.isGiddhDomain;
     /* This will hold local JSON data */
     public localeData: any = {};
     /** Holds Translated text to display on button */
@@ -41,7 +44,8 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
     constructor(
         public dialog: MatDialog,
         private sanitizer: DomSanitizer,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private generalService: GeneralService
     ) {
         this.instanceId = ++WatchVideoComponent.instanceCounter;
         WatchVideoComponent.activeInstances.set(this.instanceId, this);

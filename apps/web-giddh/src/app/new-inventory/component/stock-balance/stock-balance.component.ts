@@ -15,9 +15,7 @@ import { GeneralService } from "../../../services/general.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { SelectFieldComponent } from "../../../theme/form-fields/select-field/select-field.component";
 import { ServiceConfig } from "../../../services/service.config";
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
-import { cloneDeep, filter, forEach, includes, indexOf, map, remove } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'stock-balance',
     templateUrl: './stock-balance.component.html',
@@ -122,7 +120,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         });
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.isLoading = true;
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.getStockUnits();
         this.getWarehouses();
         this.GroupStockReportRequest = new GroupStockReportRequest();

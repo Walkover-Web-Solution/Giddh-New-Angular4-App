@@ -96,7 +96,6 @@ import {
     ASIDE_PANE_CONFIG,
     IOption,
     API_BULK_FETCH_LIMIT,
-    Configuration,
     FormFieldsType
 } from "../../app.constant";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
@@ -125,7 +124,6 @@ import { GiddhDatepickerComponent } from "../../theme/giddh-datepicker/giddh-dat
 import { FocusMonitor } from "@angular/cdk/a11y";
 import { Platform } from "@angular/cdk/platform";
 import { GeneralActions } from "../../actions/general/general.actions";
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
 import { Location } from '@angular/common';
@@ -811,7 +809,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private recurrenceService: RecurrenceFormService,
         private location: Location
     ) {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
     }
 
     /**

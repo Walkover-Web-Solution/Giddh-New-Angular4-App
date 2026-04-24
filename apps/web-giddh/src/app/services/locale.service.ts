@@ -1,10 +1,11 @@
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { get } from '../lodash-optimized';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +35,11 @@ export class LocaleService {
         this._language = lang;
     }
 
-    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService) {
+    constructor(
+        private errorHandler: GiddhErrorHandler,
+        private http: HttpWrapperService,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs
+    ) {
 
     }
 
@@ -56,7 +61,7 @@ export class LocaleService {
 
         return this.http.get(url).pipe(
             map((res) => {
-                let data: BaseResponse<any, any> = res;
+                let data: BaseResponse<any, any> = this.replaceBrandName(res);
 
                 if (!folder) {
                     this.commonLocale = data;
@@ -64,6 +69,41 @@ export class LocaleService {
 
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Recursively replaces the [BRAND_NAME] placeholder in all string values
+     * of a locale object with the configured brand name.
+     *
+     * @private
+     * @param {*} obj - The locale object or value to process
+     * @returns {*} The processed object with brand name substituted
+     * @memberof LocaleService
+     */
+    private replaceBrandName(obj: any): any {
+        const brandName = this.config?.BRAND_NAME ?? '';
+        const supportEmail = this.config?.SUPPORT_EMAIL ?? '';
+        const supportPhone = this.config?.SUPPORT_PHONE ?? '';
+        const replace = (value: any): any => {
+            if (typeof value === 'string') {
+                return value
+                    .replace(/\[BRAND_NAME\]/g, brandName)
+                    .replace(/\[SUPPORT_EMAIL\]/g, supportEmail)
+                    .replace(/\[SUPPORT_PHONE\]/g, supportPhone);
+            }
+            if (Array.isArray(value)) {
+                return value.map(replace);
+            }
+            if (value !== null && typeof value === 'object') {
+                const result: any = {};
+                for (const key of Object.keys(value)) {
+                    result[key] = replace(value[key]);
+                }
+                return result;
+            }
+            return value;
+        };
+        return replace(obj);
     }
 
     /**

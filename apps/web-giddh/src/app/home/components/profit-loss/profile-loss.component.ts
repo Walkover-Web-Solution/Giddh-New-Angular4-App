@@ -22,8 +22,6 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
 import { ServiceConfig } from '../../../services/service.config';
 import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep } from '../../../lodash-optimized';
 Chart.register(...registerables);
 
@@ -86,7 +84,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         // img path
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {

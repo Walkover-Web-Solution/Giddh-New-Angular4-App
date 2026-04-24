@@ -34,19 +34,32 @@
     </div>
 
     <div class="copy-right">
-        <p>
-            All right are reserved &copy; 2020 Walkover
-            <a [href]="giddhDomainUrl" target="_Blank">{{ domainName }}</a>
+        <p id="copyright-text">
+            All right are reserved &copy;
+            <span id="year"></span>
+            <span id="legal-name"></span>
+            <a id="domain-link" href="#" target="_blank"></a>
         </p>
     </div>
 </div>
 
 <script src="../assets/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
+    function getWhiteLabelData() {
+        try {
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
+        } catch (error) {
+            return null;
+        }
+    }
+
     var companyUniqueName = getQueryStringValue('companyUniqueName');
-    const whiteLabel = this.generalService.getDecodedWhiteLabel();
-    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || 'https://books.giddh.com/';
+    const whiteLabel = getWhiteLabelData();
+    const legalName = whiteLabel?.legalName || 'Walkover Technologies Private Limited.';
+    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName || 'https://books.giddh.com'}/`;
     var domainName = whiteLabel?.giddhWhiteLabel?.domainName || 'Giddh.com';
+    const currentYear = new Date().getFullYear();
     var search = '';
     var status = getQueryStringValue('status');
     var JSONcallBackStatus = getQueryStringValue('JSONcallBackStatus');
@@ -55,15 +68,14 @@
     }
 
     function getApi() {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || 'https://books.giddh.com/';
+        const whiteLabel = getWhiteLabelData();
+        this.giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName || 'https://books.giddh.com'}/`;
         if (whiteLabel) {
             apiBaseUrl = `${whiteLabel?.giddhWhiteLabel?.apiDomain}/`;
         } else {
             switch (window.location.hostname) {
                 case 'localhost':
-                case 'dev.giddh.com':
-                    apiBaseUrl = 'https://apidev.giddh.com/';
+                    apiBaseUrl = 'https://apitest.giddh.com/';
                     break;
                 case 'test.giddh.com':
                     apiBaseUrl = 'https://apitest.giddh.com/';
@@ -101,9 +113,15 @@
 
     $(document).ready(function () {
         var apiBaseUrl = '';
+
+        // Update DOM elements with white-label data
+        document.getElementById('year').textContent = currentYear;
+        document.getElementById('legal-name').textContent = legalName;
+        document.getElementById('domain-link').href = giddhDomainUrl;
+        document.getElementById('domain-link').textContent = domainName;
+
         $('#failed').hide();
         $('#success').hide();
-        // Would write the value of the QueryString-variable called name to the console
 
         if (!JSONcallBackStatus) {
             $('#failed').show();
@@ -113,6 +131,5 @@
             $('#success').show();
             $('#failed').hide();
         }
-        // status.find()
     });
 </script>

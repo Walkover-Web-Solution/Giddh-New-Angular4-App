@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
@@ -6,10 +6,10 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
 import { EmailForwardingResponse, YOU_ARE_NOT_ALLOWED } from '../../models/email-forwarding.model';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BANK_STATEMENT_HELP_DOC_URL, EMAIL_VALIDATION_REGEX, Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, EMAIL_VALIDATION_REGEX } from '../../../app.constant';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
 import { GeneralService } from '../../../services/general.service';
+import { IServiceConfigArgs, ServiceConfig } from '../../../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddAccountRequest } from '../../../models/api-models/Account';
 import { AppState } from '../../../store';
@@ -72,7 +72,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Flag to show/hide copy text */
     public isCopied: boolean = false;
     /** Bank statement help doc url */
-    public bankStatementHelpDocUrl = BANK_STATEMENT_HELP_DOC_URL;
+    public bankStatementHelpDocUrl = '';
     /** Form submitted flag */
     public isFormSubmitted: boolean = false;
     /** Company unique name */
@@ -97,8 +97,10 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         private generalService: GeneralService,
         private dialog: MatDialog,
         private store: Store<AppState>,
-        private salesAction: SalesActions
+        private salesAction: SalesActions,
+        @Inject(ServiceConfig) private serviceConfig: IServiceConfigArgs
     ) {
+        this.bankStatementHelpDocUrl = this.serviceConfig.BANK_STATEMENT_HELP_DOC_URL ?? '';
         this.initializeForms();
     }
 
@@ -112,7 +114,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.branchUniqueName = this.generalService.currentBranchUniqueName;
         this.setupAccountSearchSubscription();
         this.getEmailFromQueryParams();
-        this.imgPath = Configuration.isElectron ? "assets/images/" : environment.AppUrl + environment.APP_FOLDER + "assets/images/";
+        this.imgPath = this.serviceConfig.IMG_PATH;
 
         this.bankStatementStore.createUpdateEmailForwardingIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: unknown) => {
             if (response && response['uniqueName']) {
