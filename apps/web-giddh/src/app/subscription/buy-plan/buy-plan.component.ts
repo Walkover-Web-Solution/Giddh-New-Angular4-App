@@ -1747,7 +1747,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             description: this.serviceConfig.LEGAL_NAME,
         };
         if (this.serviceConfig?.logos?.primary) {
-            options["image"] = this.serviceConfig.logos.primary;
+            options["image"] = this.serviceConfig.LOGOS.dark;
         }
         const razorpayRecurringSubscriptionConfig = {
             key: this.razorpayKey,

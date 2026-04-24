@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EnvironmentService } from './environment.service';
-import { BANK_STATEMENT_HELP_DOC_URL, CALENDLY_URL, GIDDH_ANDROID_APP_URL, GIDDH_API_DOC_URL, GIDDH_HELP_DOC_URL, GIDDH_INTERNAL_DOMAINS, GIDDH_IOS_APP_URL, GIDDH_SUPPORT_EMAIL, GIDDH_SUPPORT_PHONE_NUMBER, GiddhUiDomain, ICICI_ALLOWED_COMPANIES, SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
+import { BANK_STATEMENT_HELP_DOC_URL, GIDDH_CALENDLY_URL, GIDDH_ANDROID_APP_URL, GIDDH_API_DOC_URL, GIDDH_HELP_DOC_URL, GIDDH_INTERNAL_DOMAINS, GIDDH_IOS_APP_URL, GIDDH_SUPPORT_EMAIL, GIDDH_SUPPORT_PHONE_NUMBER, GiddhUiDomain, ICICI_ALLOWED_COMPANIES, SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 
 export interface WhiteLabelConfig {
     status?: string;
@@ -247,10 +247,10 @@ export class WhiteLabelService {
             // OTP Configuration (Web and Electron)
             OTP_WIDGET_ID: this.getOtpWidgetId(),
             OTP_TOKEN_AUTH: this.getOtpTokenAuth(),
-            OTP_WIDGET_ID_WEB: this.getValueWithFallback(body.otpWidgetIdWeb, this.environmentService.otpWidgetId, ''),
-            OTP_WIDGET_TOKEN_WEB: this.getValueWithFallback(body.otpWidgetTokenWeb, this.environmentService.otpTokenAuth, ''),
-            OTP_WIDGET_ID_ELECTRON: this.getValueWithFallback(body.otpWidgetIdElectron, this.environmentService.otpWidgetId, ''),
-            OTP_WIDGET_TOKEN_ELECTRON: this.getValueWithFallback(body.otpWidgetTokenElectron, this.environmentService.otpTokenAuth, ''),
+            OTP_WIDGET_ID_WEB: this.getValueWithFallback(body.otpWidgetIdWeb, isGiddhDomain ? this.environmentService.otpWidgetId : ''),
+            OTP_WIDGET_TOKEN_WEB: this.getValueWithFallback(body.otpWidgetTokenWeb, isGiddhDomain ? this.environmentService.otpTokenAuth : ''),
+            OTP_WIDGET_ID_ELECTRON: this.getValueWithFallback(body.otpWidgetIdElectron, isGiddhDomain ? this.environmentService.otpWidgetId : ''),
+            OTP_WIDGET_TOKEN_ELECTRON: this.getValueWithFallback(body.otpWidgetTokenElectron, isGiddhDomain ? this.environmentService.otpTokenAuth : ''),
 
             // Payment
             RAZORPAY_KEY: this.getRazorpayKey(),
@@ -259,7 +259,7 @@ export class WhiteLabelService {
             IS_GIDDH_DOMAIN: isGiddhDomain,
 
             // All other properties from whiteLabel body object with fallbacks
-            CALENDLY_URL: this.getValueWithFallback(body.calendlyUrl, isGiddhDomain ? CALENDLY_URL : ''),
+            CALENDLY_URL: this.getValueWithFallback(body.calendlyUrl, isGiddhDomain ? GIDDH_CALENDLY_URL : ''),
             EMAIL_DOMAINS: this.getValueWithFallback(body.emailDomains, isGiddhDomain ? GIDDH_INTERNAL_DOMAINS : []),
             ICICI_SUPPORTED_COMPANIES: this.getValueWithFallback(body.iciciSupportedCompanies, isGiddhDomain ? ICICI_ALLOWED_COMPANIES : []),
             PAYU_PAYMENT_DETAILS: this.getValueWithFallback(body.payuPaymentDetails, {}),
@@ -271,7 +271,7 @@ export class WhiteLabelService {
             // PROXY_API_URL_UK: this.getValueWithFallback(body.proxyApiUrlUk, ''),
             WEBSITE_DOMAIN: this.getValueWithFallback(body.websiteDomain, this.environmentService.appUrl),
             BRAND_NAME: this.getValueWithFallback(body.brandName, isGiddhDomain ? 'Giddh' : ''),
-            LEGAL_NAME: this.getValueWithFallback(body.legalName, isGiddhDomain ? 'Walkover Technologies Private Limited.' : ''),
+            LEGAL_NAME: this.getValueWithFallback(body.legalName, isGiddhDomain ? 'Walkover Web Solutions Private Limited' : ''),
             SUPPORT_EMAIL: this.getValueWithFallback(body.supportEmail, isGiddhDomain ? GIDDH_SUPPORT_EMAIL : ''),
             SUPPORT_PHONE: this.getValueWithFallback(body.supportPhone, isGiddhDomain ? GIDDH_SUPPORT_PHONE_NUMBER : ''),
             GST_CREDENTIALS: this.getValueWithFallback(body.gstCredentials, {}),

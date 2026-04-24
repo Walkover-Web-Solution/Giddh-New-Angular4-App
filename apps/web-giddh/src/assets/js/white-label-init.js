@@ -12,11 +12,13 @@
  */
 window.onload = function () {
     var whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
+    const GIDDH_DOMAINS = ['localhost', 'test.giddh.com', 'books.giddh.com'];
+    const isGiddhDomain = GIDDH_DOMAINS.includes(window.location.hostname);
 
     // Apply primary logo (white label or Giddh default)
-    var logoUrl = (whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.logos && whiteLabelConfig.body.logos.primary)
-        ? whiteLabelConfig.body.logos.primary
-        : './assets/images/giddh-big-logo.svg';
+    var logoUrl = (whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.logos && whiteLabelConfig.body.logos.dark)
+        ? whiteLabelConfig.body.logos.dark
+        : isGiddhDomain ? './assets/images/giddh-big-logo.svg' : '';
     var logoElement = document.getElementById('dynamic-logo');
     if (logoElement) { logoElement.src = logoUrl; }
 
