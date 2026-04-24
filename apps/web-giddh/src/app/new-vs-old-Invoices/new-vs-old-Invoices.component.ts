@@ -15,7 +15,7 @@ import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
-import { ASIDE_PANE_CONFIG, GetBifurcationType, IOption } from '../app.constant';
+import { ASIDE_PANE_CONFIG, AppThemeClassEnum, GetBifurcationType, IOption } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 import { find, slice } from '../lodash-optimized';
 import { SalesPersonComponentStore } from '../shared/sales-person/utility/sales-person.store';
@@ -168,6 +168,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
      */
     public renderSbpCharts(): void {
+        /** Theme-aware color tokens used by all chart instances */
+        const chartThemeColors = this.getChartThemeColors();
         const rows = this.salesByPersonRows;
         const headers = this.salesByPersonData?.headers ?? [];
 
@@ -210,12 +212,12 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         const labels = top5Rows.map(getLabel);
 
         const chartScaleOptions = {
-            x: { border: { display: false }, grid: { display: false }, ticks: { color: '#555', font: { size: 11 } } },
+            x: { border: { display: false }, grid: { display: false }, ticks: { color: chartThemeColors.axisTextColor, font: { size: 11 } } },
             y: {
                 border: { display: false },
-                grid: { color: 'rgba(0,0,0,0.06)' },
+                grid: { color: chartThemeColors.gridColor },
                 ticks: {
-                    color: '#666',
+                    color: chartThemeColors.axisTextColor,
                     font: { size: 11 },
                     callback: (v: any) => v >= 1000 ? this.baseCurrencySymbol + (v / 1000).toFixed(0) + 'k' : this.baseCurrencySymbol + v
                 }
@@ -292,14 +294,14 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                         legend: {
                             display: true,
                             position: 'bottom',
-                            labels: { boxWidth: 12, font: { size: 11 }, color: '#555' }
+                            labels: { boxWidth: 12, font: { size: 11 }, color: chartThemeColors.legendTextColor }
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(255,255,255,0.95)',
-                            borderColor: 'rgb(12,177,175)',
+                            backgroundColor: chartThemeColors.tooltipBackgroundColor,
+                            borderColor: chartThemeColors.tooltipBorderColor,
                             borderWidth: 1,
-                            bodyColor: '#333',
-                            titleColor: '#333',
+                            bodyColor: chartThemeColors.tooltipTextColor,
+                            titleColor: chartThemeColors.tooltipTextColor,
                             displayColors: true,
                             padding: 8
                         }
@@ -667,7 +669,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     private openChartDialog(template: TemplateRef<unknown>, onOpened: () => void, onClosed: () => void): MatDialogRef<any> {
         const dialogRef = this.dialog.open(template, {
             width: this.chartDialogWidth,
-            height: this.chartDialogHeight
+            height: this.chartDialogHeight,
+            autoFocus: false
         });
 
         dialogRef.afterOpened().pipe(take(1)).subscribe(onOpened);
@@ -682,6 +685,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
     */
     private renderTopSalesPersonDialogChart(): void {
+        /** Theme-aware color tokens used by dialog chart */
+        const chartThemeColors = this.getChartThemeColors();
         const canvas = this.topSalesPersonDialogCanvas?.nativeElement;
 
         if (!canvas || this.topSalesPersonDialogRows.length === 0) {
@@ -711,11 +716,11 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(255,255,255,0.95)',
-                        borderColor: 'rgb(12,177,175)',
+                        backgroundColor: chartThemeColors.tooltipBackgroundColor,
+                        borderColor: chartThemeColors.tooltipBorderColor,
                         borderWidth: 1,
-                        bodyColor: '#333',
-                        titleColor: '#333',
+                        bodyColor: chartThemeColors.tooltipTextColor,
+                        titleColor: chartThemeColors.tooltipTextColor,
                         displayColors: false,
                         padding: 8,
                         callbacks: {
@@ -728,7 +733,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                         border: { display: false },
                         grid: { display: false },
                         ticks: {
-                            color: '#555',
+                            color: chartThemeColors.axisTextColor,
                             font: { size: 11 },
                             maxRotation: 45,
                             minRotation: 20
@@ -736,9 +741,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                     },
                     y: {
                         border: { display: false },
-                        grid: { color: 'rgba(0,0,0,0.06)' },
+                        grid: { color: chartThemeColors.gridColor },
                         ticks: {
-                            color: '#666',
+                            color: chartThemeColors.axisTextColor,
                             font: { size: 11 },
                             callback: (v: any) => v >= 1000 ? this.baseCurrencySymbol + (v / 1000).toFixed(0) + 'k' : this.baseCurrencySymbol + v
                         }
@@ -754,6 +759,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
     */
     private renderNvoSalesDialogChart(): void {
+        /** Theme-aware color tokens used by dialog chart */
+        const chartThemeColors = this.getChartThemeColors();
         const canvas = this.nvoSalesDialogCanvas?.nativeElement;
 
         if (!canvas || this.nvoSalesDialogLabels.length === 0 || this.nvoSalesDialogDatasets.length === 0) {
@@ -800,14 +807,14 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                     legend: {
                         display: true,
                         position: 'bottom',
-                        labels: { boxWidth: 12, font: { size: 11 }, color: '#555' }
+                        labels: { boxWidth: 12, font: { size: 11 }, color: chartThemeColors.legendTextColor }
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(255,255,255,0.95)',
-                        borderColor: 'rgb(12,177,175)',
+                        backgroundColor: chartThemeColors.tooltipBackgroundColor,
+                        borderColor: chartThemeColors.tooltipBorderColor,
                         borderWidth: 1,
-                        bodyColor: '#333',
-                        titleColor: '#333',
+                        bodyColor: chartThemeColors.tooltipTextColor,
+                        titleColor: chartThemeColors.tooltipTextColor,
                         displayColors: true,
                         padding: 8
                     }
@@ -817,7 +824,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                         border: { display: false },
                         grid: { display: false },
                         ticks: {
-                            color: '#555',
+                            color: chartThemeColors.axisTextColor,
                             font: { size: 11 },
                             maxRotation: 45,
                             minRotation: 20
@@ -825,9 +832,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                     },
                     y: {
                         border: { display: false },
-                        grid: { color: 'rgba(0,0,0,0.06)' },
+                        grid: { color: chartThemeColors.gridColor },
                         ticks: {
-                            color: '#666',
+                            color: chartThemeColors.axisTextColor,
                             font: { size: 11 },
                             callback: (v: any) => v >= 1000 ? this.baseCurrencySymbol + (v / 1000).toFixed(0) + 'k' : this.baseCurrencySymbol + v
                         }
@@ -835,5 +842,52 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    /**
+     * Reads a CSS variable value from document body and returns a fallback if missing.
+     *
+     * @param {string} variableName CSS custom property name
+     * @param {string} fallbackValue Value returned when variable is unavailable
+     * @returns {string} Resolved CSS value
+     */
+    private getCssVarValue(variableName: string, fallbackValue: string): string {
+        const resolvedValue = getComputedStyle(document.body).getPropertyValue(variableName)?.trim();
+        return resolvedValue || fallbackValue;
+    }
+
+    /**
+     * Builds theme-aware chart colors so dark mode remains readable.
+     *
+     * @returns {{
+     * axisTextColor: string;
+     * legendTextColor: string;
+     * gridColor: string;
+     * tooltipBackgroundColor: string;
+     * tooltipTextColor: string;
+     * tooltipBorderColor: string;
+     * }} Chart palette for current theme
+     */
+    private getChartThemeColors(): {
+        axisTextColor: string;
+        legendTextColor: string;
+        gridColor: string;
+        tooltipBackgroundColor: string;
+        tooltipTextColor: string;
+        tooltipBorderColor: string;
+    } {
+        /** True when active app theme is dark */
+        const isDarkThemeEnabled = document.body.classList.contains(AppThemeClassEnum.Dark);
+        /** Axis and legend label color derived from global theme tokens */
+        const baseTextColor = this.getCssVarValue('--color-dark-gray', isDarkThemeEnabled ? '#f5f5f5' : '#555555');
+
+        return {
+            axisTextColor: baseTextColor,
+            legendTextColor: baseTextColor,
+            gridColor: isDarkThemeEnabled ? 'rgba(255,255,255,0.14)' : 'rgba(0,0,0,0.06)',
+            tooltipBackgroundColor: isDarkThemeEnabled ? 'rgba(33,33,33,0.96)' : 'rgba(255,255,255,0.95)',
+            tooltipTextColor: isDarkThemeEnabled ? '#f5f5f5' : '#333333',
+            tooltipBorderColor: this.getCssVarValue('--theme-primary-color', 'rgb(12,177,175)')
+        };
     }
 }
