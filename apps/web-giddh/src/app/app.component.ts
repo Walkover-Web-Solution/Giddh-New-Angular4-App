@@ -120,11 +120,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                // Check if href contains books.giddh.com or test.giddh.com for domain-based redirect logic
+                // Check if href contains GiddhUiDomain.PRODUCTION or test.giddh.com for domain-based redirect logic
                 const isGiddhDomain = this._generalService.isGiddhDomain();
 
                 if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
-                    // Hard redirect for books.giddh.com or test.giddh.com domains
+                    // Hard redirect for GiddhUiDomain.PRODUCTION or test.giddh.com domains
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {

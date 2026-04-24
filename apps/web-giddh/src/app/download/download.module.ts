@@ -4,6 +4,7 @@ import { RouterModule } from "@angular/router";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { DownloadComponent } from "./download.component";
 import { DownloadRoutingModule } from "./download.routing.module";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -12,6 +13,7 @@ import { DownloadRoutingModule } from "./download.routing.module";
     imports: [
         CommonModule,
         RouterModule,
+        MatButtonModule,
         TranslateDirectiveModule,
         DownloadRoutingModule
     ]

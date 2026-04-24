@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, SimpleChanges, Inject, ChangeDetectorRef, signal } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, SimpleChanges, Inject, ChangeDetectorRef, signal } from '@angular/core';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { TemplateContentUISectionVisibility, InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
@@ -8,13 +8,12 @@ import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { API_BULK_FETCH_LIMIT, Configuration, IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
 import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { TemplateModeEnum, TemplateTypeEnum, VoucherTypeEnum } from '../../../models/api-models/Sales';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { ServiceConfig } from '../../../services/service.config';
 import { CustomFieldsService } from '../../../services/custom-fields.service';
 
@@ -216,7 +215,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         // Initialize dialog data
         const { templateType, voucherType, templateList, mode, localeData, commonLocaleData } = this.dialogData || {};
         this.templateType = templateType;

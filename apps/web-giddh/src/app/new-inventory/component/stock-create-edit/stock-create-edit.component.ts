@@ -11,7 +11,7 @@ import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.a
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach, isEqual } from "../../../lodash-optimized";
 import { NgForm } from "@angular/forms";
-import { Configuration, INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
+import { INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
 import { MatDialog } from "@angular/material/dialog";
@@ -31,7 +31,6 @@ import { PreviewVariantImageComponent } from "../preview-variant-image/preview-v
 import { ServiceConfig } from "../../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { DataOperationEnum } from "../../../shared/Enums/common.enum";
 
 @Component({
@@ -337,7 +336,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         // and the parent will handle the page leave confirmation via ViewChild
 
         /* added image path */
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         /** added parent class to body after entering new-inventory page */
         document.querySelector("body").classList.add("stock-create-edit");
 

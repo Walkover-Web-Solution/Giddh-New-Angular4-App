@@ -1,10 +1,12 @@
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { get } from '../lodash-optimized';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { LOCALE_PLACEHOLDER_MAP } from '../app.constant';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +36,11 @@ export class LocaleService {
         this._language = lang;
     }
 
-    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService) {
+    constructor(
+        private errorHandler: GiddhErrorHandler,
+        private http: HttpWrapperService,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs
+    ) {
 
     }
 
@@ -56,7 +62,7 @@ export class LocaleService {
 
         return this.http.get(url).pipe(
             map((res) => {
-                let data: BaseResponse<any, any> = res;
+                let data: BaseResponse<any, any> = this.replaceBrandName(res);
 
                 if (!folder) {
                     this.commonLocale = data;
@@ -64,6 +70,39 @@ export class LocaleService {
 
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Recursively replaces placeholder tokens (defined in LOCALE_PLACEHOLDER_MAP) in all
+     * string values of a locale object with their configured service config values.
+     *
+     * @private
+     * @param {*} obj - The locale object or value to process
+     * @returns {*} The processed object with all placeholders substituted
+     * @memberof LocaleService
+     */
+    private replaceBrandName(obj: any): any {
+        const replacements = LOCALE_PLACEHOLDER_MAP.map(({ token, configKey }) => ({
+            pattern: new RegExp(token.replace(/[\[\]]/g, '\\$&'), 'g'),
+            value: this.config?.[configKey] ?? ''
+        }));
+        const replace = (value: any): any => {
+            if (typeof value === 'string') {
+                return replacements.reduce((str, { pattern, value: v }) => str.replace(pattern, v), value);
+            }
+            if (Array.isArray(value)) {
+                return value.map(replace);
+            }
+            if (value !== null && typeof value === 'object') {
+                const result: any = {};
+                for (const key of Object.keys(value)) {
+                    result[key] = replace(value[key]);
+                }
+                return result;
+            }
+            return value;
+        };
+        return replace(obj);
     }
 
     /**

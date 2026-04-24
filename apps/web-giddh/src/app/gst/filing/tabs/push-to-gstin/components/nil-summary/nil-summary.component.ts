@@ -25,7 +25,7 @@ export class NilSummaryComponent implements OnInit, OnDestroy {
     constructor(@Inject(ServiceConfig) private serviceConfig ) {}
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
     }
 
     public ngOnDestroy() {

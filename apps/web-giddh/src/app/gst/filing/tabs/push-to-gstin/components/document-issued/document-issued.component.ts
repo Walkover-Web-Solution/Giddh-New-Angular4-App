@@ -2,8 +2,6 @@ import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges }
 import { ReplaySubject } from 'rxjs';
 import { DocIssueSummary, DocIssueSummaryDetailsDocs } from '../../../../../../models/api-models/GstReconcile';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -27,7 +25,7 @@ export class DocumentIssuedComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
     }
 
     /**

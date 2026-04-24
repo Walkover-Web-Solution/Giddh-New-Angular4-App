@@ -28,12 +28,12 @@
             <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="" />
         </div>
         <div class="integrate mini-icons" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-            <img src="{{ imgPath }}msg91.png" alt="" />
-            <img src="{{ imgPath }}p1.png" alt="" />
-            <img src="{{ imgPath }}whatsapp.png" alt="" />
-            <img src="{{ imgPath }}msg1.png" alt="" />
-            <img src="{{ imgPath }}91091.png" alt="" />
-            <img src="{{ imgPath }}say1.png" alt="" />
+            <img src="{{ imgPath }}msg91.png" alt="msg91" />
+            <img src="{{ imgPath }}p1.png" alt="sms by msg91" />
+            <img src="{{ imgPath }}whatsapp.png" alt="whatsapp by msg91" />
+            <img src="{{ imgPath }}msg1.png" alt="msg91" />
+            <img src="{{ imgPath }}91091.png" alt="91091 by msg91" />
+            <img src="{{ imgPath }}say1.png" alt="say1 by msg91" />
         </div>
         <div class="integrate" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
             <p>{{ localeData?.communication?.integrate_now }}</p>

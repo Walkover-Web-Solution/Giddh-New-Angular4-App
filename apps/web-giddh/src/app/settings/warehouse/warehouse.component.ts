@@ -6,7 +6,6 @@ import {
     Inject,
     OnDestroy,
     OnInit,
-    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -17,13 +16,12 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
-import { OnBoardingType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG, Configuration } from '../../app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { SettingsWarehouseService } from '../../services/settings.warehouse.service';
 import { ToasterService } from '../../services/toaster.service';
-import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ItemOnBoardingState } from '../../store/item-on-boarding/item-on-boarding.reducer';
 import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
@@ -33,7 +31,6 @@ import { WarehouseState } from './reducer/warehouse.reducer';
 import { OrganizationType } from '../../models/user-login-state';
 import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 import { ServiceConfig } from '../../services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 /**
  * Warehouse component
@@ -146,7 +143,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
 

@@ -1,23 +1,58 @@
 import { Injectable } from '@angular/core';
 import { EnvironmentService } from './environment.service';
-import { Configuration } from '../app.constant';
+import { BANK_STATEMENT_HELP_DOC_URL, GIDDH_CALENDLY_URL, GIDDH_ANDROID_APP_URL, GIDDH_API_DOC_URL, GIDDH_HELP_DOC_URL, GIDDH_INTERNAL_DOMAINS, GIDDH_IOS_APP_URL, GIDDH_SUPPORT_EMAIL, GIDDH_SUPPORT_PHONE_NUMBER, GiddhUiDomain, ICICI_ALLOWED_COMPANIES, SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 
 export interface WhiteLabelConfig {
+    status?: string;
     body?: {
-        giddhWhiteLabel?: {
-            theme?: any;
-            apiDomain?: string;
-            domainName?: string;
-            portalDomain?: string;
-        };
+        googleClientId?: string;
+        googleClientSecret?: string;
         otpWidgetIdWeb?: string;
         otpWidgetTokenWeb?: string;
         otpWidgetIdElectron?: string;
         otpWidgetTokenElectron?: string;
-        googleClientId?: string;
-        googleClientSecret?: string;
+        calendlyUrl?: string;
+        emailDomains?: string[];
+        iciciSupportedCompanies?: string[];
         razorpayPaymentDetails?: {
             keyId?: string;
+        };
+        payuPaymentDetails?: any;
+        proxyReferenceId?: string;
+        proxyUrl?: string;
+        proxyApiUrl?: string;
+        proxyReferenceIdUk?: string;
+        proxyApiUrlUk?: string;
+        websiteDomain?: string;
+        brandName?: string;
+        legalName?: string;
+        supportEmail?: string;
+        supportPhone?: string;
+        gstCredentials?: any;
+        vayanaCredentials?: any;
+        logos?: {
+            icon?: string;
+            primary?: string;
+            light?: string;
+            favicon?: string;
+            dark?: string;
+        };
+        giddhWhiteLabel?: {
+            id?: number;
+            uniqueName?: string;
+            baseDomain?: string;
+            certificateRequired?: boolean;
+            certificateStatus?: string;
+            domainName?: string;
+            portalDomain?: string;
+            apiDomain?: string;
+            adminDomain?: string;
+            uiDomains?: string[];
+            theme?: any;
+            isActive?: number;
+            isDefault?: boolean;
+            createdAt?: string;
+            updatedAt?: string;
         };
     };
 }
@@ -164,6 +199,22 @@ export class WhiteLabelService {
     }
 
     /**
+     * Generic method to get value with white label override and fallback
+     * @param whiteLabelValue - Value from white label config
+     * @param fallbackValue - Fallback value if white label is not available
+     * @param defaultValue - Default value if both are not available (optional)
+     */
+    private getValueWithFallback<T>(whiteLabelValue: T | undefined, fallbackValue: T, defaultValue?: T): T {
+        if (whiteLabelValue !== undefined && whiteLabelValue !== null) {
+            return whiteLabelValue;
+        }
+        if (fallbackValue !== undefined && fallbackValue !== null) {
+            return fallbackValue;
+        }
+        return defaultValue as T;
+    }
+
+    /**
      * Get complete service configuration (replacement for getServiceConfig)
      */
     getServiceConfig(): any {
@@ -173,13 +224,16 @@ export class WhiteLabelService {
         }
 
         const region = localStorage.getItem('Country-Region') || undefined;
+        const body = this.whiteLabelConfig?.body || {};
+
+        const isGiddhDomain = [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].includes(this.getAppUrl() as GiddhUiDomain);
 
         return {
-            // API URLs
+            // API URLs (both cases for backward compatibility)
             apiUrl: this.getApiUrl(region),
             ApiUrl: this.getApiUrl(region),
 
-            // App URLs
+            // App URLs (both cases for backward compatibility)
             appUrl: this.getAppUrl(),
             AppUrl: this.getAppUrl(),
 
@@ -190,16 +244,57 @@ export class WhiteLabelService {
             GOOGLE_CLIENT_ID: this.getGoogleClientId(),
             GOOGLE_CLIENT_SECRET: this.getGoogleClientSecret(),
 
-            // OTP Configuration
+            // OTP Configuration (Web and Electron)
             OTP_WIDGET_ID: this.getOtpWidgetId(),
             OTP_TOKEN_AUTH: this.getOtpTokenAuth(),
+            OTP_WIDGET_ID_WEB: this.getValueWithFallback(body.otpWidgetIdWeb, isGiddhDomain ? this.environmentService.otpWidgetId : ''),
+            OTP_WIDGET_TOKEN_WEB: this.getValueWithFallback(body.otpWidgetTokenWeb, isGiddhDomain ? this.environmentService.otpTokenAuth : ''),
+            OTP_WIDGET_ID_ELECTRON: this.getValueWithFallback(body.otpWidgetIdElectron, isGiddhDomain ? this.environmentService.otpWidgetId : ''),
+            OTP_WIDGET_TOKEN_ELECTRON: this.getValueWithFallback(body.otpWidgetTokenElectron, isGiddhDomain ? this.environmentService.otpTokenAuth : ''),
 
             // Payment
             RAZORPAY_KEY: this.getRazorpayKey(),
+            
+            // Is Giddh domain
+            IS_GIDDH_DOMAIN: isGiddhDomain,
 
-            // Legacy support for hardcoded Electron values
-            OTP_WIDGET_ID_NEW: this.whiteLabelConfig?.body?.otpWidgetIdElectron || '33686b716134333831313239',
-            OTP_TOKEN_AUTH_NEW: this.whiteLabelConfig?.body?.otpWidgetTokenElectron || '205968TmXguUAwoD633af103P1'
+            // All other properties from whiteLabel body object with fallbacks
+            CALENDLY_URL: this.getValueWithFallback(body.calendlyUrl, isGiddhDomain ? GIDDH_CALENDLY_URL : ''),
+            EMAIL_DOMAINS: this.getValueWithFallback(body.emailDomains, isGiddhDomain ? GIDDH_INTERNAL_DOMAINS : []),
+            ICICI_SUPPORTED_COMPANIES: this.getValueWithFallback(body.iciciSupportedCompanies, isGiddhDomain ? ICICI_ALLOWED_COMPANIES : []),
+            PAYU_PAYMENT_DETAILS: this.getValueWithFallback(body.payuPaymentDetails, {}),
+            // Below commented values come in whitelabel but not use here this is for portal domain only
+            // PROXY_REFERENCE_ID: this.getValueWithFallback(body.proxyReferenceId, ''),
+            // PROXY_URL: this.getValueWithFallback(body.proxyUrl, ''),
+            // PROXY_API_URL: this.getValueWithFallback(body.proxyApiUrl, ''),
+            // PROXY_REFERENCE_ID_UK: this.getValueWithFallback(body.proxyReferenceIdUk, ''),
+            // PROXY_API_URL_UK: this.getValueWithFallback(body.proxyApiUrlUk, ''),
+            WEBSITE_DOMAIN: this.getValueWithFallback(body.websiteDomain, this.environmentService.appUrl),
+            BRAND_NAME: this.getValueWithFallback(body.brandName, isGiddhDomain ? 'Giddh' : ''),
+            LEGAL_NAME: this.getValueWithFallback(body.legalName, isGiddhDomain ? 'Walkover Web Solutions Private Limited' : ''),
+            SUPPORT_EMAIL: this.getValueWithFallback(body.supportEmail, isGiddhDomain ? GIDDH_SUPPORT_EMAIL : ''),
+            SUPPORT_PHONE: this.getValueWithFallback(body.supportPhone, isGiddhDomain ? GIDDH_SUPPORT_PHONE_NUMBER : ''),
+            GST_CREDENTIALS: this.getValueWithFallback(body.gstCredentials, {}),
+            VAYANA_CREDENTIALS: this.getValueWithFallback(body.vayanaCredentials, {}),
+            LOGOS: {
+                icon: body.logos?.icon || (isGiddhDomain ? this.environmentService.getAssetPath('images/giddh-big-logo.svg') : ''),
+                primary: body.logos?.primary || (isGiddhDomain ? this.environmentService.getAssetPath('images/giddh-big-logo.svg') : ''),
+                light: body.logos?.light || (isGiddhDomain ? this.environmentService.getAssetPath('images/giddh-white-logo.svg') : ''),
+                favicon: body.logos?.favicon || (isGiddhDomain ? this.environmentService.getAssetPath('images/favicons.png') : ''),
+                dark: body.logos?.dark || (isGiddhDomain ? this.environmentService.getAssetPath('images/giddh-big-logo.svg') : '')
+            },
+            GIDDH_WHITE_LABEL: this.getValueWithFallback(body.giddhWhiteLabel, {}),
+
+            // Resolved image folder path - works for both Electron and Web
+            IMG_PATH: this.environmentService.getAssetPath('images/'),
+
+            // Giddh-only URLs - empty string on white label domains
+            ANDROID_APP_URL: isGiddhDomain ? GIDDH_ANDROID_APP_URL : '',
+            IOS_APP_URL: isGiddhDomain ? GIDDH_IOS_APP_URL : '',
+            HELP_DOC_URL: isGiddhDomain ? GIDDH_HELP_DOC_URL : '',
+            API_DOC_URL: isGiddhDomain ? GIDDH_API_DOC_URL : '',
+            SYNC_TALLY_HELP_DOC_URL: isGiddhDomain ? SYNC_TALLY_HELP_DOC_URL : '',
+            BANK_STATEMENT_HELP_DOC_URL: isGiddhDomain ? BANK_STATEMENT_HELP_DOC_URL : ''
         };
     }
 

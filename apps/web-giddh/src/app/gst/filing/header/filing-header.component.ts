@@ -17,8 +17,7 @@ import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../../../services/service.config';
-import { ASIDE_PANE_CONFIG, Configuration, RestrictedModules } from '../../../app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { ASIDE_PANE_CONFIG, RestrictedModules } from '../../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -106,7 +105,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         private router: Router,
         public dialog: MatDialog
     ) {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.gstSessionResponse$ = this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$));
