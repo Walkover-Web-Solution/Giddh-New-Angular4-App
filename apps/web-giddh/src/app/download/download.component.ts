@@ -23,7 +23,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
     /* Hold giddh domain url */
     public giddhDomainUrl: string = '';
 
@@ -37,7 +37,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = this.serviceConfig.IMG_PATH;
-        this.giddhLogoSrc = this.serviceConfig.LOGOS.light;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.light;
         this.giddhDomainUrl = this.serviceConfig.AppUrl ||  GiddhUiDomain.PRODUCTION;
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {

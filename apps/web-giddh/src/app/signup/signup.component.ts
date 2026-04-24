@@ -83,7 +83,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
     /* Hold domain url */
     public giddhDomainUrl: string = "";
     /** Holds images folder path */
@@ -155,7 +155,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.imgPath = this.environmentService.getImagePath('');
         this.urlPath = this.environmentService.isElectron ? "" : "";
         this.giddhDomainUrl = this.serviceConfig.AppUrl || this.environmentService.appUrl || GiddhUiDomain.PRODUCTION;
-        this.giddhLogoSrc = this.serviceConfig.LOGOS.light;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.light;
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
             country: ["India", [Validators.required]],

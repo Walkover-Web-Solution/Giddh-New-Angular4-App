@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     /** Show apple login if electron app and mac user */
     public showAppleLogin: boolean = false;
     /* Hold logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
     /* Hold domain url */
     public giddhDomainUrl: string = "";
 
@@ -127,7 +127,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         // Use relative paths for assets to avoid port/domain issues in Electron
         this.urlPath = Configuration.isElectron ? "" : "";
         this.giddhDomainUrl = this.serviceConfig.AppUrl || environment.AppUrl || GiddhUiDomain.PRODUCTION;
-        this.giddhLogoSrc = this.serviceConfig.LOGOS.light;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.light;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
