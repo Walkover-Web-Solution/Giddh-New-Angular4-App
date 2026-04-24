@@ -13,6 +13,6 @@ export class AppLoginSuccessComponent {
     /* Hold logo source */
     public brandLogoUrl: string = '';
     constructor(@Inject(ServiceConfig) private serviceConfig) {
-        this.brandLogoUrl = this.serviceConfig.LOGOS.primary;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.dark;
     }
 }

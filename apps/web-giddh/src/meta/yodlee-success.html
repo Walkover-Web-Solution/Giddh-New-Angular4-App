@@ -58,7 +58,7 @@
     const whiteLabel = getWhiteLabelData();
     const GIDDH_DOMAINS = ['localhost', 'test.giddh.com', 'books.giddh.com'];
     const isGiddhDomain = GIDDH_DOMAINS.includes(window.location.hostname);
-    const legalName = whiteLabel?.legalName || (isGiddhDomain ? 'Walkover Technologies Private Limited.' : '');
+    const legalName = whiteLabel?.legalName || (isGiddhDomain ? 'Walkover Web Solutions Private Limited' : '');
     var domainName = whiteLabel?.giddhWhiteLabel?.domainName || (isGiddhDomain ? 'Giddh.com' : '');
     const currentYear = new Date().getFullYear();
     var search = '';

@@ -63,7 +63,7 @@ export class DnsRecordsComponent implements OnInit {
    * @memberof DnsRecordsComponent
    */
     public ngOnInit(): void {
-        this.brandLogoUrl = this.serviceConfig.LOGOS.primary;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.dark;
 
         combineLatest([
             this.route.queryParams.pipe(takeUntil(this.destroyed$)),

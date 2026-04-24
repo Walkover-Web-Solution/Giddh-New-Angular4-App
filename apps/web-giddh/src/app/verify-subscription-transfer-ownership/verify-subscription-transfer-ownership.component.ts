@@ -66,7 +66,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
    * @memberof VerifySubscriptionTransferOwnershipComponent
    */
     public ngOnInit(): void {
-        this.brandLogoUrl = this.serviceConfig.LOGOS.primary;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.dark;
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.requestId) {

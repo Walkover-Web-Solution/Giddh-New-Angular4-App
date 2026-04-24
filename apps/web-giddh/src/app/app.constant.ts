@@ -21,6 +21,7 @@ export const GIDDH_SUPPORT_PHONE_NUMBER = '+918818888768';
 export const GIDDH_SUPPORT_EMAIL = 'support@giddh.com';
 export const GIDDH_ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en_IN&gl=US';
 export const GIDDH_IOS_APP_URL = 'https://apps.apple.com/in/app/giddh-books-that-make-sense/id1491003438';
+export const GIDDH_CALENDLY_URL = "https://calendly.com/sales-accounting-software/talk-to-sale";
 export const GIDDH_INTERNAL_DOMAINS = [
     'giddh.com',
     'walkover.in',
@@ -604,12 +605,10 @@ export const GIDDH_VOUCHER_FORM = [
         attachmentAllowed: false
     }
 ];
-export const CALENDLY_URL = "https://calendly.com/sales-accounting-software/talk-to-sale";
 export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=${new Date().getTime()}`;
 export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
-export const OTP_WIDGET_TOKEN = '205968TmXguUAwoD633af103P1';
 export enum BROADCAST_CHANNELS {
     REAUTH_PLAID_SUCCESS = 'REAUTH_PLAID_SUCCESS'
 };

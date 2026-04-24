@@ -29,7 +29,7 @@ export class MobileRestrictedComponent {
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  private breakpointObserver: BreakpointObserver, private router: Router, private generalService: GeneralService) {
         this.imgPath = this.serviceConfig.IMG_PATH;
-        this.brandLogoUrl = this.serviceConfig.LOGOS.primary;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.dark;
         this.isGiddhDomain = this.serviceConfig.IS_GIDDH_DOMAIN;
         this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL;
         this.iosAppUrl = this.serviceConfig.IOS_APP_URL;
