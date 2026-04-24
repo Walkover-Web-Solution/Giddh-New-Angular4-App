@@ -5,7 +5,7 @@
         </div>
     </header>
     <div class="download-button flex-column d-flex justify-content-center align-items-center">
-        <span class="mb-3"><img src="{{ imgPath }}download-illustrator.svg" /></span>
+        <span class="mb-3"><img [src]="imgPath + 'download-illustrator.svg'" /></span>
         <p class="mb-3">{{ commonLocaleData?.app_download_here }}</p>
         <a
             matButton="filled"

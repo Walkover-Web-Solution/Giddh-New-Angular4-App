@@ -124,7 +124,7 @@
                         <ng-template #noDataFound>
                             <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
                                 <h1>{{ localeData?.no_data_found }}</h1>
-                                <img class="mt-2" height="200" src="{{ imgPath }}no-data.png" [alt]="localeData?.no_data_found" />
+                                <img class="mt-2" height="200" [src]="imgPath + 'no-data.png'" [alt]="localeData?.no_data_found" />
                             </div>
                         </ng-template>
                     </ng-container>

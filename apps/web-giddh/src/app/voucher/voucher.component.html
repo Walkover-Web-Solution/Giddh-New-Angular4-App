@@ -267,7 +267,7 @@
                                     </span>
                                     <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
                                         <img
-                                            src="{{ imgPath }}new/search_customer.svg"
+                                            [src]="imgPath + 'new/search_customer.svg'"
                                             alt="customer"
                                             height="70"
                                             class="mb-3"
@@ -276,7 +276,7 @@
                                     </ng-container>
                                     <ng-container *ngIf="isPurchaseInvoice">
                                         <img
-                                            src="{{ imgPath }}new/search-vendor.svg"
+                                            [src]="imgPath + 'new/search-vendor.svg'"
                                             alt="vendor"
                                             height="70"
                                             class="mb-3"
@@ -285,7 +285,7 @@
                                     </ng-container>
                                     <ng-container *ngIf="isCashInvoice">
                                         <img
-                                            src="{{ imgPath }}new/search-customer-cash-invoice.svg"
+                                            [src]="imgPath + 'new/search-customer-cash-invoice.svg'"
                                             alt="cash invoice"
                                             height="70"
                                             class="mb-3"
@@ -298,7 +298,7 @@
                         <!-- region search_customer image -->
                         <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
                             <img
-                                src="{{ imgPath }}new/search_customer.svg"
+                                [src]="imgPath + 'new/search_customer.svg'"
                                 alt="customer"
                                 height="70"
                                 class="mb-3"
@@ -308,7 +308,7 @@
                         <!-- need to show this image on purchase invoice module -->
                         <ng-container *ngIf="isPurchaseInvoice">
                             <img
-                                src="{{ imgPath }}new/search-vendor.svg"
+                                [src]="imgPath + 'new/search-vendor.svg'"
                                 alt="search vendor"
                                 height="70"
                                 class="mb-3"
@@ -317,7 +317,7 @@
                         </ng-container>
                         <ng-container *ngIf="isCashInvoice && invoiceType !== 'cash bill' && invoiceType !== 'cash debit note'">
                             <img
-                                src="{{ imgPath }}new/search-customer-cash-invoice.svg"
+                                [src]="imgPath + 'new/search-customer-cash-invoice.svg'"
                                 alt="cash invoice"
                                 height="70"
                                 class="mb-3"
@@ -326,7 +326,7 @@
                         </ng-container>
                         <ng-container *ngIf="invoiceType === 'cash bill' || invoiceType === 'cash debit note'">
                             <img
-                                src="{{ imgPath }}search-vendor-cash-invoice.svg"
+                                [src]="imgPath + 'search-vendor-cash-invoice.svg'"
                                 alt="vendor cash invoice"
                                 height="70"
                                 class="mb-3"
@@ -2070,7 +2070,7 @@
                                                                                 (click)="isEntryDatepickerOpen = true"
                                                                             >
                                                                                 <img
-                                                                                    src="{{ imgPath }}edit-pencilicon.svg"
+                                                                                    [src]="imgPath + 'edit-pencilicon.svg'"
                                                                                     alt="edit-icon"
                                                                                 />
                                                                             </span>
@@ -2114,7 +2114,7 @@
                                                                                     *ngIf="!isEinvoiceGenerated"
                                                                                 >
                                                                                     <img
-                                                                                        src="{{ imgPath }}edit-pencilicon.svg"
+                                                                                        [src]="imgPath + 'edit-pencilicon.svg'"
                                                                                         alt="edit-icon"
                                                                                     />
                                                                                 </span>
@@ -2481,7 +2481,7 @@
                                                                                 (click)="toggleOtherTaxesAsidePane(true, entryIdx)"
                                                                             >
                                                                                 <img
-                                                                                    src="{{ imgPath }}edit-pencilicon.svg"
+                                                                                    [src]="imgPath + 'edit-pencilicon.svg'"
                                                                                     alt="edit icon"
                                                                                 />
                                                                             </a>

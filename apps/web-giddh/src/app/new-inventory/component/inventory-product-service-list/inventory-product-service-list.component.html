@@ -51,7 +51,7 @@
                 <td data-title="Name" mat-cell *matCellDef="let element">
                     <div class="product-name-image d-flex">
                         <div class="table-td-imag">
-                            <img src="{{ imgPath }}add-image.svg" />
+                            <img [src]="imgPath + 'add-image.svg'" />
                         </div>
                         <div class="cursor-pointer mx-2">
                             <strong matTooltip="Group Unique Name" class="theme-foreground-color">{{ element.name }}</strong>

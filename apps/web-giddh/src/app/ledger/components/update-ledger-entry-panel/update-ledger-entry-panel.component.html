@@ -96,7 +96,7 @@
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
                     <h2>{{ localeData?.no_transaction_found_message }}</h2>
-                    <img class="mt-2" height="200" src="{{ imgPath }}no-data.png" [alt]="commonLocaleData?.app_no_data_found" />
+                    <img class="mt-2" height="200" [src]="imgPath + 'no-data.png'" [alt]="commonLocaleData?.app_no_data_found" />
                 </div>
             </div>
             <div class="modal-body update-ledger-dialog" [hidden]="isChangeAcc || isShowNoDataFound">
