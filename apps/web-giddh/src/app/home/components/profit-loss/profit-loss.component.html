@@ -31,7 +31,7 @@
             <div class="dashboard-doughnut-chart-container" [ngClass]="{ 'visibility-hidden': requestInFlight }">
                 <canvas id="profitLossChartCanvas" [ngClass]="{ 'hide-chart': !dataFound }"></canvas>
                 <div class="no-data-available" *ngIf="!dataFound">
-                    <img src="{{ imgPath }}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found" />
+                    <img [src]="imgPath + 'noDataChart.svg'" [alt]="commonLocaleData?.app_no_data_found" />
                 </div>
             </div>
             <div class="chart-div mt-auto" *ngIf="!requestInFlight">

@@ -70,7 +70,7 @@
                 <div class="request-demo">
                     @if (serviceConfig.CALENDLY_URL) {
                         <div class="file-image">
-                            <img src="{{ imgPath }}request-demo.svg" alt="request img" />
+                            <img [src]="imgPath + 'request-demo.svg'" alt="request img" />
                             <p class="text-light">{{ localeData?.request_demo }}:</p>
                             <button matButton="filled" (click)="scheduleNow($event)" aria-label="schedule img">
                                 {{ commonLocaleData?.app_schedule_now }}

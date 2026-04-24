@@ -201,7 +201,7 @@
                                     aria-haspopup="true"
                                     aria-controls="universalDatepicker"
                                 >
-                                    <img src="{{ imgPath }}calender-icon.svg" alt="calender-icon" />
+                                    <img [src]="imgPath + 'calender-icon.svg'" alt="calender-icon" />
                                 </div>
                                 <span
                                     class="input-wrapper ipad-view-datepicker"
@@ -403,7 +403,7 @@
                                         >
                                             <img
                                                 class="autopaid-icon image-as-icon-color mr-2"
-                                                src="{{ imgPath }}autopaid.svg"
+                                                [src]="imgPath + 'autopaid.svg'"
                                                 alt="autopaid-icon"
                                             />
                                             {{ this.localeData?.autopaid_title }}
@@ -615,7 +615,7 @@
                                     >
                                         <img
                                             class="autopaid-icon image-as-icon-color"
-                                            src="{{ imgPath }}autopaid.svg"
+                                            [src]="imgPath + 'autopaid.svg'"
                                             alt="autopaid-icon"
                                         />
                                     </a>

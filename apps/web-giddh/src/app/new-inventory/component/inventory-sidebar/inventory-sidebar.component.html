@@ -10,7 +10,7 @@
             <div class="back-to-main-slider">
                 <a [routerLink]="['/pages/giddh-all-items']" href="javascript:void(0);" aria-label="home icon">
                     <span>
-                        <img src="{{ imgPath }}home-icon-black.svg" alt="home-icon" class="icon-pull-top image-as-icon-color" />
+                        <img [src]="imgPath + 'home-icon-black.svg'" alt="home-icon" class="icon-pull-top image-as-icon-color" />
                     </span>
                 </a>
                 <p class="heading">{{ localeData?.sidebar?.inventory }}</p>
@@ -34,7 +34,7 @@
                             *ngIf="!(node.onlyBranchMode && (isCompany || isConsolidatedBranch))"
                             (click)="openAsidePaneDialog(node)"
                         >
-                            <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="icon" />
+                            <img [src]="imgPath + '{{ node.icons }}'" class="sidebar-menu-icons" alt="icon" />
                             <p>{{ node.name }}</p>
                         </span>
                     </mat-tree-node>
@@ -45,7 +45,7 @@
                                 <i *ngIf="!treeControl.isExpanded(node)" class="icon-down-new ml-2 font-size-15 sidebar-icon"></i>
                             </span>
                         </button>
-                        <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="menu icon" />
+                        <img [src]="imgPath + '{{ node.icons }}'" class="sidebar-menu-icons" alt="menu icon" />
                         <p>{{ node.name }}</p>
                     </mat-tree-node>
                 </mat-tree>

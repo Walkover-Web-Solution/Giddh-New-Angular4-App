@@ -131,7 +131,7 @@
                         [routerLink]="['/pages/gstfiling/unit-mapping']"
                     >
                         <a href="javascript:;" class="d-block clear-both">
-                            <span><img src="{{ imgPath }}unit-mapping.svg" alt="unit-mapping" class="unit-mapping-icon" /></span>
+                            <span><img [src]="imgPath + 'unit-mapping.svg'" alt="unit-mapping" class="unit-mapping-icon" /></span>
                             <span>{{ localeData?.unit_mapping }}</span>
                         </a>
                     </mat-list-item>
