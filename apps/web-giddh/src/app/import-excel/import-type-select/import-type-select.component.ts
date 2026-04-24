@@ -5,12 +5,9 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { ImportStatementComponent } from '../../ledger/components/import-statement/import-statement.component';
 import { MatDialog } from '@angular/material/dialog';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 import { ServiceConfig } from '../../services/service.config';
-import { Configuration } from '../../app.constant';
-import { environment } from '../../../environments/environment.generated';
 
 @Component({
     selector: 'import-type-select',
@@ -45,7 +42,7 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];

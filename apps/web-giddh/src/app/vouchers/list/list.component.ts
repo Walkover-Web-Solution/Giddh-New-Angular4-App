@@ -15,7 +15,7 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
@@ -42,7 +42,6 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { TemplateModeEnum } from "../../models/api-models/Sales";
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { AsideRecurrenceVoucherCreateComponent } from "../../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
@@ -496,7 +495,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 

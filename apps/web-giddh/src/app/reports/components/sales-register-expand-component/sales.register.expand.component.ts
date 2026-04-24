@@ -19,8 +19,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
 import { forEach, includes, map, set } from '../../../lodash-optimized';
 import { GroupBy } from '../../constants/reports.constant';
 @Component({
@@ -125,7 +123,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
+        this.imgPath = this.serviceConfig.IMG_PATH.replace('images/', 'icon/');
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedsalesRequestFilter.q = '';

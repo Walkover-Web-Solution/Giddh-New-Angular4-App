@@ -62,7 +62,7 @@
                         </div>
                     }
 
-                    @if (generalService.isGiddhDomain()) {
+                    @if (serviceConfig.CALENDLY_URL) {
                         <div class="right-section">
                             <p class="border-btm mt-5">{{ localeData?.ask_question }}</p>
                             <span>{{ localeData?.request_demo }}</span>
@@ -71,10 +71,12 @@
                             </button>
                             <br />
                             <div class="row">
-                                <div class="col-xs-12 col-sm-6">
-                                    <span class="mt-5 mb-2">{{ localeData?.visit }}</span>
-                                    <a [href]="helpDocUrl" target="_blank" class="text-underline font-size-16">{{ helpDocUrl }}</a>
-                                </div>
+                                @if (helpDocUrl) {
+                                    <div class="col-xs-12 col-sm-6">
+                                        <span class="mt-5 mb-2">{{ localeData?.visit }}</span>
+                                        <a [href]="helpDocUrl" target="_blank" class="text-underline font-size-16">{{ helpDocUrl }}</a>
+                                    </div>
+                                }
                                 <div class="col-sm-6 schedule-img">
                                     <img src="{{ imgPath }}Schedule.png" alt="" />
                                 </div>

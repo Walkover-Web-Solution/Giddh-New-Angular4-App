@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, OnDestroy, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
@@ -48,7 +47,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
 
     constructor(
         private authService: AuthenticationService,
-        @Inject(ServiceConfig) private serviceConfig,
+        @Inject(ServiceConfig) public serviceConfig,
         private generalActions: GeneralActions,
         private store: Store<AppState>,
         public generalService: GeneralService
@@ -66,7 +65,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
         this.helpDocUrl = this.serviceConfig.HELP_DOC_URL ?? '';
         this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL ?? '';
         this.iosAppUrl = this.serviceConfig.IOS_APP_URL ?? '';
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.supportPhoneNumber = this.serviceConfig.SUPPORT_PHONE ?? '';
         this.supportEmail = this.serviceConfig.SUPPORT_EMAIL ?? '';
     }

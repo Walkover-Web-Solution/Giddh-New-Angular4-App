@@ -4,8 +4,7 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
-import { Configuration, GiddhUiDomain } from '../app.constant';
-import { environment } from '../../environments/environment.generated';
+import { GiddhUiDomain } from '../app.constant';
 
 @Component({
 selector: 'download',
@@ -37,7 +36,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
      * @memberof DownloadBulkInvoiceComponent
      */
     public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.giddhLogoSrc = this.serviceConfig.LOGOS.light;
         this.giddhDomainUrl = this.serviceConfig.AppUrl ||  GiddhUiDomain.PRODUCTION;
 

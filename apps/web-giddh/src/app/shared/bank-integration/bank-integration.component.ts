@@ -6,7 +6,7 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of as observableOf, ReplaySubject } from "rxjs";
-import { BROADCAST_CHANNELS, Configuration, ICICI_ALLOWED_COMPANIES, IOption } from "../../app.constant";
+import { BROADCAST_CHANNELS, IOption } from "../../app.constant";
 import { SalesService } from "../../services/sales.service";
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
@@ -19,7 +19,6 @@ import { NgForm } from '@angular/forms';
 import { InstitutionsListComponent } from "./institutions-list/institutions-list.component";
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { ServiceConfig } from "../../services/service.config";
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'bank-integration',
@@ -118,7 +117,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         public dialog: MatDialog
     ) {
-        this.iciciAllowedCompanies = this.serviceConfig.ICICI_SUPPORTED_COMPANIES || ICICI_ALLOWED_COMPANIES;
+        this.iciciAllowedCompanies = this.serviceConfig.ICICI_SUPPORTED_COMPANIES;
         this.bankStatementHelpDocUrl = this.serviceConfig.BANK_STATEMENT_HELP_DOC_URL ?? '';
     }
 
@@ -167,7 +166,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.loadPaymentData();
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
                 (Array.isArray(res.userEntityRoles) ? res.userEntityRoles : []).forEach(role => {

@@ -6,7 +6,6 @@ import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
 import { BREAKPOINT_SCREEN_SIZE, Configuration } from '../app.constant';
-import { environment } from '../../environments/environment.generated';
 
 @Component({
     selector: 'mobile-restricted',
@@ -29,7 +28,7 @@ export class MobileRestrictedComponent {
     public isGiddhDomain: boolean = false;
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  private breakpointObserver: BreakpointObserver, private router: Router, private generalService: GeneralService) {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.giddhLogoSrc = this.serviceConfig.LOGOS.primary;
         this.isGiddhDomain = this.serviceConfig.IS_GIDDH_DOMAIN;
         this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL ?? '';

@@ -60,20 +60,20 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private router: Router,
         public generalService: GeneralService,
         private store: Store<AppState>,
-        @Inject(ServiceConfig) private serviceConfig,
+        @Inject(ServiceConfig) public serviceConfig,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
         private componentStore: OnboardingComponentStore,
         private dialog: MatDialog
     ) {
-        this.syncWithTallyHelpDocUrl = this.serviceConfig.SYNC_TALLY_HELP_DOC_URL ?? '';
-        this.helpDocUrl = this.serviceConfig.HELP_DOC_URL ?? '';
+        this.syncWithTallyHelpDocUrl = this.serviceConfig.SYNC_TALLY_HELP_DOC_URL;
+        this.helpDocUrl = this.serviceConfig.HELP_DOC_URL;
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {

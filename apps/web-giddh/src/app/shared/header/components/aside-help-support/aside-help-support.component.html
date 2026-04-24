@@ -66,29 +66,38 @@
                         </mat-list>
                     </div>
                 }
+                @let isSupportEmailorPhoneAvailable = serviceConfig.SUPPORT_EMAIL || serviceConfig.SUPPORT_PHONE;
                 <div class="request-demo">
-                    @if (generalService.isGiddhDomain()) {
+                    @if (serviceConfig.CALENDLY_URL) {
                         <div class="file-image">
                             <img src="{{ imgPath }}request-demo.svg" alt="request img" />
                             <p class="text-light">{{ localeData?.request_demo }}:</p>
                             <button matButton="filled" (click)="scheduleNow($event)" aria-label="schedule img">
                                 {{ commonLocaleData?.app_schedule_now }}
                             </button>
-                            <br />
-                            <p class="text-light">{{ localeData?.contact }}:</p>
+                            @if (isSupportEmailorPhoneAvailable) {
+                                <br />
+                                <p class="text-light">{{ localeData?.contact }}:</p>
+                            }
                         </div>
                     }
-                    <div class="contact-block">
-                        <p class="d-flex align-items-center mb-1 support-mail-tel">
-                            <i class="icon-mail mr-2"></i>
-                            <a [href]="'mailto:' + supportEmail" aria-label="mail">{{ supportEmail }}</a>
-                        </p>
-                        <p class="d-flex align-items-center support-mail-tel">
-                            <i class="icon-mobile mr-2"></i>
-                            <a [href]="'tel:' + supportPhoneNumber" aria-label="contact">{{ supportPhoneNumber }}</a>
-                        </p>
-                        <br />
-                    </div>
+                    @if (isSupportEmailorPhoneAvailable) {
+                        <div class="contact-block">
+                            @if (serviceConfig.SUPPORT_EMAIL) {
+                                <p class="d-flex align-items-center mb-1 support-mail-tel">
+                                    <i class="icon-mail mr-2"></i>
+                                    <a [href]="'mailto:' + supportEmail" aria-label="mail">{{ supportEmail }}</a>
+                                </p>
+                            }
+                            @if (serviceConfig.SUPPORT_PHONE) {
+                                <p class="d-flex align-items-center support-mail-tel">
+                                    <i class="icon-mobile mr-2"></i>
+                                    <a [href]="'tel:' + supportPhoneNumber" aria-label="contact">{{ supportPhoneNumber }}</a>
+                                </p>
+                                <br />
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         </mat-dialog-content>

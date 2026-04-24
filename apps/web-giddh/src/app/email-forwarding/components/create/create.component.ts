@@ -6,8 +6,7 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
 import { EmailForwardingResponse, YOU_ARE_NOT_ALLOWED } from '../../models/email-forwarding.model';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, EMAIL_VALIDATION_REGEX, Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, EMAIL_VALIDATION_REGEX } from '../../../app.constant';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
 import { GeneralService } from '../../../services/general.service';
 import { IServiceConfigArgs, ServiceConfig } from '../../../services/service.config';
@@ -115,7 +114,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.branchUniqueName = this.generalService.currentBranchUniqueName;
         this.setupAccountSearchSubscription();
         this.getEmailFromQueryParams();
-        this.imgPath = Configuration.isElectron ? "assets/images/" : environment.AppUrl + environment.APP_FOLDER + "assets/images/";
+        this.imgPath = this.serviceConfig.IMG_PATH;
 
         this.bankStatementStore.createUpdateEmailForwardingIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: unknown) => {
             if (response && response['uniqueName']) {

@@ -13,9 +13,8 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { RestrictedModules, Configuration } from '../../app.constant';
+import { RestrictedModules } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
-import { environment } from '../../../environments/environment.generated';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -96,7 +95,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }

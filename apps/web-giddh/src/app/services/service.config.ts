@@ -1,5 +1,4 @@
 import { InjectionToken } from '@angular/core';
-import { environment } from '../../environments/environment.generated';
 
 export interface IServiceConfigArgs {
     apiUrl: string;
@@ -59,6 +58,9 @@ export interface IServiceConfigArgs {
         createdAt?: string;
         updatedAt?: string;
     };
+
+    /** Resolved base path for images folder (handles Electron vs Web difference) */
+    IMG_PATH: string;
 
     // Giddh-only URLs - empty string on white label domains
     ANDROID_APP_URL?: string;

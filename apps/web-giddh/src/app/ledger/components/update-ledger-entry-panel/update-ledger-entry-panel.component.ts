@@ -16,7 +16,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG, IOption, BREAKPOINT_SCREEN_SIZE, Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG, IOption, BREAKPOINT_SCREEN_SIZE } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
@@ -62,8 +62,6 @@ import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
-import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
-import { CompanyActions } from '../../../actions/company.actions';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -73,7 +71,6 @@ import { ServiceConfig } from '../../../services/service.config';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
@@ -352,8 +349,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     constructor(
         private accountService: AccountService,
         private breakPointObservar: BreakpointObserver,
-        private settingsTaxesAction: SettingsTaxesActions,
-        private companyActions: CompanyActions,
         private ledgerService: LedgerService,
         private generalService: GeneralService,
         private uiSettingsService: UiSettingsService,
@@ -400,7 +395,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public ngOnInit() {
         this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

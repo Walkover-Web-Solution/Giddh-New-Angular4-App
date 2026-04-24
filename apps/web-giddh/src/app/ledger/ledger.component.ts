@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, 
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, API_BULK_FETCH_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG, Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, API_BULK_FETCH_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -65,7 +65,6 @@ import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
 import { LedgerDropdownTypeEnum } from '../models/api-models/Ledger';
 import { IOption } from '../app.constant';
-import { environment } from '../../environments/environment.generated';
 import { SettingsDiscountService } from '../services/settings.discount.service';
 
 @Component({
@@ -682,7 +681,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceAction.getInvoiceSetting());
         this.getPurchaseSettings();
 
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
 
         this.breakpointObserver.observe([

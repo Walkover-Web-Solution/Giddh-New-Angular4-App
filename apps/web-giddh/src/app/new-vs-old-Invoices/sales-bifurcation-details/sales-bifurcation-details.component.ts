@@ -7,8 +7,7 @@ import { SalesBifurcationDetailsStore } from './utility/sales-bifurcation-detail
 import { SalesBifurcationDetailsService } from './utility/sales-bifurcation-details.service';
 import { SalesBifurcationDetailsActionEnum } from './utility/sales-bifurcation-details.constant';
 import { PageEvent } from '@angular/material/paginator';
-import { Configuration } from '../../app.constant';
-import { environment } from '../../../environments/environment.generated';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'sales-bifurcation-details',
@@ -77,7 +76,8 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         @Inject(MAT_DIALOG_DATA) public salesBifurcationDetailsData: any,
         public dialogRef: MatDialogRef<any>,
         private componentStore: SalesBifurcationDetailsStore,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        @Inject(ServiceConfig) private serviceConfig
     ) { }
 
     /**
@@ -88,7 +88,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.goToLedgerDateRangeFrom = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.fromDate;
         this.goToLedgerDateRangeTo = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.toDate;
-        this.imgPath = Configuration.isElectron ? "assets/images/" : environment.AppUrl + environment.APP_FOLDER + "assets/images/";
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.requestParams.type = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.type;
         this.requestParams.dataType = this.salesBifurcationDetailsData?.subType;
         this.requestParams.fromDate = this.salesBifurcationDetailsData?.newVsOldInvoicesData?.fromDate ?? null;

@@ -23,8 +23,6 @@ import { ReportType } from '../../../multi-currency-reports/multi-currency.const
 import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { TlPlService } from '../../../services/tl-pl.service';
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, find, findIndex, get, map, orderBy } from '../../../lodash-optimized';
 
 @Component({
@@ -211,7 +209,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         }
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
+        this.imgPath = this.serviceConfig.IMG_PATH.replace('images/', 'icon/');
         if (!this.showLabels) {
             this.filterForm?.patchValue({ selectedDateOption: '0' });
         }

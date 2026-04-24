@@ -14,11 +14,10 @@ import { GstReconcileService } from '../services/gst-reconcile.service';
 import { ToasterService } from '../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR, GIDDH_DATE_FORMAT_WITH_SPACE } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
-import { Configuration, IOption } from '../app.constant';
+import { IOption } from '../app.constant';
 import { GstReport } from './constants/gst.constant';
 import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../services/service.config';
-import { environment } from '../../environments/environment.generated';
 @Component({
     templateUrl: './gst.component.html',
     styleUrls: ['./gst.component.scss'],
@@ -94,7 +93,7 @@ export class GstComponent implements OnInit, OnDestroy {
         private gstReconcileService: GstReconcileService,
         private generalService: GeneralService
     ) {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
         this.gstr2TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr2OverViewData.count), takeUntil(this.destroyed$));

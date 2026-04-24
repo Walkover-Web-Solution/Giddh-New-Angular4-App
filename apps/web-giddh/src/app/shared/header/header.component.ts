@@ -300,7 +300,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private giddhDatePipe: GiddhDatePipe,
         private activeRoute: ActivatedRoute
     ) {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.giddhLogoSrc = this.serviceConfig.LOGOS.light;
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.serviceConfig.CALENDLY_URL);
         // Reset old stored application date
