@@ -16,7 +16,7 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, GiddhUiDomain, IOption, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, GIDDH_ONLY_ROUTES, GiddhUiDomain, IOption, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
 import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -122,7 +122,7 @@ export class GeneralService {
     private _sessionId: string;
 
     /** Signal indicating whether the current app URL is a Giddh domain */
-    public readonly isGiddhDomain = signal<boolean>(this.config?.IS_GIDDH_DOMAIN ?? window.location.href.includes(GiddhUiDomain.PRODUCTION));
+    public readonly isGiddhDomain = signal<boolean>(false);
 
     constructor(
         private router: Router,
@@ -132,7 +132,10 @@ export class GeneralService {
         private config: IServiceConfigArgs,
         private toasterService: ToasterService,
         private uiSettingsService: UiSettingsService
-    ) { }
+    ) {
+        const isGiddhDomain = this.config?.IS_GIDDH_DOMAIN ?? [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].map(url => new URL(url).hostname).includes(window.location.hostname);
+        this.isGiddhDomain.set(isGiddhDomain);
+    }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
         this.IAmLoaded.next(iAmLoaded);
@@ -934,8 +937,8 @@ export class GeneralService {
             }
 
             menuItem.items?.forEach(item => {
-                // Filter out Petty Cash menu item if not on Giddh domain
-                if (!isGiddhDomain && item.link === '/pages/expenses-manager') {
+                // Filter out Giddh-only routes when running on a white-label domain
+                if (!isGiddhDomain && GIDDH_ONLY_ROUTES.includes(item.link)) {
                     return;
                 }
 

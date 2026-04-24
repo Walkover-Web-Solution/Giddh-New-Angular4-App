@@ -1110,7 +1110,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public handleVoucherAdjustment(isUpdateMode?: boolean): void {
         if (!this.vm.selectedLedger?.voucherGenerated && this.vm.selectedLedger?.voucher?.shortCode !== 'pur') {
             // Voucher must be generated for all vouchers except purchase order
-            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
+            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_brand);
             if (this.isAdjustAdvanceReceiptSelected) {
                 this.isAdjustAdvanceReceiptSelected = false;
             } else if (this.isAdjustReceiptSelected) {
@@ -1139,7 +1139,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public checkForGeneratedVoucher(event: any): void {
         if (event && this.vm.selectedLedger?.voucher?.shortCode !== 'pur' && !this.vm.selectedLedger?.voucherGenerated) {
             // Adjustment is not allowed until the voucher is generated
-            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
+            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_brand);
             event.preventDefault();
         }
     }

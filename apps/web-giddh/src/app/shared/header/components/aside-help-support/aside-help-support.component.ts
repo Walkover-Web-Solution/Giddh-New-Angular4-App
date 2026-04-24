@@ -62,12 +62,12 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
         this.setDownloadUrls();
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
-        this.helpDocUrl = this.serviceConfig.HELP_DOC_URL ?? '';
-        this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL ?? '';
-        this.iosAppUrl = this.serviceConfig.IOS_APP_URL ?? '';
+        this.helpDocUrl = this.serviceConfig.HELP_DOC_URL;
+        this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL;
+        this.iosAppUrl = this.serviceConfig.IOS_APP_URL;
         this.imgPath = this.serviceConfig.IMG_PATH;
-        this.supportPhoneNumber = this.serviceConfig.SUPPORT_PHONE ?? '';
-        this.supportEmail = this.serviceConfig.SUPPORT_EMAIL ?? '';
+        this.supportPhoneNumber = this.serviceConfig.SUPPORT_PHONE;
+        this.supportEmail = this.serviceConfig.SUPPORT_EMAIL;
     }
 
     /**

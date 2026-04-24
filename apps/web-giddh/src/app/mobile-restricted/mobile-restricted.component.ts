@@ -31,8 +31,8 @@ export class MobileRestrictedComponent {
         this.imgPath = this.serviceConfig.IMG_PATH;
         this.brandLogoUrl = this.serviceConfig.LOGOS.primary;
         this.isGiddhDomain = this.serviceConfig.IS_GIDDH_DOMAIN;
-        this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL ?? '';
-        this.iosAppUrl = this.serviceConfig.IOS_APP_URL ?? '';
+        this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL;
+        this.iosAppUrl = this.serviceConfig.IOS_APP_URL;
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {

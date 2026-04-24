@@ -123,7 +123,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = this.serviceConfig.IMG_PATH.replace('images/', 'icon/');
+        this.imgPath = this.serviceConfig.IMG_PATH + 'icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedsalesRequestFilter.q = '';

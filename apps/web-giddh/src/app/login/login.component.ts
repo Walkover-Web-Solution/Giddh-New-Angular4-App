@@ -593,11 +593,12 @@ export class LoginComponent implements OnInit, OnDestroy {
      * @memberof LoginComponent
      */
     public async appleLogin(): Promise<void> {
-        const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = environment.production || Configuration.isElectron ? 'https://api.giddh.com' : this.serviceConfig.GIDDH_WHITE_LABEL?.apiDomain ? `${this.serviceConfig.GIDDH_WHITE_LABEL.apiDomain}` : 'https://apitest.giddh.com';
-        const REDIRECT_API_URL = url + "/v2/apple-login-callback";
+        // NOT IN USE HENCE COMMENTED THIS CODE
+        // const CLIENT_ID = "com.giddh.appsignin.client"
+        // const url = environment.production || Configuration.isElectron ? 'https://api.giddh.com' : this.serviceConfig.GIDDH_WHITE_LABEL?.apiDomain ? `${this.serviceConfig.GIDDH_WHITE_LABEL.apiDomain}` : 'https://apitest.giddh.com';
+        // const REDIRECT_API_URL = url + "/v2/apple-login-callback";
 
-        window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');
+        // window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');
     }
 
     /**

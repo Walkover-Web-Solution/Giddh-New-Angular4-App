@@ -8,12 +8,10 @@
  * - API domain preconnect hint for faster connections
  *
  * Called via window.onload in each index*.html.
- * Each HTML file sets window.DEFAULT_API_DOMAIN before loading this script
- * to provide the environment-specific fallback API URL.
+ * API domain is resolved from the whiteLabel localStorage config set by the server.
  */
 window.onload = function () {
     var whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
-    var defaultApiDomain = window.DEFAULT_API_DOMAIN || 'https://apitest.giddh.com';
 
     // Apply primary logo (white label or Giddh default)
     var logoUrl = (whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.logos && whiteLabelConfig.body.logos.primary)
@@ -39,12 +37,12 @@ window.onload = function () {
         }
     }
 
-    // Add preconnect hint for the API domain
-    var apiDomain = (whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.giddhWhiteLabel && whiteLabelConfig.body.giddhWhiteLabel.apiDomain)
-        ? whiteLabelConfig.body.giddhWhiteLabel.apiDomain
-        : defaultApiDomain;
-    var preconnectLink = document.createElement('link');
-    preconnectLink.rel = 'preconnect';
-    preconnectLink.href = apiDomain;
-    document.head.appendChild(preconnectLink);
+    // Add preconnect hint for the API domain (resolved from white label config only)
+    var apiDomain = whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.giddhWhiteLabel && whiteLabelConfig.body.giddhWhiteLabel.apiDomain;
+    if (apiDomain) {
+        var preconnectLink = document.createElement('link');
+        preconnectLink.rel = 'preconnect';
+        preconnectLink.href = apiDomain;
+        document.head.appendChild(preconnectLink);
+    }
 };

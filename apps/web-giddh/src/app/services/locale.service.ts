@@ -6,6 +6,7 @@ import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { get } from '../lodash-optimized';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { LOCALE_PLACEHOLDER_MAP } from '../app.constant';
 
 @Injectable({
     providedIn: 'root'
@@ -72,24 +73,22 @@ export class LocaleService {
     }
 
     /**
-     * Recursively replaces the [BRAND_NAME] placeholder in all string values
-     * of a locale object with the configured brand name.
+     * Recursively replaces placeholder tokens (defined in LOCALE_PLACEHOLDER_MAP) in all
+     * string values of a locale object with their configured service config values.
      *
      * @private
      * @param {*} obj - The locale object or value to process
-     * @returns {*} The processed object with brand name substituted
+     * @returns {*} The processed object with all placeholders substituted
      * @memberof LocaleService
      */
     private replaceBrandName(obj: any): any {
-        const brandName = this.config?.BRAND_NAME ?? '';
-        const supportEmail = this.config?.SUPPORT_EMAIL ?? '';
-        const supportPhone = this.config?.SUPPORT_PHONE ?? '';
+        const replacements = LOCALE_PLACEHOLDER_MAP.map(({ token, configKey }) => ({
+            pattern: new RegExp(token.replace(/[\[\]]/g, '\\$&'), 'g'),
+            value: this.config?.[configKey] ?? ''
+        }));
         const replace = (value: any): any => {
             if (typeof value === 'string') {
-                return value
-                    .replace(/\[BRAND_NAME\]/g, brandName)
-                    .replace(/\[SUPPORT_EMAIL\]/g, supportEmail)
-                    .replace(/\[SUPPORT_PHONE\]/g, supportPhone);
+                return replacements.reduce((str, { pattern, value: v }) => str.replace(pattern, v), value);
             }
             if (Array.isArray(value)) {
                 return value.map(replace);
