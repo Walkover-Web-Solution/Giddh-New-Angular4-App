@@ -1455,7 +1455,7 @@
                 <div class="charts-grid d-flex mb-3 column-gap-2">
                     <mat-card class="nvo-surface w-50">
                         <mat-card-header class="d-flex justify-content-between align-items-center px-3 pt-2 pb-2 border-bottom mb-0">
-                            <mat-card-title class="font-size-16 font-weight-semibold text-primary mb-0">
+                            <mat-card-title class="font-size-16 font-weight-semibold mb-0">
                                 {{ localeData?.top_5_salespersons }}
                             </mat-card-title>
                             <button
@@ -1476,7 +1476,7 @@
                     </mat-card>
                     <mat-card class="nvo-surface w-50">
                         <mat-card-header class="d-flex justify-content-between align-items-center px-3 pt-2 pb-2 border-bottom mb-0">
-                            <mat-card-title class="font-size-16 font-weight-semibold text-primary mb-0">
+                            <mat-card-title class="font-size-16 font-weight-semibold mb-0">
                                 {{ localeData?.new_vs_old_sales }}
                             </mat-card-title>
                             <button
@@ -1498,9 +1498,9 @@
                 </div>
 
                 <ng-template #topSalesPersonDialogTemplate>
-                    <div class="nvo-surface border-radius-8 overflow-hidden">
+                    <div class="border-radius-8 overflow-hidden">
                         <div class="d-flex justify-content-between align-items-center px-3 pt-2 pb-2 border-bottom">
-                            <h3 class="font-size-16 font-weight-semibold text-primary mb-0">{{ localeData?.all_salespersons }}</h3>
+                            <h3 class="font-size-16 font-weight-semibold mb-0">{{ localeData?.all_salespersons }}</h3>
                             <button matIconButton aria-label="close" mat-dialog-close>
                                 <i class="icon-cross font-size-20"></i>
                             </button>
@@ -1512,9 +1512,9 @@
                 </ng-template>
 
                 <ng-template #nvoSalesDialogTemplate>
-                    <div class="nvo-surface border-radius-8 overflow-hidden">
+                    <div class="border-radius-8 overflow-hidden">
                         <div class="d-flex justify-content-between align-items-center px-3 pt-2 pb-2 border-bottom">
-                            <h3 class="font-size-16 font-weight-semibold text-primary mb-0">
+                            <h3 class="font-size-16 font-weight-semibold mb-0">
                                 {{ localeData?.all_salespersons }} - {{ localeData?.new_vs_old_sales }}
                             </h3>
                             <button matIconButton aria-label="close" mat-dialog-close>
