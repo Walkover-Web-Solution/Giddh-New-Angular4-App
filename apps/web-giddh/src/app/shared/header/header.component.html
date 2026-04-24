@@ -456,20 +456,22 @@
                             </button>
                         </li>
                     </ng-container>
-                    <li class="header-utility-icons">
-                        <a href="javascript:void(0);" aria-label="help-info" (click)="toggleHelpSupportPane(true)">
-                            <button
-                                matIconButton
-                                aria-label="help"
-                                [matTooltip]="commonLocaleData?.app_help"
-                                [matTooltipPosition]="'below'"
-                                class="icon-circle"
-                            >
-                                <i class="icon-question-new"></i>
-                            </button>
-                            <span class="pl-1 help-text">{{ commonLocaleData?.app_help }}</span>
-                        </a>
-                    </li>
+                    @if (generalService.isGiddhDomain() || serviceConfig.CALENDLY_URL) {
+                        <li class="header-utility-icons">
+                            <a href="javascript:void(0);" aria-label="help-info" (click)="toggleHelpSupportPane(true)">
+                                <button
+                                    matIconButton
+                                    aria-label="help"
+                                    [matTooltip]="commonLocaleData?.app_help"
+                                    [matTooltipPosition]="'below'"
+                                    class="icon-circle"
+                                >
+                                    <i class="icon-question-new"></i>
+                                </button>
+                                <span class="pl-1 help-text">{{ commonLocaleData?.app_help }}</span>
+                            </a>
+                        </li>
+                    }
                     <li>
                         <div class="profile-wrapper" [matMenuTriggerFor]="profileMenu" role="button" aria-label="profile-picture">
                             <div class="profile-picture text-center cursor-pointer">

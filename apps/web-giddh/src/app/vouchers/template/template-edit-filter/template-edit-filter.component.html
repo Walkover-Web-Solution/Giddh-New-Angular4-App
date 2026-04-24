@@ -45,7 +45,7 @@
                                         "
                                     >
                                         <img
-                                            src="{{ imgPath }}templates/{{ template?.templateType }}.png"
+                                            [src]="imgPath + 'templates/{{ template?.templateType }}.png'"
                                             alt="template"
                                             class="view-img w-100 h-100 border-radius-4"
                                         />
@@ -54,7 +54,7 @@
                                             class="beta-img position-absolute"
                                             *ngIf="template?.templateType !== templateTypeEnum.GstTemplateA"
                                         >
-                                            <img src="{{ imgPath }}templates/beta.png" alt="beta" />
+                                            <img [src]="imgPath + 'templates/beta.png'" alt="beta" />
                                         </div>
                                     </div>
                                 </ng-container>

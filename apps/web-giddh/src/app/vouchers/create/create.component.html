@@ -332,7 +332,7 @@
                                         "
                                     >
                                         <img
-                                            src="{{ imgPath }}new/search_customer.svg"
+                                            [src]="imgPath + 'new/search_customer.svg'"
                                             height="70"
                                             class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value"
@@ -348,7 +348,7 @@
                                         "
                                     >
                                         <img
-                                            src="{{ imgPath }}new/search-vendor.svg"
+                                            [src]="imgPath + 'new/search-vendor.svg'"
                                             height="70"
                                             class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value"
@@ -358,7 +358,7 @@
                                         *ngIf="invoiceType.isCashInvoice && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote"
                                     >
                                         <img
-                                            src="{{ imgPath }}new/search-customer-cash-invoice.svg"
+                                            [src]="imgPath + 'new/search-customer-cash-invoice.svg'"
                                             height="70"
                                             class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value"
@@ -368,7 +368,7 @@
                                         *ngIf="invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isDebitNote)"
                                     >
                                         <img
-                                            src="{{ imgPath }}search-vendor-cash-invoice.svg"
+                                            [src]="imgPath + 'search-vendor-cash-invoice.svg'"
                                             height="70"
                                             class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value"
@@ -1493,7 +1493,7 @@
                                     <img
                                         alt="switch-icon"
                                         height="15px"
-                                        src="{{ imgPath }}switch-icon.svg"
+                                        [src]="imgPath + 'switch-icon.svg'"
                                         class="cursor-pointer"
                                         tabindex="0"
                                         cdkMonitorElementFocus
@@ -2486,7 +2486,7 @@
                                                                                 openOtherTaxDialog(entry, entryIndex)
                                                                             "
                                                                         >
-                                                                            <img src="{{ imgPath }}edit-pencilicon.svg" alt="edit icon" />
+                                                                            <img [src]="imgPath + 'edit-pencilicon.svg'" alt="edit icon" />
                                                                         </a>
                                                                     </span>
                                                                 </ng-container>

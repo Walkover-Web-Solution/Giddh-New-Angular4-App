@@ -14,12 +14,12 @@
                 <div class="h-100 d-flex flex-column justify-content-center">
                     <div class="button-one">
                         <a [href]="androidAppUrl" class="google-play-store" target="_blank" rel="noopener noreferrer">
-                            <img class="min-w-200 mt-3 h-auto" src="{{ imgPath }}google-play-store.svg" alt="Get it on Google Play" />
+                            <img class="min-w-200 mt-3 h-auto" [src]="imgPath + 'google-play-store.svg'" alt="Get it on Google Play" />
                         </a>
                     </div>
                     <div class="button-two">
                         <a [href]="iosAppUrl" class="apple-play-store" target="_blank" rel="noopener noreferrer">
-                            <img class="min-w-200 mt-3 h-auto" src="{{ imgPath }}apple-app-store.svg" alt="Download on the App Store" />
+                            <img class="min-w-200 mt-3 h-auto" [src]="imgPath + 'apple-app-store.svg'" alt="Download on the App Store" />
                         </a>
                     </div>
                 </div>

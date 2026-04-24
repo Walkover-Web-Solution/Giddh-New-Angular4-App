@@ -17,19 +17,19 @@
                 <ul class="import-type mb-4 mt-5 pt-5">
                     <li *ngIf="!isBranch">
                         <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'master']" href="javascript:void(0);">
-                            <img src="{{ imgPath }}new/group-import.svg" alt="group import" />
+                            <img [src]="imgPath + 'new/group-import.svg'" alt="group import" />
                             <p>{{ commonLocaleData?.app_import_type?.master }}</p>
                         </a>
                     </li>
                     <li *ngIf="isBranch || branches?.length === 1">
                         <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'entries']" href="javascript:void(0);">
-                            <img src="{{ imgPath }}new/entries-import.svg" alt="entries import" />
+                            <img [src]="imgPath + 'new/entries-import.svg'" alt="entries import" />
                             <p>{{ commonLocaleData?.app_import_type?.entries }}</p>
                         </a>
                     </li>
                     <li *ngIf="!isBranch">
                         <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'stock']" href="javascript:void(0);">
-                            <img src="{{ imgPath }}new/Inventory-13.svg" alt="inventory" />
+                            <img [src]="imgPath + 'new/Inventory-13.svg'" alt="inventory" />
                             <p>{{ commonLocaleData?.app_import_type?.inventory }}</p>
                         </a>
                     </li>
@@ -40,7 +40,7 @@
                                 [routerLink]="['/pages', 'import', voucherType.AccountWise]"
                                 href="javascript:void(0);"
                             >
-                                <img src="{{ imgPath }}new/account.svg" alt="account wise" />
+                                <img [src]="imgPath + 'new/account.svg'" alt="account wise" />
                                 <p>
                                     {{ commonLocaleData?.app_import_type?.voucher }} -
                                     {{ commonLocaleData?.app_import_type?.account_wise }}
@@ -53,7 +53,7 @@
                                 [routerLink]="['/pages', 'import', voucherType.VoucherWise]"
                                 href="javascript:void(0);"
                             >
-                                <img src="{{ imgPath }}new/voucher.svg" alt="voucher wise" />
+                                <img [src]="imgPath + 'new/voucher.svg'" alt="voucher wise" />
                                 <p>
                                     {{ commonLocaleData?.app_import_type?.voucher }} -
                                     {{ commonLocaleData?.app_import_type?.voucher_wise }}

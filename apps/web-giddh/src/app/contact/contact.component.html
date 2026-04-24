@@ -1391,7 +1391,7 @@
             "
         >
             <div class="d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1">
-                <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="data not found" />
+                <img class="customer-img" [src]="imgPath + 'customer-vendor/stock-photo.png'" alt="data not found" />
             </div>
             <h2 class="text-light">{{ commonLocaleData?.app_no_data_found }}</h2>
         </div>
@@ -1490,7 +1490,7 @@
     <mat-dialog-content class="dialog-body">
         <div class="d-flex flex-column align-items-center justify-content-center row-gap5">
             <div class="payment-img">
-                <img src="{{ imgPath }}payment-succes.svg" />
+                <img [src]="imgPath + 'payment-succes.svg'" />
             </div>
             <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
             <p>{{ paymentSuccessfulMessage }}</p>

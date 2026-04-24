@@ -112,9 +112,9 @@ export class EnvironmentService {
      */
     getAssetPath(relativePath: string): string {
         if (this.isElectron) {
-            return `assets/${relativePath}`;
+            return `/assets/${relativePath}`;
         }
-        return `${this.appUrl}${this.appFolder}assets/${relativePath}`;
+        return `/${this.appFolder}assets/${relativePath}`;
     }
 
     /**
