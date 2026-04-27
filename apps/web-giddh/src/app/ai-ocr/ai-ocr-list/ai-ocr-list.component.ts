@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    Input,
     OnDestroy,
     OnInit,
     ViewChild,
@@ -90,7 +91,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     /** This will use for active company */
     public activeCompany: any = {};
     /** True if is company */
-    public isCompany: boolean = true;
+    @Input() public isCompany: boolean = true;
     /** Hold broadcast event */
     public broadcast: any;
     /** True if show clear filter */

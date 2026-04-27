@@ -110,9 +110,6 @@
                 </button>
             </div>
         </div>
-        <div class="mr-t1 d-flex align-items-center" *ngIf="isCompany">
-            <span class="font-size-16 mr-2">{{ localeData?.create_voucher_messgae }}</span>
-        </div>
         <main class="flex-grow-1 overflow-auto main-ocr">
             <ng-container [ngSwitch]="selectedToggle">
                 <ng-container *ngSwitchCase="ocrAction.Create">
@@ -164,7 +161,7 @@
                         </div>
                     </ng-container>
                     <ng-container *ngIf="listCount > 0 || showClearFilter">
-                        <ai-ocr-list></ai-ocr-list>
+                        <ai-ocr-list [isCompany]="isCompany"></ai-ocr-list>
                     </ng-container>
                 </ng-container>
             </ng-container>
