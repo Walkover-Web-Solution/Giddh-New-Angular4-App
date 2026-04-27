@@ -298,9 +298,9 @@
                                         ) {
                                             <go-to-branch
                                                 [title]="
-                                                    isCompany
-                                                        ? commonLocaleData?.app_you_in_company_mode
-                                                        : commonLocaleData?.app_you_in_consolidate_mode
+                                                    isConsolidatedBranch
+                                                        ? commonLocaleData?.app_you_in_consolidate_mode
+                                                        : commonLocaleData?.app_you_in_company_mode
                                                 "
                                                 ]
                                                 [message]="localeData?.go_to_branch_information"

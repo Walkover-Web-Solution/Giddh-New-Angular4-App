@@ -3378,7 +3378,6 @@
                             ></select-table-column>
                         </div>
                     </div>
-                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="total-wrapper d-flex column-gap-05 w-100 mb-3">
                         <div class="total-sale opening-box p-2 w-25">
                             <p class="font-size-12">{{ localeData?.advanced_receipts }}</p>
@@ -3421,6 +3420,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -3777,7 +3777,6 @@
                             ></select-table-column>
                         </div>
                     </div>
-                    <ng-container *ngTemplateOutlet="goToBranchTemplate; context: { cssClass: 'border-radius-8 mb-3' }"></ng-container>
                     <div class="total-wrapper d-flex column-gap-05 w-100 mb-3">
                         <div class="total-sale payment-receipt p-2 w-50">
                             <p class="font-size-12">{{ localeData?.total_payments }}:</p>
@@ -3800,6 +3799,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -5701,6 +5701,7 @@
                             </span>
                         </button>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="recurringVouchersLoading()"></giddh-page-loader>
                         <table
