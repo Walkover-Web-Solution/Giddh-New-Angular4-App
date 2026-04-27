@@ -85,19 +85,21 @@
                 </form>
             </div>
         </div>
+
+        @if (isCompany || isConsolidatedBranch) {
+            <go-to-branch
+                [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
+                [message]="localeData?.info_message"
+                [buttonLabel]="commonLocaleData?.switch_to_branch"
+                [cssClass]="'mb-3 border-radius-8'"
+            ></go-to-branch>
+        }
+
         <!-- search form end -->
         <section *ngIf="isReportLoading" class="clear-both mt-custom-100 col-md-12">
             <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </section>
         <div class="col-12 col-sm-12" *ngIf="!isReportLoading && dataSource?.length === 0">
-            @if (isCompany || isConsolidatedBranch) {
-                <go-to-branch
-                    [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
-                    [message]="localeData?.info_message"
-                    [buttonLabel]="commonLocaleData?.switch_to_branch"
-                    [cssClass]="'mt-5 border-radius-8'"
-                ></go-to-branch>
-            }
             <no-data [secondaryMessageClass]="'p-0'" [primaryMessageClass]="'no-data mt-custom-100'"></no-data>
         </div>
         <section
