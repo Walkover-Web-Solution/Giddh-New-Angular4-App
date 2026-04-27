@@ -50,6 +50,14 @@
                 + {{ localeData?.create_project }}
             </button>
         </div>
+        @if (isCompany && !(isFetchingProjects$ | async) && (totalResults || isSearch || isShowSearchBox.name || isShowSearchBox.status)) {
+            <go-to-branch
+                [title]="commonLocaleData?.app_you_in_company_mode"
+                [message]="localeData?.go_to_branch_information"
+                [buttonLabel]="commonLocaleData?.switch_to_branch"
+                [cssClass]="'mt-4 mb-1 border-radius-8'"
+            ></go-to-branch>
+        }
         <div
             *ngIf="!(isFetchingProjects$ | async) && !(totalResults || isSearch)"
             class="min-height d-flex align-items-center justify-content-center"
@@ -206,19 +214,10 @@
             </table>
             <div *ngIf="!(isFetchingProjects$ | async) && !totalResults">
                 <no-data
-                    *ngIf="projectName.value?.length || projectStatus.value?.length"
                     [primaryMessage]="commonLocaleData?.app_no_data_found"
                     [secondaryMessage]="' '"
                     [primaryMessageClass]="'no-data'"
                 ></no-data>
-                @if (!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)) {
-                    <go-to-branch
-                        [title]="commonLocaleData?.app_you_in_company_mode"
-                        [message]="localeData?.go_to_branch_information"
-                        [buttonLabel]="commonLocaleData?.switch_to_branch"
-                        [cssClass]="'mt-4 mb-1 border-radius-8'"
-                    ></go-to-branch>
-                }
             </div>
             <mat-paginator
                 *ngIf="totalResults > pageSizeOptions[0]"
