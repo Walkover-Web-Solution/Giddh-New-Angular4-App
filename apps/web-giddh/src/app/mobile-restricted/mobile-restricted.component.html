@@ -1,29 +1,39 @@
-<div class="mobile-container">
-    <div class="logo-wrapper">
-        <img [src]="giddhLogoSrc" alt="brand-logo" />
+<div class="mobile-container heightVH-100">
+    <div class="logo-wrapper text-center">
+        <img [src]="brandLogoUrl" alt="brand-logo" />
     </div>
-    <div class="mobile-restriction-wrapper d-flex align-items-center m-3">
-        <div class="text-content-wrapper d-flex justify-content-between text-center flex-column">
-            <span class="mobile-heading text-center">
-                Start using giddh by
-                <br />
-                downloading mobile app
-            </span>
-            <div class="button-wrapper">
-                <div class="button-one">
-                    <a
-                        href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en_IN&gl=US"
-                        class="store-button google-play-store"
-                    >
-                        <img src="{{ imgPath }}google-play-store.svg" />
-                    </a>
-                </div>
-                <div class="button-two">
-                    <a href="https://apps.apple.com/in/app/giddh-books-that-make-sense/id1491003438" class="store-button apple-play-store">
-                        <img src="{{ imgPath }}apple-app-store.svg" />
-                    </a>
+    <div class="mobile-restriction-wrapper w-fit-content d-flex align-items-center m-3 my-0 mx-auto">
+        @if (isGiddhDomain) {
+            <!-- Show app download for Giddh domain -->
+            <div class="text-content-wrapper d-flex justify-content-between text-center flex-column">
+                <span class="font-size-24 mb-3 text-center">
+                    Start using Giddh on the go!
+                    <br />
+                    Download our mobile app
+                </span>
+                <div class="h-100 d-flex flex-column justify-content-center">
+                    <div class="button-one">
+                        <a [href]="androidAppUrl" class="google-play-store" target="_blank" rel="noopener noreferrer">
+                            <img class="min-w-200 mt-3 h-auto" [src]="imgPath + 'google-play-store.svg'" alt="Get it on Google Play" />
+                        </a>
+                    </div>
+                    <div class="button-two">
+                        <a [href]="iosAppUrl" class="apple-play-store" target="_blank" rel="noopener noreferrer">
+                            <img class="min-w-200 mt-3 h-auto" [src]="imgPath + 'apple-app-store.svg'" alt="Download on the App Store" />
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        } @else {
+            <!-- Show generic message for white-label domains -->
+            <div class="text-content-wrapper d-flex justify-content-center text-center flex-column">
+                <span class="font-size-24 mb-2 text-center text-light">
+                    📱 Mobile View Not Available
+                    <br />
+                    <br />
+                    Please switch to a tablet or desktop for the best experience
+                </span>
+            </div>
+        }
     </div>
 </div>

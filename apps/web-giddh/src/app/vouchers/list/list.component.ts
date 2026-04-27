@@ -15,7 +15,7 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
@@ -42,7 +42,6 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { TemplateModeEnum } from "../../models/api-models/Sales";
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { AsideRecurrenceVoucherCreateComponent } from "../../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
@@ -366,7 +365,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** List of all templates fetched from the service */
     public templatesList: any[] = [];
     /** List of all created templates for a given type */
-    public createdTemplatesList: any[] = [];
+    public createdTemplatesList = signal<any[]>([]);
     /** True if datepicker menu is open */
     public isDatepickerMenuOpen: boolean = false;
     /** List of all created templates for a given type */
@@ -496,7 +495,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
@@ -1047,9 +1046,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         let searchingFieldIsEmpty: boolean = false;
 
         if (this.voucherType === VoucherTypeEnum.purchase) {
-            searchingFieldIsEmpty = (this.purchaseOrderUniqueNameInput.value?.length > 0) || (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value.length > 0);
+            searchingFieldIsEmpty = (this.purchaseOrderUniqueNameInput.value?.length > 0) || (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value?.length > 0);
         } else {
-            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value.length > 0);
+            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value?.length > 0);
         }
 
         this.advanceFiltersApplied = this.isSearching = searchingFieldIsEmpty;
@@ -2515,9 +2514,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public setInitialAdvanceFilter(onlyResetValue: boolean = false): void {
         let universalDate;
         // get application date
-        this.componentStore.universalDate$.pipe(take(1)).subscribe(date => {
+        this.componentStore.universalDate$.pipe(filter(Boolean) ,take(1)).subscribe(date => {
             universalDate = date;
-        });
 
         // set date picker date as application date
         if (universalDate?.length > 1) {
@@ -2551,8 +2549,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getRecurringVouchers();
             } else {
                 this.getVouchers(false);
+                this.getVoucherBalances();
             }
         }
+        });
     }
 
     /**
@@ -3622,12 +3622,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param templateType The type of template to fetch
      */
     public fetchAllCreatedTemplates(templateType: string): void {
-        this.createdTemplatesList = [];
+        this.createdTemplatesList.set([]);
         this.invoiceTemplatesService.getAllCreatedTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
-                this.createdTemplatesList = res?.body || [];
+                this.createdTemplatesList.set(res?.body || []);
             } else {
-                this.createdTemplatesList = [];
+                this.createdTemplatesList.set([]);
             }
             this.changeDetectorRef.detectChanges();
         });
@@ -3644,13 +3644,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (res?.status === 'success') {
                 this.toasterService.showSnackBar('success', this.localeData?.template_set_as_default_successfully);
                 // Update the UI immediately
-                this.createdTemplatesList.forEach(template => {
-                    if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
-                        template.isDefaultForVoucher = (template.uniqueName === templateUniqueName);
-                    } else {
-                        template.isDefault = (template.uniqueName === templateUniqueName);
-                    }
-                });
+                this.createdTemplatesList.update(list => list.map(template => ({
+                    ...template,
+                    ...(this.voucherType === 'credit note' || this.voucherType === 'debit note'
+                        ? { isDefaultForVoucher: template.uniqueName === templateUniqueName }
+                        : { isDefault: template.uniqueName === templateUniqueName })
+                })));
+                this.changeDetectorRef.detectChanges();
             } else {
                 this.toasterService.showSnackBar('error', res?.message);
             }
@@ -3729,7 +3729,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             templateList: this.templatesList,
             voucherType: voucherType,
             templateType: templatesType,
-            createTemplateList: this.createdTemplatesList,
+            createTemplateList: this.createdTemplatesList(),
             updateTemplate: type === TemplateModeEnum.Edit ? template : null,
             mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create,
             localeData: this.localeData,

@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SYNC_TALLY_HELP_DOC_URL } from '../../app.constant';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { GeneralService } from '../../services/general.service';
+import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config';
 import { ReplaySubject } from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 
@@ -20,11 +20,11 @@ export class TallyIntegrationComponent implements OnInit, OnDestroy {
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
+    public syncWithTallyHelpDocUrl: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private generalService: GeneralService, private clipboardService: ClipboardService) {
+    constructor(private generalService: GeneralService, private clipboardService: ClipboardService, @Inject(ServiceConfig) private serviceConfig: IServiceConfigArgs) {
     }
 
     /**
@@ -35,6 +35,7 @@ export class TallyIntegrationComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         let companyUniqueName = this.generalService.companyUniqueName;
         this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
+        this.syncWithTallyHelpDocUrl = this.serviceConfig.SYNC_TALLY_HELP_DOC_URL;
     }
 
     /**

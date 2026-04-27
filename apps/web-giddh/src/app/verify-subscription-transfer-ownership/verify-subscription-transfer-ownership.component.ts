@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SubscriptionComponentStore } from '../subscription/utility/subscription.store';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { COUNTRY_REGION_MAP, Configuration } from '../app.constant';
+import { Configuration } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
 import { environment } from '../../environments/environment.generated';
@@ -27,8 +27,8 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     public loginUrl: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* it will store image path */
-    public imgPath: string = '';
+    /* Hold giddh logo source */
+    public brandLogoUrl: string = '';
     /** Instance of modal */
     public modalDialogRef: any;
     /** Instance of reject modal */
@@ -66,7 +66,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
    * @memberof VerifySubscriptionTransferOwnershipComponent
    */
     public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.brandLogoUrl = this.serviceConfig.LOGOS.dark;
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.requestId) {

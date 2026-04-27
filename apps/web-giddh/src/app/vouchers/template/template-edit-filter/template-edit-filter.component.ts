@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, SimpleChanges, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, SimpleChanges, Inject, ChangeDetectorRef, signal } from '@angular/core';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { TemplateContentUISectionVisibility, InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
@@ -8,13 +8,12 @@ import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { API_BULK_FETCH_LIMIT, Configuration, IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
 import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { TemplateModeEnum, TemplateTypeEnum, VoucherTypeEnum } from '../../../models/api-models/Sales';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { ServiceConfig } from '../../../services/service.config';
 import { CustomFieldsService } from '../../../services/custom-fields.service';
 
@@ -79,10 +78,6 @@ export class TemplateEditFilterComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True, if delete button should be shown */
     public showDeleteButton: boolean = false;
-    /** Name of the selected font */
-    public selectedFont: string = "";
-    /** Size of the selected font */
-    public selectedFontSize: string = "";
     /** Default image size */
     public defaultImageSize: string = 'S';
     /** Controls visibility of template UI sections */
@@ -94,11 +89,11 @@ export class TemplateEditFilterComponent implements OnInit {
     /** Type of the voucher */
     public voucherType = '';
     /** Source URL of the signature image */
-    public signatureSrc: string = '';
+    public signatureSrc = signal<string>('');
     /** True, if signature image is attached */
-    public signatureImgAttached: boolean = false;
+    public signatureImgAttached = signal<boolean>(false);
     /** True, if signature upload is in progress */
-    public isSignatureUploadInProgress: boolean = false;
+    public isSignatureUploadInProgress = signal<boolean>(false);
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
     /** True, if GST composition should be shown */
@@ -220,7 +215,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         // Initialize dialog data
         const { templateType, voucherType, templateList, mode, localeData, commonLocaleData } = this.dialogData || {};
         this.templateType = templateType;
@@ -597,15 +592,9 @@ export class TemplateEditFilterComponent implements OnInit {
             } else {
                 this.presetFonts = this.templateFonts;
             }
-            (Array.isArray(this.templateFonts) ? this.templateFonts : []).forEach(font => {
-                if (font?.value === this.customTemplate?.font) this.selectedFont = font?.label;
-            });
         }
         if (this.customTemplate?.fontSize) {
             this.customTemplate.fontSize = this.customTemplate?.fontSize.toString();
-            (Array.isArray(this.templateFontsSize) ? this.templateFontsSize : []).forEach(fontSize => {
-                if (fontSize?.value == this.customTemplate?.fontSize) this.selectedFontSize = fontSize?.label;
-            });
         }
     }
 
@@ -640,8 +629,8 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['content'] && changes['content'].currentValue !== changes['content'].previousValue) {
-            this.signatureImgAttached = false;
-            this.signatureSrc = '';
+            this.signatureImgAttached.set(false);
+            this.signatureSrc.set('');
             this.assignImageSignature();
         }
     }
@@ -738,16 +727,16 @@ export class TemplateEditFilterComponent implements OnInit {
             this.footerFile = this.footerSelectedFile?.files[0];
 
             this.generalService.getSelectedFileBase64(this.footerFile, (base64) => {
-                this.isSignatureUploadInProgress = true;
+                this.isSignatureUploadInProgress.set(true);
 
                 this.commonService.uploadImageBase64({ base64: base64, format: this.footerFile.type, fileName: this.footerFile.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    this.isSignatureUploadInProgress = false;
+                    this.isSignatureUploadInProgress.set(false);
 
                     if (response?.status === 'success') {
                         if (this.templateService.unusedImageSignature) {
                             this.removeFileFromServer();
                         }
-                        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName;
+                        this.signatureSrc.set(ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName);
                         if (this.customTemplate?.sections?.footer?.data?.imageSignature) {
                             this.customTemplate.sections.footer.data.imageSignature.label = response?.body?.uniqueName;
                         }
@@ -755,7 +744,7 @@ export class TemplateEditFilterComponent implements OnInit {
                         this.onChangeFieldVisibility();
                         this.toasty.showSnackBar("success", this.localeData.file_uploaded_successfully);
                     } else {
-                        this.signatureImgAttached = false;
+                        this.signatureImgAttached.set(false);
                         this.toasty.showSnackBar("error", response?.message);
                     }
                 });
@@ -769,9 +758,9 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public removeFile(): void {
-        this.signatureImgAttached = false;
-        this.signatureSrc = '';
-        this.isSignatureUploadInProgress = false;
+        this.signatureImgAttached.set(false);
+        this.signatureSrc.set('');
+        this.isSignatureUploadInProgress.set(false);
         this.footerFile = null;
         this.footerSelectedFile = null;
 
@@ -906,11 +895,11 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public assignImageSignature(): void {
         if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
-            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
-            this.signatureImgAttached = true;
+            this.signatureSrc.set(ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label);
+            this.signatureImgAttached.set(true);
         } else {
-            this.signatureSrc = '';
-            this.signatureImgAttached = false;
+            this.signatureSrc.set('');
+            this.signatureImgAttached.set(false);
         }
     }
 

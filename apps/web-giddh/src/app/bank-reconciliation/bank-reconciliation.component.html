@@ -1,0 +1,337 @@
+<div
+    appTranslate
+    [file]="'bank-reconciliation'"
+    (localeData)="localeData.set($event)"
+    (commonLocaleData)="commonLocaleData.set($event)"
+    class="d-flex flex-column full-viewport-height"
+>
+    <hamburger-menu></hamburger-menu>
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <!-- VIEW: INITIAL LOADING                                               -->
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    @if (isListLoading()) {
+        <div class="d-flex align-items-center justify-content-center flex-grow-1">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+    }
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <!-- SHARED: Upload form body (reused inline and inside dialog)          -->
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <ng-template #uploadFormBody let-dialogMode="dialogMode">
+        <div class="border-radius-8 w-100" [class]="dialogMode ? 'p-3' : 'max-w-600 p-4 box-shadow'">
+            <!-- Card header -->
+            <p class="font-size-20 font-weight-semibold mb-2">{{ localeData()?.title }}</p>
+            <p class="font-size-14 text-muted mb-1">{{ localeData()?.upload_description }}</p>
+            <p class="font-size-12 text-muted mb-4">{{ localeData()?.supported_formats }}</p>
+            <!-- File picker -->
+            <div class="d-flex align-items-center column-gap-3 mb-4">
+                <input #fileInput type="file" accept=".pdf,.xlsx,.xls,.csv" class="d-none" (change)="onFileChange($event)" />
+                <button matButton="filled" color="primary" type="button" aria-label="choose file" (click)="fileInput.click()">
+                    {{ localeData()?.choose_file }}
+                </button>
+                <span class="font-size-14 text-muted text-truncate">
+                    @if (selectedFileName()) {
+                        {{ selectedFileName() }}
+                    } @else {
+                        {{ localeData()?.no_file_chosen }}
+                    }
+                </span>
+            </div>
+
+            <!-- Password — only for PDF -->
+            @if (fileType() === reconciliationFileType.PDF) {
+                <div class="w-100 mb-3">
+                    <input-field
+                        class="w-100"
+                        [label]="commonLocaleData()?.app_password"
+                        [placeholder]="localeData()?.password_placeholder"
+                        [type]="'password'"
+                        [autocomplete]="'new-password'"
+                        [defaultValue]="password()"
+                        (onChange)="password.set($event)"
+                    ></input-field>
+                </div>
+            }
+
+            <!-- Same debit/credit column toggle — only for Excel/CSV -->
+            @if (
+                fileType() === reconciliationFileType.XLSX ||
+                fileType() === reconciliationFileType.XLS ||
+                fileType() === reconciliationFileType.CSV
+            ) {
+                <div class="d-flex align-items-center justify-content-between w-100 mb-3">
+                    <span class="font-size-14">{{ localeData()?.same_debit_credit_column }}</span>
+                    <div class="d-flex align-items-center column-gap-2">
+                        <mat-slide-toggle
+                            [checked]="sameDebitCreditColumn()"
+                            (change)="sameDebitCreditColumn.set($event.checked)"
+                            aria-label="same column for debit and credit amount"
+                        ></mat-slide-toggle>
+                        <span class="font-size-13 text-muted">
+                            {{ sameDebitCreditColumn() ? commonLocaleData()?.app_yes : commonLocaleData()?.app_no }}
+                        </span>
+                    </div>
+                </div>
+            }
+
+            <!-- Account selection -->
+            <div class="w-100 mb-3">
+                <reactive-dropdown-field
+                    [options]="accountOptions()"
+                    [required]="true"
+                    [showError]="showAccountError()"
+                    [label]="commonLocaleData()?.app_account"
+                    [placeholder]="commonLocaleData()?.app_account"
+                    [name]="'reconciliationAccount'"
+                    [labelValue]="accountLabel()"
+                    [enableDynamicSearch]="true"
+                    (dynamicSearchedQuery)="loadAccounts($event)"
+                    (selectedOption)="accountUniqueName.set($event?.value); accountLabel.set($event?.label); showAccountError.set(false)"
+                    (onClear)="accountUniqueName.set(''); accountLabel.set(''); loadAccounts()"
+                ></reactive-dropdown-field>
+            </div>
+
+            <!-- Date range -->
+            <mat-form-field appearance="outline" class="w-100 mb-4" (click)="uploadDatepicker.open()">
+                <mat-label>{{ localeData()?.from_date }} - {{ localeData()?.to_date }}</mat-label>
+                <mat-date-range-input [formGroup]="dateRangeForm" [rangePicker]="uploadDatepicker">
+                    <input matStartDate formControlName="from" [placeholder]="localeData()?.from_date" />
+                    <input matEndDate formControlName="to" [placeholder]="localeData()?.to_date" />
+                </mat-date-range-input>
+                <mat-date-range-picker #uploadDatepicker></mat-date-range-picker>
+            </mat-form-field>
+
+            <!-- Upload button -->
+            <div class="d-flex justify-content-end column-gap-15">
+                @if (dialogMode) {
+                    <button matButton="outlined" type="button" aria-label="close upload dialog" (click)="onCancelMapping()">
+                        {{ commonLocaleData()?.app_cancel }}
+                    </button>
+                }
+                <button
+                    matButton="filled"
+                    aria-label="upload bank statement"
+                    [disabled]="!selectedFile() || isLoading()"
+                    (click)="onUpload()"
+                >
+                    @if (isLoading()) {
+                        <mat-spinner diameter="18" class="d-inline-block mr-1"></mat-spinner>
+                        {{ localeData()?.uploading }}
+                    } @else {
+                        {{ localeData()?.upload_statement }}
+                    }
+                </button>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <!-- DIALOG TEMPLATE: Upload form opened as a dialog when list has data  -->
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <ng-template #uploadDialogTemplate>
+        <mat-dialog-content class="p-0">
+            <ng-container [ngTemplateOutlet]="uploadFormBody" [ngTemplateOutletContext]="{ dialogMode: true }"></ng-container>
+        </mat-dialog-content>
+    </ng-template>
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <!-- VIEW: UPLOAD — shown inline (centered) only when list is empty      -->
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    @if (!isListLoading() && currentView() === reconciliationView.Upload) {
+        <div class="flex-grow-1 d-flex align-items-center justify-content-center p-4">
+            <ng-container [ngTemplateOutlet]="uploadFormBody" [ngTemplateOutletContext]="{ dialogMode: false }"></ng-container>
+        </div>
+    }
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <!-- VIEW: COLUMN MAPPING — shown after Excel/CSV upload                 -->
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    @if (!isListLoading() && currentView() === reconciliationView.Mapping) {
+        <column-mapping-table
+            [mappingRows]="mappingRows()"
+            [previewRows]="previewRows()"
+            [accountUniqueName]="accountUniqueName()"
+            [fromDate]="uploadResponse()?.fromDate"
+            [toDate]="uploadResponse()?.toDate"
+            [isLoading]="isLoading()"
+            [localeData]="localeData()"
+            [commonLocaleData]="commonLocaleData()"
+            (giddhFieldSelected)="onGiddhFieldSelected($event.value, $event.index)"
+            (cancel)="onCancelMapping()"
+            (reconcile)="onReconcile()"
+        ></column-mapping-table>
+    }
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <!-- VIEW: LISTING — shown when reconciliation history exists            -->
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    @if (!isListLoading() && currentView() === reconciliationView.List) {
+        <div class="p-3 d-flex flex-column flex-grow-1 overflow-hidden">
+            <!-- Top bar: date filter (left) + upload button (right) -->
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center column-gap-2">
+                    <!-- Date range picker trigger -->
+                    <div
+                        class="custom-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        tabindex="0"
+                        aria-haspopup="true"
+                        aria-controls="universal-datepicker-menu"
+                    >
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi() ? selectedDateRangeUi() : ''"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
+                        />
+                    </div>
+
+                    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                        <ng-template matMenuContent>
+                            <app-datepicker-wrapper
+                                [inputStartDate]="selectedDateRange()?.startDate"
+                                [inputEndDate]="selectedDateRange()?.endDate"
+                                [alwaysShowCalendars]="true"
+                                [ranges]="datePickerOptions"
+                                [selectedRangeLabel]="selectedRangeLabel()"
+                                [showCustomRangeLabel]="true"
+                                [showClearButton]="false"
+                                [showCancel]="true"
+                                [linkedCalendars]="true"
+                                [showDropdowns]="true"
+                                [locale]="{ applyLabel: commonLocaleData()?.app_done }"
+                                (rangeClicked)="dateSelectedCallback($event)"
+                                (datesUpdated)="dateSelectedCallback($event)"
+                                (closeCalender)="toggleGiddhDatepicker(false)"
+                                [keepCalendarOpeningWithRange]="false"
+                                [showRangeLabelOnInput]="false"
+                            ></app-datepicker-wrapper>
+                        </ng-template>
+                    </mat-menu>
+
+                    @if (showClearFilter()) {
+                        <button matButton="outlined" class="min-width-100" (click)="resetFilter()">
+                            <span class="icon-cross icon-font-size-14"></span>
+                            {{ commonLocaleData()?.app_clear_filter }}
+                        </button>
+                    }
+                </div>
+
+                <!-- Upload statement button -->
+                <button matButton="filled" color="primary" aria-label="upload new bank statement" (click)="openUploadDialog()">
+                    {{ localeData()?.upload_statement }}
+                </button>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive flex-grow-1 overflow-auto">
+                <table mat-table [dataSource]="listItems()" class="w-100">
+                    <!-- Date Column -->
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData()?.reconciliation_date }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                    </ng-container>
+
+                    <!-- Action By Column -->
+                    <ng-container matColumnDef="actionBy">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData()?.action_by }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.user?.name }}</td>
+                    </ng-container>
+
+                    <!-- Uploaded File Column -->
+                    <ng-container matColumnDef="uploadedFile">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData()?.uploaded_file }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            @if (element.uploadFilePath) {
+                                <a matButton [href]="element.uploadFilePath" [matTooltip]="element.fileName" matTooltipPosition="above">
+                                    {{ commonLocaleData()?.app_download }}
+                                    <i class="icon-download1 pl-1"></i>
+                                </a>
+                            } @else {
+                                <span>—</span>
+                            }
+                        </td>
+                    </ng-container>
+
+                    <!-- Reconciled File Column -->
+                    <ng-container matColumnDef="reconciledFile">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData()?.reconciled_file }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            @if (element.status !== 'COMPLETED') {
+                                <div
+                                    class="import-text"
+                                    [matTooltip]="element.status === 'SUBMITTED' ? localeData()?.mapping_pending : ''"
+                                    matTooltipPosition="above"
+                                >
+                                    {{ element.status }}
+                                </div>
+                            } @else if (element.resultFilePath) {
+                                <a matButton [href]="element.resultFilePath">
+                                    {{ commonLocaleData()?.app_download }}
+                                    <i class="icon-download1 pl-1"></i>
+                                </a>
+                            } @else {
+                                <span>—</span>
+                            }
+                        </td>
+                    </ng-container>
+
+                    <!-- Expiry Column -->
+                    <ng-container matColumnDef="expiry">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData()?.expiry }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.expireAt }}</td>
+                    </ng-container>
+
+                    <!-- Status Column -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData()?.app_status }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span
+                                class="badge"
+                                [class.text-green]="element.status === 'COMPLETED'"
+                                [class.text-orange]="element.status === 'SUBMITTED'"
+                                [class.text-red]="element.status === 'FAILED'"
+                            >
+                                <span>{{ element.status }}</span>
+                                @if (element.status === 'FAILED') {
+                                    <span class="pl-2">
+                                        <i class="icon-info" [matTooltip]="element.errorMessage" matTooltipPosition="above"></i>
+                                    </span>
+                                }
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                    <!-- No data row -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell text-center p-4" [attr.colspan]="displayedColumns.length">
+                            {{ localeData()?.no_data }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Paginator -->
+            @if (paginationRequest().totalItems > pageSizeOptions[0]) {
+                <mat-paginator
+                    [length]="paginationRequest().totalItems"
+                    [pageSize]="paginationRequest().count"
+                    [pageIndex]="pageIndex()"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event)"
+                ></mat-paginator>
+            }
+        </div>
+    }
+</div>

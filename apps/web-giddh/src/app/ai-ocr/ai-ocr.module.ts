@@ -30,6 +30,7 @@ import { AiOcrCreateComponent } from "./ai-ocr-create/ai-ocr-create.component";
 import { AiOcrListComponent } from "./ai-ocr-list/ai-ocr-list.component";
 import { AiOcrRoutingModule } from "./ai-ocr.routing.module";
 import { MatBadgeModule } from "@angular/material/badge";
+import { GoToBranchComponent } from "../shared/go-to-branch/go-to-branch.component";
 
 @NgModule({
     imports: [
@@ -61,7 +62,8 @@ import { MatBadgeModule } from "@angular/material/badge";
         VouchersModule,
         MatProgressSpinnerModule,
         GiddhProgressSpinnerComponent,
-        MatBadgeModule
+        MatBadgeModule,
+        GoToBranchComponent
     ],
     exports: [],
     declarations: [AiOcrComponent, AiOcrCreateComponent, AiOcrListComponent],

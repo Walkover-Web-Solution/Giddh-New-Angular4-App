@@ -17,13 +17,13 @@
     "map_fields_content": "The best match to each field on the selected file have been auto-selected.",
     "header_provided": "Is Header Provided ?",
     "imported_file_fields": "Imported File Fields",
-    "giddh_fields": "Giddh Fields",
+    "giddh_fields": "[BRAND_NAME] Fields",
     "mandatory_fields": "Mandatory fields to create",
-    "in_giddh_are": "in Giddh are:",
+    "in_giddh_are": "in [BRAND_NAME] are:",
     "done": "done.",
     "successful": "Successful.",
     "minimum_fields_message": "At least one field from each group should be selected to create",
-    "in_giddh": "in Giddh",
+    "in_giddh": "in [BRAND_NAME]",
     "mandatory_columns_error": "Please Map the mandatory columns..",
     "imported_count_message": "[SUCCESS_COUNT] out of [COUNT] [SELECTED_TYPE] [IS_ARE] successfully imported.",
     "failed_report_message": "Report of failed [SELECTED_TYPE] will be mailed shortly.",
@@ -39,5 +39,6 @@
     "is": "is",
     "are": "are",
     "groups": "Groups",
-    "accounts": "Accounts"
+    "accounts": "Accounts",
+    "go_to_branch_information": "To import vouchers and entries, go to branch mode"
 }

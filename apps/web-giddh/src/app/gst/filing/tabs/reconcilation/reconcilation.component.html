@@ -358,7 +358,7 @@
         </td>
 
         <td>
-            <div>{{ item.invoice_date ? item.invoice_date : '-' }}</div>
+            <div>{{ item.invoice_date | giddhDate }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
 
@@ -451,7 +451,7 @@
 
         <td>
             <div>-</div>
-            <div class="unrecognized-value pt-1">{{ item.invoice_date ? item.invoice_date : '-' }}</div>
+            <div class="unrecognized-value pt-1">{{ item.invoice_date | giddhDate }}</div>
         </td>
 
         <td>
@@ -823,7 +823,7 @@
 <!--region common not found msg-->
 <ng-template #notFoundTmpl let-show>
     <div class="filings-empty-state" *ngIf="show">
-        <img src="{{ imgPath }}gst/nofound.svg" [style.max-width.px]="110" alt="Image not found" />
+        <img [src]="imgPath + 'gst/nofound.svg'" [style.max-width.px]="110" alt="Image not found" />
         <div class="empty-msg">
             <span>{{ localeData?.filing?.reconcilation_note }}</span>
         </div>

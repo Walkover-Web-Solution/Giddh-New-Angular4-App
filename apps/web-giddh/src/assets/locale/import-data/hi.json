@@ -17,13 +17,13 @@
     "map_fields_content": "चयनित फ़ाइल पर प्रत्येक फ़ील्ड का सबसे अच्छा मिलान ऑटो-चयनित किया गया है।",
     "header_provided": "क्या हैडर प्रदान किया गया?",
     "imported_file_fields": "आयातित फ़ाइल फ़ील्ड्स",
-    "giddh_fields": "गिद्ध फील्ड्स",
+    "giddh_fields": "[BRAND_NAME] फील्ड्स",
     "mandatory_fields": "अनिवार्य क्षेत्र बनाने के लिए",
-    "in_giddh_are": "गिद्ध में हैं:",
+    "in_giddh_are": "[BRAND_NAME] में हैं:",
     "done": "समाप्त",
     "successful": "सफल",
     "minimum_fields_message": "प्रत्येक समूह से कम से कम एक फ़ील्ड बनाने के लिए चुना जाना चाहिए",
-    "in_giddh": "गिद्ध में",
+    "in_giddh": "[BRAND_NAME] में",
     "mandatory_columns_error": "कृपया अनिवार्य कॉलम को मैप करें ।।",
     "imported_count_message": "[SUCCESS_COUNT] out of [COUNT] [SELECTED_TYPE] [IS_ARE] को सफलतापूर्वक आयात किया गया।",
     "failed_report_message": "विफल [SELECTED_TYPE] की रिपोर्ट शीघ्र ही मेल की जाएगी",
@@ -39,5 +39,6 @@
     "is": "है",
     "are": "हैं",
     "groups": "समूह",
-    "accounts": "खाता"
+    "accounts": "खाता",
+    "go_to_branch_information": "वाउचर और एंट्री आयात करने के लिए, शाखा मोड पर जाएं"
 }

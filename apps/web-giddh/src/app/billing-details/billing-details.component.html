@@ -134,7 +134,9 @@
                                         [cssClass]="'form-control border'"
                                         [name]="'stateCode'"
                                         [ngClass]="{ 'form-field': showLoader }"
-                                        [placeholder]="commonLocaleData?.app_state"
+                                        [placeholder]="
+                                            (statesSource$ | async)?.length ? commonLocaleData?.app_state : commonLocaleData?.app_region
+                                        "
                                         [options]="companyStatesSource"
                                         (selectedOption)="onStateChange($event)"
                                         [defaultValue]="searchBillingStates"

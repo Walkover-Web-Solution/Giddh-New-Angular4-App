@@ -44,7 +44,7 @@ export class ListManufacturingComponent implements OnInit {
     /** Table columns */
     public displayedColumns: string[] = ['date', 'voucher_no', 'stock', 'finished_variant', 'qty_outwards', 'qty_outwards_unit', 'raw_stock', 'raw_variant', 'qty_inwards', 'qty_inwards_unit', 'warehouse'];
     /** Holds list of data */
-    public dataSource: any = [];
+    public dataSource: any;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store available date ranges */
@@ -362,7 +362,6 @@ export class ListManufacturingComponent implements OnInit {
      */
     public getReport(): void {
         let data = cloneDeep(this.manufacturingSearchRequest);
-        this.dataSource = [];
         this.isReportLoading = true;
         this.showHideClearFilterButton();
         this.setFiltersInStore();
@@ -375,7 +374,7 @@ export class ListManufacturingComponent implements OnInit {
 
                 (Array.isArray(response.body.results) ? response.body.results : []).forEach(item => {
                     reportData.push({
-                        date: dayjs(item.date, GIDDH_DATE_FORMAT).format("DD MMM YY"),
+                        date: item.date,
                         voucher_no: item.voucherNumber,
                         stock: item.stockName,
                         variant: item.variant.name,
@@ -388,6 +387,8 @@ export class ListManufacturingComponent implements OnInit {
                 });
 
                 this.dataSource = reportData;
+            } else {
+                this.dataSource = [];
             }
 
             this.isReportLoading = false;

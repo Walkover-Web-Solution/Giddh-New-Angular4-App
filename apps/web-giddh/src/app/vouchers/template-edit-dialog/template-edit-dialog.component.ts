@@ -150,7 +150,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
         data.sections['footer'].data['textUnderSlogan'] = { label: '', display: false };
       } else if (textUnderSlogan) {
         textUnderSlogan.display = false;
-        textUnderSlogan.label = '';
+        textUnderSlogan.label = textUnderSlogan.label || '';
       }
     }
   }
@@ -265,7 +265,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     const msg1 = data?.sections?.['footer']?.data?.['message1'];
     if (msg1 && (!msg1?.display || !msg1?.label)) {
       msg1.display = false;
-      msg1.label = '';
+      msg1.label = msg1.label || '';
     }
   }
 

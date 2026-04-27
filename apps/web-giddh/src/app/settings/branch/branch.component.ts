@@ -22,9 +22,8 @@ import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { FormControl } from '@angular/forms';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
@@ -199,7 +198,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        this.imgPath = Configuration.isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = this.serviceConfig.IMG_PATH + 'warehouse-vector.svg';
     }
 
     /**

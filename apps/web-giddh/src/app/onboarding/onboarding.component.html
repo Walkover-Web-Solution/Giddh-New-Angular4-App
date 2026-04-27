@@ -3,7 +3,7 @@
     <div id="main" class="welcome-container clear-both">
         <div>
             <div class="row mt-2 mr-0 ml-0">
-                <div class="col-xl-5 col-lg-12 order-1 order-xl-0">
+                <div class="col-12 order-1 order-xl-0" [class]="generalService.isGiddhDomain() ? 'col-xl-5' : 'col-xl-12'">
                     <p class="border-btm">{{ localeData?.try_things }}</p>
                     <mat-list role="list" class="manage-invoice pt-0">
                         <mat-list-item role="listitem" class="mb-2 px-0">
@@ -12,25 +12,25 @@
                                     voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales',
                                 ]"
                             >
-                                <img src="{{ imgPath }}create-invoice.svg" alt="" class="mr-2" />
+                                <img [src]="imgPath + 'create-invoice.svg'" alt="" class="mr-2" />
                                 {{ localeData?.create_send_invoice }}
                             </a>
                         </mat-list-item>
                         <mat-list-item role="listitem" class="mb-2 px-0">
                             <a [routerLink]="['/pages', 'contact', 'customer']">
-                                <img src="{{ imgPath }}add-customer.svg" alt="" class="mr-2" />
+                                <img [src]="imgPath + 'add-customer.svg'" alt="" class="mr-2" />
                                 {{ localeData?.add_customer }}
                             </a>
                         </mat-list-item>
                         <mat-list-item role="listitem" class="mb-2 px-0">
                             <a [routerLink]="['/pages', 'settings', 'taxes']">
-                                <img src="{{ imgPath }}updateGST.svg" alt="" class="mr-2" />
+                                <img [src]="imgPath + 'updateGST.svg'" alt="" class="mr-2" />
                                 {{ localeData?.update_taxes }}
                             </a>
                         </mat-list-item>
                         <mat-list-item role="listitem" class="mb-2 px-0" *ngIf="isPlaidSupportedCountry">
                             <a (click)="openCreateAccountAsidepan()" class="cursor-pointer">
-                                <img src="{{ imgPath }}create-new.svg" alt="" class="mr-2" />
+                                <img [src]="imgPath + 'create-new.svg'" alt="" class="mr-2" />
                                 {{ localeData?.create_bank_account }}
                             </a>
                         </mat-list-item>
@@ -40,54 +40,66 @@
                             *ngIf="companyCountry !== 'India' && (isPlaidSupportedCountry || isGoCardlessSupportedCountry)"
                         >
                             <a href="javascript:;" (click)="selectConfigureBank()">
-                                <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-2" />
+                                <img [src]="imgPath + 'configure-bank-account.svg'" alt="" class="mr-2" />
                                 {{ localeData?.configure_bank_account }}
                             </a>
                         </mat-list-item>
                     </mat-list>
                     <p class="border-btm mt-5">{{ localeData?.have_data_tally }}</p>
                     <p [innerHTML]="localeData?.giddh_usage"></p>
-                    <div class="d-flex column-gap-15">
-                        <a matButton="filled" class="mt-2" target="_blank" [href]="syncWithTallyHelpDocUrl">
-                            {{ localeData?.sync_with_tally }}
-                        </a>
-                        <a matButton="filled" class="mt-2" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
-                            {{ localeData?.download_tcp }}
-                        </a>
-                    </div>
+                    @if (generalService.isGiddhDomain()) {
+                        <div class="d-flex column-gap-15">
+                            <a matButton="filled" class="mt-2" target="_blank" [href]="syncWithTallyHelpDocUrl">
+                                {{ localeData?.sync_with_tally }}
+                            </a>
+                            <a
+                                matButton="filled"
+                                class="mt-2"
+                                href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp"
+                            >
+                                {{ localeData?.download_tcp }}
+                            </a>
+                        </div>
+                    }
 
-                    <div class="right-section">
-                        <p class="border-btm mt-5">{{ localeData?.ask_question }}</p>
-                        <span>{{ localeData?.request_demo }}</span>
-                        <button matButton="filled" class="mt-2" (click)="scheduleNow()">
-                            {{ commonLocaleData?.app_schedule_now }}
-                        </button>
-                        <br />
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <span class="mt-5 mb-2">{{ localeData?.visit }}</span>
-                                <a href="https://giddh.com/help" target="_blank" class="text-underline font-size-16">giddh.com/help</a>
-                            </div>
-                            <div class="col-sm-6 schedule-img">
-                                <img src="{{ imgPath }}Schedule.png" alt="" />
+                    @if (serviceConfig.CALENDLY_URL) {
+                        <div class="right-section">
+                            <p class="border-btm mt-5">{{ localeData?.ask_question }}</p>
+                            <span>{{ localeData?.request_demo }}</span>
+                            <button matButton="filled" class="mt-2" (click)="scheduleNow()">
+                                {{ commonLocaleData?.app_schedule_now }}
+                            </button>
+                            <br />
+                            <div class="row">
+                                @if (helpDocUrl) {
+                                    <div class="col-xs-12 col-sm-6">
+                                        <span class="mt-5 mb-2">{{ localeData?.visit }}</span>
+                                        <a [href]="helpDocUrl" target="_blank" class="text-underline font-size-16">{{ helpDocUrl }}</a>
+                                    </div>
+                                }
+                                <div class="col-sm-6 schedule-img">
+                                    <img [src]="imgPath + 'Schedule.png'" alt="" />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
-                <div class="col-xl-7 col-lg-12 order-0 order-xl-1">
-                    <p class="border-btm">{{ localeData?.watch_onboarding }}</p>
-                    <div class="onboarding-video">
-                        <iframe
-                            title="onboarding"
-                            width="100%"
-                            height="100%"
-                            src="https://www.youtube.com/embed/videoseries?si=iINeTc512_whk0ec&list=PL2D8agyw4OJeuLGGci5W8bn-jwAXDsoiC&rel=0&autoplay=1"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowfullscreen
-                        ></iframe>
+                @if (generalService.isGiddhDomain()) {
+                    <div class="col-xl-7 col-lg-12 order-0 order-xl-1">
+                        <p class="border-btm">{{ localeData?.watch_onboarding }}</p>
+                        <div class="onboarding-video">
+                            <iframe
+                                title="onboarding"
+                                width="100%"
+                                height="100%"
+                                src="https://www.youtube.com/embed/videoseries?si=iINeTc512_whk0ec&list=PL2D8agyw4OJeuLGGci5W8bn-jwAXDsoiC&rel=0&autoplay=1"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen
+                            ></iframe>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         </div>
     </div>

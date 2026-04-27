@@ -509,7 +509,7 @@
     "app_select_parent_group": "समूह का चयन करें",
     "app_copy": "कापी",
     "app_inclusive_tax": "समावेशी कर",
-    "app_giddh": "गिद्ध",
+    "app_brand": "[BRAND_NAME]",
     "app_datatype_list": {
         "string": "तार / स्ट्रिंग",
         "number": "संख्या",
@@ -818,5 +818,9 @@
     "app_field_validation_error": "[FIELD_NAME] खाली नहीं हो सकता या [MAX_LENGTH] अक्षरों से अधिक नहीं हो सकता",
     "app_resume": "रिसमूल",
     "app_stop": "रोका",
-    "app_create_recurring_voucher": "सामान्य वाउचर बनाएं"
+    "app_create_recurring_voucher": "सामान्य वाउचर बनाएं",
+    "app_you_in_company_mode": "आप कंपनी मोड में हैं",
+    "app_you_in_consolidate_mode": "आप समेकित मोड में हैं",
+    "go_to_branch": "शाखा पर जाएँ",
+    "switch_to_branch": "शाखा मोड पर स्विच करें"
 }

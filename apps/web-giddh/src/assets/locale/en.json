@@ -509,7 +509,7 @@
     "app_select_parent_group": "Select Parent Group",
     "app_copy": "Copy",
     "app_inclusive_tax": "Inclusive Tax",
-    "app_giddh": "Giddh",
+    "app_brand": "[BRAND_NAME]",
     "app_datatype_list": {
         "string": "String",
         "number": "Number",
@@ -820,5 +820,9 @@
     "app_field_validation_error": "[FIELD_NAME] can not be blank or more than [MAX_LENGTH] characters",
     "app_resume": "Resume",
     "app_stop": "Stop",
-    "app_create_recurring_voucher": "Create Recurring Voucher"
+    "app_create_recurring_voucher": "Create Recurring Voucher",
+    "app_you_in_company_mode": "You are in Company Mode",
+    "app_you_in_consolidate_mode": "You are in Consolidated Mode",
+    "go_to_branch": "Go to Branch",
+    "switch_to_branch": "Switch to Branch Mode"
 }

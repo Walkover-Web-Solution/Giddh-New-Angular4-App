@@ -3,9 +3,8 @@ import { ReplaySubject } from 'rxjs';
 import { Gstr1SummaryErrors } from '../../../../../../models/api-models/GstReconcile';
 import { orderBy } from '../../../../../../lodash-optimized';
 import { PageEvent } from '@angular/material/paginator';
-import { Configuration, DROPDOWN_ITEMS_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../../../../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../../../../../app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -33,7 +32,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
     }
 
     /**

@@ -57,12 +57,14 @@
             <button *ngIf="!isCompany" matButton="filled" (click)="openCreateProjectDialog(true)">
                 + {{ localeData?.create_project }}
             </button>
-            <div class="d-flex justify-content-center align-items-center" *ngIf="isCompany">
-                <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }}</span>
-                <button matButton="filled" (click)="gotToBranchTab()">
-                    {{ localeData?.go_to_branch }}
-                </button>
-            </div>
+            @if (isCompany) {
+                <go-to-branch
+                    [title]="commonLocaleData?.app_you_in_company_mode"
+                    [message]="localeData?.go_to_branch_information"
+                    [buttonLabel]="commonLocaleData?.switch_to_branch"
+                    [cssClass]="'mt-4 mb-1 border-radius-8'"
+                ></go-to-branch>
+            }
         </div>
         <div
             class="mt-5 overflow-visible table-header-sticky"
@@ -202,21 +204,21 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
-            <div class="no-data" *ngIf="!(isFetchingProjects$ | async) && !totalResults">
+            <div *ngIf="!(isFetchingProjects$ | async) && !totalResults">
                 <no-data
                     *ngIf="projectName.value?.length || projectStatus.value?.length"
                     [primaryMessage]="commonLocaleData?.app_no_data_found"
                     [secondaryMessage]="' '"
+                    [primaryMessageClass]="'no-data'"
                 ></no-data>
-                <div
-                    *ngIf="!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)"
-                    class="d-flex justify-content-center align-items-center"
-                >
-                    <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }}</span>
-                    <button matButton="filled" (click)="gotToBranchTab()">
-                        {{ localeData?.go_to_branch }}
-                    </button>
-                </div>
+                @if (!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)) {
+                    <go-to-branch
+                        [title]="commonLocaleData?.app_you_in_company_mode"
+                        [message]="localeData?.go_to_branch_information"
+                        [buttonLabel]="commonLocaleData?.switch_to_branch"
+                        [cssClass]="'mt-4 mb-1 border-radius-8'"
+                    ></go-to-branch>
+                }
             </div>
             <mat-paginator
                 *ngIf="totalResults > pageSizeOptions[0]"

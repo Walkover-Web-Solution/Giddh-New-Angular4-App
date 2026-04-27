@@ -220,6 +220,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         this.generalService.companyUniqueName = company?.uniqueName;
         this.generalService.voucherApiVersion = company?.voucherVersion || 2;
+        this.generalService.activeCompany = company;
         this.store.dispatch(this.commonAction.setBranchConsolidated(false));
         
         // Update store with company and branch details

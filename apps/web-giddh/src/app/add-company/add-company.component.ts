@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, RestrictedModules, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
+import { BusinessTypes, Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL, RestrictedModules } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -223,8 +223,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public isCreateBySubscription: boolean = false;
     /** Holds list of countries where hide applicable tax input field */
     public hideApplicableTaxCountryList: string[] = ['US'];
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
 
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -245,7 +243,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private componentStore: AddCompanyComponentStore,
         private http: HttpClient,
         private store: Store<AppState>,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private commonActions: CommonActions,
         private companyService: CompanyService,
         private changeDetection: ChangeDetectorRef,
@@ -341,6 +339,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                             this.formFields[response.fields[key].name] = response.fields[key];
                         }
                     });
+                    this.validateGstNumber();
                     this.changeDetection.detectChanges();
                 }
                 if (response.applicableTaxes) {
@@ -450,8 +449,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public initMobileNumberField(): void {
         let configuration = {
-            widgetId: (this.serviceConfig.OTP_WIDGET_ID_NEW || OTP_WIDGET_ID_NEW),
-            tokenAuth: (this.serviceConfig.OTP_WIDGET_TOKEN_NEW || OTP_WIDGET_TOKEN_NEW),
+            widgetId: this.serviceConfig.OTP_WIDGET_ID_WEB,
+            tokenAuth: this.serviceConfig.OTP_WIDGET_TOKEN_WEB,
             exposeMethods: true,
             success: (data: any) => { },
             failure: (error: any) => {
@@ -1212,6 +1211,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
                 this.generalService.companyUniqueName = response?.body?.uniqueName;
+                this.generalService.activeCompany = response?.body;
 
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;
@@ -1548,10 +1548,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (queryParams.pincode) {
             this.secondStepForm.get('pincode')?.patchValue(queryParams.pincode);
-        }
-
-        if (queryParams.taxNumber) {
-            this.secondStepForm.get('gstin')?.patchValue(queryParams.taxNumber);
         }
 
         if (queryParams.taxNumber) {

@@ -44,7 +44,7 @@ export class HsnSummaryComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(@Inject(ServiceConfig) private serviceConfig) { }
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         if (this.selectedGst !== GstReport.Gstr1) {
             this.displayedColumns = this.displayedColumns?.filter(column => column !== 'rt');
         }

@@ -69,7 +69,7 @@
         <div class="searching-stocks mat-app-background">
             <div class="list-head">
                 <div class="custom-material-search-bar stock-searchbar d-flex align-items-center">
-                    <img src="{{ imgPath }}search-new.svg" class="search-icon" alt="search icon" />
+                    <img [src]="imgPath + 'search-new.svg'" class="search-icon" alt="search icon" />
                     <text-field
                         [placeholder]="commonLocaleData?.app_stock"
                         autocomplete="off"
@@ -82,7 +82,7 @@
                     <p class="unique-name font-size-15">{{ commonLocaleData?.app_unique_name }}</p>
                 </div>
                 <div class="group-list-head group-searchbar" *ngIf="showGroupName">
-                    <img src="{{ imgPath }}search-new.svg" class="search-icon" alt="search icon" />
+                    <img [src]="imgPath + 'search-new.svg'" class="search-icon" alt="search icon" />
                     <select-field
                         [cssClass]="'form-control bg-dropdown'"
                         [name]="'stockGroup'"
@@ -128,11 +128,11 @@
                         <p class="stock-details">
                             <span class="stock-ob">
                                 {{ stock?.openingBalance?.amount }}
-                                <img class="dot first-dot" *ngIf="stock?.openingBalance?.amount" src="{{ imgPath }}dot.png" alt="dot" />
+                                <img class="dot first-dot" *ngIf="stock?.openingBalance?.amount" [src]="imgPath + 'dot.png'" alt="dot" />
                             </span>
                             <span class="stock-ob">{{ stock?.openingBalance?.quantity }} {{ stock?.openingBalance?.stockUnit }}</span>
                             <span class="stock-ob" *ngIf="stock.display && stock?.stock?.variants?.length">
-                                <img class="dot second-dot" src="{{ imgPath }}dot.png" alt="dot" />
+                                <img class="dot second-dot" [src]="imgPath + 'dot.png'" alt="dot" />
                                 <span>
                                     {{ stock?.stock?.variants?.length }}
                                     {{
@@ -223,7 +223,7 @@
                                                     (click)="warehouseVariant.display = true; setInputFocus(3)"
                                                 >
                                                     {{ warehouseVariant?.stockUnit?.code ?? '-' }}
-                                                    <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" alt="stock unit" />
+                                                    <img [src]="imgPath + 'caret-light.svg'" class="dropdown-icon" alt="stock unit" />
                                                 </span>
                                             </p>
                                         </div>
@@ -264,7 +264,7 @@
                                                     [defaultValue]="warehouseVariant?.stockUnit?.code"
                                                     [openDropdown]="isOpen"
                                                 ></select-field>
-                                                <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" alt="dropdown" />
+                                                <img [src]="imgPath + 'caret-light.svg'" class="dropdown-icon" alt="dropdown" />
                                             </span>
                                         </div>
                                     </div>
@@ -274,7 +274,7 @@
                     </div>
                 </div>
                 <div class="no-data-found" *ngIf="stocksList?.length <= 0">
-                    <img src="{{ imgPath }}search-data-not-found.svg" alt="result not found" />
+                    <img [src]="imgPath + 'search-data-not-found.svg'" alt="result not found" />
                     <br />
                     {{ commonLocaleData?.app_no_result_found }}
                 </div>

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { delay, Observable, ReplaySubject, takeUntil, Subject, take } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
 import * as dayjs from "dayjs";
 import * as duration from "dayjs/plugin/duration";
 import { AiOcrStore } from "./utility/ai-ocr.store";
@@ -14,6 +14,7 @@ import { cloneDeep } from "../lodash-optimized";
 import { ActivatedRoute, Router } from "@angular/router";
 import { environment } from '../../environments/environment.generated';
 import { ServiceConfig } from "../services/service.config";
+import { GoToBranchVariant } from "../shared/go-to-branch/go-to-branch.component";
 dayjs.extend(duration);
 
 export enum OcrAction {
@@ -32,6 +33,8 @@ export enum OcrAction {
     standalone:false
 })
 export class AiOcrComponent implements OnInit, OnDestroy {
+    /** Expose GoToBranchVariant enum to template */
+    protected readonly GoToBranchVariant = GoToBranchVariant;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
     /** This will store selected date range to use in api */
@@ -203,7 +206,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
                     }
                 });
-                this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+                this.imgPath = this.serviceConfig.IMG_PATH;
 
                 this.ocrMainList$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
                     if (!res) {

@@ -19,7 +19,10 @@
                     <giddh-progress-spinner *ngIf="ocrUploadInProgress$ | async" [diameter]="20"></giddh-progress-spinner>
                     <span *ngIf="!(ocrUploadInProgress$ | async)"><i class="icon-upload lh-0"></i></span>
                 </button>
-                <div class="position-absolute notification-badge z-index-1 circle d-flex align-items-center justify-content-center font-size-12 text-white" *ngIf="countVariable > 0">
+                <div
+                    class="position-absolute notification-badge z-index-1 circle d-flex align-items-center justify-content-center font-size-12 text-white"
+                    *ngIf="countVariable > 0"
+                >
                     {{ countVariable }}
                 </div>
                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
@@ -121,7 +124,7 @@
                         <ng-template #noDataFound>
                             <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
                                 <h1>{{ localeData?.no_data_found }}</h1>
-                                <img class="mt-2" height="200" src="{{ imgPath }}no-data.png" [alt]="localeData?.no_data_found" />
+                                <img class="mt-2" height="200" [src]="imgPath + 'no-data.png'" [alt]="localeData?.no_data_found" />
                             </div>
                         </ng-template>
                     </ng-container>
@@ -146,15 +149,18 @@
                             >
                                 {{ localeData?.upload_button }}
                             </button>
-                            <div
-                                class="m-t1 d-flex justify-content-center align-items-center"
-                                *ngIf="!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)"
-                            >
-                                <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }}</span>
-                                <button matButton="filled" (click)="gotToBranchTab()">
-                                    {{ localeData?.go_to_branch }}
-                                </button>
-                            </div>
+                            @if (!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)) {
+                                <go-to-branch
+                                    [title]="
+                                        isCompany
+                                            ? commonLocaleData?.app_you_in_company_mode
+                                            : commonLocaleData?.app_you_in_consolidate_mode
+                                    "
+                                    [message]="localeData?.go_to_branch_information"
+                                    [buttonLabel]="commonLocaleData?.switch_to_branch"
+                                    [cssClass]="'border-radius-8'"
+                                ></go-to-branch>
+                            }
                         </div>
                     </ng-container>
                     <ng-container *ngIf="listCount > 0 || showClearFilter">

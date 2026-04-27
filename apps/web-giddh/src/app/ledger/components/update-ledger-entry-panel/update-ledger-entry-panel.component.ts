@@ -16,7 +16,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG, IOption, BREAKPOINT_SCREEN_SIZE, Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG, IOption, BREAKPOINT_SCREEN_SIZE } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
@@ -31,6 +31,7 @@ import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/a
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { DownloadLedgerRequest, IVariant, LedgerResponse } from '../../../models/api-models/Ledger';
 import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { OtherTaxTypeEnum } from '../../../vouchers/utility/vouchers.const';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
@@ -61,8 +62,6 @@ import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
-import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
-import { CompanyActions } from '../../../actions/company.actions';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -72,7 +71,6 @@ import { ServiceConfig } from '../../../services/service.config';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
@@ -227,6 +225,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public totalAdjustedAmount: number = 0;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
+    /** Enum for Other tax types */
+    public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
     /** Rate should have precision up to 4 digits for better calculation */
     public ratePrecision = RATE_FIELD_PRECISION;
     /** Clear selected invoice */
@@ -349,8 +349,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     constructor(
         private accountService: AccountService,
         private breakPointObservar: BreakpointObserver,
-        private settingsTaxesAction: SettingsTaxesActions,
-        private companyActions: CompanyActions,
         private ledgerService: LedgerService,
         private generalService: GeneralService,
         private uiSettingsService: UiSettingsService,
@@ -397,7 +395,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public ngOnInit() {
         this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -961,7 +959,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if (this.isAdvanceReceipt) {
             requestObj.voucherType = 'rcpt';
-            requestObj.transactions[0].amount = this.vm.advanceReceiptAmount;
+            requestObj.transactions[0].amount = requestObj.isOtherTaxesApplicable ? this.vm.grandTotal : this.vm.advanceReceiptAmount;
         }
 
         if (this.voucherApiVersion === 2) {
@@ -1112,7 +1110,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public handleVoucherAdjustment(isUpdateMode?: boolean): void {
         if (!this.vm.selectedLedger?.voucherGenerated && this.vm.selectedLedger?.voucher?.shortCode !== 'pur') {
             // Voucher must be generated for all vouchers except purchase order
-            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
+            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_brand);
             if (this.isAdjustAdvanceReceiptSelected) {
                 this.isAdjustAdvanceReceiptSelected = false;
             } else if (this.isAdjustReceiptSelected) {
@@ -1141,7 +1139,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public checkForGeneratedVoucher(event: any): void {
         if (event && this.vm.selectedLedger?.voucher?.shortCode !== 'pur' && !this.vm.selectedLedger?.voucherGenerated) {
             // Adjustment is not allowed until the voucher is generated
-            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
+            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_brand);
             event.preventDefault();
         }
     }

@@ -62,6 +62,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/aside-create-reason.component";
 import { PreviewVariantImageComponent } from "./component/preview-variant-image/preview-variant-image.component";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
+import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 
 @NgModule({
     declarations: [
@@ -130,7 +131,8 @@ import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.
         MatPaginatorModule,
         ReactiveFormsModule,
         AmountFieldComponentModule,
-        GiddhDatePipe
+        GiddhDatePipe,
+        GoToBranchComponent
     ],
     exports: [
         NewInventoryComponent,

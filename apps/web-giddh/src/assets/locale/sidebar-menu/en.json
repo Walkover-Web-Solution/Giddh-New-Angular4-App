@@ -23,6 +23,10 @@
                     "icon": "icon-customer",
                     "description": "Manage customers, send reminders via SMS/Email",
                     "additional": {
+                        "queryParams": {
+                            "tab": "customer",
+                            "tabIndex": 1
+                        },
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/customer",
@@ -155,7 +159,8 @@
                             "icon": "icon-advance-search",
                             "additional": {
                                 "queryParams": {
-                                    "groupBy": "duration"
+                                    "groupBy": "duration",
+                                    "required": "groupBy"
                                 },
                                 "matchQueryParams": true
                             }
@@ -166,7 +171,8 @@
                             "icon": "icon-advance-search",
                             "additional": {
                                 "queryParams": {
-                                    "groupBy": "salesPerson"
+                                    "groupBy": "salesPerson",
+                                    "required": "groupBy"
                                 },
                                 "matchQueryParams": true
                             }
@@ -177,7 +183,8 @@
                             "icon": "icon-advance-search",
                             "additional": {
                                 "queryParams": {
-                                    "groupBy": "state"
+                                    "groupBy": "state",
+                                    "required": "groupBy"
                                 },
                                 "matchQueryParams": true
                             }
@@ -188,7 +195,8 @@
                             "icon": "icon-advance-search",
                             "additional": {
                                 "queryParams": {
-                                    "groupBy": "country"
+                                    "groupBy": "country",
+                                    "required": "groupBy"
                                 },
                                 "matchQueryParams": true
                             }
@@ -438,7 +446,9 @@
                     "description": "Send Bulk SMS/Emails, Set reminders",
                     "additional": {
                         "queryParams": {
-                            "voucherVersion": 2
+                            "voucherVersion": 2,
+                            "tab": "vendor",
+                            "tabIndex": 1
                         },
                         "createNew": {
                             "label": "+",
@@ -486,7 +496,7 @@
                     "label": "E-way bill",
                     "link": "/pages/invoice/ewaybill",
                     "icon": "icon-eway-bill-new",
-                    "description": "Generate directly from Giddh after",
+                    "description": "Generate directly from [BRAND_NAME] after",
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
@@ -839,6 +849,12 @@
                     "link": "/pages/budget-forecasting",
                     "icon": "icon-audit-log",
                     "description": "AI-powered cashflow forecasting and predictions"
+                },
+                {
+                    "label": "Bank Reconciliation",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "Reconcile your books with bank statements"
                 }
             ]
         }

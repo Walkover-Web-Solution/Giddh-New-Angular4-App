@@ -11,7 +11,7 @@ import { OrganizationType } from "../../models/user-login-state";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-request";
-import { BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, Configuration, RESTRICTED_VOUCHERS_FOR_DOWNLOAD } from "../../app.constant";
+import { BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, RESTRICTED_VOUCHERS_FOR_DOWNLOAD } from "../../app.constant";
 import { LedgerVM } from "../../ledger/ledger.vm";
 import { ChangeDetectorRef } from "@angular/core";
 import { GIDDH_DATE_FORMAT } from "../helpers/defaultDateFormat";
@@ -26,7 +26,6 @@ import { ICurrencyResponse } from "../../models/api-models/Company";
 import { AccountResponse, AccountResponseV2 } from "../../models/api-models/Account";
 import { LedgerService } from "../../services/ledger.service";
 import { ServiceConfig } from "../../services/service.config";
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 @Component({
     selector: 'ledger-statement',
     templateUrl: './ledger-statement.component.html',
@@ -194,7 +193,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('ledger-body');
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 

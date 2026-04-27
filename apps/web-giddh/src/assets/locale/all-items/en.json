@@ -21,7 +21,13 @@
                     "label": "Customer",
                     "link": "/pages/contact/customer",
                     "icon": "icon-customer",
-                    "description": "Manage customers, send reminders via SMS/Email"
+                    "description": "Manage customers, send reminders via SMS/Email",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "customer",
+                            "tabIndex": 1
+                        }
+                    }
                 },
                 {
                     "label": "New Invoice",
@@ -310,7 +316,13 @@
                     "label": "Vendor",
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
-                    "description": "Send Bulk SMS/Emails, Set reminders"
+                    "description": "Send Bulk SMS/Emails, Set reminders",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "vendor",
+                            "tabIndex": 1
+                        }
+                    }
                 },
                 {
                     "label": "New Bill",
@@ -608,7 +620,7 @@
                     "label": "E-way bill",
                     "link": "/pages/invoice/ewaybill",
                     "icon": "icon-eway-bill-new",
-                    "description": "Generate directly from Giddh after",
+                    "description": "Generate directly from [BRAND_NAME] after",
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
@@ -1019,6 +1031,12 @@
                     "link": "/pages/budget-forecasting",
                     "icon": "icon-audit-log",
                     "description": "AI-powered cashflow forecasting and predictions"
+                },
+                {
+                    "label": "Bank Reconciliation",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "Reconcile your books with bank statements"
                 }
             ]
         },

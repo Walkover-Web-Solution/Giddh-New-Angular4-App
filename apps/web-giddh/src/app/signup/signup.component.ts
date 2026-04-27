@@ -83,9 +83,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
-    /* Hold domain url */
-    public giddhDomainUrl: string = "";
+    public brandLogoUrl: string = '';
     /** Holds images folder path */
     public imgPath: string = "";
 
@@ -105,7 +103,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         private environmentService: EnvironmentService
     ) {
         this.urlPath = this.environmentService.isElectron ? "" : (this.serviceConfig.AppUrl || this.environmentService.appUrl) + this.environmentService.appFolder;
-        this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -154,9 +151,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         // Use EnvironmentService for consistent asset path handling
         this.imgPath = this.environmentService.getImagePath('');
         this.urlPath = this.environmentService.isElectron ? "" : "";
-        this.giddhDomainUrl = this.serviceConfig.AppUrl || this.environmentService.appUrl || 'https://giddh.com';
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.environmentService.getImagePath('giddh-white-logo.svg');
+        this.brandLogoUrl = this.serviceConfig.LOGOS.light;
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
             country: ["India", [Validators.required]],

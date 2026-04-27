@@ -2,8 +2,6 @@ import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChildren } 
 import { HeaderItem, ImportExcelResponseData, Mappings } from '../../models/api-models/import-excel';
 import { IOption } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
-import { Configuration } from '../../app.constant';
-import { environment } from '../../../environments/environment.generated';
 import { cloneDeep, filter, findIndex, indexOf, map } from '../../lodash-optimized';
 
 interface DataModel {
@@ -48,7 +46,7 @@ export class MapExcelDataComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
+        this.imgPath = this.serviceConfig.IMG_PATH + 'icon/';
     }
 
     public mapExcelData() {

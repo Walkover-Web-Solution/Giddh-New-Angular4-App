@@ -12,7 +12,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization, StateDetailsRequest, OrganizationDetails } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
@@ -29,7 +29,7 @@ import { userLoginStateEnum, OrganizationType } from '../../models/user-login-st
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
+import { ACCOUNTING_BREAKPOINTS, BranchHierarchyType, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -45,6 +45,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { ServiceConfig } from '../../services/service.config';
 import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
+import { GoToBranchVariant } from '../go-to-branch/go-to-branch.component';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -62,10 +63,11 @@ interface SubscriptionErrorFlags {
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
+    /** Expose GoToBranchVariant enum to template */
+    protected readonly GoToBranchVariant = GoToBranchVariant;
     public userIsSuperUser: boolean = true; // Protect permission module
     public session$: Observable<userLoginStateEnum>;
     public accountSearchValue: string = '';
-    public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
     public dayjs = dayjs;
     public imgPath: string = '';
     public subscribedPlan: SubscriptionsUser;
@@ -77,7 +79,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -231,8 +233,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public broadcast: any;
     /** Hold true in production environment */
     public isProdMode: boolean = environment.PRODUCTION_ENV;
-    /** Hold broadcast event for project wise accounting */
-    public projectBroadcast: any;
+    /** Hold broadcast event for go to branch */
+    public goToBranchBroadcast: any;
     /** Hold broadcast event for AI OCR */
     public aiOcrBroadcast: any;
     /** Holds true if plan is either trial or cancelled */
@@ -282,7 +284,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private authService: AuthenticationService,
         private changeDetection: ChangeDetectorRef,
         private _breakpointObserver: BreakpointObserver,
-        private generalService: GeneralService,
+        public generalService: GeneralService,
         private commonActions: CommonActions,
         private settingsProfileService: SettingsProfileService,
         private settingsProfileAction: SettingsProfileActions,
@@ -295,16 +297,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private sanitizer: DomSanitizer,
         public dialog: MatDialog,
         private socialAuthService: AuthService,
-        @Inject(ServiceConfig) private serviceConfig,
+        @Inject(ServiceConfig) public serviceConfig,
         private elementRef: ElementRef,
         private renderer: Renderer2,
-        private giddhDatePipe: GiddhDatePipe
+        private giddhDatePipe: GiddhDatePipe,
+        private activeRoute: ActivatedRoute
     ) {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
-        const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
-        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
+        this.imgPath = this.serviceConfig.IMG_PATH;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.light;
+        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.serviceConfig.CALENDLY_URL);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
@@ -463,6 +464,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
+                this.generalService.activeCompany = selectedCmp;
                 // for voucher company message
                 this.voucherApiVersion = this.generalService.voucherApiVersion;
                 if (this.voucherApiVersion === 2) {
@@ -516,15 +518,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
 
-        this.projectBroadcast = new BroadcastChannel("project-wise-accounting");
-        this.projectBroadcast.onmessage = (event) => {
-            if (event?.data?.success) {
-                this.gotToBranchTab();
-            }
-        };
-
-        this.aiOcrBroadcast = new BroadcastChannel("ai-ocr");
-        this.aiOcrBroadcast.onmessage = (event) => {
+        this.goToBranchBroadcast = new BroadcastChannel("go-to-branch");
+        this.goToBranchBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
                 this.gotToBranchTab();
             }
@@ -545,6 +540,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.activeRoute.queryParams.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response.tab || response.required) {
+                this.generalService.restoreRouteQueryFilters();
+            }
+        });
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -594,7 +594,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let userEmail = u.email;
                 this.userEmail = clone(userEmail);
                 let userEmailDomain = userEmail?.replace(/.*@/, '');
-                this.userIsCompanyUser = userEmailDomain && this.companyDomains?.indexOf(userEmailDomain) !== -1;
+                this.userIsCompanyUser = userEmailDomain && this.serviceConfig.EMAIL_DOMAINS?.indexOf(userEmailDomain) !== -1;
                 let name = u.name;
                 if (u.name.match(/\s/g)) {
                     this.userFullName = name;
@@ -1193,6 +1193,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnDestroy() {
         this.broadcast?.close();
+        this.goToBranchBroadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1315,7 +1316,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public gotToBranchTab(): void {
         this.trigger?.closeMenu();
-        this.expandSidebar(false);
+        this.sideBarStateChange(false);
+        this.sidebarForcelyExpanded = false;
+        this.isSidebarExpanded = true;
+        this.generalService.expandSidebar();
         this.isGoToBranch = true;
     }
 
@@ -1590,6 +1594,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 toDate: this.toDate,
             };
             this.isTodaysDateSelected = false;
+            if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+                this.generalService.saveRouteQueryFilters({ fromDate: this.fromDate, toDate: this.toDate });
+            }
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         } else {
             this.isTodaysDateSelected = true;
@@ -1605,6 +1612,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 period: null,
                 noOfTransactions: null
             };
+            if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+                this.generalService.saveRouteQueryFilters({ fromDate: dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT), toDate: dayjs().format(GIDDH_DATE_FORMAT) });
+            }
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
     }
@@ -1862,6 +1872,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private saveLastState(): void {
         let companyUniqueName = null;
         let lastState = this.router.url;
+        if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+            lastState = this.generalService.getCurrentPath(true).path;
+        }
         lastState = lastState?.replace("/pages", "pages");
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
         let stateDetailsRequest = new StateDetailsRequest();

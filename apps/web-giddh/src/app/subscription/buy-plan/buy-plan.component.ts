@@ -22,7 +22,7 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { Configuration, EntityCode, IOption, PaymentProvider, PlanDuration } from '../../app.constant';
+import { EntityCode, IOption, PaymentProvider, PlanDuration } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { SessionState } from '../../store/authentication/authentication.reducer';
@@ -112,20 +112,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isFormSubmitted = signal<boolean>(false);
     /** Hold selected plan*/
     public selectedPlan = signal<any>(null);
-    /** Computed ViewModel for plan summary card visibility and section flags */
-    protected readonly planUI = computed(() => {
-        const plan = this.selectedPlan();
-        const hasNew = (plan?.newInvoiceCount ?? 0) > 0 || (plan?.newBillCount ?? 0) > 0;
-        const hasExtra = (plan?.extraInvoicesUsed ?? 0) > 0 || (plan?.extraBillUsed ?? 0) > 0;
-        const hasCarry = (plan?.carryForwardInvoices ?? 0) > 0 || (plan?.carryForwardBills ?? 0) > 0;
-        return {
-            showCard: hasNew || hasExtra || hasCarry,
-            hasNew,
-            hasExtra,
-            hasCarry,
-            totalExtra: (plan?.extraInvoicesUsed ?? 0) + (plan?.extraBillUsed ?? 0)
-        };
-    });
     /** Hold session source observable*/
     public session$: Observable<SessionState>;
     /** Hold state source observable*/
@@ -290,12 +276,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private location: Location,
         private elementRef: ElementRef,
         private viewSubscriptionComponentStore: ViewSubscriptionComponentStore,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig
     ) {
         this.session$ = this.store.pipe(select(p => p.session), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
-        this.razorpayKey = this.serviceConfig.RAZORPAY_KEY || Configuration.RAZORPAY_KEY;
+        this.razorpayKey = this.serviceConfig.RAZORPAY_KEY;
     }
 
     /**
@@ -398,11 +384,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.countrySource$ = observableOf(this.countrySource);
-                if (!this.isSubscriptionRegion) {
-                    if (this.countrySource?.length) {
-                        this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
-                    }
-                }
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -420,10 +401,28 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.commonCountrySource$ = observableOf(this.commonCountrySource);
+                if (this.countrySource?.length && this.newUserSelectedCountry) {
+                    this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
+                }
+                if (this.detectUserInfoByIp?.alpha2CountryCode) {
+                    const countryObject = this.commonCountrySource.find(item => item.label.includes(this.detectUserInfoByIp.alpha2CountryCode));
+                    if (countryObject) {
+                        this.selectCountry(countryObject);
+                        this.selectedCountry = countryObject.label;
+                    }
+                }
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+            }
+        });
+
+        this.secondStepForm.get('country.code').valueChanges.pipe(debounceTime(500), filter(Boolean), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                let statesRequest = new StatesRequest();
+                statesRequest.country = response;
+                this.store.dispatch(this.generalActions.getAllState(statesRequest));
             }
         });
 
@@ -841,12 +840,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             alpha3CountryCode: alpha3CountryCode
                         }
                     });
-                    this.secondStepForm.get("country")?.setValue(alpha2CountryCode);
-                    const countryObject = this.commonCountrySource.find(item => item.label.includes(alpha2CountryCode));
-                    if (countryObject) {
-                        this.selectCountry(countryObject);
-                        this.selectedCountry = countryObject.label;
-                    }
+                    this.secondStepForm.get("country")?.patchValue({code: alpha2CountryCode, name: countryName, additional: ''});
                 } else {
                     this.newUserSelectCountry({
                         "label": "GLB - Global",
@@ -993,16 +987,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             pincode: [''],
             mobileNumber: ['', Validators.required],
             taxNumber: null,
-            country: ['', Validators.required],
-            state: ['', Validators.required],
+            country: this.formBuilder.group({name: [''], code: ['', Validators.required], additional: ''}),
+            state: this.formBuilder.group({name: [''], code: ['', Validators.required], additional: ''}),
             address: ['']
         });
 
         this.thirdStepForm = this.formBuilder.group({
             userUniqueName: [''],
             paymentProvider: [''],
-            razorpayAuthType: [''],
-            autoPay: [true]
+            razorpayAuthType: ['']
         });
 
         this.subscriptionForm = this.formBuilder.group({
@@ -1168,7 +1161,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getStates(): void {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
             if (response) {
                 this.states = [];
                 this.countyList = [];
@@ -1195,12 +1187,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                const stateObject = response?.stateList?.find(state => state.name === this.detectUserInfoByIp.stateName);
-                if (stateObject) {
-                    const label = stateObject.code + ' - ' + stateObject.name;
+                const useStateList = response.stateList && Object.keys(response.stateList).length > 0;
+                const stateCountyObj = useStateList
+                    ? Object.values(response.stateList).find((state: any) => state.name === this.detectUserInfoByIp.stateName)
+                    : response.countyList?.find((county: any) => county.name === this.detectUserInfoByIp.stateName);
+                if (stateCountyObj) {
+                    const label = useStateList
+                        ? (stateCountyObj as any).code + ' - ' + (stateCountyObj as any).name
+                        : (stateCountyObj as any).name;
                     this.secondStepForm.get("state").patchValue({
-                        label: label,
-                        value: stateObject.code,
+                        name: label,
+                        code: (stateCountyObj as any).code,
                     });
                     this.selectedState = label;
                 }
@@ -1250,7 +1247,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.disabledState = true;
                     this.selectedState = state.label;
                     this.selectedStateCode = state.value;
-                    this.secondStepForm.controls['state'].setValue({ label: state?.label, value: state?.value });
+                    this.secondStepForm.controls['state'].patchValue({ name: state?.label, code: state?.value, additional: '' });
                     return true;
                 }
             });
@@ -1261,7 +1258,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.selectedState = '';
             this.selectedStateCode = '';
             if (!this.optionSelected) {
-                this.secondStepForm.controls['state'].setValue(null);
+                this.secondStepForm.controls['state'].patchValue({ name: '', code: '', additional: '' });
             }
             this.changeDetection.detectChanges();
         }
@@ -1450,7 +1447,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             planUniqueName: this.selectedPlan()?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
             duration: this.firstStepForm.get('duration').value,
-            countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.value ?? this.viewSubscriptionData?.region?.code)
+            countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.code ?? this.viewSubscriptionData?.region?.code)
         }
 
         if (this.isChangePlan || this.isRenewPlan) {
@@ -1476,16 +1473,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (entityCode === EntityCode.GBR) {
             // GBR: GoCardless/PayPal/PayU for recurring, Razorpay/PayU for yearly
             if (this.isMonthly() || this.isDaily()) {
-                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL, PaymentProvider.PAYU].includes(provider.value));
+                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
             } else if (this.isYearly()) {
-                filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
+                filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode !== EntityCode.IND) {
             // Non-IND: PayPal/PayU for recurring, Razorpay/PayU for yearly
-            filterProviders(this.isYearly() ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.PAYPAL, PaymentProvider.PAYU]);
+            filterProviders(this.isYearly() ? [PaymentProvider.RAZORPAY] : [PaymentProvider.PAYPAL]);
         } else {
             // IND: Razorpay + PayU for all durations
-            filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
+            filterProviders([PaymentProvider.RAZORPAY]);
         }
 
         // Auto-select CARD auth type when Razorpay is chosen for recurring plans
@@ -1544,9 +1541,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public selectCountry(event: any): void {
         if (event?.value) {
             this.selectedCountry = event.label;
-            this.secondStepForm.controls['country'].setValue(event);
+            this.secondStepForm.controls['country'].patchValue({ name: event.label, code: event.value, additional: event.additional });
             this.secondStepForm.get('taxNumber')?.setValue('');
-            this.secondStepForm.get('state')?.setValue('');
+            this.secondStepForm.get('state')?.patchValue({name: '', code: '', additional: ''});
             this.selectedState = "";
             this.selectedStateCode = "";
             this.disabledState = false;
@@ -1555,10 +1552,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             onboardingFormRequest.formName = 'onboarding';
             onboardingFormRequest.country = event.value;
             this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
-
-            let statesRequest = new StatesRequest();
-            statesRequest.country = event.value;
-            this.store.dispatch(this.generalActions.getAllState(statesRequest));
             this.changeDetection.detectChanges();
         }
     }
@@ -1576,7 +1569,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.isFormSubmitted.set(false);
         
         // If the plan is free else payment provider not selected, payment provider is not required
-        const isPaymentProviderRequired = !this.isFreePlan(this.selectedPlan, this.selectedDuration()) && (this.payType === 'buy' && !this.subscriptionForm.value.thirdStepForm?.paymentProvider);
+        const isPaymentProviderRequired = !this.isFreePlan(this.selectedPlan(), this.selectedDuration()) && (this.payType === 'buy' && !this.subscriptionForm.value.thirdStepForm?.paymentProvider);
         
         if (isPaymentProviderRequired) {
             this.thirdStepForm.get('paymentProvider')?.setErrors({ required: true });
@@ -1603,8 +1596,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     pincode: this.subscriptionForm.value.secondStepForm.pincode,
                     mobileNumber: mobileNumber,
                     country: {
-                        name: this.subscriptionForm.value.secondStepForm.country.label ? this.subscriptionForm.value.secondStepForm.country.label : this.subscriptionForm.value.secondStepForm.country.name,
-                        code: this.subscriptionForm.value.secondStepForm.country.value ? this.subscriptionForm.value.secondStepForm.country.value : this.subscriptionForm.value.secondStepForm.country.code
+                        name: this.subscriptionForm.value.secondStepForm.country.name,
+                        code: this.subscriptionForm.value.secondStepForm.country.code
                     },
                     address: this.subscriptionForm.value.secondStepForm.address
                 },
@@ -1613,34 +1606,30 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 subscriptionId: null
             }
 
-            if (this.isMonthly() || this.isDaily()) {
-                request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
-            }
             if ((this.isMonthly() || this.isDaily()) && this.selectedPlan()?.entityCode !== EntityCode.GBR) {
                 request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
             }
 
             if (this.subscriptionForm.value.secondStepForm.country.value === 'GB') {
                 request.billingAccount['county'] = {
-                    name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
-                    code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
+                    name: this.subscriptionForm.value.secondStepForm.state.name,
+                    code: this.subscriptionForm.value.secondStepForm.state.code
                 };
             } else {
                 request.billingAccount['state'] = {
-                    name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
-                    code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
+                    name: this.subscriptionForm.value.secondStepForm.state.name,
+                    code: this.subscriptionForm.value.secondStepForm.state.code
                 };
             }
 
             request['payNow'] = !isTrial;
-            if (isTrial) {
-                delete request.autoPay;
-                delete request.razorpayAuthType;
-                delete request.subscriptionId;
-                delete request.userUniqueName;
-                delete request.paymentProvider;
-                delete request.promoCode;
-            }
+            // if (isTrial) {
+            //     delete request.razorpayAuthType;
+            //     delete request.subscriptionId;
+            //     delete request.userUniqueName;
+            //     delete request.paymentProvider;
+            //     delete request.promoCode;
+            // }
             if (this.subscriptionId && this.isChangePlan) {
                 request.subscriptionId = this.subscriptionId;
                 this.subscriptionRequest = request;
@@ -1744,7 +1733,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
         let options = {
             key: this.razorpayKey,
-            image: 'data:image/png;base64,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',
             handler: function (res) {
                 that.updateSubscriptionPayment(res, false, request);
                 that.razorpayRetryCount = 0;
@@ -1755,9 +1743,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             },
             amount: request.dueAmount,
             currency: request.planDetails?.currency?.code || this.activeCompany?.baseCurrency,
-            name: 'GIDDH',
-            description: 'Walkover Technologies Private Limited.',
+            name: this.serviceConfig.BRAND_NAME,
+            description: this.serviceConfig.LEGAL_NAME,
         };
+        if (this.serviceConfig?.logos?.primary) {
+            options["image"] = this.serviceConfig.LOGOS.dark;
+        }
         const razorpayRecurringSubscriptionConfig = {
             key: this.razorpayKey,
             order_id: request.razorpayOrderId,
@@ -1772,8 +1763,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             },
             amount: request.dueAmount,
             currency: request.planDetails?.currency?.code || this.activeCompany?.baseCurrency,
-            name: 'GIDDH',
-            description: 'Walkover Technologies Private Limited.',
+            name: this.serviceConfig.BRAND_NAME,
+            description: this.serviceConfig.LEGAL_NAME
         };
 
         try {
@@ -1869,12 +1860,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
         this.secondStepForm.controls['address'].setValue(data?.address);
         if (data?.country) {
-            this.secondStepForm.controls['country'].setValue({ label: data.country.name, value: data.country.code, additional: data.country });
+            this.secondStepForm.controls['country'].patchValue({ name: data.country.name, code: data.country.code, additional: data.country });
         }
         if (data?.state) {
-            this.secondStepForm.controls['state'].setValue({ label: data.state.name, value: data.state.code, additional: data.state });
+            this.secondStepForm.controls['state'].patchValue({ name: data.state.name, code: data.state.code, additional: data.state });
         } else {
-            this.secondStepForm.controls['state'].setValue({ abel: data.county.name, value: data.county.code, additional: data.county });
+            this.secondStepForm.controls['state'].patchValue({ name: data.county.name, code: data.county.code, additional: data.county });
         }
 
         this.subscriptionForm.markAsPristine();

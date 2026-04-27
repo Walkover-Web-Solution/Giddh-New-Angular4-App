@@ -279,8 +279,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public salesTaxInclusive: boolean;
     /** True, if stock category is 'assets' and inclusive tax is applied */
     public fixedAssetTaxInclusive: boolean;
-    /** Stores the value of selected stock variant */
-    public selectedStockVariant: IOption = { label: '', value: '' };
+    /** Stores the value of selected stock variant, provided by the parent */
+    @Input() public selectedStockVariant: IOption;
     /** Holds Aside Menu State For Other Taxes DialogRef */
     public asideMenuStateForOtherTaxesDialogRef: MatDialogRef<any>;
     /** Holds Tooltip is opend/close status */
@@ -456,9 +456,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     opens the new ledger.
                 */
                 const currentSelectedVariant = res.find(variant => variant.value === this.currentTxn?.inventory?.variant?.uniqueName);
-                this.selectedStockVariant = Object.assign({}, currentSelectedVariant ?? res[0]);
+                const newVariant = Object.assign({}, currentSelectedVariant ?? res[0]);
+                const variantChanged = newVariant.value !== this.selectedStockVariant?.value;
+                this.selectedStockVariant = newVariant;
                 this.cdRef.detectChanges();
-                this.stockVariantSelected.emit(currentSelectedVariant?.value ?? res[0].value);
+                if (variantChanged) {
+                    this.stockVariantSelected.emit(newVariant.value);
+                }
             }
         });
 
@@ -497,8 +501,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
             if (callback) {
                 callback();
-            } else {
-                this.preparePreAppliedDiscounts();
             }
         });
     }
@@ -551,7 +553,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.selectedWarehouse = this.currentTxn.inventory?.warehouse?.uniqueName ?? this.blankLedger.transactions[0].inventory?.warehouse?.uniqueName;
             }
             this.calculatePreAppliedTax();
-            this.preparePreAppliedDiscounts();
             if (this.blankLedger?.otherTaxModal?.appliedOtherTax?.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
@@ -582,24 +583,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
         }
 
-        if (this.activeAccount?.applicableTaxes?.length > 0) {
-            (Array.isArray(this.activeAccount.applicableTaxes) ? this.activeAccount.applicableTaxes : []).forEach(tl => {
-                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === tl.uniqueName) : undefined;
-                if (tax) {
-                    switch (tax.taxType) {
-                        case 'tcsrc':
-                        case 'tcspay':
-                        case 'tdsrc':
-                        case 'tdspay':
-                            this.blankLedger.otherTaxModal.appliedOtherTax = {
-                                name: tax?.name,
-                                uniqueName: tax?.uniqueName
-                            };
-                            this.blankLedger.isOtherTaxesApplicable = true;
-                            break;
-                    }
+        if (companyTaxes.length && this.currentTxn.selectedAccount?.otherTax?.uniqueName) {
+            const taxUniqueName = this.currentTxn.selectedAccount.otherTax.uniqueName;
+            let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === taxUniqueName) : undefined;
+            if (tax) {
+                switch (tax.taxType) {
+                    case 'tcsrc':
+                    case 'tcspay':
+                    case 'tdsrc':
+                    case 'tdspay':
+                        this.blankLedger.otherTaxModal.appliedOtherTax = {
+                            name: tax?.name,
+                            uniqueName: tax?.uniqueName
+                        };
+                        this.blankLedger.isOtherTaxesApplicable = true;
+                        break;
                 }
-            });
+            }
         }
     }
 
@@ -607,7 +607,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.needToReCalculate.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.setTaxCalculationMethodForStock();
-                this.preparePreAppliedDiscounts();
                 this.calculatePreAppliedTax();
                 this.detectChanges();
                 setTimeout(() => {
@@ -1216,6 +1215,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (!event.relatedTarget || !this.entryContent?.nativeElement.contains(event.relatedTarget)) {
+            if (this.currentTxn?.selectedAccount?.applicableTaxes) {
+                this.currentTxn.selectedAccount.applicableTaxes = this.currentTxn.taxesVm;
+            }
             this.clickedOutsideEvent.emit(event);
         }
     }
@@ -1808,62 +1810,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (accountDetails.country && accountDetails.country.countryName) {
             this.activeAccountCountryName = accountDetails.country.countryName;
         }
-        if (accountDetails.applicableDiscounts && accountDetails.applicableDiscounts.length) {
-            this.accountOtherApplicableDiscount = accountDetails.applicableDiscounts;
-        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount?.length)) {
-            this.accountOtherApplicableDiscount.push(...accountDetails.inheritedDiscounts[0].applicableDiscounts);
-        }
-        if (!accountDetails.applicableTaxes?.length && accountDetails.otherApplicableTaxes?.length) {
-            accountDetails.applicableTaxes = [...accountDetails.otherApplicableTaxes];
-        }
-        this.preparePreAppliedDiscounts();
         this.calculatePreAppliedTax();
 
-    }
-
-    /**
-     * To prepare pre applied discount for current transactions
-     *
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public preparePreAppliedDiscounts(): void {
-        if (!this.currentTxn?.duplicateEntry) {
-            this.currentTxn.discounts = [];
-        }
-        const stockDiscounts = this.currentTxn.selectedAccount?.stock?.variant?.variantDiscount?.discounts
-        if (stockDiscounts?.length && !this.currentTxn.isMrpDiscountApplied) {
-            stockDiscounts?.forEach(variantDiscount => {
-                this.discountsList()?.forEach(item => {
-                    if (variantDiscount?.discount?.uniqueName === item?.uniqueName) {
-                        this.currentTxn.discounts.push(item);
-                    }
-                    return item;
-                });
-            });
-        } else {
-            if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
-                this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
-                (Array.isArray(this.currentTxn?.selectedAccount.accountApplicableDiscounts) ? this.currentTxn?.selectedAccount.accountApplicableDiscounts : []).forEach(element => {
-                    this.discountsList()?.forEach(item => {
-                        if (element?.uniqueName === item?.uniqueName) {
-                            this.currentTxn.discounts.push(item);
-                        }
-                    });
-                });
-            } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
-                (Array.isArray(this.accountOtherApplicableDiscount) ? this.accountOtherApplicableDiscount : []).forEach(element => {
-                    this.discountsList()?.forEach(item => {
-                        if (element?.uniqueName === item?.uniqueName) {
-                            this.currentTxn.discounts.push(item);
-                        }
-                    });
-                });
-            } else if (!this.currentTxn?.duplicateEntry) {
-                if (this.currentTxn) {
-                    this.currentTxn.discount = 0;
-                }
-            }
-        }
     }
 
     /**
@@ -2002,6 +1950,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public variantChanged(event: IOption): void {
         if (event.value) {
+            this.selectedStockVariant = event;
             // Must not call the variant API when stock is changed
             this.stockVariantSelected.emit(event.value);
         }

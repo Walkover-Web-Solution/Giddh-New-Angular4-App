@@ -21,7 +21,13 @@
                     "label": "ग्राहक",
                     "link": "/pages/contact/customer",
                     "icon": "icon-customer",
-                    "description": "ग्राहकों को प्रबंधित करें, एसएमएस/ईमेल के माध्यम से अनुस्मारक भेजें"
+                    "description": "ग्राहकों को प्रबंधित करें, एसएमएस/ईमेल के माध्यम से अनुस्मारक भेजें",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "customer",
+                            "tabIndex": 1
+                        }
+                    }
                 },
                 {
                     "label": "नया चालान",
@@ -310,7 +316,13 @@
                     "label": "विक्रेता",
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
-                    "description": "बल्क एसएमएस/ईमेल भेजें, रिमाइंडर सेट करें"
+                    "description": "बल्क एसएमएस/ईमेल भेजें, रिमाइंडर सेट करें",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "vendor",
+                            "tabIndex": 1
+                        }
+                    }
                 },
                 {
                     "label": "नया बिल",
@@ -605,7 +617,7 @@
                     "label": "ई-वे बिल",
                     "link": "/pages/invoice/ewaybill",
                     "icon": "icon-eway-bill-new",
-                    "description": "बाद में गिद्ध से सीधे उत्पन्न करें",
+                    "description": "बाद में [BRAND_NAME] से सीधे उत्पन्न करें",
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
@@ -1015,6 +1027,12 @@
                     "link": "/pages/budget-forecasting",
                     "icon": "icon-audit-log",
                     "description": "एआई-संचालित नकदी प्रवाह पूर्वानुमान और भविष्यवाणियां"
+                },
+                {
+                    "label": "बैंक समाधान",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "अपनी पुस्तकों को बैंक स्टेटमेंट से मिलाएं"
                 }
             ]
         },

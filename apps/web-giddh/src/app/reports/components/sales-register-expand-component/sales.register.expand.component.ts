@@ -8,7 +8,7 @@ import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
 import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,8 +19,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
 import { forEach, includes, map, set } from '../../../lodash-optimized';
 import { GroupBy } from '../../constants/reports.constant';
 @Component({
@@ -92,8 +90,6 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public isDefaultLoaded: boolean = false;
     /** Hold active company country code */
     public activeCompanyCountryCode: string = '';
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Datasource of Sales Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     /** Holds page size options for pagination */
@@ -115,7 +111,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         private activeRoute: ActivatedRoute,
         private router: Router,
         private _cd: ChangeDetectorRef,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private dialog: MatDialog,
         private companyActions: CompanyActions
     ) {
@@ -127,7 +123,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
+        this.imgPath = this.serviceConfig.IMG_PATH + 'icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedsalesRequestFilter.q = '';
@@ -332,7 +328,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
      */
     public gotoSalesRegister(): void {
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
-            this.router.navigate(['pages', 'reports', 'sales-register'], { queryParams: { from: params.from, to: params.to, branchUniqueName: params.branchUniqueName, interval: params.interval, selectedMonth: params.selectedMonth, groupBy: this.currentGroupBy() } });
+            this.router.navigate(['pages', 'reports', 'sales-register'], { queryParams: { groupBy: this.currentGroupBy(), required: "groupBy" } });
         });
     }
 
@@ -486,7 +482,8 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             q: this.voucherNumberInput?.value,
             branchUniqueName: this.getDetailedsalesRequestFilter?.branchUniqueName,
             commonLocaleData: this.commonLocaleData,
-            localeData: this.localeData
+            localeData: this.localeData,
+            activeCompanyCountryCode: this.activeCompanyCountryCode
         }
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
                     width: '630px',

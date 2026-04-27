@@ -85,22 +85,12 @@
                             <div class="form-group col-sm-4">
                                 <div class="form-group mb-1">
                                     <input-field
-                                        [label]="
-                                            zipCodeSupportedCountryList.includes(activeCompanyCountryCode)
-                                                ? commonLocaleData?.app_zip_code
-                                                : commonLocaleData?.app_pin_code
-                                        "
-                                        [placeholder]="
-                                            zipCodeSupportedCountryList.includes(activeCompanyCountryCode)
-                                                ? commonLocaleData?.app_enter_zip_code
-                                                : commonLocaleData?.app_enter_pin_code
-                                        "
+                                        [label]="generalService.getPostalCodeLabel(activeCompanyCountryCode)"
+                                        [placeholder]="generalService.getPostalCodePlaceholder(activeCompanyCountryCode)"
                                         [type]="'text'"
                                         [autocomplete]="'false'"
                                         [name]="'pinCodeNum'"
                                         formControlName="pincode"
-                                        [allowDecimalDigitsOnly]="true"
-                                        [preventDecimal]="true"
                                     ></input-field>
                                 </div>
                             </div>

@@ -21,7 +21,13 @@
                     "label": "ग्राहक",
                     "link": "/pages/contact/customer",
                     "icon": "icon-customer",
-                    "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा"
+                    "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "customer",
+                            "tabIndex": 1
+                        }
+                    }
                 },
                 {
                     "label": "नवीन चालान",
@@ -310,7 +316,13 @@
                     "label": "विक्रेता",
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
-                    "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा"
+                    "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "vendor",
+                            "tabIndex": 1
+                        }
+                    }
                 },
                 {
                     "label": "नवीन विधेयक",
@@ -1015,6 +1027,12 @@
                     "link": "/pages/budget-forecasting",
                     "icon": "icon-audit-log",
                     "description": "एआय-संचालित रोख प्रवाह अंदाज आणि भविष्यवाण्या"
+                },
+                {
+                    "label": "बँक जुळवणी",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "आपली नोंदी बँक स्टेटमेंटशी जुळवा"
                 }
             ]
         },

@@ -201,9 +201,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
             this.options.placeholder = this.commonLocaleData?.app_select_option;
 
             this.FYPeriodOptions = [
-                { label: this.localeData?.financial_year_period_options?.jan_dec, value: 'JAN-DEC' },
-                { label: this.localeData?.financial_year_period_options?.apr_mar, value: 'APR-MAR' },
-                { label: this.localeData?.financial_year_period_options?.july_july, value: 'JULY-JULY' }
+                { label: this.localeData?.financial_year_period_options?.jan_dec, value: 'JAN-DEC'},
+                { label: this.localeData?.financial_year_period_options?.apr_mar, value: 'APR-MAR'},
+                { label: this.localeData?.financial_year_period_options?.july_july, value: 'JULY-JULY'}
             ];
 
             if (this.financialYearObj?.financialYearPeriod) {

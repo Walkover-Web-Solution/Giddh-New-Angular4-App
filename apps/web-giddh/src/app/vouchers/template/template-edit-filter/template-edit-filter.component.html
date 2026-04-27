@@ -45,7 +45,7 @@
                                         "
                                     >
                                         <img
-                                            src="{{ imgPath }}templates/{{ template?.templateType }}.png"
+                                            [src]="imgPath + 'templates/{{ template?.templateType }}.png'"
                                             alt="template"
                                             class="view-img w-100 h-100 border-radius-4"
                                         />
@@ -54,7 +54,7 @@
                                             class="beta-img position-absolute"
                                             *ngIf="template?.templateType !== templateTypeEnum.GstTemplateA"
                                         >
-                                            <img src="{{ imgPath }}templates/beta.png" alt="beta" />
+                                            <img [src]="imgPath + 'templates/beta.png'" alt="beta" />
                                         </div>
                                     </div>
                                 </ng-container>
@@ -164,8 +164,6 @@
                                     [options]="presetFonts"
                                     (selectedOption)="onFontSelect($event)"
                                     [(ngModel)]="customTemplate.font"
-                                    (onClear)="selectedFont = ''"
-                                    [labelValue]="selectedFont"
                                     [placeholder]="localeData?.choose_font"
                                 ></reactive-dropdown-field>
                             </div>
@@ -184,8 +182,6 @@
                                     [options]="presetFontsSize"
                                     (selectedOption)="onFontSizeSelect($event)"
                                     [(ngModel)]="customTemplate.fontSize"
-                                    (onClear)="selectedFontSize = ''"
-                                    [labelValue]="selectedFontSize"
                                     [placeholder]="localeData?.select_different_fonts_size"
                                 ></reactive-dropdown-field>
                             </div>
@@ -374,7 +370,8 @@
                                             <div
                                                 *ngIf="
                                                     sectionSettings?.header.displayPlaceOfSupply &&
-                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
+                                                    (templateType === voucherTypeEnum.invoice || templateType === voucherTypeEnum.voucher)
                                                 "
                                             >
                                                 <mat-checkbox
@@ -384,6 +381,42 @@
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
                                                     <span class="ml-2">{{ localeData?.place_of_supply }}</span>
+                                                </mat-checkbox>
+                                            </div>
+                                            <div
+                                                *ngIf="
+                                                    sectionSettings?.header.sourceOfSupply &&
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
+                                                    (templateType === voucherTypeEnum.purchase_order ||
+                                                        templateType === voucherTypeEnum.purchase_bill ||
+                                                        templateType === voucherTypeEnum.voucher)
+                                                "
+                                            >
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="sourceOfSupplyCheckbox"
+                                                    [(ngModel)]="customTemplate.sections['header'].data['sourceOfSupply'].display"
+                                                    (ngModelChange)="onChangeFieldVisibility()"
+                                                >
+                                                    <span class="ml-2">{{ localeData?.source_of_supply }}</span>
+                                                </mat-checkbox>
+                                            </div>
+                                            <div
+                                                *ngIf="
+                                                    sectionSettings?.header.destinationOfSupply &&
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
+                                                    (templateType === voucherTypeEnum.purchase_order ||
+                                                        templateType === voucherTypeEnum.purchase_bill ||
+                                                        templateType === voucherTypeEnum.voucher)
+                                                "
+                                            >
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="destinationOfSupplyCheckbox"
+                                                    [(ngModel)]="customTemplate.sections['header'].data['destinationOfSupply'].display"
+                                                    (ngModelChange)="onChangeFieldVisibility()"
+                                                >
+                                                    <span class="ml-2">{{ localeData?.destination_of_supply }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <!-- place of country -->
@@ -3180,7 +3213,7 @@
                                                                     <label
                                                                         class="upload-button text-center cursor-pointer"
                                                                         for="signatureImg-edit"
-                                                                        [hidden]="signatureImgAttached"
+                                                                        [hidden]="signatureImgAttached()"
                                                                     >
                                                                         <input
                                                                             type="file"
@@ -3198,19 +3231,19 @@
                                                                     <label
                                                                         for="signatureImg-edit"
                                                                         class="logo-preview"
-                                                                        [hidden]="!signatureImgAttached"
+                                                                        [hidden]="!signatureImgAttached()"
                                                                     >
                                                                         <img
-                                                                            [src]="signatureSrc"
+                                                                            [src]="signatureSrc()"
                                                                             alt="signature"
                                                                             id="signatureImage"
                                                                             (ngModelChange)="onChangeFieldVisibility()"
                                                                         />
                                                                     </label>
                                                                     <label
-                                                                        *ngIf="isSignatureUploadInProgress"
+                                                                        *ngIf="isSignatureUploadInProgress()"
                                                                         class="logo-preview"
-                                                                        [hidden]="!signatureImgAttached"
+                                                                        [hidden]="!signatureImgAttached()"
                                                                     >
                                                                         <span>
                                                                             <b>{{ localeData?.uploading }}</b>
@@ -3218,7 +3251,7 @@
                                                                     </label>
                                                                 </span>
                                                                 <button
-                                                                    *ngIf="signatureImgAttached"
+                                                                    *ngIf="signatureImgAttached()"
                                                                     type="button"
                                                                     class="start-upload-btn ml-4"
                                                                     (click)="removeFile()"

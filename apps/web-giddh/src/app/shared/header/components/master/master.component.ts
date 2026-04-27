@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren, NgZone } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren, NgZone, input } from "@angular/core";
 import { Angular21ChangeDetectionService } from "../../../../services/angular21-change-detection.service";
 import { select, Store } from "@ngrx/store";
 import { AccountsAction } from "apps/web-giddh/src/app/actions/accounts.actions";
@@ -30,7 +30,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     /** Data obtained by searching master */
     @Input() public searchedMasterData: any[] = [];
     /** Height of column */
-    @Input() public height: number;
+    public height = input<number>();
     /** true/false if searching */
     @Input() public isSearchingGroups: boolean = false;
     /** This will hold local JSON data */

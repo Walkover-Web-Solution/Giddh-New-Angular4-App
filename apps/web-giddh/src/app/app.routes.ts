@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
 import { UserAuthenticated } from './decorators/UserAuthenticated';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
+import { GiddhDomainGuard } from './decorators/giddh-domain-guard';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
 import { PageComponent } from './page/page.component';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
@@ -88,7 +89,7 @@ export const ROUTES: Routes = [
             { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule), canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', loadChildren: () => import('./billing-details/billing-details.module').then(module => module.BillingDetailModule) },
             { path: 'giddh-all-items', loadChildren: () => import('./all-items/all-item.module').then(module => module.AllItemModule), canActivate: [NeedsAuthorization] },
-            { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
+            { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization, GiddhDomainGuard] },
             { path: 'vat-report', loadChildren: () => import('./vat-report/vat-report.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule), canActivate: [NeedsAuthorization] },
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule), canActivate: [NeedsAuthorization] },
@@ -105,6 +106,7 @@ export const ROUTES: Routes = [
             { path: 'project-wise-accounting', loadChildren: () => import('./project-wise-accounting/project-wise-accounting.module').then(module => module.ProjectWiseAccountingModule), canActivate: [NeedsAuthorization] },
             { path: 'email-forwarding', loadChildren: () => import('./email-forwarding/email-forwarding.module').then(m => m.BankStatementModule), canActivate: [NeedsAuthorization] },
             { path: 'budget-forecasting', loadComponent: () => import('./budget-forecasting/budget-forecasting.component').then(m => m.BudgetForecastingComponent), canActivate: [NeedsAuthorization] },
+            { path: 'bank-reconciliation', loadComponent: () => import('./bank-reconciliation/bank-reconciliation.component').then(m => m.BankReconciliationComponent), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

@@ -614,11 +614,13 @@
                                             </div>
                                             <div class="form-group">
                                                 <input-field
-                                                    [type]="'number'"
+                                                    [type]="'text'"
                                                     [name]="'subscriptionPincode' + currentTimeStamp"
-                                                    [label]="localeData?.pincode"
+                                                    [label]="generalService.getPostalCodeLabel(secondStepForm.get('country')?.value?.value)"
                                                     formControlName="pincode"
-                                                    [placeholder]="localeData?.pincode"
+                                                    [placeholder]="
+                                                        generalService.getPostalCodePlaceholder(secondStepForm.get('country')?.value?.value)
+                                                    "
                                                     [autocomplete]="'subscriptionPincode' + currentTimeStamp"
                                                 ></input-field>
                                             </div>
@@ -633,17 +635,16 @@
                                                 ></mobile-number-input>
                                             </div>
                                             <div class="form-group">
-                                                <div class="w-100">
+                                                <div class="w-100" formGroupName="country">
                                                     <reactive-dropdown-field
                                                         [name]="'subscriptionCountry' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_country"
                                                         [placeholder]="commonLocaleData?.app_country"
                                                         class="mb-3 d-block"
                                                         [options]="commonCountrySource"
-                                                        formControlName="country"
+                                                        formControlName="code"
                                                         [required]="true"
                                                         (selectedOption)="selectCountry($event)"
-                                                        [labelValue]="selectedCountry"
                                                         [showError]="isFormSubmitted() && !secondStepForm.get('country')?.value"
                                                         [autocomplete]="'subscriptionCountry' + currentTimeStamp"
                                                     ></reactive-dropdown-field>
@@ -664,7 +665,7 @@
                                                     [autocomplete]="'subscriptionTaxNumber' + currentTimeStamp"
                                                 ></input-field>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" formGroupName="state">
                                                 <div *ngIf="!countyList?.length">
                                                     <reactive-dropdown-field
                                                         [name]="'subscriptionState' + currentTimeStamp"
@@ -673,7 +674,7 @@
                                                         [options]="states"
                                                         [showError]="isFormSubmitted() && !secondStepForm.get('state')?.value"
                                                         [readonly]="disabledState"
-                                                        [labelValue]="selectedState"
+                                                        formControlName="code"
                                                         [required]="true"
                                                         (selectedOption)="selectState($event)"
                                                         [ngClass]="{ 'readonly-field': disabledState }"
@@ -688,7 +689,7 @@
                                                         [options]="countyList"
                                                         [showError]="isFormSubmitted() && !secondStepForm.get('state')?.value"
                                                         [labelValue]="selectedState"
-                                                        formControlName="state"
+                                                        formControlName="code"
                                                         [required]="true"
                                                         (selectedOption)="selectState($event)"
                                                         [autocomplete]="'subscriptionCounty' + currentTimeStamp"
@@ -758,7 +759,7 @@
                                                 [providers]="filteredPaymentProviders"
                                                 [label]="localeData?.payment_provider"
                                                 [required]="
-                                                    !isFreePlan(selectedPlan, firstStepForm.get('duration')?.value) && payType === 'buy'
+                                                    !isFreePlan(selectedPlan(), firstStepForm.get('duration')?.value) && payType === 'buy'
                                                 "
                                                 [showError]="isFormSubmitted() && !thirdStepForm.get('paymentProvider')?.value"
                                                 [errorMessage]="localeData?.please_select_payment_provider"
@@ -783,19 +784,6 @@
                                                         {{ localeData?.upi }}
                                                     </mat-radio-button>
                                                 </mat-radio-group>
-                                            }
-
-                                            @if (isMonthly() || isDaily()) {
-                                                <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
-                                                    <span class="font-size-14 text-primary font-weight-semibold">
-                                                        {{ localeData?.auto_pay }}
-                                                    </span>
-                                                    <mat-slide-toggle
-                                                        color="primary"
-                                                        formControlName="autoPay"
-                                                        [attr.aria-label]="localeData?.auto_pay"
-                                                    ></mat-slide-toggle>
-                                                </div>
                                             }
                                         </mat-card-content>
                                     </mat-card>
@@ -825,63 +813,6 @@
             <p class="font-size-16 mb-3 strong d-flex align-items-center plan-summary-heading">
                 {{ localeData?.plan_summary }}
             </p>
-            @if (planUI().showCard) {
-                <mat-card class="outline-card mb-3">
-                    <mat-card-content>
-                        @if (planUI().hasNew) {
-                            <div
-                                [class.pb-3]="planUI().hasExtra || planUI().hasCarry"
-                                [class.border-bottom]="planUI().hasExtra || planUI().hasCarry"
-                            >
-                                <p class="pb-3">{{ localeData?.total_transaction_count }}</p>
-                                <ul class="pl-4">
-                                    <li class="py-1">
-                                        <div class="d-flex justify-content-between">
-                                            <p>{{ localeData?.invoice_count }}</p>
-                                            <p>{{ selectedPlan()?.newInvoiceCount }}</p>
-                                        </div>
-                                    </li>
-                                    <li class="py-1">
-                                        <div class="d-flex justify-content-between">
-                                            <p>{{ localeData?.bill_count }}</p>
-                                            <p>{{ selectedPlan()?.newBillCount }}</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                        @if (planUI().hasExtra) {
-                            <div
-                                class="d-flex justify-content-between pt-3"
-                                [class.border-bottom]="planUI().hasCarry"
-                                [class.pb-3]="planUI().hasCarry"
-                            >
-                                <p>{{ localeData?.extra_invoice_count }}</p>
-                                <p>{{ planUI().totalExtra }}</p>
-                            </div>
-                        }
-                        @if (planUI().hasCarry) {
-                            <div [class.pt-3]="planUI().hasNew || planUI().hasExtra">
-                                <p class="pb-3">{{ localeData?.carry_forward_count }}</p>
-                                <ul class="pl-4">
-                                    <li class="py-1">
-                                        <div class="d-flex justify-content-between">
-                                            <p>{{ localeData?.invoice_count }}</p>
-                                            <p>{{ selectedPlan()?.carryForwardInvoices }}</p>
-                                        </div>
-                                    </li>
-                                    <li class="py-1">
-                                        <div class="d-flex justify-content-between">
-                                            <p>{{ localeData?.bill_count }}</p>
-                                            <p>{{ selectedPlan()?.carryForwardBills }}</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                    </mat-card-content>
-                </mat-card>
-            }
             <mat-card class="outline-card">
                 <form name="firstStepForm" autocomplete="off" novalidate [formGroup]="firstStepForm" name="firstStepForm">
                     <mat-card-content>
@@ -941,16 +872,6 @@
                                 [currencyCode]="selectedPlan()?.currency?.code"
                             ></amount-field>
                         </div>
-                        @if (selectedPlan()?.refundAmount > 0) {
-                            <div class="d-flex justify-content-between border-bottom py-3">
-                                <p>{{ selectedPlan()?.upgrade ? localeData?.refund_amount : localeData?.due_amount }}</p>
-                                <amount-field
-                                    [amount]="selectedPlan()?.refundAmount"
-                                    [currencySymbol]="selectedPlan()?.currency?.symbol"
-                                    [currencyCode]="selectedPlan()?.currency?.code"
-                                ></amount-field>
-                            </div>
-                        }
                         <div *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="d-flex justify-content-between py-3">
                                 <p class="strong">{{ localeData?.final_amount }}</p>

@@ -28,8 +28,6 @@ const ELEMENT_DATA: GetDomainList[] = [];
 export class DnsRecordsComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* it will store image path */
-    public imgPath: string = '';
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if API is in progress */
@@ -46,7 +44,7 @@ export class DnsRecordsComponent implements OnInit {
     /* it will store company uniquename */
     public companyUniqueName: string = '';
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
 
 
     constructor(private route: ActivatedRoute,
@@ -65,9 +63,7 @@ export class DnsRecordsComponent implements OnInit {
    * @memberof DnsRecordsComponent
    */
     public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-text-primary-logo.svg';
+        this.brandLogoUrl = this.serviceConfig.LOGOS.dark;
 
         combineLatest([
             this.route.queryParams.pipe(takeUntil(this.destroyed$)),
