@@ -282,6 +282,24 @@ export class VatService {
     }
 
     /**
+     * This will initiate a VAT payment for UK liabilities
+     *
+     * @param {string} companyUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VatService
+     */
+    public initiatePayment(companyUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + VAT_API.INITIATE_PAYMENT;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
      * Download Detailed Vat liability report
      *
      * @param {VatReportRequest} request

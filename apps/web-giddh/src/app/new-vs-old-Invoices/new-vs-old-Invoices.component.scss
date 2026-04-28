@@ -1,3 +1,17 @@
+@use '../../assets/styles/abstracts/mixins';
+
+.nvo-surface {
+    background-color: var(--table-background-color);
+    border: 1px solid var(--border-color);
+}
+
+.nvo-canvas-fill {
+    canvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
 .height-25px {
     height: 25px;
 }
@@ -24,4 +38,62 @@
         display: block;
         width: 100%;
     }
+}
+
+.nvo-page-wrap {
+    max-width: 1500px;
+}
+
+// ── Sales Bifurcation Dashboard ──────────────────────────
+
+.sbp-summary-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.sbp-summary-card {
+    background-color: var(--table-background-color);
+}
+
+.sbp-icon-wrap {
+    flex-shrink: 0;
+    @include mixins.square(48px);
+
+    &.sbp-icon-blue {
+        background-color: rgba(33, 150, 243, 0.12);
+
+        i {
+            color: var(--color-blue);
+        }
+    }
+
+    &.sbp-icon-teal {
+        background-color: rgba(0, 150, 136, 0.12);
+
+        i {
+            color: var(--color-green);
+        }
+    }
+
+    &.sbp-icon-orange {
+        background-color: rgba(255, 152, 0, 0.12);
+
+        i {
+            color: var(--color-orange);
+        }
+    }
+}
+
+.chart-height {
+    height: 250px;
+}
+
+@media (max-width: 1200px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+        row-gap: 12px;
+    }
+}
+
+.top-salesperson-dialog-height {
+    height: 55vh;
 }
