@@ -308,6 +308,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "label": "Net Purchase",
                 "checked": true,
             },
+            {
+                "value": "app_round_off",
+                "label": "Round Off",
+                "checked": true,
+                "isCommonLocaleData": true
+            }
         ];
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {

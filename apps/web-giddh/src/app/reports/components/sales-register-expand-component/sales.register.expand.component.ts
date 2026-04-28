@@ -295,6 +295,12 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
                 "value": "net_sales",
                 "label": "Net Sales",
                 "checked": true
+            },
+            {
+                "value": "app_round_off",
+                "label": "Round Off",
+                "checked": true,
+                "isCommonLocaleData": true
             }
         ];
 

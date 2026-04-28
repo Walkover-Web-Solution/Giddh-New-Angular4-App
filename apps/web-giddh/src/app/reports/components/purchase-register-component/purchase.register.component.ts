@@ -92,7 +92,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         tcsTotal: ["app_tcs", false, "text-right"],
         tdsTotal: ["app_tds", false, "text-right"],
         netPurchase: ["app_net_purchase", false, "text-right"],
-        cumulative: ["app_cumulative", false, "text-right"]
+        cumulative: ["app_cumulative", false, "text-right"],
+        roundOff: ["app_round_off", false, "text-right"]
     }
     /** Constant for duration */
     public durationEnum: typeof DurationEnum = DurationEnum;
@@ -393,6 +394,7 @@ constructor(
             reportsModel.discountTotal = item.discountTotal;
             reportsModel.tcsTotal = item.tcsTotal;
             reportsModel.tdsTotal = item.tdsTotal;
+            reportsModel.roundOff = Number(item.roundOff ?? 0);
             reportsModel.netPurchase = (item.balance.type === "CREDIT") ? Number("-" + item.balance.amount) : item.balance.amount;
             reportsModel.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
             reportsModel.from = item.from;
@@ -433,6 +435,7 @@ constructor(
                 reportsModelCombined.discountTotal += item.discountTotal;
                 reportsModelCombined.tcsTotal += item.tcsTotal;
                 reportsModelCombined.tdsTotal += item.tdsTotal;
+                reportsModelCombined.roundOff += Number(item.roundOff ?? 0);
                 reportsModelCombined.netPurchase += (item.balance.type === "CREDIT") ? Number("-" + item.balance.amount) : item.balance.amount;
                 reportsModelCombined.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
                 reportsModelCombined.interval = this.interval;
@@ -684,6 +687,7 @@ constructor(
             this.purchaseRegisterTotal.discountTotal += item.discountTotal;
             this.purchaseRegisterTotal.tcsTotal += item.tcsTotal;
             this.purchaseRegisterTotal.tdsTotal += item.tdsTotal;
+            this.purchaseRegisterTotal.roundOff += Number(item.roundOff ?? 0);
             this.purchaseRegisterTotal.netPurchase += (item.balance.type === "CREDIT") ? Number("-" + item.balance.amount) : item.balance.amount;
             this.purchaseRegisterTotal.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
             this.purchaseRegisterTotal.interval = this.interval;
