@@ -9,7 +9,6 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { CommonService } from '../../services/common.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../../services/general.service';
-import { ZIP_CODE_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 
@@ -78,8 +77,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public selectedEntity: any[] = [];
     /** Hold active company country code */
     public activeCompanyCountryCode: string = '';
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Enum for tax type name */
     public taxTypeNameEnum: typeof TaxTypeNameEnum = TaxTypeNameEnum;
     /** Holds the type of address configuration */
@@ -90,7 +87,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private commonService: CommonService,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         public dialog: MatDialog,
         private store: Store<AppState>
     ) {

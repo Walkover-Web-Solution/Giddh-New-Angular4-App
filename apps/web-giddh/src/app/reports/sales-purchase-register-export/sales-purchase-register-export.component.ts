@@ -8,6 +8,7 @@ import { takeUntil } from "rxjs/operators";
 import { ExportBodyRequest } from "../../models/api-models/DaybookRequest";
 import { LedgerService } from "../../services/ledger.service";
 import { ToasterService } from "../../services/toaster.service";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
     selector: "sales-purchase-register-export",
@@ -29,7 +30,8 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         private ledgerService: LedgerService,
         private toaster: ToasterService,
         private router: Router,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        protected generalService: GeneralService
     ) {}
 
     /**

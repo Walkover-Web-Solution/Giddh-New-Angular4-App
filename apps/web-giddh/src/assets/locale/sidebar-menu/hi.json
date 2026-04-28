@@ -849,6 +849,12 @@
                     "link": "/pages/budget-forecasting",
                     "icon": "icon-audit-log",
                     "description": "एआई-संचालित नकदी प्रवाह पूर्वानुमान और भविष्यवाणियां"
+                },
+                {
+                    "label": "बैंक समाधान",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "अपनी पुस्तकों को बैंक स्टेटमेंट से मिलाएं"
                 }
             ]
         }

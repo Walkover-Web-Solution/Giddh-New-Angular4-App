@@ -86,7 +86,7 @@
                             <reactive-dropdown-field
                                 [label]="commonLocaleData?.app_select_account"
                                 [placeholder]="commonLocaleData?.app_select"
-                                [options]="accountSearchResponse"
+                                [options]="accountSearchResponse()"
                                 [labelValue]="createAccountEntryForm.get('account')?.value"
                                 formControlName="accountUniqueName"
                                 [enableDynamicSearch]="true"
@@ -216,7 +216,7 @@
                                             [label]="commonLocaleData?.app_select_account"
                                             [placeholder]="commonLocaleData?.app_select"
                                             [labelValue]="entry?.get('account')?.value"
-                                            [options]="accountSearchResponse"
+                                            [options]="accountSearchResponse()"
                                             formControlName="accountUniqueName"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"

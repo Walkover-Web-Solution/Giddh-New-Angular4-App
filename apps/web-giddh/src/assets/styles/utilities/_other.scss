@@ -137,6 +137,9 @@
 .bg-black {
     background: var(--color-black) !important;
 }
+.bg-warning {
+    background: var(--color-warm-orange-light) !important;
+}
 .custom-keyboard-dropdown-list-focus {
     background-color: var(--theme-primary-light);
 }
@@ -452,4 +455,13 @@
 }
 .table-layout-fixed {
     table-layout: fixed !important;
+}
+.table-border-collapse {
+    border-collapse: collapse !important;
+}
+.table-border-separate {
+    border-collapse: separate !important;
+}
+.box-shadow {
+    box-shadow: var(--mat-menu-box-shadow) !important;
 }

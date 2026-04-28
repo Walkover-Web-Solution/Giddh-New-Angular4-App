@@ -56,6 +56,12 @@ export enum RestrictedModules {
     Users = 'Users'
 };
 
+/** Enum for application theme class names applied on body element */
+export enum AppThemeClassEnum {
+    Default = 'default-theme',
+    Dark = 'dark-theme'
+}
+
 export const DEFAULT_TOASTER_OPTIONS = {
     closeButton: true, // show close button
     timeOut: 3000, // time to live
@@ -733,7 +739,6 @@ export enum WeekdaysEnum {
 /** Get Bifurcation Type */
 export enum GetBifurcationType {
     MONTH = 'month',
-    QUATER = 'quater',
     QUARTER = 'quarter'
 }
 
@@ -759,6 +764,7 @@ export interface IOption {
     isHilighted?: boolean;
     additional?: any;
     subVoucher?: string;
+    tooltip?: string;
 }
 
 /** Number Format Locale Mapping for GiddhNumberFormatPipe */

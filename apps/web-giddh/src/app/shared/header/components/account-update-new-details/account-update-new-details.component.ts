@@ -45,7 +45,7 @@ import { AppState } from '../../../../store';
 import { digitsOnly } from '../../../helpers';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, TCS_TDS_TAXES_TYPES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -241,8 +241,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public voucherApiVersion: number;
     /** This will hold is portal default */
     public isPortalDefault: boolean;
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current currency is not company currency */
     public isForeignCurrency: boolean = false;
     /** Hold all temporary save bulk balance data */
@@ -325,10 +323,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private groupService: GroupService,
         private invoiceService: InvoiceService,
         private changeDetectorRef: ChangeDetectorRef,
+        private elementRef: ElementRef,
         private settingsDiscountService: SettingsDiscountService,
         private customFieldsService: CustomFieldsService,
         private http: HttpClient,
@@ -748,17 +747,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
-            this.selectedTabLabel = event.tab.textLabel;
+            const tabLabel = event.tab.textLabel || event.tab.ariaLabel;
+            this.selectedTabLabel = tabLabel;
             this.selectedTabIndex = event.index;
-            this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
-            if (event.tab.textLabel === this.localeData?.tabs?.others) {
+            this.isCustomSelectedTab = tabLabel === this.localeData?.tabs?.custom;
+            if (tabLabel === this.localeData?.tabs?.others) {
                 this.isOtherSelectedTab = true;
             } else {
                 this.isOtherSelectedTab = false;
             }
 
             // Mark this tab as activated
-            this.activatedTabs.add(event.tab.textLabel);
+            this.activatedTabs.add(tabLabel);
             this.changeDetectorRef.detectChanges();
         }
     }
@@ -1121,11 +1121,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
-
-            // If duplicate contact errors exist, navigate to portal tab
-            if (this.hasDuplicateContactErrors) {
-                this.goToPortalTab();
-            }
+            this.navigateToFirstErrorTab();
             return;
         }
 
@@ -2685,6 +2681,60 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public goToPortalTab(): void {
         this.goToTab(2); // Portal tab is at index 2
+    }
+
+    /**
+     * Checks whether the given form control names contain at least one invalid control
+     *
+     * @param {string[]} controlNames - List of top-level form control names belonging to a tab
+     * @returns {boolean} True if any control in the list is invalid
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public tabHasError(controlNames: string[]): boolean {
+        if (!this.isValidForm) {
+            return controlNames.some(name => this.addAccountForm.get(name)?.invalid);
+        }
+        return false;
+    }
+
+    /**
+     * Navigates to the first tab that contains validation errors
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private navigateToFirstErrorTab(): void {
+        const tabControlMap: { controlNames: string[]; index: number }[] = [
+            { controlNames: ['addresses'], index: 0 },
+            { controlNames: ['attentionTo', 'mobileNo', 'email'], index: 1 },
+            { controlNames: ['portalDomain'], index: 2 },
+            { controlNames: ['accountBankDetails'], index: 3 },
+            { controlNames: ['uniqueName', 'closingBalanceTriggerAmount', 'hsnOrSac', 'hsnNumber', 'sacNumber'], index: 4 },
+            { controlNames: ['customFields'], index: 5 },
+        ];
+        const firstErrorTab = tabControlMap.find(tab =>
+            tab.controlNames.some(name => this.addAccountForm.get(name)?.invalid)
+        );
+        if (firstErrorTab) {
+            this.goToTab(firstErrorTab.index);
+        }
+        this.scrollToFirstInvalidField();
+    }
+
+    /**
+     * Scrolls the sidebar panel to the first invalid form field
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private scrollToFirstInvalidField(): void {
+        setTimeout(() => {
+            const hostEl: HTMLElement = this.elementRef.nativeElement;
+            const firstInvalid = hostEl.querySelector<HTMLElement>(
+                'input.ng-invalid, mat-select.ng-invalid, reactive-dropdown-field.ng-invalid, input-field.ng-invalid, select-field.ng-invalid, textarea.ng-invalid'
+            );
+            firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
     }
 
     /**

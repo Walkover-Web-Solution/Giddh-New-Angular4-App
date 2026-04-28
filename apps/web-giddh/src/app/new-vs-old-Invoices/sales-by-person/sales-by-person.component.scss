@@ -1,0 +1,236 @@
+// ── Main mat-table ────────────────────────────────────────
+.sbp-mat-table {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+        background-color: var(--table-background-color);
+        border: 1px solid var(--border-color);
+        padding: 8px 12px;
+        box-sizing: border-box;
+    }
+}
+
+// ── Group header row: 80px — visually acts as two rows ─────────
+.sbp-group-header-row {
+    height: 80px;
+}
+
+.sbp-group-header-cell {
+    height: 80px !important;
+
+    &.mat-mdc-header-cell {
+        padding: 0 !important;
+        border: none !important;
+    }
+}
+
+// Full-width flex container
+.sbp-group-header-inner {
+    height: 80px;
+    align-items: stretch;
+}
+
+// Base group cell styles
+.sbp-group-th {
+    flex-shrink: 0;
+    flex-grow: 0;
+    border-right: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
+    background-color: var(--table-background-color);
+    font-weight: var(--font-weight-semibold);
+
+    &:first-child {
+        border-left: 1px solid var(--border-color);
+    }
+
+    // Sales Person: single label, vertically centered, full 80px height
+    &--leaf {
+        justify-content: flex-start;
+        padding: 8px 12px;
+    }
+
+    // Group cell: label on top half, children row on bottom half
+    &--group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+// Group label (top 40px)
+.sbp-group-th__label {
+    height: 40px;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+// Children row (bottom 40px)
+.sbp-group-th__children {
+    height: 40px;
+    align-items: stretch;
+}
+
+// Each child label cell
+.sbp-group-th__child {
+    flex: 1;
+    padding: 0 8px;
+    font-weight: var(--font-weight-semibold);
+    border-left: 1px solid var(--border-color);
+
+    &:first-child {
+        border-left: none;
+    }
+}
+
+// ── Leaf header row: collapsed (only for column registration) ────
+.sbp-leaf-header-row {
+    height: 0;
+    overflow: hidden;
+
+    .mat-mdc-header-cell {
+        height: 0 !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        overflow: hidden;
+    }
+}
+
+.sbp-leaf-th {
+    font-weight: var(--font-weight-semibold);
+    background-color: var(--theme-primary-light);
+}
+
+// ── Data cells ────────────────────────────────────────────
+.sbp-td {
+    &--left {
+        font-weight: var(--font-weight-medium);
+    }
+}
+
+// ── Expandable data rows ──────────────────────────────────
+.sbp-data-row--expandable {
+    &:hover .mat-mdc-cell {
+        filter: brightness(0.95);
+    }
+}
+
+// ── Expand detail row ─────────────────────────────────────
+.sbp-expand-detail-row {
+    &--hidden {
+        display: none;
+
+        .mat-mdc-cell {
+            height: 0;
+            padding: 0 !important;
+            overflow: hidden;
+            border: none;
+        }
+    }
+}
+
+.sbp-expand-detail-td {
+    padding: 12px 16px 16px !important;
+    background-color: var(--table-background-color);
+}
+
+.sbp-expand-loading {
+    padding: 16px;
+}
+
+.sbp-expand-empty {
+    padding: 10px 14px;
+}
+
+// ── Expand panel (flat design) ────────────────────────────
+.sbp-expand-panel {
+    background: var(--table-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 4px 0;
+
+    // ── Breadcrumb header ─────────────────────────────────
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 16px;
+        background: var(--table-background-color);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    &__crumb-person {
+        font-weight: var(--font-weight-semibold);
+    }
+
+    &__crumb-sep {
+        line-height: 1;
+    }
+
+    &__crumb-title {
+        font-weight: var(--font-weight-bold);
+        letter-spacing: 0.5px;
+    }
+}
+
+// ── Shared grid layout (4 columns: period 30%, 3 num columns share remaining 70%) ─
+%sbp-expand-grid {
+    display: grid;
+    grid-template-columns: 30% repeat(3, 1fr);
+    align-items: center;
+    padding: 0 16px;
+}
+
+// ── Column header row ─────────────────────────────────────
+.sbp-expand-col-header {
+    @extend %sbp-expand-grid;
+    height: 36px;
+    background: var(--table-background-color);
+    border-bottom: 1px solid var(--border-color);
+
+    &__period {
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.3px;
+    }
+
+    &__num {
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.3px;
+    }
+}
+
+// ── Data row ──────────────────────────────────────────────
+.sbp-expand-row {
+    @extend %sbp-expand-grid;
+    min-height: 44px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.12s;
+
+    &:last-of-type {
+        border-bottom: none;
+    }
+
+    &__period {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 0;
+    }
+
+    &__label {
+        font-weight: var(--font-weight-semibold);
+    }
+
+    &__num {
+        &--link {
+            color: var(--theme-primary-color);
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}

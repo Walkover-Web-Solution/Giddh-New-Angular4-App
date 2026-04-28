@@ -1,9 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
-import {
-    TRIAL_BALANCE_VIEWPORT_LIMIT,
-} from 'apps/web-giddh/src/app/financial-reports/constants/trial-balance-profit.constant';
 import { FinancialReportsComponentStore } from 'apps/web-giddh/src/app/financial-reports/financial-reports.store';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
@@ -31,8 +28,6 @@ export class ProfitLossGridRowComponent implements OnInit, OnChanges, OnDestroy 
     @Input() public plHeaders: any[];
     /** True, if all items are expanded  */
     @Input() public expandAll: boolean;
-    /** Minimum limit on which Trial balance viewport enables */
-    public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
     /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
     /** Hold current url */
