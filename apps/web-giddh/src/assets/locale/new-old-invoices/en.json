@@ -14,6 +14,14 @@
     "sales_from": "Sales from",
     "clients": "Clients",
     "no_invoices": "No. of Invoices",
+    "top_salespersons": "Top Salespersons",
+    "top_5_salespersons": "Top 5 Salespersons",
+    "all_salespersons": "All Salespersons",
+    "tooltip_view_all_salespersons_chart": "Click to view all salespersons chart",
+    "tooltip_view_all_salespersons_new_vs_old_chart": "Click to view all salespersons new vs old chart",
+    "new_vs_old_sales": "New vs Old Sales",
+    "old_sales_breakdown": "Old Sales Breakdown",
+    "period": "Period",
     "bifurcation_clients": "Bifurcation of clients in [COLUMN_NAME]",
     "from_new_clients": "From new Clients",
     "from_old_clients": "From old Clients",
@@ -26,5 +34,8 @@
     "get_type_options": {
         "month": "Month",
         "quarter": "Quarter"
-    }
+    },
+    "others": "Others",
+    "no_data_salespersons": "No data available for:",
+    "no_sales_data_salesperson": "No sales data available for the selected salesperson"
 }

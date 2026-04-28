@@ -24,6 +24,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
+import { GoToBranchComponent } from '../../../shared/go-to-branch/go-to-branch.component';
 
 @NgModule({
     imports: [
@@ -48,7 +49,8 @@ import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
         MatSlideToggleModule,
         WatchVideoModule,
         MatPaginatorModule,
-        GiddhDatePipe
+        GiddhDatePipe,
+        GoToBranchComponent
     ],
     exports: [
         CreateManufacturingComponent,
