@@ -1,5 +1,12 @@
 <div appTranslate [file]="'import-data'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    @if (isCompany) {
+        <go-to-branch
+            [title]="commonLocaleData?.app_you_in_company_mode"
+            [message]="localeData?.go_to_branch_information"
+            [buttonLabel]="commonLocaleData?.switch_to_branch"
+        ></go-to-branch>
+    }
     <div class="row w-100">
         <div class="col-12">
             <div class="pt-4 mt-2">

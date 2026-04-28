@@ -21,6 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 
 @NgModule({
     declarations: [
@@ -52,7 +53,8 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
         FormFieldsModule,
         MatCheckboxModule,
         HamburgerMenuModule,
-        GiddhDatePipe
+        GiddhDatePipe,
+        GoToBranchComponent
     ],
 })
 export class ImportExcelModule {

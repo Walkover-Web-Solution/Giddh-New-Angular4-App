@@ -231,8 +231,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public broadcast: any;
     /** Hold true in production environment */
     public isProdMode: boolean = environment.PRODUCTION_ENV;
-    /** Hold broadcast event for project wise accounting */
-    public projectBroadcast: any;
+    /** Hold broadcast event for go to branch */
+    public goToBranchBroadcast: any;
     /** Hold broadcast event for AI OCR */
     public aiOcrBroadcast: any;
     /** Holds true if plan is either trial or cancelled */
@@ -518,15 +518,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
 
-        this.projectBroadcast = new BroadcastChannel("project-wise-accounting");
-        this.projectBroadcast.onmessage = (event) => {
-            if (event?.data?.success) {
-                this.gotToBranchTab();
-            }
-        };
-
-        this.aiOcrBroadcast = new BroadcastChannel("ai-ocr");
-        this.aiOcrBroadcast.onmessage = (event) => {
+        this.goToBranchBroadcast = new BroadcastChannel("go-to-branch");
+        this.goToBranchBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
                 this.gotToBranchTab();
             }
@@ -1200,6 +1193,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnDestroy() {
         this.broadcast?.close();
+        this.goToBranchBroadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1322,7 +1316,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public gotToBranchTab(): void {
         this.trigger?.closeMenu();
-        this.expandSidebar(false);
+        this.sideBarStateChange(false);
+        this.sidebarForcelyExpanded = false;
+        this.isSidebarExpanded = true;
+        this.generalService.expandSidebar();
         this.isGoToBranch = true;
     }
 

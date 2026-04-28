@@ -47,7 +47,8 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         sortBy: '',
         fromDate: null,
         toDate: null,
-        salesFrom: null
+        salesFrom: null,
+        salesPersonUniqueNames: null
     };
     /** Hold Sales Bifurcation Details Client List */
     public salesBifurcationDetailsClientList: any = [];
@@ -95,6 +96,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.requestParams.toDate = this.salesBifurcationDetailsData?.newVsOldInvoicesData?.toDate ?? null;
         this.requestParams.value = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.value;
         this.requestParams.salesFrom = this.salesBifurcationDetailsData?.salesFrom;
+        this.requestParams.salesPersonUniqueNames = this.salesBifurcationDetailsData?.salesPersonUniqueNames ?? null;
 
         this.salesBifurcationDetailsList$.pipe(
             takeUntil(this.destroyed$)
