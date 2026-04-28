@@ -1,9 +1,9 @@
 <div appTranslate [file]="'ai-ocr'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="ocr-container mx-auto p-3 overflow-visible">
-        @if (isCompany) {
+        @if (isCompany() || isConsolidatedBranch()) {
             <go-to-branch
-                [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
+                [title]="isCompany() ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
                 [message]="localeData?.go_to_branch_information"
                 [buttonLabel]="commonLocaleData?.switch_to_branch"
                 [cssClass]="'border-radius-8'"
