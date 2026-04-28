@@ -21,7 +21,6 @@ import { Store } from "@ngrx/store";
 import { GeneralActions } from "../../actions/general/general.actions";
 import { ActivatedRoute } from "@angular/router";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
-import { GoToBranchVariant } from "../../shared/go-to-branch/go-to-branch.component";
 
 @Component({
     selector: "ai-ocr-list",
@@ -32,8 +31,6 @@ import { GoToBranchVariant } from "../../shared/go-to-branch/go-to-branch.compon
     standalone:false
 })
 export class AiOcrListComponent implements OnInit, OnDestroy {
-    /** Expose GoToBranchVariant enum to template */
-    protected readonly GoToBranchVariant = GoToBranchVariant;
     /** Holds table sorting reference */
     @ViewChild(MatSort) sortBy: MatSort;
     /** Holds Paginator Reference */

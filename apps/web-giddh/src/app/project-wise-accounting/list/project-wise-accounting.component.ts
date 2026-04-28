@@ -18,7 +18,6 @@ import { NewConfirmationModalComponent } from '../../theme/new-confirmation-moda
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, filter, forEach, includes, map, set } from '../../lodash-optimized';
-import { GoToBranchVariant } from '../../shared/go-to-branch/go-to-branch.component';
 @Component({
     selector: 'project-wise-accounting',
     templateUrl: './project-wise-accounting.component.html',
@@ -27,8 +26,6 @@ import { GoToBranchVariant } from '../../shared/go-to-branch/go-to-branch.compon
     standalone: false
 })
 export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
-    /** Expose GoToBranchVariant enum to template */
-    protected readonly GoToBranchVariant = GoToBranchVariant;
     /** Holds table sorting reference */
     @ViewChild(MatSort) sortBy: MatSort;
     /** MatMenuTrigger reference for the date picker */
