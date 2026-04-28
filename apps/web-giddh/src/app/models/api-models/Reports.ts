@@ -11,6 +11,7 @@ export class ReportsModel {
     public discountTotal: number = 0;
     public tcsTotal: number = 0;
     public tdsTotal: number = 0;
+    public roundOff: number = 0;
     public netSales: number = 0;
     public cumulative: number = 0;
     public reportType: string;
@@ -144,6 +145,7 @@ export class PurchaseReportsModel {
     public discountTotal: number = 0;
     public tcsTotal: number = 0;
     public tdsTotal: number = 0;
+    public roundOff: number = 0;
     public netPurchase: number = 0;
     public cumulative: number = 0;
     public reportType: string;
