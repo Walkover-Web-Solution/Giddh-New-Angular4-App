@@ -15,7 +15,7 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { AppThemeClassEnum, BREAKPOINT_SCREEN_SIZE, Configuration } from "./app.constant";
+import { AppThemeClassEnum, BREAKPOINT_SCREEN_SIZE, Configuration, GiddhUiDomain } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -120,11 +120,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                // Check if href contains GiddhUiDomain.PRODUCTION or test.giddh.com for domain-based redirect logic
-                const isGiddhDomain = this._generalService.isGiddhDomain();
+                // Hard redirect to giddh.com/login only when running on the production books domain
+                const isProductionBooksDomain = window.location.hostname === new URL(GiddhUiDomain.PRODUCTION).hostname;
 
-                if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
-                    // Hard redirect for GiddhUiDomain.PRODUCTION or test.giddh.com domains
+                if (environment.production && !Configuration.isElectron && !isLocalHost && isProductionBooksDomain) {
+                    // Hard redirect only for GiddhUiDomain.PRODUCTION (books.giddh.com)
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
