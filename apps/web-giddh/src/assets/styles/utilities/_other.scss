@@ -456,6 +456,10 @@
 .table-layout-fixed {
     table-layout: fixed !important;
 }
+
+.custom-mat-form-field-height {
+    height: var(--custom-mat-form-field-height) !important;
+}
 .table-border-collapse {
     border-collapse: collapse !important;
 }

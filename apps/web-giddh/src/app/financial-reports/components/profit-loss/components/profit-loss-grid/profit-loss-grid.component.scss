@@ -1,75 +1,308 @@
-:host ::ng-deep .table-container {
-    padding: 0;
-}
+/* ══════════════════════════════════════════════
+   Profit & Loss – Angular Material table styles
+   ══════════════════════════════════════════════ */
 
-:host ::ng-deep .basic {
-    margin-bottom: 0;
-}
+.pl-no-data {
+    text-align: center;
+    padding: 40px 0;
 
-:host ::ng-deep .table-container thead tr th:first-child {
-    border-left: 0;
-}
-
-:host ::ng-deep .basic > thead > tr > th {
-    padding: 8px 8px;
-}
-
-:host ::ng-deep .table-container section div .group {
-    text-transform: capitalize;
-}
-
-:host ::ng-deep .table-container div.row {
-    border-bottom: 0;
-}
-.pl-table-grid {
-    th {
-        border: none !important;
-        border-bottom: 1px solid var(--border-color) !important;
-        padding: 13px 5px 14px 0 !important;
-        min-width: 275px;
-
-        &:first-child {
-            padding: 0 !important;
-            min-width: 300px;
-            max-width: 300px;
-            width: 300px;
-        }
-
-        input {
-            height: 47px;
-        }
+    img {
+        max-width: 200px;
+        margin-top: 16px;
     }
 }
-.tb-wrapper {
+
+/* ── Scrollable wrapper ── */
+.pl-table-wrapper {
     width: 100%;
-    max-width: 70%;
     overflow: auto;
-    margin: auto;
+    max-height: calc(100vh - 160px);
 }
-.account {
-    .col {
-        min-width: 275px;
-        padding-block: 10px;
-        background: var(--color-light-gray);
-        color: var(--color-black);
+
+/* ── Base table ── */
+.pl-mat-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: auto;
+}
+
+/* ── Sticky header row ── */
+.pl-header-row {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: var(--color-white, #fff);
+}
+
+/* ── Header cells ── */
+::ng-deep .pl-mat-table .mat-mdc-header-cell {
+    background: var(--color-white, #fff);
+    border-bottom: 2px solid var(--border-color, #dee2e6);
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+    padding: 10px 8px;
+    vertical-align: middle;
+}
+
+/* ── Sticky name header ── */
+.pl-name-header {
+    min-width: 300px;
+    max-width: 300px;
+    width: 300px;
+    position: sticky;
+    left: 0;
+    z-index: 300;
+    background: var(--color-white, #fff);
+    border-right: 1px solid var(--border-color, #dee2e6);
+}
+
+/* ── Amount column headers ── */
+.pl-amount-header {
+    min-width: 200px;
+    text-align: right !important;
+}
+
+/* ── Sticky name cell ── */
+.pl-name-cell {
+    position: sticky;
+    left: 0;
+    background: var(--color-white, #fff);
+    border-right: 1px solid var(--border-color, #dee2e6);
+    min-width: 300px;
+    max-width: 300px;
+    width: 300px;
+    padding: 0 !important;
+    vertical-align: middle;
+    overflow: hidden;
+
+    .pl-name-cell-inner {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0 8px;
+        height: 100%;
+        overflow: hidden;
     }
 }
 
-.pl-content-width {
-    min-width: 275px;
-    min-height: 38px;
+/* ── Amount cells ── */
+.pl-amount-cell {
+    min-width: 200px;
+    text-align: right;
+    padding: 6px 12px 6px 8px !important;
+    border-left: 1px solid var(--border-color, #dee2e6);
+    vertical-align: middle;
 }
 
-.row-height {
-    min-height: 37px;
+/* ── Data rows ── */
+.pl-data-row {
+    height: 38px;
+
+    &:last-child td {
+        border-bottom: none;
+    }
 }
 
+/* ── Row type: section header ── */
+.pl-row-type-section-header {
+    background: var(--color-light-gray, #f5f5f5);
+
+    .pl-name-cell,
+    .pl-amount-cell {
+        background: var(--color-light-gray, #f5f5f5) !important;
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--color-primary, #333);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+}
+
+/* ── Row type: group ── */
+.pl-row-type-group {
+    .pl-name-cell,
+    .pl-amount-cell {
+        font-weight: 500;
+        background: var(--color-white, #fff) !important;
+    }
+}
+
+/* ── Row type: account ── */
+.pl-row-type-account {
+    .pl-name-cell {
+        background: var(--color-white, #fff) !important;
+    }
+
+    &:hover .pl-name-cell,
+    &:hover .pl-amount-cell {
+        background: var(--color-hover, #f9f9f9) !important;
+    }
+}
+
+/* ── Row type: summary ── */
+.pl-row-type-summary {
+    .pl-name-cell,
+    .pl-amount-cell {
+        background: var(--color-white, #fff) !important;
+        font-weight: 500;
+    }
+}
+
+/* ── Row type: summary-bold ── */
+.pl-row-type-summary-bold {
+    .pl-name-cell,
+    .pl-amount-cell {
+        background: var(--color-light-gray, #f5f5f5) !important;
+        font-weight: 700;
+        font-size: 14px;
+        border-top: 1px solid var(--border-color, #dee2e6);
+        border-bottom: 1px solid var(--border-color, #dee2e6);
+    }
+}
+
+/* ── Tailed / reconcile highlighted row ── */
+.pl-row-tailed {
+    .pl-name-cell,
+    .pl-amount-cell {
+        background: var(--tailed-row-bg, rgba(var(--color-primary-rgb, 0, 123, 255), 0.06)) !important;
+    }
+}
+
+/* ── cogs-item row ── */
+.pl-row-type-cogs-item {
+    .pl-name-cell,
+    .pl-amount-cell {
+        background: var(--color-white, #fff) !important;
+    }
+}
+
+/* ── Expand/collapse button ── */
+.pl-expand-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--color-text, #333);
+
+    &:focus-visible {
+        outline: 2px solid var(--color-primary, #1976d2);
+        border-radius: 2px;
+    }
+}
+
+.pl-chevron {
+    font-size: 18px;
+    line-height: 1;
+    display: inline-block;
+    transform: rotate(0deg);
+    transition: transform 200ms ease;
+}
+
+.pl-chevron-open {
+    transform: rotate(90deg);
+}
+
+.pl-expand-placeholder {
+    display: inline-block;
+    width: 18px;
+    flex-shrink: 0;
+}
+
+/* ── Reconcile checkbox ── */
+.pl-checkbox {
+    flex-shrink: 0;
+}
+
+/* ── Header inner layout ── */
+.pl-header-name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+}
+
+.pl-uncheck-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px;
+    flex-shrink: 0;
+
+    &:focus-visible {
+        outline: 2px solid var(--color-primary, #1976d2);
+        border-radius: 2px;
+    }
+
+    .uncheck-all-icon {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.pl-header-label {
+    flex: 1;
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pl-search-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+
+    &:focus-visible {
+        outline: 2px solid var(--color-primary, #1976d2);
+        border-radius: 2px;
+    }
+}
+
+.pl-search-input {
+    width: 100%;
+    height: 38px;
+}
+
+.pl-section-label {
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* ── Sticky-left shadow for the frozen column ── */
+::ng-deep .pl-mat-table .mat-mdc-cell.pl-name-cell,
+::ng-deep .pl-mat-table .mat-mdc-header-cell.pl-name-header {
+    box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Responsive ── */
 @media (max-width: 1024px) {
-    .tb-wrapper {
-        width: 100%;
-        margin: auto;
-        .table-container {
-            overflow-x: auto;
-        }
+    .pl-table-wrapper {
+        max-height: calc(100vh - 120px);
     }
+
+    .pl-name-header,
+    .pl-name-cell {
+        min-width: 220px;
+        max-width: 220px;
+        width: 220px;
+    }
+}
+
+/* ── Ensure mat-table td/th renders as table-cell (not flex/block) ── */
+::ng-deep .pl-mat-table .mat-mdc-cell,
+::ng-deep .pl-mat-table .mat-mdc-header-cell {
+    display: table-cell !important;
 }

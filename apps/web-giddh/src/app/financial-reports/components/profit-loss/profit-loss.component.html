@@ -22,20 +22,22 @@
     <div *ngIf="(showLoader | async) || (isFetchingProfitAndLoss$ | async)">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
-    <div *ngIf="!(showLoader | async) && !(isFetchingProfitAndLoss$ | async) && data">
-        <profit-loss-grid
-            [ngClass]="{ 'show-tailed-checkbox': showReportTallyOption }"
-            #plGrid
-            [search]="search"
-            [from]="from"
-            [to]="to"
-            (searchChange)="searchChanged($event)"
-            (refresh)="handleRefresh()"
-            [expandAll]="expandAll"
-            [plData]="data"
-            [cogsData]="cogsData"
-        ></profit-loss-grid>
-    </div>
+    @if (!(showLoader | async) && !(isFetchingProfitAndLoss$ | async) && data) {
+        <div class="mt-4" [class]="data?.headers?.length <= 1 ? 'mx-auto max-w-1000' : ''">
+            <profit-loss-grid
+                [ngClass]="{ 'show-tailed-checkbox': showReportTallyOption }"
+                #plGrid
+                [search]="search"
+                [from]="from"
+                [to]="to"
+                (searchChange)="searchChanged($event)"
+                (refresh)="handleRefresh()"
+                [expandAll]="expandAll"
+                [plData]="data"
+                [cogsData]="cogsData"
+            ></profit-loss-grid>
+        </div>
+    }
     <div
         *ngIf="!(showLoader | async) && !(isFetchingProfitAndLoss$ | async) && !data"
         class="d-flex align-items-center justify-content-center tb-pl-bs-data"

@@ -26,6 +26,7 @@ export class Account {
     public isIncludedInSearch: boolean = true;
     public isCreated: boolean = false;
     public category?: string;
+    public checked?: boolean = false;
 }
 
 export interface AccountFlat {
