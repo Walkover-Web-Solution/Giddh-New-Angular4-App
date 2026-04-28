@@ -39,5 +39,6 @@
     "is": "is",
     "are": "are",
     "groups": "Groups",
-    "accounts": "Accounts"
+    "accounts": "Accounts",
+    "go_to_branch_information": "To import vouchers and entries, go to branch mode"
 }

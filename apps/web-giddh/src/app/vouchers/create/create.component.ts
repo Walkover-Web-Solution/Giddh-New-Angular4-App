@@ -712,6 +712,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Returns true when the due date field should be visible.
+     * Mirrors the *ngIf condition on the due date datepicker in the template.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get showDueDate(): boolean {
+        return (
+            this.currentVoucherFormDetails?.dueDate ||
+            this.invoiceType.isSalesInvoice ||
+            this.invoiceType.isPurchaseInvoice ||
+            this.invoiceType.isPurchaseOrder ||
+            this.invoiceType.isProformaInvoice ||
+            this.invoiceType.isEstimateInvoice
+        ) && !this.invoiceType.isCashInvoice;
+    }
+
+    /**
      *
      * @readonly
      * @type {FormGroup}
@@ -5333,24 +5352,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return false;
         }
 
-        const parsedDate = invoiceForm.date instanceof Date ? dayjs(invoiceForm.date) : dayjs(invoiceForm.date, GIDDH_DATE_FORMAT);
-        const parsedDueDate = invoiceForm.dueDate instanceof Date ? dayjs(invoiceForm.dueDate) : dayjs(invoiceForm.dueDate, GIDDH_DATE_FORMAT);
-        if (parsedDate.isValid() && parsedDueDate.isValid() && parsedDueDate.isBefore(parsedDate, "d")) {
-            let dateText = this.commonLocaleData?.app_invoice;
+        if (this.showDueDate) {
+            const parsedDate = invoiceForm.date instanceof Date ? dayjs(invoiceForm.date) : dayjs(invoiceForm.date, GIDDH_DATE_FORMAT);
+            const parsedDueDate = invoiceForm.dueDate instanceof Date ? dayjs(invoiceForm.dueDate) : dayjs(invoiceForm.dueDate, GIDDH_DATE_FORMAT);
+            if (parsedDate.isValid() && parsedDueDate.isValid() && parsedDueDate.isBefore(parsedDate, "d")) {
+                let dateText = this.commonLocaleData?.app_invoice;
 
-            if (this.invoiceType.isProformaInvoice) {
-                dateText = this.localeData?.invoice_types?.proforma;
+                if (this.invoiceType.isProformaInvoice) {
+                    dateText = this.localeData?.invoice_types?.proforma;
+                }
+
+                if (this.invoiceType.isEstimateInvoice) {
+                    dateText = this.localeData?.invoice_types?.estimate;
+                }
+
+                let dueDateError = this.localeData?.due_date_error;
+                dueDateError = dueDateError?.replace("[INVOICE_TYPE]", dateText);
+                this.toasterService.showSnackBar("error", dueDateError);
+                this.invoiceForm.get('dueDate')?.setErrors({ dueDateBeforeVoucherDate: true });
+                return false;
             }
-
-            if (this.invoiceType.isEstimateInvoice) {
-                dateText = this.localeData?.invoice_types?.estimate;
-            }
-
-            let dueDateError = this.localeData?.due_date_error;
-            dueDateError = dueDateError?.replace("[INVOICE_TYPE]", dateText);
-            this.toasterService.showSnackBar("error", dueDateError);
-            this.invoiceForm.get('dueDate')?.setErrors({ dueDateBeforeVoucherDate: true });
-            return false;
         }
 
         let hasTransactions = false;

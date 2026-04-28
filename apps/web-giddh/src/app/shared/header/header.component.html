@@ -292,18 +292,22 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div
-                                            class="mt-4 mb-1 align-items-center"
-                                            *ngIf="
-                                                currentCompanyBranches?.length > 1 &&
-                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                                            "
-                                        >
-                                            <span>{{ localeData?.go_to_branch_information }}</span>
-                                            <button matButton="filled" class="mt-4" (click)="gotToBranchTab()">
-                                                {{ localeData?.go_to_branch }}
-                                            </button>
-                                        </div>
+                                        @if (
+                                            currentCompanyBranches?.length > 1 &&
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                        ) {
+                                            <go-to-branch
+                                                [title]="
+                                                    isConsolidatedBranch
+                                                        ? commonLocaleData?.app_you_in_consolidate_mode
+                                                        : commonLocaleData?.app_you_in_company_mode
+                                                "
+                                                ]
+                                                [message]="localeData?.go_to_branch_information"
+                                                [buttonLabel]="commonLocaleData?.switch_to_branch"
+                                                [cssClass]="'mt-4 mb-1 border-radius-8'"
+                                            ></go-to-branch>
+                                        }
                                         <ng-container
                                             *ngIf="
                                                 (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||

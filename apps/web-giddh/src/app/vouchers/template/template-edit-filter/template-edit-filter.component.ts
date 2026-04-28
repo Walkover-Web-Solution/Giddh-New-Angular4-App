@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, SimpleChanges, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, SimpleChanges, Inject, ChangeDetectorRef, signal } from '@angular/core';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { TemplateContentUISectionVisibility, InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
@@ -89,11 +89,11 @@ export class TemplateEditFilterComponent implements OnInit {
     /** Type of the voucher */
     public voucherType = '';
     /** Source URL of the signature image */
-    public signatureSrc: string = '';
+    public signatureSrc = signal<string>('');
     /** True, if signature image is attached */
-    public signatureImgAttached: boolean = false;
+    public signatureImgAttached = signal<boolean>(false);
     /** True, if signature upload is in progress */
-    public isSignatureUploadInProgress: boolean = false;
+    public isSignatureUploadInProgress = signal<boolean>(false);
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
     /** True, if GST composition should be shown */
@@ -629,8 +629,8 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['content'] && changes['content'].currentValue !== changes['content'].previousValue) {
-            this.signatureImgAttached = false;
-            this.signatureSrc = '';
+            this.signatureImgAttached.set(false);
+            this.signatureSrc.set('');
             this.assignImageSignature();
         }
     }
@@ -727,16 +727,16 @@ export class TemplateEditFilterComponent implements OnInit {
             this.footerFile = this.footerSelectedFile?.files[0];
 
             this.generalService.getSelectedFileBase64(this.footerFile, (base64) => {
-                this.isSignatureUploadInProgress = true;
+                this.isSignatureUploadInProgress.set(true);
 
                 this.commonService.uploadImageBase64({ base64: base64, format: this.footerFile.type, fileName: this.footerFile.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    this.isSignatureUploadInProgress = false;
+                    this.isSignatureUploadInProgress.set(false);
 
                     if (response?.status === 'success') {
                         if (this.templateService.unusedImageSignature) {
                             this.removeFileFromServer();
                         }
-                        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName;
+                        this.signatureSrc.set(ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName);
                         if (this.customTemplate?.sections?.footer?.data?.imageSignature) {
                             this.customTemplate.sections.footer.data.imageSignature.label = response?.body?.uniqueName;
                         }
@@ -744,7 +744,7 @@ export class TemplateEditFilterComponent implements OnInit {
                         this.onChangeFieldVisibility();
                         this.toasty.showSnackBar("success", this.localeData.file_uploaded_successfully);
                     } else {
-                        this.signatureImgAttached = false;
+                        this.signatureImgAttached.set(false);
                         this.toasty.showSnackBar("error", response?.message);
                     }
                 });
@@ -758,9 +758,9 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public removeFile(): void {
-        this.signatureImgAttached = false;
-        this.signatureSrc = '';
-        this.isSignatureUploadInProgress = false;
+        this.signatureImgAttached.set(false);
+        this.signatureSrc.set('');
+        this.isSignatureUploadInProgress.set(false);
         this.footerFile = null;
         this.footerSelectedFile = null;
 
@@ -895,11 +895,11 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public assignImageSignature(): void {
         if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
-            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
-            this.signatureImgAttached = true;
+            this.signatureSrc.set(ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label);
+            this.signatureImgAttached.set(true);
         } else {
-            this.signatureSrc = '';
-            this.signatureImgAttached = false;
+            this.signatureSrc.set('');
+            this.signatureImgAttached.set(false);
         }
     }
 

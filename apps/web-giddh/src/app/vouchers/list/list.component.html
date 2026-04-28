@@ -94,6 +94,7 @@
                             ></select-table-column>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -519,6 +520,7 @@
                             ></select-table-column>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -990,6 +992,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -1488,6 +1491,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -1928,6 +1932,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -2573,6 +2578,7 @@
                             ></select-table-column>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -2954,6 +2960,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -3413,6 +3420,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -3791,6 +3799,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -5692,6 +5701,7 @@
                             </span>
                         </button>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="recurringVouchersLoading()"></giddh-page-loader>
                         <table
@@ -6028,3 +6038,15 @@
         ></app-datepicker-wrapper>
     </ng-template>
 </mat-menu>
+
+<!-- Reusable go-to-branch template -->
+<ng-template #goToBranchTemplate let-cssClass="cssClass">
+    @if (isCompany || isConsolidatedBranch) {
+        <go-to-branch
+            [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
+            [message]="localeData?.go_to_branch_message"
+            [cssClass]="cssClass || 'border-radius-8'"
+            [buttonLabel]="commonLocaleData?.switch_to_branch"
+        ></go-to-branch>
+    }
+</ng-template>

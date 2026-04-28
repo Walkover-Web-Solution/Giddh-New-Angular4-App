@@ -3213,7 +3213,7 @@
                                                                     <label
                                                                         class="upload-button text-center cursor-pointer"
                                                                         for="signatureImg-edit"
-                                                                        [hidden]="signatureImgAttached"
+                                                                        [hidden]="signatureImgAttached()"
                                                                     >
                                                                         <input
                                                                             type="file"
@@ -3231,19 +3231,19 @@
                                                                     <label
                                                                         for="signatureImg-edit"
                                                                         class="logo-preview"
-                                                                        [hidden]="!signatureImgAttached"
+                                                                        [hidden]="!signatureImgAttached()"
                                                                     >
                                                                         <img
-                                                                            [src]="signatureSrc"
+                                                                            [src]="signatureSrc()"
                                                                             alt="signature"
                                                                             id="signatureImage"
                                                                             (ngModelChange)="onChangeFieldVisibility()"
                                                                         />
                                                                     </label>
                                                                     <label
-                                                                        *ngIf="isSignatureUploadInProgress"
+                                                                        *ngIf="isSignatureUploadInProgress()"
                                                                         class="logo-preview"
-                                                                        [hidden]="!signatureImgAttached"
+                                                                        [hidden]="!signatureImgAttached()"
                                                                     >
                                                                         <span>
                                                                             <b>{{ localeData?.uploading }}</b>
@@ -3251,7 +3251,7 @@
                                                                     </label>
                                                                 </span>
                                                                 <button
-                                                                    *ngIf="signatureImgAttached"
+                                                                    *ngIf="signatureImgAttached()"
                                                                     type="button"
                                                                     class="start-upload-btn ml-4"
                                                                     (click)="removeFile()"

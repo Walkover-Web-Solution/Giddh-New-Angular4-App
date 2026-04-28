@@ -31,6 +31,8 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     public voucherType: typeof VoucherType = VoucherType; // Commented out due to missing import
     /** Holds images folder path */
     public imgPath: string = "";
+    /** True if current organization is company with multiple branches */
+    public isCompany: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -46,6 +48,7 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
+                this.isCompany = !this.isBranch && this.branches.length > 1;
             }
         });
     }

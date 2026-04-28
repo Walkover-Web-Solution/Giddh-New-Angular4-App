@@ -15,7 +15,7 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { BREAKPOINT_SCREEN_SIZE, Configuration } from "./app.constant";
+import { AppThemeClassEnum, BREAKPOINT_SCREEN_SIZE, Configuration } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -304,8 +304,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.value) {
-                document.querySelector("body")?.classList?.remove("dark-theme");
-                document.querySelector("body")?.classList?.remove("default-theme");
+                document.querySelector("body")?.classList?.remove(AppThemeClassEnum.Dark);
+                document.querySelector("body")?.classList?.remove(AppThemeClassEnum.Default);
                 document.querySelector("body")?.classList?.add(response?.value);
             } else {
                 let availableThemes = this._generalService.getAvailableThemes();
