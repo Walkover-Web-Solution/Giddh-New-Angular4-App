@@ -253,7 +253,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                             titleColor: '#333',
                             displayColors: false,
                             padding: 8,
-                            callbacks: { label: (ctx) => ` ₹${ctx.parsed.y.toLocaleString()}` }
+                            callbacks: { label: (ctx) => ` ${this.baseCurrencySymbol}${ctx.parsed.y.toLocaleString()}` }
                         }
                     },
                     scales: chartScaleOptions
