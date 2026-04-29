@@ -653,6 +653,17 @@ export class GeneralService {
     }
 
     /**
+     * This will return session cookie name based on logged in region
+     *
+     * @param {string} loggedInRegion
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getRegionSessionCookieName(loggedInRegion: string): string {
+        return (loggedInRegion || '').toUpperCase() === 'UK' ? 'giddh_session_id_uk' : (loggedInRegion || '').toUpperCase() === 'AE' ? 'giddh_session_id_ae' : 'giddh_session_id';
+    }
+
+    /**
      *Get cookie value
      *
      * @param {*} name

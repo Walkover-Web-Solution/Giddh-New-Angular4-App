@@ -641,7 +641,7 @@ export class LoginActions {
             ofType(LoginActions.renewSessionResponse),
             map((action: CustomActions) => {
                 if (action.payload?.status === 'success' && action.payload.body && action.payload.body.session) {
-                    this._generalService.setCookie("giddh_session_id", action.payload.body.session.id, 30);
+                    this._generalService.setCookie(this._generalService.getRegionSessionCookieName(action.payload.body.loggedInRegion), action.payload.body.session.id, 30);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -798,7 +798,7 @@ export class LoginActions {
 
     public LoginSuccess(response?: any, isSocialLogin?: boolean): CustomActions {
         if (response && response.body && response.body.session) {
-            this._generalService.setCookie("giddh_session_id", response.body.session.id, 30);
+            this._generalService.setCookie(this._generalService.getRegionSessionCookieName(response.body.loggedInRegion), response.body.session.id, 30);
         }
         return {
             type: LoginActions.LoginSuccess,
