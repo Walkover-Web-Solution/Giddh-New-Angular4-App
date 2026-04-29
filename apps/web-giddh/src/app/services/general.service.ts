@@ -16,7 +16,7 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, GiddhRegion, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
 import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -650,6 +650,28 @@ export class GeneralService {
         date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
         const expires = "expires=" + date.toUTCString();
         document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
+    }
+
+    /**
+     * This will return session cookie name based on logged in region
+     *
+     * @param {string} loggedInRegion
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getRegionSessionCookieName(loggedInRegion: GiddhRegion | string): string {
+        // Stores the default session cookie name.
+        const defaultCookieName = 'giddh_session_id';
+        // Stores region-wise session cookie mapping.
+        const regionSessionCookieMap: Record<GiddhRegion, string> = {
+            [GiddhRegion.UK]: 'giddh_session_id_uk',
+            [GiddhRegion.AE]: 'giddh_session_id_ae',
+            [GiddhRegion.IN]: defaultCookieName
+        };
+        // Stores normalized logged-in region for lookup.
+        const normalizedRegion = (loggedInRegion ?? '').trim().toUpperCase() as GiddhRegion;
+
+        return regionSessionCookieMap[normalizedRegion] ?? defaultCookieName;
     }
 
     /**
