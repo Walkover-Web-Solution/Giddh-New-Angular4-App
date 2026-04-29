@@ -124,7 +124,7 @@ $region = null;
 if (!empty($queryParams['region'])) {
     $region = strtolower($queryParams['region']);
 
-    if (in_array($region, ['uk', 'gb'])) {
+    if (in_array($region, ['uk', 'ae', 'in'])) {
         setcookie(
             'giddh_region',
             $region,
