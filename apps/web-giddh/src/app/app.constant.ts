@@ -14,6 +14,13 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
+/** Supported regions for session cookie naming */
+export enum GiddhRegion {
+    UK = 'UK',
+    AE = 'AE',
+    IN = 'IN'
+}
+
 /** Branch Hierarchy Type */
 export enum BranchHierarchyType {
     Flatten = 'flatten',
