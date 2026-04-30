@@ -91,9 +91,9 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         discountTotal: ["app_discount", false, "text-right"],
         tcsTotal: ["app_tcs", false, "text-right"],
         tdsTotal: ["app_tds", false, "text-right"],
+        roundOff: ["app_round_off", false, "text-right"],
         netPurchase: ["app_net_purchase", false, "text-right"],
-        cumulative: ["app_cumulative", false, "text-right"],
-        roundOff: ["app_round_off", false, "text-right"]
+        cumulative: ["app_cumulative", false, "text-right"]
     }
     /** Constant for duration */
     public durationEnum: typeof DurationEnum = DurationEnum;

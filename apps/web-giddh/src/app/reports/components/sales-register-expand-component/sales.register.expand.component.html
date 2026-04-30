@@ -471,8 +471,13 @@
 
                     <!-- Round Off Column -->
                     <ng-container matColumnDef="app_round_off">
-                        <th mat-header-cell *matHeaderCellDef class="text-right">
-                            {{ commonLocaleData?.app_round_off }}
+                        <th mat-header-cell *matHeaderCellDef>
+                            <div class="d-flex justify-content-end align-items-center">
+                                <div class="text-right">{{ commonLocaleData?.app_round_off }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'roundOff' }"></ng-container>
+                                </div>
+                            </div>
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
                             @if (item?.roundOff !== null) {
