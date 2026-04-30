@@ -18,7 +18,8 @@ export enum BusinessTypes {
 export enum GiddhRegion {
     UK = 'UK',
     AE = 'AE',
-    IN = 'IN'
+    IN = 'IN',
+    GB = 'GB'
 }
 
 /** Branch Hierarchy Type */
