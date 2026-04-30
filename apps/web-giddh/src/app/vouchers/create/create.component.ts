@@ -308,8 +308,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         trackingNumber: "",
         showNotesAtLastPage: false,
     };
-    /** Holds list of last vouchers */
-    public lastVouchersList$: Observable<LastInvoices[]> = observableOf(null);
     /** Signal holding recent company vouchers for the aside pane */
     protected readonly lastVouchersCompanyList = signal<LastInvoices[]>([]);
     /** Signal holding recent account vouchers for the aside pane */
@@ -1750,45 +1748,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .subscribe((response) => {
                 this.calculateVoucherTotals();
             });
-
-        this.componentStore.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                const lastVouchers: LastInvoices[] = [];
-                if (!this.invoiceType.isProformaInvoice && !this.invoiceType.isEstimateInvoice) {
-                    if (response) {
-                        response = response as ReciptResponse;
-                        response?.items?.forEach((item) => {
-                            lastVouchers.push({
-                                voucherNumber: item.voucherNumber,
-                                date: item.voucherDate,
-                                grandTotal: item.grandTotal,
-                                account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
-                                uniqueName: item?.uniqueName,
-                            });
-                        });
-                    }
-                } else {
-                    if (response) {
-                        response = response as ProformaResponse;
-                        if (response?.items?.length) {
-                            response.items.forEach((item) => {
-                                lastVouchers.push({
-                                    voucherNumber: this.invoiceType.isProformaInvoice
-                                        ? item.proformaNumber
-                                        : item.estimateNumber,
-                                    date: item.voucherDate,
-                                    grandTotal: item.grandTotal,
-                                    account: { name: item.customerName, uniqueName: item.customerUniqueName },
-                                    uniqueName: item?.uniqueName,
-                                });
-                            });
-                        }
-                    }
-                }
-                this.lastVouchersList$ = observableOf([...lastVouchers]);
-                this.changeDetection.detectChanges();
-            }
-        });
 
         this.componentStore.lastVouchersCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
