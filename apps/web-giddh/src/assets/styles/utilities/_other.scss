@@ -416,7 +416,8 @@
         visibility: hidden;
     }
     &.hover-trigger--active,
-    &:hover {
+    &:hover,
+    &:focus-within {
         .hover-target {
             visibility: visible;
         }
