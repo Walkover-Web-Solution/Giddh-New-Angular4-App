@@ -17,7 +17,6 @@ export enum BusinessTypes {
 /** Supported regions for session cookie naming */
 export enum GiddhRegion {
     UK = 'UK',
-    AE = 'AE',
     IN = 'IN',
     GB = 'GB'
 }
