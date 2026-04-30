@@ -9,8 +9,6 @@ import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state
 import { Observable, ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { Configuration, ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'aside-setting',
@@ -45,7 +43,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Holds array of company uniqueNames which ICICI allowed companies */
-    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    public iciciAllowedCompanies: any[] = [];
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Holds true if current company country is gocardless supported country */
@@ -66,13 +64,14 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public ngOnInit(): void {
+        this.iciciAllowedCompanies = this.serviceConfig.ICICI_SUPPORTED_COMPANIES;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {

@@ -1,18 +1,17 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, ViewChild, signal, computed, effect } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, ViewChild, signal } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, of, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import * as dayjs from "dayjs";
-import { BranchHierarchyType, Configuration, PAGINATION_LIMIT } from "../../app.constant";
+import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
 import { GeneralService } from "../../services/general.service";
 import { OrganizationType } from "../../models/user-login-state";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { cloneDeep } from "../../lodash-optimized";
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { ServiceConfig } from "../../services/service.config";
 import { ContactComponentStore } from "../../contact/utility/contact.store";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
@@ -145,7 +144,7 @@ export class RecurringPreviewComponent implements OnDestroy {
         this.currentCompanyBranches$ = this.componentStore.currentCompanyBranches$;
         this.getRecurringVouchersInProgress$ = this.componentStore.getLastAccountsInProgress$;
         this.isCompany.set(this.generalService.currentOrganizationType === OrganizationType.Company);
-        this.imgPath.set(Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/');
+        this.imgPath.set(serviceConfig.IMG_PATH);
 
         // Initialize component with subscriptions
         this.initializeBranches();

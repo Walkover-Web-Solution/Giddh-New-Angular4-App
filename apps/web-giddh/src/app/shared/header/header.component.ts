@@ -29,7 +29,7 @@ import { userLoginStateEnum, OrganizationType } from '../../models/user-login-st
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
+import { ACCOUNTING_BREAKPOINTS, BranchHierarchyType, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -65,7 +65,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userIsSuperUser: boolean = true; // Protect permission module
     public session$: Observable<userLoginStateEnum>;
     public accountSearchValue: string = '';
-    public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
     public dayjs = dayjs;
     public imgPath: string = '';
     public subscribedPlan: SubscriptionsUser;
@@ -77,7 +76,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -282,7 +281,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private authService: AuthenticationService,
         private changeDetection: ChangeDetectorRef,
         private _breakpointObserver: BreakpointObserver,
-        private generalService: GeneralService,
+        public generalService: GeneralService,
         private commonActions: CommonActions,
         private settingsProfileService: SettingsProfileService,
         private settingsProfileAction: SettingsProfileActions,
@@ -295,17 +294,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private sanitizer: DomSanitizer,
         public dialog: MatDialog,
         private socialAuthService: AuthService,
-        @Inject(ServiceConfig) private serviceConfig,
+        @Inject(ServiceConfig) public serviceConfig,
         private elementRef: ElementRef,
         private renderer: Renderer2,
         private giddhDatePipe: GiddhDatePipe,
         private activeRoute: ActivatedRoute
     ) {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
-        const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
-        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
+        this.imgPath = this.serviceConfig.IMG_PATH;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.light;
+        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.serviceConfig.CALENDLY_URL);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
@@ -594,7 +591,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let userEmail = u.email;
                 this.userEmail = clone(userEmail);
                 let userEmailDomain = userEmail?.replace(/.*@/, '');
-                this.userIsCompanyUser = userEmailDomain && this.companyDomains?.indexOf(userEmailDomain) !== -1;
+                this.userIsCompanyUser = userEmailDomain && this.serviceConfig.EMAIL_DOMAINS?.indexOf(userEmailDomain) !== -1;
                 let name = u.name;
                 if (u.name.match(/\s/g)) {
                     this.userFullName = name;

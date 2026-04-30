@@ -5,7 +5,7 @@
  */
 
 import { environment } from './../../environments/environment.generated';
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Inject, Injectable, Optional, signal } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -30,7 +30,7 @@ import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
 import { Configuration } from '../app.constant';
-import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, map, orderBy, remove, set, slice, some } from '../lodash-optimized';
+import { cloneDeep, find,orderBy } from '../lodash-optimized';
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
 import { UiSettingsService } from './ui-settings.service';
@@ -121,6 +121,9 @@ export class GeneralService {
 
     private _sessionId: string;
 
+    /** Signal indicating whether the current app URL is a Giddh domain */
+    public readonly isGiddhDomain = signal<boolean>(false);
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -129,7 +132,10 @@ export class GeneralService {
         private config: IServiceConfigArgs,
         private toasterService: ToasterService,
         private uiSettingsService: UiSettingsService
-    ) { }
+    ) {
+        const isGiddhDomain = this.config?.IS_GIDDH_DOMAIN ?? [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].map(url => new URL(url).hostname).includes(window.location.hostname);
+        this.isGiddhDomain.set(isGiddhDomain);
+    }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
         this.IAmLoaded.next(iAmLoaded);
@@ -139,7 +145,7 @@ export class GeneralService {
         Object.keys(params).forEach((key, index) => {
             if (params[key] !== undefined) {
                 const delimiter = url.indexOf('?') === -1 ? '?' : (index === 0 ? '' : '&');
-                url += `${delimiter}${key}=${params[key]}`
+                url += `${delimiter}${key}=${encodeURIComponent(params[key])}`;
             }
         });
         return url;
@@ -401,10 +407,9 @@ export class GeneralService {
      */
     public checkIfEmailDomainAllowed(email: string): boolean {
         let isAllowed = false;
-        const whiteLabelDomainsAllowed = this.getDecodedWhiteLabel();
         if (email) {
             let emailSplit = email.split("@");
-            if ((whiteLabelDomainsAllowed?.emailDomains || JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
+            if ((this.config?.EMAIL_DOMAINS).includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }
@@ -692,16 +697,6 @@ export class GeneralService {
     }
 
     /**
-     * Checks whether the current URL belongs to the Giddh domain
-     *
-     * @returns {boolean} True if the current URL contains 'books.giddh.com', false otherwise
-     * @memberof GeneralService
-     */
-    public isGiddhDomain(): boolean {
-        return window.location.href.includes('books.giddh.com');
-    }
-
-    /**
      * This will be use for get giddh region url
      *
      * @return {*}  {string}
@@ -711,7 +706,7 @@ export class GeneralService {
         if (this.isGiddhDomain()){
             const countryRegion = localStorage.getItem('Country-Region');
             const region = COUNTRY_REGION_MAP[countryRegion] || null;
-            return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+            return region === 'gl' ? `${GiddhUiDomain.WEBSITE}login` : `${GiddhUiDomain.WEBSITE}${region}/login`;
         } else {
             return `${window.location.origin}/login`;
         }
@@ -952,6 +947,7 @@ export class GeneralService {
     public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
         const voucherApiVersion = this.voucherApiVersion || 2;
+        const isGiddhDomain = this.isGiddhDomain();
         let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
@@ -963,6 +959,11 @@ export class GeneralService {
             }
 
             menuItem.items?.forEach(item => {
+                // Filter out Giddh-only routes when running on a white-label domain
+                if (!isGiddhDomain && GIDDH_ONLY_ROUTES.includes(item.link)) {
+                    return;
+                }
+
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
                 if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
@@ -2423,22 +2424,6 @@ export class GeneralService {
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
 
-    /**
-     * Retrieves the decoded white label data from the local storage.
-     *
-     * @returns {any} The decoded white label data or null if the data is not available or cannot be parsed.
-     *
-     * @throws {Error} If there is an error parsing the white label data from the local storage.
-     */
-    public getDecodedWhiteLabel(): any {
-        try {
-            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
-            return whiteLabelData?.body || null;
-        } catch (error) {
-
-            return null;
-        }
-    }
 
     /**
      * Replaces placeholders in a URL with corresponding values from a model object.

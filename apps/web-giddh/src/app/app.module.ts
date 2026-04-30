@@ -386,7 +386,7 @@ const createHybridStorage = () => {
  */
 function migrateExistingData(): void {
     try {
-        const migrationKey = 'giddh_hybrid_migration_completed';
+        const migrationKey = 'hybrid_migration_completed';
         // Check if migration already completed
         if (localStorage.getItem(migrationKey)) {
             return;

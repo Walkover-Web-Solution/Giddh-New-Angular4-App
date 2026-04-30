@@ -49,6 +49,8 @@
     "postinstall.web": "node tools/web/postinstall",
     "postinstall.electron": "node tools/electron/postinstall",
     "prepare": "husky install",
+    "crg:update": "code-review-graph update",
+    "crg:watch": "code-review-graph watch",
     "prepare.electron.giddh": "npm run postinstall.electron && tsc -p apps/electron-giddh/tsconfig.json"
   },
   "dependencies": {

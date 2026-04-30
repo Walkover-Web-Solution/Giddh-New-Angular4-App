@@ -20,8 +20,7 @@ import { AppState } from '../../../store';
 import { ImportsService } from '../../../services/imports.service';
 import { ServiceConfig } from '../../../services/service.config';
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
-import { cloneDeep, find, forEach, keys, map, remove } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
 @Component({
@@ -115,7 +114,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         document.querySelector('body')?.classList?.add('import-page');
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;

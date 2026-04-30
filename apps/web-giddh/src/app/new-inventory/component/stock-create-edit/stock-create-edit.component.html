@@ -804,7 +804,7 @@
                                                                                 <div class="data-wrap">
                                                                                     <div class="dot-img">
                                                                                         <img
-                                                                                            src="{{ imgPath }}drag-dots-com.svg"
+                                                                                            [src]="imgPath + 'drag-dots-com.svg'"
                                                                                             alt="drag img"
                                                                                         />
                                                                                     </div>
@@ -1993,7 +1993,7 @@
                                     <tbody>
                                         <tr>
                                             <td width="3%">
-                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" alt="add img" />
+                                                <img [src]="imgPath + 'add-image.svg'" width="60" height="60" alt="add img" />
                                             </td>
                                             <td width="20%">
                                                 <input-field
@@ -2037,7 +2037,7 @@
                                         </tr>
                                         <tr>
                                             <td width="3%">
-                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" alt="add img" />
+                                                <img [src]="imgPath + 'add-image.svg'" width="60" height="60" alt="add img" />
                                             </td>
                                             <td width="20%">
                                                 <input-field

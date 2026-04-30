@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, 
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, API_BULK_FETCH_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG, Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, API_BULK_FETCH_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -64,8 +64,8 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
 import { LedgerDropdownTypeEnum } from '../models/api-models/Ledger';
+import { AccountingGroupEnum } from '../shared/Enums/common.enum';
 import { IOption } from '../app.constant';
-import { environment } from '../../environments/environment.generated';
 import { SettingsDiscountService } from '../services/settings.discount.service';
 
 @Component({
@@ -682,7 +682,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceAction.getInvoiceSetting());
         this.getPurchaseSettings();
 
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
 
         this.breakpointObserver.observe([
@@ -3533,12 +3533,59 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
                 txn.showTaxationDiscountBox = false;
-                // Take taxes of parent group and stock's own taxes
-                const taxes = this.generalService.fetchTaxesOnPriority(
-                    data.body.stock?.taxes ?? [],
-                    data.body.stock?.groupTaxes ?? [],
-                    data.body.taxes ?? [],
-                    data.body.groupTaxes ?? []);
+                const parentGroups = data.body.parentGroups;
+                const isSundryDebtorCreditorGroup = parentGroups.includes(AccountingGroupEnum.SundryCreditors) || parentGroups.includes(AccountingGroupEnum.SundryDebtors);
+                let taxes = [];
+                let otherTax = {};
+                const accountApplicableTaxes = this.lc.activeAccount.applicableTaxes ?? [];
+                const accountOtherApplicableTaxes = this.lc.activeAccount.otherApplicableTaxes ?? [];
+                const applicableTaxesExcludingOtherTaxes = accountApplicableTaxes.filter(applicableTax =>
+                    !accountOtherApplicableTaxes.some(otherApplicableTax => (otherApplicableTax?.uniqueName ?? otherApplicableTax) === (applicableTax?.uniqueName ?? applicableTax))
+                );
+                const prioritizedApplicableTaxes = applicableTaxesExcludingOtherTaxes.length ? applicableTaxesExcludingOtherTaxes : accountOtherApplicableTaxes;
+
+                if (!isSundryDebtorCreditorGroup) {
+                    // Take taxes of parent group and stock's own taxes
+                    taxes = this.generalService.fetchTaxesOnPriority(
+                        data.body.stock?.taxes ?? [],
+                        data.body.stock?.groupTaxes ?? [],
+                        data.body.taxes ?? [],
+                        data.body.groupTaxes ?? []);
+                        const isSundryDebtorCreditorAccount = data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryCreditors) || data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryDebtors);
+                        if (data.body.oppositeAccount && isSundryDebtorCreditorAccount) {
+                            const stockAccountOtherTax = this.generalService.fetchTaxesOnPriority(
+                                                    [],
+                                                    [],
+                                                    data.body.oppositeAccount.taxes ?? [],
+                                                    data.body.oppositeAccount.groupTaxes ?? []);
+                            otherTax = {
+                                name: '',
+                                uniqueName: stockAccountOtherTax.length ? stockAccountOtherTax[0] : ''
+                            };
+                        }
+                        if (prioritizedApplicableTaxes.length && !otherTax['uniqueName']) {
+                            otherTax = {
+                                name: prioritizedApplicableTaxes[0]?.name,
+                                uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
+                            };
+                        }
+                } else {
+                    taxes = prioritizedApplicableTaxes.map(tax => tax?.uniqueName);
+                
+                    const remainingBodyTaxes = data.body.taxes.filter(tax =>
+                                    !data.body.groupTaxes.includes(tax));
+                    if (remainingBodyTaxes.length) {
+                        otherTax = {
+                            name: '',
+                            uniqueName: remainingBodyTaxes[0]
+                        };
+                    } else if (data.body.applicableTaxes.length) {
+                        otherTax = {
+                            name: data.body.applicableTaxes[0].name,
+                            uniqueName: data.body.applicableTaxes[0].uniqueName
+                        };
+                    }
+                }
 
                 if (this.profileObj?.baseCurrency === this.lc.activeAccount?.currency) {
                     if (this.lc.activeAccount?.currency !== data.body?.currency.code) {
@@ -3612,6 +3659,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     value: event?.value,
                     isHilighted: true,
                     applicableTaxes: txn.duplicateEntry ? [] : taxes,
+                    otherTax: otherTax,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
                     email: data.body.emails,

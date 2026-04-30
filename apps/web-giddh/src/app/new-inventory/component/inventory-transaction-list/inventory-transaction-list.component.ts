@@ -21,9 +21,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 import { OrganizationType } from "../../../models/user-login-state";
 import { ServiceConfig } from "../../../services/service.config";
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
-import { cloneDeep, filter, forEach, includes, set } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: "inventory-transaction-list",
@@ -172,7 +170,7 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.stockReportRequest.count = PAGINATION_LIMIT;
 
         this.searchAccountName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
