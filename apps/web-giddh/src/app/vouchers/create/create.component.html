@@ -3426,16 +3426,7 @@
     </div>
     <mat-dialog-content class="dialog-body">
         <mat-tab-group animationDuration="0">
-            <!-- Tab 1: All Invoices (Company) -->
-            <mat-tab [label]="localeData?.all_invoices">
-                @if (isCompanyVouchersLoading()) {
-                    <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
-                } @else {
-                    <ng-container *ngTemplateOutlet="voucherListTemplate; context: { $implicit: lastVouchersCompanyList() }"></ng-container>
-                }
-            </mat-tab>
-
-            <!-- Tab 2: Account Invoices -->
+            <!-- Tab 1: Account Invoices -->
             <mat-tab [label]="localeData?.account_invoices">
                 @if (isAccountVouchersLoading()) {
                     <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
@@ -3443,23 +3434,39 @@
                     <ng-container *ngTemplateOutlet="voucherListTemplate; context: { $implicit: lastVouchersAccountList() }"></ng-container>
                 }
             </mat-tab>
+
+            <!-- Tab 2: All Invoices (Company) -->
+            <mat-tab [label]="localeData?.all_invoices">
+                @if (isCompanyVouchersLoading()) {
+                    <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
+                } @else {
+                    <ng-container *ngTemplateOutlet="voucherListTemplate; context: { $implicit: lastVouchersCompanyList() }"></ng-container>
+                }
+            </mat-tab>
         </mat-tab-group>
     </mat-dialog-content>
 
     <!-- Shared voucher list template used by both tabs -->
     <ng-template #voucherListTemplate let-vouchers>
-        <div class="w-100 overflow-x-hidden mt-2">
+        <div class="w-100 overflow-x-hidden border mt-3">
             <div
-                class="d-grid vouchers-recent-grid align-items-center column-gap-1 py-2 border-bottom font-weight-semibold text-light font-size-11 text-uppercase"
+                class="d-grid vouchers-recent-grid align-items-center column-gap-1 py-2 px-2 border-bottom font-weight-semibold text-light font-size-11 text-uppercase"
             >
-                <span class="pl-2">{{ commonLocaleData?.app_invoice_no }}</span>
+                <span>{{ commonLocaleData?.app_name }}</span>
+                <span>{{ commonLocaleData?.app_invoice_no }}</span>
                 <span>{{ commonLocaleData?.app_date }}</span>
                 <span class="text-right">{{ commonLocaleData?.app_amount }}</span>
                 <span></span>
             </div>
-            @for (voucher of vouchers; track voucher.uniqueName) {
-                <div class="d-grid vouchers-recent-grid align-items-center column-gap-1 py-2 border-bottom hover-trigger">
-                    <span class="pl-2">
+            @for (voucher of vouchers; track voucher.uniqueName; let last = $last) {
+                <div
+                    class="d-grid vouchers-recent-grid align-items-center column-gap-1 py-2 hover-trigger px-2"
+                    [class.border-bottom]="!last"
+                >
+                    <span>
+                        {{ voucher?.account?.name }}
+                    </span>
+                    <span>
                         <a
                             href="javascript:;"
                             class="text-underline text-truncate"
@@ -3524,7 +3531,7 @@
         </button>
     </div>
     <mat-dialog-content class="dialog-body">
-        <div class="container h-100">
+        <div class="container h-100 px-0">
             <div class="pdf-preview h-100">
                 @if (!previewPdfUrl()) {
                     <mat-spinner class="ml-auto mr-auto my-4" [diameter]="40"></mat-spinner>

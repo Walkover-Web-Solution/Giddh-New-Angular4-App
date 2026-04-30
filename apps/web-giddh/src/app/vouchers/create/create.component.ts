@@ -1594,9 +1594,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                         if (voucherDetails.isCopyVoucher) {
                             this.recentVouchersAsideRef?.close();
-                            setTimeout(() => {
-                                this.copyVoucherElement?.nativeElement?.focus();
-                            }, 100);
+                            this.focusOnCopyPreviousBtn();
                         } else if (this.isUpdateMode) {
                             setTimeout(() => {
                                 this.customerVendorDropdown.focusInputField();
@@ -5039,12 +5037,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public openRecentVouchersPane(): void {
         this.recentVouchersAsideRef = this.dialog.open(this.recentVouchersTemplate, {
-            ...ASIDE_PANE_CONFIG,
-            width: '500px',
-            maxWidth: '500px'
+            ...ASIDE_PANE_CONFIG
         });
         this.recentVouchersAsideRef.afterClosed().pipe(take(1)).subscribe(() => {
-            this.customerVendorDropdownOpen();
+            this.focusOnCopyPreviousBtn();
         });
     }
 
@@ -5070,7 +5066,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const dialogRef = this.dialog.open(this.voucherPdfPreviewTemplate, {
             width: '60vw',
             maxWidth: '90vw',
-            height: '80vh'
+            height: '90vh',
+            maxHeight: '90vh'
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
             const container = (this.recentVouchersAsideRef as any)?._containerInstance?._elementRef?.nativeElement as HTMLElement | undefined;
@@ -8703,5 +8700,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         };
         const matchedKey = Object.keys(recurringLabels).find(key => this.invoiceType[key]);
         return matchedKey ? recurringLabels[matchedKey] : this.updateVoucherText;
+    }
+
+     /**
+     * Focus on copy Previous 
+     * 
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private focusOnCopyPreviousBtn(): void {
+         setTimeout(() => {
+            this.copyVoucherElement?.nativeElement?.focus();
+        }, 100);
     }
 }
