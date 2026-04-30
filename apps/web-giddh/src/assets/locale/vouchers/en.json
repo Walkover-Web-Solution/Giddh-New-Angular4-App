@@ -175,5 +175,7 @@
     "update_recurring_payment": "Update Recurring Payment",
     "place_of_supply": "Place of Supply",
     "source_of_supply": "Source of Supply",
-    "destination_of_supply": "Destination of Supply"
+    "destination_of_supply": "Destination of Supply",
+    "all_invoices": "All Invoices",
+    "account_invoices": "Account Invoices"
 }

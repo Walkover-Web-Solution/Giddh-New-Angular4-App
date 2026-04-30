@@ -15,6 +15,7 @@ import {
     ViewChildren,
     signal,
 } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -111,6 +112,7 @@ import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxe
 import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { MatSelectChange } from "@angular/material/select";
 import { ServiceConfig } from "../../services/service.config";
 import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
@@ -128,7 +130,6 @@ import { GeneralActions } from "../../actions/general/general.actions";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
-import { Location } from '@angular/common';
 import { RecurringEndType, RecurringRepeatOption, RecurringFrequencyUnit, RecurringRepeatType, RecurringMonthlyMode } from "../../models/enums/recurring-voucher.enum";
 import { AccountCategoryEnum } from "../../shared/Enums/common.enum";
 @Component({
@@ -163,6 +164,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('shippingDetailsTrigger') shippingDetailsTrigger!: MatMenuTrigger;
     /** Copy Voucher div element for focusing */
     @ViewChild('copyVoucherElement') copyVoucherElement!: ElementRef<HTMLDivElement>;
+    /** Template reference for the recent vouchers aside pane */
+    @ViewChild('recentVouchersTemplate', { static: true }) recentVouchersTemplate: TemplateRef<any>;
+    /** Template reference for the voucher PDF preview dialog */
+    @ViewChild('voucherPdfPreviewTemplate', { static: true }) voucherPdfPreviewTemplate: TemplateRef<any>;
     /** Description textarea element for focusing */
     @ViewChild('inputDescription', { static: false }) inputDescription?: ElementRef<HTMLTextAreaElement>;
     /** Reference to the "Add new row/line" span element for focusing */
@@ -199,6 +204,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public briefAccounts$: Observable<OptionInterface[]> = observableOf(null);
     /** Last vouchers get in progress Observable */
     public getLastVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
+    /** Signal indicating company vouchers fetch is in progress */
+    protected readonly isCompanyVouchersLoading = toSignal(this.componentStore.getLastVouchersCompanyInProgress$, { initialValue: false });
+    /** Signal indicating account vouchers fetch is in progress */
+    protected readonly isAccountVouchersLoading = toSignal(this.componentStore.getLastVouchersAccountInProgress$, { initialValue: false });
     /** Vendor purchase orders Observable */
     public vendorPurchaseOrders$: Observable<any> = this.componentStore.vendorPurchaseOrders$;
     /** Vendor purchase orders Observable */
@@ -301,6 +310,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     /** Holds list of last vouchers */
     public lastVouchersList$: Observable<LastInvoices[]> = observableOf(null);
+    /** Signal holding recent company vouchers for the aside pane */
+    protected readonly lastVouchersCompanyList = signal<LastInvoices[]>([]);
+    /** Signal holding recent account vouchers for the aside pane */
+    protected readonly lastVouchersAccountList = signal<LastInvoices[]>([]);
+    /** Dialog ref for recent vouchers aside pane */
+    private recentVouchersAsideRef: MatDialogRef<any>;
+    /** Signal holding the voucher number shown in the PDF preview dialog title */
+    protected readonly selectedPdfVoucherNumber = signal<string>('');
+    /** Signal holding the sanitized URL for the PDF preview iframe */
+    protected readonly previewPdfUrl = signal<SafeResourceUrl>(null);
+    /** Holds URL string for revoking blob object */
+    private previewPdfFileURL: string = '';
     /** Form Group for invoice form */
     public invoiceForm: FormGroup;
     /** This will open account dropdown by default */
@@ -809,7 +830,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private generalActions: GeneralActions,
         private customFieldsService: CustomFieldsService,
         private recurrenceService: RecurrenceFormService,
-        private location: Location
+        private domSanitizer: DomSanitizer
     ) {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
     }
@@ -1576,6 +1597,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.checkIfEntriesHasStock();
 
                         if (voucherDetails.isCopyVoucher) {
+                            this.recentVouchersAsideRef?.close();
                             setTimeout(() => {
                                 this.copyVoucherElement?.nativeElement?.focus();
                             }, 100);
@@ -1765,6 +1787,42 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
                 this.lastVouchersList$ = observableOf([...lastVouchers]);
                 this.changeDetection.detectChanges();
+            }
+        });
+
+        this.componentStore.lastVouchersCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                const res = response as any;
+                this.lastVouchersCompanyList.set(
+                    (res?.items ?? []).map((item: any) => ({
+                        voucherNumber: item.voucherNumber,
+                        date: item.voucherDate,
+                        grandTotal: item.grandTotal,
+                        account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
+                        uniqueName: item?.uniqueName,
+                    }))
+                );
+            }
+        });
+
+        this.componentStore.lastVouchersAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                const res = response as any;
+                this.lastVouchersAccountList.set(
+                    (res?.items ?? []).map((item: any) => ({
+                        voucherNumber: item.voucherNumber,
+                        date: item.voucherDate,
+                        grandTotal: item.grandTotal,
+                        account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
+                        uniqueName: item?.uniqueName,
+                    }))
+                );
+            }
+        });
+
+        this.componentStore.downloadVoucherFileResponse$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.handlePreviewVoucherPdfResponse(response);
             }
         });
 
@@ -2408,7 +2466,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Fetches last 5 vouchers
+     * Fetches last 10 vouchers for both company-wide and account-specific lists.
+     * - Company request: fetches without account filter.
+     * - Account request: fetches with q = account uniqueName to filter by current account.
      *
      * @private
      * @memberof VoucherCreateComponent
@@ -2418,19 +2478,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             let filterRequest: ProformaFilter = new ProformaFilter();
             filterRequest.sortBy = this.invoiceType.isProformaInvoice ? "proformaDate" : "estimateDate";
             filterRequest.sort = "desc";
-            filterRequest.count = 5;
+            filterRequest.count = 10;
             filterRequest.isLastInvoicesRequest = true;
             this.componentStore.getPreviousProformaEstimates({
                 model: filterRequest,
                 type: this.invoiceType.isProformaInvoice ? "proformas" : "estimates",
             });
         } else {
-            let request: InvoiceReceiptFilter = new InvoiceReceiptFilter();
-            request.sortBy = "voucherDate";
-            request.sort = "desc";
-            request.count = 5;
-            request.isLastInvoicesRequest = true;
-            this.componentStore.getPreviousVouchers({ model: request, type: this.voucherType });
+            const baseRequest: Partial<InvoiceReceiptFilter> = {
+                sortBy: "voucherDate",
+                sort: "desc",
+                count: 10,
+                isLastInvoicesRequest: true,
+            };
+
+            const companyRequest: InvoiceReceiptFilter = Object.assign(new InvoiceReceiptFilter(), baseRequest);
+            this.componentStore.getPreviousVouchersCompany({ model: companyRequest, type: this.voucherType });
+
+            const accountRequest: InvoiceReceiptFilter = Object.assign(new InvoiceReceiptFilter(), baseRequest);
+            accountRequest.q = this.invoiceForm.controls['account']?.get('customerName')?.value;
+            this.componentStore.getPreviousVouchersAccount({ model: accountRequest, type: this.voucherType });
         }
     }
 
@@ -5006,6 +5073,72 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             accountUniqueName: item.account?.uniqueName,
             payload: { uniqueName: item?.uniqueName, voucherType: this.voucherType },
         });
+    }
+
+    /**
+     * Opens the recent vouchers aside pane showing company and account voucher lists.
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public openRecentVouchersPane(): void {
+        this.recentVouchersAsideRef = this.dialog.open(this.recentVouchersTemplate, {
+            ...ASIDE_PANE_CONFIG,
+            width: '500px',
+            maxWidth: '500px'
+        });
+        this.recentVouchersAsideRef.afterClosed().pipe(take(1)).subscribe(() => {
+            this.customerVendorDropdownOpen();
+        });
+    }
+
+    /**
+     * Triggers PDF download for the given voucher and opens the preview dialog.
+     *
+     * @param {LastInvoices} voucher - Voucher to preview
+     * @memberof VoucherCreateComponent
+     */
+    public openVoucherPdfPreview(voucher: LastInvoices): void {
+        this.selectedPdfVoucherNumber.set(voucher?.voucherNumber ?? '');
+        this.previewPdfUrl.set(null);
+        this.componentStore.downloadVoucherPdf({
+            model: {
+                voucherType: this.voucherType,
+                uniqueName: voucher?.uniqueName
+            },
+            type: 'ALL',
+            fileType: 'base64',
+            voucherType: this.voucherType,
+            isDownloadFromDialog: true
+        });
+        const dialogRef = this.dialog.open(this.voucherPdfPreviewTemplate, {
+            width: '60vw',
+            maxWidth: '90vw',
+            height: '80vh'
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+            const container = (this.recentVouchersAsideRef as any)?._containerInstance?._elementRef?.nativeElement as HTMLElement | undefined;
+            (container?.querySelector('button[aria-label="close"]') as HTMLElement | null)?.focus();
+        });
+    }
+
+    /**
+     * Handles the PDF response for the inline voucher preview dialog.
+     * Converts base64 data to a blob URL and sets it as the sanitized iframe src.
+     *
+     * @private
+     * @param {*} response - API response containing base64 PDF data
+     * @memberof VoucherCreateComponent
+     */
+    private handlePreviewVoucherPdfResponse(response: any): void {
+        if (response?.data || typeof response === 'string') {
+            const blob: Blob = this.generalService.base64ToBlob(response?.data ?? response, 'application/pdf', 512);
+            const file = new Blob([blob], { type: 'application/pdf' });
+            URL.revokeObjectURL(this.previewPdfFileURL);
+            this.previewPdfFileURL = URL.createObjectURL(file);
+            this.previewPdfUrl.set(this.domSanitizer.bypassSecurityTrustResourceUrl(this.previewPdfFileURL));
+            this.componentStore.resetPreviewPdfResponse();
+            this.changeDetection.detectChanges();
+        }
     }
 
     /**
