@@ -666,7 +666,6 @@ export class GeneralService {
         const regionSessionCookieMap: Record<GiddhRegion, string> = {
             [GiddhRegion.UK]: 'giddh_session_id_uk',
             [GiddhRegion.GB]: 'giddh_session_id_uk',
-            [GiddhRegion.AE]: 'giddh_session_id_ae',
             [GiddhRegion.IN]: defaultCookieName
         };
         // Stores normalized logged-in region for lookup.
