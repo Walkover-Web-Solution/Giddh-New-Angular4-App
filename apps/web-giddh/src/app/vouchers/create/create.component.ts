@@ -4162,6 +4162,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(response?.name);
         this.updateAccountDataInForm(response, fetchStates);
         this.fillDefaultAccountAddresses(response);
+        this.fetchPreviousVouchers();
         this.accountAsideMenuRef?.close();
     }
 

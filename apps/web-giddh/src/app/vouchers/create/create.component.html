@@ -3418,13 +3418,13 @@
 
 <!-- Recent Vouchers Aside Pane -->
 <ng-template #recentVouchersTemplate>
-    <div cdkFocusInitial class="dialog-header">
+    <div cdkFocusInitial class="dialog-header font-size-15">
         <span>{{ voucherType | voucherCopyLink: localeData | titlecase }}</span>
         <button mat-icon-button aria-label="close" mat-dialog-close>
             <i class="icon-cross"></i>
         </button>
     </div>
-    <mat-dialog-content class="dialog-body">
+    <mat-dialog-content class="dialog-body font-size-15">
         <mat-tab-group animationDuration="0">
             <!-- Tab 1: Account Invoices -->
             <mat-tab [label]="localeData?.account_invoices">
@@ -3524,7 +3524,7 @@
 
 <!-- Voucher PDF Preview Dialog -->
 <ng-template #voucherPdfPreviewTemplate>
-    <div cdkFocusInitial class="dialog-header">
+    <div cdkFocusInitial class="dialog-header font-size-15">
         <span>{{ selectedPdfVoucherNumber() }}</span>
         <button mat-icon-button aria-label="close" mat-dialog-close>
             <i class="icon-cross"></i>
