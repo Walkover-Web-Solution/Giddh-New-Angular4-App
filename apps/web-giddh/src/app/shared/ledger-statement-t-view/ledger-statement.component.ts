@@ -459,7 +459,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             }
             this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.trxRequest.accountUniqueName));
             this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
-            this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: fromDate, to: toDate }));
+            this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: fromDate, to: toDate, isTView: true }));
             this.lc.transactionData$ = this.store.pipe(select(p => p.ledger.transactionsResponse), takeUntil(this.destroyed$), shareReplay(1));
             this.lc.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
             this.lc.companyProfile$ = this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$));

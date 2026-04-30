@@ -302,15 +302,15 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true,
             },
             {
-                "value": "net_purchase",
-                "label": "Net Purchase",
-                "checked": true,
-            },
-            {
                 "value": "app_round_off",
                 "label": "Round Off",
                 "checked": true,
                 "isCommonLocaleData": true
+            },
+            {
+                "value": "net_purchase",
+                "label": "Net Purchase",
+                "checked": true,
             }
         ];
 

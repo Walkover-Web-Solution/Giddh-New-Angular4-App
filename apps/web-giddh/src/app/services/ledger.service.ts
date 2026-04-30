@@ -87,6 +87,9 @@ export class LedgerService {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
         }
+        if (request.isTView) {
+            url = url.concat(`&isTView=${request.isTView}`);
+        }
         // tslint:disable-next-line:max-line-length
         const options = request.paginationToken ? { headers: { 'token': request.paginationToken } } : null;
         return this.http.get(url, null, options).pipe(map((res) => {
