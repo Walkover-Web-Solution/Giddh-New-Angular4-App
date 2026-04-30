@@ -145,7 +145,7 @@ export class GeneralService {
         Object.keys(params).forEach((key, index) => {
             if (params[key] !== undefined) {
                 const delimiter = url.indexOf('?') === -1 ? '?' : (index === 0 ? '' : '&');
-                url += `${delimiter}${key}=${params[key]}`
+                url += `${delimiter}${key}=${encodeURIComponent(params[key])}`;
             }
         });
         return url;
