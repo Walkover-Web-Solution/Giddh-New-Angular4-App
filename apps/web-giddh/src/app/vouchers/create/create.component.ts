@@ -164,6 +164,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('shippingDetailsTrigger') shippingDetailsTrigger!: MatMenuTrigger;
     /** Copy Voucher div element for focusing */
     @ViewChild('copyVoucherElement') copyVoucherElement!: ElementRef<HTMLDivElement>;
+    /** Template reference for the copy particular dialog */
+    @ViewChild('copyParticular', { static: true }) copyParticularTemplate: TemplateRef<any>;
     /** Template reference for the recent vouchers aside pane */
     @ViewChild('recentVouchersTemplate', { static: true }) recentVouchersTemplate: TemplateRef<any>;
     /** Template reference for the voucher PDF preview dialog */
@@ -391,6 +393,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     /** Entry index which is open in edit mode */
     public activeEntryIndex: number | null = null;
+    /** Reference to the copy particular dialog */
+    private copyParticularDialogRef: MatDialogRef<any>;
     /** Rate precision value that will be visible on UI */
     public ratePrecision = RATE_FIELD_PRECISION;
     /** Rate precision value that will be sent to API */
@@ -2869,7 +2873,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             transactionFormGroup.get("account.name")?.patchValue(event?.label);
             transactionFormGroup.get("account.uniqueName")?.patchValue(event?.account?.uniqueName || event?.value);
-
             if (event?.additional?.stock?.uniqueName) {
                 transactionFormGroup.get("stock.name")?.patchValue(event?.additional?.stock?.name);
                 transactionFormGroup.get("stock.uniqueName")?.patchValue(event?.additional?.stock?.uniqueName);
@@ -3664,6 +3667,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         }
         return maxQuantity;
+    }
+
+    /**
+     * Opens the copy particular dialog
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public openCopyDialog(): void {
+        this.copyParticularDialogRef = this.dialog.open(this.copyParticularTemplate, {
+            panelClass: 'mat-dialog-lg',
+        });
     }
 
     /**

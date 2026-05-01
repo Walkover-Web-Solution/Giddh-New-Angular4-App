@@ -289,3 +289,12 @@
 .vouchers-recent-grid {
     grid-template-columns: 2fr 2fr 1.5fr 2fr 40px;
 }
+.copy-particular-table {
+    tr {
+        th,
+        td {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+        }
+    }
+}

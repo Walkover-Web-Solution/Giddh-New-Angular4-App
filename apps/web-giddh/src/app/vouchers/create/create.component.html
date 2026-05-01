@@ -1561,6 +1561,7 @@
                                                                             tabindex="0"
                                                                             cdkMonitorElementFocus
                                                                             (focus)="setActiveEntryIndex(entryIndex)"
+                                                                            (dblclick)="openCopyDialog()"
                                                                         >
                                                                             {{
                                                                                 transaction.get('account.name')?.value
@@ -1577,6 +1578,7 @@
                                                                         #accountDropdown
                                                                         [sidebarListView]="true"
                                                                         (click)="setUserManuallyClicked()"
+                                                                        (dblclick)="openCopyDialog()"
                                                                         *ngIf="activeEntryIndex === entryIndex"
                                                                         (keydown.enter)="$event.preventDefault()"
                                                                         [label]="commonLocaleData?.app_account"
@@ -3539,6 +3541,91 @@
                     <iframe width="100%" height="100%" [src]="previewPdfUrl()" title="PDF"></iframe>
                 }
             </div>
+        </div>
+    </mat-dialog-content>
+</ng-template>
+
+<ng-template #copyParticular>
+    <div cdkFocusInitial class="dialog-header font-size-15">
+        <span>{{ invoiceForm?.controls['account']?.get('customerName')?.value }} (selected item)</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="px-0">
+            <table class="w-100 copy-particular-table">
+                <thead>
+                    <tr class="text-right">
+                        <th class="text-left">
+                            {{
+                                invoiceType.isReceiptInvoice
+                                    ? localeData?.receipt_mode
+                                    : invoiceType.isPaymentInvoice
+                                      ? localeData?.payment_mode
+                                      : localeData?.product_service
+                            }}
+                        </th>
+                        <th class="text-left" *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
+                            {{ commonLocaleData?.app_description }}
+                        </th>
+                        <th [ngClass]="{ 'd-none': !hasStock }">
+                            {{ commonLocaleData?.app_quantity_unit }}
+                        </th>
+                        <th [ngClass]="{ 'd-none': !hasStock }">
+                            {{ commonLocaleData?.app_rate }}
+                        </th>
+                        <th>{{ commonLocaleData?.app_amount }}</th>
+                        <th *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
+                            {{ commonLocaleData?.app_discount }}
+                        </th>
+                        <th *ngIf="showTaxColumn || invoiceForm.get('isAdvanceReceipt')?.value">
+                            {{ commonLocaleData?.app_tax }}
+                            <span *ngIf="rcmCheckbox?.checked">
+                                ({{ commonLocaleData?.app_rcm }})
+                                <sup class="mandatory-asterisk">*</sup>
+                            </span>
+                        </th>
+                        <th>{{ commonLocaleData?.app_total }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (entry of invoiceForm?.get('entries')['controls']; track $index) {
+                        @for (transaction of entry?.get('transactions')['controls']; track $index) {
+                            @if (transaction.get('account.name')?.value) {
+                                <tr class="text-right">
+                                    <td class="text-left">
+                                        <div>{{ transaction.get('stock.name')?.value || transaction.get('account.name')?.value }}</div>
+                                        @if (transaction.get('stock.variant.name')?.value) {
+                                            <div class="font-size-12 text-light">
+                                                {{ transaction.get('stock.variant.name')?.value }}
+                                            </div>
+                                        }
+                                    </td>
+                                    <td class="text-left" *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
+                                        {{ entry?.get('description')?.value || '-' }}
+                                    </td>
+                                    <td [ngClass]="{ 'd-none': !hasStock }">
+                                        {{ transaction.get('stock.quantity')?.value || '-' }}
+                                        {{ transaction.get('stock.stockUnit.code')?.value }}
+                                    </td>
+                                    <td [ngClass]="{ 'd-none': !hasStock }">
+                                        {{ transaction.get('stock.rate.rateForAccount')?.value || '-' }}
+                                    </td>
+                                    <td>{{ transaction.get('amount.amountForAccount')?.value || 0 }}</td>
+                                    <td *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
+                                        {{ entry?.get('totalDiscount')?.value || 0 }}
+                                    </td>
+                                    <td *ngIf="showTaxColumn || invoiceForm.get('isAdvanceReceipt')?.value">
+                                        {{ entry?.get('totalTax')?.value || 0 }}
+                                    </td>
+                                    <td>{{ entry?.get('total.amountForAccount')?.value || 0 }}</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
         </div>
     </mat-dialog-content>
 </ng-template>
