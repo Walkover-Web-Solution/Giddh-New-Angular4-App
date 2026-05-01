@@ -500,7 +500,7 @@
         </div>
         <mat-dialog-content class="dialog-body">
             <div class="list-wrapper">
-                <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading">
+                <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading && unpaidInvoiceData?.length">
                     <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
                         <mat-list-item class="list-item px-2" *cdkVirtualFor="let item of unpaidInvoiceData">
                             <a
@@ -533,6 +533,9 @@
                 </mat-list>
                 <div *ngIf="unpaidInvoiceIsLoading">
                     <giddh-page-loader></giddh-page-loader>
+                </div>
+                <div class="no-data" *ngIf="!unpaidInvoiceIsLoading && !unpaidInvoiceData?.length">
+                    <no-data [secondaryMessage]="' '" [primaryMessageClass]="'font-size-24'"></no-data>
                 </div>
             </div>
         </mat-dialog-content>

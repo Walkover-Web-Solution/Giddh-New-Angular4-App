@@ -627,7 +627,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 dueDate: undefined,
                 voucherNumber: undefined,
                 total: "",
-                source: "AGING_REPORT"
+                source: "AGING_REPORT",
+                branchUniqueName: this.currentBranch?.uniqueName
             };
 
             if (model.page === 1) {
