@@ -135,6 +135,7 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
         MatTabsModule,
         MatTableModule,
         MatButtonModule,
+        MatIconModule,
         MatMenuModule,
         MatInputModule,
         MatTooltipModule,

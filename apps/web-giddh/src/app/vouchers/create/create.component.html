@@ -1556,12 +1556,11 @@
                                                         >
                                                             <ng-container formGroupName="0">
                                                                 <ng-container formGroupName="account">
-                                                                    <ng-container *ngIf="activeEntryIndex !== entryIndex">
+                                                                    @if (activeEntryIndex !== entryIndex) {
                                                                         <div
                                                                             tabindex="0"
                                                                             cdkMonitorElementFocus
                                                                             (focus)="setActiveEntryIndex(entryIndex)"
-                                                                            (dblclick)="openCopyDialog()"
                                                                         >
                                                                             {{
                                                                                 transaction.get('account.name')?.value
@@ -1571,82 +1570,103 @@
                                                                                     : localeData?.select_account
                                                                             }}
                                                                         </div>
-                                                                    </ng-container>
-                                                                    <reactive-dropdown-field
-                                                                        appEnterNext
-                                                                        class="mat-form-field-clean"
-                                                                        #accountDropdown
-                                                                        [sidebarListView]="true"
-                                                                        (click)="setUserManuallyClicked()"
-                                                                        (dblclick)="openCopyDialog()"
-                                                                        *ngIf="activeEntryIndex === entryIndex"
-                                                                        (keydown.enter)="$event.preventDefault()"
-                                                                        [label]="commonLocaleData?.app_account"
-                                                                        [placeholder]="localeData?.select_acc"
-                                                                        formControlName="uniqueName"
-                                                                        [name]="'transactionAccountUniqueName' + entryIndex"
-                                                                        [useCustomLabelValue]="true"
-                                                                        [labelValue]="getAccountDisplayLabel(transaction)"
-                                                                        [options]="voucherStockResults$ | async"
-                                                                        [showCreateNew]="true"
-                                                                        [enableDynamicSearch]="true"
-                                                                        [isPaginationEnabled]="true"
-                                                                        [createNewText]="commonLocaleData?.app_create_new"
-                                                                        (scrollEnd)="handleSearchStockScrollEnd()"
-                                                                        (selectedOption)="selectStock($event, entryIndex)"
-                                                                        (dynamicSearchedQuery)="searchStock($event, 1)"
-                                                                        (onClear)="selectStock($event, entryIndex, true)"
-                                                                        (createOption)="toggleStockAsidePane()"
-                                                                        [openDropdown]="
-                                                                            shouldOpenDropdown(
-                                                                                entryIndex,
-                                                                                transaction.get('account.uniqueName')?.value
-                                                                            )
-                                                                        "
-                                                                        [showOptionDivider]="true"
-                                                                        [showMatLabel]="false"
-                                                                        [showCaretIcon]="false"
-                                                                        [appearance]="'fill'"
-                                                                        [forceClear]="forceClear"
-                                                                    >
-                                                                        <ng-template #optionTemplate let-option="option">
-                                                                            @if (!option.additional?.stock) {
-                                                                                <a href="javascript:;" class="d-block py-1">
-                                                                                    <div class="option-label pt-2">
-                                                                                        {{ option?.label | titlecase }}
-                                                                                    </div>
-                                                                                    @if (showAccountUniqueName) {
-                                                                                        <div class="option-value pb-2">
-                                                                                            {{ option.additional?.uniqueName }}
-                                                                                        </div>
+                                                                    } @else {
+                                                                        <div
+                                                                            class="d-flex align-items-center justify-content-between column-gap-15"
+                                                                        >
+                                                                            <reactive-dropdown-field
+                                                                                appEnterNext
+                                                                                class="mat-form-field-clean"
+                                                                                #accountDropdown
+                                                                                [sidebarListView]="true"
+                                                                                (click)="setUserManuallyClicked()"
+                                                                                (keydown.enter)="$event.preventDefault()"
+                                                                                [label]="commonLocaleData?.app_account"
+                                                                                [placeholder]="localeData?.select_acc"
+                                                                                formControlName="uniqueName"
+                                                                                [name]="'transactionAccountUniqueName' + entryIndex"
+                                                                                [useCustomLabelValue]="true"
+                                                                                [labelValue]="getAccountDisplayLabel(transaction)"
+                                                                                [options]="voucherStockResults$ | async"
+                                                                                [showCreateNew]="true"
+                                                                                [enableDynamicSearch]="true"
+                                                                                [isPaginationEnabled]="true"
+                                                                                [createNewText]="commonLocaleData?.app_create_new"
+                                                                                (scrollEnd)="handleSearchStockScrollEnd()"
+                                                                                (selectedOption)="selectStock($event, entryIndex)"
+                                                                                (dynamicSearchedQuery)="searchStock($event, 1)"
+                                                                                (onClear)="selectStock($event, entryIndex, true)"
+                                                                                (createOption)="toggleStockAsidePane()"
+                                                                                [openDropdown]="
+                                                                                    shouldOpenDropdown(
+                                                                                        entryIndex,
+                                                                                        transaction.get('account.uniqueName')?.value
+                                                                                    )
+                                                                                "
+                                                                                [showOptionDivider]="true"
+                                                                                [showMatLabel]="false"
+                                                                                [showCaretIcon]="false"
+                                                                                [appearance]="'fill'"
+                                                                                [forceClear]="forceClear"
+                                                                            >
+                                                                                <ng-template #optionTemplate let-option="option">
+                                                                                    @if (!option.additional?.stock) {
+                                                                                        <a href="javascript:;" class="d-block py-1">
+                                                                                            <div class="option-label pt-2">
+                                                                                                {{ option?.label | titlecase }}
+                                                                                            </div>
+                                                                                            @if (showAccountUniqueName) {
+                                                                                                <div class="option-value pb-2">
+                                                                                                    {{ option.additional?.uniqueName }}
+                                                                                                </div>
+                                                                                            }
+                                                                                        </a>
                                                                                     }
-                                                                                </a>
-                                                                            }
-                                                                            @if (option.additional?.stock) {
-                                                                                <a href="javascript:;" class="d-block py-1 flex-column">
-                                                                                    <div class="option-label">
-                                                                                        @if (option?.additional?.stock) {
-                                                                                            <span>
-                                                                                                {{
-                                                                                                    option?.additional?.stock?.name
-                                                                                                        | titlecase
-                                                                                                }}
-                                                                                            </span>
-                                                                                        }
-                                                                                    </div>
-                                                                                    @if (showAccountUniqueName) {
-                                                                                        <div class="option-value">
-                                                                                            {{ option.additional?.uniqueName }}
-                                                                                        </div>
-                                                                                        <div class="option-value-stock font-12">
-                                                                                            {{ commonLocaleData?.app_stock }}:
-                                                                                            {{ option.additional?.stock?.uniqueName }}
-                                                                                        </div>
+                                                                                    @if (option.additional?.stock) {
+                                                                                        <a
+                                                                                            href="javascript:;"
+                                                                                            class="d-block py-1 flex-column"
+                                                                                        >
+                                                                                            <div class="option-label">
+                                                                                                @if (option?.additional?.stock) {
+                                                                                                    <span>
+                                                                                                        {{
+                                                                                                            option?.additional?.stock?.name
+                                                                                                                | titlecase
+                                                                                                        }}
+                                                                                                    </span>
+                                                                                                }
+                                                                                            </div>
+                                                                                            @if (showAccountUniqueName) {
+                                                                                                <div class="option-value">
+                                                                                                    {{ option.additional?.uniqueName }}
+                                                                                                </div>
+                                                                                                <div class="option-value-stock font-12">
+                                                                                                    {{ commonLocaleData?.app_stock }}:
+                                                                                                    {{
+                                                                                                        option.additional?.stock?.uniqueName
+                                                                                                    }}
+                                                                                                </div>
+                                                                                            }
+                                                                                        </a>
                                                                                     }
-                                                                                </a>
-                                                                            }
-                                                                        </ng-template>
-                                                                    </reactive-dropdown-field>
+                                                                                </ng-template>
+                                                                            </reactive-dropdown-field>
+                                                                            <button
+                                                                                mat-icon-button
+                                                                                type="button"
+                                                                                class="copy-particular-search-btn"
+                                                                                [matTooltip]="'View past invoices using this item'"
+                                                                                (click)="$event.stopPropagation(); openCopyDialog()"
+                                                                                aria-label="View past invoices using this item"
+                                                                                tabindex="0"
+                                                                                cdkMonitorElementFocus
+                                                                                *ngIf="transaction.get('account.name')?.value"
+                                                                            >
+                                                                                <i class="icon-search font-size-14"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    }
                                                                 </ng-container>
                                                                 <ng-container
                                                                     *ngIf="
@@ -3547,7 +3567,7 @@
 
 <ng-template #copyParticular>
     <div cdkFocusInitial class="dialog-header font-size-15">
-        <span>{{ invoiceForm?.controls['account']?.get('customerName')?.value }} (selected item)</span>
+        <span>{{ invoiceForm?.controls['account']?.get('customerName')?.value }} (AYURVEDA MASALA CTC 100-gms)</span>
         <button mat-icon-button aria-label="close" mat-dialog-close>
             <i class="icon-cross"></i>
         </button>
@@ -3557,15 +3577,8 @@
             <table class="w-100 copy-particular-table">
                 <thead>
                     <tr class="text-right">
-                        <th class="text-left">
-                            {{
-                                invoiceType.isReceiptInvoice
-                                    ? localeData?.receipt_mode
-                                    : invoiceType.isPaymentInvoice
-                                      ? localeData?.payment_mode
-                                      : localeData?.product_service
-                            }}
-                        </th>
+                        <th class="text-left">Invoice Number</th>
+                        <th class="text-left">Invoice Date</th>
                         <th class="text-left" *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
                             {{ commonLocaleData?.app_description }}
                         </th>
@@ -3587,6 +3600,7 @@
                             </span>
                         </th>
                         <th>{{ commonLocaleData?.app_total }}</th>
+                        <th>{{ 'Action' }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -3594,14 +3608,8 @@
                         @for (transaction of entry?.get('transactions')['controls']; track $index) {
                             @if (transaction.get('account.name')?.value) {
                                 <tr class="text-right">
-                                    <td class="text-left">
-                                        <div>{{ transaction.get('stock.name')?.value || transaction.get('account.name')?.value }}</div>
-                                        @if (transaction.get('stock.variant.name')?.value) {
-                                            <div class="font-size-12 text-light">
-                                                {{ transaction.get('stock.variant.name')?.value }}
-                                            </div>
-                                        }
-                                    </td>
+                                    <td class="text-left">00001</td>
+                                    <td class="text-left">May 1</td>
                                     <td class="text-left" *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
                                         {{ entry?.get('description')?.value || '-' }}
                                     </td>
@@ -3620,6 +3628,7 @@
                                         {{ entry?.get('totalTax')?.value || 0 }}
                                     </td>
                                     <td>{{ entry?.get('total.amountForAccount')?.value || 0 }}</td>
+                                    <td><button matButton="filled">Use</button></td>
                                 </tr>
                             }
                         }
