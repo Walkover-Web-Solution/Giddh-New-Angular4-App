@@ -532,6 +532,7 @@
     "close_popup": "क्या आप वाकई इस पॉपअप को बंद करना चाहते हैं? आपके असहेजे गए परिवर्तन खो जाएंगे",
     "document_title": "दस्तऐवज",
     "customer_details": "ग्राहकाचे तपशील",
+    "vendor_details": "विक्रेता विवरण",
     "shipping_details": "शिपिंग तपशील",
     "billing_details": "बिलिंग तपशील",
     "tax_rate": "कराचे दर",

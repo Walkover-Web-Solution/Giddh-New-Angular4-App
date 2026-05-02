@@ -73,7 +73,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   */
   public closeDialog(): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      panelClass: ['mat-dialog-md'],
+      panelClass: ['mat-dialog-sm'],
       data: {
         title: this.commonLocaleData?.app_confirmation,
         body: this.localeData?.close_popup,
