@@ -370,8 +370,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
             name: this.serviceConfig.BRAND_NAME,
             description: this.serviceConfig.LEGAL_NAME
         };
-        if (this.serviceConfig?.logos?.primary) {
-            options["image"] = this.serviceConfig.LOGOS.dark;
+        if (this.serviceConfig?.LOGOS?.primary) {
+            options["image"] = this.serviceConfig.LOGOS.primary;
         }
         try {
             this.razorpay = new window['Razorpay'](options);

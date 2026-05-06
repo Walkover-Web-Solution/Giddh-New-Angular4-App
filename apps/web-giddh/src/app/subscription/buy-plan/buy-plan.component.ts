@@ -1746,9 +1746,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             name: this.serviceConfig.BRAND_NAME,
             description: this.serviceConfig.LEGAL_NAME,
         };
-        if (this.serviceConfig?.logos?.primary) {
-            options["image"] = this.serviceConfig.LOGOS.dark;
-        }
         const razorpayRecurringSubscriptionConfig = {
             key: this.razorpayKey,
             order_id: request.razorpayOrderId,
@@ -1766,6 +1763,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             name: this.serviceConfig.BRAND_NAME,
             description: this.serviceConfig.LEGAL_NAME
         };
+        if (this.serviceConfig?.LOGOS?.primary) {
+            options["image"] = this.serviceConfig.LOGOS.primary;
+            razorpayRecurringSubscriptionConfig["image"] = this.serviceConfig.LOGOS.primary;
+        }
 
         try {
             const isChangePlan = this.isChangePlan ? (

@@ -243,9 +243,13 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                             organizationIndex = 0;
                         }
                     }
+                    const isGiddhDomain = this.generalService.isGiddhDomain();
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
                         this.settingsPageTabs[loop] = [];
-                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
+                        const items = [...settingsPageTabs[organizationIndex][key]];
+                        this.settingsPageTabs[loop] = isGiddhDomain
+                            ? items
+                            : items.filter((item: any) => item?.link !== '/pages/settings/tally');
                         loop++;
                     });
                 });
