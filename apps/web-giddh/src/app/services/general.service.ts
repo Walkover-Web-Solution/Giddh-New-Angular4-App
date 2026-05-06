@@ -134,7 +134,7 @@ export class GeneralService {
         private uiSettingsService: UiSettingsService
     ) {
         const isGiddhDomain = this.config?.IS_GIDDH_DOMAIN ?? [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].map(url => new URL(url).hostname).includes(window.location.hostname);
-        this.isGiddhDomain.set(false);
+        this.isGiddhDomain.set(isGiddhDomain);
     }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
