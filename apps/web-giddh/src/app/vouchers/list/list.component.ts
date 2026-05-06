@@ -397,7 +397,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private componentStore: VoucherComponentStore,
         private store: Store<AppState>,
-        private generalService: GeneralService,
+        public generalService: GeneralService,
         private vouchersUtilityService: VouchersUtilityService,
         private toasterService: ToasterService,
         private invoiceReceiptActions: InvoiceReceiptActions,
