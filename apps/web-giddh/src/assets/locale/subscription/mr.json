@@ -152,5 +152,7 @@
         "cancelled": "रद्द",
         "expired": "कालबाह्य",
         "select_status": "स्थिती निवडा",
-        "please_select_payment_provider": "कृपया पेमेंट प्रदाता निवडा"
+        "please_select_payment_provider": "कृपया पेमेंट प्रदाता निवडा",
+        "no_plans_available": "कोणतीही योजना उपलब्ध नाही",
+        "no_plans_available_for_region": "निवडलेल्या प्रदेशासाठी कोणतीही योजना उपलब्ध नाही"
 	}

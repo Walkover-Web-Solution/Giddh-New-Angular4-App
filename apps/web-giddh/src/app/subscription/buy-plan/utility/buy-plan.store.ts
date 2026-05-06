@@ -33,8 +33,8 @@ export interface BuyPlanState {
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
-    planListInProgress: true,
-    planList: [],
+    planListInProgress: null,
+    planList: null,
     countryListInProgress: true,
     countryList: [],
     createSubscriptionSuccess: false,
@@ -435,7 +435,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    countryList: res?.body ?? [],
+                                    countryList: res?.body ?? [], // .filter((i: any) => i?.alpha2CountryCode === 'IN' || i?.alpha2CountryCode === 'MM')
                                     countryListInProgress: false,
                                 });
                             } else {
