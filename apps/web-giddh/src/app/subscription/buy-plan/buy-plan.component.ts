@@ -43,7 +43,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Holds Country list Mat Trigger Reference  */
     @ViewChild('countryList', { static: false }) public countryList: MatSelect;
     /** This will use for hold table data */
-    public inputData: any[] = [];
+    public inputData: any[] | null = null;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -384,6 +384,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.countrySource$ = observableOf(this.countrySource);
+                this.patchCurrentCountryFromSelection();
+                if (this.countrySource.length === 1 && !this.newUserSelectedCountryValue) {
+                    this.newUserSelectCountry(this.countrySource[0], true);
+                } else {
+                    setTimeout(() => {
+                        this.countryList?.open();
+                    }, 400);
+                }
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -401,9 +409,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.commonCountrySource$ = observableOf(this.commonCountrySource);
-                if (this.countrySource?.length && this.newUserSelectedCountry) {
-                    this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
-                }
+                this.patchCurrentCountryFromSelection();
                 if (this.detectUserInfoByIp?.alpha2CountryCode) {
                     const countryObject = this.commonCountrySource.find(item => item.label.includes(this.detectUserInfoByIp.alpha2CountryCode));
                     if (countryObject) {
@@ -668,7 +674,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.viewSubscriptionData$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
             if (this.subscriptionId && response?.region) {
                 this.newUserSelectCountry({
@@ -830,12 +836,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     const { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse } = this.determineCountryCodes(result);
                     this.detectUserInfoByIp = { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse };
                     const isRegionCode = this.isRegionCountryCode(alpha3CountryCode);
+                    const selectionCode = !isRegionCode ? alpha3CountryCode : alpha2CountryCode;
                     this.newUserSelectCountry({
-                        label: `${!isRegionCode ? alpha3CountryCode : alpha2CountryCode} - ${countryName}`,
-                        value: !isRegionCode ? alpha3CountryCode : alpha2CountryCode,
+                        label: `${selectionCode} - ${countryName}`,
+                        value: selectionCode,
                         additional: {
-                            value: !isRegionCode ? alpha3CountryCode : alpha2CountryCode,
-                            label: `${!isRegionCode ? alpha3CountryCode : alpha2CountryCode}  - ${countryName}`,
+                            value: selectionCode,
+                            label: `${selectionCode} - ${countryName}`,
                             alpha2CountryCode: alpha2CountryCode,
                             alpha3CountryCode: alpha3CountryCode
                         }
@@ -1390,10 +1397,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.setPlans();
             } else {
                 this.inputData = [];
-                setTimeout(() => {
-                    this.countryList?.open();
-                }, 100);
             }
+            this.changeDetection.detectChanges();
         });
     }
 
@@ -1514,10 +1519,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /**
      * This will be use for new user select country
      *
-     * @param {*} event
+     * @param {*} event Country option selected
+     * @param {boolean} [isAutoSelect=false] True when triggered programmatically (e.g. single-region auto-select)
      * @memberof BuyPlanComponent
      */
-    public newUserSelectCountry(event: any): void {
+    public newUserSelectCountry(event: any, isAutoSelect: boolean = false): void {
         if (event?.value) {
             this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
             this.newUserSelectedCountry = event.label;
@@ -1525,10 +1531,31 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
             setTimeout(() => {
                 this.getAllPlans();
-                if (this.isSubscriptionRegion) {
-                    this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
-                }
+                this.patchCurrentCountryFromSelection();
             }, 200);
+        }
+    }
+
+    /**
+     * Patches currentCountry control from countrySource using a stable code match.
+     * Safe to call multiple times; no-ops until both selection and source are ready.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private patchCurrentCountryFromSelection(): void {
+        if (!this.countrySource?.length || !this.newUserSelectedCountryValue) {
+            return;
+        }
+        const selectionValue = this.newUserSelectedCountryValue;
+        const match = this.countrySource.find(country =>
+            country.value === selectionValue ||
+            country.label === this.newUserSelectedCountry ||
+            country.additional?.alpha2CountryCode === selectionValue ||
+            country.additional?.alpha3CountryCode === selectionValue
+        );
+        if (match) {
+            this.currentCountry.patchValue(match);
         }
     }
 
@@ -1746,9 +1773,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             name: this.serviceConfig.BRAND_NAME,
             description: this.serviceConfig.LEGAL_NAME,
         };
-        if (this.serviceConfig?.logos?.primary) {
-            options["image"] = this.serviceConfig.LOGOS.dark;
-        }
         const razorpayRecurringSubscriptionConfig = {
             key: this.razorpayKey,
             order_id: request.razorpayOrderId,
@@ -1880,7 +1904,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public getFlagUrl(countryRegionCode: string): string {
-        return this.generalService.getCountryFlagUrl(countryRegionCode);
+        return this.generalService.getCountryFlagUrl(countryRegionCode) || this.serviceConfig.IMG_PATH + 'exclamation-black.svg';
     }
 
     /**
