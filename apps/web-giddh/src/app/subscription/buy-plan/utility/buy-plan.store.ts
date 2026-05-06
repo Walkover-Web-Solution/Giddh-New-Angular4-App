@@ -435,7 +435,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    countryList: res?.body ?? [], // .filter((i: any) => i?.alpha2CountryCode === 'IN' || i?.alpha2CountryCode === 'MM')
+                                    countryList: res?.body ?? [],
                                     countryListInProgress: false,
                                 });
                             } else {
