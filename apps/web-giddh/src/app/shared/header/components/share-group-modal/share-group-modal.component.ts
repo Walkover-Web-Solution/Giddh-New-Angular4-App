@@ -71,7 +71,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.shareGroupForm = this.formBuilder.group({
-            email: ['', [Validators.required, Validators.email]],
+            email: ['', [Validators.required, Validators.pattern(this.giddhEmailRegex)]],
             permission: ['', [Validators.required]]
         });
 
