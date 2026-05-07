@@ -572,11 +572,19 @@
                                     </div>
                                 </ng-container>
                                 @if (inputData?.length === 0) {
-                                    <div class="text-center py-4">
+                                    <div class="no-datat text-center py-4">
                                         @if ((countrySource$ | async)?.length > 1) {
-                                            <p class="text-light">{{ localeData?.no_plans_available_for_region }}</p>
+                                            <no-data
+                                                [primaryMessage]="localeData?.no_plans_available_for_region"
+                                                [secondaryMessage]="' '"
+                                                [primaryMessageClass]="'no-data'"
+                                            ></no-data>
                                         } @else {
-                                            <p class="text-light">{{ localeData?.no_plans_available }}</p>
+                                            <no-data
+                                                [primaryMessage]="localeData?.no_plans_available"
+                                                [secondaryMessage]="' '"
+                                                [primaryMessageClass]="'no-data'"
+                                            ></no-data>
                                         }
                                     </div>
                                 }
