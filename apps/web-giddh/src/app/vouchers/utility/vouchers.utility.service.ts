@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { OtherTaxTypeEnum, SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
+import { OtherTaxTypeEnum, SearchType, TaxCollectionDeductionType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { VoucherForm } from "../../models/api-models/Voucher";
 import { API_BULK_FETCH_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM, ROUND_OFF_THRESHOLD } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -306,6 +306,10 @@ export class VouchersUtilityService {
         };
 
         entries?.forEach(entry => {
+            const otherTaxAmount = Number(entry.otherTax?.amount) || 0;
+            const isTcs = entry.otherTax?.type === OtherTaxTypeEnum.TCS;
+            const isTds = entry.otherTax?.type === OtherTaxTypeEnum.TDS;
+
             voucherTotals.totalAmount += (Number(entry.transactions[0]?.amount?.amountForAccount) || 0);
             voucherTotals.totalDiscount += (Number(entry.totalDiscount) || 0);
             if (entry.transactions[0]?.taxableValue) {
@@ -322,10 +326,12 @@ export class VouchersUtilityService {
                 voucherTotals.grandTotal += (Number(entry.total?.amountForAccount) || 0);
             }
 
-            if (entry.otherTax?.type === OtherTaxTypeEnum.TCS) {
-                voucherTotals.tcsTotal += (Number(entry.otherTax?.amount) || 0);
-            } else if (entry.otherTax?.type === OtherTaxTypeEnum.TDS) {
-                voucherTotals.tdsTotal += (Number(entry.otherTax?.amount) || 0);
+            if (isTcs) {
+                voucherTotals.tcsTotal += otherTaxAmount;
+                voucherTotals.grandTotal += entry.otherTax?.taxType === TaxCollectionDeductionType.TCS_PAYABLE ? -otherTaxAmount : otherTaxAmount;
+            } else if (isTds) {
+                voucherTotals.tdsTotal += otherTaxAmount;
+                voucherTotals.grandTotal -= otherTaxAmount;
             }
         });
 
