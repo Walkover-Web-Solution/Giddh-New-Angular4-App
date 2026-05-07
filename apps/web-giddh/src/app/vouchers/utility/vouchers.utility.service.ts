@@ -290,7 +290,7 @@ export class VouchersUtilityService {
         }
     }
 
-    public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean, exchangeRate: number): any {
+    public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean, exchangeRate: number, options?: { applyTcsToGrandTotal?: boolean }): any {
         let voucherTotals = {
             totalAmount: 0,
             totalDiscount: 0,
@@ -328,10 +328,11 @@ export class VouchersUtilityService {
 
             if (isTcs) {
                 voucherTotals.tcsTotal += otherTaxAmount;
-                voucherTotals.grandTotal += entry.otherTax?.taxType === TaxCollectionDeductionType.TCS_PAYABLE ? -otherTaxAmount : otherTaxAmount;
+                if (options?.applyTcsToGrandTotal) {
+                    voucherTotals.grandTotal += entry.otherTax?.taxType === TaxCollectionDeductionType.TCS_PAYABLE ? -otherTaxAmount : otherTaxAmount;
+                }
             } else if (isTds) {
                 voucherTotals.tdsTotal += otherTaxAmount;
-                voucherTotals.grandTotal -= otherTaxAmount;
             }
         });
 
