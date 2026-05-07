@@ -5172,7 +5172,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 entries,
                 this.company.giddhBalanceDecimalPlaces,
                 this.applyRoundOff,
-                this.invoiceForm.get("exchangeRate")?.value
+                this.invoiceForm.get("exchangeRate")?.value,
+                { applyTcsToGrandTotal: !this.invoiceForm.get("isAdvanceReceipt")?.value }
             );
             this.invoiceForm.get("grandTotalMultiCurrency")?.patchValue(this.voucherTotals?.grandTotalMultiCurrency);
             this.calculateBalanceDue();
@@ -6641,9 +6642,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment(): number {
+        const tcsAdjustment = this.invoiceForm.get("isAdvanceReceipt")?.value ? this.voucherTotals.tcsTotal : 0;
         return parseFloat(
             Number(
                 this.voucherTotals.grandTotal -
+                this.voucherTotals.tdsTotal +
+                tcsAdjustment -
                 this.adjustPaymentData.totalAdjustedAmount -
                 this.totalDepositAmount
             ).toFixed(this.company?.giddhBalanceDecimalPlaces)
@@ -6657,6 +6661,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public calculateBalanceDue(): void {
         this.getTotalDepositAmount();
+        const tcsAdjustment = this.invoiceForm.get("isAdvanceReceipt")?.value ? this.voucherTotals.tcsTotal : 0;
         let depositAmount = this.totalDepositAmount;
         if (this.isMultiCurrencyVoucher) {
             const deposits = this.invoiceForm.get("deposits") as FormArray;
@@ -6680,7 +6685,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.voucherTotals.balanceDue = giddhRoundOff(
-            this.voucherTotals.grandTotal -
+            this.voucherTotals.grandTotal +
+            tcsAdjustment -
+            this.voucherTotals.tdsTotal -
             depositAmount -
             this.totalAdvanceReceiptsAdjustedAmount,
             this.company?.giddhBalanceDecimalPlaces
@@ -6692,7 +6699,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             !this.adjustPaymentData.totalAdjustedAmount
         ) {
             this.voucherTotals.balanceDue = giddhRoundOff(
-                this.voucherTotals.grandTotal -
+                this.voucherTotals.grandTotal +
+                tcsAdjustment -
+                this.voucherTotals.tdsTotal -
                 this.totalAdvanceReceiptsAdjustedAmount,
                 this.company?.giddhBalanceDecimalPlaces
             );
