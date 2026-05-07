@@ -3489,6 +3489,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 uniqueName: [""],
                 amount: [""],
                 type: [""],
+                taxType: [""],
                 calculationMethod: [""],
                 isChecked: [false],
                 taxValue: [0],
@@ -3998,6 +3999,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup.get("otherTax.isChecked")?.patchValue(true);
         entryFormGroup.get("otherTax.name").patchValue(tax?.name);
         entryFormGroup.get("otherTax.uniqueName").patchValue(tax?.uniqueName);
+        entryFormGroup.get("otherTax.taxType").patchValue(tax?.taxType);
         entryFormGroup.get("otherTax.taxValue").patchValue(tax?.taxDetail[0]?.taxValue);
         entryFormGroup.get("otherTax.taxDetail").patchValue(tax?.taxDetail);
         entryFormGroup
@@ -6641,11 +6643,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment(): number {
         return parseFloat(
             Number(
-                this.voucherTotals.grandTotal +
-                this.voucherTotals.tcsTotal -
+                this.voucherTotals.grandTotal -
                 this.adjustPaymentData.totalAdjustedAmount -
-                this.totalDepositAmount -
-                this.voucherTotals.tdsTotal
+                this.totalDepositAmount
             ).toFixed(this.company?.giddhBalanceDecimalPlaces)
         );
     }
@@ -6680,9 +6680,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.voucherTotals.balanceDue = giddhRoundOff(
-            this.voucherTotals.grandTotal +
-            this.voucherTotals.tcsTotal -
-            this.voucherTotals.tdsTotal -
+            this.voucherTotals.grandTotal -
             depositAmount -
             this.totalAdvanceReceiptsAdjustedAmount,
             this.company?.giddhBalanceDecimalPlaces
@@ -6694,9 +6692,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             !this.adjustPaymentData.totalAdjustedAmount
         ) {
             this.voucherTotals.balanceDue = giddhRoundOff(
-                this.voucherTotals.grandTotal +
-                this.voucherTotals.tcsTotal -
-                this.voucherTotals.tdsTotal -
+                this.voucherTotals.grandTotal -
                 this.totalAdvanceReceiptsAdjustedAmount,
                 this.company?.giddhBalanceDecimalPlaces
             );
