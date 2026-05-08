@@ -386,8 +386,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.countrySource$ = observableOf(this.countrySource);
                 this.patchCurrentCountryFromSelection();
                 if (this.countrySource.length === 1 && !this.newUserSelectedCountryValue) {
-                    this.newUserSelectCountry(this.countrySource[0], true);
+                    this.selectFirstPlanFromList();
                 } else {
+                    this.getDefaultPlan();
                     setTimeout(() => {
                         this.countryList?.open();
                     }, 400);
@@ -835,31 +836,61 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (result) {
                     const { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse } = this.determineCountryCodes(result);
                     this.detectUserInfoByIp = { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse };
-                    const isRegionCode = this.isRegionCountryCode(alpha3CountryCode);
-                    const selectionCode = !isRegionCode ? alpha3CountryCode : alpha2CountryCode;
-                    this.newUserSelectCountry({
-                        label: `${selectionCode} - ${countryName}`,
-                        value: selectionCode,
-                        additional: {
-                            value: selectionCode,
-                            label: `${selectionCode} - ${countryName}`,
-                            alpha2CountryCode: alpha2CountryCode,
-                            alpha3CountryCode: alpha3CountryCode
-                        }
-                    });
+                    this.getDefaultPlan();
                     this.secondStepForm.get("country")?.patchValue({code: alpha2CountryCode, name: countryName, additional: ''});
                 } else {
-                    this.newUserSelectCountry({
-                        "label": "GLB - Global",
-                        "value": "GLB",
-                        "additional": {
-                            "value": "GLB",
-                            "label": "GLB - Global",
-                            "alpha3CountryCode": "GLB"
-                        }
-                    });
+                    const { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse } = this.determineCountryCodes(null);
+                    this.detectUserInfoByIp = { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse };
+                    this.getDefaultPlan();
                 }
             });
+    }
+
+    /**
+     * Selects the first available region from the country list.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private selectFirstPlanFromList(): void {
+        if (!this.countrySource?.length) {
+            return;
+        }
+        this.newUserSelectCountry(this.countrySource[0], true);
+    }
+
+    /**
+     * Selects a default region using detected IP information when available.
+     * Falls back to the first available region if no matching region exists.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private getDefaultPlan(): void {
+        if (!this.countrySource?.length || this.inputData?.length || !this.detectUserInfoByIp?.alpha3CountryCode) {
+            return;
+        }
+
+        let isPlanListInProgress = false;
+        this.planListInProgress$.pipe(take(1)).subscribe(planListInProgress => {
+            isPlanListInProgress = !!planListInProgress;
+        });
+        if (isPlanListInProgress) {
+            return;
+        }
+
+        const isRegionCode = this.isRegionCountryCode(this.detectUserInfoByIp.alpha3CountryCode);
+        const selectionCode = !isRegionCode ? this.detectUserInfoByIp.alpha3CountryCode : this.detectUserInfoByIp.alpha2CountryCode;
+        const matchedCountry = this.countrySource?.find(country => country.value === this.detectUserInfoByIp.alpha3CountryCode);
+        if (matchedCountry) {
+            this.newUserSelectCountry({
+                ...matchedCountry,
+                label: `${selectionCode} - ${this.detectUserInfoByIp.countryName}`,
+                value: this.detectUserInfoByIp.alpha3CountryCode
+            });
+        } else {
+            this.selectFirstPlanFromList();
+        }
     }
 
     /**
