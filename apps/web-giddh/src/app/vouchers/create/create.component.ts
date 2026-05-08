@@ -48,6 +48,7 @@ import { SettingsBranchActions } from "../../actions/settings/branch/settings.br
 import { OrganizationType } from "../../models/user-login-state";
 import {
     PreviousInvoicesVm,
+    ProformaDownloadRequest,
     ProformaFilter,
     ProformaGetRequest,
     ProformaResponse,
@@ -5513,16 +5514,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
+        const previewVoucherType = this.getCopyParticularPreviewVoucherType(item);
+        const previewRequest = this.getCopyParticularPreviewRequest(item, previewVoucherType);
+
+        if (!previewRequest) {
+            return;
+        }
+
         this.selectedPdfVoucherNumber.set(item?.voucherNumber ?? '');
         this.previewPdfUrl.set(null);
         this.componentStore.downloadVoucherPdf({
-            model: {
-                voucherType: item?.voucherType || this.voucherType,
-                uniqueName: item?.voucherUniqueName
-            },
+            model: previewRequest,
             type: 'ALL',
             fileType: 'base64',
-            voucherType: item?.voucherType || this.voucherType,
+            voucherType: previewVoucherType,
             isDownloadFromDialog: true
         });
         const dialogRef = this.dialog.open(this.voucherPdfPreviewTemplate, {
@@ -5535,6 +5540,65 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const container = (this.copyParticularDialogRef as any)?._containerInstance?._elementRef?.nativeElement as HTMLElement | undefined;
             (container?.querySelector('.dialog-header button[mat-icon-button]') as HTMLElement | null)?.focus();
         });
+    }
+
+    /**
+     * Returns normalized voucher type for copy particular preview API.
+     *
+     * @private
+     * @param {*} item
+     * @returns {string}
+     * @memberof VoucherCreateComponent
+     */
+    private getCopyParticularPreviewVoucherType(item: any): string {
+        const voucherType = item?.voucherType || this.voucherType;
+
+        if (voucherType === VoucherTypeEnum.purchase_order || voucherType === VoucherTypeEnum.purchaseOrder) {
+            return VoucherTypeEnum.purchaseOrder;
+        } else if (voucherType === VoucherTypeEnum.estimate || voucherType === VoucherTypeEnum.estimates || voucherType === VoucherTypeEnum.generateEstimate) {
+            return VoucherTypeEnum.generateEstimate;
+        } else if (voucherType === VoucherTypeEnum.proforma || voucherType === VoucherTypeEnum.proformas || voucherType === VoucherTypeEnum.generateProforma) {
+            return VoucherTypeEnum.generateProforma;
+        }
+
+        return voucherType;
+    }
+
+    /**
+     * Builds preview request payload for copy particular preview API based on voucher type.
+     *
+     * @private
+     * @param {*} item
+     * @param {string} voucherType
+     * @returns {*}
+     * @memberof VoucherCreateComponent
+     */
+    private getCopyParticularPreviewRequest(item: any, voucherType: string): any {
+        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(voucherType as VoucherTypeEnum)) {
+            return {
+                voucherType,
+                uniqueName: item?.voucherUniqueName
+            };
+        } else if ([VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(voucherType as VoucherTypeEnum)) {
+            const request = new ProformaDownloadRequest();
+            request.fileType = "base64";
+            request.accountUniqueName = item?.accountUniqueName;
+
+            if (voucherType === VoucherTypeEnum.generateProforma) {
+                request.proformaNumber = item?.voucherNumber;
+            } else {
+                request.estimateNumber = item?.voucherNumber;
+            }
+
+            return request;
+        } else if (voucherType === VoucherTypeEnum.purchaseOrder) {
+            return {
+                accountUniqueName: item?.accountUniqueName,
+                poUniqueName: item?.voucherUniqueName
+            };
+        }
+
+        return null;
     }
 
     /**
