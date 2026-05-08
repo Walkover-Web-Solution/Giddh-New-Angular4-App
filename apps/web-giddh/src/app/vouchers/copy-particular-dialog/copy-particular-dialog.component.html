@@ -13,7 +13,9 @@
 <mat-dialog-content class="dialog-body">
     <div class="px-0">
         @if (inputData?.parent?.isCopyParticularLoading) {
-            <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
+            <div class="d-flex justify-content-center align-items-center min-h-200">
+                <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
         } @else {
             <table class="w-100 copy-particular-table">
                 <thead>
