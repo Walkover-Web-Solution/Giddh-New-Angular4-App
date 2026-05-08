@@ -295,12 +295,3 @@
     line-height: 28px;
     flex-shrink: 0;
 }
-.copy-particular-table {
-    tr {
-        th,
-        td {
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
-        }
-    }
-}

@@ -1656,12 +1656,22 @@
                                                                                 mat-icon-button
                                                                                 type="button"
                                                                                 class="copy-particular-search-btn"
-                                                                                [matTooltip]="'View past invoices using this item'"
-                                                                                (click)="$event.stopPropagation(); openCopyDialog()"
-                                                                                aria-label="View past invoices using this item"
+                                                                                [matTooltip]="
+                                                                                    localeData?.view_past_invoices_using_this_item
+                                                                                "
+                                                                                (click)="
+                                                                                    $event.stopPropagation();
+                                                                                    openCopyDialog(entryIndex, $event)
+                                                                                "
+                                                                                [attr.aria-label]="
+                                                                                    localeData?.view_past_invoices_using_this_item
+                                                                                "
                                                                                 tabindex="0"
                                                                                 cdkMonitorElementFocus
-                                                                                *ngIf="transaction.get('account.name')?.value"
+                                                                                *ngIf="
+                                                                                    transaction.get('stock.uniqueName')?.value &&
+                                                                                    shouldShowCopyParticularSearchButton
+                                                                                "
                                                                             >
                                                                                 <i class="icon-search font-size-14"></i>
                                                                             </button>
@@ -3561,80 +3571,6 @@
                     <iframe width="100%" height="100%" [src]="previewPdfUrl()" title="PDF"></iframe>
                 }
             </div>
-        </div>
-    </mat-dialog-content>
-</ng-template>
-
-<ng-template #copyParticular>
-    <div cdkFocusInitial class="dialog-header font-size-15">
-        <span>{{ invoiceForm?.controls['account']?.get('customerName')?.value }} (AYURVEDA MASALA CTC 100-gms)</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close>
-            <i class="icon-cross"></i>
-        </button>
-    </div>
-    <mat-dialog-content class="dialog-body">
-        <div class="px-0">
-            <table class="w-100 copy-particular-table">
-                <thead>
-                    <tr class="text-right">
-                        <th class="text-left">Invoice Number</th>
-                        <th class="text-left">Invoice Date</th>
-                        <th class="text-left" *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
-                            {{ commonLocaleData?.app_description }}
-                        </th>
-                        <th [ngClass]="{ 'd-none': !hasStock }">
-                            {{ commonLocaleData?.app_quantity_unit }}
-                        </th>
-                        <th [ngClass]="{ 'd-none': !hasStock }">
-                            {{ commonLocaleData?.app_rate }}
-                        </th>
-                        <th>{{ commonLocaleData?.app_amount }}</th>
-                        <th *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
-                            {{ commonLocaleData?.app_discount }}
-                        </th>
-                        <th *ngIf="showTaxColumn || invoiceForm.get('isAdvanceReceipt')?.value">
-                            {{ commonLocaleData?.app_tax }}
-                            <span *ngIf="rcmCheckbox?.checked">
-                                ({{ commonLocaleData?.app_rcm }})
-                                <sup class="mandatory-asterisk">*</sup>
-                            </span>
-                        </th>
-                        <th>{{ commonLocaleData?.app_total }}</th>
-                        <th>{{ 'Action' }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (entry of invoiceForm?.get('entries')['controls']; track $index) {
-                        @for (transaction of entry?.get('transactions')['controls']; track $index) {
-                            @if (transaction.get('account.name')?.value) {
-                                <tr class="text-right">
-                                    <td class="text-left">00001</td>
-                                    <td class="text-left">May 1</td>
-                                    <td class="text-left" *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
-                                        {{ entry?.get('description')?.value || '-' }}
-                                    </td>
-                                    <td [ngClass]="{ 'd-none': !hasStock }">
-                                        {{ transaction.get('stock.quantity')?.value || '-' }}
-                                        {{ transaction.get('stock.stockUnit.code')?.value }}
-                                    </td>
-                                    <td [ngClass]="{ 'd-none': !hasStock }">
-                                        {{ transaction.get('stock.rate.rateForAccount')?.value || '-' }}
-                                    </td>
-                                    <td>{{ transaction.get('amount.amountForAccount')?.value || 0 }}</td>
-                                    <td *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
-                                        {{ entry?.get('totalDiscount')?.value || 0 }}
-                                    </td>
-                                    <td *ngIf="showTaxColumn || invoiceForm.get('isAdvanceReceipt')?.value">
-                                        {{ entry?.get('totalTax')?.value || 0 }}
-                                    </td>
-                                    <td>{{ entry?.get('total.amountForAccount')?.value || 0 }}</td>
-                                    <td><button matButton="filled">Use</button></td>
-                                </tr>
-                            }
-                        }
-                    }
-                </tbody>
-            </table>
         </div>
     </mat-dialog-content>
 </ng-template>
