@@ -177,5 +177,6 @@
     "source_of_supply": "पुरवठ्याचा स्रोत",
     "destination_of_supply": "पुरवठ्याचे गंतव्य",
     "all_invoices": "सर्व इनव्हॉइस",
-    "account_invoices": "खाते इनव्हॉइस"
+    "account_invoices": "खाते इनव्हॉइस",
+    "view_past_invoices_using_this_item": "हा आयटम वापरून मागील बीजके पहा"
 }
