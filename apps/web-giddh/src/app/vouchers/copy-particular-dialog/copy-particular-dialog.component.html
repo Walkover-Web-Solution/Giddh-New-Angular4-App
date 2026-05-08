@@ -1,0 +1,120 @@
+<div cdkFocusInitial class="dialog-header font-size-15">
+    <span>{{ inputData?.parent?.copyParticularDialogTitle }}</span>
+    <button
+        mat-icon-button
+        [attr.aria-label]="inputData?.parent?.commonLocaleData?.app_close"
+        (click)="closeDialog($event)"
+        (keydown.enter)="closeDialog($event)"
+        (keydown.space)="closeDialog($event)"
+    >
+        <i class="icon-cross"></i>
+    </button>
+</div>
+<mat-dialog-content class="dialog-body">
+    <div class="px-0">
+        @if (inputData?.parent?.isCopyParticularLoading) {
+            <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
+        } @else {
+            <table class="w-100 copy-particular-table">
+                <thead>
+                    <tr class="text-right">
+                        <th class="text-left">{{ inputData?.parent?.commonLocaleData?.app_invoice_number }}</th>
+                        <th class="text-left">{{ inputData?.parent?.commonLocaleData?.app_invoice_date }}</th>
+                        <th
+                            class="text-left"
+                            *ngIf="!inputData?.parent?.invoiceType?.isReceiptInvoice && !inputData?.parent?.invoiceType?.isPaymentInvoice"
+                        >
+                            {{ inputData?.parent?.commonLocaleData?.app_description }}
+                        </th>
+                        <th [ngClass]="{ 'd-none': !inputData?.parent?.hasStock }">
+                            {{ inputData?.parent?.commonLocaleData?.app_quantity_unit }}
+                        </th>
+                        <th [ngClass]="{ 'd-none': !inputData?.parent?.hasStock }">
+                            {{ inputData?.parent?.commonLocaleData?.app_rate }}
+                        </th>
+                        <th>{{ inputData?.parent?.commonLocaleData?.app_amount }}</th>
+                        <th *ngIf="!inputData?.parent?.invoiceType?.isReceiptInvoice && !inputData?.parent?.invoiceType?.isPaymentInvoice">
+                            {{ inputData?.parent?.commonLocaleData?.app_discount }}
+                        </th>
+                        <th *ngIf="inputData?.parent?.showTaxColumn || inputData?.parent?.invoiceForm.get('isAdvanceReceipt')?.value">
+                            {{ inputData?.parent?.commonLocaleData?.app_tax }}
+                            <span *ngIf="inputData?.parent?.rcmCheckbox?.checked">
+                                ({{ inputData?.parent?.commonLocaleData?.app_rcm }})
+                                <sup class="mandatory-asterisk">*</sup>
+                            </span>
+                        </th>
+                        <th>{{ inputData?.parent?.commonLocaleData?.app_total }}</th>
+                        <th>{{ inputData?.parent?.commonLocaleData?.app_action }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of inputData?.parent?.copyParticularHistory?.items; track item?.voucherUniqueName) {
+                        <tr class="text-right">
+                            <td class="text-left">
+                                <a
+                                    href="javascript:;"
+                                    class="text-underline text-truncate"
+                                    cdkMonitorElementFocus
+                                    [attr.aria-label]="item?.voucherNumber || inputData?.parent?.commonLocaleData?.app_not_available"
+                                    (click)="inputData?.parent?.openCopyParticularVoucherPreview(item)"
+                                    (keydown.enter)="$event.preventDefault(); inputData?.parent?.openCopyParticularVoucherPreview(item)"
+                                    (keydown.space)="$event.preventDefault(); inputData?.parent?.openCopyParticularVoucherPreview(item)"
+                                >
+                                    {{ item?.voucherNumber || inputData?.parent?.commonLocaleData?.app_not_available }}
+                                </a>
+                            </td>
+                            <td class="text-left">{{ item?.voucherDate || '' }}</td>
+                            <td
+                                class="text-left"
+                                *ngIf="
+                                    !inputData?.parent?.invoiceType?.isReceiptInvoice && !inputData?.parent?.invoiceType?.isPaymentInvoice
+                                "
+                            >
+                                {{ item?.description }}
+                            </td>
+                            <td [ngClass]="{ 'd-none': !inputData?.parent?.hasStock }">
+                                {{ item?.quantity || 0 }} {{ item?.stockUnit || '' }}
+                            </td>
+                            <td [ngClass]="{ 'd-none': !inputData?.parent?.hasStock }">
+                                {{ item?.rate || 0 }}
+                            </td>
+                            <td>{{ item?.amount || 0 }}</td>
+                            <td
+                                *ngIf="
+                                    !inputData?.parent?.invoiceType?.isReceiptInvoice && !inputData?.parent?.invoiceType?.isPaymentInvoice
+                                "
+                            >
+                                {{ item?.discount || 0 }}
+                            </td>
+                            <td *ngIf="inputData?.parent?.showTaxColumn || inputData?.parent?.invoiceForm.get('isAdvanceReceipt')?.value">
+                                {{ item?.tax || 0 }}
+                            </td>
+                            <td>{{ item?.total || 0 }}</td>
+                            <td>
+                                <button matButton="filled" type="button" (click)="inputData?.parent?.useCopyParticularHistory(item)">
+                                    {{ inputData?.parent?.commonLocaleData?.app_use }}
+                                </button>
+                            </td>
+                        </tr>
+                    } @empty {
+                        <tr>
+                            <td class="text-center text-muted py-4" colspan="10">
+                                {{ inputData?.parent?.commonLocaleData?.app_no_result_found }}
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <mat-paginator
+                *ngIf="inputData?.parent?.copyParticularHistory?.totalItems > inputData?.parent?.pageSizeOptions[0]"
+                (page)="inputData?.parent?.handleCopyParticularPageChange($event)"
+                [length]="inputData?.parent?.copyParticularHistory?.totalItems"
+                [pageSize]="inputData?.parent?.copyParticularPagination.size"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="inputData?.parent?.pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="inputData?.parent?.copyParticularPagination.page - 1"
+            ></mat-paginator>
+        }
+    </div>
+</mat-dialog-content>
