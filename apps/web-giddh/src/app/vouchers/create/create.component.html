@@ -3564,7 +3564,7 @@
     </div>
     <mat-dialog-content class="dialog-body">
         <div class="container h-100 px-0">
-            <div class="pdf-preview h-100">
+            <div class="pdf-preview h-100" [ngClass]="{ 'd-flex align-items-center justify-content-center': !previewPdfUrl() }">
                 @if (!previewPdfUrl()) {
                     <mat-spinner class="ml-auto mr-auto my-4" [diameter]="40"></mat-spinner>
                 } @else {
