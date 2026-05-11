@@ -2161,7 +2161,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.useCustomVoucherNumber = true;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
                     this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
-                    this.useCustomVoucherNumber = true;
+                    this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomDebitNoteNumber;
                 } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                     this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
                     this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomCreditNoteNumber;
@@ -2171,10 +2171,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomPaymentNumber;
                 } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate) {
                     this.applyRoundOff = settings.estimateSettings.estimateRoundOff;
-                    this.useCustomVoucherNumber = true;
+                    this.useCustomVoucherNumber = false;
                 } else if (this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
                     this.applyRoundOff = settings.proformaSettings?.proformaRoundOff;
-                    this.useCustomVoucherNumber = true;
+                    this.useCustomVoucherNumber = false;
                 } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
                     this.applyRoundOff = settings.purchaseBillSettings?.purchaseOrderRoundOff;
