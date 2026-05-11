@@ -42,6 +42,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     @ViewChild('tableContent', { read: ElementRef }) public tableContent: ElementRef<any>;
     /** Holds Country list Mat Trigger Reference  */
     @ViewChild('countryList', { static: false }) public countryList: MatSelect;
+    /** Stripe Payment Element container reference */
+    @ViewChild('stripePaymentElement') public stripePaymentElementRef: ElementRef;
     /** This will use for hold table data */
     public inputData: any[] | null = null;
     /* This will hold local JSON data */
@@ -249,6 +251,22 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public readonly entityCode: typeof EntityCode = EntityCode;
     /** This will hold razorpay key */
     public razorpayKey: string = '';
+    /** This will hold stripe key */
+    public stripeKey: string = '';
+    /** Stripe instance */
+    public stripe: any;
+    /** Stripe elements instance */
+    public stripeElements: any;
+    /** Holds stripe client secret */
+    public stripeClientSecret: string = '';
+    /** True if stripe payment element is visible */
+    public showStripePaymentElement: boolean = false;
+    /** True if stripe payment is in progress */
+    public stripePaymentInProgress: boolean = false;
+    /** Stripe error message */
+    public stripeError: string = '';
+    /** Holds store save stripe payment success observable */
+    public saveStripePaymentSuccess$: Observable<any> = this.componentStore.select(state => state.saveStripePaymentSuccess);
     /** True if promo code is removed */
     public removePromoCode: boolean = false;
     /** Hold true in production environment */
@@ -282,6 +300,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.session$ = this.store.pipe(select(p => p.session), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
         this.razorpayKey = this.serviceConfig.RAZORPAY_KEY;
+        this.stripeKey = this.serviceConfig.STRIPE_PUBLISHABLE_KEY
     }
 
     /**
@@ -300,6 +319,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.getOnboardingFormData();
         this.getActiveCompany();
         this.setUserCountry();
+
+        // Handle Stripe redirect return
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectSecret = urlParams.get('payment_intent_client_secret');
+        const redirectIntentId = urlParams.get('payment_intent');
+        if (redirectSecret && redirectIntentId) {
+            this.handleStripeRedirectReturn(redirectSecret, redirectIntentId);
+        }
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params?.id) {
@@ -327,8 +354,40 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.saveStripePaymentSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const paymentIntentId = sessionStorage.getItem('stripe_payment_intent_id');
+                const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
+                if (paymentIntentId && subscriptionId) {
+                    const subscriptionRequestStr = sessionStorage.getItem('stripe_subscription_request');
+                    const subscriptionRequest = subscriptionRequestStr ? JSON.parse(subscriptionRequestStr) : {};
+                    const model = {
+                        paymentIntentId: paymentIntentId,
+                        subscriptionId: subscriptionId,
+                        callNewPlanApi: true,
+                        duration: sessionStorage.getItem('stripe_duration'),
+                        planUniqueName: sessionStorage.getItem('stripe_plan_unique_name'),
+                        amountPaid: Number(sessionStorage.getItem('stripe_amount_paid')) || 0
+                    };
+                    const data = { ...model, ...subscriptionRequest };
+                    this.componentStore.changePlan(data);
+                }
+                sessionStorage.removeItem('stripe_subscription_id');
+                sessionStorage.removeItem('stripe_payment_intent_id');
+                sessionStorage.removeItem('stripe_is_change_plan');
+                sessionStorage.removeItem('stripe_subscription_request');
+                sessionStorage.removeItem('stripe_duration');
+                sessionStorage.removeItem('stripe_plan_unique_name');
+                sessionStorage.removeItem('stripe_amount_paid');
+            }
+        });
+
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                if (response?.stripeClientSecret) {
+                    this.initializeStripePayment(response);
+                    return;
+                }
                 this.setBroadcastEvent();
                 const value = response?.region?.code !== EntityCode.IND ? 1 : response?.duration === PlanDuration.MONTHLY ? 1 : 10;
                 if (response.dueAmount >= value) {
@@ -494,6 +553,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
                 this.subscriptionId = response.subscriptionId;
+                if (response?.clientSecret) {
+                    this.initializeStripePayment(response);
+                    return;
+                }
                 if (response?.paypalOrderId) {
                     if ((response?.duration === PlanDuration.MONTHLY || response?.duration === PlanDuration.DAILY)) {
                         if (response?.paypalOrderId && this.payType === 'buy') {
@@ -554,7 +617,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.paypalApprovalLink) {
+            if (response?.stripeClientSecret) {
+                this.initializeStripePayment(response);
+            } else if (response?.paypalApprovalLink) {
                 this.paypalCaptureOrderId = response.paypalOrderId;
                 this.openWindow(response.paypalApprovalLink);
             } else if (response?.redirectLink) {
@@ -646,6 +711,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeSubscriptionId = response?.subscriptionId;
                 this.upgradeRegion = response?.region?.code;
 
+            }
+            if (response?.stripeClientSecret) {
+                this.initializeStripePayment(response);
+                return;
             }
             const value = response?.region?.code !== EntityCode.IND ? 1 : (this.isMonthly() || this.isDaily()) ? 1 : 10;
             if (response?.payuHtml) {
@@ -1378,6 +1447,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
         this.setFinalAmount();
+        if (this.selectedStep !== 2) {
+            this.showStripePaymentElement = false;
+            this.stripeClientSecret = '';
+            this.stripeError = '';
+            this.stripePaymentInProgress = false;
+            this.stripeElements = null;
+            this.stripe = null;
+        }
         this.changeDetection.detectChanges();
     }
 
@@ -1389,6 +1466,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     protected onPaymentProviderChange(): void {
+        this.showStripePaymentElement = false;
+        this.stripeClientSecret = '';
+        this.stripeError = '';
+        this.stripePaymentInProgress = false;
+        this.stripeElements = null;
+        this.stripe = null;
         this.changeDetection.detectChanges();
     }
 
@@ -1514,8 +1597,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode !== EntityCode.IND) {
-            // Non-IND: PayPal/PayU for recurring, Razorpay/PayU for yearly
-            filterProviders(this.isYearly() ? [PaymentProvider.RAZORPAY] : [PaymentProvider.PAYPAL]);
+            // Non-IND: Stripe/PayPal for monthly, Stripe/Razorpay for yearly
+            if (this.isMonthly() || this.isDaily()) {
+                filterProviders([PaymentProvider.STRIPE, PaymentProvider.PAYPAL]);
+            } else if (this.isYearly()) {
+                filterProviders([PaymentProvider.STRIPE, PaymentProvider.RAZORPAY]);
+            }
         } else {
             // IND: Razorpay + PayU for all durations
             filterProviders([PaymentProvider.RAZORPAY]);
@@ -1891,6 +1978,162 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Loads Stripe.js script dynamically
+     *
+     * @private
+     * @returns {Promise<void>}
+     * @memberof BuyPlanComponent
+     */
+    private loadStripeScript(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            if (window['Stripe']) {
+                resolve();
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = 'https://js.stripe.com/v3/';
+            script.onload = () => resolve();
+            script.onerror = () => {
+                this.toasterService.showSnackBar('error', 'Failed to load Stripe payment library');
+                reject();
+            };
+            document.head.appendChild(script);
+        });
+    }
+
+    /**
+     * Initializes Stripe Payment Element with the client secret from API response
+     *
+     * @param {*} response
+     * @memberof BuyPlanComponent
+     */
+    public initializeStripePayment(response: any): void {
+        this.stripeClientSecret = response.clientSecret;
+        this.subscriptionResponse = response;
+        this.showStripePaymentElement = true;
+
+        if (!this.stripeClientSecret) {
+            this.toasterService.showSnackBar('error', 'Invalid Stripe configuration');
+            return;
+        }
+
+        this.loadStripeScript().then(() => {
+            const stripe = window['Stripe'](this.stripeKey);
+            this.stripe = stripe;
+            const elements = stripe.elements({
+                clientSecret: this.stripeClientSecret,
+                appearance: { theme: 'stripe' }
+            });
+            this.stripeElements = elements;
+            const paymentElement = elements.create('payment');
+
+            setTimeout(() => {
+                if (this.stripePaymentElementRef?.nativeElement) {
+                    paymentElement.mount(this.stripePaymentElementRef.nativeElement);
+                }
+                this.changeDetection.detectChanges();
+            }, 100);
+        }).catch(() => {
+            this.stripePaymentInProgress = false;
+            this.changeDetection.detectChanges();
+        });
+    }
+
+    /**
+     * Confirms Stripe payment and handles redirect return
+     *
+     * @memberof BuyPlanComponent
+     */
+    public async confirmStripePayment(): Promise<void> {
+        if (!this.stripe || !this.stripeElements) {
+            return;
+        }
+        this.stripePaymentInProgress = true;
+        this.stripeError = '';
+        this.changeDetection.detectChanges();
+
+        const subscriptionId = this.subscriptionResponse?.subscriptionId || this.responseSubscriptionId || this.subscriptionId;
+        sessionStorage.setItem('stripe_subscription_id', subscriptionId);
+        sessionStorage.setItem('stripe_is_change_plan', String(this.isChangePlan));
+        sessionStorage.setItem('stripe_payment_intent_id', this.extractPaymentIntentId(this.stripeClientSecret));
+        sessionStorage.setItem('stripe_plan_unique_name', this.subscriptionResponse?.planDetails?.uniqueName || this.firstStepForm.get('planUniqueName')?.value);
+        sessionStorage.setItem('stripe_duration', this.subscriptionResponse?.duration || this.firstStepForm.get('duration')?.value);
+        sessionStorage.setItem('stripe_amount_paid', String(this.subscriptionResponse?.dueAmount || 0));
+        if (this.subscriptionRequest) {
+            sessionStorage.setItem('stripe_subscription_request', JSON.stringify(this.subscriptionRequest));
+        }
+
+        const returnUrl = window.location.origin + window.location.pathname;
+        const { error } = await this.stripe.confirmPayment({
+            elements: this.stripeElements,
+            confirmParams: { return_url: returnUrl }
+        });
+
+        if (error) {
+            this.stripePaymentInProgress = false;
+            this.stripeError = error.message;
+            this.changeDetection.detectChanges();
+        }
+    }
+
+    /**
+     * Handles Stripe redirect return after payment confirmation
+     *
+     * @private
+     * @param {string} piClientSecret
+     * @param {string} piId
+     * @memberof BuyPlanComponent
+     */
+    private handleStripeRedirectReturn(piClientSecret: string, piId: string): void {
+        this.isLoading = true;
+        this.changeDetection.detectChanges();
+
+        this.loadStripeScript().then(() => {
+            const stripe = window['Stripe'](this.stripeKey);
+            stripe.retrievePaymentIntent(piClientSecret).then(({ paymentIntent, error }: any) => {
+                this.isLoading = false;
+                if (error || !paymentIntent) {
+                    this.toasterService.showSnackBar('error', error?.message || 'Could not retrieve payment status.');
+                    this.changeDetection.detectChanges();
+                    return;
+                }
+                if (paymentIntent.status === 'succeeded') {
+                    const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
+                    if (subscriptionId) {
+                        sessionStorage.setItem('stripe_payment_intent_id', piId);
+                        this.componentStore.saveStripePayment({ subscriptionId, paymentIntentId: piId });
+                    } else {
+                        this.toasterService.showSnackBar('error', 'Subscription ID not found.');
+                    }
+                } else if (['processing', 'requires_action'].includes(paymentIntent.status)) {
+                    this.toasterService.showSnackBar('success', 'Payment is processing... status: ' + paymentIntent.status);
+                } else {
+                    this.toasterService.showSnackBar('error', 'Payment status: ' + paymentIntent.status);
+                }
+                this.changeDetection.detectChanges();
+            });
+        });
+
+        // Clean up Stripe query params from URL
+        const queryParams = { ...this.route.snapshot.queryParams };
+        delete queryParams['payment_intent'];
+        delete queryParams['payment_intent_client_secret'];
+        this.router.navigate([], { queryParams, replaceUrl: true });
+    }
+
+    /**
+     * Extracts payment intent ID from client secret
+     *
+     * @private
+     * @param {string} clientSecret
+     * @returns {string}
+     * @memberof BuyPlanComponent
+     */
+    private extractPaymentIntentId(clientSecret: string): string {
+        return clientSecret?.split('_secret_')[0] || '';
+    }
+
+    /**
      * This will be use for get billing details
      *
      *
@@ -1962,6 +2205,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 {
                     label: this.localeData?.razorpay,
                     value: PaymentProvider.RAZORPAY,
+                },
+                {
+                    label: this.localeData?.stripe,
+                    value: PaymentProvider.STRIPE
                 }
             ];
             this.changeDetection.detectChanges();

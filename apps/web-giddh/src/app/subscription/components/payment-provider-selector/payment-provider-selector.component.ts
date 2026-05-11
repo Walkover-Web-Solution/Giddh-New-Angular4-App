@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, forwardRef, input, output, signal }
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
-import { IOption } from '../../../app.constant';
+import { IOption, PaymentProvider } from '../../../app.constant';
 
 @Component({
     selector: 'payment-provider-selector',
@@ -29,6 +29,8 @@ export class PaymentProviderSelectorComponent implements ControlValueAccessor {
     readonly showError = input<boolean>(false);
     /** Error message text */
     readonly errorMessage = input<string>('');
+    /** Holds PaymentProvider constant */
+    readonly paymentProvider:any = PaymentProvider;
 
     /** Currently selected provider value as signal for OnPush CD */
     protected readonly value = signal<string | null>(null);

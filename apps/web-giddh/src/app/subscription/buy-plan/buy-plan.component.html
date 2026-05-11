@@ -819,6 +819,28 @@
                                         </mat-card-content>
                                     </mat-card>
                                 </div>
+                                @if (showStripePaymentElement) {
+                                    <div class="new-plan mt-4">
+                                        <mat-card class="outline-card">
+                                            <mat-card-content>
+                                                <div #stripePaymentElement id="stripe-payment-element"></div>
+                                                <button
+                                                    matButton="filled"
+                                                    color="primary"
+                                                    class="w-100 mt-3"
+                                                    (click)="confirmStripePayment()"
+                                                    [disabled]="stripePaymentInProgress"
+                                                >
+                                                    <span *ngIf="!stripePaymentInProgress">{{ localeData?.pay_now || 'Pay now' }}</span>
+                                                    <span *ngIf="stripePaymentInProgress">Processing...</span>
+                                                </button>
+                                                @if (stripeError) {
+                                                    <div class="text-red mt-2 font-size-12">{{ stripeError }}</div>
+                                                }
+                                            </mat-card-content>
+                                        </mat-card>
+                                    </div>
+                                }
                             </div>
                             <ng-container *ngTemplateOutlet="planSummary"></ng-container>
                         </div>
@@ -989,7 +1011,7 @@
                                 aria-label="submit"
                                 matButton="filled"
                                 class="w-100 mt-2"
-                                *ngIf="selectedStep === 2"
+                                *ngIf="selectedStep === 2 && !showStripePaymentElement"
                                 (click)="onSubmit('buy')"
                             >
                                 {{ localeData?.buy_plan }}

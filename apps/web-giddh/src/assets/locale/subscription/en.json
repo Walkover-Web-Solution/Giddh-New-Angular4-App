@@ -145,6 +145,7 @@
         "cancel": "Cancel",
         "razorpay": "RAZORPAY",
         "paypal": "PAYPAL",
+        "stripe": "STRIPE",
         "razorpay_error_message": "There is an error with Razorpay. Please contact support.",
         "payu": "PAYU",
         "active": "Active",

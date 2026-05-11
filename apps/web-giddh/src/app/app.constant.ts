@@ -728,7 +728,8 @@ export const PaymentProvider = {
     RAZORPAY: 'RAZORPAY',
     GOCARDLESS: 'GOCARDLESS',
     PAYPAL: 'PAYPAL',
-    PAYU: 'PAYU'
+    PAYU: 'PAYU',
+    STRIPE: 'STRIPE'
 };
 
 /** Plan duration */

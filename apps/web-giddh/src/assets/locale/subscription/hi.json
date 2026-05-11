@@ -145,6 +145,7 @@
         "cancel": "रद्द करें",
         "razorpay": "RAZORPAY",
         "paypal": "PAYPAL",
+        "stripe": "STRIPE",
         "razorpay_error_message": "रेज़रपे में कोई त्रुटि है। कृपया सहायता से संपर्क करें।",
         "payu": "PAYU",
         "active": "सक्रिय",
