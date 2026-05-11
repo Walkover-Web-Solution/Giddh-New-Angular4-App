@@ -13,7 +13,13 @@
     >
         @for (provider of providers(); track provider.value) {
             <mat-radio-button color="primary" [value]="provider.value" [disabled]="disabled">
-                <img [src]="'assets/images/icon/' + provider.value + '.svg'" [alt]="provider.label" height="20" width="auto" class="pl-2" />
+                <img
+                    [src]="'assets/images/icon/' + provider.value + '.svg'"
+                    [alt]="provider.label"
+                    [height]="provider.value === paymentProvider.STRIPE ? 30 : 20"
+                    width="auto"
+                    class="pl-2"
+                />
             </mat-radio-button>
         }
     </mat-radio-group>
