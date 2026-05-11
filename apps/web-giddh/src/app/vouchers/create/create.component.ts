@@ -3953,7 +3953,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         );
         transactionFormGroup.get("stock.stockUnit.code")?.patchValue(item?.stockUnit || "");
 
-        if (item?.variantUniqueName || item?.variantName) {
+        if (item?.hasVariants) {
             transactionFormGroup.get("stock.variant.name")?.patchValue(item?.variantName || "");
             transactionFormGroup.get("stock.variant.uniqueName")?.patchValue(item?.variantUniqueName || "");
             transactionFormGroup.get("stock.hasVariants")?.patchValue(true);
