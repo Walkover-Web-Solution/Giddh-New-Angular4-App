@@ -483,7 +483,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     entry.taxes?.forEach(tax => {
                         if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
                             tcsSum += tax.amount?.amountForAccount;
-                            tcsGrandTotalAdjustment += tax?.taxType === 'tcspay' ? -tax.amount?.amountForAccount : tax.amount?.amountForAccount;
+                            tcsGrandTotalAdjustment += tax.amount?.amountForAccount;
                         } else if (['tdsrc', 'tdspay'].includes(tax?.taxType)) {
                             tdsSum += tax.amount?.amountForAccount;
                         }
@@ -491,7 +491,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 });
 
                 this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(response?.entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, response?.exchangeRate);
-                if (response?.body?.subVoucher !== SubVoucher.AdvanceReceipt) {
+                if (response?.body?.subVoucher !== SubVoucher.AdvanceReceipt && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
                     this.voucherTotals.grandTotal += tcsGrandTotalAdjustment;
                 }
                 this.voucherTotals.tcsTotal = tcsSum;
