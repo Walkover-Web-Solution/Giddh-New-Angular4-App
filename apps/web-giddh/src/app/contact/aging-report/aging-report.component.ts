@@ -8,7 +8,8 @@ import {
     Input,
     OnDestroy,
     TemplateRef,
-    Inject
+    Inject,
+    signal
 } from "@angular/core";
 import {
     AgingAdvanceSearchModal,
@@ -21,8 +22,8 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../store";
 import { AgingReportActions } from "../../actions/aging-report.actions";
 import { cloneDeep, map as lodashMap } from "../../lodash-optimized";
-import { Observable, of, ReplaySubject, Subject } from "rxjs";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { merge, Observable, of, ReplaySubject, Subject } from "rxjs";
+import { debounceTime, distinctUntilChanged, skip, take, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
 import { GeneralService } from "../../services/general.service";
@@ -36,7 +37,7 @@ import { PageEvent } from "@angular/material/paginator";
 import { BranchHierarchyType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG, Configuration } from "../../app.constant";
 import { AgingreportingService } from "../../services/agingreporting.service";
 import { ToasterService } from "../../services/toaster.service";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ReceiptService } from "../../services/receipt.service";
 import { InvoiceReceiptFilter } from "../../models/api-models/recipt";
@@ -112,13 +113,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Mat menu instance reference */
     @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
-    public showClearFilter: boolean = false;
+    public showClearFilter = signal<boolean>(false);
     /** Holds images folder path */
     public imgPath: string = "";
     /** False for on init call */
     public defaultLoad: boolean = true;
     /** True if api call in progress */
-    public isLoading: boolean = false;
+    public isLoading = signal<boolean>(false);
     /** Stores the voucher API version of company */
     public voucherApiVersion: number;
     /** Holds Unpaid invoice Dailog ref */
@@ -149,6 +150,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private router: Router,
+        private route: ActivatedRoute,
         private agingReportService: AgingreportingService,
         private receiptService: ReceiptService,
         private scrollDispatcher: ScrollDispatcher,
@@ -160,15 +162,19 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.dueAmountReportRequest.count = PAGINATION_LIMIT;
         this.setDueRangeOpen$ = this.store.pipe(select(s => s.agingreport.setDueRangeOpen), takeUntil(this.destroyed$));
         this.getAgingReportRequestInProcess$ = this.store.pipe(select(s => s.agingreport.getAgingReportRequestInFlight), takeUntil(this.destroyed$));
+        this.store.dispatch(this.agingReportActions.GetDueReportResponse(null));
     }
 
     public getDueAmountreportData() {
         this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
+                this.isLoading.set(false);
                 this.agingReportDataSource.data = data.results;
                 this.dueAmountReportRequest.page = data.page;
                 this.totalDueAmounts = data.overAllDueAmount;
                 this.totalFutureDueAmounts = data.overAllFutureDueAmount;
+            } else {
+                this.isLoading.set(true);
             }
             this.dueAmountReportData$ = of(data);
             if (data) {
@@ -201,7 +207,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        this.getDueReport();
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -211,16 +216,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
 
         this.searchStr$.pipe(
-            debounceTime(1000),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(term => {
-            if (!this.defaultLoad) {
-                this.showClearFilter = (term) ? true : false;
+            if (term !== undefined && term !== null) {
                 this.dueAmountReportRequest.q = term;
                 this.getDueReport();
             }
-            this.defaultLoad = false;
         });
 
         this.store.pipe(
@@ -268,12 +270,39 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        const queryParams$ = this.route.queryParams.pipe(distinctUntilChanged());
+        merge(
+            queryParams$.pipe(take(1)),
+            queryParams$.pipe(skip(1), debounceTime(700))
+        ).pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
+            if (queryParams.tab === 'aging-report') {
+                const restoredQ = queryParams.searchText || '';
+                this.searchStr = restoredQ;
+                this.searchedName.setValue(restoredQ, { emitEvent: false });
+                this.showNameSearch = restoredQ ? true : false;
+                if (queryParams.category || queryParams.amountType || queryParams.amount) {
+                    this.commonRequest.category = queryParams.category || '';
+                    this.commonRequest.amountType = queryParams.amountType || '';
+                    this.commonRequest.amount = queryParams.amount ? Number(queryParams.amount) : null;
+                    this.dueAmountReportRequest.q = restoredQ;
+                    this.showClearFilter.set(true);
+                    this.applyAdvanceSearch(this.commonRequest, true);
+                } else {
+                    this.showClearFilter.set(restoredQ ? true : false);
+                    this.searchStr$.next(restoredQ);
+                }
+            } else {
+                this.generalService.saveRouteQueryFilters({ tab: 'aging-report', tabIndex: 1 });
+            }
+        });
+
         this.searchedName?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.searchStr$.next(searchedText);
+            this.generalService.saveRouteQueryFilters({ searchText: searchedText || null });
         });
 
         this.store.pipe(select(state => state.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$)).subscribe(response => {
@@ -330,19 +359,31 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         if (this.agingReportAdvanceSearch) {
             this.agingReportAdvanceSearch.reset();
         }
-        this.searchStr$.next('');
-        this.searchedName?.reset();
-        this.searchStr = "";
-        this.showNameSearch = false;
         this.isAdvanceSearchApplied = false;
         this.dueAmountReportRequest.q = '';
-        this.sort("name", "asc");
-        this.showClearFilter = false;
-        this.defaultLoad = true;
+        this.showClearFilter.set(false);
+        this.dueAmountReportRequest.sortBy = 'name';
+        this.dueAmountReportRequest.sort = 'asc';
+        this.generalService.saveRouteQueryFilters(null, true);
     }
 
-    public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
+    /**
+     * Saves the current advance search filters and search text to localStorage and URL query params
+     *
+     * @private
+     * @memberof AgingReportComponent
+     */
+    private saveAgingReportFilters(): void {
+        const { category, amountType, amount } = this.commonRequest;
+        this.generalService.saveRouteQueryFilters({ category, amountType, amount });
+    }
+
+    public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal, skipSave: boolean = false) {
         this.commonRequest = request;
+        if (!skipSave) {
+            this.saveAgingReportFilters();
+            return;
+        }
         this.agingAdvanceSearchModal.totalDueAmount = request.amount;
         if (request.category === "totalDue") {
             this.agingAdvanceSearchModal.includeTotalDueAmount = true;
@@ -384,12 +425,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         }
 
         this.isAdvanceSearchApplied = true;
-        this.showClearFilter = false;
         this.getDueReport();
     }
 
     public sort(key: string, ord: "asc" | "desc" = "asc") {
-        this.showClearFilter = true;
+        this.showClearFilter.set(true);
         if (key.includes("range")) {
             this.dueAmountReportRequest.rangeCol = parseInt(key?.replace("range", ""));
             this.dueAmountReportRequest.sortBy = "range";
@@ -509,7 +549,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public exportReport(): void {
-        if (this.isLoading) {
+        if (this.isLoading()) {
             return;
         }
         let exportData = {
@@ -526,9 +566,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             rangeCol: this.dueAmountReportRequest.rangeCol,
             q: this.dueAmountReportRequest.q
         }
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.agingReportService.exportAgingReport(exportData, this.currentBranch ? this.currentBranch.uniqueName : "").pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;
+            this.isLoading.set(false);
             if (response?.status === 'success') {
                 this.toaster.showSnackBar("success", response?.body);
                 this.router.navigate(['pages', 'downloads', 'exports']);

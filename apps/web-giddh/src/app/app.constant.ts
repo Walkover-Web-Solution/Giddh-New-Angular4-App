@@ -14,6 +14,13 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
+/** Supported regions for session cookie naming */
+export enum GiddhRegion {
+    UK = 'UK',
+    IN = 'IN',
+    GB = 'GB'
+}
+
 /** Branch Hierarchy Type */
 export enum BranchHierarchyType {
     Flatten = 'flatten',
@@ -55,6 +62,12 @@ export enum RestrictedModules {
     EInvoice = 'E-invoice',
     Users = 'Users'
 };
+
+/** Enum for application theme class names applied on body element */
+export enum AppThemeClassEnum {
+    Default = 'default-theme',
+    Dark = 'dark-theme'
+}
 
 export const DEFAULT_TOASTER_OPTIONS = {
     closeButton: true, // show close button
@@ -705,6 +718,19 @@ export const PaymentProvider = {
     PAYU: 'PAYU'
 };
 
+/** Plan duration */
+export const PlanDuration = {
+    MONTHLY: 'MONTHLY',
+    YEARLY: 'YEARLY',
+    DAILY: 'DAILY'
+} as const;
+
+/** Entity/region codes used in subscription and plan logic */
+export const EntityCode = {
+    IND: 'IND',
+    GBR: 'GBR'
+} as const;
+
 /** Weekdays enum */
 export enum WeekdaysEnum {
     DAILY = 'daily',
@@ -720,7 +746,6 @@ export enum WeekdaysEnum {
 /** Get Bifurcation Type */
 export enum GetBifurcationType {
     MONTH = 'month',
-    QUATER = 'quater',
     QUARTER = 'quarter'
 }
 
@@ -746,6 +771,7 @@ export interface IOption {
     isHilighted?: boolean;
     additional?: any;
     subVoucher?: string;
+    tooltip?: string;
 }
 
 /** Number Format Locale Mapping for GiddhNumberFormatPipe */

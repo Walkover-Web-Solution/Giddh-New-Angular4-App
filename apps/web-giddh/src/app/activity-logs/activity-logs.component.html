@@ -227,7 +227,7 @@
                 <ng-container matColumnDef="time">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.date }}</th>
                     <td class="activity-td" mat-cell *matCellDef="let element" (click)="getLogsDetails($event, element)">
-                        <span [matTooltip]="element.timeonly" matTooltipPosition="above">{{ element.time }}</span>
+                        <span [matTooltip]="element.timeonly" matTooltipPosition="above">{{ element.time | giddhDate }}</span>
                     </td>
                 </ng-container>
                 <!-- IP Column -->
@@ -304,7 +304,7 @@
                                             (click)="getLogsDetails($event, rowHistory)"
                                         >
                                             <span [matTooltip]="details.timeonly" matTooltipPosition="above">
-                                                {{ details.time }}
+                                                {{ details.time | giddhDate }}
                                             </span>
                                         </td>
                                     </ng-container>

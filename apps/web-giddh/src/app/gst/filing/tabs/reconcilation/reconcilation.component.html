@@ -358,7 +358,7 @@
         </td>
 
         <td>
-            <div>{{ item.invoice_date ? item.invoice_date : '-' }}</div>
+            <div>{{ item.invoice_date | giddhDate }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
 
@@ -451,7 +451,7 @@
 
         <td>
             <div>-</div>
-            <div class="unrecognized-value pt-1">{{ item.invoice_date ? item.invoice_date : '-' }}</div>
+            <div class="unrecognized-value pt-1">{{ item.invoice_date | giddhDate }}</div>
         </td>
 
         <td>
@@ -542,9 +542,9 @@
         </td>
 
         <td>
-            <div>{{ item.invoice_date ? item.invoice_date : '-' }}</div>
+            <div>{{ item.invoice_date | giddhDate }}</div>
             <div [ngClass]="{ 'unrecognized-value': item.invoice_date !== item?.data_in_giddh?.invoice_date }" class="pt-1">
-                {{ item?.data_in_giddh?.invoice_date ? item?.data_in_giddh?.invoice_date : '-' }}
+                {{ item?.data_in_giddh?.invoice_date | giddhDate }}
             </div>
         </td>
 
@@ -686,8 +686,8 @@
         </td>
 
         <td>
-            <div>{{ item.invoice_date ? item.invoice_date : '-' }}</div>
-            <div class="pt-1">{{ item?.data_in_giddh?.invoice_date ? item?.data_in_giddh?.invoice_date : '-' }}</div>
+            <div>{{ item.invoice_date | giddhDate }}</div>
+            <div class="pt-1">{{ item?.data_in_giddh?.invoice_date | giddhDate }}</div>
         </td>
 
         <td>

@@ -151,5 +151,6 @@
         "trial": "चाचणी",
         "cancelled": "रद्द",
         "expired": "कालबाह्य",
-        "select_status": "स्थिती निवडा"
+        "select_status": "स्थिती निवडा",
+        "please_select_payment_provider": "कृपया पेमेंट प्रदाता निवडा"
 	}

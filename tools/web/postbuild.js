@@ -124,9 +124,9 @@ $region = null;
 if (!empty($queryParams['region'])) {
     $region = strtolower($queryParams['region']);
 
-    if (in_array($region, ['uk', 'gb'])) {
+    if (in_array($region, ['uk', 'ae', 'in'])) {
         setcookie(
-            'region',
+            'giddh_region',
             $region,
             time() + (86400 * 30), // 30 days
             '/',
@@ -137,8 +137,8 @@ if (!empty($queryParams['region'])) {
     }
 }
 /* Priority 2: Cookie */
-if ($region === null && !empty($_COOKIE['region'])) {
-    $region = strtolower($_COOKIE['region']);
+if ($region === null && !empty($_COOKIE['giddh_region'])) {
+    $region = strtolower($_COOKIE['giddh_region']);
 }
 
 /* -------------------------------------------------

@@ -8,6 +8,7 @@ import { NewVsOldInvoicesRoutingModule } from './new-vs-old-Invoices.routing.mod
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
+import { SalesByPersonComponent } from './sales-by-person/sales-by-person.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -22,14 +23,23 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { ActionMenuComponent } from '../shared/action-menu/action-menu.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { SalesPersonComponentStore } from '../shared/sales-person/utility/sales-person.store';
+import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 
 
 @NgModule({
     declarations: [
         NewVsOldInvoicesComponent,
-        SalesBifurcationDetailsComponent
+        SalesBifurcationDetailsComponent,
+        SalesByPersonComponent
     ],
     imports: [
         CommonModule,
@@ -58,7 +68,13 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         FroalaTemplateEditorModule,
         MatFormFieldModule,
         MatInputModule,
-        MatIconModule
+        GiddhDatePipe,
+        MatSelectModule,
+        NgxMatSelectSearchModule,
+        MatTooltipModule,
+        MatCardModule,
+        MatChipsModule,
+        NoDataModule
     ],
     providers: []
 })

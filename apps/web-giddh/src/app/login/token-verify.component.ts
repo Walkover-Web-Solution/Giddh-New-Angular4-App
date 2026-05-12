@@ -88,12 +88,12 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         }
 
         if (this.route.snapshot.queryParams['request']) {
-            const sessionId = decodeURIComponent(this.route.snapshot.queryParams['request']);
+            const sessionId = this.route.snapshot.queryParams['request'];
             if (sessionId) {
                 this.authenticationService.getUserDetails(sessionId).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
                     this.request = data;
                     if (data?.status === "success" && data?.body && data?.body?.session && data?.body?.session?.id) {
-                        this.generalService.setCookie("giddh_session_id", data.body.session.id, 30);
+                        this.generalService.setCookie(this.generalService.getRegionSessionCookieName(data.body.loggedInRegion), data.body.session.id, 30);
                     }
                     this.verifyUser();
                 });
@@ -125,14 +125,8 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
      * @memberof TokenVerifyComponent
      */
     public refreshPage(): void {
-        if (this.route.snapshot.queryParams['token']) {
-            this.token = this.route.snapshot.queryParams['token'];
-            window.location.href = "/token-verify?token=" + this.token;
-        }
-
-        if (this.route.snapshot.queryParams['request']) {
-            const sessionId = decodeURIComponent(this.route.snapshot.queryParams['request']);
-            window.location.href = "/token-verify?request=" + sessionId;
-        }
+        const params = this.route.snapshot.queryParamMap;
+        const queryString = params.keys.map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params.get(k))}`).join('&');
+        window.location.href = '/token-verify' + (queryString ? '?' + queryString : '');
     }
 }

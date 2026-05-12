@@ -8,7 +8,7 @@ import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
 import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -92,8 +92,6 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public isDefaultLoaded: boolean = false;
     /** Hold active company country code */
     public activeCompanyCountryCode: string = '';
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Datasource of Sales Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     /** Holds page size options for pagination */
@@ -115,7 +113,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         private activeRoute: ActivatedRoute,
         private router: Router,
         private _cd: ChangeDetectorRef,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private dialog: MatDialog,
         private companyActions: CompanyActions
     ) {
@@ -178,10 +176,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
                 this.SalesRegisteDetailedItems = res;
-                this.dataSource.data = this.SalesRegisteDetailedItems.items.map((obj: any) => {
-                    obj.date = this.getDateToDMY(obj.date);
-                    return obj;
-                });
+                this.dataSource.data = this.SalesRegisteDetailedItems.items;
                 if (this.voucherNumberInput?.value) {
                     setTimeout(() => {
                         if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
@@ -335,7 +330,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
      */
     public gotoSalesRegister(): void {
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
-            this.router.navigate(['pages', 'reports', 'sales-register'], { queryParams: { from: params.from, to: params.to, branchUniqueName: params.branchUniqueName, interval: params.interval, selectedMonth: params.selectedMonth } });
+            this.router.navigate(['pages', 'reports', 'sales-register'], { queryParams: { groupBy: this.currentGroupBy(), required: "groupBy" } });
         });
     }
 
@@ -489,7 +484,8 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             q: this.voucherNumberInput?.value,
             branchUniqueName: this.getDetailedsalesRequestFilter?.branchUniqueName,
             commonLocaleData: this.commonLocaleData,
-            localeData: this.localeData
+            localeData: this.localeData,
+            activeCompanyCountryCode: this.activeCompanyCountryCode
         }
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
                     width: '630px',

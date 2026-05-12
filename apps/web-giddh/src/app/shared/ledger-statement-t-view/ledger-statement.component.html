@@ -129,7 +129,7 @@
                             >
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan="{{ ledgerGridColumnsValue[0] }}">
                                     <div class="d-flex align-items-center column-gap-05">
-                                        <span>{{ txn.entryDate }}</span>
+                                        <span>{{ txn.entryDate | giddhDate }}</span>
                                     </div>
                                 </mat-grid-tile>
 
@@ -305,7 +305,7 @@
                             >
                                 <mat-grid-tile colspan="{{ ledgerGridColumnsValue[0] }}" [attr.data-title]="commonLocaleData?.app_date">
                                     <div class="d-flex align-items-center column-gap-05">
-                                        <span>{{ txn.entryDate }}</span>
+                                        <span>{{ txn.entryDate | giddhDate }}</span>
                                     </div>
                                 </mat-grid-tile>
                                 <mat-grid-tile

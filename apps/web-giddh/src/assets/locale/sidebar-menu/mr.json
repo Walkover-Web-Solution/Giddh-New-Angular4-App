@@ -23,6 +23,10 @@
                     "icon": "icon-customer",
                     "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा",
                     "additional": {
+                        "queryParams": {
+                            "tab": "customer",
+                            "tabIndex": 1
+                        },
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/customer",
@@ -147,6 +151,56 @@
                     "description": "निव्वळ व संचयी विक्री",
                     "additionalRoutes": [
                         "/pages/reports/sales-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "कालावधीनुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-view",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration",
+                                    "required": "groupBy"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "विक्री व्यक्तीनुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson",
+                                    "required": "groupBy"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "राज्यानुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state",
+                                    "required": "groupBy"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "देशानुसार",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country",
+                                    "required": "groupBy"
+                                },
+                                "matchQueryParams": true
+                            }
+                        }
                     ]
                 },
                 {
@@ -337,6 +391,52 @@
                     "description": "निव्वळ आणि संचयी खरेदी",
                     "additionalRoutes": [
                         "/pages/reports/purchase-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "कालावधीनुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-view",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "विक्री व्यक्तीनुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "राज्यानुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "देशानुसार",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-export",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country"
+                                },
+                                "matchQueryParams": true
+                            }
+                        }
                     ]
                 },
                 {
@@ -346,7 +446,9 @@
                     "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा",
                     "additional": {
                         "queryParams": {
-                            "voucherVersion": 2
+                            "voucherVersion": 2,
+                            "tab": "vendor",
+                            "tabIndex": 1
                         },
                         "createNew": {
                             "label": "+",
@@ -514,7 +616,8 @@
                         "queryParams": {
                             "tab": "balance-sheet",
                             "tabIndex": 2
-                        }
+                        },
+                        "matchQueryParams": true
                     }
                 },
                 {
@@ -532,7 +635,8 @@
                         "queryParams": {
                             "tab": "profit-loss",
                             "tabIndex": 1
-                        }
+                        },
+                        "matchQueryParams": true
                     }
                 },
                 {
@@ -550,7 +654,8 @@
                         "queryParams": {
                             "tab": "trial-balance",
                             "tabIndex": 0
-                        }
+                        },
+                        "matchQueryParams": true
                     }
                 },
                 {
@@ -738,6 +843,18 @@
                     "link": "/pages/email-forwarding",
                     "icon": "icon-mail",
                     "description": "बँक स्टेटमेंट ईमेलपासून ऑटो-वाउचर तयार करा।"
+                },
+                {
+                    "label": "बजेट अंदाज",
+                    "link": "/pages/budget-forecasting",
+                    "icon": "icon-audit-log",
+                    "description": "एआय-संचालित रोख प्रवाह अंदाज आणि भविष्यवाण्या"
+                },
+                {
+                    "label": "बँक जुळवणी",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "आपली नोंदी बँक स्टेटमेंटशी जुळवा"
                 }
             ]
         }

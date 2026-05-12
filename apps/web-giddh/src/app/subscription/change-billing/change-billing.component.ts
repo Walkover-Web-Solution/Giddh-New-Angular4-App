@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeBillingComponentStore } from './utility/change-billing.store';
-import { Observable, takeUntil, of as observableOf, ReplaySubject, delay } from 'rxjs';
+import { Observable, takeUntil, of as observableOf, ReplaySubject, delay, filter, distinctUntilChanged, debounceTime } from 'rxjs';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { Store } from '@ngrx/store';
@@ -99,7 +99,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         private componentStore: ChangeBillingComponentStore,
         private commonActions: CommonActions,
         private toasterService: ToasterService,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private subscriptionService: SubscriptionsService,
         private store: Store<AppState>,
         private changeDetection: ChangeDetectorRef,
@@ -122,6 +122,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         this.getCompanyProfile();
         this.getOnboardingFormData();
         this.getActiveCompany();
+        this.getStates();
 
         this.route.params.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
@@ -136,10 +137,17 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.changeBillingForm.get('country.code').valueChanges.pipe(debounceTime(500), filter(Boolean), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                let statesRequest = new StatesRequest();
+                statesRequest.country = response;
+                this.store.dispatch(this.generalActions.getAllState(statesRequest));
+            }
+        });
+
         this.getBillingDetails$.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
                 this.getCountry();
-                this.getStates(data.country?.code);
                 this.setFormValues(data);
                 this.selectedCountry = data.country?.name;
                 this.selectedState = data.state?.name ? data?.state?.code + ' - ' + data.state?.name : data?.county?.code + ' - ' + data.county?.name;
@@ -182,8 +190,8 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             pincode: [''],
             mobileNumber: ['', Validators.required],
             taxNumber: null,
-            country: ['', Validators.required],
-            state: ['', Validators.required],
+            country: this.formBuilder.group({name: [''], code: ['', Validators.required]}),
+            state: this.formBuilder.group({name: [''], code: ['', Validators.required]}),
             address: ['']
         });
     }
@@ -248,7 +256,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      *
      * @memberof ChangeBillingComponent
      */
-    public getStates(countryCode?: string): void {
+    public getStates(): void {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
 
             if (response) {
@@ -276,10 +284,6 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                         return { label: county.name, value: county.code };
                     });
                 }
-            } else {
-                const statesRequest = new StatesRequest();
-                statesRequest.country = countryCode;
-                this.store.dispatch(this.generalActions.getAllState(statesRequest));
             }
         });
     }
@@ -327,7 +331,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                     this.disabledState = true;
                     this.selectedState = state.label;
                     this.selectedStateCode = state.value;
-                    this.changeBillingForm.controls['state'].setValue({ label: state?.label, value: state?.value });
+                    this.changeBillingForm.controls['state'].patchValue({ name: state?.label, code: state?.value });
                     return true;
                 }
             });
@@ -338,7 +342,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             this.selectedState = '';
             this.selectedStateCode = '';
             if (!this.optionSelected) {
-                this.changeBillingForm.controls['state'].setValue(null);
+                this.changeBillingForm.controls['state'].patchValue({ name: '', code: '' });
             }
             this.changeDetection.detectChanges();
         }
@@ -379,10 +383,6 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             onboardingFormRequest.formName = 'onboarding';
             onboardingFormRequest.country = event.value;
             this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
-
-            let statesRequest = new StatesRequest();
-            statesRequest.country = event.value;
-            this.store.dispatch(this.generalActions.getAllState(statesRequest));
             this.changeDetection.detectChanges();
         }
     }
@@ -516,15 +516,14 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         }
         if (this.changeBillingForm.value.country.code === 'GB') {
             request['county'] = {
-                name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,
-                code: this.changeBillingForm.value.state.code ? this.changeBillingForm.value.state.code : this.changeBillingForm.value.state.value
+                name: this.changeBillingForm.value.state.name,
+                code: this.changeBillingForm.value.state.code
             };
         } else {
             request['state'] = {
-                name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,
-                code: this.changeBillingForm.value.state.code ? this.changeBillingForm.value.state.code : this.changeBillingForm.value.state.value
+                name: this.changeBillingForm.value.state.name,
+                code: this.changeBillingForm.value.state.code
             };
-
         }
         this.componentStore.updateBillingDetails({ request: request, id: this.billingDetails.uniqueName });
     }

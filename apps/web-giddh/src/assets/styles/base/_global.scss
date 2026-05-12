@@ -6008,8 +6008,10 @@ hamburger-menu {
 }
 
 .table {
+    $bg-color: var(--table-background-color);
     width: 100%;
-    background-color: var(--table-background-color);
+    background-color: $bg-color;
+    border-spacing: 0;
 
     th,
     td {
@@ -6021,6 +6023,7 @@ hamburger-menu {
     thead th {
         border-bottom: 1px solid var(--border-color);
         font-weight: var(--font-weight-semibold);
+        background-color: $bg-color;
     }
 
     tbody + tbody {

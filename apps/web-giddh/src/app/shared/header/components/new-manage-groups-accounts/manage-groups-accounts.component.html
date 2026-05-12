@@ -76,12 +76,7 @@
 
     <div class="modal-body p-0">
         <div class="clear-both">
-            <div
-                class="grp-col p-0"
-                [ngStyle]="{
-                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px',
-                }"
-            >
+            <div class="grp-col p-0" [style.height.px]="bodyHeight">
                 <div class="search-loading" *ngIf="searchLoad | async">
                     <div class="vertical-center">
                         <span class="spinner small"></span>
@@ -104,10 +99,8 @@
                                 #master
                                 [topSharedGroups]="topSharedGroups"
                                 [searchedMasterData]="searchedMasterData"
-                                [ngStyle]="{
-                                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px',
-                                }"
-                                [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                                [style.height.px]="bodyHeight"
+                                [height]="bodyHeight"
                                 [isSearchingGroups]="!(grpSrch?.value === '')"
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
@@ -124,7 +117,7 @@
             <div class="form-box height-in-vh">
                 <account-operations
                     [topSharedGroups]="topSharedGroups"
-                    [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                    [height]="bodyHeight"
                     [breadcrumbPath]="breadcrumbPath"
                     [breadcrumbUniquePath]="breadcrumbUniquePath"
                     [localeData]="localeData"

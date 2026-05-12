@@ -25,7 +25,6 @@
     "next_weeks": "Next {{weeks}} weeks",
     "next_months": "Next {{months}} months",
     "analysis_based_on": "Analysis based on {{period}} of past activity.",
-    "closing": "Closing",
     "lowest_balance": "Lowest balance",
     "highest_inflow": "Highest inflow",
     "on_date": "on",

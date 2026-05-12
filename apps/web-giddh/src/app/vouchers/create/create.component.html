@@ -218,63 +218,22 @@
                                                     invoiceType.isCreditNote ||
                                                     invoiceType.isDebitNote) &&
                                                 invoiceForm.controls['account'].get('uniqueName')?.value &&
-                                                (lastVouchersList$ | async)?.length
+                                                (lastVouchersCompanyList().length || lastVouchersAccountList().length)
                                             "
                                         >
                                             <div
                                                 tabindex="0"
                                                 role="button"
                                                 cdkMonitorElementFocus
-                                                (keydown.enter)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
-                                                (keydown.space)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
                                                 #copyVoucherElement
-                                                #copyVoucherTrigger="matMenuTrigger"
-                                                [matMenuTriggerFor]="copyLastVouchers"
+                                                (click)="openRecentVouchersPane()"
+                                                (keydown.enter)="$event.preventDefault(); openRecentVouchersPane()"
+                                                (keydown.space)="$event.preventDefault(); openRecentVouchersPane()"
                                                 class="vouchers-copy-sales ml-5 cursor-pointer"
                                             >
                                                 <i class="icon-copy-file"></i>
                                                 {{ voucherType | voucherCopyLink: localeData | titlecase }}
                                             </div>
-                                            <mat-menu #copyLastVouchers="matMenu">
-                                                <div class="mat-menu-width-large">
-                                                    <ng-container *ngIf="getLastVouchersInProgress$ | async">
-                                                        <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
-                                                    </ng-container>
-                                                    <button
-                                                        mat-menu-item
-                                                        *ngFor="let voucher of lastVouchersList$ | async"
-                                                        (click)="copyInvoice(voucher)"
-                                                        class="line-height-initial"
-                                                    >
-                                                        <div class="p-1">
-                                                            <div class="d-flex flex-column">
-                                                                <div class="d-flex justify-content-between">
-                                                                    <span>
-                                                                        {{
-                                                                            invoiceType.isProformaInvoice
-                                                                                ? voucher?.proformaNumber
-                                                                                : invoiceType.isEstimateInvoice
-                                                                                  ? voucher?.estimateNumber
-                                                                                  : voucher?.voucherNumber
-                                                                                    ? voucher?.voucherNumber
-                                                                                    : commonLocaleData?.app_not_available
-                                                                        }}
-                                                                    </span>
-                                                                    <span>{{ voucher?.grandTotal?.amountForAccount }}</span>
-                                                                </div>
-                                                                <span>{{ voucher?.date }} ( {{ voucher?.account?.name }} )</span>
-                                                            </div>
-                                                        </div>
-                                                    </button>
-                                                    <ng-container
-                                                        *ngIf="
-                                                            !(lastVouchersList$ | async)?.length && !(getLastVouchersInProgress$ | async)
-                                                        "
-                                                    >
-                                                        {{ commonLocaleData?.app_no_result_found }}
-                                                    </ng-container>
-                                                </div>
-                                            </mat-menu>
                                         </ng-container>
                                     </div>
                                 </div>
@@ -548,13 +507,7 @@
                                                             [type]="'text'"
                                                             [name]="'billingPinCode'"
                                                             (keyup)="copyAccountBillingAddressToShippingAddress()"
-                                                            [placeholder]="
-                                                                zipCodeSupportedCountryList.includes(
-                                                                    activeCompany?.countryV2?.alpha2CountryCode
-                                                                )
-                                                                    ? commonLocaleData?.app_zip_code
-                                                                    : commonLocaleData?.app_pin_code
-                                                            "
+                                                            [placeholder]="generalService.getPostalCodePlaceholder(account?.countryCode)"
                                                             [cssClass]="'border-none w-100'"
                                                             formControlName="pincode"
                                                         ></text-field>
@@ -723,13 +676,7 @@
                                                             appEnterNext
                                                             [type]="'text'"
                                                             [name]="'shippingPinCode'"
-                                                            [placeholder]="
-                                                                zipCodeSupportedCountryList.includes(
-                                                                    activeCompany?.countryV2?.alpha2CountryCode
-                                                                )
-                                                                    ? commonLocaleData?.app_zip_code
-                                                                    : commonLocaleData?.app_pin_code
-                                                            "
+                                                            [placeholder]="generalService.getPostalCodePlaceholder(account?.countryCode)"
                                                             [cssClass]="'border-none w-100'"
                                                             formControlName="pincode"
                                                         ></text-field>
@@ -737,6 +684,51 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- Supply Fields Row - India only -->
+                                        @if (isIndianCompanyAndAccount) {
+                                            <!-- Place of Supply (Invoice / Credit Note / Estimate / Proforma) -->
+                                            @if (showPlaceOfSupply) {
+                                                <div class="col-6 mt-3" formGroupName="placeOfSupply">
+                                                    <reactive-dropdown-field
+                                                        appEnterNext
+                                                        [name]="'placeOfSupply'"
+                                                        [label]="localeData?.place_of_supply"
+                                                        [placeholder]="commonLocaleData?.app_state"
+                                                        formControlName="code"
+                                                        [options]="companyStateList$ | async"
+                                                        [forceClear]="forceClear"
+                                                        [required]="!!branchCurrentAddressInfo.taxNumber"
+                                                        [showError]="
+                                                            invoiceForm.controls['account'].get('placeOfSupply.code')?.touched &&
+                                                            invoiceForm.controls['account'].get('placeOfSupply.code')?.invalid
+                                                        "
+                                                        (selectedOption)="onSupplyStateSelect('placeOfSupply', $event)"
+                                                    ></reactive-dropdown-field>
+                                                </div>
+                                            }
+
+                                            <!-- Source of Supply (Purchase Bill / Debit Note / PO) -->
+                                            @if (showSourceDestinationOfSupply) {
+                                                <div class="col-6 mt-3" formGroupName="sourceOfSupply">
+                                                    <reactive-dropdown-field
+                                                        appEnterNext
+                                                        [name]="'sourceOfSupply'"
+                                                        [label]="localeData?.source_of_supply"
+                                                        [placeholder]="commonLocaleData?.app_state"
+                                                        formControlName="code"
+                                                        [options]="companyStateList$ | async"
+                                                        [forceClear]="forceClear"
+                                                        [required]="!!branchCurrentAddressInfo.taxNumber"
+                                                        [showError]="
+                                                            invoiceForm.controls['account'].get('sourceOfSupply.code')?.touched &&
+                                                            invoiceForm.controls['account'].get('sourceOfSupply.code')?.invalid
+                                                        "
+                                                        (selectedOption)="onSupplyStateSelect('sourceOfSupply', $event)"
+                                                    ></reactive-dropdown-field>
+                                                </div>
+                                            }
+                                        }
 
                                         <ng-container *ngIf="!invoiceType.isPurchaseOrder">
                                             <!-- Attention to -->
@@ -969,13 +961,7 @@
                                                         [type]="'text'"
                                                         [name]="'companyBillingPinCode'"
                                                         (keyup)="copyCompanyBillingAddressToShippingAddress()"
-                                                        [placeholder]="
-                                                            zipCodeSupportedCountryList.includes(
-                                                                activeCompany?.countryV2?.alpha2CountryCode
-                                                            )
-                                                                ? commonLocaleData?.app_zip_code
-                                                                : commonLocaleData?.app_pin_code
-                                                        "
+                                                        [placeholder]="generalService.getPostalCodePlaceholder(company?.countryCode)"
                                                         [cssClass]="'border-none w-100'"
                                                         formControlName="pincode"
                                                     ></text-field>
@@ -1119,13 +1105,7 @@
                                                         appEnterNext
                                                         [type]="'text'"
                                                         [name]="'companyShippingPinCode'"
-                                                        [placeholder]="
-                                                            zipCodeSupportedCountryList.includes(
-                                                                activeCompany?.countryV2?.alpha2CountryCode
-                                                            )
-                                                                ? commonLocaleData?.app_zip_code
-                                                                : commonLocaleData?.app_pin_code
-                                                        "
+                                                        [placeholder]="generalService.getPostalCodePlaceholder(company?.countryCode)"
                                                         [cssClass]="'border-none w-100'"
                                                         formControlName="pincode"
                                                     ></text-field>
@@ -1134,17 +1114,38 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Row 3 -->
-                                <div
-                                    class="row row-gap-15 mt-3 mb-3"
-                                    *ngIf="
-                                        invoiceType.isPurchaseInvoice &&
-                                        ((vendorPurchaseOrders$ | async)?.length || fieldFilteredOptions?.length)
-                                    "
-                                >
+                                <div class="row row-gap-15 mt-3 mb-3">
+                                    @if (isIndianCompanyAndAccount && showSourceDestinationOfSupply) {
+                                        <ng-container formGroupName="account">
+                                            <!-- Destination of Supply -->
+                                            <div class="col-6" formGroupName="destinationOfSupply">
+                                                <reactive-dropdown-field
+                                                    appEnterNext
+                                                    [name]="'destinationOfSupply'"
+                                                    [label]="localeData?.destination_of_supply"
+                                                    [placeholder]="commonLocaleData?.app_state"
+                                                    formControlName="code"
+                                                    [options]="companyStateList$ | async"
+                                                    [forceClear]="forceClear"
+                                                    [required]="!!branchCurrentAddressInfo.taxNumber"
+                                                    [showError]="
+                                                        invoiceForm.controls['account'].get('destinationOfSupply.code')?.touched &&
+                                                        invoiceForm.controls['account'].get('destinationOfSupply.code')?.invalid
+                                                    "
+                                                    (selectedOption)="onSupplyStateSelect('destinationOfSupply', $event)"
+                                                ></reactive-dropdown-field>
+                                            </div>
+                                        </ng-container>
+                                    }
                                     <!-- Purchase Order -->
-                                    <div class="col-6">
+                                    <div
+                                        class="col-6"
+                                        *ngIf="
+                                            invoiceType.isPurchaseInvoice &&
+                                            ((vendorPurchaseOrders$ | async)?.length || fieldFilteredOptions?.length)
+                                        "
+                                    >
                                         <mat-select
                                             name="linkedPO"
                                             formControlName="linkedPo"
@@ -1230,30 +1231,21 @@
                                     </div>
 
                                     <!-- Due Date -->
-                                    <div
-                                        class="col-3 pl-2"
-                                        *ngIf="
-                                            (currentVoucherFormDetails?.dueDate ||
-                                                invoiceType.isSalesInvoice ||
-                                                invoiceType.isPurchaseInvoice ||
-                                                invoiceType.isPurchaseOrder ||
-                                                invoiceType.isProformaInvoice ||
-                                                invoiceType.isEstimateInvoice) &&
-                                            !invoiceType.isCashInvoice
-                                        "
-                                    >
-                                        <giddh-datepicker
-                                            (keydown.enter)="$event.preventDefault()"
-                                            [label]="voucherDueDateLabel"
-                                            [closeDatepickerOnFocus]="true"
-                                            [placeholder]="voucherDueDateLabel"
-                                            name="voucherDueDate"
-                                            [showToggleIcon]="false"
-                                            [appearance]="'outline'"
-                                            formControlName="dueDate"
-                                            appEnterNext
-                                        ></giddh-datepicker>
-                                    </div>
+                                    @if (showDueDate) {
+                                        <div class="col-3 pl-2">
+                                            <giddh-datepicker
+                                                (keydown.enter)="$event.preventDefault()"
+                                                [label]="voucherDueDateLabel"
+                                                [closeDatepickerOnFocus]="true"
+                                                [placeholder]="voucherDueDateLabel"
+                                                name="voucherDueDate"
+                                                [showToggleIcon]="false"
+                                                [appearance]="'outline'"
+                                                formControlName="dueDate"
+                                                appEnterNext
+                                            ></giddh-datepicker>
+                                        </div>
+                                    }
 
                                     <!-- Select Voucher -->
                                     <div
@@ -1286,7 +1278,8 @@
                                                 <a *ngIf="option" href="javascript:;" aria-label="option" class="linking-item">
                                                     <div class="option-label">{{ option?.label }}</div>
                                                     <div class="option-value">
-                                                        ({{ commonLocaleData?.app_dated }}: {{ option.additional?.voucherDate }})
+                                                        ({{ commonLocaleData?.app_dated }}:
+                                                        {{ option.additional?.voucherDate | giddhDate }})
                                                     </div>
                                                     <div class="option-value-stock font-size-12">
                                                         ({{ commonLocaleData?.app_amount }}:
@@ -1572,10 +1565,7 @@
                                                                             {{
                                                                                 transaction.get('account.name')?.value
                                                                                     ? transaction.get('stock.name')?.value
-                                                                                        ? transaction.get('account.name')?.value +
-                                                                                          ' (' +
-                                                                                          transaction.get('stock.name')?.value +
-                                                                                          ')'
+                                                                                        ? transaction.get('stock.name')?.value
                                                                                         : transaction.get('account.name')?.value
                                                                                     : localeData?.select_account
                                                                             }}
@@ -1633,13 +1623,12 @@
                                                                             @if (option.additional?.stock) {
                                                                                 <a href="javascript:;" class="d-block py-1 flex-column">
                                                                                     <div class="option-label">
-                                                                                        {{ option?.label | titlecase }}
                                                                                         @if (option?.additional?.stock) {
                                                                                             <span>
-                                                                                                ({{
+                                                                                                {{
                                                                                                     option?.additional?.stock?.name
                                                                                                         | titlecase
-                                                                                                }})
+                                                                                                }}
                                                                                             </span>
                                                                                         }
                                                                                     </div>
@@ -1731,7 +1720,7 @@
                                                                 <div class="mt-2 font-size-12">
                                                                     <span>{{ localeData?.entry_date }}</span>
                                                                     <div class="mt-1" *ngIf="activeEntryIndex !== entryIndex">
-                                                                        {{ entry.get('date')?.value }}
+                                                                        {{ entry.get('date')?.value | giddhDate }}
                                                                     </div>
                                                                     <div
                                                                         class="mt-1 d-flex align-items-baseline column-gap-05"
@@ -2951,7 +2940,7 @@
                                                                     </ng-container>
                                                                     <ng-container formGroupName="templateDetails">
                                                                         <ng-container formGroupName="other">
-                                                                            <div class="col-12 px-2" *ngIf="!invoiceType.isPurchaseInvoice">
+                                                                            <div class="col-12 px-2">
                                                                                 <mat-form-field
                                                                                     class="initial-height w-100"
                                                                                     appearance="outline"
@@ -3425,4 +3414,131 @@
         [purchaseOrderCompanyUniqueName]="activeCompany?.uniqueName"
         (closeModelEvent)="cancelEmailModal()"
     ></purchase-order-preview-modal>
+</ng-template>
+
+<!-- Recent Vouchers Aside Pane -->
+<ng-template #recentVouchersTemplate>
+    <div cdkFocusInitial class="dialog-header font-size-15">
+        <span>{{ voucherType | voucherCopyLink: localeData | titlecase }}</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body font-size-15">
+        <mat-tab-group animationDuration="0">
+            <!-- Tab 1: Account Invoices -->
+            <mat-tab [label]="localeData?.account_invoices">
+                @if (isAccountVouchersLoading()) {
+                    <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
+                } @else {
+                    <ng-container *ngTemplateOutlet="voucherListTemplate; context: { $implicit: lastVouchersAccountList() }"></ng-container>
+                }
+            </mat-tab>
+
+            <!-- Tab 2: All Invoices (Company) -->
+            <mat-tab [label]="localeData?.all_invoices">
+                @if (isCompanyVouchersLoading()) {
+                    <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
+                } @else {
+                    <ng-container *ngTemplateOutlet="voucherListTemplate; context: { $implicit: lastVouchersCompanyList() }"></ng-container>
+                }
+            </mat-tab>
+        </mat-tab-group>
+    </mat-dialog-content>
+
+    <!-- Shared voucher list template used by both tabs -->
+    <ng-template #voucherListTemplate let-vouchers>
+        <div class="w-100 overflow-x-hidden border mt-3">
+            <div
+                class="d-grid vouchers-recent-grid align-items-center column-gap-1 py-2 px-2 border-bottom font-weight-semibold text-light font-size-11 text-uppercase"
+            >
+                <span>{{ commonLocaleData?.app_name }}</span>
+                <span>{{ commonLocaleData?.app_invoice_no }}</span>
+                <span>{{ commonLocaleData?.app_date }}</span>
+                <span class="text-right">{{ commonLocaleData?.app_amount }}</span>
+                <span></span>
+            </div>
+            @for (voucher of vouchers; track voucher.uniqueName; let last = $last) {
+                <div
+                    class="d-grid vouchers-recent-grid align-items-center column-gap-1 py-2 hover-trigger px-2"
+                    [class.border-bottom]="!last"
+                >
+                    <span>
+                        {{ voucher?.account?.name }}
+                    </span>
+                    <span>
+                        <a
+                            href="javascript:;"
+                            class="text-underline text-truncate"
+                            cdkMonitorElementFocus
+                            [attr.aria-label]="
+                                (invoiceType.isProformaInvoice
+                                    ? voucher?.proformaNumber
+                                    : invoiceType.isEstimateInvoice
+                                      ? voucher?.estimateNumber
+                                      : voucher?.voucherNumber) || commonLocaleData?.app_not_available
+                            "
+                            (click)="openVoucherPdfPreview(voucher)"
+                            (keydown.enter)="$event.preventDefault(); openVoucherPdfPreview(voucher)"
+                            (keydown.space)="$event.preventDefault(); openVoucherPdfPreview(voucher)"
+                        >
+                            {{
+                                invoiceType.isProformaInvoice
+                                    ? voucher?.proformaNumber
+                                    : invoiceType.isEstimateInvoice
+                                      ? voucher?.estimateNumber
+                                      : voucher?.voucherNumber
+                                        ? voucher?.voucherNumber
+                                        : commonLocaleData?.app_not_available
+                            }}
+                        </a>
+                    </span>
+                    <span class="text-muted">{{ voucher?.date | giddhDate }}</span>
+                    <span class="text-right">
+                        <amount-field
+                            [amount]="voucher?.grandTotal?.amountForAccount"
+                            [currencySymbol]="voucher?.grandTotal?.currency?.symbol"
+                            [currencyCode]="voucher?.grandTotal?.currency?.code"
+                        ></amount-field>
+                    </span>
+                    <span class="justify-self-end">
+                        <button
+                            mat-icon-button
+                            class="hover-target"
+                            [matTooltip]="voucherType | voucherCopyLink: localeData | titlecase"
+                            (click)="copyInvoice(voucher)"
+                            (keydown.enter)="$event.preventDefault(); copyInvoice(voucher)"
+                            (keydown.space)="$event.preventDefault(); copyInvoice(voucher)"
+                            [attr.aria-label]="voucherType | voucherCopyLink: localeData | titlecase"
+                        >
+                            <i class="icon-copy-file font-size-16 text-primary"></i>
+                        </button>
+                    </span>
+                </div>
+            } @empty {
+                <div class="text-center text-muted py-4">{{ commonLocaleData?.app_no_result_found }}</div>
+            }
+        </div>
+    </ng-template>
+</ng-template>
+
+<!-- Voucher PDF Preview Dialog -->
+<ng-template #voucherPdfPreviewTemplate>
+    <div cdkFocusInitial class="dialog-header font-size-15">
+        <span>{{ selectedPdfVoucherNumber() }}</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="container h-100 px-0">
+            <div class="pdf-preview h-100">
+                @if (!previewPdfUrl()) {
+                    <mat-spinner class="ml-auto mr-auto my-4" [diameter]="40"></mat-spinner>
+                } @else {
+                    <iframe width="100%" height="100%" [src]="previewPdfUrl()" title="PDF"></iframe>
+                }
+            </div>
+        </div>
+    </mat-dialog-content>
 </ng-template>

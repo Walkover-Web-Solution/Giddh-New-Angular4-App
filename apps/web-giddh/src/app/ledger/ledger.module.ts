@@ -67,8 +67,10 @@ import { TributeMentionModule } from '../shared/helpers/directives/tributeMentio
 import { MatDividerModule } from '@angular/material/divider';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { CommonTaxComponent } from '../shared/common-tax/common-tax.component';
 import { CommonDiscountComponent } from '../shared/common-discount/common-discount.component';
+import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 
 @NgModule({
     declarations: [
@@ -155,7 +157,9 @@ import { CommonDiscountComponent } from '../shared/common-discount/common-discou
         TributeMentionModule,
         MatDividerModule,
         GiddhNumberFormatModule,
-        KeyboardShortutModule
+        KeyboardShortutModule,
+        GiddhDatePipe,
+        GoToBranchComponent
     ]
 })
 export class LedgerModule {

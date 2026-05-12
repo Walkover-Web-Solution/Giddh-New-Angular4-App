@@ -172,5 +172,10 @@
     "update_recurring_credit_note": "Update Recurring Credit Note",
     "update_recurring_debit_note": "Update Recurring Debit Note",
     "update_recurring_receipt": "Update Recurring Receipt",
-    "update_recurring_payment": "Update Recurring Payment"
+    "update_recurring_payment": "Update Recurring Payment",
+    "place_of_supply": "Place of Supply",
+    "source_of_supply": "Source of Supply",
+    "destination_of_supply": "Destination of Supply",
+    "all_invoices": "All Invoices",
+    "account_invoices": "Account Invoices"
 }

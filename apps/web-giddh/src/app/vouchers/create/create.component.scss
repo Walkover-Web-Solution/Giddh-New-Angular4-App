@@ -138,6 +138,10 @@
                         td {
                             vertical-align: top;
 
+                            &.error-box {
+                                border: 2px solid var(--color-red) !important;
+                            }
+
                             .delete-btn {
                                 right: 12px;
                                 bottom: 18px;
@@ -280,4 +284,8 @@
 
 .single-toggle-button {
     min-width: 100px;
+}
+
+.vouchers-recent-grid {
+    grid-template-columns: 2fr 2fr 1.5fr 2fr 40px;
 }

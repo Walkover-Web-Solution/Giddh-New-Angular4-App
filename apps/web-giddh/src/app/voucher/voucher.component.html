@@ -147,7 +147,7 @@
                                                                         <span>{{ item?.versionNumber }}</span>
                                                                         <span>{{ item?.grandTotal?.amountForAccount }}</span>
                                                                     </div>
-                                                                    <span>{{ item?.date }} ( {{ item?.account?.name }} )</span>
+                                                                    <span>{{ item?.date | giddhDate }} ( {{ item?.account?.name }} )</span>
                                                                 </div>
                                                             </div>
                                                         </button>
@@ -580,14 +580,17 @@
                                                 <div class="pin-code-field">
                                                     <text-field
                                                         [id]="'billingPinCode'"
-                                                        [type]="'number'"
+                                                        [type]="'text'"
                                                         [cssClass]="'border-none'"
                                                         autocomplete="false"
                                                         [name]="'billingPinCode'"
                                                         (change)="autoFillShippingDetails()"
-                                                        [placeholder]="commonLocaleData?.app_pin_code"
+                                                        [placeholder]="
+                                                            generalService.getPostalCodePlaceholder(
+                                                                selectedCompany?.countryV2?.alpha2CountryCode
+                                                            )
+                                                        "
                                                         [(ngModel)]="invFormData.accountDetails.billingDetails.pincode"
-                                                        [allowDecimalDigitsOnly]="true"
                                                         [readonly]="isEinvoiceGenerated"
                                                     ></text-field>
                                                 </div>
@@ -790,13 +793,16 @@
                                                 <div class="pin-code-field">
                                                     <text-field
                                                         [id]="'shippingPinCode'"
-                                                        [type]="'number'"
+                                                        [type]="'text'"
                                                         [cssClass]="'border-none'"
                                                         autocomplete="false"
                                                         [name]="'shippingPinCode'"
-                                                        [placeholder]="commonLocaleData?.app_pin_code"
+                                                        [placeholder]="
+                                                            generalService.getPostalCodePlaceholder(
+                                                                selectedCompany?.countryV2?.alpha2CountryCode
+                                                            )
+                                                        "
                                                         [(ngModel)]="invFormData.accountDetails.shippingDetails.pincode"
-                                                        [allowDecimalDigitsOnly]="true"
                                                         [readonly]="isEinvoiceGenerated"
                                                     ></text-field>
                                                 </div>
@@ -1324,7 +1330,8 @@
                                                         >
                                                             <div class="option-label">{{ option?.label }}</div>
                                                             <div class="option-value">
-                                                                ({{ commonLocaleData?.app_dated }}: {{ option.additional?.voucherDate }})
+                                                                ({{ commonLocaleData?.app_dated }}:
+                                                                {{ option.additional?.voucherDate | giddhDate }})
                                                             </div>
                                                             <div class="option-value-stock">
                                                                 ({{ commonLocaleData?.app_amount }}:
@@ -1359,7 +1366,8 @@
                                                         >
                                                             <div class="option-label">{{ option?.label }}</div>
                                                             <div class="option-value">
-                                                                ({{ commonLocaleData?.app_dated }}: {{ option?.additional?.voucherDate }}))
+                                                                ({{ commonLocaleData?.app_dated }}:
+                                                                {{ option?.additional?.voucherDate | giddhDate }}))
                                                             </div>
                                                             <div class="option-value-stock">
                                                                 ({{ commonLocaleData?.app_amount }}:
@@ -1617,7 +1625,7 @@
                                                                     <label class="font-size-12 w-100 d-block">
                                                                         {{ localeData?.entry_date }}:
                                                                     </label>
-                                                                    {{ entry?.entryDate }}
+                                                                    {{ entry?.entryDate | giddhDate }}
                                                                 </div>
                                                             </div>
                                                             <div
@@ -2068,7 +2076,7 @@
                                                                             </span>
                                                                         </span>
                                                                         <span *ngIf="isUpdateMode">
-                                                                            {{ entry?.entryDate }}
+                                                                            {{ entry?.entryDate | giddhDate }}
                                                                         </span>
                                                                     </div>
                                                                 </div>

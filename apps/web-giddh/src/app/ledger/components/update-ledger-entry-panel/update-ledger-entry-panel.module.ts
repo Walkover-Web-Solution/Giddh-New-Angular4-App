@@ -31,6 +31,7 @@ import { NumberToWordsModule } from '../../../shared/helpers/pipes/numberToWords
 import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace.module';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 import { CommonDiscountComponent } from '../../../shared/common-discount/common-discount.component';
+import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -71,7 +72,8 @@ import { CommonDiscountComponent } from '../../../shared/common-discount/common-
         }),
         OverlayModule,
         CommonTaxComponent,
-        CommonDiscountComponent
+        CommonDiscountComponent,
+        GiddhDatePipe
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })

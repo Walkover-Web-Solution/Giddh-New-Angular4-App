@@ -104,6 +104,8 @@ export const ROUTES: Routes = [
             { path: 'multi-currency-report', loadChildren: () => import('./multi-currency-reports/multi-currency-reports.module').then(module => module.MultiCurrencyReportsModule), canActivate: [NeedsAuthorization] },
             { path: 'project-wise-accounting', loadChildren: () => import('./project-wise-accounting/project-wise-accounting.module').then(module => module.ProjectWiseAccountingModule), canActivate: [NeedsAuthorization] },
             { path: 'email-forwarding', loadChildren: () => import('./email-forwarding/email-forwarding.module').then(m => m.BankStatementModule), canActivate: [NeedsAuthorization] },
+            { path: 'budget-forecasting', loadComponent: () => import('./budget-forecasting/budget-forecasting.component').then(m => m.BudgetForecastingComponent), canActivate: [NeedsAuthorization] },
+            { path: 'bank-reconciliation', loadComponent: () => import('./bank-reconciliation/bank-reconciliation.component').then(m => m.BankReconciliationComponent), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

@@ -86,7 +86,7 @@
                             <reactive-dropdown-field
                                 [label]="commonLocaleData?.app_select_account"
                                 [placeholder]="commonLocaleData?.app_select"
-                                [options]="accountSearchResponse"
+                                [options]="accountSearchResponse()"
                                 [labelValue]="createAccountEntryForm.get('account')?.value"
                                 formControlName="accountUniqueName"
                                 [enableDynamicSearch]="true"
@@ -138,7 +138,7 @@
                                             <table class="w-100">
                                                 <tr>
                                                     <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_dated }}</td>
-                                                    <td class="option-extra-content">: {{ option?.additional?.entryDate }}</td>
+                                                    <td class="option-extra-content">: {{ option?.additional?.entryDate | giddhDate }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="option-extra-content" width="75px">
@@ -216,7 +216,7 @@
                                             [label]="commonLocaleData?.app_select_account"
                                             [placeholder]="commonLocaleData?.app_select"
                                             [labelValue]="entry?.get('account')?.value"
-                                            [options]="accountSearchResponse"
+                                            [options]="accountSearchResponse()"
                                             formControlName="accountUniqueName"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"
@@ -268,7 +268,9 @@
                                                                 <td class="option-extra-content" width="75px">
                                                                     {{ commonLocaleData?.app_dated }}
                                                                 </td>
-                                                                <td class="option-extra-content">: {{ option?.additional?.entryDate }}</td>
+                                                                <td class="option-extra-content">
+                                                                    : {{ option?.additional?.entryDate | giddhDate }}
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="option-extra-content" width="75px">

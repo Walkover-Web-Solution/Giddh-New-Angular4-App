@@ -4,7 +4,7 @@
             *ngIf="
                 (dueAmountReportData$ | async)?.results?.length ||
                 (getAgingReportRequestInProcess$ | async) ||
-                showClearFilter ||
+                showClearFilter() ||
                 isAdvanceSearchApplied
             "
             class="top-bar aging-top-bar d-flex align-items-center justify-content-between"
@@ -33,7 +33,7 @@
             </div>
             <div
                 class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start"
-                *ngIf="showClearFilter || isAdvanceSearchApplied"
+                *ngIf="showClearFilter() || isAdvanceSearchApplied"
             >
                 <button matButton="outlined" class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
                     <span class="icon-cross"></span>
@@ -42,20 +42,6 @@
             </div>
             <div class="d-flex justify-content-between align-items-center">
                 <watch-video class="mr-2" [cssClass]="'text-primary'" [moduleName]="'AGING_REPORT'"></watch-video>
-                <div class="pull-left d-flex wrap-searching-aging">
-                    <div class="form-group search-field max-width-250">
-                        <text-field
-                            type="text"
-                            [placeholder]="localeData?.name_amount"
-                            [cssClass]="'form-control name-width'"
-                            [(ngModel)]="searchStr"
-                            (ngModelChange)="searchStr$.next($event)"
-                        ></text-field>
-                        <span class="input-addon">
-                            <i class="icon-search"></i>
-                        </span>
-                    </div>
-                </div>
                 <div class="cursor-pointer advance-clear-filter-icons d-flex float-right column-gap-1">
                     <button
                         matButton="filled"
@@ -117,7 +103,7 @@
             </div>
         </div>
     </div>
-    <div class="contact-main aging-page overflow-visible" *ngIf="!isLoading">
+    <div class="contact-main aging-page overflow-visible" *ngIf="!isLoading()">
         <div class="pb-4 mb-2 on-mobile-view mobile-card-wrapper overflow-visible">
             <div class="table-responsive overflow-visible">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
@@ -127,7 +113,7 @@
                 *ngIf="
                     !(dueAmountReportData$ | async)?.results?.length &&
                     !(getAgingReportRequestInProcess$ | async) &&
-                    !showClearFilter &&
+                    !showClearFilter() &&
                     !isAdvanceSearchApplied
                 "
             >
@@ -148,14 +134,14 @@
                 *ngIf="
                     !(dueAmountReportData$ | async)?.results?.length &&
                     !(getAgingReportRequestInProcess$ | async) &&
-                    (showClearFilter || isAdvanceSearchApplied)
+                    (showClearFilter() || isAdvanceSearchApplied)
                 "
             >
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>
     </div>
-    <div *ngIf="isLoading">
+    <div *ngIf="isLoading()">
         <giddh-page-loader></giddh-page-loader>
     </div>
 </div>
@@ -527,7 +513,7 @@
                                         <p class="font-size-14">
                                             <span class="text-primary">{{ item?.voucherNumber }}</span>
                                             |
-                                            <span class="light-gray">{{ item?.voucherDate }}</span>
+                                            <span class="light-gray">{{ item?.voucherDate | giddhDate }}</span>
                                         </p>
                                         <p class="customer-name font-size-16">
                                             {{ item?.account?.customerName || item?.account?.name }}

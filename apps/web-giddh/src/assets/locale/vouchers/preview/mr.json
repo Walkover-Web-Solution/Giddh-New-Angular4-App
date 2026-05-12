@@ -473,6 +473,8 @@
     "exchange_conversion_rate": "विनिमय/रूपांतरण दर",
     "place_of_supply": "पुरवठ्याचे ठिकाण",
     "country_of_supply": "पुरवठ्याचे ठिकाण",
+    "source_of_supply": "पुरवठ्याचा स्रोत",
+    "destination_of_supply": "पुरवठ्याचे गंतव्य",
     "failed_to_get_template_preview": "टेम्पलेट पूर्वावलोकन उपलब्ध नहीं है",
     "please_enter_template_name": "कृपया टेम्पलेट नाव प्रविष्ट करा",
     "template_saved_successfully": "टेम्पलेट सफलतापूर्वक सहायक बनाया गया।",
@@ -543,5 +545,6 @@
     "select_custom_fields": "कस्टम फील्ड्स निवडा",
     "apply_estimate_round_off": "अंदाज व्हाउचरवर राउंड ऑफ लागू करा",
     "apply_proforma_round_off": "प्रोफॉर्मा व्हाउचरवर राउंड ऑफ लागू करा",
-    "apply_purchase_order_round_off": "खरेदी ऑर्डर व्हाउचरवर राउंड ऑफ लागू करा"
+    "apply_purchase_order_round_off": "खरेदी ऑर्डर व्हाउचरवर राउंड ऑफ लागू करा",
+    "go_to_branch_message": "व्हाउचर तयार करण्यासाठी, शाखा मोडवर जा"
 }

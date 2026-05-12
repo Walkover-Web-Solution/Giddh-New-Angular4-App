@@ -15,6 +15,23 @@
                         : ''
                 "
             ></hamburger-menu>
+            @if (
+                !isShowLedgerColumnarReportTable &&
+                showBranchSwitcher &&
+                currentCompanyBranches?.length > 2 &&
+                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+            ) {
+                <go-to-branch
+                    [title]="
+                        currentOrganizationType === 'COMPANY'
+                            ? commonLocaleData?.app_you_in_company_mode
+                            : commonLocaleData?.app_you_in_consolidate_mode
+                    "
+                    [message]="localeData?.go_to_branch_message"
+                    [buttonLabel]="commonLocaleData?.switch_to_branch"
+                    [cssClass]="'pt-3'"
+                ></go-to-branch>
+            }
             <section class="container-fluid ledger-section pt-3" [hidden]="isShowLedgerColumnarReportTable">
                 <div class="custom-tabs mt-2 mb-2 position-static" *ngIf="isTabletScreen && ledgerView == ledgerViewEnum.TView">
                     <ul class="nav nav-tabs pt-0">
@@ -51,7 +68,7 @@
                         {{ localeData?.opening_closing_balance_filter_message }}
                     </p>
                     <!-- region ledger header -->
-                    <div class="clear-both row mb-3" [ngClass]="{ 'mb-5': currentCompanyBranches?.length > 2 }">
+                    <div class="clear-both row mb-3">
                         <!-- region currency toggle -->
                         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 search-ledger-wrapper">
                             <div class="d-flex column-gap-1 search-ledger-field">
@@ -974,6 +991,7 @@
                                                                         loadDetails(selectedAccountDetails, txn, $event)
                                                                     "
                                                                     [selectedAccountDetails]="selectedAccountDetails"
+                                                                    [selectedStockVariant]="selectedStockVariant"
                                                                     [(isTotalChanged)]="isTotalChanged"
                                                                     [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                                                 ></new-ledger-entry-panel>
@@ -1218,6 +1236,7 @@
                                                                         loadDetails(selectedAccountDetails, txn, $event)
                                                                     "
                                                                     [selectedAccountDetails]="selectedAccountDetails"
+                                                                    [selectedStockVariant]="selectedStockVariant"
                                                                     [(isTotalChanged)]="isTotalChanged"
                                                                     [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                                                 ></new-ledger-entry-panel>
@@ -1627,7 +1646,7 @@
                                                     (change)="entrySelected($event, txn.entryUniqueName, 'debit')"
                                                 ></mat-checkbox>
                                             </span>
-                                            <span>{{ txn.entryDate }}</span>
+                                            <span>{{ txn.entryDate | giddhDate }}</span>
                                         </div>
                                     </mat-grid-tile>
 
@@ -1861,6 +1880,7 @@
                                                     [entrySide]="'dr'"
                                                     (stockVariantSelected)="loadDetails(selectedAccountDetails, txn, $event)"
                                                     [selectedAccountDetails]="selectedAccountDetails"
+                                                    [selectedStockVariant]="selectedStockVariant"
                                                     [(isTotalChanged)]="isTotalChanged"
                                                     [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                                 ></new-ledger-entry-panel>
@@ -2024,7 +2044,7 @@
                                                     (change)="entrySelected($event, txn.entryUniqueName, 'credit')"
                                                 ></mat-checkbox>
                                             </span>
-                                            <span>{{ txn.entryDate }}</span>
+                                            <span>{{ txn.entryDate | giddhDate }}</span>
                                         </div>
                                     </mat-grid-tile>
                                     <mat-grid-tile
@@ -2256,6 +2276,7 @@
                                                     [entrySide]="'cr'"
                                                     (stockVariantSelected)="loadDetails(selectedAccountDetails, txn, $event)"
                                                     [selectedAccountDetails]="selectedAccountDetails"
+                                                    [selectedStockVariant]="selectedStockVariant"
                                                     [(isTotalChanged)]="isTotalChanged"
                                                     [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                                 ></new-ledger-entry-panel>
@@ -3080,7 +3101,7 @@
                                         entrySelected($event, txn.entryUniqueName, txn.type === transactionType.Debit ? 'debit' : 'credit')
                                     "
                                 ></mat-checkbox>
-                                <span class="lh-1">{{ txn.entryDate }}</span>
+                                <span class="lh-1">{{ txn.entryDate | giddhDate }}</span>
                             </div>
                         </mat-grid-tile>
 
@@ -3424,6 +3445,7 @@
                                 [entrySide]="txn.type === transactionType.Debit ? 'dr' : 'cr'"
                                 (stockVariantSelected)="loadDetails(selectedAccountDetails, txn, $event)"
                                 [selectedAccountDetails]="selectedAccountDetails"
+                                [selectedStockVariant]="selectedStockVariant"
                                 [(isTotalChanged)]="isTotalChanged"
                                 [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                             ></new-ledger-entry-panel>

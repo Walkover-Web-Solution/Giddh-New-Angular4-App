@@ -94,6 +94,7 @@
                             ></select-table-column>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -266,7 +267,7 @@
                                                 {{ localeData?.estimate_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -310,7 +311,7 @@
                                                 {{ localeData?.expiry_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.expiryDate ?? '-' }}
+                                                {{ element.expiryDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -519,6 +520,7 @@
                             ></select-table-column>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -688,7 +690,7 @@
                                                 {{ localeData?.proforma_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.proformaDate ?? '-' }}
+                                                {{ element.proformaDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -732,7 +734,7 @@
                                                 {{ localeData?.expiry_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.expiryDate ?? '-' }}
+                                                {{ element.expiryDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -990,6 +992,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -1166,7 +1169,7 @@
                                                 {{ commonLocaleData?.app_invoice_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.voucherDate ?? '-' }}
+                                                {{ element.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -1240,7 +1243,7 @@
                                                 {{ localeData?.due_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element.dueDate ?? '-' }}
+                                                {{ element.dueDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -1488,6 +1491,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -1656,7 +1660,7 @@
                                                 {{ commonLocaleData?.app_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -1928,6 +1932,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -2091,7 +2096,7 @@
                                                 {{ commonLocaleData?.app_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -2367,7 +2372,7 @@
                                         {{ commonLocaleData?.app_date }}
                                     </th>
                                     <td mat-cell *matCellDef="let element">
-                                        {{ element?.entryDate }}
+                                        {{ element?.entryDate | giddhDate }}
                                     </td>
                                 </ng-container>
                                 <ng-container matColumnDef="particular">
@@ -2573,6 +2578,7 @@
                             ></select-table-column>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -2622,7 +2628,7 @@
                                                 {{ commonLocaleData?.app_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="table-date-width">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -2748,7 +2754,9 @@
                                                 >
                                                     {{ getDeliveryDaysText(element.dueDays) }}
                                                 </span>
-                                                <span *ngIf="element?.dueDays && element?.dueDays > 7">{{ element?.dueDate }}</span>
+                                                <span *ngIf="element?.dueDays && element?.dueDays > 7">
+                                                    {{ element?.dueDate | giddhDate }}
+                                                </span>
                                                 <span class="ontime-delivery" *ngIf="element?.dueDays === 0">
                                                     {{ commonLocaleData?.app_today }}
                                                 </span>
@@ -2952,6 +2960,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -3091,7 +3100,7 @@
                                                 {{ localeData?.bill_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -3165,7 +3174,7 @@
                                                 {{ localeData?.due_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center">
-                                                {{ element?.dueDate ?? '-' }}
+                                                {{ element?.dueDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -3411,6 +3420,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -3505,7 +3515,7 @@
                                                 {{ commonLocaleData?.app_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -3789,6 +3799,7 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table
@@ -3877,7 +3888,7 @@
                                                 {{ commonLocaleData?.app_date }}
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-center table-date-width">
-                                                {{ element?.voucherDate ?? '-' }}
+                                                {{ element?.voucherDate | giddhDate }}
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -4118,7 +4129,7 @@
                                         {{ commonLocaleData?.app_date }}
                                     </th>
                                     <td mat-cell *matCellDef="let element">
-                                        {{ element?.entryDate }}
+                                        {{ element?.entryDate | giddhDate }}
                                     </td>
                                 </ng-container>
                                 <ng-container matColumnDef="particular">
@@ -5466,7 +5477,7 @@
                                 </button>
                             </mat-card-content>
                         </mat-card>
-                        <ng-container *ngFor="let template of createdTemplatesList">
+                        <ng-container *ngFor="let template of createdTemplatesList()">
                             <mat-card
                                 class="outline-card add-template-wrapper text-center"
                                 *ngIf="
@@ -5489,6 +5500,7 @@
                                         *ngIf="!template.isDefault"
                                         class="default-wrap font-size-12 p-2 cursor-pointer"
                                         (click)="
+                                            template.isDefault = true;
                                             setTemplateAsDefault(
                                                 template.uniqueName,
                                                 template.type === voucherTypeEnum.invoice
@@ -5689,6 +5701,7 @@
                             </span>
                         </button>
                     </div>
+                    <ng-container *ngTemplateOutlet="goToBranchTemplate"></ng-container>
                     <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="recurringVouchersLoading()"></giddh-page-loader>
                         <table
@@ -5757,7 +5770,7 @@
                             <ng-container matColumnDef="createdAt">
                                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.created_at }}</th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{ element?.createdAt }}
+                                    {{ element?.createdAt | giddhDate }}
                                 </td>
                             </ng-container>
 
@@ -5765,7 +5778,7 @@
                             <ng-container matColumnDef="lastRun">
                                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.last_run }}</th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{ element?.lastRun }}
+                                    {{ element?.lastRun | giddhDate }}
                                 </td>
                             </ng-container>
 
@@ -5773,7 +5786,7 @@
                             <ng-container matColumnDef="nextRun">
                                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.next_run }}</th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{ element?.nextRun }}
+                                    {{ element?.nextRun | giddhDate }}
                                 </td>
                             </ng-container>
 
@@ -6025,3 +6038,15 @@
         ></app-datepicker-wrapper>
     </ng-template>
 </mat-menu>
+
+<!-- Reusable go-to-branch template -->
+<ng-template #goToBranchTemplate let-cssClass="cssClass">
+    @if (isCompany || isConsolidatedBranch) {
+        <go-to-branch
+            [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
+            [message]="localeData?.go_to_branch_message"
+            [cssClass]="cssClass || 'border-radius-8'"
+            [buttonLabel]="commonLocaleData?.switch_to_branch"
+        ></go-to-branch>
+    }
+</ng-template>

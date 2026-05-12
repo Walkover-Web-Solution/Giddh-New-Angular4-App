@@ -1,6 +1,6 @@
 <div>
     {{ getAddressDisplayText() }}
-    <p>{{ address.address ? address.address + ', ' : '' }}{{ address.state?.name }}</p>
+    <p>{{ address.address ? address.address + ', ' : '' }}{{ address.state?.name || address.county?.name }}</p>
     <p>
         {{
             address.gstNumber

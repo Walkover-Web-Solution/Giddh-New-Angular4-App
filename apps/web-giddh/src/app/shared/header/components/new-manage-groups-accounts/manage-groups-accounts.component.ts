@@ -1,5 +1,5 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild, NgZone, ChangeDetectionStrategy, AfterViewChecked } from '@angular/core';
 import { Angular21ChangeDetectionService } from '../../../../services/angular21-change-detection.service';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
@@ -26,12 +26,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     @ViewChild('master', { static: false }) public master: MasterComponent;
     @ViewChild('header', { static: true }) public header: ElementRef;
     @ViewChild('grpSrch', { static: true }) public groupSrch: ElementRef;
-    public headerRect: any;
+    /** Bounding rect of the header element, used to calculate scrollable body height */
     public showForm: boolean = false;
     @ViewChild('myModel', { static: true }) public myModel: ElementRef;
     public breadcrumbPath: string[] = [];
     public breadcrumbUniquePath: string[] = [];
-    public myModelRect: any;
+    /** Computed body height = modal height - header height */
+    public bodyHeight: number = 0;
     public searchLoad: Observable<boolean>;
     public groupAndAccountSearchString$: Observable<string>;
     private groupSearchTerms = new Subject<string>();
@@ -84,8 +85,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
     @HostListener('window:resize', ['$event'])
     public resizeEvent(e) {
-        this.headerRect = this.header.nativeElement?.getBoundingClientRect();
-        this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
+        this.updateBodyHeight();
     }
 
     /**
@@ -166,10 +166,36 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         });
 
         document.querySelector('body')?.classList?.add('master-page');
+        this.updateBodyHeight();
     }
 
     public ngAfterViewChecked() {
         this.changeDetectionService.safeChangeDetection(this.cdRef, this.ngZone);
+    }
+
+    /**
+     * Lifecycle hook called after view initialization
+     *
+     * @returns {void}
+     * @memberof ManageGroupsAccountsComponent
+     */
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.updateBodyHeight();
+        }, 100);
+    }
+
+    /**
+     * Updates bodyHeight based on current modal and header bounding rects 
+     * 
+     * @memberof ManageGroupsAccountsComponent
+     * @returns {void}
+     */
+    private updateBodyHeight(): void {
+        const modelRect = this.myModel?.nativeElement?.getBoundingClientRect();
+        const headerRect = this.header?.nativeElement?.getBoundingClientRect();
+        this.bodyHeight = (modelRect?.height ?? 0) - (headerRect?.height ?? 0);
+        this.cdRef.detectChanges();
     }
 
     public searchGroups(term: string): void {

@@ -10,13 +10,13 @@ import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eve
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
-import { CompanyCreateRequest } from '../models/api-models/Company';
+import { CompanyCreateRequest, CompanyResponse } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, GiddhRegion, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
 import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -33,6 +33,7 @@ import { Configuration } from '../app.constant';
 import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, map, orderBy, remove, set, slice, some } from '../lodash-optimized';
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
+import { UiSettingsService } from './ui-settings.service';
 
 @Injectable({
     providedIn: 'root'
@@ -64,6 +65,8 @@ export class GeneralService {
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     /** Stores the version number for new voucher APIs (1 for old APIs and 2 for new APIs) */
     public voucherApiVersion: number;
+    /** Stores the active company object, used for company-level fallbacks such as postal code label resolution */
+    public activeCompany: CompanyResponse;
 
     get user(): UserDetails {
         return this._user;
@@ -124,7 +127,8 @@ export class GeneralService {
         private http: HttpClient,
         @Optional() @Inject(ServiceConfig)
         private config: IServiceConfigArgs,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private uiSettingsService: UiSettingsService
     ) { }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -135,7 +139,7 @@ export class GeneralService {
         Object.keys(params).forEach((key, index) => {
             if (params[key] !== undefined) {
                 const delimiter = url.indexOf('?') === -1 ? '?' : (index === 0 ? '' : '&');
-                url += `${delimiter}${key}=${params[key]}`
+                url += `${delimiter}${key}=${encodeURIComponent(params[key])}`;
             }
         });
         return url;
@@ -649,6 +653,28 @@ export class GeneralService {
     }
 
     /**
+     * This will return session cookie name based on logged in region
+     *
+     * @param {string} loggedInRegion
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getRegionSessionCookieName(loggedInRegion: GiddhRegion | string): string {
+        // Stores the default session cookie name.
+        const defaultCookieName = 'giddh_session_id';
+        // Stores region-wise session cookie mapping.
+        const regionSessionCookieMap: Record<GiddhRegion, string> = {
+            [GiddhRegion.UK]: 'giddh_session_id_uk',
+            [GiddhRegion.GB]: 'giddh_session_id_uk',
+            [GiddhRegion.IN]: defaultCookieName
+        };
+        // Stores normalized logged-in region for lookup.
+        const normalizedRegion = (loggedInRegion ?? '').trim().toUpperCase() as GiddhRegion;
+
+        return regionSessionCookieMap[normalizedRegion] ?? defaultCookieName;
+    }
+
+    /**
      *Get cookie value
      *
      * @param {*} name
@@ -870,12 +896,13 @@ export class GeneralService {
      */
     public fetchTaxesOnPriority(stockTaxes?: Array<string>, stockGroupTaxes?: Array<string>,
         accountTaxes?: Array<string>, accountGroupTaxes?: Array<string>): Array<string> {
+        accountTaxes = accountTaxes?.filter((tax) => !(accountGroupTaxes ?? []).includes(tax)) ?? [];
         if (stockTaxes?.length) {
             return stockTaxes;
         } else if (stockGroupTaxes?.length) {
             return stockGroupTaxes;
         } else if (accountTaxes?.length) {
-            return accountTaxes?.filter((tax) => !(accountGroupTaxes ?? []).includes(tax)) ?? [];
+            return accountTaxes;
         } else if (accountGroupTaxes?.length) {
             return accountGroupTaxes;
         } else {
@@ -2231,6 +2258,136 @@ export class GeneralService {
     }
 
     /**
+     * Parses a comma-separated query param string into a string array.
+     *
+     * @param {string} [value] - Raw query param value
+     * @returns {string[]} Parsed array, empty if no value
+     * @memberof GeneralService
+     */
+    public parseQueryParamArray(value?: string): string[] {
+        return value ? value.split(',').filter(Boolean) : [];
+    }
+
+    /**
+     * Normalizes query params by converting any array values to comma-separated strings.
+     *
+     * @private
+     * @param {Record<string, any>} queryParams - Raw query params
+     * @returns {Record<string, any>} Normalized params
+     * @memberof GeneralService
+     */
+    private normalizeQueryParams(queryParams: Record<string, any>): Record<string, any> {
+        const normalized: Record<string, any> = {};
+        for (const [key, value] of Object.entries(queryParams)) {
+            normalized[key] = Array.isArray(value) ? (value.length ? value.join(',') : null) : value;
+        }
+        return normalized;
+    }
+
+    /**
+     * Saves query params for a given route path scoped to the active company.
+     * Pass null as queryParams to clear the saved entry.
+     * When replaceOnly is true, saves exactly the provided params without merging with existing ones.
+     * When replaceOnly is false (default), merges the provided params with any existing saved params.
+     * Array values are automatically normalized to comma-separated strings.
+     *
+     * @public
+     * @param {(Record<string, any> | null)} queryParams - Params to save, or null to clear
+     * @param {boolean} [replaceOnly=false] - When true, replaces existing saved params entirely
+     * @memberof GeneralService
+     */
+    public saveRouteQueryFilters(queryParams: Record<string, any> | null, replaceOnly: boolean = false): void {
+        const companyUniqueName = this.companyUniqueName;
+        const { path, queryParams: forcedParams } = this.getCurrentPath(replaceOnly);
+        if (companyUniqueName && path) {
+            const normalized = queryParams ? this.normalizeQueryParams(queryParams) : {};
+            const existing = replaceOnly ? {} : (this.uiSettingsService.getRouteQueryFilters(companyUniqueName, path) ?? {});
+            const merged = { ...existing, ...forcedParams, ...normalized };
+            this.updateActivatedRouteQueryParams(merged ?? {}, replaceOnly ? 'replace' : 'merge');
+            this.uiSettingsService.setRouteQueryFilters(companyUniqueName, path, merged);
+        }
+    }
+
+    /**
+     * Gets the saved query params for a given route path scoped to the active company
+     *
+     * @public
+     * @param {string} routePath - Route path to look up (e.g. /pages/contact/customer)
+     * @returns {(Record<string, any> | null)} Saved query params or null
+     * @memberof GeneralService
+     */
+    public getRouteQueryFiltersForPath(): Record<string, any> | null {
+        const companyUniqueName = this.companyUniqueName;
+        const { path } = this.getCurrentPath();
+        if (!companyUniqueName || !path) {
+            return null;
+        }
+        return this.uiSettingsService.getRouteQueryFilters(companyUniqueName, path);
+    }
+
+    /**
+     * Restores saved query params for a given route path from localStorage only.
+     * Returns the saved params so the component can apply them to its own state and URL.
+     *
+     * @public
+     * @param {string} routePath - Explicit route path (e.g. /pages/contact/customer)
+     * @returns {(Record<string, any> | null)} Saved params or null if nothing found
+     * @memberof GeneralService
+     */
+    public restoreRouteQueryFilters(): void {
+        const { queryParams: forcedParams } = this.getCurrentPath();
+        const saved = this.getRouteQueryFiltersForPath() ?? {};
+        const merged: Record<string, any> = { ...saved, ...forcedParams };
+        this.updateActivatedRouteQueryParams(merged);
+    }
+
+    /**
+     * Returns the current route path scoped by required query params (for localStorage key)
+     * and the full current query params (for merging with saved filters).
+     * When replaceOnly is true, returns only the forced/required params as queryParams.
+     *
+     * @param {boolean} [replaceOnly] - When true, returns only required params in queryParams
+     * @returns {{ path: string; queryParams: Record<string, any> }} Scoped path and query params
+     * @memberof GeneralService
+     */
+    public getCurrentPath(replaceOnly: boolean = false): { path: string; queryParams: Record<string, any> } {
+        const currentUrlParams = this.activatedRoute.snapshot.queryParams;
+        const basePath = this.router.url.split('?')[0];
+        const forcedParams: Record<string, any> = {};
+
+        if (currentUrlParams?.required) {
+            const requiredKeys: string[] = currentUrlParams.required.split(',');
+            requiredKeys.forEach(key => {
+                if (currentUrlParams[key] != null) {
+                    forcedParams[key] = currentUrlParams[key];
+                }
+            });
+        } else if (currentUrlParams?.tab) {
+            forcedParams['tab'] = currentUrlParams['tab'];
+            if (currentUrlParams?.tabIndex) {
+                forcedParams['tabIndex'] = currentUrlParams['tabIndex'];
+            }
+        }
+        
+        const scopedPath = Object.keys(forcedParams).length
+            ? `${basePath}?${Object.entries(forcedParams).map(([k, v]) => `${k}=${v}`).join('&')}`
+            : basePath;
+
+        return { path: scopedPath, queryParams: replaceOnly ? forcedParams : currentUrlParams };
+    }
+
+    /** List of scoped route paths that support fromDate/toDate query param persistence */
+    public readonly currentSupportedQueryParam: string[] = [
+        '/pages/contact/customer?tab=customer&tabIndex=1',
+        '/pages/contact/vendor?tab=vendor&tabIndex=1',
+        '/pages/contact/aging-report?tab=aging-report&tabIndex=1',
+        '/pages/reports/sales-register?groupBy=salesPerson',
+        '/pages/reports/sales-register?groupBy=state',
+        '/pages/reports/sales-register?groupBy=country',
+        '/pages/reports/sales-register?groupBy=duration'
+    ];
+
+    /**
      * Update current page query params
      *
      * @param {Params} queryParams
@@ -3191,5 +3348,43 @@ export class GeneralService {
     public appendQueryParam(url: string, paramName: string, paramValue: string | number | boolean): string {
         const delimiter = url.includes('?') ? '&' : '?';
         return `${url}${delimiter}${paramName}=${paramValue}`;
+    }
+
+    /**
+     * Returns the country-specific label for the postal/pin code field.
+     * Different countries use different names for their postal code:
+     * India uses "PIN Code", US uses "ZIP Code", UK uses "Postcode", Canada uses "Postal Code", etc.
+     *
+     * @param {string} countryCode - ISO alpha-2 country code (e.g. 'IN', 'US', 'GB', 'CA')
+     * @returns {string} The localized label for the postal code field
+     * @memberof GeneralService
+     */
+    public getPostalCodeLabel(countryCode: string): string {
+        const resolvedCode = countryCode || this.activeCompany?.countryV2?.alpha2CountryCode;
+        switch (resolvedCode?.toUpperCase()) {
+            case 'IN': return 'PIN Code';
+            case 'US': return 'ZIP Code';
+            case 'GB': return 'Postcode';
+            case 'CA': return 'Postal Code';
+            case 'AU': return 'Postcode';
+            case 'NZ': return 'Postcode';
+            case 'IE': return 'Eircode';
+            case 'NL': return 'Postcode';
+            case 'DE': return 'Postleitzahl';
+            case 'FR': return 'Code Postal';
+            case 'AE': return 'P.O. Box';
+            default: return 'Postal Code';
+        }
+    }
+
+    /**
+     * Returns the placeholder text for the postal/pin code field (e.g. "Enter PIN Code", "Enter ZIP Code").
+     *
+     * @param {string} countryCode - ISO alpha-2 country code (e.g. 'IN', 'US', 'GB', 'CA')
+     * @returns {string} The placeholder string for the postal code input field
+     * @memberof GeneralService
+     */
+    public getPostalCodePlaceholder(countryCode: string): string {
+        return `Enter ${this.getPostalCodeLabel(countryCode)}`;
     }
 }

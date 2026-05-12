@@ -53,6 +53,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -119,7 +120,8 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         MatMenuModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        NewConfirmationModalModule
+        NewConfirmationModalModule,
+        GiddhDatePipe
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

@@ -1,10 +1,12 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { skip, take, takeUntil } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
@@ -78,9 +80,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
         private salesService: SalesService,
         private generalService: GeneralService,
         private componentStore: TaxAuthorityComponentStore,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.initForm();
+        this.store.dispatch(this.settingsTaxesActions.CreateTaxResponse(null));
     }
 
     /**
@@ -144,9 +148,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
      * @memberof AsideMenuCreateTaxComponent
      */
     public ngAfterViewInit(): void {
-        setTimeout(() => {
-            this.dropdownRef?.openDropdownPanel();
-        }, 200);
+        if (!this.tax?.uniqueName){
+            setTimeout(() => {
+                this.dropdownRef?.openDropdownPanel();
+            }, 200);
+        }
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -164,7 +170,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
             this.taxForm.get('taxAuthority').setValue(this.tax?.taxAuthority ?? '');
             (this.taxForm.get('taxAuthorityRequest') as FormGroup).get('uniqueName').setValue(this.tax.taxAuthority?.uniqueName ?? '');
             this.taxForm.get('taxValue').setValue(this.tax.taxDetail[0].taxValue ?? '');
-            this.taxForm.get('date').setValue(dayjs(this.tax.taxDetail[0].date).toDate() ?? dayjs().toDate());
+            const rawDate = this.tax.taxDetail[0].date;
+            const parsedDate = dayjs(rawDate, GIDDH_DATE_FORMAT).isValid() ? dayjs(rawDate, GIDDH_DATE_FORMAT).toDate() : (dayjs(rawDate).isValid() ? dayjs(rawDate).toDate() : dayjs().toDate());
+            this.taxForm.get('date').setValue(parsedDate);
             this.taxForm.get('tdsTcsTaxSubTypes').setValue(this.subType ?? '');
             this.taxForm.get('taxType').setValue(this.subType ? this.tax.taxType?.replace(this.subType, '') : this.tax.taxType);
             this.taxForm.get('taxFileDate').setValue(this.tax.taxFileDate?.toString() ?? '');
@@ -327,6 +335,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
                     }
 
                     this.taxList.push({ label: res.taxes[key]?.label, value: res.taxes[key]?.value });
+                    this.changeDetectorRef.detectChanges();
                 });
                 this.taxListSource$ = observableOf(this.taxList);
             } else {

@@ -581,7 +581,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                 linkedStockIndex++;
                             });
                         }
-                        index++;
                     });
                     this.existingRecipe = this.formatRecipeRequest();
                     this.isByLinkedStockExpanded = this.recipeObject.manufacturingDetails[0]?.linkedStocks[0]
@@ -654,7 +653,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                 byProductlinkedStockIndex++;
                             });
                         }
-                        index++;
                     });
                     this.existingRecipe = this.formatRecipeRequest();
                     this.isByProductExpanded = this.recipeObject.manufacturingDetails[0]?.byProducts[0]

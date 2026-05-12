@@ -140,6 +140,8 @@ export class ListBranchTransferComponent implements OnInit {
     public translationLoaded: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
         return (
@@ -209,6 +211,7 @@ export class ListBranchTransferComponent implements OnInit {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
+                this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && response.length > 1;
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
                     value: branch?.uniqueName,

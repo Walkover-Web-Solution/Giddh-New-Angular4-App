@@ -15,7 +15,7 @@ import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
+import { IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, PlanDuration } from '../../app.constant';
 import { CompanyListDialogComponent } from '../company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
@@ -42,7 +42,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
-    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'renewalDate'];
+    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'duration', 'renewalDate'];
     /** Hold the data of subscriptions */
     public dataSource: any;
     /** True if translations loaded */
@@ -117,6 +117,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public selectedStatus: string = '';
     /** This will use for voucher api version */
     public voucherApiVersion: number;
+    /** Hold plan duration constant reference for template usage */
+    public readonly planDuration: typeof PlanDuration = PlanDuration;
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,

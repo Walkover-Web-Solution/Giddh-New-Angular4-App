@@ -571,7 +571,6 @@ export class AsideRecurrenceVoucherCreateComponent implements OnInit, AfterViewI
         const { dayOfMonth, weekday, weekOfMonth } = this.generalService.getDateMeta(date);
         const currentFrequencyUnit = this.activeForm.get('frequency.unit')?.value || 'MONTH';
 
-
         this.ensureRepeatOnControls();
 
         // Clear weekdays array first

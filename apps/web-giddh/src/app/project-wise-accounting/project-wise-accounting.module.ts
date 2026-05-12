@@ -9,6 +9,7 @@ import { ProjectWiseAccountingRoutingModule } from './project-wise-accounting.ro
 import { ProjectWiseAccountingListComponent } from './list/project-wise-accounting.component';
 import { RevenueExpenseListComponent } from './revenue-expense-list/revenue-expense-list.component';
 import { CreateProjectComponent } from './components/create-project/create-project.component';
+import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 import { MainComponent } from './main.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
@@ -31,6 +32,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -67,7 +69,9 @@ import { FinancialReportsModule } from '../financial-reports/financial-reports.m
         MatProgressSpinnerModule,
         HamburgerMenuModule,
         MatMenuModule,
-        FinancialReportsModule
+        FinancialReportsModule,
+        GiddhDatePipe,
+        GoToBranchComponent
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]

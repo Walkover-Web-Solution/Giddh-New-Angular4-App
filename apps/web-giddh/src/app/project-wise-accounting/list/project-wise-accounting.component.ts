@@ -79,8 +79,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public isCompany: boolean = true;
     /** Enum representing the types of project-wise accounting status type */
     public projectStatusType: typeof ProjectStatusType = ProjectStatusType;
-    /** Hold broadcast event */
-    public broadcast: any;
     /** True if project is fetching. */
     public isLoadingGetProject: boolean = false;
     /** Stores the searched name value for the Name filter */
@@ -521,15 +519,5 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             },
             payload: { status: project.status === this.projectStatusType.Closed ? this.projectStatusType.InProgress : this.projectStatusType.Closed }
         });
-    }
-
-    /**
-     * This will use for go to branch mode
-     *
-     * @memberof ProjectWiseAccountingListComponent
-     */
-    public gotToBranchTab(): void {
-        this.broadcast = new BroadcastChannel("project-wise-accounting");
-        this.broadcast.postMessage({ success: true });
     }
 }
