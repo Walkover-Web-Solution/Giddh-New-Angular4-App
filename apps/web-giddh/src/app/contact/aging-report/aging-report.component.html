@@ -1,3 +1,4 @@
+@let isCompanyMode = currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch);
 <div class="container-fluid">
     <div class="header-content-sticky aging-report-z-index mb-3">
         <div
@@ -5,7 +6,8 @@
                 (dueAmountReportData$ | async)?.results?.length ||
                 (getAgingReportRequestInProcess$ | async) ||
                 showClearFilter() ||
-                isAdvanceSearchApplied
+                isAdvanceSearchApplied ||
+                (isCompanyMode && currentCompanyBranches?.[0]?.value !== currentBranch?.uniqueName)
             "
             class="top-bar aging-top-bar d-flex align-items-center justify-content-between"
         >
@@ -15,10 +17,7 @@
                         {{ localeData?.new_customer }}
                     </button>
                 </div>
-                <div
-                    class="form-group mr-3 pull-left linked-entities mb-0"
-                    *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
-                >
+                <div class="form-group mr-3 pull-left linked-entities mb-0" *ngIf="isCompanyMode">
                     <div class="form-group mb-0">
                         <reactive-dropdown-field
                             [options]="currentCompanyBranches"
@@ -114,7 +113,8 @@
                     !(dueAmountReportData$ | async)?.results?.length &&
                     !(getAgingReportRequestInProcess$ | async) &&
                     !showClearFilter() &&
-                    !isAdvanceSearchApplied
+                    !isAdvanceSearchApplied &&
+                    !(isCompanyMode && currentCompanyBranches?.[0]?.value !== currentBranch?.uniqueName)
                 "
             >
                 <div class="d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1">
@@ -134,7 +134,9 @@
                 *ngIf="
                     !(dueAmountReportData$ | async)?.results?.length &&
                     !(getAgingReportRequestInProcess$ | async) &&
-                    (showClearFilter() || isAdvanceSearchApplied)
+                    (showClearFilter() ||
+                        isAdvanceSearchApplied ||
+                        (isCompanyMode && currentCompanyBranches?.[0]?.value !== currentBranch?.uniqueName))
                 "
             >
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
@@ -500,7 +502,7 @@
         </div>
         <mat-dialog-content class="dialog-body">
             <div class="list-wrapper">
-                <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading">
+                <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading && unpaidInvoiceData?.length">
                     <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
                         <mat-list-item class="list-item px-2" *cdkVirtualFor="let item of unpaidInvoiceData">
                             <a
@@ -533,6 +535,9 @@
                 </mat-list>
                 <div *ngIf="unpaidInvoiceIsLoading">
                     <giddh-page-loader></giddh-page-loader>
+                </div>
+                <div class="no-data" *ngIf="!unpaidInvoiceIsLoading && !unpaidInvoiceData?.length">
+                    <no-data [secondaryMessage]="' '" [primaryMessageClass]="'font-size-24'"></no-data>
                 </div>
             </div>
         </mat-dialog-content>

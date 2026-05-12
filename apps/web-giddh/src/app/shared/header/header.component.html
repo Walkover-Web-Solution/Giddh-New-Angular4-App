@@ -298,9 +298,9 @@
                                         ) {
                                             <go-to-branch
                                                 [title]="
-                                                    isCompany
-                                                        ? commonLocaleData?.app_you_in_company_mode
-                                                        : commonLocaleData?.app_you_in_consolidate_mode
+                                                    isConsolidatedBranch
+                                                        ? commonLocaleData?.app_you_in_consolidate_mode
+                                                        : commonLocaleData?.app_you_in_company_mode
                                                 "
                                                 ]
                                                 [message]="localeData?.go_to_branch_information"
@@ -386,16 +386,23 @@
                                 </div>
                             </mat-menu>
                         </li>
-                        <li
-                            class="border-none pr-3 notification position-relative"
-                            [ngClass]="{ 'mr-0': isTodaysDateSelected }"
-                            [matTooltip]="localeData?.notifications"
-                            [matTooltipPosition]="'below'"
-                        >
-                            <button matIconButton aria-label="notification" class="icon-circle notification" (click)="openNotifications()">
-                                <i class="icon-bell-new"></i>
-                            </button>
-                        </li>
+                        @if (generalService.isGiddhDomain()) {
+                            <li
+                                class="border-none pr-3 notification position-relative"
+                                [ngClass]="{ 'mr-0': isTodaysDateSelected }"
+                                [matTooltip]="localeData?.notifications"
+                                [matTooltipPosition]="'below'"
+                            >
+                                <button
+                                    matIconButton
+                                    aria-label="notification"
+                                    class="icon-circle notification"
+                                    (click)="openNotifications()"
+                                >
+                                    <i class="icon-bell-new"></i>
+                                </button>
+                            </li>
+                        }
                         <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
                             <button matButton="outlined" class="p-1 font-size-15" (click)="dateSelectedCallback()">
                                 {{ commonLocaleData?.app_today }}

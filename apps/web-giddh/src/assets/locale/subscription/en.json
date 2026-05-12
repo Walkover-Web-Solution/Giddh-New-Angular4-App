@@ -152,5 +152,7 @@
         "cancelled": "Cancelled",
         "expired": "Expired",
         "select_status": "Select status",
-        "please_select_payment_provider": "Please select a payment provider"
+        "please_select_payment_provider": "Please select a payment provider",
+        "no_plans_available": "No plans available",
+        "no_plans_available_for_region": "No plans available for selected region"
     }

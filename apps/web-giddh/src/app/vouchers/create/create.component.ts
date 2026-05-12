@@ -15,6 +15,7 @@ import {
     ViewChildren,
     signal,
 } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -47,6 +48,7 @@ import { SettingsBranchActions } from "../../actions/settings/branch/settings.br
 import { OrganizationType } from "../../models/user-login-state";
 import {
     PreviousInvoicesVm,
+    ProformaDownloadRequest,
     ProformaFilter,
     ProformaGetRequest,
     ProformaResponse,
@@ -68,6 +70,7 @@ import {
 } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { PageEvent } from "@angular/material/paginator";
 import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
 import { CommonTaxComponent } from "../../shared/common-tax/common-tax.component";
@@ -96,7 +99,9 @@ import {
     ASIDE_PANE_CONFIG,
     IOption,
     API_BULK_FETCH_LIMIT,
-    FormFieldsType
+    Configuration,
+    FormFieldsType,
+    PAGE_SIZE_OPTIONS
 } from "../../app.constant";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -110,6 +115,7 @@ import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxe
 import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { MatSelectChange } from "@angular/material/select";
 import { ServiceConfig } from "../../services/service.config";
 import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
@@ -126,9 +132,9 @@ import { Platform } from "@angular/cdk/platform";
 import { GeneralActions } from "../../actions/general/general.actions";
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
-import { Location } from '@angular/common';
 import { RecurringEndType, RecurringRepeatOption, RecurringFrequencyUnit, RecurringRepeatType, RecurringMonthlyMode } from "../../models/enums/recurring-voucher.enum";
 import { AccountCategoryEnum } from "../../shared/Enums/common.enum";
+import { CopyParticularDialogComponent } from "../copy-particular-dialog/copy-particular-dialog.component";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -161,6 +167,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('shippingDetailsTrigger') shippingDetailsTrigger!: MatMenuTrigger;
     /** Copy Voucher div element for focusing */
     @ViewChild('copyVoucherElement') copyVoucherElement!: ElementRef<HTMLDivElement>;
+    /** Template reference for the recent vouchers aside pane */
+    @ViewChild('recentVouchersTemplate', { static: true }) recentVouchersTemplate: TemplateRef<any>;
+    /** Template reference for the voucher PDF preview dialog */
+    @ViewChild('voucherPdfPreviewTemplate', { static: true }) voucherPdfPreviewTemplate: TemplateRef<any>;
     /** Description textarea element for focusing */
     @ViewChild('inputDescription', { static: false }) inputDescription?: ElementRef<HTMLTextAreaElement>;
     /** Reference to the "Add new row/line" span element for focusing */
@@ -197,6 +207,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public briefAccounts$: Observable<OptionInterface[]> = observableOf(null);
     /** Last vouchers get in progress Observable */
     public getLastVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
+    /** Signal indicating company vouchers fetch is in progress */
+    protected readonly isCompanyVouchersLoading = toSignal(this.componentStore.getLastVouchersCompanyInProgress$, { initialValue: false });
+    /** Signal indicating account vouchers fetch is in progress */
+    protected readonly isAccountVouchersLoading = toSignal(this.componentStore.getLastVouchersAccountInProgress$, { initialValue: false });
     /** Vendor purchase orders Observable */
     public vendorPurchaseOrders$: Observable<any> = this.componentStore.vendorPurchaseOrders$;
     /** Vendor purchase orders Observable */
@@ -297,8 +311,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         trackingNumber: "",
         showNotesAtLastPage: false,
     };
-    /** Holds list of last vouchers */
-    public lastVouchersList$: Observable<LastInvoices[]> = observableOf(null);
+    /** Signal holding recent company vouchers for the aside pane */
+    protected readonly lastVouchersCompanyList = signal<LastInvoices[]>([]);
+    /** Signal holding recent account vouchers for the aside pane */
+    protected readonly lastVouchersAccountList = signal<LastInvoices[]>([]);
+    /** Dialog ref for recent vouchers aside pane */
+    private recentVouchersAsideRef: MatDialogRef<any>;
+    /** Signal holding the voucher number shown in the PDF preview dialog title */
+    protected readonly selectedPdfVoucherNumber = signal<string>('');
+    /** Signal holding the sanitized URL for the PDF preview iframe */
+    protected readonly previewPdfUrl = signal<SafeResourceUrl>(null);
+    /** Holds URL string for revoking blob object */
+    private previewPdfFileURL: string = '';
     /** Form Group for invoice form */
     public invoiceForm: FormGroup;
     /** This will open account dropdown by default */
@@ -370,6 +394,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     /** Entry index which is open in edit mode */
     public activeEntryIndex: number | null = null;
+    /** Reference to the copy particular dialog */
+    private copyParticularDialogRef: MatDialogRef<any>;
+    /** Instance of copy particular dialog component */
+    private copyParticularDialogComponentInstance: CopyParticularDialogComponent | null = null;
+    /** Copy particular dialog list */
+    public copyParticularHistory: any = { items: [], totalItems: 0, totalPages: 0, page: 1 };
+    /** Copy particular dialog loading state */
+    public isCopyParticularLoading: boolean = false;
+    /** Copy particular dialog title */
+    public copyParticularDialogTitle: string = "";
+    /** Pagination information for copy particular dialog */
+    public copyParticularPagination: { page: number; size: number } = {
+        page: 1,
+        size: PAGE_SIZE_OPTIONS[0]
+    };
+    /** Page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Rate precision value that will be visible on UI */
     public ratePrecision = RATE_FIELD_PRECISION;
     /** Rate precision value that will be sent to API */
@@ -397,6 +438,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public emailDialogRef: MatDialogRef<any>;
     /** Stores the last focused element before dialog opens for focus restoration */
     private lastFocusedElement: HTMLElement | null = null;
+    /** Stores the trigger button for copy particular dialog focus restoration */
+    private copyParticularTriggerElement: HTMLElement | null = null;
+    /** Stores the entry index for copy particular trigger focus restoration */
+    private copyParticularTriggerEntryIndex: number | null = null;
+    /** Skip trigger restore when copy particular selects a row */
+    private shouldFocusAddNewParticularAfterCopy: boolean = false;
+    /** Entry index currently associated with copy particular dialog */
+    private copyParticularEntryIndex: number | null = null;
     /** List of vouchers available for adjustment */
     public vouchersForAdjustment: any[] = [];
     /** Stores the adjustment data */
@@ -731,6 +780,29 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * True when copy particular search should be available for current voucher type.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get shouldShowCopyParticularSearchButton(): boolean {
+        if (this.invoiceType.isCashInvoice) {
+            return false;
+        }
+
+        return (
+            this.invoiceType.isSalesInvoice ||
+            this.invoiceType.isPurchaseInvoice ||
+            this.invoiceType.isEstimateInvoice ||
+            this.invoiceType.isProformaInvoice ||
+            this.invoiceType.isPurchaseOrder ||
+            this.invoiceType.isCreditNote ||
+            this.invoiceType.isDebitNote
+        );
+    }
+
+    /**
      *
      * @readonly
      * @type {FormGroup}
@@ -807,7 +879,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private generalActions: GeneralActions,
         private customFieldsService: CustomFieldsService,
         private recurrenceService: RecurrenceFormService,
-        private location: Location
+        private domSanitizer: DomSanitizer
     ) {
         this.imgPath = this.serviceConfig.IMG_PATH;
     }
@@ -1574,9 +1646,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.checkIfEntriesHasStock();
 
                         if (voucherDetails.isCopyVoucher) {
-                            setTimeout(() => {
-                                this.copyVoucherElement?.nativeElement?.focus();
-                            }, 100);
+                            this.recentVouchersAsideRef?.close();
+                            this.focusOnCopyPreviousBtn();
                         } else if (this.isUpdateMode) {
                             setTimeout(() => {
                                 this.customerVendorDropdown.focusInputField();
@@ -1727,42 +1798,39 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.calculateVoucherTotals();
             });
 
-        this.componentStore.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.lastVouchersCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                const lastVouchers: LastInvoices[] = [];
-                if (!this.invoiceType.isProformaInvoice && !this.invoiceType.isEstimateInvoice) {
-                    if (response) {
-                        response = response as ReciptResponse;
-                        response?.items?.forEach((item) => {
-                            lastVouchers.push({
-                                voucherNumber: item.voucherNumber,
-                                date: item.voucherDate,
-                                grandTotal: item.grandTotal,
-                                account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
-                                uniqueName: item?.uniqueName,
-                            });
-                        });
-                    }
-                } else {
-                    if (response) {
-                        response = response as ProformaResponse;
-                        if (response?.items?.length) {
-                            response.items.forEach((item) => {
-                                lastVouchers.push({
-                                    voucherNumber: this.invoiceType.isProformaInvoice
-                                        ? item.proformaNumber
-                                        : item.estimateNumber,
-                                    date: item.voucherDate,
-                                    grandTotal: item.grandTotal,
-                                    account: { name: item.customerName, uniqueName: item.customerUniqueName },
-                                    uniqueName: item?.uniqueName,
-                                });
-                            });
-                        }
-                    }
-                }
-                this.lastVouchersList$ = observableOf([...lastVouchers]);
-                this.changeDetection.detectChanges();
+                const res = response as any;
+                this.lastVouchersCompanyList.set(
+                    (res?.items ?? []).map((item: any) => ({
+                        voucherNumber: item.voucherNumber,
+                        date: item.voucherDate,
+                        grandTotal: item.grandTotal,
+                        account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
+                        uniqueName: item?.uniqueName,
+                    }))
+                );
+            }
+        });
+
+        this.componentStore.lastVouchersAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                const res = response as any;
+                this.lastVouchersAccountList.set(
+                    (res?.items ?? []).map((item: any) => ({
+                        voucherNumber: item.voucherNumber,
+                        date: item.voucherDate,
+                        grandTotal: item.grandTotal,
+                        account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
+                        uniqueName: item?.uniqueName,
+                    }))
+                );
+            }
+        });
+
+        this.componentStore.downloadVoucherFileResponse$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.handlePreviewVoucherPdfResponse(response);
             }
         });
 
@@ -2093,7 +2161,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.useCustomVoucherNumber = true;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
                     this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
-                    this.useCustomVoucherNumber = true;
+                    this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomDebitNoteNumber;
                 } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                     this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
                     this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomCreditNoteNumber;
@@ -2103,10 +2171,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomPaymentNumber;
                 } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate) {
                     this.applyRoundOff = settings.estimateSettings.estimateRoundOff;
-                    this.useCustomVoucherNumber = true;
+                    this.useCustomVoucherNumber = false;
                 } else if (this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
                     this.applyRoundOff = settings.proformaSettings?.proformaRoundOff;
-                    this.useCustomVoucherNumber = true;
+                    this.useCustomVoucherNumber = false;
                 } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
                     this.applyRoundOff = settings.purchaseBillSettings?.purchaseOrderRoundOff;
@@ -2406,7 +2474,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Fetches last 5 vouchers
+     * Fetches last 10 vouchers for both company-wide and account-specific lists.
+     * - Company request: fetches without account filter.
+     * - Account request: fetches with q = account uniqueName to filter by current account.
      *
      * @private
      * @memberof VoucherCreateComponent
@@ -2416,19 +2486,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             let filterRequest: ProformaFilter = new ProformaFilter();
             filterRequest.sortBy = this.invoiceType.isProformaInvoice ? "proformaDate" : "estimateDate";
             filterRequest.sort = "desc";
-            filterRequest.count = 5;
+            filterRequest.count = 10;
             filterRequest.isLastInvoicesRequest = true;
             this.componentStore.getPreviousProformaEstimates({
                 model: filterRequest,
                 type: this.invoiceType.isProformaInvoice ? "proformas" : "estimates",
             });
         } else {
-            let request: InvoiceReceiptFilter = new InvoiceReceiptFilter();
-            request.sortBy = "voucherDate";
-            request.sort = "desc";
-            request.count = 5;
-            request.isLastInvoicesRequest = true;
-            this.componentStore.getPreviousVouchers({ model: request, type: this.voucherType });
+            const baseRequest: Partial<InvoiceReceiptFilter> = {
+                sortBy: "voucherDate",
+                sort: "desc",
+                count: 10,
+                isLastInvoicesRequest: true,
+            };
+
+            const companyRequest: InvoiceReceiptFilter = Object.assign(new InvoiceReceiptFilter(), baseRequest);
+            this.componentStore.getPreviousVouchersCompany({ model: companyRequest, type: this.voucherType });
+
+            const accountRequest: InvoiceReceiptFilter = Object.assign(new InvoiceReceiptFilter(), baseRequest);
+            accountRequest.q = this.invoiceForm.controls['account']?.get('customerName')?.value;
+            this.componentStore.getPreviousVouchersAccount({ model: accountRequest, type: this.voucherType });
         }
     }
 
@@ -2843,7 +2920,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             transactionFormGroup.get("account.name")?.patchValue(event?.label);
             transactionFormGroup.get("account.uniqueName")?.patchValue(event?.account?.uniqueName || event?.value);
-
             if (event?.additional?.stock?.uniqueName) {
                 transactionFormGroup.get("stock.name")?.patchValue(event?.additional?.stock?.name);
                 transactionFormGroup.get("stock.uniqueName")?.patchValue(event?.additional?.stock?.uniqueName);
@@ -2935,7 +3011,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             this.checkIfEntriesHasStock();
+
+            if (event?.additional?.stock?.uniqueName && this.lastInteraction === InteractionType.KEYBOARD) {
+                this.focusCopyParticularSearchButton(entryIndex);
+            }
         }
+    }
+
+    /**
+     * Focuses copy particular search button after stock selection when it becomes available in DOM.
+     *
+     * @private
+     * @param {number} entryIndex
+     * @memberof VoucherCreateComponent
+     */
+    private focusCopyParticularSearchButton(entryIndex: number): void {
+        setTimeout(() => {
+            this.changeDetection.detectChanges();
+            const searchButton = this.getCopyParticularSearchButtonByEntryIndex(entryIndex);
+            if (searchButton) {
+                this.focusMonitor.focusVia(searchButton, 'keyboard');
+            }
+        }, 150);
     }
 
     /**
@@ -3465,6 +3562,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 uniqueName: [""],
                 amount: [""],
                 type: [""],
+                taxType: [""],
                 calculationMethod: [""],
                 isChecked: [false],
                 taxValue: [0],
@@ -3638,6 +3736,357 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         }
         return maxQuantity;
+    }
+
+    /**
+     * Opens the copy particular dialog
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public openCopyDialog(entryIndex: number, event?: Event): void {
+        const entryFormGroup = this.getEntryFormGroup(entryIndex);
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        const stockUniqueName = transactionFormGroup.get("stock.uniqueName")?.value;
+        const accountUniqueName = this.invoiceForm.get("account.uniqueName")?.value;
+
+        if (!stockUniqueName || !accountUniqueName) {
+            return;
+        }
+
+        const accountName =
+            this.invoiceForm?.controls["account"]?.get("customerName")?.value ||
+            this.invoiceForm?.controls["account"]?.get("name")?.value ||
+            "";
+        const stockName = transactionFormGroup.get("stock.name")?.value || "";
+        const variantName = transactionFormGroup.get("stock.variant.name")?.value || "";
+
+        this.copyParticularEntryIndex = entryIndex;
+        this.copyParticularDialogTitle = stockName
+            ? `${accountName} (${stockName}${variantName ? ` - ${variantName}` : ""})`
+            : accountName;
+        this.copyParticularPagination = {
+            page: 1,
+            size: this.pageSizeOptions[0]
+        };
+        this.copyParticularHistory = { items: [], totalItems: 0, totalPages: 0, page: 1 };
+        this.copyParticularTriggerElement = (event?.currentTarget as HTMLElement) || (document.activeElement as HTMLElement) || null;
+        this.copyParticularTriggerEntryIndex = entryIndex;
+
+        this.copyParticularDialogRef = this.dialog.open(CopyParticularDialogComponent, {
+            panelClass: 'mat-dialog-lg',
+            data: {
+                parent: this
+            }
+        });
+        this.copyParticularDialogComponentInstance = this.copyParticularDialogRef.componentInstance;
+
+        this.getCopyParticularHistory();
+
+        this.copyParticularDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+            this.copyParticularEntryIndex = null;
+            this.copyParticularHistory = { items: [], totalItems: 0, totalPages: 0, page: 1 };
+            this.isCopyParticularLoading = false;
+            this.copyParticularDialogTitle = "";
+            this.copyParticularDialogComponentInstance = null;
+            this.copyParticularDialogRef = null;
+            if (this.shouldFocusAddNewParticularAfterCopy) {
+                this.focusAddNewParticularElement();
+                this.shouldFocusAddNewParticularAfterCopy = false;
+                this.copyParticularTriggerElement = null;
+                this.copyParticularTriggerEntryIndex = null;
+            } else {
+                this.restoreCopyParticularTriggerFocus();
+            }
+        });
+    }
+
+    /**
+     * Restores focus to the copy particular trigger button if available,
+     * otherwise focuses the next logical element from the original trigger.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private restoreCopyParticularTriggerFocus(): void {
+        setTimeout(() => {
+            const triggerElement = this.getCopyParticularTriggerButton();
+
+            if (triggerElement) {
+                triggerElement.focus();
+            } else if (this.copyParticularTriggerElement) {
+                const nextElement = this.findNextFocusableElementSimple(this.copyParticularTriggerElement);
+                if (nextElement) {
+                    nextElement.focus();
+                } else {
+                    this.copyParticularTriggerElement.focus();
+                }
+            }
+
+            this.copyParticularTriggerElement = null;
+            this.copyParticularTriggerEntryIndex = null;
+        }, 100);
+    }
+
+    /**
+     * Finds the current copy particular trigger button in DOM for the stored entry index.
+     *
+     * @private
+     * @returns {(HTMLElement | null)}
+     * @memberof VoucherCreateComponent
+     */
+    private getCopyParticularTriggerButton(): HTMLElement | null {
+        if (this.copyParticularTriggerEntryIndex === null || !this.platform.isBrowser) {
+            return null;
+        }
+
+        return this.getCopyParticularSearchButtonByEntryIndex(this.copyParticularTriggerEntryIndex);
+    }
+
+    /**
+     * Finds copy particular search button in DOM for the provided entry index.
+     *
+     * @private
+     * @param {number} entryIndex
+     * @returns {(HTMLElement | null)}
+     * @memberof VoucherCreateComponent
+     */
+    private getCopyParticularSearchButtonByEntryIndex(entryIndex: number): HTMLElement | null {
+        if (!this.platform.isBrowser || entryIndex === null || entryIndex === undefined) {
+            return null;
+        }
+
+        const productColumn = document.querySelectorAll('td.product-column')[entryIndex] as HTMLElement | undefined;
+        if (!productColumn) {
+            return null;
+        }
+
+        return productColumn.querySelector('.copy-particular-search-btn') as HTMLElement | null;
+    }
+
+    /**
+     * Handles page change for copy particular dialog
+     *
+     * @param {PageEvent} event
+     * @memberof VoucherCreateComponent
+     */
+    public handleCopyParticularPageChange(event: PageEvent): void {
+        if (!event) {
+            return;
+        }
+
+        this.copyParticularPagination.page = this.copyParticularPagination.size !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.copyParticularPagination.size = event.pageSize;
+        this.getCopyParticularHistory();
+    }
+
+    /**
+     * Populates selected history row in active entry
+     *
+     * @param {*} item
+     * @memberof VoucherCreateComponent
+     */
+    public useCopyParticularHistory(item: any): void {
+        if (this.copyParticularEntryIndex === null || !item) {
+            return;
+        }
+
+        const entryFormGroup = this.getEntryFormGroup(this.copyParticularEntryIndex);
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        const exchangeRate = Number(this.invoiceForm.get("exchangeRate")?.value ?? 1) || 1;
+        const amountForAccount = Number(item?.amount) || 0;
+        const totalForAccount = Number(item?.total) || 0;
+        const quantity = Number(item?.quantity) || 0;
+        const rate = Number(item?.rate) || 0;
+
+        this.activeEntryIndex = this.copyParticularEntryIndex;
+
+        entryFormGroup.get("description")?.patchValue(item?.description || "");
+
+        // Map API discounts (uses `amount`) → form's expected shape (uses `discountValue`)
+        const mappedDiscounts = (item?.discounts ?? []).map((d: any) => ({
+            ...d,
+            discountValue: d?.amount ?? 0,
+            discountType: d?.calculationMethod || "FIX_AMOUNT",
+            calculationMethod: d?.calculationMethod || "FIX_AMOUNT",
+        }));
+        this.getSelectedDiscounts(this.copyParticularEntryIndex, mappedDiscounts);
+        // Use exact API total (avoids floating-point drift from recomputation)
+        entryFormGroup.get("totalDiscount")?.patchValue(Number(item?.discount) || 0);
+
+        // Map API taxes (uses `taxPercent`) → form's expected shape (uses `taxDetail[0].taxValue`)
+        const mappedTaxes = (item?.taxes ?? []).map((t: any) => ({
+            ...t,
+            taxDetail: [{ taxValue: t?.taxPercent ?? 0, date: null }],
+        }));
+        this.getSelectedTaxes(this.copyParticularEntryIndex, mappedTaxes, false);
+        // Override with exact API amounts per tax type (non-CESS vs CESS split)
+        const taxWithoutCess = (item?.taxes ?? [])
+            .filter((t: any) => t?.taxType !== "CESS")
+            .reduce((sum: number, t: any) => sum + (Number(t?.amount?.amountForAccount) || 0), 0);
+        const cessTotal = (item?.taxes ?? [])
+            .filter((t: any) => t?.taxType === "CESS")
+            .reduce((sum: number, t: any) => sum + (Number(t?.amount?.amountForAccount) || 0), 0);
+        entryFormGroup.get("totalTax")?.patchValue(Number(item?.tax) || 0);
+        entryFormGroup.get("totalTaxWithoutCess")?.patchValue(taxWithoutCess || (Number(item?.tax) || 0));
+        entryFormGroup.get("totalCess")?.patchValue(cessTotal);
+        entryFormGroup.get("total.amountForAccount")?.patchValue(totalForAccount);
+        entryFormGroup.get("total.amountForCompany")?.patchValue(
+            giddhRoundOff(totalForAccount * exchangeRate, this.company.giddhBalanceDecimalPlaces)
+        );
+
+        entryFormGroup.get("otherTax.name")?.patchValue("");
+        entryFormGroup.get("otherTax.uniqueName")?.patchValue("");
+        entryFormGroup.get("otherTax.amount")?.patchValue("");
+        entryFormGroup.get("otherTax.type")?.patchValue("");
+        entryFormGroup.get("otherTax.calculationMethod")?.patchValue("");
+        entryFormGroup.get("otherTax.isChecked")?.patchValue(false);
+        entryFormGroup.get("otherTax.taxValue")?.patchValue(0);
+        entryFormGroup.get("otherTax.taxDetail")?.patchValue([]);
+
+        transactionFormGroup.get("stock.name")?.patchValue(item?.stockName || transactionFormGroup.get("stock.name")?.value);
+        transactionFormGroup.get("stock.uniqueName")?.patchValue(item?.stockUniqueName || transactionFormGroup.get("stock.uniqueName")?.value);
+        transactionFormGroup.get("stock.quantity")?.patchValue(quantity);
+        transactionFormGroup.get("stock.rate.rateForAccount")?.patchValue(rate);
+        transactionFormGroup.get("amount.amountForAccount")?.patchValue(amountForAccount);
+        transactionFormGroup.get("amount.amountForCompany")?.patchValue(
+            giddhRoundOff(amountForAccount * exchangeRate, this.company.giddhBalanceDecimalPlaces)
+        );
+        transactionFormGroup.get("stock.stockUnit.code")?.patchValue(item?.stockUnit || "");
+
+        if (item?.hasVariants) {
+            transactionFormGroup.get("stock.variant.name")?.patchValue(item?.variantName || "");
+            transactionFormGroup.get("stock.variant.uniqueName")?.patchValue(item?.variantUniqueName || "");
+            transactionFormGroup.get("stock.hasVariants")?.patchValue(true);
+            this.componentStore.getStockVariants({
+                q: transactionFormGroup.get("stock.uniqueName")?.value,
+                index: this.copyParticularEntryIndex,
+                autoSelectVariant: false,
+            });
+        } else {
+            transactionFormGroup.get("stock.variant.name")?.patchValue("");
+            transactionFormGroup.get("stock.variant.uniqueName")?.patchValue("");
+            transactionFormGroup.get("stock.hasVariants")?.patchValue(false);
+        }
+
+        this.updateCopyParticularStockUnit(this.copyParticularEntryIndex, item?.stockUnit);
+        this.checkIfEntriesHasStock();
+        this.calculateVoucherTotals();
+        this.shouldFocusAddNewParticularAfterCopy = true;
+        this.copyParticularDialogRef?.close();
+    }
+
+    /**
+     * Focuses add new particular element.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private focusAddNewParticularElement(): void {
+        if (this.addNewParticular?.nativeElement) {
+            setTimeout(() => {
+                this.addNewParticular.nativeElement.focus();
+            }, 100);
+        }
+    }
+
+    /**
+     * Updates stock unit in selected entry from loaded unit options
+     *
+     * @private
+     * @param {number} entryIndex
+     * @param {string} stockUnitCode
+     * @memberof VoucherCreateComponent
+     */
+    private updateCopyParticularStockUnit(entryIndex: number, stockUnitCode: string): void {
+        if (!stockUnitCode || !this.stockUnits[entryIndex]) {
+            return;
+        }
+
+        this.stockUnits[entryIndex].pipe(take(1)).subscribe((units: any[]) => {
+            const matchedUnit = units?.find((unit) => unit?.stockUnitCode === stockUnitCode);
+            if (!matchedUnit) {
+                return;
+            }
+
+            const entryFormGroup = this.getEntryFormGroup(entryIndex);
+            const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+            transactionFormGroup.get("stock.stockUnit.code")?.patchValue(matchedUnit.stockUnitCode);
+            transactionFormGroup.get("stock.stockUnit.uniqueName")?.patchValue(matchedUnit.stockUnitUniqueName);
+        });
+    }
+
+    /**
+     * Gets stock history for copy particular dialog
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private getCopyParticularHistory(): void {
+        const request = this.getCopyParticularHistoryRequest();
+
+        if (!request) {
+            return;
+        }
+
+        this.ngZone.run(() => {
+            this.isCopyParticularLoading = true;
+            this.changeDetection.detectChanges();
+        });
+        this.voucherService
+            .getStockHistory(request)
+            .pipe(take(1))
+            .subscribe((response) => {
+                this.ngZone.run(() => {
+                    this.isCopyParticularLoading = false;
+                    this.copyParticularHistory = response?.status === "success"
+                        ? (response?.body ?? { items: [], totalItems: 0, totalPages: 0, page: 1 })
+                        : { items: [], totalItems: 0, totalPages: 0, page: 1 };
+                    this.changeDetection.detectChanges();
+                    this.copyParticularDialogComponentInstance?.refreshView();
+                });
+            }, () => {
+                this.ngZone.run(() => {
+                    this.isCopyParticularLoading = false;
+                    this.copyParticularHistory = { items: [], totalItems: 0, totalPages: 0, page: 1 };
+                    this.changeDetection.detectChanges();
+                    this.copyParticularDialogComponentInstance?.refreshView();
+                });
+            });
+    }
+
+    /**
+     * Builds request payload for copy particular dialog API
+     *
+     * @private
+     * @return {*}
+     * @memberof VoucherCreateComponent
+     */
+    private getCopyParticularHistoryRequest(): any {
+        if (this.copyParticularEntryIndex === null) {
+            return null;
+        }
+
+        const entryFormGroup = this.getEntryFormGroup(this.copyParticularEntryIndex);
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        const stockUniqueName = transactionFormGroup.get("stock.uniqueName")?.value;
+        const accountUniqueName = this.invoiceForm.get("account.uniqueName")?.value;
+
+        if (!stockUniqueName || !accountUniqueName) {
+            return null;
+        }
+
+        return {
+            stockUniqueName,
+            accountUniqueName,
+            variantUniqueName: transactionFormGroup.get("stock.variant.uniqueName")?.value || "",
+            voucherType: this.voucherType === VoucherTypeEnum.purchaseOrder ? VoucherTypeEnum.purchase_order : 
+                            this.voucherType === VoucherTypeEnum.generateEstimate ? VoucherTypeEnum.estimate 
+                                : (this.voucherType === VoucherTypeEnum.generateProforma ? VoucherTypeEnum.proforma 
+                                    : this.voucherType),
+            page: this.copyParticularPagination.page,
+            size: this.copyParticularPagination.size,
+        };
     }
 
     /**
@@ -3974,6 +4423,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup.get("otherTax.isChecked")?.patchValue(true);
         entryFormGroup.get("otherTax.name").patchValue(tax?.name);
         entryFormGroup.get("otherTax.uniqueName").patchValue(tax?.uniqueName);
+        entryFormGroup.get("otherTax.taxType").patchValue(tax?.taxType);
         entryFormGroup.get("otherTax.taxValue").patchValue(tax?.taxDetail[0]?.taxValue);
         entryFormGroup.get("otherTax.taxDetail").patchValue(tax?.taxDetail);
         entryFormGroup
@@ -4138,6 +4588,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(response?.name);
         this.updateAccountDataInForm(response, fetchStates);
         this.fillDefaultAccountAddresses(response);
+        this.fetchPreviousVouchers();
         this.accountAsideMenuRef?.close();
     }
 
@@ -5007,6 +5458,170 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Opens the recent vouchers aside pane showing company and account voucher lists.
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public openRecentVouchersPane(): void {
+        this.recentVouchersAsideRef = this.dialog.open(this.recentVouchersTemplate, {
+            ...ASIDE_PANE_CONFIG
+        });
+        this.recentVouchersAsideRef.afterClosed().pipe(take(1)).subscribe(() => {
+            this.focusOnCopyPreviousBtn();
+        });
+    }
+
+    /**
+     * Triggers PDF download for the given voucher and opens the preview dialog.
+     *
+     * @param {LastInvoices} voucher - Voucher to preview
+     * @memberof VoucherCreateComponent
+     */
+    public openVoucherPdfPreview(voucher: LastInvoices): void {
+        this.selectedPdfVoucherNumber.set(voucher?.voucherNumber ?? '');
+        this.previewPdfUrl.set(null);
+        this.componentStore.downloadVoucherPdf({
+            model: {
+                voucherType: this.voucherType,
+                uniqueName: voucher?.uniqueName
+            },
+            type: 'ALL',
+            fileType: 'base64',
+            voucherType: this.voucherType,
+            isDownloadFromDialog: true
+        });
+        const dialogRef = this.dialog.open(this.voucherPdfPreviewTemplate, {
+            width: '60vw',
+            maxWidth: '90vw',
+            height: '90vh',
+            maxHeight: '90vh'
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+            const container = (this.recentVouchersAsideRef as any)?._containerInstance?._elementRef?.nativeElement as HTMLElement | undefined;
+            (container?.querySelector('button[aria-label="close"]') as HTMLElement | null)?.focus();
+        });
+    }
+
+    /**
+     * Opens the PDF preview for a voucher from the copy particular dialog.
+     * After preview closes, focus returns to the copy particular dialog.
+     *
+     * @param {*} item - Stock history item from the copy particular dialog
+     * @memberof VoucherCreateComponent
+     */
+    public openCopyParticularVoucherPreview(item: any): void {
+        if (!item?.voucherUniqueName) {
+            return;
+        }
+
+        const previewVoucherType = this.getCopyParticularPreviewVoucherType(item);
+        const previewRequest = this.getCopyParticularPreviewRequest(item, previewVoucherType);
+
+        if (!previewRequest) {
+            return;
+        }
+
+        this.selectedPdfVoucherNumber.set(item?.voucherNumber ?? '');
+        this.previewPdfUrl.set(null);
+        this.componentStore.downloadVoucherPdf({
+            model: previewRequest,
+            type: 'ALL',
+            fileType: 'base64',
+            voucherType: previewVoucherType,
+            isDownloadFromDialog: true
+        });
+        const dialogRef = this.dialog.open(this.voucherPdfPreviewTemplate, {
+            width: '60vw',
+            maxWidth: '90vw',
+            height: '90vh',
+            maxHeight: '90vh'
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+            const container = (this.copyParticularDialogRef as any)?._containerInstance?._elementRef?.nativeElement as HTMLElement | undefined;
+            (container?.querySelector('.dialog-header button[mat-icon-button]') as HTMLElement | null)?.focus();
+        });
+    }
+
+    /**
+     * Returns normalized voucher type for copy particular preview API.
+     *
+     * @private
+     * @param {*} item
+     * @returns {string}
+     * @memberof VoucherCreateComponent
+     */
+    private getCopyParticularPreviewVoucherType(item: any): string {
+        const voucherType = item?.voucherType || this.voucherType;
+
+        if (voucherType === VoucherTypeEnum.purchase_order || voucherType === VoucherTypeEnum.purchaseOrder) {
+            return VoucherTypeEnum.purchaseOrder;
+        } else if (voucherType === VoucherTypeEnum.estimate || voucherType === VoucherTypeEnum.estimates || voucherType === VoucherTypeEnum.generateEstimate) {
+            return VoucherTypeEnum.generateEstimate;
+        } else if (voucherType === VoucherTypeEnum.proforma || voucherType === VoucherTypeEnum.proformas || voucherType === VoucherTypeEnum.generateProforma) {
+            return VoucherTypeEnum.generateProforma;
+        }
+
+        return voucherType;
+    }
+
+    /**
+     * Builds preview request payload for copy particular preview API based on voucher type.
+     *
+     * @private
+     * @param {*} item
+     * @param {string} voucherType
+     * @returns {*}
+     * @memberof VoucherCreateComponent
+     */
+    private getCopyParticularPreviewRequest(item: any, voucherType: string): any {
+        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(voucherType as VoucherTypeEnum)) {
+            return {
+                voucherType,
+                uniqueName: item?.voucherUniqueName
+            };
+        } else if ([VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(voucherType as VoucherTypeEnum)) {
+            const request = new ProformaDownloadRequest();
+            request.fileType = "base64";
+            request.accountUniqueName = item?.accountUniqueName;
+
+            if (voucherType === VoucherTypeEnum.generateProforma) {
+                request.proformaNumber = item?.voucherNumber;
+            } else {
+                request.estimateNumber = item?.voucherNumber;
+            }
+
+            return request;
+        } else if (voucherType === VoucherTypeEnum.purchaseOrder) {
+            return {
+                accountUniqueName: item?.accountUniqueName,
+                poUniqueName: item?.voucherUniqueName
+            };
+        }
+
+        return null;
+    }
+
+    /**
+     * Handles the PDF response for the inline voucher preview dialog.
+     * Converts base64 data to a blob URL and sets it as the sanitized iframe src.
+     *
+     * @private
+     * @param {*} response - API response containing base64 PDF data
+     * @memberof VoucherCreateComponent
+     */
+    private handlePreviewVoucherPdfResponse(response: any): void {
+        if (response?.data || typeof response === 'string') {
+            const blob: Blob = this.generalService.base64ToBlob(response?.data ?? response, 'application/pdf', 512);
+            const file = new Blob([blob], { type: 'application/pdf' });
+            URL.revokeObjectURL(this.previewPdfFileURL);
+            this.previewPdfFileURL = URL.createObjectURL(file);
+            this.previewPdfUrl.set(this.domSanitizer.bypassSecurityTrustResourceUrl(this.previewPdfFileURL));
+            this.componentStore.resetPreviewPdfResponse();
+            this.changeDetection.detectChanges();
+        }
+    }
+
+    /**
      * Updates due date based on voucher date
      *
      * @memberof VoucherCreateComponent
@@ -5080,7 +5695,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 entries,
                 this.company.giddhBalanceDecimalPlaces,
                 this.applyRoundOff,
-                this.invoiceForm.get("exchangeRate")?.value
+                this.invoiceForm.get("exchangeRate")?.value,
+                { applyTcsToGrandTotal: !this.invoiceForm.get("isAdvanceReceipt")?.value }
             );
             this.invoiceForm.get("grandTotalMultiCurrency")?.patchValue(this.voucherTotals?.grandTotalMultiCurrency);
             this.calculateBalanceDue();
@@ -6549,13 +7165,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment(): number {
+        const tcsAdjustment = this.invoiceForm.get("isAdvanceReceipt")?.value ? this.voucherTotals.tcsTotal : 0;
         return parseFloat(
             Number(
-                this.voucherTotals.grandTotal +
-                this.voucherTotals.tcsTotal -
+                this.voucherTotals.grandTotal -
+                this.voucherTotals.tdsTotal +
+                tcsAdjustment -
                 this.adjustPaymentData.totalAdjustedAmount -
-                this.totalDepositAmount -
-                this.voucherTotals.tdsTotal
+                this.totalDepositAmount
             ).toFixed(this.company?.giddhBalanceDecimalPlaces)
         );
     }
@@ -6567,6 +7184,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public calculateBalanceDue(): void {
         this.getTotalDepositAmount();
+        const tcsAdjustment = this.invoiceForm.get("isAdvanceReceipt")?.value ? this.voucherTotals.tcsTotal : 0;
         let depositAmount = this.totalDepositAmount;
         if (this.isMultiCurrencyVoucher) {
             const deposits = this.invoiceForm.get("deposits") as FormArray;
@@ -6591,7 +7209,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.voucherTotals.balanceDue = giddhRoundOff(
             this.voucherTotals.grandTotal +
-            this.voucherTotals.tcsTotal -
+            tcsAdjustment -
             this.voucherTotals.tdsTotal -
             depositAmount -
             this.totalAdvanceReceiptsAdjustedAmount,
@@ -6605,7 +7223,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         ) {
             this.voucherTotals.balanceDue = giddhRoundOff(
                 this.voucherTotals.grandTotal +
-                this.voucherTotals.tcsTotal -
+                tcsAdjustment -
                 this.voucherTotals.tdsTotal -
                 this.totalAdvanceReceiptsAdjustedAmount,
                 this.company?.giddhBalanceDecimalPlaces
@@ -8611,5 +9229,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         };
         const matchedKey = Object.keys(recurringLabels).find(key => this.invoiceType[key]);
         return matchedKey ? recurringLabels[matchedKey] : this.updateVoucherText;
+    }
+
+     /**
+     * Focus on copy Previous 
+     * 
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private focusOnCopyPreviousBtn(): void {
+         setTimeout(() => {
+            this.copyVoucherElement?.nativeElement?.focus();
+        }, 100);
     }
 }

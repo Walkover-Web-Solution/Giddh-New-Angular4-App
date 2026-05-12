@@ -45,7 +45,7 @@
                                         "
                                     >
                                         <img
-                                            [src]="imgPath + 'templates/{{ template?.templateType }}.png'"
+                                            [src]="imgPath + 'templates/' + template?.templateType + '.png'"
                                             alt="template"
                                             class="view-img w-100 h-100 border-radius-4"
                                         />
@@ -965,7 +965,14 @@
                                                 customTemplate?.templateType !== templateTypeEnum.ThermalTemplate)
                                         ) {
                                             <div class="px-3 d-flex flex-column row-gap-05 mt-4">
-                                                <p class="font-size-16 my-2">{{ localeData?.customer_details }}</p>
+                                                <p class="font-size-16 my-2">
+                                                    {{
+                                                        templateType === voucherTypeEnum.purchase_order ||
+                                                        templateType === voucherTypeEnum.purchase_bill
+                                                            ? localeData?.vendor_details
+                                                            : localeData?.customer_details
+                                                    }}
+                                                </p>
                                                 <!-- customer name -->
                                                 <div *ngIf="sectionSettings?.header.customerName">
                                                     <mat-checkbox
@@ -975,7 +982,14 @@
                                                         [(ngModel)]="customTemplate.sections['header'].data['customerName'].display"
                                                         (ngModelChange)="onChangeFieldVisibility()"
                                                     >
-                                                        <span class="ml-2">{{ localeData?.customer_name }}</span>
+                                                        <span class="ml-2">
+                                                            {{
+                                                                templateType === voucherTypeEnum.purchase_order ||
+                                                                templateType === voucherTypeEnum.purchase_bill
+                                                                    ? commonLocaleData?.app_vendor_name
+                                                                    : commonLocaleData?.app_customer_name
+                                                            }}
+                                                        </span>
                                                     </mat-checkbox>
                                                 </div>
                                                 <!-- attention to -->
@@ -3064,9 +3078,8 @@
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    customTemplate?.type === voucherTypeEnum.invoice &&
-                                                    customTemplate?.templateType === templateTypeEnum.GstTemplateA &&
-                                                    customTemplate?.templateType !== templateTypeEnum.TallyTemplate &&
+                                                    (customTemplate?.templateType === templateTypeEnum.GstTemplateA ||
+                                                        customTemplate?.templateType === templateTypeEnum.TallyTemplate) &&
                                                     customTemplate.sections['footer'].data['showMessage2']
                                                 "
                                             >

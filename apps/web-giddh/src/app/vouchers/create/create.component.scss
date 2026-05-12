@@ -285,3 +285,13 @@
 .single-toggle-button {
     min-width: 100px;
 }
+
+.vouchers-recent-grid {
+    grid-template-columns: 2fr 2fr 1.5fr 2fr 40px;
+}
+.copy-particular-search-btn {
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    flex-shrink: 0;
+}

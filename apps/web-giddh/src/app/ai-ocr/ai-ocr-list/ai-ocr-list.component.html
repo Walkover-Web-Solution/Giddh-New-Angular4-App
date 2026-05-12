@@ -1,6 +1,14 @@
 <div appTranslate [file]="'ai-ocr'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="ocr-container mx-auto p-3 overflow-visible">
+        @if (isCompany() || isConsolidatedBranch()) {
+            <go-to-branch
+                [title]="isCompany() ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
+                [message]="localeData?.go_to_branch_information"
+                [buttonLabel]="commonLocaleData?.switch_to_branch"
+                [cssClass]="'border-radius-8'"
+            ></go-to-branch>
+        }
         <giddh-page-loader *ngIf="ocrListInProgress$ | async"></giddh-page-loader>
         <section [hidden]="!showData || (ocrListInProgress$ | async)">
             <form
@@ -177,24 +185,6 @@
                 [primaryMessage]="commonLocaleData?.app_no_data_found"
                 [secondaryMessage]="' '"
             ></no-data>
-            @if (
-                isCompany &&
-                !(
-                    showClearFilter ||
-                    !dataSource?.filteredData?.length ||
-                    ocrDocumentListForm?.controls['user']?.value ||
-                    ocrDocumentListForm?.controls['fileName']?.value ||
-                    ocrDocumentListForm?.controls['status']?.value ||
-                    ocrDocumentListForm?.controls['convertedStatus']?.value
-                )
-            ) {
-                <go-to-branch
-                    [variant]="GoToBranchVariant.Inline"
-                    [message]="localeData?.go_to_branch_information"
-                    [buttonLabel]="commonLocaleData?.go_to_branch"
-                    [cssClass]="'border-radius-8'"
-                ></go-to-branch>
-            }
         </div>
         <mat-paginator
             *ngIf="ocrDocumentsRequestParams.totalItems > pageSizeOptions[0] && showData && !(ocrListInProgress$ | async)"

@@ -10,6 +10,12 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
+/** Settings tab links that are only available on Giddh-owned domains */
+const GIDDH_DOMAIN_ONLY_SETTINGS_LINKS: readonly string[] = [
+    '/pages/settings/tally',
+    '/pages/settings/shopify'
+];
+
 @Component({
     selector: 'aside-setting',
     templateUrl: './aside-setting.component.html',
@@ -243,9 +249,13 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                             organizationIndex = 0;
                         }
                     }
+                    const isGiddhDomain = this.generalService.isGiddhDomain();
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
                         this.settingsPageTabs[loop] = [];
-                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
+                        const items = [...settingsPageTabs[organizationIndex][key]];
+                        this.settingsPageTabs[loop] = isGiddhDomain
+                            ? items
+                            : items.filter((item: any) => !GIDDH_DOMAIN_ONLY_SETTINGS_LINKS.includes(item?.link));
                         loop++;
                     });
                 });

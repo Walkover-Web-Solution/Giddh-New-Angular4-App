@@ -290,6 +290,12 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
                 "checked": true
             },
             {
+                "value": "app_round_off",
+                "label": "Round Off",
+                "checked": true,
+                "isCommonLocaleData": true
+            },
+            {
                 "value": "net_sales",
                 "label": "Net Sales",
                 "checked": true

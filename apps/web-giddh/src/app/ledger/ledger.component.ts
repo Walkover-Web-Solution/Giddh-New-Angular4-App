@@ -3551,13 +3551,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         data.body.stock?.groupTaxes ?? [],
                         data.body.taxes ?? [],
                         data.body.groupTaxes ?? []);
-
-                    if (prioritizedApplicableTaxes.length) {
-                        otherTax = {
-                            name: prioritizedApplicableTaxes[0]?.name,
-                            uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
-                        };
-                    }
+                        const isSundryDebtorCreditorAccount = data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryCreditors) || data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryDebtors);
+                        if (data.body.oppositeAccount && isSundryDebtorCreditorAccount) {
+                            const stockAccountOtherTax = this.generalService.fetchTaxesOnPriority(
+                                                    [],
+                                                    [],
+                                                    data.body.oppositeAccount.taxes ?? [],
+                                                    data.body.oppositeAccount.groupTaxes ?? []);
+                            otherTax = {
+                                name: '',
+                                uniqueName: stockAccountOtherTax.length ? stockAccountOtherTax[0] : ''
+                            };
+                        }
+                        if (prioritizedApplicableTaxes.length && !otherTax['uniqueName']) {
+                            otherTax = {
+                                name: prioritizedApplicableTaxes[0]?.name,
+                                uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
+                            };
+                        }
                 } else {
                     taxes = prioritizedApplicableTaxes.map(tax => tax?.uniqueName);
                 

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { OtherTaxTypeEnum, SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
+import { OtherTaxTypeEnum, SearchType, TaxCollectionDeductionType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { VoucherForm } from "../../models/api-models/Voucher";
 import { API_BULK_FETCH_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM, ROUND_OFF_THRESHOLD } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -290,7 +290,7 @@ export class VouchersUtilityService {
         }
     }
 
-    public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean, exchangeRate: number): any {
+    public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean, exchangeRate: number, options?: { applyTcsToGrandTotal?: boolean }): any {
         let voucherTotals = {
             totalAmount: 0,
             totalDiscount: 0,
@@ -306,6 +306,10 @@ export class VouchersUtilityService {
         };
 
         entries?.forEach(entry => {
+            const otherTaxAmount = Number(entry.otherTax?.amount) || 0;
+            const isTcs = entry.otherTax?.type === OtherTaxTypeEnum.TCS;
+            const isTds = entry.otherTax?.type === OtherTaxTypeEnum.TDS;
+
             voucherTotals.totalAmount += (Number(entry.transactions[0]?.amount?.amountForAccount) || 0);
             voucherTotals.totalDiscount += (Number(entry.totalDiscount) || 0);
             if (entry.transactions[0]?.taxableValue) {
@@ -322,10 +326,13 @@ export class VouchersUtilityService {
                 voucherTotals.grandTotal += (Number(entry.total?.amountForAccount) || 0);
             }
 
-            if (entry.otherTax?.type === OtherTaxTypeEnum.TCS) {
-                voucherTotals.tcsTotal += (Number(entry.otherTax?.amount) || 0);
-            } else if (entry.otherTax?.type === OtherTaxTypeEnum.TDS) {
-                voucherTotals.tdsTotal += (Number(entry.otherTax?.amount) || 0);
+            if (isTcs) {
+                voucherTotals.tcsTotal += otherTaxAmount;
+                if (options?.applyTcsToGrandTotal) {
+                    voucherTotals.grandTotal += otherTaxAmount;
+                }
+            } else if (isTds) {
+                voucherTotals.tdsTotal += otherTaxAmount;
             }
         });
 
@@ -335,7 +342,7 @@ export class VouchersUtilityService {
         voucherTotals.totalTaxWithoutCess = giddhRoundOff(voucherTotals.totalTaxWithoutCess, balanceDecimalPlaces);
         voucherTotals.totalCess = giddhRoundOff(voucherTotals.totalCess, balanceDecimalPlaces); 
         voucherTotals.roundOff.value = (applyRoundOff) ? Number((voucherTotals.grandTotal - Math.floor(voucherTotals.grandTotal)).toFixed(balanceDecimalPlaces)) : Number((0).toFixed(balanceDecimalPlaces));
-        if (voucherTotals.roundOff.value > ROUND_OFF_THRESHOLD) {
+        if (voucherTotals.roundOff.value >= ROUND_OFF_THRESHOLD) {
             voucherTotals.roundOff = { value: 1 - voucherTotals.roundOff.value, isPositive: true };
         } else {
             voucherTotals.roundOff = { value: voucherTotals.roundOff.value, isPositive: false };

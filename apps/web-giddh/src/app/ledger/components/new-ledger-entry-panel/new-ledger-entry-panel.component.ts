@@ -579,9 +579,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let companyTaxes: TaxResponse[] = [];
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
 
-        if (!this.blankLedger.otherTaxModal) {
-            this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
-        }
+        this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
 
         if (companyTaxes.length && this.currentTxn.selectedAccount?.otherTax?.uniqueName) {
             const taxUniqueName = this.currentTxn.selectedAccount.otherTax.uniqueName;

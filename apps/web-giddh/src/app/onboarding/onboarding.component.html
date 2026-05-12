@@ -45,9 +45,9 @@
                             </a>
                         </mat-list-item>
                     </mat-list>
-                    <p class="border-btm mt-5">{{ localeData?.have_data_tally }}</p>
-                    <p [innerHTML]="localeData?.giddh_usage"></p>
                     @if (generalService.isGiddhDomain()) {
+                        <p class="border-btm mt-5">{{ localeData?.have_data_tally }}</p>
+                        <p [innerHTML]="localeData?.giddh_usage"></p>
                         <div class="d-flex column-gap-15">
                             <a matButton="filled" class="mt-2" target="_blank" [href]="syncWithTallyHelpDocUrl">
                                 {{ localeData?.sync_with_tally }}
@@ -77,7 +77,7 @@
                                         <a [href]="helpDocUrl" target="_blank" class="text-underline font-size-16">{{ helpDocUrl }}</a>
                                     </div>
                                 }
-                                <div class="col-sm-6 schedule-img">
+                                <div class="schedule-img text-right" [class]="helpDocUrl ? 'col-6' : 'col-12'">
                                     <img [src]="imgPath + 'Schedule.png'" alt="" />
                                 </div>
                             </div>

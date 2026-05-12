@@ -33,8 +33,8 @@ export interface BuyPlanState {
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
-    planListInProgress: true,
-    planList: [],
+    planListInProgress: null,
+    planList: null,
     countryListInProgress: true,
     countryList: [],
     createSubscriptionSuccess: false,
