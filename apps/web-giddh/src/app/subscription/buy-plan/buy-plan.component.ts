@@ -1,8 +1,9 @@
 import { ViewSubscriptionComponentStore } from './../view-subscription/utility/view-subscription.store';
 import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild, computed, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
+import { StripePaymentDialogComponent, StripePaymentDialogData } from './stripe-payment-dialog/stripe-payment-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
 import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, delay, take, filter } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
@@ -22,7 +23,7 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { EntityCode, IOption, PaymentProvider, PlanDuration } from '../../app.constant';
+import { EntityCode, IOption, PaymentProvider, PlanDuration, STRIPE_JS_CDN_URL } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { SessionState } from '../../store/authentication/authentication.reducer';
@@ -259,14 +260,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public stripeElements: any;
     /** Holds stripe client secret */
     public stripeClientSecret: string = '';
-    /** True if stripe payment element is visible */
+    /** True if stripe payment dialog is open */
     public showStripePaymentElement: boolean = false;
     /** True if stripe payment is in progress */
     public stripePaymentInProgress: boolean = false;
     /** Stripe error message */
     public stripeError: string = '';
+    /** Reference to the open Stripe payment dialog */
+    private stripeDialogRef: MatDialogRef<StripePaymentDialogComponent> | null = null;
     /** Holds store save stripe payment success observable */
     public saveStripePaymentSuccess$: Observable<any> = this.componentStore.select(state => state.saveStripePaymentSuccess);
+    /** Holds store save stripe payment success observable */
+    public saveStripePaymentInProgress$: Observable<any> = this.componentStore.select(state => state.saveStripePaymentInProgress);
     /** True if promo code is removed */
     public removePromoCode: boolean = false;
     /** Hold true in production environment */
@@ -300,7 +305,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.session$ = this.store.pipe(select(p => p.session), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
         this.razorpayKey = this.serviceConfig.RAZORPAY_KEY;
-        this.stripeKey = this.serviceConfig.STRIPE_PUBLISHABLE_KEY
+        this.stripeKey = this.serviceConfig.STRIPE_PUBLISHABLE_KEY;
     }
 
     /**
@@ -321,10 +326,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.setUserCountry();
 
         // Handle Stripe redirect return
-        const urlParams = new URLSearchParams(window.location.search);
-        const redirectSecret = urlParams.get('payment_intent_client_secret');
-        const redirectIntentId = urlParams.get('payment_intent');
-        if (redirectSecret && redirectIntentId) {
+        const redirectSecret = this.route.snapshot.queryParamMap.get('payment_intent_client_secret');
+        const redirectIntentId = this.route.snapshot.queryParamMap.get('payment_intent');
+        const redirectStatus = this.route.snapshot.queryParamMap.get('redirect_status');
+        if (redirectStatus === 'failed') {
+            this.handleStripeRedirectFailure();
+        } else if (redirectSecret && redirectIntentId) {
             this.handleStripeRedirectReturn(redirectSecret, redirectIntentId);
         }
 
@@ -356,22 +363,24 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.saveStripePaymentSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const paymentIntentId = sessionStorage.getItem('stripe_payment_intent_id');
                 const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
-                if (paymentIntentId && subscriptionId) {
-                    const subscriptionRequestStr = sessionStorage.getItem('stripe_subscription_request');
-                    const subscriptionRequest = subscriptionRequestStr ? JSON.parse(subscriptionRequestStr) : {};
-                    const model = {
-                        paymentIntentId: paymentIntentId,
-                        subscriptionId: subscriptionId,
-                        callNewPlanApi: true,
-                        duration: sessionStorage.getItem('stripe_duration'),
-                        planUniqueName: sessionStorage.getItem('stripe_plan_unique_name'),
-                        amountPaid: Number(sessionStorage.getItem('stripe_amount_paid')) || 0
-                    };
-                    const data = { ...model, ...subscriptionRequest };
-                    this.componentStore.changePlan(data);
-                }
+                this.navigateToNewCompany(subscriptionId);
+                // const paymentIntentId = sessionStorage.getItem('stripe_payment_intent_id');
+                // const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
+                // if (paymentIntentId && subscriptionId) {
+                //     const subscriptionRequestStr = sessionStorage.getItem('stripe_subscription_request');
+                //     const subscriptionRequest = subscriptionRequestStr ? JSON.parse(subscriptionRequestStr) : {};
+                //     const model = {
+                //         paymentIntentId: paymentIntentId,
+                //         subscriptionId: subscriptionId,
+                //         callNewPlanApi: true,
+                //         duration: sessionStorage.getItem('stripe_duration'),
+                //         planUniqueName: sessionStorage.getItem('stripe_plan_unique_name'),
+                //         amountPaid: Number(sessionStorage.getItem('stripe_amount_paid')) || 0
+                //     };
+                //     const data = { ...model, ...subscriptionRequest };
+                //     this.componentStore.changePlan(data);
+                // }
                 sessionStorage.removeItem('stripe_subscription_id');
                 sessionStorage.removeItem('stripe_payment_intent_id');
                 sessionStorage.removeItem('stripe_is_change_plan');
@@ -384,7 +393,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (response?.stripeClientSecret) {
+                if (response.clientSecret ?? response.stripeClientSecret) {
                     this.initializeStripePayment(response);
                     return;
                 }
@@ -553,8 +562,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
                 this.subscriptionId = response.subscriptionId;
-                if (response?.clientSecret) {
-                    this.initializeStripePayment(response);
+                if (response.clientSecret ?? response.stripeClientSecret) {
+                    if (this.payType === 'trial') {
+                        this.navigateToNewCompany(response.subscriptionId);
+                    } else {
+                        this.initializeStripePayment(response);
+                    }
                     return;
                 }
                 if (response?.paypalOrderId) {
@@ -617,7 +630,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.stripeClientSecret) {
+            if (response?.clientSecret ?? response?.stripeClientSecret) {
                 this.initializeStripePayment(response);
             } else if (response?.paypalApprovalLink) {
                 this.paypalCaptureOrderId = response.paypalOrderId;
@@ -712,7 +725,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeRegion = response?.region?.code;
 
             }
-            if (response?.stripeClientSecret) {
+            if (response?.clientSecret ?? response?.stripeClientSecret) {
                 this.initializeStripePayment(response);
                 return;
             }
@@ -1071,7 +1084,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     * @memberof BuyPlanComponent
     */
     public ngAfterViewInit(): void {
-        this.stepperIcon._getIndicatorType = () => 'number';
+        if (this.stepperIcon) {
+            this.stepperIcon._getIndicatorType = () => 'number';
+        }
     }
 
     /**
@@ -1448,6 +1463,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.selectedStep = event?.selectedIndex;
         this.setFinalAmount();
         if (this.selectedStep !== 2) {
+            this.stripeDialogRef?.close();
+            this.stripeDialogRef = null;
             this.showStripePaymentElement = false;
             this.stripeClientSecret = '';
             this.stripeError = '';
@@ -1466,6 +1483,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     protected onPaymentProviderChange(): void {
+        this.stripeDialogRef?.close();
+        this.stripeDialogRef = null;
         this.showStripePaymentElement = false;
         this.stripeClientSecret = '';
         this.stripeError = '';
@@ -1590,21 +1609,25 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
 
         if (entityCode === EntityCode.GBR) {
-            // GBR: GoCardless/PayPal/PayU for recurring, Razorpay/PayU for yearly
-            if (this.isMonthly() || this.isDaily()) {
-                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
+            // GBR: Stripe shown for monthly/yearly; GoCardless/PayPal only for daily
+            if (this.isMonthly()) {
+                filterProviders([PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL]);
             } else if (this.isYearly()) {
-                filterProviders([PaymentProvider.RAZORPAY]);
+                filterProviders([PaymentProvider.STRIPE, PaymentProvider.RAZORPAY]);
+            } else if (this.isDaily()) {
+                filterProviders([PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL]);
             }
         } else if (entityCode !== EntityCode.IND) {
-            // Non-IND: Stripe/PayPal for monthly, Stripe/Razorpay for yearly
-            if (this.isMonthly() || this.isDaily()) {
+            // Non-IND: Stripe for monthly/yearly only; PayPal for daily (no Stripe)
+            if (this.isMonthly()) {
                 filterProviders([PaymentProvider.STRIPE, PaymentProvider.PAYPAL]);
             } else if (this.isYearly()) {
                 filterProviders([PaymentProvider.STRIPE, PaymentProvider.RAZORPAY]);
+            } else if (this.isDaily()) {
+                filterProviders([PaymentProvider.PAYPAL]);
             }
         } else {
-            // IND: Razorpay + PayU for all durations
+            // IND: Razorpay for all durations (no Stripe)
             filterProviders([PaymentProvider.RAZORPAY]);
         }
 
@@ -1991,7 +2014,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 return;
             }
             const script = document.createElement('script');
-            script.src = 'https://js.stripe.com/v3/';
+            script.src = STRIPE_JS_CDN_URL;
             script.onload = () => resolve();
             script.onerror = () => {
                 this.toasterService.showSnackBar('error', 'Failed to load Stripe payment library');
@@ -2008,73 +2031,51 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public initializeStripePayment(response: any): void {
-        this.stripeClientSecret = response.clientSecret;
+        this.stripeClientSecret = response.clientSecret ?? response.stripeClientSecret;
         this.subscriptionResponse = response;
-        this.showStripePaymentElement = true;
 
         if (!this.stripeClientSecret) {
             this.toasterService.showSnackBar('error', 'Invalid Stripe configuration');
             return;
         }
 
-        this.loadStripeScript().then(() => {
-            const stripe = window['Stripe'](this.stripeKey);
-            this.stripe = stripe;
-            const elements = stripe.elements({
-                clientSecret: this.stripeClientSecret,
-                appearance: { theme: 'stripe' }
-            });
-            this.stripeElements = elements;
-            const paymentElement = elements.create('payment');
-
-            setTimeout(() => {
-                if (this.stripePaymentElementRef?.nativeElement) {
-                    paymentElement.mount(this.stripePaymentElementRef.nativeElement);
-                }
-                this.changeDetection.detectChanges();
-            }, 100);
-        }).catch(() => {
-            this.stripePaymentInProgress = false;
-            this.changeDetection.detectChanges();
-        });
-    }
-
-    /**
-     * Confirms Stripe payment and handles redirect return
-     *
-     * @memberof BuyPlanComponent
-     */
-    public async confirmStripePayment(): Promise<void> {
-        if (!this.stripe || !this.stripeElements) {
-            return;
-        }
-        this.stripePaymentInProgress = true;
-        this.stripeError = '';
-        this.changeDetection.detectChanges();
-
-        const subscriptionId = this.subscriptionResponse?.subscriptionId || this.responseSubscriptionId || this.subscriptionId;
-        sessionStorage.setItem('stripe_subscription_id', subscriptionId);
-        sessionStorage.setItem('stripe_is_change_plan', String(this.isChangePlan));
-        sessionStorage.setItem('stripe_payment_intent_id', this.extractPaymentIntentId(this.stripeClientSecret));
-        sessionStorage.setItem('stripe_plan_unique_name', this.subscriptionResponse?.planDetails?.uniqueName || this.firstStepForm.get('planUniqueName')?.value);
-        sessionStorage.setItem('stripe_duration', this.subscriptionResponse?.duration || this.firstStepForm.get('duration')?.value);
-        sessionStorage.setItem('stripe_amount_paid', String(this.subscriptionResponse?.dueAmount || 0));
+        const subscriptionId = response?.subscriptionId || this.responseSubscriptionId || this.subscriptionId;
+        const sessionData: Record<string, string> = {
+            stripe_subscription_id: subscriptionId,
+            stripe_is_change_plan: String(this.isChangePlan),
+            stripe_payment_intent_id: this.extractPaymentIntentId(this.stripeClientSecret),
+            stripe_plan_unique_name: response?.planDetails?.uniqueName || this.firstStepForm.get('planUniqueName')?.value || '',
+            stripe_duration: response?.duration || this.firstStepForm.get('duration')?.value || '',
+            stripe_amount_paid: String(response?.dueAmount || 0)
+        };
         if (this.subscriptionRequest) {
-            sessionStorage.setItem('stripe_subscription_request', JSON.stringify(this.subscriptionRequest));
+            sessionData['stripe_subscription_request'] = JSON.stringify(this.subscriptionRequest);
         }
 
-        const returnUrl = window.location.origin + window.location.pathname;
-        const { error } = await this.stripe.confirmPayment({
-            elements: this.stripeElements,
-            confirmParams: { return_url: returnUrl }
+        const dialogData: StripePaymentDialogData = {
+            stripeKey: this.stripeKey,
+            clientSecret: this.stripeClientSecret,
+            sessionData,
+            returnUrl: window.location.origin + window.location.pathname,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        };
+
+        this.showStripePaymentElement = true;
+        this.stripeDialogRef = this.dialog.open(StripePaymentDialogComponent, {
+            width: '520px',
+            disableClose: true,
+            data: dialogData
         });
 
-        if (error) {
-            this.stripePaymentInProgress = false;
-            this.stripeError = error.message;
+        this.stripeDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+            this.stripeDialogRef = null;
+            this.showStripePaymentElement = false;
+            this.stripeClientSecret = '';
             this.changeDetection.detectChanges();
-        }
+        });
     }
+
 
     /**
      * Handles Stripe redirect return after payment confirmation
@@ -2086,6 +2087,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private handleStripeRedirectReturn(piClientSecret: string, piId: string): void {
         this.isLoading = true;
+        this.componentStore.patchState({saveStripePaymentInProgress: true});
         this.changeDetection.detectChanges();
 
         this.loadStripeScript().then(() => {
@@ -2114,11 +2116,39 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             });
         });
 
-        // Clean up Stripe query params from URL
-        const queryParams = { ...this.route.snapshot.queryParams };
-        delete queryParams['payment_intent'];
-        delete queryParams['payment_intent_client_secret'];
-        this.router.navigate([], { queryParams, replaceUrl: true });
+        this.clearStripeRedirectParams();
+    }
+
+    /**
+     * Handles Stripe redirect when payment fails (redirect_status=failed).
+     * Resets the loader and shows a translated failure message.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private handleStripeRedirectFailure(): void {
+        this.isLoading = false;
+        this.componentStore.patchState({ saveStripePaymentInProgress: false });
+        const message = this.localeData?.payment_failed || 'Payment failed. Please try again.';
+        this.toasterService.showSnackBar('error', message);
+
+        this.clearStripeRedirectParams();
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Removes Stripe-related query params (payment_intent, payment_intent_client_secret, redirect_status)
+     * from the current URL using the shared GeneralService helper.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private clearStripeRedirectParams(): void {
+        this.generalService.updateActivatedRouteQueryParams({
+            payment_intent: null,
+            payment_intent_client_secret: null,
+            redirect_status: null
+        });
     }
 
     /**

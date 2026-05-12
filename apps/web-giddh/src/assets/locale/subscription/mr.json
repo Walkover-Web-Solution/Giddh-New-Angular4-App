@@ -155,5 +155,8 @@
         "select_status": "स्थिती निवडा",
         "please_select_payment_provider": "कृपया पेमेंट प्रदाता निवडा",
         "no_plans_available": "कोणतीही योजना उपलब्ध नाही",
-        "no_plans_available_for_region": "निवडलेल्या प्रदेशासाठी कोणतीही योजना उपलब्ध नाही"
+        "no_plans_available_for_region": "निवडलेल्या प्रदेशासाठी कोणतीही योजना उपलब्ध नाही",
+        "pay_now": "आता पैसे द्या",
+        "processing": "प्रक्रिया होत आहे...",
+        "payment_failed": "पेमेंट अयशस्वी झाले. कृपया पुन्हा प्रयत्न करा."
 	}

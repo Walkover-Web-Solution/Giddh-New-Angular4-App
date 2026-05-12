@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, forwardRef, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, inject, input, output, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 import { CommonModule } from '@angular/common';
 import { IOption, PaymentProvider } from '../../../app.constant';
+import { ServiceConfig, IServiceConfigArgs } from '../../../services/service.config';
 
 @Component({
     selector: 'payment-provider-selector',
@@ -31,6 +32,10 @@ export class PaymentProviderSelectorComponent implements ControlValueAccessor {
     readonly errorMessage = input<string>('');
     /** Holds PaymentProvider constant */
     readonly paymentProvider:any = PaymentProvider;
+    /** Holds images folder path */
+    public imgPath: string = "";
+    /** Injected service configuration */
+    private readonly serviceConfig = inject(ServiceConfig) as IServiceConfigArgs;
 
     /** Currently selected provider value as signal for OnPush CD */
     protected readonly value = signal<string | null>(null);
@@ -43,6 +48,10 @@ export class PaymentProviderSelectorComponent implements ControlValueAccessor {
     private onChange: (value: string | null) => void = () => {};
     /** @ignore */
     private onTouched: () => void = () => {};
+
+    constructor() {
+        this.imgPath = this.serviceConfig.IMG_PATH;
+    }
 
     /**
      * Handles provider radio button change
