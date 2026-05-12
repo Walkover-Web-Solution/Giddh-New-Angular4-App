@@ -342,7 +342,7 @@ export class VouchersUtilityService {
         voucherTotals.totalTaxWithoutCess = giddhRoundOff(voucherTotals.totalTaxWithoutCess, balanceDecimalPlaces);
         voucherTotals.totalCess = giddhRoundOff(voucherTotals.totalCess, balanceDecimalPlaces); 
         voucherTotals.roundOff.value = (applyRoundOff) ? Number((voucherTotals.grandTotal - Math.floor(voucherTotals.grandTotal)).toFixed(balanceDecimalPlaces)) : Number((0).toFixed(balanceDecimalPlaces));
-        if (voucherTotals.roundOff.value > ROUND_OFF_THRESHOLD) {
+        if (voucherTotals.roundOff.value >= ROUND_OFF_THRESHOLD) {
             voucherTotals.roundOff = { value: 1 - voucherTotals.roundOff.value, isPositive: true };
         } else {
             voucherTotals.roundOff = { value: voucherTotals.roundOff.value, isPositive: false };

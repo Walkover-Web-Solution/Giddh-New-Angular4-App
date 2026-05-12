@@ -1062,5 +1062,5 @@ export enum FormFieldsType {
     BARCODE = 'BARCODE'
 }
 
-/** Round off threshold for 4 decimal place precision */
-export const ROUND_OFF_THRESHOLD = 0.5555; 
+/** Round off threshold for standard mathematical rounding */
+export const ROUND_OFF_THRESHOLD = 0.5; 
