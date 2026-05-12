@@ -782,7 +782,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     entry.taxes?.forEach(tax => {
                         if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
                             tcsSum += tax.amount?.amountForAccount;
-                            tcsGrandTotalAdjustment += tax?.taxType === 'tcspay' ? -tax.amount?.amountForAccount : tax.amount?.amountForAccount;
+                            tcsGrandTotalAdjustment += tax.amount?.amountForAccount;
                         } else if (['tdsrc', 'tdspay'].includes(tax?.taxType)) {
                             tdsSum += tax.amount?.amountForAccount;
                         }

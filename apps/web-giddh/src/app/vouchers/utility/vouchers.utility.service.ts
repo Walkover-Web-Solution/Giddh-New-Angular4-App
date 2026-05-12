@@ -329,7 +329,7 @@ export class VouchersUtilityService {
             if (isTcs) {
                 voucherTotals.tcsTotal += otherTaxAmount;
                 if (options?.applyTcsToGrandTotal) {
-                    voucherTotals.grandTotal += entry.otherTax?.taxType === TaxCollectionDeductionType.TCS_PAYABLE ? -otherTaxAmount : otherTaxAmount;
+                    voucherTotals.grandTotal += otherTaxAmount;
                 }
             } else if (isTds) {
                 voucherTotals.tdsTotal += otherTaxAmount;
