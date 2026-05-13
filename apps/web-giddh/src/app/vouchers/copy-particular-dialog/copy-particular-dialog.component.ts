@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from "@
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
-    selector: "app-copy-particular-dialog",
+    selector: "copy-particular-dialog",
     templateUrl: "./copy-particular-dialog.component.html",
     styleUrls: ["./copy-particular-dialog.component.scss"],
     changeDetection: ChangeDetectionStrategy.Default,

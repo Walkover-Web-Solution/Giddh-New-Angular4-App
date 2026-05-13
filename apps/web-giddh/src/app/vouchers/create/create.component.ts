@@ -414,9 +414,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Copy particular dialog title */
     public copyParticularDialogTitle: string = "";
     /** Pagination information for copy particular dialog */
-    public copyParticularPagination: { page: number; size: number } = {
-        page: 1,
-        size: PAGE_SIZE_OPTIONS[0]
+    public copyParticularPagination: { page: number } = {
+        page: 1
     };
     /** Page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
@@ -3795,8 +3794,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             ? `${accountName} (${stockName}${variantName ? ` - ${variantName}` : ""})`
             : accountName;
         this.copyParticularPagination = {
-            page: 1,
-            size: this.pageSizeOptions[0]
+            page: 1
         };
         this.copyParticularHistory = { items: [], totalItems: 0, totalPages: 0, page: 1 };
         this.copyParticularTriggerElement = (event?.currentTarget as HTMLElement) || (document.activeElement as HTMLElement) || null;
@@ -3904,8 +3902,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        this.copyParticularPagination.page = this.copyParticularPagination.size !== event.pageSize ? 1 : event.pageIndex + 1;
-        this.copyParticularPagination.size = event.pageSize;
+        this.copyParticularPagination.page = event.pageIndex + 1;
         this.getCopyParticularHistory();
     }
 
@@ -4114,8 +4111,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.voucherType === VoucherTypeEnum.generateEstimate ? VoucherTypeEnum.estimate 
                                 : (this.voucherType === VoucherTypeEnum.generateProforma ? VoucherTypeEnum.proforma 
                                     : this.voucherType),
-            page: this.copyParticularPagination.page,
-            size: this.copyParticularPagination.size,
+            page: this.copyParticularPagination.page
         };
     }
 
