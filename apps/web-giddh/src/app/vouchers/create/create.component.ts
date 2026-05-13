@@ -5726,7 +5726,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.company.giddhBalanceDecimalPlaces,
                 this.applyRoundOff,
                 this.invoiceForm.get("exchangeRate")?.value,
-                { applyTcsToGrandTotal: !this.invoiceForm.get("isAdvanceReceipt")?.value }
+                { applyTcsToGrandTotal: !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice && !this.invoiceForm.get("isAdvanceReceipt")?.value }
             );
             this.invoiceForm.get("grandTotalMultiCurrency")?.patchValue(this.voucherTotals?.grandTotalMultiCurrency);
             this.calculateBalanceDue();

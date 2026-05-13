@@ -491,7 +491,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 });
 
                 this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(response?.entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, response?.exchangeRate);
-                if (response?.body?.subVoucher !== SubVoucher.AdvanceReceipt) {
+                if (response?.body?.subVoucher !== SubVoucher.AdvanceReceipt && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
                     this.voucherTotals.grandTotal += tcsGrandTotalAdjustment;
                 }
                 this.voucherTotals.tcsTotal = tcsSum;
