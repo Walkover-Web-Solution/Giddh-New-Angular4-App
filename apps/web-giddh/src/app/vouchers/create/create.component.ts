@@ -201,8 +201,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public companyTaxes$: Observable<any> = this.componentStore.companyTaxes$;
     /** Voucher account results Observable */
     public voucherAccountResults$: Observable<OptionInterface[]> = observableOf(null);
-    /** Voucher stock results Observable */
-    public voucherStockResults$: Observable<OptionInterface[]> = observableOf(null);
     /** Brief accounts Observable */
     public briefAccounts$: Observable<OptionInterface[]> = observableOf(null);
     /** Last vouchers get in progress Observable */
@@ -219,8 +217,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public pendingPurchaseOrders$: Observable<any> = this.componentStore.pendingPurchaseOrders$;
     /** Account search request */
     public accountSearchRequest: any;
-    /** Stock search request */
-    public stockSearchRequest: any;
+    /** Stock search request by entry row */
+    public stockSearchRequestByEntry: Map<number, any> = new Map();
     /** Stores the voucher API version of current company */
     public voucherApiVersion: number;
     /** Invoice Settings */
@@ -392,8 +390,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         hsnNumber: "",
         sacNumber: "",
     };
+    /** Subject backing the active entry index for reactive consumption */
+    private readonly activeEntryIndexSubject$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+    /** Observable to react when the active (open in edit mode) entry row changes */
+    public readonly activeEntryIndex$: Observable<number | null> = this.activeEntryIndexSubject$.asObservable();
     /** Entry index which is open in edit mode */
-    public activeEntryIndex: number | null = null;
+    public get activeEntryIndex(): number | null {
+        return this.activeEntryIndexSubject$.value;
+    }
+    public set activeEntryIndex(value: number | null) {
+        if (this.activeEntryIndexSubject$.value !== value) {
+            this.activeEntryIndexSubject$.next(value);
+        }
+    }
     /** Reference to the copy particular dialog */
     private copyParticularDialogRef: MatDialogRef<any>;
     /** Instance of copy particular dialog component */
@@ -911,6 +920,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCompanyTaxes();
         this.getSalesPersonList();
 
+        /** Trigger row-specific stock search whenever the active entry row changes */
+        this.activeEntryIndex$
+            .pipe(distinctUntilChanged(), takeUntil(this.destroyed$))
+            .subscribe((index) => {
+                if (index === null || index < 0) {
+                    return;
+                }
+                if (this.stockSearchRequestByEntry.get(index)?.results !== undefined) {
+                    return;
+                }
+                const entryFormGroup = this.getEntryFormGroup(index);
+                const transactionFormGroup = entryFormGroup ? this.getTransactionFormGroup(entryFormGroup) : null;
+                const query = transactionFormGroup?.get("stock.name")?.value || transactionFormGroup?.get("account.name")?.value || "";
+                this.searchStock(query, 1, index);
+            });
+
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams])
             .pipe(delay(1), takeUntil(this.destroyed$))
             .subscribe((response) => {
@@ -973,7 +998,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getInvoiceSettings();
                         this.getCreatedTemplates();
                         this.getAccountOnboardingFormData();
-                        this.searchStock();
                         this.setDefaultSupplyFields();
 
                         if (!this.invoiceType.isPaymentInvoice && !this.invoiceType.isReceiptInvoice) {
@@ -1303,7 +1327,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.getInvoiceSettings();
                     this.getCreatedTemplates();
                     this.getAccountOnboardingFormData();
-                    this.searchStock();
                     if (this.invoiceType.isCashInvoice) {
                         this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
                         this.componentStore.getBriefAccounts({
@@ -2645,45 +2668,51 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @return {*}  {void}
      * @memberof VoucherCreateComponent
      */
-    public searchStock(query: string = "", page: number = 1): void {
-        if (this.stockSearchRequest?.isLoading) {
+    public searchStock(query: string, page: number, entryIndex: number): void {
+        const requestState = this.stockSearchRequestByEntry.get(entryIndex);
+
+        if (requestState?.isLoading) {
             return;
         }
 
-        let stockSearchRequest = this.vouchersUtilityService.getSearchRequestObject(
+        const stockSearchRequest = this.vouchersUtilityService.getSearchRequestObject(
             this.voucherType,
             query,
             page,
             SearchType.ITEM
         );
-        this.stockSearchRequest = cloneDeep(stockSearchRequest);
-        this.stockSearchRequest.isLoading = true;
+
+        const updatedRequest = cloneDeep(stockSearchRequest);
+        updatedRequest.isLoading = true;
+        updatedRequest.results = requestState?.results;
+
+        this.stockSearchRequestByEntry.set(entryIndex, updatedRequest);
 
         this.searchService
             .searchAccountV3(stockSearchRequest)
             .pipe(takeUntil(this.destroyed$))
             .subscribe((response) => {
+                const activeRequest = this.stockSearchRequestByEntry.get(entryIndex);
+
                 if (response?.body?.results?.length) {
-                    this.stockSearchRequest.loadMore = true;
-                    let voucherStockResults = [];
-                    if (page > 1) {
-                        this.voucherStockResults$.subscribe((res) => (voucherStockResults = res));
-                    }
-                    const newResults = response?.body?.results?.map((res) => {
+                    activeRequest.loadMore = true;
+                    const priorResults: OptionInterface[] = page > 1 ? (activeRequest.results || []) : [];
+
+                    const newResults = response.body.results.map((res) => {
                         return { label: res.name, value: res.uniqueName, additional: res, tooltip: `${res.stock?.name ? res.name + ' (' + res.stock.name + ')' : res.name}` };
                     });
-                    this.voucherStockResults$ = observableOf(voucherStockResults.concat(...newResults));
+
+                    activeRequest.results = priorResults.concat(...newResults);
                 } else {
-                    this.stockSearchRequest.loadMore = false;
+                    activeRequest.loadMore = false;
                     if (page === 1) {
-                        this.voucherStockResults$ = observableOf(null);
+                        activeRequest.results = null;
                     }
                 }
-                this.stockSearchRequest.isLoading = false;
-                this.changeDetection.detectChanges()
+                activeRequest.isLoading = false;
+                this.changeDetection.detectChanges();
             });
     }
-
     /**
      * Gets exchange rate
      *
@@ -2802,13 +2831,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public handleSearchStockScrollEnd(): void {
-        if (this.stockSearchRequest.loadMore) {
-            let page = this.stockSearchRequest.page + 1;
-            this.searchStock(this.stockSearchRequest.query, page);
+    public handleSearchStockScrollEnd(entryIndex: number): void {
+        const requestState = this.stockSearchRequestByEntry.get(entryIndex);
+
+        if (requestState?.loadMore) {
+            const page = requestState.page + 1;
+            this.searchStock(decodeURIComponent(requestState.q || ""), page, entryIndex);
         }
     }
-
     /**
      * Callback for select account
      *
@@ -6760,7 +6790,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getIsTcsTdsApplicable();
         this.getInvoiceSettings();
         this.getCreatedTemplates();
-        this.searchStock();
         this.searchAccount();
         this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
         this.changeDetection.detectChanges();
