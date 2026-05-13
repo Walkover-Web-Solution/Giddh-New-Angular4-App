@@ -55,6 +55,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public subscriptionForm: FormGroup;
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True when a Stripe failure redirect is awaiting translation data before showing the toast */
+    private pendingStripeFailureToast: boolean = false;
     /** Hold selected tab */
     public selectedStep: number = 0;
     /** Form Group for subscription first step form form */
@@ -1579,22 +1581,22 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
 
         if (entityCode === EntityCode.GBR) {
-            // GBR: Stripe shown for monthly/yearly; GoCardless/PayPal only for daily
+            // GBR: Stripe shown for all durations; GoCardless/PayPal added for monthly & daily
             if (this.isMonthly()) {
                 filterProviders([PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL]);
             } else if (this.isYearly()) {
                 filterProviders([PaymentProvider.STRIPE, PaymentProvider.RAZORPAY]);
             } else if (this.isDaily()) {
-                filterProviders([PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL]);
+                filterProviders([PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL]);
             }
         } else if (entityCode !== EntityCode.IND) {
-            // Non-IND: Stripe for monthly/yearly only; PayPal for daily (no Stripe)
+            // Non-IND: Stripe available for all durations; PayPal added for monthly & daily
             if (this.isMonthly()) {
                 filterProviders([PaymentProvider.STRIPE, PaymentProvider.PAYPAL]);
             } else if (this.isYearly()) {
                 filterProviders([PaymentProvider.STRIPE, PaymentProvider.RAZORPAY]);
             } else if (this.isDaily()) {
-                filterProviders([PaymentProvider.PAYPAL]);
+                filterProviders([PaymentProvider.STRIPE, PaymentProvider.PAYPAL]);
             }
         } else {
             // IND: Razorpay for all durations (no Stripe)
@@ -2099,10 +2101,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     private handleStripeRedirectFailure(): void {
         this.isLoading = false;
         this.componentStore.patchState({ saveStripePaymentInProgress: false });
-        const message = this.localeData?.payment_failed;
-        this.toasterService.showSnackBar('error', message);
-
         this.clearStripeRedirectParams();
+
+        if (this.localeData?.payment_failed) {
+            this.toasterService.showSnackBar('error', this.localeData.payment_failed);
+        } else {
+            // Translations not yet loaded; defer toast until translationComplete fires
+            this.pendingStripeFailureToast = true;
+        }
         this.changeDetection.detectChanges();
     }
 
@@ -2204,6 +2210,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
    */
     public translationComplete(event: any): void {
         if (event) {
+            if (this.pendingStripeFailureToast && this.localeData?.payment_failed) {
+                this.toasterService.showSnackBar('error', this.localeData.payment_failed);
+                this.pendingStripeFailureToast = false;
+            }
             this.allPaymentProviders = [
                 {
                     label: this.localeData?.gocardless,
