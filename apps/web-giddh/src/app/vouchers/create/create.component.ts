@@ -3491,6 +3491,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 uniqueName: [""],
                 amount: [""],
                 type: [""],
+                taxType: [""],
                 calculationMethod: [""],
                 isChecked: [false],
                 taxValue: [0],
@@ -4000,6 +4001,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup.get("otherTax.isChecked")?.patchValue(true);
         entryFormGroup.get("otherTax.name").patchValue(tax?.name);
         entryFormGroup.get("otherTax.uniqueName").patchValue(tax?.uniqueName);
+        entryFormGroup.get("otherTax.taxType").patchValue(tax?.taxType);
         entryFormGroup.get("otherTax.taxValue").patchValue(tax?.taxDetail[0]?.taxValue);
         entryFormGroup.get("otherTax.taxDetail").patchValue(tax?.taxDetail);
         entryFormGroup
@@ -5172,7 +5174,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 entries,
                 this.company.giddhBalanceDecimalPlaces,
                 this.applyRoundOff,
-                this.invoiceForm.get("exchangeRate")?.value
+                this.invoiceForm.get("exchangeRate")?.value,
+                { applyTcsToGrandTotal: !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice && !this.invoiceForm.get("isAdvanceReceipt")?.value }
             );
             this.invoiceForm.get("grandTotalMultiCurrency")?.patchValue(this.voucherTotals?.grandTotalMultiCurrency);
             this.calculateBalanceDue();
@@ -6641,13 +6644,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment(): number {
+        const tcsAdjustment = this.invoiceForm.get("isAdvanceReceipt")?.value ? this.voucherTotals.tcsTotal : 0;
         return parseFloat(
             Number(
-                this.voucherTotals.grandTotal +
-                this.voucherTotals.tcsTotal -
+                this.voucherTotals.grandTotal -
+                this.voucherTotals.tdsTotal +
+                tcsAdjustment -
                 this.adjustPaymentData.totalAdjustedAmount -
-                this.totalDepositAmount -
-                this.voucherTotals.tdsTotal
+                this.totalDepositAmount
             ).toFixed(this.company?.giddhBalanceDecimalPlaces)
         );
     }
@@ -6659,6 +6663,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public calculateBalanceDue(): void {
         this.getTotalDepositAmount();
+        const tcsAdjustment = this.invoiceForm.get("isAdvanceReceipt")?.value ? this.voucherTotals.tcsTotal : 0;
         let depositAmount = this.totalDepositAmount;
         if (this.isMultiCurrencyVoucher) {
             const deposits = this.invoiceForm.get("deposits") as FormArray;
@@ -6683,7 +6688,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.voucherTotals.balanceDue = giddhRoundOff(
             this.voucherTotals.grandTotal +
-            this.voucherTotals.tcsTotal -
+            tcsAdjustment -
             this.voucherTotals.tdsTotal -
             depositAmount -
             this.totalAdvanceReceiptsAdjustedAmount,
@@ -6697,7 +6702,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         ) {
             this.voucherTotals.balanceDue = giddhRoundOff(
                 this.voucherTotals.grandTotal +
-                this.voucherTotals.tcsTotal -
+                tcsAdjustment -
                 this.voucherTotals.tdsTotal -
                 this.totalAdvanceReceiptsAdjustedAmount,
                 this.company?.giddhBalanceDecimalPlaces
