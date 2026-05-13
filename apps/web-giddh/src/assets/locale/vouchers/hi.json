@@ -175,5 +175,7 @@
     "update_recurring_payment": "रिकरंग भुगतान संशोधित करें",
     "place_of_supply": "आपूर्ति का स्थान",
     "source_of_supply": "आपूर्ति का स्रोत",
-    "destination_of_supply": "आपूर्ति का गंतव्य"
+    "destination_of_supply": "आपूर्ति का गंतव्य",
+    "all_invoices": "सभी इनवॉइस",
+    "account_invoices": "खाता इनवॉइस"
 }

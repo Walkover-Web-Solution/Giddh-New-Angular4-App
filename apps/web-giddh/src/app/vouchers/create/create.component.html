@@ -218,65 +218,22 @@
                                                     invoiceType.isCreditNote ||
                                                     invoiceType.isDebitNote) &&
                                                 invoiceForm.controls['account'].get('uniqueName')?.value &&
-                                                (lastVouchersList$ | async)?.length
+                                                (lastVouchersCompanyList().length || lastVouchersAccountList().length)
                                             "
                                         >
                                             <div
                                                 tabindex="0"
                                                 role="button"
                                                 cdkMonitorElementFocus
-                                                (keydown.enter)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
-                                                (keydown.space)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
                                                 #copyVoucherElement
-                                                #copyVoucherTrigger="matMenuTrigger"
-                                                [matMenuTriggerFor]="copyLastVouchers"
+                                                (click)="openRecentVouchersPane()"
+                                                (keydown.enter)="$event.preventDefault(); openRecentVouchersPane()"
+                                                (keydown.space)="$event.preventDefault(); openRecentVouchersPane()"
                                                 class="vouchers-copy-sales ml-5 cursor-pointer"
                                             >
                                                 <i class="icon-copy-file"></i>
                                                 {{ voucherType | voucherCopyLink: localeData | titlecase }}
                                             </div>
-                                            <mat-menu #copyLastVouchers="matMenu">
-                                                <div class="mat-menu-width-large">
-                                                    <ng-container *ngIf="getLastVouchersInProgress$ | async">
-                                                        <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
-                                                    </ng-container>
-                                                    <button
-                                                        mat-menu-item
-                                                        *ngFor="let voucher of lastVouchersList$ | async"
-                                                        (click)="copyInvoice(voucher)"
-                                                        class="line-height-initial"
-                                                    >
-                                                        <div class="p-1">
-                                                            <div class="d-flex flex-column">
-                                                                <div class="d-flex justify-content-between">
-                                                                    <span>
-                                                                        {{
-                                                                            invoiceType.isProformaInvoice
-                                                                                ? voucher?.proformaNumber
-                                                                                : invoiceType.isEstimateInvoice
-                                                                                  ? voucher?.estimateNumber
-                                                                                  : voucher?.voucherNumber
-                                                                                    ? voucher?.voucherNumber
-                                                                                    : commonLocaleData?.app_not_available
-                                                                        }}
-                                                                    </span>
-                                                                    <span>{{ voucher?.grandTotal?.amountForAccount }}</span>
-                                                                </div>
-                                                                <span>
-                                                                    {{ voucher?.date | giddhDate }} ( {{ voucher?.account?.name }} )
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </button>
-                                                    <ng-container
-                                                        *ngIf="
-                                                            !(lastVouchersList$ | async)?.length && !(getLastVouchersInProgress$ | async)
-                                                        "
-                                                    >
-                                                        {{ commonLocaleData?.app_no_result_found }}
-                                                    </ng-container>
-                                                </div>
-                                            </mat-menu>
                                         </ng-container>
                                     </div>
                                 </div>
@@ -3457,4 +3414,131 @@
         [purchaseOrderCompanyUniqueName]="activeCompany?.uniqueName"
         (closeModelEvent)="cancelEmailModal()"
     ></purchase-order-preview-modal>
+</ng-template>
+
+<!-- Recent Vouchers Aside Pane -->
+<ng-template #recentVouchersTemplate>
+    <div cdkFocusInitial class="dialog-header font-size-15">
+        <span>{{ voucherType | voucherCopyLink: localeData | titlecase }}</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body font-size-15">
+        <mat-tab-group animationDuration="0">
+            <!-- Tab 1: Account Invoices -->
+            <mat-tab [label]="localeData?.account_invoices">
+                @if (isAccountVouchersLoading()) {
+                    <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
+                } @else {
+                    <ng-container *ngTemplateOutlet="voucherListTemplate; context: { $implicit: lastVouchersAccountList() }"></ng-container>
+                }
+            </mat-tab>
+
+            <!-- Tab 2: All Invoices (Company) -->
+            <mat-tab [label]="localeData?.all_invoices">
+                @if (isCompanyVouchersLoading()) {
+                    <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
+                } @else {
+                    <ng-container *ngTemplateOutlet="voucherListTemplate; context: { $implicit: lastVouchersCompanyList() }"></ng-container>
+                }
+            </mat-tab>
+        </mat-tab-group>
+    </mat-dialog-content>
+
+    <!-- Shared voucher list template used by both tabs -->
+    <ng-template #voucherListTemplate let-vouchers>
+        <div class="w-100 overflow-x-hidden border mt-3">
+            <div
+                class="d-grid vouchers-recent-grid align-items-center column-gap-1 py-2 px-2 border-bottom font-weight-semibold text-light font-size-11 text-uppercase"
+            >
+                <span>{{ commonLocaleData?.app_name }}</span>
+                <span>{{ commonLocaleData?.app_invoice_no }}</span>
+                <span>{{ commonLocaleData?.app_date }}</span>
+                <span class="text-right">{{ commonLocaleData?.app_amount }}</span>
+                <span></span>
+            </div>
+            @for (voucher of vouchers; track voucher.uniqueName; let last = $last) {
+                <div
+                    class="d-grid vouchers-recent-grid align-items-center column-gap-1 py-2 hover-trigger px-2"
+                    [class.border-bottom]="!last"
+                >
+                    <span>
+                        {{ voucher?.account?.name }}
+                    </span>
+                    <span>
+                        <a
+                            href="javascript:;"
+                            class="text-underline text-truncate"
+                            cdkMonitorElementFocus
+                            [attr.aria-label]="
+                                (invoiceType.isProformaInvoice
+                                    ? voucher?.proformaNumber
+                                    : invoiceType.isEstimateInvoice
+                                      ? voucher?.estimateNumber
+                                      : voucher?.voucherNumber) || commonLocaleData?.app_not_available
+                            "
+                            (click)="openVoucherPdfPreview(voucher)"
+                            (keydown.enter)="$event.preventDefault(); openVoucherPdfPreview(voucher)"
+                            (keydown.space)="$event.preventDefault(); openVoucherPdfPreview(voucher)"
+                        >
+                            {{
+                                invoiceType.isProformaInvoice
+                                    ? voucher?.proformaNumber
+                                    : invoiceType.isEstimateInvoice
+                                      ? voucher?.estimateNumber
+                                      : voucher?.voucherNumber
+                                        ? voucher?.voucherNumber
+                                        : commonLocaleData?.app_not_available
+                            }}
+                        </a>
+                    </span>
+                    <span class="text-muted">{{ voucher?.date | giddhDate }}</span>
+                    <span class="text-right">
+                        <amount-field
+                            [amount]="voucher?.grandTotal?.amountForAccount"
+                            [currencySymbol]="voucher?.grandTotal?.currency?.symbol"
+                            [currencyCode]="voucher?.grandTotal?.currency?.code"
+                        ></amount-field>
+                    </span>
+                    <span class="justify-self-end">
+                        <button
+                            mat-icon-button
+                            class="hover-target"
+                            [matTooltip]="voucherType | voucherCopyLink: localeData | titlecase"
+                            (click)="copyInvoice(voucher)"
+                            (keydown.enter)="$event.preventDefault(); copyInvoice(voucher)"
+                            (keydown.space)="$event.preventDefault(); copyInvoice(voucher)"
+                            [attr.aria-label]="voucherType | voucherCopyLink: localeData | titlecase"
+                        >
+                            <i class="icon-copy-file font-size-16 text-primary"></i>
+                        </button>
+                    </span>
+                </div>
+            } @empty {
+                <div class="text-center text-muted py-4">{{ commonLocaleData?.app_no_result_found }}</div>
+            }
+        </div>
+    </ng-template>
+</ng-template>
+
+<!-- Voucher PDF Preview Dialog -->
+<ng-template #voucherPdfPreviewTemplate>
+    <div cdkFocusInitial class="dialog-header font-size-15">
+        <span>{{ selectedPdfVoucherNumber() }}</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="container h-100 px-0">
+            <div class="pdf-preview h-100">
+                @if (!previewPdfUrl()) {
+                    <mat-spinner class="ml-auto mr-auto my-4" [diameter]="40"></mat-spinner>
+                } @else {
+                    <iframe width="100%" height="100%" [src]="previewPdfUrl()" title="PDF"></iframe>
+                }
+            </div>
+        </div>
+    </mat-dialog-content>
 </ng-template>
