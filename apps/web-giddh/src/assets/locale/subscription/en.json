@@ -145,6 +145,7 @@
         "cancel": "Cancel",
         "razorpay": "RAZORPAY",
         "paypal": "PAYPAL",
+        "stripe": "STRIPE",
         "razorpay_error_message": "There is an error with Razorpay. Please contact support.",
         "payu": "PAYU",
         "active": "Active",
@@ -154,5 +155,8 @@
         "select_status": "Select status",
         "please_select_payment_provider": "Please select a payment provider",
         "no_plans_available": "No plans available",
-        "no_plans_available_for_region": "No plans available for selected region"
+        "no_plans_available_for_region": "No plans available for selected region",
+        "pay_now": "Pay now",
+        "processing": "Processing...",
+        "payment_failed": "Payment failed. Please try again."
     }
