@@ -205,7 +205,7 @@ export class WhiteLabelService {
      * Get Stripe Publishable Key with white label override
      */
     getStripeKey(): string {
-        const whiteLabelStripeKey = this.whiteLabelConfig?.body?.stripePaymentDetails?.stripePublishablekey || 'pk_test_51TH166C633IiX3tNahGBDHzERIFl1xqM4dusNYN0bjgdAxOUJaLhviUqd4dMeeJVwYn2MaSsbCdoOlNsLz6TFDBh00Psvqk3Yg';
+        const whiteLabelStripeKey = this.whiteLabelConfig?.body?.stripePaymentDetails?.stripePublishablekey;
         return whiteLabelStripeKey ? whiteLabelStripeKey : '';
     }
 

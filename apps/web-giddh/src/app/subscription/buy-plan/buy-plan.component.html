@@ -862,7 +862,7 @@
                                                         (click)="confirmStripePayment()"
                                                         [disabled]="stripePaymentInProgress"
                                                     >
-                                                        <span *ngIf="!stripePaymentInProgress">{{ localeData?.pay_now || 'Pay now' }}</span>
+                                                        <span *ngIf="!stripePaymentInProgress">{{ localeData?.pay_now }}</span>
                                                         <span *ngIf="stripePaymentInProgress">Processing...</span>
                                                     </button>
                                                     @if (stripeError) {
