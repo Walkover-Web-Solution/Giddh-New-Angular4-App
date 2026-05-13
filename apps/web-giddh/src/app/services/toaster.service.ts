@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { APP_DEFAULT_TITLE, DEFAULT_TOASTER_OPTIONS, DEFAULT_TOASTER_OPTIONS_WITH_HTML } from '../app.constant';
+import { APP_DEFAULT_TITLE, DEFAULT_SERVER_ERROR_MSG, DEFAULT_TOASTER_OPTIONS, DEFAULT_TOASTER_OPTIONS_WITH_HTML } from '../app.constant';
 import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarComponent } from '../theme/snackbar/snackbar.component';
@@ -64,6 +64,7 @@ export class ToasterService {
      * @memberof ToasterService
      */
     public showSnackBar(type: string, message: string, title: string = APP_DEFAULT_TITLE): void {
+        if (!message) message = DEFAULT_SERVER_ERROR_MSG;
         this.snackBar.openFromComponent(SnackBarComponent, {
             data: { title: title, message: message },
             horizontalPosition: "center",

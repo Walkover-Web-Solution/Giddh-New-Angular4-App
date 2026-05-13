@@ -30,6 +30,8 @@ export interface BuyPlanState {
     paypalCaptureOrderIdSuccess: boolean;
     calculateData: any;
     razorpaySuccess: boolean;
+    saveStripePaymentInProgress: boolean;
+    saveStripePaymentSuccess: boolean;
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
@@ -52,7 +54,9 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     calculateDataInProgress: false,
     paypalCaptureOrderIdSuccess: null,
     calculateData: null,
-    razorpaySuccess: false
+    razorpaySuccess: false,
+    saveStripePaymentInProgress: false,
+    saveStripePaymentSuccess: false
 };
 
 @Injectable()
@@ -567,6 +571,45 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
                             return this.patchState({
                                 paypalCaptureOrderIdSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Save stripe payment by subscription id and payment intent id
+     *
+     * @memberof BuyPlanComponentStore
+     */
+    readonly saveStripePayment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ saveStripePaymentSuccess: false, saveStripePaymentInProgress: true });
+                return this.subscriptionService.saveStripePayment(req.subscriptionId, req.paymentIntentId).pipe(
+                    tap(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    saveStripePaymentSuccess: true,
+                                    saveStripePaymentInProgress: false
+                                });
+                            } else {
+                                this.toasterService.showSnackBar('error', res.message);
+                                return this.patchState({
+                                    saveStripePaymentSuccess: false,
+                                    saveStripePaymentInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+                            return this.patchState({
+                                saveStripePaymentSuccess: false,
+                                saveStripePaymentInProgress: false
                             });
                         }
                     ),
