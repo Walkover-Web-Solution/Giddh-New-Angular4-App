@@ -3961,14 +3961,30 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             giddhRoundOff(totalForAccount * exchangeRate, this.company.giddhBalanceDecimalPlaces)
         );
 
-        entryFormGroup.get("otherTax.name")?.patchValue("");
-        entryFormGroup.get("otherTax.uniqueName")?.patchValue("");
-        entryFormGroup.get("otherTax.amount")?.patchValue("");
-        entryFormGroup.get("otherTax.type")?.patchValue("");
-        entryFormGroup.get("otherTax.calculationMethod")?.patchValue("");
-        entryFormGroup.get("otherTax.isChecked")?.patchValue(false);
-        entryFormGroup.get("otherTax.taxValue")?.patchValue(0);
-        entryFormGroup.get("otherTax.taxDetail")?.patchValue([]);
+        // Map API other taxes (TDS/TCS) → form's otherTax group using exact API amounts
+        const otherTaxFromApi = (item?.taxes ?? []).find((t: any) =>
+            this.otherTaxTypes.includes(t?.taxType)
+        );
+        if (otherTaxFromApi) {
+            const isTcs = ["tcsrc", "tcspay"].includes(otherTaxFromApi?.taxType);
+            entryFormGroup.get("otherTax.name")?.patchValue(otherTaxFromApi?.accountName || "");
+            entryFormGroup.get("otherTax.uniqueName")?.patchValue(otherTaxFromApi?.uniqueName || "");
+            entryFormGroup.get("otherTax.amount")?.patchValue(Number(otherTaxFromApi?.amount?.amountForAccount) || 0);
+            entryFormGroup.get("otherTax.type")?.patchValue(isTcs ? this.otherTaxTypeEnum.TCS : this.otherTaxTypeEnum.TDS);
+            entryFormGroup.get("otherTax.calculationMethod")?.patchValue(otherTaxFromApi?.calculationMethod || "");
+            entryFormGroup.get("otherTax.isChecked")?.patchValue(true);
+            entryFormGroup.get("otherTax.taxValue")?.patchValue(otherTaxFromApi?.taxPercent ?? 0);
+            entryFormGroup.get("otherTax.taxDetail")?.patchValue([{ taxValue: otherTaxFromApi?.taxPercent ?? 0, date: null }]);
+        } else {
+            entryFormGroup.get("otherTax.name")?.patchValue("");
+            entryFormGroup.get("otherTax.uniqueName")?.patchValue("");
+            entryFormGroup.get("otherTax.amount")?.patchValue("");
+            entryFormGroup.get("otherTax.type")?.patchValue("");
+            entryFormGroup.get("otherTax.calculationMethod")?.patchValue("");
+            entryFormGroup.get("otherTax.isChecked")?.patchValue(false);
+            entryFormGroup.get("otherTax.taxValue")?.patchValue(0);
+            entryFormGroup.get("otherTax.taxDetail")?.patchValue([]);
+        }
 
         transactionFormGroup.get("stock.name")?.patchValue(item?.stockName || transactionFormGroup.get("stock.name")?.value);
         transactionFormGroup.get("stock.uniqueName")?.patchValue(item?.stockUniqueName || transactionFormGroup.get("stock.uniqueName")?.value);
