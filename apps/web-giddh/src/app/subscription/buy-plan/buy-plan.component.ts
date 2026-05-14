@@ -366,7 +366,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.saveStripePaymentSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
-                this.navigateToNewCompany(subscriptionId);
+                const isChangePlanSession = sessionStorage.getItem('stripe_is_change_plan') === 'true';
                 sessionStorage.removeItem('stripe_subscription_id');
                 sessionStorage.removeItem('stripe_payment_intent_id');
                 sessionStorage.removeItem('stripe_is_change_plan');
@@ -374,6 +374,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 sessionStorage.removeItem('stripe_duration');
                 sessionStorage.removeItem('stripe_plan_unique_name');
                 sessionStorage.removeItem('stripe_amount_paid');
+                if (isChangePlanSession || this.isChangePlan || this.isRenewPlan) {
+                    this.navigateToRoute('/pages/user-details/subscription');
+                } else {
+                    this.navigateToNewCompany(subscriptionId);
+                }
             }
         });
 
