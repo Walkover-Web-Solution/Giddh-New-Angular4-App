@@ -2122,7 +2122,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.toasterService.showSnackBar('error', 'Payment status: ' + paymentIntent.status);
                 }
                 this.changeDetection.detectChanges();
+            }).catch(() => {
+                this.isLoading = false;
+                this.changeDetection.detectChanges();
             });
+        }).catch(() => {
+            this.isLoading = false;
+            this.changeDetection.detectChanges();
         });
 
         this.clearStripeRedirectParams();
