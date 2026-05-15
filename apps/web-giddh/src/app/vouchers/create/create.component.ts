@@ -3065,6 +3065,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     entryFormGroup.get("otherTax.taxValue")?.patchValue(otherTax?.taxPercent ?? 0);
                     entryFormGroup.get("otherTax.taxDetail")?.patchValue([{ taxValue: otherTax?.taxPercent ?? 0, date: null }]);
                 }
+            } else if (this.invoiceForm.get("isAdvanceReceipt").value && normalTaxes?.length) {
+                this.calculateReceiptPaymentAmount(entryFormGroup, true);
             } else {
                 entryFormGroup.get("otherTax.name")?.patchValue("");
                 entryFormGroup.get("otherTax.uniqueName")?.patchValue("");
