@@ -3911,15 +3911,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         // Use exact API total (avoids floating-point drift from recomputation)
         entryFormGroup.get("totalDiscount")?.patchValue(Number(item?.discount) || 0);
 
-        // Map API taxes (uses `taxPercent`) → form's expected shape (uses `taxDetail[0].taxValue`)
-        const mappedTaxes = (item?.taxes ?? []).map((t: any) => ({
-            ...t,
-            taxDetail: [{ taxValue: t?.taxPercent ?? 0, date: null }],
-        }));
-        this.getSelectedTaxes(this.copyParticularEntryIndex, mappedTaxes, false);
+        // Separate normal taxes from other taxes (TDS/TCS) and map to form shapes
+        const normalTaxes: any[] = [];
+        let otherTax: any = null;
+        (item?.taxes ?? []).forEach((t: any) => {
+            if (this.otherTaxTypes.includes(t?.taxType)) {
+                otherTax = t;
+            } else {
+                normalTaxes.push({
+                    ...t,
+                    taxDetail: [{ taxValue: t?.taxPercent ?? 0, date: null }],
+                });
+            }
+        });
+
+        if (normalTaxes.length) {
+            this.getSelectedTaxes(this.copyParticularEntryIndex, normalTaxes, false);
+        }
+
         // Override with exact API amounts per tax type (non-CESS vs CESS split)
         const taxWithoutCess = (item?.taxes ?? [])
-            .filter((t: any) => t?.taxType !== "CESS")
+            .filter((t: any) => t?.taxType !== "CESS" && !this.otherTaxTypes.includes(t?.taxType))
             .reduce((sum: number, t: any) => sum + (Number(t?.amount?.amountForAccount) || 0), 0);
         const cessTotal = (item?.taxes ?? [])
             .filter((t: any) => t?.taxType === "CESS")
@@ -3932,20 +3944,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             giddhRoundOff(totalForAccount * exchangeRate, this.company.giddhBalanceDecimalPlaces)
         );
 
-        // Map API other taxes (TDS/TCS) → form's otherTax group using exact API amounts
-        const otherTaxFromApi = (item?.taxes ?? []).find((t: any) =>
-            this.otherTaxTypes.includes(t?.taxType)
-        );
-        if (otherTaxFromApi) {
-            const isTcs = ["tcsrc", "tcspay"].includes(otherTaxFromApi?.taxType);
-            entryFormGroup.get("otherTax.name")?.patchValue(otherTaxFromApi?.accountName || "");
-            entryFormGroup.get("otherTax.uniqueName")?.patchValue(otherTaxFromApi?.uniqueName || "");
-            entryFormGroup.get("otherTax.amount")?.patchValue(Number(otherTaxFromApi?.amount?.amountForAccount) || 0);
-            entryFormGroup.get("otherTax.type")?.patchValue(isTcs ? this.otherTaxTypeEnum.TCS : this.otherTaxTypeEnum.TDS);
-            entryFormGroup.get("otherTax.calculationMethod")?.patchValue(otherTaxFromApi?.calculationMethod || "");
-            entryFormGroup.get("otherTax.isChecked")?.patchValue(true);
-            entryFormGroup.get("otherTax.taxValue")?.patchValue(otherTaxFromApi?.taxPercent ?? 0);
-            entryFormGroup.get("otherTax.taxDetail")?.patchValue([{ taxValue: otherTaxFromApi?.taxPercent ?? 0, date: null }]);
+        // Map API other taxes (TDS/TCS) using getSelectedOtherTax (matches lines 1595-1643 logic)
+        if (otherTax) {
+            const selectedOtherTax = this.allCompanyTaxes?.filter(
+                (tax) => tax.uniqueName === otherTax.uniqueName
+            );
+            if (selectedOtherTax?.length && selectedOtherTax[0]) {
+                otherTax["taxDetail"] = selectedOtherTax[0].taxDetail;
+                otherTax["name"] = selectedOtherTax[0].name;
+                this.getSelectedOtherTax(this.copyParticularEntryIndex, otherTax, otherTax.calculationMethod, true);
+            } else {
+                // Fallback: patch directly if company tax not found
+                const isTcs = ["tcsrc", "tcspay"].includes(otherTax?.taxType);
+                entryFormGroup.get("otherTax.name")?.patchValue(otherTax?.accountName || "");
+                entryFormGroup.get("otherTax.uniqueName")?.patchValue(otherTax?.uniqueName || "");
+                entryFormGroup.get("otherTax.amount")?.patchValue(Number(otherTax?.amount?.amountForAccount) || 0);
+                entryFormGroup.get("otherTax.type")?.patchValue(isTcs ? this.otherTaxTypeEnum.TCS : this.otherTaxTypeEnum.TDS);
+                entryFormGroup.get("otherTax.calculationMethod")?.patchValue(otherTax?.calculationMethod || "");
+                entryFormGroup.get("otherTax.isChecked")?.patchValue(true);
+                entryFormGroup.get("otherTax.taxValue")?.patchValue(otherTax?.taxPercent ?? 0);
+                entryFormGroup.get("otherTax.taxDetail")?.patchValue([{ taxValue: otherTax?.taxPercent ?? 0, date: null }]);
+            }
         } else {
             entryFormGroup.get("otherTax.name")?.patchValue("");
             entryFormGroup.get("otherTax.uniqueName")?.patchValue("");
