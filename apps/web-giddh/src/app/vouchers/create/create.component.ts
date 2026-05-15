@@ -940,6 +940,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .pipe(delay(1), takeUntil(this.destroyed$))
             .subscribe((response) => {
                 if (response) {
+                    // Clear cached per-row stock search results so a new voucher/route starts fresh
+                    this.stockSearchRequestByEntry.clear();
                     let params = response[0];
                     if (params?.uniqueName && params.action !== "copy") {
                         this.isUpdateMode = true;
@@ -5255,8 +5257,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public deleteLineEntry(entryIndex: number): void {
         const entries = this.invoiceForm.get("entries") as FormArray;
         entries.removeAt(entryIndex);
-        this.stockVariants[entryIndex] = observableOf([]);
-        this.stockUnits[entryIndex] = observableOf([]);
+        // Re-index per-row state so it stays aligned with the FormArray after removal
+        this.stockVariants.splice(entryIndex, 1);
+        this.stockUnits.splice(entryIndex, 1);
+        this.reindexStockSearchRequestByEntry(entryIndex);
         if (!entries?.length) {
             this.addNewLineEntry();
         }
@@ -5267,6 +5271,31 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.addNewParticular.nativeElement.focus();
             }, 100);
         }
+    }
+
+    /**
+     * Re-indexes the stockSearchRequestByEntry Map after a row at removedIndex is deleted.
+     * Removes the entry for removedIndex and shifts every higher key down by 1 so the
+     * cached search results stay aligned with the FormArray row indices.
+     *
+     * @private
+     * @param {number} removedIndex Index of the row that was just removed
+     * @memberof VoucherCreateComponent
+     */
+    private reindexStockSearchRequestByEntry(removedIndex: number): void {
+        if (!this.stockSearchRequestByEntry?.size) {
+            return;
+        }
+        const sortedKeys = Array.from(this.stockSearchRequestByEntry.keys()).sort((a, b) => a - b);
+        const reindexed: Map<number, any> = new Map();
+        for (const key of sortedKeys) {
+            if (key < removedIndex) {
+                reindexed.set(key, this.stockSearchRequestByEntry.get(key));
+            } else if (key > removedIndex) {
+                reindexed.set(key - 1, this.stockSearchRequestByEntry.get(key));
+            }
+        }
+        this.stockSearchRequestByEntry = reindexed;
     }
 
     /**
