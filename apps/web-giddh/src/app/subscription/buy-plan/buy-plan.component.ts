@@ -276,6 +276,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public saveStripePaymentInProgress$: Observable<any> = this.componentStore.select(state => state.saveStripePaymentInProgress);
     /** True if promo code is removed */
     public removePromoCode: boolean = false;
+    /** True when page was loaded after a Stripe payment failure redirect */
+    private restoringFromStripeFailure: boolean = false;
     /** Hold true in production environment */
     public isProdMode: boolean = environment.PRODUCTION_ENV;
     /** This will hold option selected state */
@@ -366,7 +368,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.saveStripePaymentSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
-                this.navigateToNewCompany(subscriptionId);
+                const isChangePlanSession = sessionStorage.getItem('stripe_is_change_plan') === 'true';
                 sessionStorage.removeItem('stripe_subscription_id');
                 sessionStorage.removeItem('stripe_payment_intent_id');
                 sessionStorage.removeItem('stripe_is_change_plan');
@@ -374,6 +376,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 sessionStorage.removeItem('stripe_duration');
                 sessionStorage.removeItem('stripe_plan_unique_name');
                 sessionStorage.removeItem('stripe_amount_paid');
+                sessionStorage.removeItem('stripe_subscription_form');
+                sessionStorage.removeItem('stripe_selected_plan');
+                sessionStorage.removeItem('stripe_region_value');
+                sessionStorage.removeItem('stripe_region_label');
+                if (isChangePlanSession || this.isChangePlan || this.isRenewPlan) {
+                    this.navigateToRoute('/pages/user-details/subscription');
+                } else {
+                    this.navigateToNewCompany(subscriptionId);
+                }
             }
         });
 
@@ -935,6 +946,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     private getDefaultPlan(): void {
+        // While restoring from a Stripe failure redirect, the correct region's plans are
+        // being loaded via newUserSelectCountry(). Skip IP-based country detection so it
+        // cannot override the saved region (e.g. switch GLB → IND).
+        if (this.restoringFromStripeFailure) {
+            return;
+        }
         if (!this.countrySource?.length || this.inputData?.length || !this.detectUserInfoByIp?.alpha3CountryCode) {
             return;
         }
@@ -1515,6 +1532,22 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private setPlans(isToggle: boolean = false): void {
         this.inputData = [];
+
+        // When restoring from a Stripe failure redirect, handleStripeRedirectFailure has
+        // already set the correct selectedPlan and firstStepForm.planUniqueName via the
+        // planList$ filtered subscription.  Just refresh inputData from the newly arrived
+        // plans so the plan-selection step (step 0) shows the right list, then exit –
+        // do NOT reset selectedPlan, planUniqueName, or the payment provider.
+        if (this.restoringFromStripeFailure) {
+            const filteredPlans = !this.subscriptionId
+                ? (this.isYearly() ? this.yearlyPlans : this.monthlyPlans)
+                : (this.viewSubscriptionData?.period === PlanDuration.YEARLY ? this.yearlyPlans : this.monthlyPlans);
+            filteredPlans?.forEach(plan => { this.inputData.push(plan); });
+            this.restoringFromStripeFailure = false;
+            this.changeDetection.detectChanges();
+            return;
+        }
+
         if (!this.subscriptionId) {
             const filteredPlans = this.isYearly() ? this.yearlyPlans : this.monthlyPlans;
             this.selectedPlan.set(filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1]);
@@ -2018,7 +2051,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             stripe_payment_intent_id: this.extractPaymentIntentId(this.stripeClientSecret),
             stripe_plan_unique_name: response?.planDetails?.uniqueName || this.firstStepForm.get('planUniqueName')?.value || '',
             stripe_duration: response?.duration || this.firstStepForm.get('duration')?.value || '',
-            stripe_amount_paid: String(response?.dueAmount || 0)
+            stripe_amount_paid: String(response?.dueAmount || 0),
+            stripe_subscription_form: JSON.stringify(this.subscriptionForm.value),
+            stripe_selected_plan: JSON.stringify(this.selectedPlan() || null),
+            stripe_region_value: this.newUserSelectedCountryValue || '',
+            stripe_region_label: this.newUserSelectedCountry || ''
         };
         if (this.subscriptionRequest) {
             sessionData['stripe_subscription_request'] = JSON.stringify(this.subscriptionRequest);
@@ -2085,7 +2122,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.toasterService.showSnackBar('error', 'Payment status: ' + paymentIntent.status);
                 }
                 this.changeDetection.detectChanges();
+            }).catch(() => {
+                this.isLoading = false;
+                this.changeDetection.detectChanges();
             });
+        }).catch(() => {
+            this.isLoading = false;
+            this.changeDetection.detectChanges();
         });
 
         this.clearStripeRedirectParams();
@@ -2093,7 +2136,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
     /**
      * Handles Stripe redirect when payment fails (redirect_status=failed).
-     * Resets the loader and shows a translated failure message.
+     * Restores the full subscription form saved before the redirect and returns
+     * the user to the review-and-pay step (step 2) with Stripe pre-selected.
      *
      * @private
      * @memberof BuyPlanComponent
@@ -2102,6 +2146,79 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.componentStore.patchState({ saveStripePaymentInProgress: false });
         this.clearStripeRedirectParams();
+
+        // Read every piece of state that was saved before the Stripe redirect
+        const savedFormStr = sessionStorage.getItem('stripe_subscription_form');
+        const savedPlanStr = sessionStorage.getItem('stripe_selected_plan');
+        const regionValue = sessionStorage.getItem('stripe_region_value');
+        const regionLabel = sessionStorage.getItem('stripe_region_label');
+        const savedPlanUniqueName = sessionStorage.getItem('stripe_plan_unique_name');
+
+        // Clean up snapshot keys immediately (remaining keys cleaned in saveStripePaymentSuccess$)
+        sessionStorage.removeItem('stripe_subscription_form');
+        sessionStorage.removeItem('stripe_selected_plan');
+        sessionStorage.removeItem('stripe_region_value');
+        sessionStorage.removeItem('stripe_region_label');
+
+        // Restore all three step-forms in one call:
+        //  - firstStepForm.planUniqueName  → must be valid for linear stepper to reach step 2
+        //  - secondStepForm required fields → must be valid for linear stepper to reach step 2
+        //  - thirdStepForm.paymentProvider → was 'STRIPE' when Buy Now was clicked, so Stripe
+        //    is automatically pre-selected without any extra work
+        if (savedFormStr) {
+            try { this.subscriptionForm.patchValue(JSON.parse(savedFormStr)); } catch {}
+        }
+
+        // Restore the full plan object into the signal so the review screen renders the
+        // correct plan summary immediately (before the fresh API response arrives).
+        const savedPlan = savedPlanStr ? (JSON.parse(savedPlanStr) as any) : null;
+        if (savedPlan) {
+            this.selectedPlan.set(savedPlan);
+        }
+
+        // Block IP-based country detection (getDefaultPlan) while we reload the correct
+        // region's plans; otherwise the component switches to India and hides Stripe.
+        this.restoringFromStripeFailure = true;
+
+        // Re-trigger the API call for the originally selected region (e.g. GLB).
+        if (regionValue) {
+            this.newUserSelectCountry({ value: regionValue, label: regionLabel || regionValue });
+        }
+
+        // Once the correct region's plans arrive, do a final sync of all plan-dependent
+        // state. The filter() ignores cached plans from a different region; the subscription
+        // only fires when the right region's plans are actually available.
+        if (savedPlanUniqueName) {
+            this.planList$.pipe(
+                filter((plans: any[]) => Array.isArray(plans) && plans.some((p: any) => p.uniqueName === savedPlanUniqueName)),
+                take(1),
+                takeUntil(this.destroyed$)
+            ).subscribe((plans: any[]) => {
+                this.allPlans = plans;
+                this.yearlyPlans = plans.filter((p: any) => p.period === PlanDuration.YEARLY);
+                this.monthlyPlans = plans.filter((p: any) => p.period === PlanDuration.MONTHLY);
+                const filteredPlans = this.isYearly() ? this.yearlyPlans : this.monthlyPlans;
+                this.inputData = [];
+                filteredPlans?.forEach(plan => { this.inputData.push(plan); });
+                const restoredPlan = plans.find((p: any) => p.uniqueName === savedPlanUniqueName);
+                if (restoredPlan) {
+                    this.selectedPlan.set(restoredPlan);
+                    this.firstStepForm.get('planUniqueName')?.setValue(savedPlanUniqueName);
+                }
+                // NOTE: restoringFromStripeFailure is intentionally NOT cleared here.
+                // setPlans() fires after this subscription (triggered by the getAllPlans()
+                // take(1) set up 200ms later inside newUserSelectCountry). The flag is cleared
+                // inside setPlans so it can honour the restoration before resetting plan state.
+                this.setFinalAmount();
+                this.changeDetection.detectChanges();
+            });
+        }
+
+        // Calculate amounts / payment providers now using the restored plan so the review
+        // screen is correct before the fresh API response arrives.
+        this.setFinalAmount();
+
+        this.selectedStep = 2;
 
         if (this.localeData?.payment_failed) {
             this.toasterService.showSnackBar('error', this.localeData.payment_failed);
