@@ -3929,12 +3929,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         entryFormGroup.get("description")?.patchValue(item?.description || "");
 
-        // Map API discounts (uses `amount`) → form's expected shape (uses `discountValue`)
+        // Map API discounts → form's expected shape
         const mappedDiscounts = (item?.discounts ?? []).map((d: any) => ({
             ...d,
-            discountValue: d?.amount ?? 0,
-            discountType: d?.calculationMethod || "FIX_AMOUNT",
-            calculationMethod: d?.calculationMethod || "FIX_AMOUNT",
+            discountValue: d?.discountValue ?? 0,
+            discountType: d?.calculationMethod,
+            calculationMethod: d?.calculationMethod,
         }));
         this.getSelectedDiscounts(this.copyParticularEntryIndex, mappedDiscounts);
         // Use exact API total (avoids floating-point drift from recomputation)
