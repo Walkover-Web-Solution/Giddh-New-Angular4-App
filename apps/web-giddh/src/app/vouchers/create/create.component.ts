@@ -1612,59 +1612,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.invoiceForm
                                 .get("entries")
                             ["controls"].push(this.getEntriesFormGroup(entry, !voucherDetails.isCopyVoucher));
-                            if (entry.discounts?.length) {
-                                this.getSelectedDiscounts(index, entry.discounts);
-                            }
-
-                            if (entry.taxes) {
-                                let normalTaxes = [];
-                                let otherTax = null;
-                                entry.taxes?.forEach((tax) => {
-                                    if (this.otherTaxTypes.includes(tax.taxType)) {
-                                        otherTax = tax;
-                                    } else {
-                                        if (!tax.taxDetail) {
-                                            tax.taxDetail = [{ taxValue: tax.taxPercent }];
-                                        }
-                                        normalTaxes.push(tax);
-                                    }
-                                });
-
-                                if (this.invoiceForm.get("isAdvanceReceipt")?.value) {
-                                    let totalAmount = entry.transactions[0]?.amount.amountForAccount + normalTaxes[0]?.amount.amountForAccount + (([TaxCollectionDeductionType.TCS_RECEIVABLE, TaxCollectionDeductionType.TCS_PAYABLE].includes(otherTax?.taxType) ? 1 : -1) * (otherTax?.amount.amountForAccount ?? 0));
-                                    if (totalAmount > 0) {
-                                        this.getEntryFormGroup(index).get('total.amountForAccount')?.patchValue(totalAmount);
-                                    }
-                                }
-
-                                if (normalTaxes?.length) {
-                                    this.getSelectedTaxes(index, normalTaxes, false);
-                                }
-
-                                if (!otherTax && this.account?.otherApplicableTaxes?.length) {
-                                    this.allCompanyTaxes?.forEach((tax) => {
-                                        if (
-                                            this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName &&
-                                            this.otherTaxTypes.includes(tax.taxType)
-                                        ) {
-                                            otherTax = tax;
-                                        }
-                                    });
-                                }
-
-                                if (otherTax) {
-                                    const selectedOtherTax = this.allCompanyTaxes?.filter(
-                                        (tax) => tax.uniqueName === otherTax.uniqueName
-                                    );
-                                    if (selectedOtherTax?.length && selectedOtherTax[0]) {
-                                        otherTax["taxDetail"] = selectedOtherTax[0].taxDetail;
-                                        otherTax["name"] = selectedOtherTax[0].name;
-                                        this.getSelectedOtherTax(index, otherTax, otherTax.calculationMethod, true);
-                                    }
-                                } else if (this.invoiceForm.get("isAdvanceReceipt").value && normalTaxes?.length) {
-                                    this.calculateReceiptPaymentAmount(this.getEntryFormGroup(index), true);
-                                }
-                            }
+                            this.applyEntryTaxesAndDiscounts(
+                                index,
+                                entry,
+                                this.invoiceForm.get("isAdvanceReceipt")?.value
+                            );
                         });
 
                         this.checkIfEntriesHasStock();
@@ -3067,6 +3019,97 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Applies entry-level taxes and discounts to a given entry form group.
+     * Shared logic used by voucherDetails$ subscription and useCopyParticularHistory.
+     *
+     * @private
+     * @param {number} entryIndex
+     * @param {*} entryData
+     * @param {boolean} [isAdvanceReceipt=false]
+     * @memberof VoucherCreateComponent
+     */
+    private applyEntryTaxesAndDiscounts(
+        entryIndex: number,
+        entryData: any,
+        isAdvanceReceipt: boolean = false
+    ): void {
+        const entryFormGroup = this.getEntryFormGroup(entryIndex);
+
+        if (entryData.discounts?.length) {
+            this.getSelectedDiscounts(entryIndex, entryData.discounts);
+        }
+        entryFormGroup.get("totalDiscount")?.patchValue(Number(entryData?.discount) || 0);
+
+        if (entryData.taxes) {
+            let normalTaxes = [];
+            let otherTax = null;
+            entryData.taxes?.forEach((tax) => {
+                if (this.otherTaxTypes.includes(tax.taxType)) {
+                    otherTax = tax;
+                } else {
+                    if (!tax.taxDetail) {
+                        tax.taxDetail = [{ taxValue: tax.taxPercent }];
+                    }
+                    normalTaxes.push(tax);
+                }
+            });
+
+            if (isAdvanceReceipt) {
+                let totalAmount = entryData.transactions?.[0]?.amount?.amountForAccount + normalTaxes[0]?.amount?.amountForAccount + (([TaxCollectionDeductionType.TCS_RECEIVABLE, TaxCollectionDeductionType.TCS_PAYABLE].includes(otherTax?.taxType) ? 1 : -1) * (otherTax?.amount?.amountForAccount ?? 0));
+                if (totalAmount > 0) {
+                    entryFormGroup.get('total.amountForAccount')?.patchValue(totalAmount);
+                }
+            }
+
+            if (normalTaxes?.length) {
+                this.getSelectedTaxes(entryIndex, normalTaxes, false);
+            }
+
+            if (!otherTax && this.account?.otherApplicableTaxes?.length) {
+                this.allCompanyTaxes?.forEach((tax) => {
+                    if (
+                        this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName &&
+                        this.otherTaxTypes.includes(tax.taxType)
+                    ) {
+                        otherTax = tax;
+                    }
+                });
+            }
+
+            if (otherTax) {
+                const selectedOtherTax = this.allCompanyTaxes?.filter(
+                    (tax) => tax.uniqueName === otherTax.uniqueName
+                );
+                if (selectedOtherTax?.length && selectedOtherTax[0]) {
+                    otherTax["taxDetail"] = selectedOtherTax[0].taxDetail;
+                    otherTax["name"] = selectedOtherTax[0].name;
+                    this.getSelectedOtherTax(entryIndex, otherTax, otherTax.calculationMethod, true);
+                } else {
+                    // Fallback: patch directly if company tax not found
+                    const isTcs = ["tcsrc", "tcspay"].includes(otherTax?.taxType);
+                    entryFormGroup.get("otherTax.name")?.patchValue(otherTax?.accountName || "");
+                    entryFormGroup.get("otherTax.uniqueName")?.patchValue(otherTax?.uniqueName || "");
+                    entryFormGroup.get("otherTax.amount")?.patchValue(Number(otherTax?.amount?.amountForAccount) || 0);
+                    entryFormGroup.get("otherTax.type")?.patchValue(isTcs ? this.otherTaxTypeEnum.TCS : this.otherTaxTypeEnum.TDS);
+                    entryFormGroup.get("otherTax.calculationMethod")?.patchValue(otherTax?.calculationMethod || "");
+                    entryFormGroup.get("otherTax.isChecked")?.patchValue(true);
+                    entryFormGroup.get("otherTax.taxValue")?.patchValue(otherTax?.taxPercent ?? 0);
+                    entryFormGroup.get("otherTax.taxDetail")?.patchValue([{ taxValue: otherTax?.taxPercent ?? 0, date: null }]);
+                }
+            } else {
+                entryFormGroup.get("otherTax.name")?.patchValue("");
+                entryFormGroup.get("otherTax.uniqueName")?.patchValue("");
+                entryFormGroup.get("otherTax.amount")?.patchValue("");
+                entryFormGroup.get("otherTax.type")?.patchValue("");
+                entryFormGroup.get("otherTax.calculationMethod")?.patchValue("");
+                entryFormGroup.get("otherTax.isChecked")?.patchValue(false);
+                entryFormGroup.get("otherTax.taxValue")?.patchValue(0);
+                entryFormGroup.get("otherTax.taxDetail")?.patchValue([]);
+            }
+        }
+    }
+
+    /**
      * Callback for select variant
      *
      * @param {*} event
@@ -3931,26 +3974,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         entryFormGroup.get("description")?.patchValue(item?.description || "");
 
-        // Map API discounts → form's expected shape
-        const mappedDiscounts = (item?.discounts ?? []).map((d: any) => ({
-            ...d,
-            discountValue: d?.discountValue ?? 0,
-            discountType: d?.calculationMethod,
-            calculationMethod: d?.calculationMethod,
-        }));
-        this.getSelectedDiscounts(this.copyParticularEntryIndex, mappedDiscounts);
-        // Use exact API total (avoids floating-point drift from recomputation)
-        entryFormGroup.get("totalDiscount")?.patchValue(Number(item?.discount) || 0);
+        this.applyEntryTaxesAndDiscounts(
+            this.copyParticularEntryIndex,
+            item,
+            this.invoiceForm.get("isAdvanceReceipt")?.value
+        );
 
-        // Map API taxes (uses `taxPercent`) → form's expected shape (uses `taxDetail[0].taxValue`)
-        const mappedTaxes = (item?.taxes ?? []).map((t: any) => ({
-            ...t,
-            taxDetail: [{ taxValue: t?.taxPercent ?? 0, date: null }],
-        }));
-        this.getSelectedTaxes(this.copyParticularEntryIndex, mappedTaxes, false);
         // Override with exact API amounts per tax type (non-CESS vs CESS split)
         const taxWithoutCess = (item?.taxes ?? [])
-            .filter((t: any) => t?.taxType !== "CESS")
+            .filter((t: any) => t?.taxType !== "CESS" && !this.otherTaxTypes.includes(t?.taxType))
             .reduce((sum: number, t: any) => sum + (Number(t?.amount?.amountForAccount) || 0), 0);
         const cessTotal = (item?.taxes ?? [])
             .filter((t: any) => t?.taxType === "CESS")
@@ -3962,31 +3994,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup.get("total.amountForCompany")?.patchValue(
             giddhRoundOff(totalForAccount * exchangeRate, this.company.giddhBalanceDecimalPlaces)
         );
-
-        // Map API other taxes (TDS/TCS) → form's otherTax group using exact API amounts
-        const otherTaxFromApi = (item?.taxes ?? []).find((t: any) =>
-            this.otherTaxTypes.includes(t?.taxType)
-        );
-        if (otherTaxFromApi) {
-            const isTcs = ["tcsrc", "tcspay"].includes(otherTaxFromApi?.taxType);
-            entryFormGroup.get("otherTax.name")?.patchValue(otherTaxFromApi?.accountName || "");
-            entryFormGroup.get("otherTax.uniqueName")?.patchValue(otherTaxFromApi?.uniqueName || "");
-            entryFormGroup.get("otherTax.amount")?.patchValue(Number(otherTaxFromApi?.amount?.amountForAccount) || 0);
-            entryFormGroup.get("otherTax.type")?.patchValue(isTcs ? this.otherTaxTypeEnum.TCS : this.otherTaxTypeEnum.TDS);
-            entryFormGroup.get("otherTax.calculationMethod")?.patchValue(otherTaxFromApi?.calculationMethod || "");
-            entryFormGroup.get("otherTax.isChecked")?.patchValue(true);
-            entryFormGroup.get("otherTax.taxValue")?.patchValue(otherTaxFromApi?.taxPercent ?? 0);
-            entryFormGroup.get("otherTax.taxDetail")?.patchValue([{ taxValue: otherTaxFromApi?.taxPercent ?? 0, date: null }]);
-        } else {
-            entryFormGroup.get("otherTax.name")?.patchValue("");
-            entryFormGroup.get("otherTax.uniqueName")?.patchValue("");
-            entryFormGroup.get("otherTax.amount")?.patchValue("");
-            entryFormGroup.get("otherTax.type")?.patchValue("");
-            entryFormGroup.get("otherTax.calculationMethod")?.patchValue("");
-            entryFormGroup.get("otherTax.isChecked")?.patchValue(false);
-            entryFormGroup.get("otherTax.taxValue")?.patchValue(0);
-            entryFormGroup.get("otherTax.taxDetail")?.patchValue([]);
-        }
 
         transactionFormGroup.get("stock.name")?.patchValue(item?.stockName || transactionFormGroup.get("stock.name")?.value);
         transactionFormGroup.get("stock.uniqueName")?.patchValue(item?.stockUniqueName || transactionFormGroup.get("stock.uniqueName")?.value);
