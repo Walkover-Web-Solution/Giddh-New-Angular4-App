@@ -100,6 +100,7 @@ import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview
 import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
+import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-particular-dialog.component";
 
 @NgModule({
     declarations: [
@@ -114,6 +115,7 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
         HistoryDialogComponent,
+        CopyParticularDialogComponent,
         EmailSendDialogComponent,
         TemplatePreviewDialogComponent,
         TemplateEditDialogComponent,
