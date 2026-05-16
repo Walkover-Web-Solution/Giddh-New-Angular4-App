@@ -2320,24 +2320,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Clears all Stripe-related sessionStorage items to prevent stale data
-     * from being reused on subsequent visits.
+     * Clears Stripe form sessionStorage items after redirect is handled.
+     * Keeps subscription_id and is_change_plan for saveStripePaymentSuccess$.
      *
      * @private
      * @memberof BuyPlanComponent
      */
     private clearStripeSessionData(): void {
-        sessionStorage.removeItem('stripe_subscription_id');
-        sessionStorage.removeItem('stripe_is_change_plan');
-        sessionStorage.removeItem('stripe_payment_intent_id');
-        sessionStorage.removeItem('stripe_subscription_request');
-        sessionStorage.removeItem('stripe_duration');
-        sessionStorage.removeItem('stripe_plan_unique_name');
-        sessionStorage.removeItem('stripe_amount_paid');
         sessionStorage.removeItem('stripe_subscription_form');
         sessionStorage.removeItem('stripe_selected_plan');
         sessionStorage.removeItem('stripe_region_value');
         sessionStorage.removeItem('stripe_region_label');
+        sessionStorage.removeItem('stripe_duration');
+        sessionStorage.removeItem('stripe_plan_unique_name');
+        sessionStorage.removeItem('stripe_amount_paid');
+        sessionStorage.removeItem('stripe_subscription_request');
     }
 
     /**
