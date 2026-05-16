@@ -121,6 +121,28 @@ export class VoucherService {
     }
 
     /**
+     * Fetch stock history for copy particular dialog
+     *
+     * @param {*} body
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getStockHistory(body: any): Observable<BaseResponse<any, any>> {
+        const url = this.config.apiUrl + RECEIPT_API.STOCK_HISTORY
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':branchUniqueName', encodeURIComponent(this.generalService.currentBranchUniqueName || ''))
+
+        return this.http.post(url, body).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = body;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, body))
+        );
+    }
+
+    /**
      * Get list of all templates
      *
      * @param {*} voucherType
