@@ -278,6 +278,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public removePromoCode: boolean = false;
     /** True when page was loaded after a Stripe payment failure redirect */
     private restoringFromStripeFailure: boolean = false;
+    /** Holds the duration value restored from sessionStorage during Stripe failure recovery */
+    private restoredDuration: string = '';
     /** Hold true in production environment */
     public isProdMode: boolean = environment.PRODUCTION_ENV;
     /** This will hold option selected state */
@@ -1490,6 +1492,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getAllPlans(): void {
         this.planList$.pipe(filter(Boolean), take(1)).subscribe(response => {
+            // If we just finished restoring from a Stripe failure, do NOT re-run the default
+            // plan selection logic — the restoration already set the correct plan and duration.
+            if (!this.restoringFromStripeFailure && this.restoredDuration) {
+                this.restoredDuration = '';
+                return;
+            }
             if (response?.length) {
                 this.allPlans = response;
                 this.monthlyPlans = response?.filter(plan =>
@@ -1502,10 +1510,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (!this.subscriptionId) {
-                    if (this.yearlyPlans?.length) {
-                        this.firstStepForm.get('duration').patchValue(PlanDuration.YEARLY);
-                    } else {
-                        this.firstStepForm.get('duration').patchValue(PlanDuration.MONTHLY);
+                    // When restoring from a Stripe failure, the duration was already restored
+                    // from sessionStorage; do NOT overwrite it with the default yearly fallback.
+                    if (!this.restoringFromStripeFailure) {
+                        if (this.yearlyPlans?.length) {
+                            this.firstStepForm.get('duration').patchValue(PlanDuration.YEARLY);
+                        } else {
+                            this.firstStepForm.get('duration').patchValue(PlanDuration.MONTHLY);
+                        }
                     }
                 } else if (this.viewSubscriptionData?.period) {
                     this.firstStepForm.get('duration').patchValue(this.viewSubscriptionData?.period);
@@ -1539,11 +1551,25 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         // plans so the plan-selection step (step 0) shows the right list, then exit –
         // do NOT reset selectedPlan, planUniqueName, or the payment provider.
         if (this.restoringFromStripeFailure) {
+            // Use the restored duration directly instead of isYearly() signal which may
+            // have been overwritten by earlier getAllPlans() calls before restoration.
+            const useYearly = this.restoredDuration === PlanDuration.YEARLY;
             const filteredPlans = !this.subscriptionId
-                ? (this.isYearly() ? this.yearlyPlans : this.monthlyPlans)
+                ? (useYearly ? this.yearlyPlans : this.monthlyPlans)
                 : (this.viewSubscriptionData?.period === PlanDuration.YEARLY ? this.yearlyPlans : this.monthlyPlans);
             filteredPlans?.forEach(plan => { this.inputData.push(plan); });
+            // Re-select the previously selected plan from the restored form value
+            // instead of leaving it as whatever was set by an earlier getAllPlans() call.
+            const restoredPlanUniqueName = this.firstStepForm.get('planUniqueName')?.value;
+            if (restoredPlanUniqueName) {
+                const restoredPlan = this.allPlans?.find((p: any) => p.uniqueName === restoredPlanUniqueName);
+                if (restoredPlan) {
+                    this.selectedPlan.set(restoredPlan);
+                }
+            }
             this.restoringFromStripeFailure = false;
+            // Do NOT clear restoredDuration here; the planList$ subscription in
+            // handleStripeRedirectFailure may fire after setPlans and still needs it.
             this.changeDetection.detectChanges();
             return;
         }
@@ -1598,10 +1624,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         }
         if (this.selectedPlan()?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
-        }
-        if (!this.removePromoCode && !this.thirdStepForm.get('paymentProvider')?.value) {
-            // Clear the payment provider initially
-            this.thirdStepForm.get('paymentProvider')?.patchValue(null);
         }
 
         const entityCode = this.selectedPlan()?.entityCode;
@@ -2071,17 +2093,24 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
 
         this.showStripePaymentElement = true;
-        this.stripeDialogRef = this.dialog.open(StripePaymentDialogComponent, {
-            panelClass: ['mat-dialog-sm'],
-            disableClose: true,
-            data: dialogData
-        });
+        // Pre-load Stripe.js before opening the dialog so the payment element
+        // renders instantly instead of waiting for the CDN fetch.
+        this.loadStripeScript().then(() => {
+            this.stripeDialogRef = this.dialog.open(StripePaymentDialogComponent, {
+                panelClass: ['mat-dialog-sm'],
+                disableClose: true,
+                data: dialogData
+            });
 
-        this.stripeDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
-            this.stripeDialogRef = null;
+            this.stripeDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+                this.stripeDialogRef = null;
+                this.showStripePaymentElement = false;
+                this.stripeClientSecret = '';
+                this.changeDetection.detectChanges();
+            });
+        }).catch(() => {
+            this.toasterService.showSnackBar('error', 'Failed to load Stripe payment library');
             this.showStripePaymentElement = false;
-            this.stripeClientSecret = '';
-            this.changeDetection.detectChanges();
         });
     }
 
@@ -2121,6 +2150,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 } else {
                     this.toasterService.showSnackBar('error', 'Payment status: ' + paymentIntent.status);
                 }
+                // Clear cached form data regardless of payment status — we don't want stale
+                // sessionStorage values lingering after the redirect is handled.
+                this.clearStripeSessionData();
                 this.changeDetection.detectChanges();
             }).catch(() => {
                 this.isLoading = false;
@@ -2165,8 +2197,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         //  - secondStepForm required fields → must be valid for linear stepper to reach step 2
         //  - thirdStepForm.paymentProvider → was 'STRIPE' when Buy Now was clicked, so Stripe
         //    is automatically pre-selected without any extra work
+        let savedForm: any = null;
         if (savedFormStr) {
-            try { this.subscriptionForm.patchValue(JSON.parse(savedFormStr)); } catch {}
+            try { savedForm = JSON.parse(savedFormStr); } catch {}
+        }
+        if (savedForm) {
+            this.subscriptionForm.patchValue(savedForm);
+            // Explicitly re-apply payment provider because nested patchValue can be flaky
+            // with ControlValueAccessor components that use OnPush change detection.
+            if (savedForm.thirdStepForm?.paymentProvider) {
+                this.thirdStepForm.get('paymentProvider')?.setValue(savedForm.thirdStepForm.paymentProvider);
+            }
+            // Explicitly sync the selectedDuration signal so setPlans() picks the right list
+            // (valueChanges may not have fired yet by the time getAllPlans() runs).
+            const restoredDuration = savedForm.firstStepForm?.duration;
+            if (restoredDuration) {
+                this.selectedDuration.set(restoredDuration);
+                this.restoredDuration = restoredDuration;
+                // Also explicitly set the form control value so mat-button-toggle-group reflects it
+                this.firstStepForm.get('duration')?.setValue(restoredDuration, { emitEvent: true });
+            }
         }
 
         // Restore the full plan object into the signal so the review screen renders the
@@ -2194,10 +2244,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 take(1),
                 takeUntil(this.destroyed$)
             ).subscribe((plans: any[]) => {
+                // Skip if setPlans() already handled the restoration (getAllPlans from newUserSelectCountry fires first)
+                if (!this.restoredDuration) {
+                    return;
+                }
                 this.allPlans = plans;
-                this.yearlyPlans = plans.filter((p: any) => p.period === PlanDuration.YEARLY);
-                this.monthlyPlans = plans.filter((p: any) => p.period === PlanDuration.MONTHLY);
-                const filteredPlans = this.isYearly() ? this.yearlyPlans : this.monthlyPlans;
+                this.yearlyPlans = plans.filter((p: any) => p.hasOwnProperty('yearlyAmount') && p?.yearlyAmount !== null);
+                this.monthlyPlans = plans.filter((p: any) => p.hasOwnProperty('monthlyAmount') && p?.monthlyAmount !== null);
+                const useYearly = this.restoredDuration === PlanDuration.YEARLY;
+                const filteredPlans = useYearly ? this.yearlyPlans : this.monthlyPlans;
                 this.inputData = [];
                 filteredPlans?.forEach(plan => { this.inputData.push(plan); });
                 const restoredPlan = plans.find((p: any) => p.uniqueName === savedPlanUniqueName);
@@ -2219,6 +2274,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.setFinalAmount();
 
         this.selectedStep = 2;
+        // Defer stepper navigation so the linear stepper sees valid forms after patchValue.
+        // Use next() twice instead of selectedIndex because linear stepper validates
+        // stepControl before allowing navigation.
+        setTimeout(() => {
+            if (this.stepperIcon) {
+                this.stepperIcon.next();
+                setTimeout(() => {
+                    if (this.stepperIcon) {
+                        this.stepperIcon.next();
+                    }
+                    // Re-apply Stripe after the stepper has rendered step 3 and the
+                    // payment-provider-selector ControlValueAccessor has initialized.
+                    // A longer delay is needed because the component uses OnPush CD.
+                    setTimeout(() => {
+                        this.thirdStepForm.get('paymentProvider')?.patchValue(PaymentProvider.STRIPE);
+                        this.changeDetection.detectChanges();
+                    }, 100);
+                }, 0);
+            }
+        }, 0);
 
         if (this.localeData?.payment_failed) {
             this.toasterService.showSnackBar('error', this.localeData.payment_failed);
@@ -2242,6 +2317,24 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             payment_intent_client_secret: null,
             redirect_status: null
         });
+    }
+
+    /**
+     * Clears Stripe form sessionStorage items after redirect is handled.
+     * Keeps subscription_id and is_change_plan for saveStripePaymentSuccess$.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private clearStripeSessionData(): void {
+        sessionStorage.removeItem('stripe_subscription_form');
+        sessionStorage.removeItem('stripe_selected_plan');
+        sessionStorage.removeItem('stripe_region_value');
+        sessionStorage.removeItem('stripe_region_label');
+        sessionStorage.removeItem('stripe_duration');
+        sessionStorage.removeItem('stripe_plan_unique_name');
+        sessionStorage.removeItem('stripe_amount_paid');
+        sessionStorage.removeItem('stripe_subscription_request');
     }
 
     /**
