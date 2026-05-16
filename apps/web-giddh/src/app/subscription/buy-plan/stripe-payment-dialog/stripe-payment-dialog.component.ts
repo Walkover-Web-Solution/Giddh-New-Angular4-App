@@ -111,22 +111,36 @@ export class StripePaymentDialogComponent implements AfterViewInit, OnDestroy {
             this.error.set('Stripe client secret is missing.');
             return;
         }
-        this.loadStripeScript().then(() => {
-            try {
-                this.stripe = window['Stripe'](this.data.stripeKey);
-                const elements = this.stripe.elements({
-                    clientSecret: this.data.clientSecret,
-                    appearance: { theme: 'stripe' }
-                });
-                this.stripeElements = elements;
-                const paymentElement = elements.create('payment');
-                paymentElement.mount(this.stripePaymentElementRef.nativeElement);
-            } catch (err: any) {
-                this.error.set(err?.message || 'Failed to initialize Stripe.');
-            }
-        }).catch(() => {
-            this.error.set('Failed to load Stripe payment library.');
-        });
+        // Stripe.js is pre-loaded by the parent component before the dialog opens.
+        // If for some reason it is not available, fall back to dynamic loading.
+        if (window['Stripe']) {
+            this.mountStripeElement();
+        } else {
+            this.loadStripeScript().then(() => this.mountStripeElement()).catch(() => {
+                this.error.set('Failed to load Stripe payment library.');
+            });
+        }
+    }
+
+    /**
+     * Creates Stripe instance and mounts the payment element
+     *
+     * @private
+     * @memberof StripePaymentDialogComponent
+     */
+    private mountStripeElement(): void {
+        try {
+            this.stripe = window['Stripe'](this.data.stripeKey);
+            const elements = this.stripe.elements({
+                clientSecret: this.data.clientSecret,
+                appearance: { theme: 'stripe' }
+            });
+            this.stripeElements = elements;
+            const paymentElement = elements.create('payment');
+            paymentElement.mount(this.stripePaymentElementRef.nativeElement);
+        } catch (err: any) {
+            this.error.set(err?.message || 'Failed to initialize Stripe.');
+        }
     }
 
     /**
