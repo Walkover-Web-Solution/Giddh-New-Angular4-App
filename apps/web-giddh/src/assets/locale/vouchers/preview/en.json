@@ -532,6 +532,7 @@
     "close_popup": "Are you sure want to close this popup? Your unsaved changes will be discarded",
     "document_title": "Document Title",
     "customer_details": "Customer Details",
+    "vendor_details": "Vendor Details",
     "shipping_details": "Shipping Details",
     "billing_details": "Billing Details",
     "tax_rate": "Tax Rate",
