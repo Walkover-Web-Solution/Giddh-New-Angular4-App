@@ -8,6 +8,7 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
 import { IOption } from '../../app.constant';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 
 @Component({
     selector: 'generic-aside-menu-account',
@@ -88,6 +89,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     constructor(
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
+        private groupWithAccountsAction: GroupWithAccountsAction,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         // account-add component's property
@@ -194,6 +196,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
             } else {
                 this.activeGroupUniqueName = 'revenuefromoperations';
             }
+            this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(s.selectedGroupUniqueName.currentValue));
         }
 
         if ('selectedAccountUniqueName' in s) {

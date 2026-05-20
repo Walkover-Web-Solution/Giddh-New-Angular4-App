@@ -85,7 +85,6 @@ export class CompanyListDialogComponent implements OnInit {
         this.localeData = this.inputData?.localeData;
         this.commonLocaleData = this.inputData?.commonLocaleData;
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
-        document.body?.classList?.add("subscription-sidebar");
         this.initForm();
         this.initCompanyListRequest();
         this.getAllCompaniesList();
@@ -267,12 +266,10 @@ export class CompanyListDialogComponent implements OnInit {
 
     /**
      * Lifecycle hook that is called when the component is destroyed.
-     * Removes "subscription-sidebar" class from body, and completes the subject indicating component destruction.
      *
      * @memberof CompanyListDialogComponent
      */
     public ngOnDestroy(): void {
-        document.body?.classList?.remove("subscription-sidebar");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

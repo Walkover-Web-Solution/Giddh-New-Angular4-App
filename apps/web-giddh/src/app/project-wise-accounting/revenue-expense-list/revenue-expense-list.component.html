@@ -91,6 +91,7 @@
                                 formControlName="accountUniqueName"
                                 [enableDynamicSearch]="true"
                                 [isPaginationEnabled]="true"
+                                [refreshList]="accountListRefreshTrigger()"
                                 (scrollEnd)="handleSearchAccountScrollEnd()"
                                 (dynamicSearchedQuery)="searchAccount($event)"
                                 (selectedOption)="

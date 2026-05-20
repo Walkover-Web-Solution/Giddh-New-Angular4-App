@@ -587,7 +587,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getSelectedTabIndex();
                 this.ledgerSearchRequest.page = 1;
                 this.ledgerSearchRequest.count = PAGINATION_LIMIT;
-                if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
+                if (this.universalDate && !['list', 'settings', 'templates', 'recurring'].includes(this.activeModule)) {
                     this.customDateSelected = false;
                     this.getLedgersOfInvoice();
                 }

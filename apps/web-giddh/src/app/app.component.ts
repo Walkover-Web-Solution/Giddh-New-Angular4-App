@@ -373,6 +373,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }, 2000);
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
             if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !Configuration.isElectron) {
+                // [GIDDH-RELOAD-DIAG] Cause A: version-check forced reload on next navigation
+                const reason = {
+                    cause: 'A_VERSION_CHECK_RELOAD',
+                    fromUrl: this.router.url,
+                    toUrl: evt.url,
+                    newVersionAvailable: this.newVersionAvailableForWebApp,
+                    timestamp: new Date().toISOString()
+                };
+                console.warn('[GIDDH-RELOAD-DIAG]', reason);
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
@@ -427,6 +436,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
+                    // [GIDDH-RELOAD-DIAG] version.json hash changed; will reload on next NavigationStart
+                    console.warn('[GIDDH-RELOAD-DIAG] version.json hash changed - newVersionAvailableForWebApp = true at', new Date().toISOString(), 'currentUrl=', this.router.url);
                     this.newVersionAvailableForWebApp = clone(isChanged);
                 }
             });

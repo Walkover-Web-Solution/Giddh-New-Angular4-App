@@ -560,7 +560,7 @@
         *ngIf="showAlertMessage.isSubscriptionRenewalExpired && subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="warning-msg-row plan-issue d-flex justify-content-between">
+        <div class="warning-msg-row-yellow plan-issue d-flex justify-content-between">
             <p>
                 <i class="icon-traingle-info font-size-15 mr-2"></i>
                 {{ getSubscriptionEndedNote() }}
@@ -605,7 +605,7 @@
         *ngIf="showAlertMessage.isObligationExpired && isUKCompany && obligation"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
+        <div class="warning-msg-row-yellow plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
                 <i class="icon-traingle-info font-size-15 mr-2"></i>
                 <span

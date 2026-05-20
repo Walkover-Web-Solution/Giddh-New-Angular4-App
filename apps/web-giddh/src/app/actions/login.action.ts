@@ -347,6 +347,15 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
+                // [GIDDH-RELOAD-DIAG] Cause C: LogOut effect about to hard-redirect / reload
+                const reason = {
+                    cause: 'C_LOGOUT_EFFECT_REDIRECT',
+                    isElectron: Configuration.isElectron,
+                    isProd: environment.PRODUCTION_ENV,
+                    currentUrl: window.location.href,
+                    timestamp: new Date().toISOString()
+                };
+                console.warn('[GIDDH-RELOAD-DIAG]', reason);
                 if (environment.PRODUCTION_ENV && !Configuration.isElectron) {
                     window.location.href = this._generalService.getGiddhRegionUrl();
                 } else if (Configuration.isElectron) {
