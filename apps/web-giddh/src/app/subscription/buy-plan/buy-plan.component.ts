@@ -227,6 +227,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public allPaymentProviders: any[] = [];
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
+    /** Broadcast channel to sync stripe payment success across multiple open tabs */
+    private stripePaymentSuccessBroadcast: BroadcastChannel | null = null;
     /** Hold callback event */
     public callBackEvent: boolean = false;
     /** Hold create subscription success event */
@@ -332,9 +334,24 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.setUserCountry();
 
         // Handle Stripe redirect return
-        const redirectSecret = this.route.snapshot.queryParamMap.get('payment_intent_client_secret');
-        const redirectIntentId = this.route.snapshot.queryParamMap.get('payment_intent');
-        const redirectStatus = this.route.snapshot.queryParamMap.get('redirect_status');
+
+        const queryParamMap = this.route.snapshot.queryParamMap;
+        const redirectSecret = queryParamMap.get('payment_intent_client_secret') || queryParamMap.get('setup_intent_client_secret');
+        const redirectIntentId = queryParamMap.get('payment_intent') || queryParamMap.get('setup_intent');
+        const redirectStatus = queryParamMap.get('redirect_status');
+
+        // Listen for stripe payment completion (success or failure) from any other open tab
+        // so the loader does not get stuck on this tab when the flow finished elsewhere.
+        // Initialize before redirect handlers so they can post messages on this channel.
+        this.stripePaymentSuccessBroadcast = new BroadcastChannel('stripe-payment-success');
+        this.stripePaymentSuccessBroadcast.onmessage = (event) => {
+            if (event?.data) {
+                this.isLoading = false;
+                this.componentStore.patchState({ saveStripePaymentInProgress: false });
+                this.changeDetection.detectChanges();
+            }
+        };
+
         if (redirectStatus === 'failed') {
             this.handleStripeRedirectFailure();
         } else if (redirectSecret && redirectIntentId) {
@@ -603,7 +620,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                         this.navigateToNewCompany(response?.subscriptionId);
                                     } else {
                                         const model = {
-                                            planUniqueName: response?.planDetails?.uniqueName,
+                                            planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
                                             paymentProvider: this.thirdStepForm.value.paymentProvider,
                                             subscriptionId: response.subscriptionId,
                                             duration: this.firstStepForm.get('duration')?.value,
@@ -734,7 +751,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             } else if (response && response.dueAmount >= value) {
                 if (((this.isMonthly() || this.isDaily() || this.isYearly()) && response?.region?.code !== EntityCode.IND && this.thirdStepForm.value.paymentProvider === PaymentProvider.STRIPE)) {
                     let model = {
-                        planUniqueName: response?.planDetails?.uniqueName,
+                        planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
                         paymentProvider: this.thirdStepForm.value.paymentProvider,
                         subscriptionId: response.subscriptionId,
                         duration: this.firstStepForm.get('duration')?.value,
@@ -850,7 +867,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             } else {
                 if (response?.region?.code === EntityCode.GBR) {
                     let model = {
-                        planUniqueName: response?.planDetails?.uniqueName,
+                        planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
                         paymentProvider: this.thirdStepForm.value.paymentProvider,
                         subscriptionId: response.subscriptionId,
                         duration: response?.duration,
@@ -1900,6 +1917,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         document.body?.classList?.remove("plan-page");
         this.broadcast?.close();
         this.callBackBroadcast?.close();
+        if (this.stripePaymentSuccessBroadcast) {
+            this.stripePaymentSuccessBroadcast.onmessage = null;
+            this.stripePaymentSuccessBroadcast.close();
+            this.stripePaymentSuccessBroadcast = null;
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -2088,6 +2110,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             clientSecret: this.stripeClientSecret,
             sessionData,
             returnUrl: window.location.origin + window.location.pathname,
+            isSetup:response?.isSetup,
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData
         };
@@ -2133,11 +2156,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             stripe.retrievePaymentIntent(piClientSecret).then(({ paymentIntent, error }: any) => {
                 this.isLoading = false;
                 if (error || !paymentIntent) {
+                    this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
                     this.toasterService.showSnackBar('error', error?.message || 'Could not retrieve payment status.');
                     this.changeDetection.detectChanges();
                     return;
                 }
                 if (paymentIntent.status === 'succeeded') {
+                    // Notify any other open buy-plan tabs so their loader is dismissed
+                    this.stripePaymentSuccessBroadcast?.postMessage({ success: true });
                     const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
                     if (subscriptionId) {
                         sessionStorage.setItem('stripe_payment_intent_id', piId);
@@ -2146,8 +2172,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         this.toasterService.showSnackBar('error', 'Subscription ID not found.');
                     }
                 } else if (['processing', 'requires_action'].includes(paymentIntent.status)) {
+                    this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
                     this.toasterService.showSnackBar('success', 'Payment is processing... status: ' + paymentIntent.status);
                 } else {
+                    this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
                     this.toasterService.showSnackBar('error', 'Payment status: ' + paymentIntent.status);
                 }
                 // Clear cached form data regardless of payment status — we don't want stale
@@ -2156,10 +2184,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.changeDetection.detectChanges();
             }).catch(() => {
                 this.isLoading = false;
+                this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
                 this.changeDetection.detectChanges();
             });
         }).catch(() => {
             this.isLoading = false;
+            this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
             this.changeDetection.detectChanges();
         });
 
@@ -2177,6 +2207,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     private handleStripeRedirectFailure(): void {
         this.isLoading = false;
         this.componentStore.patchState({ saveStripePaymentInProgress: false });
+        // Notify any other open buy-plan tabs so their loader is dismissed
+        this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
         this.clearStripeRedirectParams();
 
         // Read every piece of state that was saved before the Stripe redirect
