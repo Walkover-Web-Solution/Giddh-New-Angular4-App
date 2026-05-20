@@ -369,36 +369,6 @@ input[type='date']::-webkit-outer-spin-button {
     border-top-width: 1px;
     border-radius: var(--mat-border-radius-4);
 }
-/* Center icon-only Material buttons in the ledger toolbar.
-   Material wraps button content in .mdc-button__label which has its own
-   padding and width, so we force it to fill the host and center the icon. */
-.ledg-head button.icon-button-width {
-    padding: 0 !important;
-    .mdc-button__label,
-    .mat-mdc-button-touch-target {
-        display: flex;
-        width: 100%;
-        height: 100%;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-    }
-    i,
-    [class^='icon-'],
-    [class*=' icon-'] {
-        font-size: 16px !important;
-        line-height: 1;
-    }
-    /* These icomoon glyphs are drawn smaller within the font's em-square,
-       so they need a larger font-size to look visually consistent with the rest. */
-    .icon-ledger-path,
-    .icon-ledger-union-5 {
-        font-size: 16px !important;
-        &::before {
-            font-size: 16px !important;
-        }
-    }
-}
 .advance-search-block input {
     background: var(--color-light-gray) !important;
     height: 28px;

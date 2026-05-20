@@ -248,25 +248,6 @@ ul {
     }
 }
 
-.warning-msg-row-yellow {
-    background: var(--color-warm-orange-light) !important;
-    padding: 10px 15px;
-    font-size: var(--font-size-15);
-    box-shadow: 1px 1px 3px var(--color-shadow-light);
-    color: var(--theme-foreground-color);
-
-    p {
-        font-weight: var(--font-weight-semibold);
-        font-size: var(--font-size-15);
-        color: var(--theme-foreground-color);
-    }
-
-    i.icon-traingle-info {
-        color: var(--color-orange);
-        font-style: normal;
-    }
-}
-
 .setting-sidebar {
     box-shadow: -2px -2px 15px var(--color-shadow-light);
 }

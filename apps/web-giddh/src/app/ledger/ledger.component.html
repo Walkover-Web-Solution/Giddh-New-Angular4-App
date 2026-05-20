@@ -228,7 +228,7 @@
                                     id="advance-filter"
                                     matButton="outlined"
                                     (click)="onOpenAdvanceSearch()"
-                                    class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0"
+                                    class="advance-icon d-flex advance-search-filter icon-button-width font-size-16 p-0 pointer mx-0"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
                                     [matTooltipPosition]="'above'"
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
@@ -241,7 +241,7 @@
                                     matButton="outlined"
                                     *ngIf="isAdvanceSearchImplemented && !isTabletScreen"
                                     (click)="resetAdvanceSearch(); getTransactionData()"
-                                    class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0"
+                                    class="advance-icon d-flex advance-search-filter icon-button-width font-size-16 p-0 pointer mx-0"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                     [matTooltipPosition]="'above'"
                                 >
@@ -255,7 +255,7 @@
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
                                         "
-                                        class="d-flex align-items-center justify-content-center icon-button-width"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 p-0"
                                         id="delete-ledger"
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
@@ -272,7 +272,7 @@
                                             currentCompanyBranches?.length > 2
                                         "
                                         id="generate-invoice"
-                                        class="d-flex align-items-center justify-content-center icon-button-width"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 p-0"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
                                         [matTooltipPosition]="'above'"
@@ -287,7 +287,7 @@
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
                                         "
-                                        class="d-flex align-items-center justify-content-center icon-button-width"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 p-0"
                                         id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
@@ -312,7 +312,7 @@
                                         id="button-basic"
                                         [matMenuTriggerFor]="menu"
                                         type="button"
-                                        class="min-width-unset icon-button-width ml-auto"
+                                        class="min-width-unset icon-button-width font-size-16 p-0 ml-auto"
                                     >
                                         <i class="icon-dots-three-vertical"></i>
                                     </button>
@@ -561,7 +561,7 @@
                                         [matTooltip]="localeData?.share_ledger"
                                         [matTooltipPosition]="'above'"
                                     >
-                                        <i class="icon-ledger-path lh-0"></i>
+                                        <i class="icon-ledger-path font-size-20 lh-0"></i>
                                     </button>
                                     <button
                                         aria-label="show"
@@ -572,7 +572,7 @@
                                         [matTooltip]="commonLocaleData?.app_export"
                                         [matTooltipPosition]="'above'"
                                     >
-                                        <i class="icon-ledger-union-5 lh-0"></i>
+                                        <i class="icon-ledger-union-5 font-size-20 lh-0"></i>
                                     </button>
                                     <button
                                         aria-label="delete"
