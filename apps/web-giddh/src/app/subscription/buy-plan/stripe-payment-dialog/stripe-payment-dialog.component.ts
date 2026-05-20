@@ -13,6 +13,8 @@ export interface StripePaymentDialogData {
     sessionData: Record<string, string>;
     /** Return URL for Stripe to redirect back after 3DS */
     returnUrl: string;
+    /** Autopay step without taking payment get from API */
+    isSetup: boolean;
     /** Locale data for translated strings */
     localeData?: any;
     /** Common locale data for translated strings */
@@ -85,14 +87,24 @@ export class StripePaymentDialogComponent implements AfterViewInit, OnDestroy {
             }
         });
 
-        const { error } = await this.stripe.confirmPayment({
-            elements: this.stripeElements,
-            confirmParams: { return_url: this.data.returnUrl }
-        });
-
-        if (error) {
-            this.paymentInProgress.set(false);
-            this.error.set(error.message);
+        if (this.data?.isSetup) {
+            const { error } = await this.stripe.confirmSetup({
+                elements: this.stripeElements,
+                confirmParams: { return_url: this.data.returnUrl }
+            });
+            if (error) {
+                this.paymentInProgress.set(false);
+                this.error.set(error.message);
+            }
+        } else {
+            const { error } = await this.stripe.confirmPayment({
+                elements: this.stripeElements,
+                confirmParams: { return_url: this.data.returnUrl }
+            });
+            if (error) {
+                this.paymentInProgress.set(false);
+                this.error.set(error.message);
+            }
         }
     }
 
