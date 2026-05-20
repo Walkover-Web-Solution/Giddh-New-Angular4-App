@@ -99,7 +99,6 @@ import {
     ASIDE_PANE_CONFIG,
     IOption,
     API_BULK_FETCH_LIMIT,
-    Configuration,
     FormFieldsType,
     PAGE_SIZE_OPTIONS
 } from "../../app.constant";
