@@ -196,7 +196,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
             } else {
                 this.activeGroupUniqueName = 'revenuefromoperations';
             }
-            this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(s.selectedGroupUniqueName.currentValue));
         }
 
         if ('selectedAccountUniqueName' in s) {
