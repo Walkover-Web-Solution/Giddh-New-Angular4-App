@@ -13,6 +13,7 @@ export interface INameUniqueName {
     customerName?: string;
     parentGroups?: any;
     category?: any;
+    taxType?: string;
 }
 
 /*

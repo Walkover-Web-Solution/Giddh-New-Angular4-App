@@ -21,6 +21,7 @@ export interface WhiteLabelConfig {
             stripePublishablekey?: string
         },
         payuPaymentDetails?: any;
+        paymentProviderList?: string[];
         proxyReferenceId?: string;
         proxyUrl?: string;
         proxyApiUrl?: string;
@@ -266,6 +267,7 @@ export class WhiteLabelService {
             // Payment
             RAZORPAY_KEY: this.getRazorpayKey(),
             STRIPE_PUBLISHABLE_KEY: this.getStripeKey(),
+            ALL_PAYMENT_PROVIDERS: this.getValueWithFallback(body.paymentProviderList, []),
             
             // Is Giddh domain
             IS_GIDDH_DOMAIN: isGiddhDomain,

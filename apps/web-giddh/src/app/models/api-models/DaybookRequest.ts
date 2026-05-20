@@ -44,6 +44,7 @@ export class ExportBodyRequest {
     copyTypes?: any[];
     showInAccountCurrency?: boolean;
     ledgerAdvanceFilter?: any;
+    type?: string;
 }
 
 export interface DayBookRequestModel {

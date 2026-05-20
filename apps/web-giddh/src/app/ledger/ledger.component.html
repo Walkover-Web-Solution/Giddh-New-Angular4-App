@@ -228,7 +228,7 @@
                                     id="advance-filter"
                                     matButton="outlined"
                                     (click)="onOpenAdvanceSearch()"
-                                    class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0"
+                                    class="advance-icon d-flex advance-search-filter icon-button-width font-size-16 p-0 pointer mx-0"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
                                     [matTooltipPosition]="'above'"
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
@@ -237,11 +237,11 @@
                                 </button>
                                 <button
                                     aria-label="clear"
-                                    class="cursor-pointer clear-filter-btn"
                                     id="clear-filter"
+                                    matButton="outlined"
                                     *ngIf="isAdvanceSearchImplemented && !isTabletScreen"
-                                    href="javascript:;"
                                     (click)="resetAdvanceSearch(); getTransactionData()"
+                                    class="advance-icon d-flex advance-search-filter icon-button-width font-size-16 p-0 pointer mx-0"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                     [matTooltipPosition]="'above'"
                                 >
@@ -255,7 +255,7 @@
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
                                         "
-                                        class="d-flex align-items-center justify-content-center icon-button-width"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 p-0"
                                         id="delete-ledger"
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
@@ -272,7 +272,7 @@
                                             currentCompanyBranches?.length > 2
                                         "
                                         id="generate-invoice"
-                                        class="d-flex align-items-center justify-content-center icon-button-width"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 p-0"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
                                         [matTooltipPosition]="'above'"
@@ -287,7 +287,7 @@
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
                                         "
-                                        class="d-flex align-items-center justify-content-center icon-button-width"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 p-0"
                                         id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
@@ -312,7 +312,7 @@
                                         id="button-basic"
                                         [matMenuTriggerFor]="menu"
                                         type="button"
-                                        class="min-width-unset icon-button-width ml-auto"
+                                        class="min-width-unset icon-button-width font-size-16 p-0 ml-auto"
                                     >
                                         <i class="icon-dots-three-vertical"></i>
                                     </button>
@@ -495,19 +495,18 @@
 
                                 <div class="d-flex">
                                     <ng-container *ngIf="!isGocardlessSupportedCountry && isBankAccount && !isBankTransactionLoading">
-                                        <a
+                                        <button
                                             *ngIf="lc.bankTransactionsDebitData?.length || lc.bankTransactionsCreditData?.length"
                                             aria-label="refresh-bank-transactions"
-                                            matButton="outlined"
-                                            href="javascript:void(0)"
                                             id="refresh"
-                                            class="icomoon-ico d-flex align-items-center"
+                                            matButton="outlined"
+                                            (click)="getBankTransactions()"
+                                            class="d-flex align-items-center justify-content-center icon-button-width font-size-16 mr-2"
                                             [matTooltip]="commonLocaleData?.app_refresh"
                                             [matTooltipPosition]="'above'"
-                                            (click)="getBankTransactions()"
                                         >
                                             <i aria-hidden="true" class="icon-refresh lh-0"></i>
-                                        </a>
+                                        </button>
                                     </ng-container>
                                     <ng-container
                                         *ngIf="
@@ -517,87 +516,84 @@
                                             !isBankTransactionLoading
                                         "
                                     >
-                                        <a
+                                        <button
                                             *ngIf="isBankAccountConnected"
                                             aria-label="refresh-bank-transactions"
-                                            matButton="outlined"
-                                            href="javascript:void(0)"
                                             id="refresh"
-                                            class="icomoon-ico d-flex align-items-center"
-                                            [matTooltip]="commonLocaleData?.app_refresh"
-                                            [matTooltipPosition]="'above'"
+                                            matButton="outlined"
                                             (click)="refreshBankTransactions()"
                                             [disabled]="isBankRefreshing$ | async"
+                                            class="d-flex align-items-center justify-content-center icon-button-width font-size-16 mr-2"
+                                            [matTooltip]="commonLocaleData?.app_refresh"
+                                            [matTooltipPosition]="'above'"
                                         >
                                             <i aria-hidden="true" class="icon-refresh lh-0"></i>
-                                        </a>
-                                        <a
-                                            matButton="outlined"
+                                        </button>
+                                        <button
                                             aria-label="connect-bank"
                                             id="connect-bank"
-                                            class="icomoon-ico d-flex align-items-center"
+                                            matButton="outlined"
+                                            (click)="openBankLinkDialog()"
+                                            class="d-flex align-items-center justify-content-center icon-button-width font-size-16 mr-2"
                                             [matTooltip]="localeData?.connect_bank"
                                             [matTooltipPosition]="'above'"
-                                            (click)="openBankLinkDialog()"
                                         >
                                             <i aria-hidden="true" class="icon-plus"></i>
-                                        </a>
+                                        </button>
                                     </ng-container>
-                                    <a
+                                    <button
                                         aria-label="show"
-                                        matButton="outlined"
-                                        href="javascript:void(0)"
                                         id="upload"
-                                        class="icomoon-ico d-flex align-items-center"
+                                        matButton="outlined"
+                                        (click)="showUploadBankStatementModal()"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 mr-2"
                                         [matTooltip]="localeData?.import_statement"
                                         [matTooltipPosition]="'above'"
-                                        (click)="showUploadBankStatementModal()"
                                     >
                                         <i class="icon-upload lh-0"></i>
-                                    </a>
-                                    <a
+                                    </button>
+                                    <button
                                         aria-label="share"
-                                        matButton="outlined"
-                                        href="javascript:void(0)"
                                         id="share"
-                                        class="icomoon-ico d-flex align-items-center"
+                                        matButton="outlined"
+                                        (click)="showShareLedgerModal()"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 mr-2"
                                         [matTooltip]="localeData?.share_ledger"
                                         [matTooltipPosition]="'above'"
-                                        (click)="showShareLedgerModal()"
                                     >
-                                        <i class="icon-ledger-path lh-0"></i>
-                                    </a>
-                                    <a
+                                        <i class="icon-ledger-path font-size-20 lh-0"></i>
+                                    </button>
+                                    <button
                                         aria-label="show"
-                                        matButton="outlined"
-                                        class="icomoon-ico d-flex align-items-center"
                                         id="export-ledger"
-                                        href="javascript:void(0)"
+                                        matButton="outlined"
+                                        (click)="showExportLedgerModal()"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 mr-2"
                                         [matTooltip]="commonLocaleData?.app_export"
                                         [matTooltipPosition]="'above'"
-                                        (click)="showExportLedgerModal()"
                                     >
-                                        <i class="icon-ledger-union-5 lh-0"></i>
-                                    </a>
-                                    <a
+                                        <i class="icon-ledger-union-5 font-size-20 lh-0"></i>
+                                    </button>
+                                    <button
                                         aria-label="delete"
-                                        matButton="outlined"
-                                        class="icomoon-ico d-flex align-items-center"
                                         id="delete-bank-transaction"
-                                        href="javascript:void(0)"
-                                        [matTooltip]="localeData?.delete_bank_transactions"
-                                        [matTooltipPosition]="'above'"
-                                        (click)="showBulkDeleteBankTransactionsConfirmationModal()"
+                                        matButton="outlined"
                                         *ngIf="
                                             entryUniqueNamesForBulkAction?.length > 0 ||
                                             selectedDebitTransactionIds?.size > 0 ||
                                             selectedCreditTransactionIds?.size > 0
                                         "
+                                        (click)="showBulkDeleteBankTransactionsConfirmationModal()"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 mr-2"
+                                        [matTooltip]="localeData?.delete_bank_transactions"
+                                        [matTooltipPosition]="'above'"
                                     >
                                         <i class="icon-trash lh-0"></i>
-                                    </a>
-                                    <a
+                                    </button>
+                                    <button
                                         aria-label="autopaid"
+                                        id="autopaid"
+                                        matButton="outlined"
                                         *ngIf="
                                             voucherApiVersion === 2 &&
                                             enableAutopaid &&
@@ -605,20 +601,17 @@
                                                 currentCompanyBranches?.length <= 2 ||
                                                 isBranchTransactionSelected)
                                         "
-                                        matButton="outlined"
-                                        class="icomoon-ico d-flex align-items-center"
-                                        id="autopaid"
-                                        href="javascript:void(0)"
+                                        (click)="showAutopaidModal()"
+                                        class="d-flex align-items-center justify-content-center icon-button-width font-size-16 mr-2"
                                         [matTooltip]="this.localeData?.autopaid_title"
                                         [matTooltipPosition]="'above'"
-                                        (click)="showAutopaidModal()"
                                     >
                                         <img
                                             class="autopaid-icon image-as-icon-color"
                                             [src]="imgPath + 'autopaid.svg'"
                                             alt="autopaid-icon"
                                         />
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -743,7 +736,7 @@
                                         </mat-grid-list>
                                     </div>
                                     <div class="row ml-0 mr-0 ledger-book">
-                                        <div class="col-6 left-col-new" (click)="$event.stopPropagation()">
+                                        <div class="col-6 left-col-new">
                                             <mat-grid-list
                                                 cols="{{ ledgerGridTotalColumns }}"
                                                 rowHeight="43px"
@@ -812,6 +805,7 @@
                                                             }"
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
+                                                            (click)="$event.stopPropagation()"
                                                         >
                                                             <mat-grid-tile colspan="{{ ledgerGridColumnsValue[0] }}">
                                                                 <div class="d-flex align-items-center custom-input-field">
@@ -1001,7 +995,7 @@
                                                 </ng-container>
                                             </mat-grid-list>
                                         </div>
-                                        <div class="col-6 right-col-new" (click)="$event.stopPropagation()">
+                                        <div class="col-6 right-col-new">
                                             <mat-grid-list
                                                 cols="{{ ledgerGridTotalColumns }}"
                                                 rowHeight="43px"
@@ -1070,6 +1064,7 @@
                                                             }"
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
+                                                            (click)="$event.stopPropagation()"
                                                         >
                                                             <mat-grid-tile colspan="{{ ledgerGridColumnsValue[0] }}">
                                                                 <div class="d-flex align-items-center custom-input-field">

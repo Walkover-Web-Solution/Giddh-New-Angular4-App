@@ -1184,11 +1184,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isDatepickerOpen = event;
     }
 
-    @HostListener('window:click', ['$event'])
-    public clickedOutsideOfComponent(event) {
-        this.clickedOutside(event);
-    }
-
     public clickedOutside(event: any): void {
         if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxControl?.isTaxDialogOpen || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
             return;

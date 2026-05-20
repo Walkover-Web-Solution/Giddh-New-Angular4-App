@@ -382,6 +382,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
                         exportBodyRequest.from = this.daybookQueryRequest.from;
                         exportBodyRequest.to = this.daybookQueryRequest.to;
+                        exportBodyRequest.type = this.daybookQueryRequest.type;
                         exportBodyRequest.exportType = "DAYBOOK";
                         exportBodyRequest.showVoucherNumber = response.showVoucherNumber;
                         exportBodyRequest.showEntryVoucher = response.showEntryVoucher;

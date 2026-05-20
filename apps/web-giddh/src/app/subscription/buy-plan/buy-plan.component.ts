@@ -2478,6 +2478,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     value: PaymentProvider.STRIPE
                 }
             ];
+            this.allPaymentProviders = this.allPaymentProviders.filter(payment => this.serviceConfig.ALL_PAYMENT_PROVIDERS.includes(payment.value));
             this.changeDetection.detectChanges();
         }
     }

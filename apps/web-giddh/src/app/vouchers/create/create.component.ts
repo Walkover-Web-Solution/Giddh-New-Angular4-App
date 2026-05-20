@@ -2651,7 +2651,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     const priorResults: OptionInterface[] = page > 1 ? (activeRequest.results || []) : [];
 
                     const newResults = response.body.results.map((res) => {
-                        return { label: res.name, value: res.uniqueName, additional: res, tooltip: `${res.stock?.name ? res.name + ' (' + res.stock.name + ')' : res.name}` };
+                        return { label: res.stock?.name || res.name, value: res.uniqueName, additional: res, tooltip: `${res.stock?.name ? res.name + ' (' + res.stock.name + ')' : res.name}` };
                     });
 
                     activeRequest.results = priorResults.concat(...newResults);
