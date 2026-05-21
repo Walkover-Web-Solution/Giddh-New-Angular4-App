@@ -2148,52 +2148,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private handleStripeRedirectReturn(piClientSecret: string, piId: string): void {
         this.isLoading = true;
-        this.componentStore.patchState({saveStripePaymentInProgress: true});
+        this.componentStore.patchState({ saveStripePaymentInProgress: true });
         this.changeDetection.detectChanges();
 
-        this.loadStripeScript().then(() => {
-            const stripe = window['Stripe'](this.stripeKey);
-            stripe.retrievePaymentIntent(piClientSecret).then(({ paymentIntent, error }: any) => {
-                this.isLoading = false;
-                if (error || !paymentIntent) {
-                    this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
-                    this.toasterService.showSnackBar('error', error?.message || 'Could not retrieve payment status.');
-                    this.changeDetection.detectChanges();
-                    return;
-                }
-                if (paymentIntent.status === 'succeeded') {
-                    // Notify any other open buy-plan tabs so their loader is dismissed
-                    this.stripePaymentSuccessBroadcast?.postMessage({ success: true });
-                    const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
-                    if (subscriptionId) {
-                        sessionStorage.setItem('stripe_payment_intent_id', piId);
-                        this.componentStore.saveStripePayment({ subscriptionId, paymentIntentId: piId });
-                    } else {
-                        this.toasterService.showSnackBar('error', 'Subscription ID not found.');
-                    }
-                } else if (['processing', 'requires_action'].includes(paymentIntent.status)) {
-                    this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
-                    this.toasterService.showSnackBar('success', 'Payment is processing... status: ' + paymentIntent.status);
-                } else {
-                    this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
-                    this.toasterService.showSnackBar('error', 'Payment status: ' + paymentIntent.status);
-                }
-                // Clear cached form data regardless of payment status — we don't want stale
-                // sessionStorage values lingering after the redirect is handled.
-                this.clearStripeSessionData();
-                this.changeDetection.detectChanges();
-            }).catch(() => {
-                this.isLoading = false;
-                this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
-                this.changeDetection.detectChanges();
-            });
-        }).catch(() => {
-            this.isLoading = false;
-            this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
-            this.changeDetection.detectChanges();
-        });
+        // Notify any other open buy-plan tabs so their loader is dismissed
+        this.stripePaymentSuccessBroadcast?.postMessage({ success: true });
 
+        const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
+        if (subscriptionId) {
+            sessionStorage.setItem('stripe_payment_intent_id', piId);
+            this.componentStore.saveStripePayment({ subscriptionId, paymentIntentId: piId });
+        } else {
+            this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
+            this.toasterService.showSnackBar('error', 'Subscription ID not found.');
+        }
+
+        // Clear cached form data — we don't want stale sessionStorage values
+        // lingering after the redirect is handled.
+        this.clearStripeSessionData();
         this.clearStripeRedirectParams();
+        this.changeDetection.detectChanges();
     }
 
     /**
