@@ -28,9 +28,13 @@ export interface VoucherState {
     deleteAttachmentIsSuccess: boolean;
     deleteVoucherIsSuccess: boolean;
     getLastVouchersInProgress: boolean;
+    getLastVouchersCompanyInProgress: boolean;
+    getLastVouchersAccountInProgress: boolean;
     discountsList: IDiscountList[];
     invoiceSettings: InvoiceSetting;
     lastVouchers: LastVouchersResponse;
+    lastVouchersCompany: LastVouchersResponse;
+    lastVouchersAccount: LastVouchersResponse;
     createdTemplates: CustomTemplateResponse[];
     createdTemplatesIsLoading: boolean | null;
     stockVariants: any;
@@ -90,9 +94,13 @@ const DEFAULT_STATE: VoucherState = {
     deleteAttachmentIsSuccess: null,
     deleteVoucherIsSuccess: null,
     getLastVouchersInProgress: null,
+    getLastVouchersCompanyInProgress: null,
+    getLastVouchersAccountInProgress: null,
     discountsList: null,
     invoiceSettings: null,
     lastVouchers: null,
+    lastVouchersCompany: null,
+    lastVouchersAccount: null,
     createdTemplates: null,
     createdTemplatesIsLoading: null,
     stockVariants: null,
@@ -166,11 +174,15 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public isLoading$ = this.select((state) => state.isLoading);
     public createUpdateInProgress$ = this.select((state) => state.createUpdateInProgress);
     public getLastVouchersInProgress$ = this.select((state) => state.getLastVouchersInProgress);
+    public getLastVouchersCompanyInProgress$ = this.select((state) => state.getLastVouchersCompanyInProgress);
+    public getLastVouchersAccountInProgress$ = this.select((state) => state.getLastVouchersAccountInProgress);
     public discountsList$ = this.select((state) => state.discountsList);
     public voucherSettings$ = this.select((state) => state.invoiceSettings);
     public createdTemplates$ = this.select((state) => state.createdTemplates);
     public createdTemplatesIsLoading$ = this.select((state) => state.createdTemplatesIsLoading);
     public lastVouchers$ = this.select((state) => state.lastVouchers);
+    public lastVouchersCompany$ = this.select((state) => state.lastVouchersCompany);
+    public lastVouchersAccount$ = this.select((state) => state.lastVouchersAccount);
     public stockVariants$ = this.select((state) => state.stockVariants);
     public exchangeRate$ = this.select((state) => state.exchangeRate);
     public exchangeRateInProgress$ = this.select((state) => state.exchangeRateInProgress);
@@ -343,6 +355,64 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             return this.patchState({
                                 getLastVouchersInProgress: false,
                                 lastVouchers: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getPreviousVouchersCompany = this.effect((data: Observable<{ model: InvoiceReceiptFilter, type: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ getLastVouchersCompanyInProgress: true, lastVouchersCompany: null });
+                return this.voucherService.getAllVouchers(req.model, req.type).pipe(
+                    tap(
+                        (res: BaseResponse<LastVouchersResponse, any>) => {
+                            if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
+                            return this.patchState({
+                                getLastVouchersCompanyInProgress: false,
+                                lastVouchersCompany: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                getLastVouchersCompanyInProgress: false,
+                                lastVouchersCompany: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getPreviousVouchersAccount = this.effect((data: Observable<{ model: InvoiceReceiptFilter, type: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ getLastVouchersAccountInProgress: true, lastVouchersAccount: null });
+                return this.voucherService.getAllVouchers(req.model, req.type).pipe(
+                    tap(
+                        (res: BaseResponse<LastVouchersResponse, any>) => {
+                            if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
+                            return this.patchState({
+                                getLastVouchersAccountInProgress: false,
+                                lastVouchersAccount: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                getLastVouchersAccountInProgress: false,
+                                lastVouchersAccount: null
                             });
                         }
                     ),
@@ -1321,6 +1391,15 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 this.patchState({
                     eInvoiceGenerated: null
                 });
+                return of(null);
+            })
+        );
+    });
+
+    readonly resetPreviewPdfResponse = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap(() => {
+                this.patchState({ downloadVoucherFileResponse: null });
                 return of(null);
             })
         );
