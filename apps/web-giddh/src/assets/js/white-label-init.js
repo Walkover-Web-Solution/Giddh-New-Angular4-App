@@ -23,10 +23,16 @@ window.onload = function () {
     if (logoElement) { logoElement.src = logoUrl; }
 
     // Apply favicon (white label only, falls back to static <link> tag)
+    whiteLabelConfig.body.logos.favicon = '';
     var favicon = whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.logos && whiteLabelConfig.body.logos.favicon;
     if (favicon) {
         var faviconEl = document.querySelector('link[rel="icon"]');
-        if (faviconEl) { faviconEl.setAttribute('href', favicon); }
+        if (!faviconEl) {
+            faviconEl = document.createElement('link');
+            faviconEl.setAttribute('rel', 'icon');
+            document.head.appendChild(faviconEl);
+        }
+        faviconEl.setAttribute('href', favicon);
     }
 
     // Apply title and meta description from white label legal name
@@ -48,3 +54,4 @@ window.onload = function () {
         document.head.appendChild(preconnectLink);
     }
 };
+
