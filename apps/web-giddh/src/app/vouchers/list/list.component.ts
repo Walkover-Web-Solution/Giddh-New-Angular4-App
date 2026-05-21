@@ -15,7 +15,7 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, SubVoucher } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, SubVoucher } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
