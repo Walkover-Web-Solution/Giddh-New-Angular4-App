@@ -6254,9 +6254,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isPurchaseOrder
         ) {
-            this.invoiceForm.get("entries")["controls"]?.forEach((control) => {
-                if (control?.value) {
-                    delete control.value.date;
+            invoiceForm.entries.forEach((control) => {
+                if (control?.date) {
+                    delete control.date;
                 }
             });
         }

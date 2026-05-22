@@ -49,10 +49,17 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                     cause: 'C_SESSION_EXPIRED_LOGOUT',
                     expiresAt: session.user.session.expiresAt,
                     requestUrl: request.url,
+                    component: 'http.interceptor',
+                    line: '53',
                     currentUrl: window.location.href,
                     timestamp: new Date().toISOString()
                 };
                 console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
                 this.store.dispatch(this.loginAction.LogOut());
                 return;
             }
