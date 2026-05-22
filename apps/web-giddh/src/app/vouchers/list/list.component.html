@@ -5986,16 +5986,6 @@
         ></app-convert-bill-dialog>
     </ng-template>
 
-    <!-- E-way bill -->
-    <ng-template #ewayBill>
-        <app-generate-ewaybill-dialog
-            [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData"
-            (closeModelEvent)="ewayBillDialogRef?.close()"
-            (createEWayBillEvent)="createEwayBill()"
-        ></app-generate-ewaybill-dialog>
-    </ng-template>
-
     <ng-template #accountAsideMenu>
         <generic-aside-menu-account
             (closeAsideEvent)="accountAsideMenuRef.close()"

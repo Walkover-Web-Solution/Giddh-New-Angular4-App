@@ -1435,9 +1435,12 @@
                                         [useMask]="true"
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
-                                        [(ngModel)]="vm.totalAmount"
-                                        (onChange)="
-                                            vm.handleTaxAndDiscountEntry(); vm.updateFirstEntryAmount(); vm.inventoryAmountChanged()
+                                        [ngModel]="vm.totalAmount"
+                                        (change)="
+                                            vm.totalAmount = $event;
+                                            vm.handleTaxAndDiscountEntry();
+                                            vm.updateFirstEntryAmount();
+                                            vm.inventoryAmountChanged()
                                         "
                                     ></input-field>
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">

@@ -622,16 +622,46 @@ export class UpdateLedgerVm {
         const otherTaxAmount = isApplicable
             ? giddhRoundOff(Number(this.selectedLedger.tdsTcsTaxesSum) || 0, this.giddhBalanceDecimalPlaces)
             : 0;
-
+        // Update existing TCS/TDS row(s) if present; track whether at least one was found.
+        let hasOtherTaxRow = false;
         this.selectedLedger.transactions.forEach((trx: ILedgerTransactionItem) => {
             if (trx?.isDiscount || !trx?.isTax || !TCS_TDS_TAXES_TYPES.includes(trx.particular?.taxType || '')) {
                 return;
             }
+            hasOtherTaxRow = true;
             trx.amount = otherTaxAmount;
-            trx.particular.name = appliedTax?.accounts?.[0]?.name;
-            trx.particular.uniqueName = appliedTax?.accounts?.[0]?.uniqueName;
             trx.convertedAmount = this.calculateConversionRate(otherTaxAmount);
         });
+
+        // No existing row but a TCS/TDS tax is applied: push a new tax row.
+        if (!hasOtherTaxRow && isApplicable && appliedTax) {
+            // New row side: existing tax row's side, else first non-tax/non-discount row's, else DEBIT.
+            const newRowType = (this.selectedLedger.transactions.find(trx => trx?.isTax && !trx?.isDiscount)
+                || this.selectedLedger.transactions.find(trx => !trx?.isTax && !trx?.isDiscount))?.type || 'DEBIT';
+
+            const trx: ILedgerTransactionItem = this.blankTransactionItem(newRowType);
+            trx.particular.uniqueName = appliedTax?.accounts?.[0]?.uniqueName || '';
+            trx.particular.name = appliedTax?.accounts?.[0]?.name || '';
+            (trx.particular as any).taxType = appliedTax?.taxType;
+            trx.amount = otherTaxAmount;
+            trx.convertedAmount = this.calculateConversionRate(otherTaxAmount);
+            trx.isStock = false;
+            trx.isTax = true;
+            trx.isDiscount = false;
+
+            // Insert position: after last existing tax row; else after first non-tax/non-discount row; else end.
+            let insertIndex = this.selectedLedger.transactions.length;
+            for (let i = this.selectedLedger.transactions.length - 1; i >= 0; i--) {
+                if (this.selectedLedger.transactions[i]?.isTax) {
+                    insertIndex = i + 1;
+                    break;
+                } else if (!this.selectedLedger.transactions[i].particular.uniqueName) {
+                    insertIndex = i;
+                    break;
+                }
+            }
+            this.selectedLedger.transactions.splice(insertIndex, 0, trx);
+        }
 
         this.getEntryTotal();
         this.generateCompoundTotal();

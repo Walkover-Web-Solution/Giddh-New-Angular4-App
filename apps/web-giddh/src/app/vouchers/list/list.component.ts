@@ -2135,11 +2135,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.invoiceService.setSelectedInvoicesList(this.selectedVouchers);
             }
         }
-
-        this.ewayBillDialogRef = this.dialog.open(this.ewayBill, {
-            width: '600px',
-            disableClose: true
-        });
+        this.createEwayBill();
     }
 
     /**
@@ -2148,7 +2144,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public createEwayBill(): void {
-        this.componentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
+        this.componentStore.createEwayBill$.pipe(filter(Boolean), take(1)).subscribe(response => {
             if (!response?.account?.billingDetails?.pincode) {
                 this.toasterService.showSnackBar("error", this.localeData?.pincode_required);
             } else {

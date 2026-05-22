@@ -28,10 +28,18 @@ export class Angular21CompatibilityErrorHandler implements ErrorHandler {
                 cause: 'B1_CHUNK_LOAD_ERROR_HANDLE_ERROR',
                 errorName: error?.name,
                 errorMessage: error?.message,
+                component: 'angular21-compatibility',
+                line: '43',
                 currentUrl: window.location.href,
                 timestamp: new Date().toISOString()
             };
             console.warn('[GIDDH-RELOAD-DIAG]', reason, error);
+            try {
+                const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                giddhReloadDiag.push(reason);
+                localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+            } catch (e) { /* ignore localStorage errors */ }
+            alert('Application needs to reload. Please wait.');
             window.location.reload();
             return;
         }
@@ -130,10 +138,18 @@ export function applyAngular21Patches() {
             const reason = {
                 cause: 'B2_CHUNK_LOAD_ERROR_CONSOLE',
                 message,
+                component: 'angular21-compatibility',
+                line: '153',
                 currentUrl: window.location.href,
                 timestamp: new Date().toISOString()
             };
             originalConsoleError.call(console, '[GIDDH-RELOAD-DIAG]', reason);
+            try {
+                const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                giddhReloadDiag.push(reason);
+                localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+            } catch (e) { /* ignore localStorage errors */ }
+            alert('Application needs to reload. Please wait.');
             window.location.reload();
             return;
         }
@@ -174,10 +190,18 @@ export function applyAngular21Patches() {
                     message,
                     source,
                     lineno,
+                    component: 'angular21-compatibility',
+                    line: '205',
                     currentUrl: window.location.href,
                     timestamp: new Date().toISOString()
                 };
                 console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
+                alert('Application needs to reload. Please wait.');
                 window.location.reload();
                 return true;
             }
@@ -211,10 +235,18 @@ export function applyAngular21Patches() {
                     cause: 'B4_CHUNK_LOAD_ERROR_UNHANDLED_REJECTION',
                     errorName: event.reason.name,
                     errorMessage: event.reason.message,
+                    component: 'angular21-compatibility',
+                    line: '250',
                     currentUrl: window.location.href,
                     timestamp: new Date().toISOString()
                 };
                 console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
+                alert('Application needs to reload. Please wait.');
                 window.location.reload();
                 event.preventDefault();
                 return;

@@ -352,16 +352,24 @@ export class LoginActions {
                     cause: 'C_LOGOUT_EFFECT_REDIRECT',
                     isElectron: Configuration.isElectron,
                     isProd: environment.PRODUCTION_ENV,
+                    component: 'login.action',
+                    line: '373',
                     currentUrl: window.location.href,
                     timestamp: new Date().toISOString()
                 };
                 console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
                 if (environment.PRODUCTION_ENV && !Configuration.isElectron) {
                     window.location.href = this._generalService.getGiddhRegionUrl();
                 } else if (Configuration.isElectron) {
                     this._router.navigate(['/login']).then(() => {
                         // Wait for navigation to complete before reloading
                         setTimeout(() => {
+                            alert('Application needs to reload. Please wait.');
                             window.location.reload();
                         }, 500);
                     }).catch(() => {
