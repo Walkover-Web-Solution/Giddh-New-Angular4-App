@@ -1436,7 +1436,7 @@
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
                                         [ngModel]="vm.totalAmount"
-                                        (change)="
+                                        (onChange)="
                                             vm.totalAmount = $event;
                                             vm.handleTaxAndDiscountEntry();
                                             vm.updateFirstEntryAmount();
