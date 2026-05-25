@@ -20,15 +20,13 @@ import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Se
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
 import { ReplaySubject } from 'rxjs';
-import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
-import { Configuration } from '../../../../../app.constant';
-import { environment } from '../../../../../../environments/environment.generated';
-import { each, forEach } from '../../../../../lodash-optimized';
+import { each } from '../../../../../lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
@@ -92,7 +90,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {

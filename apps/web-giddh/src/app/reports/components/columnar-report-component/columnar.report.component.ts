@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Angular21ChangeDetectionService } from '../../../services/angular21-change-detection.service';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
@@ -41,6 +41,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public forceClear: boolean = false;
+    /** Signal bound to the group dropdown's `refreshList` input; bumping it triggers a fresh page-1 fetch */
+    public groupListRefreshTrigger = signal<number>(0);
     public fromMonth: any = null;
     public toMonth: any = null;
     public financialYearSelected: any;
@@ -397,6 +399,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.toMonth = null;
         this.forceClear$ = observableOf({ status: true });
         this.forceClear = !this.forceClear;
+        this.groupListRefreshTrigger.update(value => value + 1);
         this.fromMonthNames = [];
         this.toMonthNames = [];
         this.columnarReportResponse = null;

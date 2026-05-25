@@ -4,8 +4,6 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { cloneDeep } from '../lodash-optimized';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
-import { environment } from '../../environments/environment.generated';
-import { Configuration } from '../app.constant';
 
 @Component({
   selector: 'app-group-name',
@@ -49,7 +47,7 @@ export class GroupNameComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-      this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+      this.imgPath = this.serviceConfig.IMG_PATH;
 
     // get branches
     this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {

@@ -17,8 +17,7 @@ import { SettingsIntegrationService } from '../../services/settings.integration.
 import { IForceClear } from '../../models/api-models/Sales';
 import { ServiceConfig } from '../../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Configuration, IOption } from '../../app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'payment-aside',
@@ -159,7 +158,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.initializeNewForm();
         // get all registered account
         this.store.pipe((select(c => c.session.companyUniqueName)), take(2)).subscribe(s => this.companyUniqueName = s);

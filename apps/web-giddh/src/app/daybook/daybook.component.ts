@@ -382,11 +382,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
                         exportBodyRequest.from = this.daybookQueryRequest.from;
                         exportBodyRequest.to = this.daybookQueryRequest.to;
+                        exportBodyRequest.type = this.daybookQueryRequest.type;
                         exportBodyRequest.exportType = "DAYBOOK";
                         exportBodyRequest.showVoucherNumber = response.showVoucherNumber;
                         exportBodyRequest.showEntryVoucher = response.showEntryVoucher;
                         exportBodyRequest.sort = response.order?.toUpperCase();
                         exportBodyRequest.fileType = "CSV";
+                        exportBodyRequest.ledgerAdvanceFilter = this.searchFilterData;
                         exportBodyRequest.tagNames = this.searchFilterData?.tags;
                         exportBodyRequest.includeTag = this.searchFilterData?.includeTag;
                         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {

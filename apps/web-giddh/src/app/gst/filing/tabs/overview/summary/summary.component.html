@@ -18,16 +18,16 @@
                     </th>
                     <td [ngSwitch]="true" mat-cell *matCellDef="let element" class="border-right-none">
                         <ng-container *ngSwitchCase="element.gstReturnType === 'b2b' || element.gstReturnType === 'b2bur'">
-                            <img src="{{ imgPath }}gst/b2b.svg" class="icon image-as-icon-color text-bottom" alt="b2b img" />
+                            <img [src]="imgPath + 'gst/b2b.svg'" class="icon image-as-icon-color text-bottom" alt="b2b img" />
                         </ng-container>
                         <ng-container *ngSwitchCase="element.gstReturnType === 'b2cs' || element.gstReturnType === 'b2cl'">
-                            <img src="{{ imgPath }}gst/b2cs.svg" class="icon image-as-icon-color text-bottom" alt="b2c img" />
+                            <img [src]="imgPath + 'gst/b2cs.svg'" class="icon image-as-icon-color text-bottom" alt="b2c img" />
                         </ng-container>
                         <ng-container *ngSwitchCase="element.gstReturnType === 'export'">
-                            <img src="{{ imgPath }}gst/export.svg" class="icon image-as-icon-color text-bottom" alt="export img" />
+                            <img [src]="imgPath + 'gst/export.svg'" class="icon image-as-icon-color text-bottom" alt="export img" />
                         </ng-container>
                         <ng-container *ngSwitchCase="element.gstReturnType === 'nil'">
-                            <img src="{{ imgPath }}gst/nil.svg" class="icon image-as-icon-color text-bottom" alt="nil img" />
+                            <img [src]="imgPath + 'gst/nil.svg'" class="icon image-as-icon-color text-bottom" alt="nil img" />
                         </ng-container>
                         <ng-container
                             *ngSwitchCase="
@@ -37,23 +37,23 @@
                                 element.gstReturnType === 'imps'
                             "
                         >
-                            <img src="{{ imgPath }}gst/cdn.svg" class="icon image-as-icon-color text-bottom" alt="cdn img" />
+                            <img [src]="imgPath + 'gst/cdn.svg'" class="icon image-as-icon-color text-bottom" alt="cdn img" />
                         </ng-container>
                         <ng-container
                             *ngSwitchCase="element.gstReturnType === 'advance-receipt' || element.gstReturnType === 'advance-payments'"
                         >
-                            <img src="{{ imgPath }}gst/adv.svg" class="icon image-as-icon-color text-bottom" alt="adv img" />
+                            <img [src]="imgPath + 'gst/adv.svg'" class="icon image-as-icon-color text-bottom" alt="adv img" />
                         </ng-container>
 
                         <ng-container *ngSwitchCase="element.gstReturnType === 'hsnsac'">
-                            <img src="{{ imgPath }}gst/hsnsac.svg" class="icon image-as-icon-color text-bottom" alt="hsnsac img" />
+                            <img [src]="imgPath + 'gst/hsnsac.svg'" class="icon image-as-icon-color text-bottom" alt="hsnsac img" />
                         </ng-container>
                         <ng-container *ngSwitchCase="element.gstReturnType === 'taxPaid'">
-                            <img src="{{ imgPath }}gst/taxpaid.svg" class="icon image-as-icon-color text-bottom" alt="taxpaid img" />
+                            <img [src]="imgPath + 'gst/taxpaid.svg'" class="icon image-as-icon-color text-bottom" alt="taxpaid img" />
                         </ng-container>
 
                         <ng-container *ngSwitchCase="element.gstReturnType === 'impg'">
-                            <img src="{{ imgPath }}gst/impg.svg" class="icon image-as-icon-color text-bottom" alt="impg img" />
+                            <img [src]="imgPath + 'gst/impg.svg'" class="icon image-as-icon-color text-bottom" alt="impg img" />
                         </ng-container>
                         {{ element?.name }}
                     </td>
@@ -157,7 +157,7 @@
 
         <div *ngIf="!gstrOverviewData.count">
             <div class="filings-empty-state">
-                <img src="{{ imgPath }}gst/nofound.svg" [style.max-width.px]="110" alt="Image not found" />
+                <img [src]="imgPath + 'gst/nofound.svg'" [style.max-width.px]="110" alt="Image not found" />
                 <div class="empty-msg">
                     <span>{{ localeData?.filing?.no_result_found }}</span>
                 </div>

@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, RestrictedModules } from '../app.constant';
+import { BusinessTypes, Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL, RestrictedModules } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -449,8 +449,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public initMobileNumberField(): void {
         let configuration = {
-            widgetId: (this.serviceConfig.OTP_WIDGET_ID_NEW || OTP_WIDGET_ID_NEW),
-            tokenAuth: (this.serviceConfig.OTP_WIDGET_TOKEN_NEW || OTP_WIDGET_TOKEN_NEW),
+            widgetId: this.serviceConfig.OTP_WIDGET_ID_WEB,
+            tokenAuth: this.serviceConfig.OTP_WIDGET_TOKEN_WEB,
             exposeMethods: true,
             success: (data: any) => { },
             failure: (error: any) => {

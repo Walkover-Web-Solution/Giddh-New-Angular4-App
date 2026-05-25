@@ -94,7 +94,7 @@
 
         <div *ngIf="!brcsSummary?.length">
             <div class="filings-empty-state">
-                <img src="{{ imgPath }}gst/nofound.svg" [style.max-width.px]="110" />
+                <img [src]="imgPath + 'gst/nofound.svg'" [style.max-width.px]="110" />
                 <div class="empty-msg">
                     <span>{{ localeData?.filing?.b2c_small_details_no_invoices }}</span>
                 </div>

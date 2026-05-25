@@ -43,6 +43,8 @@ export class ExportBodyRequest {
     mergePdf?: boolean;
     copyTypes?: any[];
     showInAccountCurrency?: boolean;
+    ledgerAdvanceFilter?: any;
+    type?: string;
 }
 
 export interface DayBookRequestModel {

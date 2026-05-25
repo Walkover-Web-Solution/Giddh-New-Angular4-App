@@ -579,28 +579,25 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let companyTaxes: TaxResponse[] = [];
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
 
-        if (!this.blankLedger.otherTaxModal) {
-            this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
-        }
+        this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
 
-        if (this.activeAccount?.applicableTaxes?.length > 0) {
-            (Array.isArray(this.activeAccount.applicableTaxes) ? this.activeAccount.applicableTaxes : []).forEach(tl => {
-                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === tl.uniqueName) : undefined;
-                if (tax) {
-                    switch (tax.taxType) {
-                        case 'tcsrc':
-                        case 'tcspay':
-                        case 'tdsrc':
-                        case 'tdspay':
-                            this.blankLedger.otherTaxModal.appliedOtherTax = {
-                                name: tax?.name,
-                                uniqueName: tax?.uniqueName
-                            };
-                            this.blankLedger.isOtherTaxesApplicable = true;
-                            break;
-                    }
+        if (companyTaxes.length && this.currentTxn.selectedAccount?.otherTax?.uniqueName) {
+            const taxUniqueName = this.currentTxn.selectedAccount.otherTax.uniqueName;
+            let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === taxUniqueName) : undefined;
+            if (tax) {
+                switch (tax.taxType) {
+                    case 'tcsrc':
+                    case 'tcspay':
+                    case 'tdsrc':
+                    case 'tdspay':
+                        this.blankLedger.otherTaxModal.appliedOtherTax = {
+                            name: tax?.name,
+                            uniqueName: tax?.uniqueName
+                        };
+                        this.blankLedger.isOtherTaxesApplicable = true;
+                        break;
                 }
-            });
+            }
         }
     }
 
@@ -1185,11 +1182,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public datepickerState(event: any): void {
         this.isDatepickerOpen = event;
-    }
-
-    @HostListener('window:click', ['$event'])
-    public clickedOutsideOfComponent(event) {
-        this.clickedOutside(event);
     }
 
     public clickedOutside(event: any): void {

@@ -23,9 +23,8 @@ import { MatSelect } from '@angular/material/select';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 import { InventoryService } from '../../../services/inventory.service';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../../app.constant';
 import { ServiceConfig } from '../../../services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'create-branch',
@@ -200,7 +199,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.loadAddresses('GET', { count: 0 });
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
 
-        this.imgPath = Configuration.isElectron ? 'assets/images/branch-image.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/branch-image.svg';
+        this.imgPath = this.serviceConfig.IMG_PATH + 'branch-image.svg';
         this.branchForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();

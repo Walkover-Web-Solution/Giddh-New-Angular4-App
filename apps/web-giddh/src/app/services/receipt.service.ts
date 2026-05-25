@@ -60,10 +60,13 @@ export class ReceiptService {
 
     public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        const { branchUniqueName, source, ...bodyWithoutQueryParams } = body;
         const requestPayload = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? this.getPurchaseRecordPayload(body) : body;
         const contextPath = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
         const requestParameter = {
-            page: body?.page, count: body?.count, from: body?.from, to: body?.to, q: (body?.q) ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy
+            page: body?.page, count: body?.count, from: body?.from, to: body?.to, q: (body?.q) ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy,
+            ...(branchUniqueName ? { branchUniqueName } : {}),
+            ...(source ? { source } : {})
         };
 
         if (this.generalService.voucherApiVersion === 2) {
@@ -289,6 +292,9 @@ export class ReceiptService {
         }
         if ((model.q)) {
             url = url + '&q=' + model.q;
+        }
+         if ((model.branchUniqueName)) {
+            url = url + '&branchUniqueName=' + model.branchUniqueName;
         }
         return url;
     }
