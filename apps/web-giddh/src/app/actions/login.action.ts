@@ -369,7 +369,6 @@ export class LoginActions {
                     this._router.navigate(['/login']).then(() => {
                         // Wait for navigation to complete before reloading
                         setTimeout(() => {
-                            alert('Application needs to reload. Please wait.');
                             window.location.reload();
                         }, 500);
                     }).catch(() => {

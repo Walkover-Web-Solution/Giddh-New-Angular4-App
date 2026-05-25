@@ -39,7 +39,6 @@ export class Angular21CompatibilityErrorHandler implements ErrorHandler {
                 giddhReloadDiag.push(reason);
                 localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
             } catch (e) { /* ignore localStorage errors */ }
-            alert('Application needs to reload. Please wait.');
             window.location.reload();
             return;
         }
@@ -149,7 +148,6 @@ export function applyAngular21Patches() {
                 giddhReloadDiag.push(reason);
                 localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
             } catch (e) { /* ignore localStorage errors */ }
-            alert('Application needs to reload. Please wait.');
             window.location.reload();
             return;
         }
@@ -201,7 +199,6 @@ export function applyAngular21Patches() {
                     giddhReloadDiag.push(reason);
                     localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
                 } catch (e) { /* ignore localStorage errors */ }
-                alert('Application needs to reload. Please wait.');
                 window.location.reload();
                 return true;
             }
@@ -246,7 +243,6 @@ export function applyAngular21Patches() {
                     giddhReloadDiag.push(reason);
                     localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
                 } catch (e) { /* ignore localStorage errors */ }
-                alert('Application needs to reload. Please wait.');
                 window.location.reload();
                 event.preventDefault();
                 return;
