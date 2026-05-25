@@ -392,7 +392,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
-                alert('Application needs to reload. Please wait.');
                 window.location.reload();
                 return;
             }
