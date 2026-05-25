@@ -96,7 +96,7 @@
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
                     <h2>{{ localeData?.no_transaction_found_message }}</h2>
-                    <img class="mt-2" height="200" src="{{ imgPath }}no-data.png" [alt]="commonLocaleData?.app_no_data_found" />
+                    <img class="mt-2" height="200" [src]="imgPath + 'no-data.png'" [alt]="commonLocaleData?.app_no_data_found" />
                 </div>
             </div>
             <div class="modal-body update-ledger-dialog" [hidden]="isChangeAcc || isShowNoDataFound">
@@ -1420,6 +1420,7 @@
                                         [suffix]="vm.selectedSuffixForCurrency"
                                         [(ngModel)]="vm.advanceReceiptAmount"
                                         [cssClass]="'text-right bg-transparent'"
+                                        (onChange)="vm.handleTaxAndDiscountEntry()"
                                     ></input-field>
                                     <input-field
                                         [label]="commonLocaleData?.app_amount"
@@ -1434,8 +1435,13 @@
                                         [useMask]="true"
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
-                                        [(ngModel)]="vm.totalAmount"
-                                        (change)="vm.updateFirstEntryAmount(); vm.inventoryAmountChanged()"
+                                        [ngModel]="vm.totalAmount"
+                                        (onChange)="
+                                            vm.totalAmount = $event;
+                                            vm.handleTaxAndDiscountEntry();
+                                            vm.updateFirstEntryAmount();
+                                            vm.inventoryAmountChanged()
+                                        "
                                     ></input-field>
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
                                         <ng-container
@@ -1476,7 +1482,9 @@
                                             [suffixInput]="vm.selectedSuffixForCurrency"
                                             [commonLocaleData]="commonLocaleData"
                                             [giddhBalanceDecimalPlaces]="vm.giddhBalanceDecimalPlaces"
-                                            (discountTotalUpdated)="vm.handleDiscountEntry($event); vm.generateGrandTotal()"
+                                            (discountTotalUpdated)="
+                                                vm.setTotalDiscount($event); vm.handleDiscountEntry(); vm.generateGrandTotal()
+                                            "
                                             [discountsList]="discountsList()"
                                             [readonly]="isEinvoiceGenerated"
                                             (createNewDiscount)="showCreateDiscountDialog()"
@@ -1555,7 +1563,7 @@
                                             [hasBackdrop]="false"
                                             [showCreateNew]="true"
                                             [readonly]="isEinvoiceGenerated"
-                                            (selectedTaxEvent)="vm.taxTrxUpdated($event); showTaxError = false"
+                                            (selectedTaxEvent)="vm.taxTrxUpdated($event); vm.rebuildTaxTransactions(); showTaxError = false"
                                             (taxAmountSumEvent)="calculateTax()"
                                         ></common-tax>
                                     </span>
@@ -1593,7 +1601,7 @@
                                             [prefix]="vm.selectedPrefixForCurrency"
                                             [suffix]="vm.selectedSuffixForCurrency"
                                             [(ngModel)]="vm.grandTotal"
-                                            (change)="vm.inventoryTotalChanged()"
+                                            (onChange)="vm.handleTaxAndDiscountEntry(); vm.inventoryTotalChanged()"
                                             (keypress)="totalAmountChanged$.next(true)"
                                         ></input-field>
                                         <p class="mb-0 amount-total pr-1 pb-1" *ngIf="vm.isMultiCurrencyAvailable">

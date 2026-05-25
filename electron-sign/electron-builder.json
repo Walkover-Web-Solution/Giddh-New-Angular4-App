@@ -51,7 +51,7 @@
     },
     "linux": {
         "icon": "icon.png",
-        "maintainer": "Walkover Technologies Pvt Ltd",
+        "maintainer": "Walkover Web Solutions Private Limited",
         "target": [
             "AppImage",
             "snap",

@@ -19,11 +19,10 @@ import { GstReport, TaxServiceEnum, TaxServiceType } from '../constants/gst.cons
 import { GeneralService } from '../../services/general.service';
 import { FormControl } from '@angular/forms';
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules, Configuration } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GstComponentStore } from '../gst.store';
 import { ServiceConfig } from '../../services/service.config';
-import { environment } from '../../../environments/environment.generated';
 
 @Component({
     selector: 'file-gstr3',
@@ -138,7 +137,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }

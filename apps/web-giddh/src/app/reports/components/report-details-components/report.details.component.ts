@@ -89,6 +89,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         discountTotal: ["net_discount", false, "text-right"],
         tcsTotal: ["net_tcs", false, "text-right"],
         tdsTotal: ["net_tds", false, "text-right"],
+        roundOff: ["app_round_off", false, "text-right"],
         netSales: ["net_sales", false, "text-right"],
         cumulative: ["app_cumulative", false, "text-right"]
     }
@@ -340,6 +341,7 @@ constructor(
             reportsModel.discountTotal = item.discountTotal;
             reportsModel.tcsTotal = item.tcsTotal;
             reportsModel.tdsTotal = item.tdsTotal;
+            reportsModel.roundOff = Number(item.roundOff ?? 0);
             reportsModel.netSales = (item.balance.type === "DEBIT") ? Number("-" + item.balance.amount) : item.balance.amount;
             reportsModel.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
             reportsModel.from = item.from;
@@ -380,6 +382,7 @@ constructor(
                 reportsModelCombined.discountTotal += item.discountTotal;
                 reportsModelCombined.tcsTotal += item.tcsTotal;
                 reportsModelCombined.tdsTotal += item.tdsTotal;
+                reportsModelCombined.roundOff += Number(item.roundOff ?? 0);
                 reportsModelCombined.netSales += (item.balance.type === "DEBIT") ? Number("-" + item.balance.amount) : item.balance.amount;
                 reportsModelCombined.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
                 reportsModelCombined.interval = this.interval;
@@ -704,6 +707,7 @@ constructor(
         this.salesRegisterTotal.discountTotal += item.discountTotal;
         this.salesRegisterTotal.tcsTotal += item.tcsTotal;
         this.salesRegisterTotal.tdsTotal += item.tdsTotal;
+        this.salesRegisterTotal.roundOff += Number(item.roundOff ?? 0);
         this.salesRegisterTotal.netSales += (item.balance.type === "DEBIT") ? Number("-" + item.balance.amount) : item.balance.amount;
         this.salesRegisterTotal.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
         this.salesRegisterTotal.interval = this.interval;

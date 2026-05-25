@@ -66,7 +66,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.shareAccountForm = this.formBuilder.group({
-            email: ['', [Validators.required, Validators.email]],
+            email: ['', [Validators.required, Validators.pattern(this.giddhEmailRegex)]],
             permission: ['', [Validators.required]]
         });
 

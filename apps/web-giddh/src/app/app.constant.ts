@@ -1,12 +1,45 @@
 import * as dayjs from 'dayjs';
 import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
-import { CountryCodeService } from './services/country-code.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { environment } from '../environments/environment.generated';
 
 // ENVIRONMENT AND CORE CONSTANTS - Now using webpack DefinePlugin and environment variables
 // These are injected at build time via webpack.partial.js
+
+/** Giddh UI domains */
+export enum GiddhUiDomain {
+    LOCAL = 'http://localhost:3000/',
+    TEST = 'https://test.giddh.com/',
+    PRODUCTION = 'https://books.giddh.com/',
+    WEBSITE = 'https://giddh.com/'
+}
+
+export const GIDDH_API_DOC_URL = `${GiddhUiDomain.WEBSITE}/api`;
+export const GIDDH_HELP_DOC_URL = `${GiddhUiDomain.WEBSITE}/help`;
+export const GIDDH_SUPPORT_PHONE_NUMBER = '+918818888768';
+export const GIDDH_SUPPORT_EMAIL = 'support@giddh.com';
+export const GIDDH_ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en_IN&gl=US';
+export const GIDDH_IOS_APP_URL = 'https://apps.apple.com/in/app/giddh-books-that-make-sense/id1491003438';
+export const GIDDH_CALENDLY_URL = "https://calendly.com/sales-accounting-software/talk-to-sale";
+export const GIDDH_INTERNAL_DOMAINS = [
+    'giddh.com',
+    'walkover.in',
+    'muneem.co',
+    'msg91.com',
+    'whozzat.com',
+];
+/** Maps locale placeholder tokens to their corresponding service config keys.
+ * To add a new substitution, add an entry: { token: '[TOKEN]', configKey: 'CONFIG_KEY' } */
+export const LOCALE_PLACEHOLDER_MAP: { token: string; configKey: string }[] = [
+    { token: '[BRAND_NAME]', configKey: 'BRAND_NAME' },
+    { token: '[SUPPORT_EMAIL]', configKey: 'SUPPORT_EMAIL' },
+    { token: '[SUPPORT_PHONE]', configKey: 'SUPPORT_PHONE' }
+];
+/** Routes that are only available on the Giddh domain and must be hidden for white-label tenants. Add new Giddh-only routes here. */
+export const GIDDH_ONLY_ROUTES: string[] = [
+    '/pages/expenses-manager'
+];
 
 /** Add Company business type*/
 export enum BusinessTypes {
@@ -46,14 +79,15 @@ export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
 export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
+export const STRIPE_JS_CDN_URL = 'https://js.stripe.com/v3/';
 
 /** Regex for IPv4 address validation */
 export const IPV4_REGEX = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
 
 export const APP_DEFAULT_TITLE = '';
-export const SYNC_TALLY_HELP_DOC_URL = 'https://giddh.com/help/sync-with-tally-1591360375828781';
-export const BANK_STATEMENT_HELP_DOC_URL = 'https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh';
+export const SYNC_TALLY_HELP_DOC_URL = `${GIDDH_HELP_DOC_URL}/sync-with-tally-1591360375828781`;
+export const BANK_STATEMENT_HELP_DOC_URL = `${GIDDH_HELP_DOC_URL}/how-to-integrate-icici-bank-account-with-giddh`;
 export const SOCKET_FLOW_API = 'https://flow.sokt.io/func/CMEQnVPyk2a8';
 
 /** Restricted modules */
@@ -311,8 +345,6 @@ export const SALES_TAX_SUPPORTED_COUNTRIES = ['US'];
 
 /** ZIP Code supported country codes */
 export const ZIP_CODE_SUPPORTED_COUNTRIES = ['US', 'GB'];
-
-export const API_POSTMAN_DOC_URL = 'https://giddh.com/api';
 
 /** Decimal point for rate field, irrespective of user profile preference
  * will be displayed up to 4 decimal places
@@ -587,21 +619,10 @@ export const GIDDH_VOUCHER_FORM = [
         attachmentAllowed: false
     }
 ];
-export const CALENDLY_URL = "https://calendly.com/sales-accounting-software/talk-to-sale";
-export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
-    'giddh.com',
-    'walkover.in',
-    'muneem.co',
-    'whozzat.com',
-];
-
 export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=${new Date().getTime()}`;
 export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
-export const OTP_WIDGET_TOKEN = '205968TmXguUAwoD633af103P1';
-export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
-export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
 export enum BROADCAST_CHANNELS {
     REAUTH_PLAID_SUCCESS = 'REAUTH_PLAID_SUCCESS'
 };
@@ -715,7 +736,8 @@ export const PaymentProvider = {
     RAZORPAY: 'RAZORPAY',
     GOCARDLESS: 'GOCARDLESS',
     PAYPAL: 'PAYPAL',
-    PAYU: 'PAYU'
+    PAYU: 'PAYU',
+    STRIPE: 'STRIPE'
 };
 
 /** Plan duration */
@@ -1024,7 +1046,7 @@ export const DEFAULT_NUMBER_FORMAT_LOCALE = 'en-IN';
 export const DEFAULT_NUMBER_DISPLAY_FORMAT = 'IND_COMMA_SEPARATED';
 
 /** Global localStorage key for storing UI preferences and settings */
-export const UI_SETTINGS_STORAGE_KEY = 'giddh-ui-settings';
+export const UI_SETTINGS_STORAGE_KEY = 'ui-settings';
 
 /** Cache duration constants in milliseconds */
 export const CACHE_DURATION = {
@@ -1042,5 +1064,5 @@ export enum FormFieldsType {
     BARCODE = 'BARCODE'
 }
 
-/** Round off threshold for 4 decimal place precision */
-export const ROUND_OFF_THRESHOLD = 0.5555; 
+/** Round off threshold for standard mathematical rounding */
+export const ROUND_OFF_THRESHOLD = 0.5; 

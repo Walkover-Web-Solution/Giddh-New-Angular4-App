@@ -16,7 +16,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG, IOption, BREAKPOINT_SCREEN_SIZE, Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG, IOption, BREAKPOINT_SCREEN_SIZE } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
@@ -62,8 +62,6 @@ import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
-import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
-import { CompanyActions } from '../../../actions/company.actions';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -73,7 +71,6 @@ import { ServiceConfig } from '../../../services/service.config';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
-import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
@@ -186,6 +183,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Observable for total amount changes */
     public totalAmountChanged$: Subject<any> = new Subject();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Emits true once the discounts list API has populated this.discountsList */
+    private discountsLoaded$: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
     public baseCurrency: string = null;
     public isChangeAcc: boolean = false;
     public firstBaseAccountSelected: string;
@@ -352,8 +351,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     constructor(
         private accountService: AccountService,
         private breakPointObservar: BreakpointObserver,
-        private settingsTaxesAction: SettingsTaxesActions,
-        private companyActions: CompanyActions,
         private ledgerService: LedgerService,
         private generalService: GeneralService,
         private uiSettingsService: UiSettingsService,
@@ -382,7 +379,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isTabScreen = result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
         });
-        this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService);
+        this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService, this.changeDetectorRef);
 
         this.entryUniqueName$ = this.store.pipe(select(p => p.ledger.selectedTxnForEditUniqueName), takeUntil(this.destroyed$));
         this.editAccUniqueName$ = this.store.pipe(select(p => p.ledger.selectedAccForEditUniqueName), takeUntil(this.destroyed$));
@@ -400,7 +397,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public ngOnInit() {
         this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -415,6 +412,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         this.getAllDiscounts();
+        // Trigger handleTaxAndDiscountEntry() once all three prerequisites are ready:
+        // company taxes list, discounts list API success, and selected ledger stream.
+        // take(1) auto-completes after the first joint emission; takeUntil(destroyed$) handles teardown.
+        observableCombineLatest([
+            this.vm.companyTaxesList$,
+            this.discountsLoaded$,
+            this.selectedLedgerStream$
+        ])
+            .pipe(
+                rxjsFilter(([taxes, discountsLoaded, ledger]) => !!taxes && !!discountsLoaded && !!ledger),
+                take(1),
+                takeUntil(this.destroyed$)
+            )
+            .subscribe(() => {
+                setTimeout(()=> {
+                    this.vm?.handleTaxAndDiscountEntry();
+                    this.changeDetectorRef.detectChanges();
+                }, 500);
+            });
         if (this.generalService.voucherApiVersion === 2) {
             this.allowParentGroup.push("loanandoverdraft");
         }
@@ -586,6 +602,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public ngAfterViewInit(): void {
         this.vm.discountComponent = this.discountComponent;
+        this.vm.taxComponent = this.commonTaxControll;
         this.transaction = this.entryTransactionData?.transaction;
         this.index = this.entryTransactionData?.index;
         this.transactionsList = this.entryTransactionData?.transactionsList;
@@ -1013,6 +1030,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.discountsLoaded$.complete();
         this.store.dispatch(this.ledgerAction.resetLedgerTrxDetails());
         document.querySelector('body')?.classList?.remove('update-ledger-entry-panel-popup');
     }
@@ -1115,7 +1133,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public handleVoucherAdjustment(isUpdateMode?: boolean): void {
         if (!this.vm.selectedLedger?.voucherGenerated && this.vm.selectedLedger?.voucher?.shortCode !== 'pur') {
             // Voucher must be generated for all vouchers except purchase order
-            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
+            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_brand);
             if (this.isAdjustAdvanceReceiptSelected) {
                 this.isAdjustAdvanceReceiptSelected = false;
             } else if (this.isAdjustReceiptSelected) {
@@ -1144,7 +1162,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public checkForGeneratedVoucher(event: any): void {
         if (event && this.vm.selectedLedger?.voucher?.shortCode !== 'pur' && !this.vm.selectedLedger?.voucherGenerated) {
             // Adjustment is not allowed until the voucher is generated
-            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
+            this.toaster.showSnackBar("info", ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_brand);
             event.preventDefault();
         }
     }
@@ -1394,9 +1412,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public changeRcmCheckboxState(event: any): void {
-        if (!this.isPettyCash && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch) && (this.branches && this.branches.length > 1)) {
-            return;
-        }
         this.isRcmEntry = !this.isRcmEntry;
         this.toggleRcmCheckbox(event, 'checkbox');
     }
@@ -1408,9 +1423,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public toggleRcmCheckbox(event: any, element: string): void {
-        if (!this.isPettyCash && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch) && (this.branches && this.branches.length > 1)) {
-            return;
-        }
         let isChecked;
 
         if (element === "checkbox") {
@@ -2341,9 +2353,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                      * so transaction amount of income/ expenses account differ from both the side
                      * so overcome this issue api provides the actual amount which was added by user while creating entry
                      */
-                    if (index === 0) {
-                        t.amount = this.vm.selectedLedger.actualAmount;
-                    }
+                    t.amount = this.vm.selectedLedger.actualAmount;
                     // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
                     if (t.inventory) {
                         t.inventory.amount = this.vm.selectedLedger.actualAmount;
@@ -2473,6 +2483,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger.voucher.shortCode === 'jr') {
             this.vm.inventoryAmountChanged();
         }
+        this.vm.handleTaxAndDiscountEntry();
 
         this.activeAccountSubject.next(this.activeAccount);
 
@@ -2809,6 +2820,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountsList.set(response?.body);
+            }
+            if (response?.status === "success" ){
+                // Notify combined trigger that the discounts API call has completed
+                this.discountsLoaded$.next(true);
             }
             if (callback) {
                 callback();

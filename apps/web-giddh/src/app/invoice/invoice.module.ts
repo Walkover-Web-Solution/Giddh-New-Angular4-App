@@ -48,7 +48,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
-import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
@@ -132,7 +131,6 @@ import { MatCardModule } from '@angular/material/card';
         MatInputModule,
         MatRadioModule,
         MatButtonModule,
-        GenerateEWayBillModule,
         InvoiceSettingModule,
         MatMenuModule,
         MatTooltipModule,

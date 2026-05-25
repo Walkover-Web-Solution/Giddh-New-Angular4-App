@@ -23,6 +23,22 @@ export class Angular21CompatibilityErrorHandler implements ErrorHandler {
         if (error?.name === 'ChunkLoadError' ||
             (error && error.message && error.message.includes('ChunkLoadError')) ||
             (error && error.stack && /Loading chunk .+ failed/.test(error.stack))) {
+            // [GIDDH-RELOAD-DIAG] Cause B1: ChunkLoadError caught by Angular ErrorHandler
+            const reason = {
+                cause: 'B1_CHUNK_LOAD_ERROR_HANDLE_ERROR',
+                errorName: error?.name,
+                errorMessage: error?.message,
+                component: 'angular21-compatibility',
+                line: '43',
+                currentUrl: window.location.href,
+                timestamp: new Date().toISOString()
+            };
+            console.warn('[GIDDH-RELOAD-DIAG]', reason, error);
+            try {
+                const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                giddhReloadDiag.push(reason);
+                localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+            } catch (e) { /* ignore localStorage errors */ }
             window.location.reload();
             return;
         }
@@ -117,6 +133,21 @@ export function applyAngular21Patches() {
         // Handle ChunkLoadError
         if (message.includes('ChunkLoadError') ||
             message.includes('Loading chunk') && message.includes('failed')) {
+            // [GIDDH-RELOAD-DIAG] Cause B2: ChunkLoadError detected via console.error patch
+            const reason = {
+                cause: 'B2_CHUNK_LOAD_ERROR_CONSOLE',
+                message,
+                component: 'angular21-compatibility',
+                line: '153',
+                currentUrl: window.location.href,
+                timestamp: new Date().toISOString()
+            };
+            originalConsoleError.call(console, '[GIDDH-RELOAD-DIAG]', reason);
+            try {
+                const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                giddhReloadDiag.push(reason);
+                localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+            } catch (e) { /* ignore localStorage errors */ }
             window.location.reload();
             return;
         }
@@ -151,6 +182,23 @@ export function applyAngular21Patches() {
             // Handle ChunkLoadError
             if (message.includes('ChunkLoadError') ||
                 (message.includes('Loading chunk') && message.includes('failed'))) {
+                // [GIDDH-RELOAD-DIAG] Cause B3: ChunkLoadError detected via window.onerror
+                const reason = {
+                    cause: 'B3_CHUNK_LOAD_ERROR_WINDOW_ONERROR',
+                    message,
+                    source,
+                    lineno,
+                    component: 'angular21-compatibility',
+                    line: '205',
+                    currentUrl: window.location.href,
+                    timestamp: new Date().toISOString()
+                };
+                console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
                 window.location.reload();
                 return true;
             }
@@ -179,6 +227,22 @@ export function applyAngular21Patches() {
             if (event.reason.name === 'ChunkLoadError' ||
                 (event.reason.message && event.reason.message.includes('ChunkLoadError')) ||
                 (event.reason.message && event.reason.message.includes('Loading chunk') && event.reason.message.includes('failed'))) {
+                // [GIDDH-RELOAD-DIAG] Cause B4: ChunkLoadError detected via unhandledrejection
+                const reason = {
+                    cause: 'B4_CHUNK_LOAD_ERROR_UNHANDLED_REJECTION',
+                    errorName: event.reason.name,
+                    errorMessage: event.reason.message,
+                    component: 'angular21-compatibility',
+                    line: '250',
+                    currentUrl: window.location.href,
+                    timestamp: new Date().toISOString()
+                };
+                console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
                 window.location.reload();
                 event.preventDefault();
                 return;

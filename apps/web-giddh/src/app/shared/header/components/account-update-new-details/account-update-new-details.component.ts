@@ -367,7 +367,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.moveAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$));
-        this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -1638,22 +1637,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public taxHierarchy() {
         let activeAccount: AccountResponseV2 = null;
         let activeGroup: GroupResponse = null;
-        this.store.pipe(take(1)).subscribe(s => {
-            if (s.groupwithaccounts) {
-                activeAccount = s.groupwithaccounts.activeAccount;
-                activeGroup = s.groupwithaccounts.activeGroup;
+        this.store.pipe(filter(group => !!group.groupwithaccounts.activeAccount || !!group.groupwithaccounts.activeGroup), take(1)).subscribe(group => {
+            if (group.groupwithaccounts) {
+                activeAccount = group.groupwithaccounts.activeAccount;
+                activeGroup = group.groupwithaccounts.activeGroup;
+            }
+            if (activeAccount) {
+                this.store.dispatch(this.companyActions.getTax());
+                this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount?.uniqueName));
+                this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
+            } else {
+                this.store.dispatch(this.companyActions.getTax());
+                if (activeGroup) {
+                    this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
+                    this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupTaxHierarchy), takeUntil(this.destroyed$));
+                }
             }
         });
-        if (activeAccount) {
-            this.store.dispatch(this.companyActions.getTax());
-            this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount?.uniqueName));
-        } else {
-            this.store.dispatch(this.companyActions.getTax());
-            if (activeGroup) {
-                this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
-            }
-        }
-
     }
 
     public applyTax() {

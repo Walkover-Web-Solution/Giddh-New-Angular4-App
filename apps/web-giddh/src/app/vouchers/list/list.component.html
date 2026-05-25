@@ -4454,15 +4454,17 @@
                                                 >
                                                     {{ localeData?.auto_change_status_expiry }}
                                                 </mat-slide-toggle>
-                                                <mat-slide-toggle
-                                                    name="autoWhatsApp"
-                                                    aria-label="auto whatsApp"
-                                                    class="disable-toggle slide-toggle d-block mb-3"
-                                                    color="primary"
-                                                    formControlName="autoWhatsApp"
-                                                >
-                                                    {{ getWhatsappSettingLabel(voucherTypeEnum.estimate) }}
-                                                </mat-slide-toggle>
+                                                @if (generalService.isGiddhDomain()) {
+                                                    <mat-slide-toggle
+                                                        name="autoWhatsApp"
+                                                        aria-label="auto whatsApp"
+                                                        class="disable-toggle slide-toggle d-block mb-3"
+                                                        color="primary"
+                                                        formControlName="autoWhatsApp"
+                                                    >
+                                                        {{ getWhatsappSettingLabel(voucherTypeEnum.estimate) }}
+                                                    </mat-slide-toggle>
+                                                }
                                                 <mat-slide-toggle
                                                     aria-label="estimate round off"
                                                     name="estimateRoundOff"
@@ -4541,15 +4543,17 @@
                                                 >
                                                     {{ localeData?.auto_change_status_expiry }}
                                                 </mat-slide-toggle>
-                                                <mat-slide-toggle
-                                                    aria-label="auto whatsApp"
-                                                    name="autoWhatsApp"
-                                                    class="disable-toggle slide-toggle d-block mb-3"
-                                                    color="primary"
-                                                    formControlName="autoWhatsApp"
-                                                >
-                                                    {{ getWhatsappSettingLabel(voucherTypeEnum.proforma) }}
-                                                </mat-slide-toggle>
+                                                @if (generalService.isGiddhDomain()) {
+                                                    <mat-slide-toggle
+                                                        aria-label="auto whatsApp"
+                                                        name="autoWhatsApp"
+                                                        class="disable-toggle slide-toggle d-block mb-3"
+                                                        color="primary"
+                                                        formControlName="autoWhatsApp"
+                                                    >
+                                                        {{ getWhatsappSettingLabel(voucherTypeEnum.proforma) }}
+                                                    </mat-slide-toggle>
+                                                }
                                                 <mat-slide-toggle
                                                     aria-label="proforma round off"
                                                     name="proformaRoundOff"
@@ -4708,15 +4712,17 @@
                                                 >
                                                     {{ localeData?.apply_sales_round_off }}
                                                 </mat-slide-toggle>
-                                                <mat-slide-toggle
-                                                    aria-label="auto whatsapp invoice"
-                                                    name="autoWhatsAppInvoice"
-                                                    class="disable-toggle slide-toggle d-block mb-3"
-                                                    color="primary"
-                                                    formControlName="autoWhatsAppInvoice"
-                                                >
-                                                    {{ getWhatsappSettingLabel('invoice') }}
-                                                </mat-slide-toggle>
+                                                @if (generalService.isGiddhDomain()) {
+                                                    <mat-slide-toggle
+                                                        aria-label="auto whatsapp invoice"
+                                                        name="autoWhatsAppInvoice"
+                                                        class="disable-toggle slide-toggle d-block mb-3"
+                                                        color="primary"
+                                                        formControlName="autoWhatsAppInvoice"
+                                                    >
+                                                        {{ getWhatsappSettingLabel('invoice') }}
+                                                    </mat-slide-toggle>
+                                                }
                                                 <mat-slide-toggle
                                                     name="autoPaid"
                                                     aria-label="generate voucher"
@@ -4854,15 +4860,17 @@
                                                         [type]="'text'"
                                                     ></input-field>
                                                 </div>
-                                                <mat-slide-toggle
-                                                    aria-label="auto whatsapp receipt"
-                                                    name="autoWhatsAppReceipt"
-                                                    class="disable-toggle slide-toggle d-block mb-3"
-                                                    color="primary"
-                                                    formControlName="autoWhatsAppReceipt"
-                                                >
-                                                    {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.receipt) }}
-                                                </mat-slide-toggle>
+                                                @if (generalService.isGiddhDomain()) {
+                                                    <mat-slide-toggle
+                                                        aria-label="auto whatsapp receipt"
+                                                        name="autoWhatsAppReceipt"
+                                                        class="disable-toggle slide-toggle d-block mb-3"
+                                                        color="primary"
+                                                        formControlName="autoWhatsAppReceipt"
+                                                    >
+                                                        {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.receipt) }}
+                                                    </mat-slide-toggle>
+                                                }
                                                 <div class="d-flex align-items-center">
                                                     <mat-slide-toggle
                                                         aria-label="auto mail receipt"
@@ -4939,15 +4947,17 @@
                                                         formControlName="initialDebitNoteNumber"
                                                     ></input-field>
                                                 </div>
-                                                <mat-slide-toggle
-                                                    aria-label="auto whatsapp debit  note"
-                                                    name="autoWhatsAppDebitNote"
-                                                    formControlName="autoWhatsAppDebitNote"
-                                                    class="disable-toggle slide-toggle d-block mb-3"
-                                                    color="primary"
-                                                >
-                                                    {{ getWhatsappSettingLabel(voucherTypeEnum.debitNote) }}
-                                                </mat-slide-toggle>
+                                                @if (generalService.isGiddhDomain()) {
+                                                    <mat-slide-toggle
+                                                        aria-label="auto whatsapp debit note"
+                                                        name="autoWhatsAppDebitNote"
+                                                        formControlName="autoWhatsAppDebitNote"
+                                                        class="disable-toggle slide-toggle d-block mb-3"
+                                                        color="primary"
+                                                    >
+                                                        {{ getWhatsappSettingLabel(voucherTypeEnum.debitNote) }}
+                                                    </mat-slide-toggle>
+                                                }
                                                 <mat-slide-toggle
                                                     aria-label="debit note round off"
                                                     name="debitNoteRoundOff"
@@ -5043,15 +5053,17 @@
                                                 >
                                                     {{ localeData?.apply_credit_note_round_off }}
                                                 </mat-slide-toggle>
-                                                <mat-slide-toggle
-                                                    aria-label="credit note whatsapp"
-                                                    name="voucher"
-                                                    formControlName="autoWhatsAppCreditNote"
-                                                    class="disable-toggle slide-toggle d-block mb-3"
-                                                    color="primary"
-                                                >
-                                                    {{ getWhatsappSettingLabel(voucherTypeEnum.creditNote) }}
-                                                </mat-slide-toggle>
+                                                @if (generalService.isGiddhDomain()) {
+                                                    <mat-slide-toggle
+                                                        aria-label="credit note whatsapp"
+                                                        name="voucher"
+                                                        formControlName="autoWhatsAppCreditNote"
+                                                        class="disable-toggle slide-toggle d-block mb-3"
+                                                        color="primary"
+                                                    >
+                                                        {{ getWhatsappSettingLabel(voucherTypeEnum.creditNote) }}
+                                                    </mat-slide-toggle>
+                                                }
                                                 <div class="d-flex align-items-center mb-3">
                                                     <mat-slide-toggle
                                                         aria-label="credit note auto mail"
@@ -5208,15 +5220,17 @@
                                             >
                                                 {{ localeData?.auto_change_status }}
                                             </mat-slide-toggle>
-                                            <mat-slide-toggle
-                                                aria-label="purchase order whatsapp"
-                                                name="poAutoWhatsApp"
-                                                class="disable-toggle slide-toggle d-block mb-3"
-                                                color="primary"
-                                                formControlName="poAutoWhatsApp"
-                                            >
-                                                {{ getWhatsappSettingLabel('purchase order') }}
-                                            </mat-slide-toggle>
+                                            @if (generalService.isGiddhDomain()) {
+                                                <mat-slide-toggle
+                                                    aria-label="purchase order whatsapp"
+                                                    name="poAutoWhatsApp"
+                                                    class="disable-toggle slide-toggle d-block mb-3"
+                                                    color="primary"
+                                                    formControlName="poAutoWhatsApp"
+                                                >
+                                                    {{ getWhatsappSettingLabel('purchase order') }}
+                                                </mat-slide-toggle>
+                                            }
                                             <mat-slide-toggle
                                                 aria-label="purchase order round off"
                                                 name="purchaseOrderRoundOff"
@@ -5314,15 +5328,17 @@
                                             >
                                                 {{ localeData?.enable_voucher_download }}
                                             </mat-slide-toggle>
-                                            <mat-slide-toggle
-                                                aria-label="auto whatsapp"
-                                                name="autoWhatsApp"
-                                                class="disable-toggle slide-toggle d-block mb-3"
-                                                color="primary"
-                                                formControlName="autoWhatsApp"
-                                            >
-                                                {{ getWhatsappSettingLabel('purchase bill') }}
-                                            </mat-slide-toggle>
+                                            @if (generalService.isGiddhDomain()) {
+                                                <mat-slide-toggle
+                                                    aria-label="auto whatsapp"
+                                                    name="autoWhatsApp"
+                                                    class="disable-toggle slide-toggle d-block mb-3"
+                                                    color="primary"
+                                                    formControlName="autoWhatsApp"
+                                                >
+                                                    {{ getWhatsappSettingLabel('purchase bill') }}
+                                                </mat-slide-toggle>
+                                            }
                                         </ng-container>
                                         <ng-container formGroupName="invoiceSettings">
                                             <mat-slide-toggle
@@ -5430,15 +5446,17 @@
                                                     {{ commonLocaleData?.app_custom_email }}
                                                 </a>
                                             </div>
-                                            <mat-slide-toggle
-                                                name="autoWhatsAppPayment"
-                                                class="disable-toggle slide-toggle d-block mb-3"
-                                                color="primary"
-                                                aria-label="auto whatsapp payment"
-                                                formControlName="autoWhatsAppPayment"
-                                            >
-                                                {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.payment) }}
-                                            </mat-slide-toggle>
+                                            @if (generalService.isGiddhDomain()) {
+                                                <mat-slide-toggle
+                                                    name="autoWhatsAppPayment"
+                                                    class="disable-toggle slide-toggle d-block mb-3"
+                                                    color="primary"
+                                                    aria-label="auto whatsapp payment"
+                                                    formControlName="autoWhatsAppPayment"
+                                                >
+                                                    {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.payment) }}
+                                                </mat-slide-toggle>
+                                            }
                                             <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                         </div>
                                     </ng-container>
@@ -5966,16 +5984,6 @@
             [commonLocaleData]="commonLocaleData"
             (convertToBill)="poBulkAction('create_purchase_bill', $event)"
         ></app-convert-bill-dialog>
-    </ng-template>
-
-    <!-- E-way bill -->
-    <ng-template #ewayBill>
-        <app-generate-ewaybill-dialog
-            [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData"
-            (closeModelEvent)="ewayBillDialogRef?.close()"
-            (createEWayBillEvent)="createEwayBill()"
-        ></app-generate-ewaybill-dialog>
     </ng-template>
 
     <ng-template #accountAsideMenu>

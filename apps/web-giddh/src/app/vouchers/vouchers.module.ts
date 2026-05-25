@@ -69,7 +69,6 @@ import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-
 import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
-import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBill/generateEWayBill.module";
 import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker.wrapper.module";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
@@ -184,7 +183,6 @@ import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-par
         PurchaseOrderPreviewModule,
         DecimalDigitsModule,
         NgxMaskModule,
-        GenerateEWayBillModule,
         DatepickerWrapperModule,
         MatDatepickerModule,
         MatNativeDateModule,

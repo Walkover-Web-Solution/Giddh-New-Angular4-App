@@ -46,6 +46,7 @@
                         [placeholder]="localeData?.group"
                         [name]="'group'"
                         [forceClear]="forceClear"
+                        [refreshList]="groupListRefreshTrigger()"
                         (selectedOption)="selectGroup($event)"
                         [enableDynamicSearch]="true"
                         [isPaginationEnabled]="true"
