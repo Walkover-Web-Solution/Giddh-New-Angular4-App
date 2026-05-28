@@ -1483,7 +1483,7 @@
                                             [commonLocaleData]="commonLocaleData"
                                             [giddhBalanceDecimalPlaces]="vm.giddhBalanceDecimalPlaces"
                                             (discountTotalUpdated)="
-                                                vm.setTotalDiscount($event); vm.handleDiscountEntry(); vm.generateGrandTotal()
+                                                vm.setTotalDiscount($event); vm.handleTaxAndDiscountEntry(); vm.generateGrandTotal()
                                             "
                                             [discountsList]="discountsList()"
                                             [readonly]="isEinvoiceGenerated"
