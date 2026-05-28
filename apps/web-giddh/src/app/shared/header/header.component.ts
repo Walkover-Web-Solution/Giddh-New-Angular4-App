@@ -620,7 +620,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let tempParams = lastState.substr(lastState.lastIndexOf('?'));
                 let urlParams = new URLSearchParams(tempParams);
                 let queryParams: any = {};
-                (Array.isArray(urlParams) ? urlParams : []).forEach((val, key) => {
+                urlParams.forEach((val, key) => {
                     queryParams[key] = val;
                 });
 
@@ -1867,19 +1867,37 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     private saveLastState(): void {
+        this.generalService.debugLog('saveLastState() called');
         let companyUniqueName = null;
         let lastState = this.router.url;
-        if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
-            lastState = this.generalService.getCurrentPath(true).path;
+        const currentPath = this.generalService.getCurrentPath(true).path;
+        this.generalService.debugLog('router.url:', this.router.url);
+        this.generalService.debugLog('getCurrentPath(true).path:', currentPath);
+        this.generalService.debugLog('currentSupportedQueryParam:', this.generalService.currentSupportedQueryParam);
+        
+        if (this.generalService.currentSupportedQueryParam.includes(currentPath)) {
+            this.generalService.debugLog('Condition matched! Using currentPath');
+            lastState = currentPath;
+        } else {
+            this.generalService.debugLog('Condition NOT matched! Using router.url');
         }
         lastState = lastState?.replace("/pages", "pages");
-        this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = decodeURI(lastState);
-        if (lastState !== '/pages/user-details/subscription/buy-plan') {
-            this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-        }
+        this.generalService.debugLog('lastState after replace:', lastState);
+        
+        this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => {
+            companyUniqueName = response;
+            this.generalService.debugLog('companyUniqueName from store:', companyUniqueName);
+            let stateDetailsRequest = new StateDetailsRequest();
+            stateDetailsRequest.companyUniqueName = companyUniqueName;
+            stateDetailsRequest.lastState = decodeURI(lastState);
+            this.generalService.debugLog('stateDetailsRequest:', stateDetailsRequest);
+            if (lastState !== '/pages/user-details/subscription/buy-plan') {
+                this.generalService.debugLog('Dispatching SetStateDetails');
+                this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+            } else {
+                this.generalService.debugLog('Skipping dispatch - subscription page');
+            }
+        });
     }
 
     /**

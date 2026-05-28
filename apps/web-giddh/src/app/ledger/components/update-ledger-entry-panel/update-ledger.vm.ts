@@ -256,17 +256,30 @@ export class UpdateLedgerVm {
 
     public getEntryTotal() {
         this.entryTotal.drTotal = giddhRoundOff(sumBy(this.selectedLedger?.transactions, (tr) => {
-            if (tr.type === 'DEBIT') {
+            if (tr.type === 'DEBIT' && tr.particular?.uniqueName !== 'roundoff') {
                 return Number(tr.amount) || 0;
             }
             return 0;
         }), this.giddhBalanceDecimalPlaces);
         this.entryTotal.crTotal = giddhRoundOff(sumBy(this.selectedLedger?.transactions, (tr) => {
-            if (tr.type === 'CREDIT') {
+            if (tr.type === 'CREDIT' && tr.particular?.uniqueName !== 'roundoff') {
                 return Number(tr.amount) || 0;
             }
             return 0;
         }), this.giddhBalanceDecimalPlaces);
+
+        this.selectedLedger?.transactions?.forEach((entry) => {
+            if (entry.particular.uniqueName === 'roundoff') {
+                entry.amount = Math.round(this.grandTotal) - this.grandTotal;
+                entry.convertedAmount = this.calculateConversionRate(entry.amount);
+            }
+        });
+
+        if (this.entryTotal.drTotal > this.entryTotal.crTotal) {
+            this.entryTotal.drTotal += Math.round(this.grandTotal) - this.grandTotal;
+        } else {
+            this.entryTotal.crTotal += Math.round(this.grandTotal) - this.grandTotal;
+        }
 
         this.convertedEntryTotal = {
             drTotal: this.calculateConversionRate(this.entryTotal.drTotal),

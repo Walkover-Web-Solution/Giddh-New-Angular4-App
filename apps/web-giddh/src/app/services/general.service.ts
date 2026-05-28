@@ -29,7 +29,7 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
-import { Configuration } from '../app.constant';
+import { Configuration, INTERNAL_EMAILS_DOMAINS } from '../app.constant';
 import { cloneDeep, find,orderBy } from '../lodash-optimized';
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
@@ -2356,6 +2356,10 @@ export class GeneralService {
         const basePath = this.router.url.split('?')[0];
         const forcedParams: Record<string, any> = {};
 
+        this.debugLog('[getCurrentPath] router.url:', this.router.url);
+        this.debugLog('[getCurrentPath] basePath:', basePath);
+        this.debugLog('[getCurrentPath] currentUrlParams:', currentUrlParams);
+
         if (currentUrlParams?.required) {
             const requiredKeys: string[] = currentUrlParams.required.split(',');
             requiredKeys.forEach(key => {
@@ -2373,6 +2377,10 @@ export class GeneralService {
         const scopedPath = Object.keys(forcedParams).length
             ? `${basePath}?${Object.entries(forcedParams).map(([k, v]) => `${k}=${v}`).join('&')}`
             : basePath;
+
+        this.debugLog('[getCurrentPath] forcedParams:', forcedParams);
+        this.debugLog('[getCurrentPath] scopedPath:', scopedPath);
+        this.debugLog('[getCurrentPath] replaceOnly:', replaceOnly);
 
         return { path: scopedPath, queryParams: replaceOnly ? forcedParams : currentUrlParams };
     }
@@ -2456,6 +2464,39 @@ export class GeneralService {
     public replacePlaceholders(text: string, ...args: string[]): string {
         return text.replace(/\[.*?\]/g, () => args.shift() || '');
     }
+
+    /**
+     * Debug logging function - logs only for developers in INTERNAL_EMAILS_DOMAINS
+     * Checks the current company creator's email and logs if it matches the developer email list
+     * 
+     * @param args - Variable number of arguments to log (same as console.log)
+     * 
+     * @example
+     * this.generalService.debugLog('message');
+     * this.generalService.debugLog('key:', value);
+     * this.generalService.debugLog('multiple', 'args', object);
+     * 
+     * @memberof GeneralService
+     */
+    public debugLog(...args: any): void {
+        if (this.isInternalEmailDomain()) {
+            console.log(...args);
+        }
+    }
+
+    /**
+     * Check if the current company creator's email domain is in the internal domains list
+     * Extracts the domain part from the email and checks against INTERNAL_EMAILS_DOMAINS
+     * 
+     * @returns {boolean} True if the email domain is in INTERNAL_EMAILS_DOMAINS, false otherwise
+     * 
+     * @memberof GeneralService
+     */
+    public isInternalEmailDomain(): boolean {
+        const allowDomain = this.activeCompany?.createdBy?.email?.split('@')[1] || '';
+        return INTERNAL_EMAILS_DOMAINS.includes(allowDomain);
+    }
+
 
     /**
      * Retrieves a list of available voucher types with localized labels.
