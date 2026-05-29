@@ -29,6 +29,8 @@ export const GIDDH_INTERNAL_DOMAINS = [
     'msg91.com',
     'whozzat.com',
 ];
+
+export const INTERNAL_EMAILS_DOMAINS = ['msg91.com', 'giddh.com', 'walkover.in', 'whozzat.com'];
 /** Maps locale placeholder tokens to their corresponding service config keys.
  * To add a new substitution, add an entry: { token: '[TOKEN]', configKey: 'CONFIG_KEY' } */
 export const LOCALE_PLACEHOLDER_MAP: { token: string; configKey: string }[] = [

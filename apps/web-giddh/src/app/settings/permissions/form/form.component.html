@@ -17,10 +17,11 @@
                     [name]="'emailId'"
                     formControlName="emailId"
                     [placeholder]="localeData?.unique_name_email_placeholder"
+                    [pattern]="giddhEmailRegex"
                     [readonly]="userdata?.uniqueName"
                     [disabled]="isUserRestricted"
                     [required]="true"
-                    [showError]="isFormInvalid && permissionForm?.get('emailId').invalid"
+                    [showError]="permissionForm?.get('emailId').invalid && (permissionForm?.get('emailId').touched || isFormInvalid)"
                 ></input-field>
             </div>
             <div>
