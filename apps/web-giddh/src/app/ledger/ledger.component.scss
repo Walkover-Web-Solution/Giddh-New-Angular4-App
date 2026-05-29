@@ -786,6 +786,12 @@ input#ledger-search {
     padding: 3px !important;
 }
 
+.icon-svg {
+    height: 18px;
+    width: auto;
+    color: var(--theme-primary-color);
+}
+
 @media screen and (max-width: 1280px) {
     .ledger-row {
         .column-gap-05 {

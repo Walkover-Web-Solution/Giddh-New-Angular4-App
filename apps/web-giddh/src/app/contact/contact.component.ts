@@ -25,7 +25,7 @@ import { select, Store } from "@ngrx/store";
 import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
 import { combineLatest, BehaviorSubject, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
-import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
+import { debounceTime, filter, take, takeUntil } from "rxjs/operators";
 import { cloneDeep, find, map as lodashMap, uniq  } from '../lodash-optimized';
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
@@ -63,7 +63,6 @@ import { TemplateFroalaComponent } from '../shared/template-froala/template-froa
 import { ServiceConfig } from '../services/service.config';
 import { ContactsTab, ContactsColumn } from './contacts.enum';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
-import { environment } from '../../environments/environment.generated';
 
 @Component({
     selector: "contact-detail",
@@ -309,7 +308,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));

@@ -6,9 +6,9 @@
     >
         <div class="wrap-GSTR-1-title">
             <a [routerLink]="['/gstfiling']" aria-label="back img" class="ember-view">
-                <img src="{{ imgPath }}gst/back.svg" class="icon image-as-icon-color icon-sm text-middle" alt="back img" />
+                <img [src]="imgPath + 'gst/back.svg'" class="icon image-as-icon-color icon-sm text-middle" alt="back img" />
             </a>
-            <img src="{{ imgPath }}gst/cart.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="cart img" />
+            <img [src]="imgPath + 'gst/cart.svg'" class="icon gstr-icon image-as-icon-color text-middle" alt="cart img" />
 
             <div class="text-vertical-align-middle nav-top">
                 <div class="text-vertical-align-middle head head-font-weight d-flex align-items-center column-gap-1">
@@ -73,9 +73,9 @@
     >
         <div>
             <a href="javascript:;" aria-label="back img" id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
-                <img src="{{ imgPath }}gst/back.svg" class="icon icon-sm image-as-icon-color text-middle" alt="back img" />
+                <img [src]="imgPath + 'gst/back.svg'" class="icon icon-sm image-as-icon-color text-middle" alt="back img" />
             </a>
-            <img src="{{ imgPath }}gst/bag.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="back img" />
+            <img [src]="imgPath + 'gst/bag.svg'" class="icon gstr-icon image-as-icon-color text-middle" alt="back img" />
             <div class="text-vertical-align-middle nav-top">
                 <div class="text-vertical-align-middle head-font-weight d-flex align-items-center column-gap-1">
                     {{ localeData?.gstr2_label }}

@@ -46,9 +46,11 @@
                             <button matButton="filled" type="submit" (click)="regenerateKey()" class="mr-4">
                                 {{ localeData?.auth_key?.regenerate_auth_key }}
                             </button>
-                            <a class="text-primary" href="{{ apiPostmanDocUrl }}" target="_blank">
-                                {{ localeData?.auth_key?.documentation }}
-                            </a>
+                            @if (apiPostmanDocUrl) {
+                                <a class="text-primary" [href]="apiPostmanDocUrl" target="_blank">
+                                    {{ localeData?.auth_key?.documentation }}
+                                </a>
+                            }
                         </div>
                     </form>
                 </div>

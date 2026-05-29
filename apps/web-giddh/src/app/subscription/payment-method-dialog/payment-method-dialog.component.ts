@@ -68,7 +68,6 @@ export class PaymentMethodDialogComponent implements OnInit {
      * @memberof PaymentMethodDialogComponent
      */
     public ngOnInit(): void {
-        document.body?.classList?.add("subscription-sidebar");
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
         this.localeData = this.inputData?.localeData;
         this.commonLocaleData = this.inputData?.commonLocaleData;
@@ -213,12 +212,10 @@ export class PaymentMethodDialogComponent implements OnInit {
 
     /**
      * Lifecycle hook that is called when the component is destroyed.
-     * Removes "subscription-sidebar" class from body, and completes the subject indicating component destruction.
-     *
+     * 
      * @memberof PaymentMethodDialogComponent
      */
     public ngOnDestroy(): void {
-        document.body?.classList?.remove("subscription-sidebar");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

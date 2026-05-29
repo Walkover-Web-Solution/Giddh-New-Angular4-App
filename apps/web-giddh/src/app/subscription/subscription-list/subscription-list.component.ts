@@ -15,7 +15,7 @@ import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, PlanDuration } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, PlanDuration } from '../../app.constant';
 import { CompanyListDialogComponent } from '../company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
@@ -435,9 +435,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         }
         this.dialog.open(CompanyListDialogComponent, {
             data: data,
-            panelClass: 'subscription-sidebar',
-            role: 'alertdialog',
-            ariaLabel: 'companyDialog'
+            ...ASIDE_PANE_CONFIG
         });
     }
 
@@ -681,9 +679,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         }
         this.dialog.open(PaymentMethodDialogComponent, {
             data: data,
-            panelClass: 'subscription-sidebar',
-            role: 'alertdialog',
-            ariaLabel: 'paymentDialog'
+            ...ASIDE_PANE_CONFIG
         });
     }
 

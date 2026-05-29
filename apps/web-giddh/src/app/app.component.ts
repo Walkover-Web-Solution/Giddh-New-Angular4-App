@@ -15,7 +15,7 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { AppThemeClassEnum, BREAKPOINT_SCREEN_SIZE, Configuration } from "./app.constant";
+import { AppThemeClassEnum, BREAKPOINT_SCREEN_SIZE, Configuration, GiddhUiDomain } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -120,11 +120,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                // Check if href contains books.giddh.com or test.giddh.com for domain-based redirect logic
-                const isGiddhDomain = this._generalService.isGiddhDomain();
+                // Hard redirect to giddh.com/login only when running on the production books domain
+                const isProductionBooksDomain = window.location.hostname === new URL(GiddhUiDomain.PRODUCTION).hostname;
 
-                if (environment.production && !Configuration.isElectron && !isLocalHost && isGiddhDomain) {
-                    // Hard redirect for books.giddh.com or test.giddh.com domains
+                if (environment.production && !Configuration.isElectron && !isLocalHost && isProductionBooksDomain) {
+                    // Hard redirect only for GiddhUiDomain.PRODUCTION (books.giddh.com)
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -373,6 +373,22 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }, 2000);
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
             if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !Configuration.isElectron) {
+                // [GIDDH-RELOAD-DIAG] Cause A: version-check forced reload on next navigation
+                const reason = {
+                    cause: 'A_VERSION_CHECK_RELOAD',
+                    fromUrl: this.router.url,
+                    toUrl: evt.url,
+                    newVersionAvailable: this.newVersionAvailableForWebApp,
+                    component: 'app.component',
+                    line: '396',
+                    timestamp: new Date().toISOString()
+                };
+                console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
@@ -427,6 +443,21 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
+                    // [GIDDH-RELOAD-DIAG] version.json hash changed; will reload on next NavigationStart
+                    const reason = {
+                        cause: 'A_VERSION_CHECK_FLAG',
+                        message: 'version.json hash changed - newVersionAvailableForWebApp = true',
+                        component: 'app.component',
+                        line: '452',
+                        currentUrl: this.router.url,
+                        timestamp: new Date().toISOString()
+                    };
+                    console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                    try {
+                        const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                        giddhReloadDiag.push(reason);
+                        localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                    } catch (e) { /* ignore localStorage errors */ }
                     this.newVersionAvailableForWebApp = clone(isChanged);
                 }
             });

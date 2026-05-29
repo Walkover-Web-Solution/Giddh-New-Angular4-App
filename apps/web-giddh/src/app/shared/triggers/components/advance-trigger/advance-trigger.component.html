@@ -24,8 +24,8 @@
             <div class="initial-screen position-absolute text-center">
                 <div class="msg91-container mb-5">
                     <div class="image">
-                        <img src="{{ imgPath }}msgOne.png" class="logo" alt="" />
-                        <img src="{{ imgPath }}msgTwo.png" class="msg" alt="" />
+                        <img [src]="imgPath + 'msgOne.png'" class="logo" alt="" />
+                        <img [src]="imgPath + 'msgTwo.png'" class="msg" alt="" />
                     </div>
                 </div>
                 <button matButton="filled" (click)="isShowIntegrated = true">+ {{ localeData?.communication?.integrate_now }}</button>
@@ -55,20 +55,20 @@
                             </mat-menu>
                         </div>
                         <div class="image" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
-                            <img src="{{ imgPath }}msgOne.png" class="logo" alt="" />
-                            <img src="{{ imgPath }}msgTwo.png" class="msg" alt="" />
+                            <img [src]="imgPath + 'msgOne.png'" class="logo" alt="" />
+                            <img [src]="imgPath + 'msgTwo.png'" class="msg" alt="" />
                         </div>
                         <div class="image" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-                            <img src="{{ imgPath }}msgOne-color.png" class="logo" alt="" />
-                            <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="" />
+                            <img [src]="imgPath + 'msgOne-color.png'" class="logo" alt="" />
+                            <img [src]="imgPath + 'msgTwo-color.png'" class="msg" alt="" />
                         </div>
                         <div class="integrate mini-icons" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-                            <img src="{{ imgPath }}msg91.png" alt="" />
-                            <img src="{{ imgPath }}p1.png" alt="" />
-                            <img src="{{ imgPath }}whatsapp.png" alt="" />
-                            <img src="{{ imgPath }}msg1.png" alt="" />
-                            <img src="{{ imgPath }}91091.png" alt="" />
-                            <img src="{{ imgPath }}say1.png" alt="" />
+                            <img [src]="imgPath + 'msg91.png'" alt="" />
+                            <img [src]="imgPath + 'p1.png'" alt="" />
+                            <img [src]="imgPath + 'whatsapp.png'" alt="" />
+                            <img [src]="imgPath + 'msg1.png'" alt="" />
+                            <img [src]="imgPath + '91091.png'" alt="" />
+                            <img [src]="imgPath + 'say1.png'" alt="" />
                         </div>
                         <div class="integrate" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
                             <p>{{ localeData?.communication?.integrate_now }}</p>
@@ -182,18 +182,18 @@
                                 <img
                                     class="icon-visibility cursor-pointer"
                                     (click)="editTrigger(element, 'copy')"
-                                    src="{{ imgPath }}copy.svg"
+                                    [src]="imgPath + 'copy.svg'"
                                     alt=""
                                 />
                                 <img
                                     class="ml-4 icon-visibility cursor-pointer"
-                                    src="{{ imgPath }}edit.svg"
+                                    [src]="imgPath + 'edit.svg'"
                                     alt=""
                                     (click)="editTrigger(element, 'update')"
                                 />
                                 <img
                                     class="ml-4 icon-visibility cursor-pointer"
-                                    src="{{ imgPath }}delete.svg"
+                                    [src]="imgPath + 'delete.svg'"
                                     (click)="deleteTrigger(element?.uniqueName)"
                                 />
                             </td>
@@ -234,7 +234,7 @@
             <div class="trigger-form" *ngIf="!editCommunicationPlatform && showTriggerForm">
                 <div class="trigger-form-left-side">
                     <div class="create-trigger-head">
-                        <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
+                        <img class="return" [src]="imgPath + 'return.svg'" alt="" (click)="backToListPage($event)" />
                         <p class="trigger-heading font-size-15">
                             {{
                                 triggerMode === 'create' || triggerMode === 'copy'

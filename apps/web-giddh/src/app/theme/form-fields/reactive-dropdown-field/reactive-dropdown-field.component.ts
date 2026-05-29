@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef, inject, signal } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, effect, ElementRef, EventEmitter, HostListener, Input, input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, untracked, ViewChild, forwardRef, inject, signal } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil, take, filter } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
@@ -75,6 +75,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public forceClear: boolean = false;
     /** Show or Hide Label */
     @Input() public showLabel: boolean = true;
+    /** Signal input: when this value changes, the dropdown list is cleared and a refresh is requested from the parent. Using a signal input deduplicates synchronous re-runs in the same CD burst. */
+    public readonly refreshList = input<any>(undefined);
     /** Keyboard command label */
     @Input() public showKeyboardCommand: string = '';
     /** Show divider line below options */
@@ -131,10 +133,24 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private previousOptionsCount: number = 0;
     /** Flag to clear the displayed label on the first keystroke after a value is selected */
     private isFirstKeystroke = signal<boolean>(true);
+    /** Last value of `refreshList` that was already handled, used to deduplicate effect re-runs caused by unrelated CD bursts */
+    private lastHandledRefreshListValue: any = undefined;
 
     constructor(
         private changeDetection: ChangeDetectorRef
-    ) { }
+    ) {
+        effect(() => {
+            // Read the signal to register the dependency
+            const value = this.refreshList();
+
+            if (!value || isEqual(this.lastHandledRefreshListValue, value)) {
+                return;
+            }
+
+            this.lastHandledRefreshListValue = value;
+            this.handleRefreshList();
+        });
+    }
 
     /**
      * Lifecycle hook for component initialization
@@ -302,6 +318,26 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
+     * Clears the dropdown list and emits a request so the parent can supply a new list.
+     * Triggered whenever the `refreshList` input value changes.
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private handleRefreshList(): void {
+        this.fieldFilteredOptions.set([]);
+        this.previousOptionsCount = 0;
+
+        if (this.enableDynamicSearch) {
+            // For dynamic search, ask the parent to fetch a fresh list via API
+            this.dynamicSearchedQuery.emit('');
+        } else {
+            // For static search, re-seed from the locally provided options
+            this.fieldFilteredOptions.set(this.options ?? []);
+        }
+    }
+
+    /**
      * Common method to handle dropdown panel operations with error handling
      *
      * @private
@@ -347,7 +383,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public ngOnDestroy(): void {
         // Set destroyed flag first
         this.isDestroyed = true;
-
         // Only complete the subject if it hasn't been completed already
         if (!this.destroyed$.closed) {
             this.destroyed$.next(true);

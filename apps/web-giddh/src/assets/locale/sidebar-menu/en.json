@@ -496,7 +496,7 @@
                     "label": "E-way bill",
                     "link": "/pages/invoice/ewaybill",
                     "icon": "icon-eway-bill-new",
-                    "description": "Generate directly from Giddh after",
+                    "description": "Generate directly from [BRAND_NAME] after",
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {

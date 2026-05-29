@@ -204,7 +204,7 @@
             class="mt-4 no-data-found text-center"
             *ngIf="!(salesBifurcationDetailsListInProgress$ | async) && (salesBifurcationDetailsList$ | async)?.totalItems <= 0"
         >
-            <img src="{{ imgPath }}search-data-not-found.svg" alt="result not found" />
+            <img [src]="imgPath + 'search-data-not-found.svg'" alt="result not found" />
             <br />
             {{ commonLocaleData?.app_no_result_found }}
         </div>

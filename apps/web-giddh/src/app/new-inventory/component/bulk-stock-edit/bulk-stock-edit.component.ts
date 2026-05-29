@@ -433,7 +433,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             } else if (customFields.includes(key)) {
                 requestBody[key] = [];
                 currentFieldsData[key].forEach((item: any, index: number) => {
-                    if (!isEqual(item, this.dropdownValues[selectTableRowIndex][key][index])) {
+                    if (!isEqual(item.value, this.dropdownValues[selectTableRowIndex][key][index].value)) {
                         requestBody[key].push(item);
                     }
                 });

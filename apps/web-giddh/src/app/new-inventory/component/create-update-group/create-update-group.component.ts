@@ -19,8 +19,6 @@ import { GeneralService } from "../../../services/general.service";
 import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 import { ServiceConfig } from "../../../services/service.config";
 import { IOption } from "../../../app.constant";
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, findIndex, forEach, isEqual } from '../../../lodash-optimized';
 import { DataOperationEnum } from "../../../shared/Enums/common.enum";
 
@@ -126,7 +124,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /* added image path */
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         /** added parent class to body after entering create group page */
         document.querySelector("body").classList.add("group-create-update");
         this.initGroupForm();

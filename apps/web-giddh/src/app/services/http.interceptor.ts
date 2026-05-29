@@ -44,6 +44,22 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         if (session?.user?.session?.expiresAt && this.generalService.user) {
             let sessionExpiresAt: any = dayjs((session.user.session.expiresAt), GIDDH_DATE_FORMAT + " h:m:s");
             if (sessionExpiresAt && sessionExpiresAt.diff(dayjs(), 'hours') < 0) {
+                // [GIDDH-RELOAD-DIAG] Cause C: session expired, dispatching LogOut from interceptor
+                const reason = {
+                    cause: 'C_SESSION_EXPIRED_LOGOUT',
+                    expiresAt: session.user.session.expiresAt,
+                    requestUrl: request.url,
+                    component: 'http.interceptor',
+                    line: '53',
+                    currentUrl: window.location.href,
+                    timestamp: new Date().toISOString()
+                };
+                console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
                 this.store.dispatch(this.loginAction.LogOut());
                 return;
             }
