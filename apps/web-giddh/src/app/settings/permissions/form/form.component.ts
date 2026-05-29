@@ -81,7 +81,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
     /** Email id validation regex pattern - string for Validators.pattern() */
-    public giddhEmailRegex = GIDDH_EMAIL_REGEX.replace(/^\^|\$$/g, '');
+    public giddhEmailRegex = GIDDH_EMAIL_REGEX;
     /** To check form is invalid */
     public isFormInvalid: boolean = false;
 
