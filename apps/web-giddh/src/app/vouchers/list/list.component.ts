@@ -15,7 +15,7 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, SubVoucher } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, SubVoucher } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
@@ -587,7 +587,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getSelectedTabIndex();
                 this.ledgerSearchRequest.page = 1;
                 this.ledgerSearchRequest.count = PAGINATION_LIMIT;
-                if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
+                if (this.universalDate && !['list', 'settings', 'templates', 'recurring'].includes(this.activeModule)) {
                     this.customDateSelected = false;
                     this.getLedgersOfInvoice();
                 }
@@ -789,7 +789,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 });
 
                 this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(response?.entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, response?.exchangeRate);
-                if (response?.body?.subVoucher !== SubVoucher.AdvanceReceipt) {
+                if (response?.body?.subVoucher !== SubVoucher.AdvanceReceipt && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
                     this.voucherTotals.grandTotal += tcsGrandTotalAdjustment;
                 }
                 this.voucherTotals.tcsTotal = tcsSum;
@@ -2135,11 +2135,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.invoiceService.setSelectedInvoicesList(this.selectedVouchers);
             }
         }
-
-        this.ewayBillDialogRef = this.dialog.open(this.ewayBill, {
-            width: '600px',
-            disableClose: true
-        });
+        this.createEwayBill();
     }
 
     /**
@@ -2148,7 +2144,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public createEwayBill(): void {
-        this.componentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
+        this.componentStore.createEwayBill$.pipe(filter(Boolean), take(1)).subscribe(response => {
             if (!response?.account?.billingDetails?.pincode) {
                 this.toasterService.showSnackBar("error", this.localeData?.pincode_required);
             } else {

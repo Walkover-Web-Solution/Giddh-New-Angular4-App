@@ -373,6 +373,22 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }, 2000);
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
             if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !Configuration.isElectron) {
+                // [GIDDH-RELOAD-DIAG] Cause A: version-check forced reload on next navigation
+                const reason = {
+                    cause: 'A_VERSION_CHECK_RELOAD',
+                    fromUrl: this.router.url,
+                    toUrl: evt.url,
+                    newVersionAvailable: this.newVersionAvailableForWebApp,
+                    component: 'app.component',
+                    line: '396',
+                    timestamp: new Date().toISOString()
+                };
+                console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
@@ -427,6 +443,21 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
+                    // [GIDDH-RELOAD-DIAG] version.json hash changed; will reload on next NavigationStart
+                    const reason = {
+                        cause: 'A_VERSION_CHECK_FLAG',
+                        message: 'version.json hash changed - newVersionAvailableForWebApp = true',
+                        component: 'app.component',
+                        line: '452',
+                        currentUrl: this.router.url,
+                        timestamp: new Date().toISOString()
+                    };
+                    console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                    try {
+                        const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                        giddhReloadDiag.push(reason);
+                        localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                    } catch (e) { /* ignore localStorage errors */ }
                     this.newVersionAvailableForWebApp = clone(isChanged);
                 }
             });

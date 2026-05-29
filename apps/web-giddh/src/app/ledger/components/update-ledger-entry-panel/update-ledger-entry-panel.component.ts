@@ -183,6 +183,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Observable for total amount changes */
     public totalAmountChanged$: Subject<any> = new Subject();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Emits true once the discounts list API has populated this.discountsList */
+    private discountsLoaded$: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
     public baseCurrency: string = null;
     public isChangeAcc: boolean = false;
     public firstBaseAccountSelected: string;
@@ -377,7 +379,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isTabScreen = result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
         });
-        this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService);
+        this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService, this.changeDetectorRef);
 
         this.entryUniqueName$ = this.store.pipe(select(p => p.ledger.selectedTxnForEditUniqueName), takeUntil(this.destroyed$));
         this.editAccUniqueName$ = this.store.pipe(select(p => p.ledger.selectedAccForEditUniqueName), takeUntil(this.destroyed$));
@@ -410,6 +412,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         this.getAllDiscounts();
+        // Trigger handleTaxAndDiscountEntry() once all three prerequisites are ready:
+        // company taxes list, discounts list API success, and selected ledger stream.
+        // take(1) auto-completes after the first joint emission; takeUntil(destroyed$) handles teardown.
+        observableCombineLatest([
+            this.vm.companyTaxesList$,
+            this.discountsLoaded$,
+            this.selectedLedgerStream$
+        ])
+            .pipe(
+                rxjsFilter(([taxes, discountsLoaded, ledger]) => !!taxes && !!discountsLoaded && !!ledger),
+                take(1),
+                takeUntil(this.destroyed$)
+            )
+            .subscribe(() => {
+                setTimeout(()=> {
+                    this.vm?.handleTaxAndDiscountEntry();
+                    this.changeDetectorRef.detectChanges();
+                }, 500);
+            });
         if (this.generalService.voucherApiVersion === 2) {
             this.allowParentGroup.push("loanandoverdraft");
         }
@@ -581,6 +602,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public ngAfterViewInit(): void {
         this.vm.discountComponent = this.discountComponent;
+        this.vm.taxComponent = this.commonTaxControll;
         this.transaction = this.entryTransactionData?.transaction;
         this.index = this.entryTransactionData?.index;
         this.transactionsList = this.entryTransactionData?.transactionsList;
@@ -1008,6 +1030,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.discountsLoaded$.complete();
         this.store.dispatch(this.ledgerAction.resetLedgerTrxDetails());
         document.querySelector('body')?.classList?.remove('update-ledger-entry-panel-popup');
     }
@@ -1389,9 +1412,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public changeRcmCheckboxState(event: any): void {
-        if (!this.isPettyCash && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch) && (this.branches && this.branches.length > 1)) {
-            return;
-        }
         this.isRcmEntry = !this.isRcmEntry;
         this.toggleRcmCheckbox(event, 'checkbox');
     }
@@ -1403,9 +1423,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public toggleRcmCheckbox(event: any, element: string): void {
-        if (!this.isPettyCash && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch) && (this.branches && this.branches.length > 1)) {
-            return;
-        }
         let isChecked;
 
         if (element === "checkbox") {
@@ -2336,9 +2353,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                      * so transaction amount of income/ expenses account differ from both the side
                      * so overcome this issue api provides the actual amount which was added by user while creating entry
                      */
-                    if (index === 0) {
-                        t.amount = this.vm.selectedLedger.actualAmount;
-                    }
+                    t.amount = this.vm.selectedLedger.actualAmount;
                     // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
                     if (t.inventory) {
                         t.inventory.amount = this.vm.selectedLedger.actualAmount;
@@ -2468,6 +2483,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger.voucher.shortCode === 'jr') {
             this.vm.inventoryAmountChanged();
         }
+        this.vm.handleTaxAndDiscountEntry();
 
         this.activeAccountSubject.next(this.activeAccount);
 
@@ -2804,6 +2820,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountsList.set(response?.body);
+            }
+            if (response?.status === "success" ){
+                // Notify combined trigger that the discounts API call has completed
+                this.discountsLoaded$.next(true);
             }
             if (callback) {
                 callback();

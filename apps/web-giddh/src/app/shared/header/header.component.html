@@ -605,9 +605,13 @@
         *ngIf="showAlertMessage.isObligationExpired && isUKCompany && obligation"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
+        <div
+            class="warning-msg-row plan-issue d-flex justify-content-between"
+            [ngClass]="{ 'bg-warning': obligation.daysRemaining }"
+            (mouseenter)="addListenerErrorMessage()"
+        >
             <p>
-                <i class="icon-traingle-info font-size-15 mr-2"></i>
+                <i class="icon-traingle-info font-size-15 mr-2" [ngClass]="{ 'text-orange': obligation.daysRemaining }"></i>
                 <span
                     *ngIf="obligation.daysRemaining"
                     [innerHTML]="getExpiredMessage(localeData?.obligation_expired, obligation.daysRemaining)"
@@ -627,9 +631,13 @@
         *ngIf="showAlertMessage.isLiabilitiesExpired && isUKCompany && liabilities"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
+        <div
+            class="warning-msg-row plan-issue d-flex justify-content-between"
+            [ngClass]="{ 'bg-warning': liabilities.daysRemaining }"
+            (mouseenter)="addListenerErrorMessage()"
+        >
             <p>
-                <i class="icon-traingle-info font-size-15 mr-2"></i>
+                <i class="icon-traingle-info font-size-15 mr-2" [ngClass]="{ 'text-orange': liabilities.daysRemaining }"></i>
                 <span
                     *ngIf="liabilities.daysRemaining"
                     [innerHTML]="getExpiredMessage(localeData?.liabilities_expired, liabilities.daysRemaining)"

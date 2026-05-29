@@ -8,7 +8,7 @@ import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { ASIDE_PANE_CONFIG, Configuration, FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT, SubVoucher } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT, SubVoucher } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
@@ -491,7 +491,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 });
 
                 this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(response?.entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, response?.exchangeRate);
-                if (response?.body?.subVoucher !== SubVoucher.AdvanceReceipt) {
+                if (response?.body?.subVoucher !== SubVoucher.AdvanceReceipt && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
                     this.voucherTotals.grandTotal += tcsGrandTotalAdjustment;
                 }
                 this.voucherTotals.tcsTotal = tcsSum;

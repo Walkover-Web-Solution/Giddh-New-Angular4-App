@@ -17,7 +17,11 @@ export interface WhiteLabelConfig {
         razorpayPaymentDetails?: {
             keyId?: string;
         };
+        stripePaymentDetails?: {
+            stripePublishablekey?: string
+        },
         payuPaymentDetails?: any;
+        paymentProviderList?: string[];
         proxyReferenceId?: string;
         proxyUrl?: string;
         proxyApiUrl?: string;
@@ -199,6 +203,14 @@ export class WhiteLabelService {
     }
 
     /**
+     * Get Stripe Publishable Key with white label override
+     */
+    getStripeKey(): string {
+        const whiteLabelStripeKey = this.whiteLabelConfig?.body?.stripePaymentDetails?.stripePublishablekey;
+        return whiteLabelStripeKey ? whiteLabelStripeKey : '';
+    }
+
+    /**
      * Generic method to get value with white label override and fallback
      * @param whiteLabelValue - Value from white label config
      * @param fallbackValue - Fallback value if white label is not available
@@ -254,6 +266,8 @@ export class WhiteLabelService {
 
             // Payment
             RAZORPAY_KEY: this.getRazorpayKey(),
+            STRIPE_PUBLISHABLE_KEY: this.getStripeKey(),
+            ALL_PAYMENT_PROVIDERS: this.getValueWithFallback(body.paymentProviderList, []),
             
             // Is Giddh domain
             IS_GIDDH_DOMAIN: isGiddhDomain,

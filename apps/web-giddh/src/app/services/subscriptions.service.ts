@@ -466,6 +466,29 @@ export class SubscriptionsService {
     }
 
     /**
+     * Save stripe payment by subscription id and payment intent id
+     *
+     * @param {string} subscriptionId
+     * @param {string} paymentIntentId
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
+    public saveStripePayment(subscriptionId: string, paymentIntentId: string): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_STRIPE_PAYMENT
+            ?.replace(':subscriptionId', encodeURIComponent(subscriptionId))
+            ?.replace(':paymentIntentId', encodeURIComponent(paymentIntentId)))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    /**
      *  This will be use for get all companies by subscription id
      *
      * @param {*} model

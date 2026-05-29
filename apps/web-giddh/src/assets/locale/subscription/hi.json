@@ -145,6 +145,7 @@
         "cancel": "रद्द करें",
         "razorpay": "RAZORPAY",
         "paypal": "PAYPAL",
+        "stripe": "STRIPE",
         "razorpay_error_message": "रेज़रपे में कोई त्रुटि है। कृपया सहायता से संपर्क करें।",
         "payu": "PAYU",
         "active": "सक्रिय",
@@ -154,5 +155,8 @@
         "select_status": "स्थिति का चयन करें",
         "please_select_payment_provider": "कृपया एक भुगतान प्रदाता चुनें",
         "no_plans_available": "कोई योजना उपलब्ध नहीं है",
-        "no_plans_available_for_region": "चयनित क्षेत्र के लिए कोई योजना उपलब्ध नहीं है"
+        "no_plans_available_for_region": "चयनित क्षेत्र के लिए कोई योजना उपलब्ध नहीं है",
+        "pay_now": "अभी भुगतान करें",
+        "processing": "प्रसंस्करण हो रहा है...",
+        "payment_failed": "भुगतान विफल रहा। कृपया पुनः प्रयास करें।"
 	}

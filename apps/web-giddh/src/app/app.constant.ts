@@ -29,6 +29,8 @@ export const GIDDH_INTERNAL_DOMAINS = [
     'msg91.com',
     'whozzat.com',
 ];
+
+export const INTERNAL_EMAILS_DOMAINS = ['msg91.com', 'giddh.com', 'walkover.in', 'whozzat.com'];
 /** Maps locale placeholder tokens to their corresponding service config keys.
  * To add a new substitution, add an entry: { token: '[TOKEN]', configKey: 'CONFIG_KEY' } */
 export const LOCALE_PLACEHOLDER_MAP: { token: string; configKey: string }[] = [
@@ -79,6 +81,7 @@ export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
 export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
+export const STRIPE_JS_CDN_URL = 'https://js.stripe.com/v3/';
 
 /** Regex for IPv4 address validation */
 export const IPV4_REGEX = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
@@ -735,7 +738,8 @@ export const PaymentProvider = {
     RAZORPAY: 'RAZORPAY',
     GOCARDLESS: 'GOCARDLESS',
     PAYPAL: 'PAYPAL',
-    PAYU: 'PAYU'
+    PAYU: 'PAYU',
+    STRIPE: 'STRIPE'
 };
 
 /** Plan duration */

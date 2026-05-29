@@ -104,6 +104,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public projectWiseAccountingType: typeof ProjectWiseAccountingType = ProjectWiseAccountingType;
     /** True if is company */
     public isCompany: boolean = false;
+    /** Counter signal bound to the account dropdown's `refreshList` input; bumping it triggers the dropdown to clear and re-fetch */
+    public accountListRefreshTrigger = signal<any>(0);
 
     constructor(
         private generalService: GeneralService,
@@ -208,6 +210,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                 this.totalResults += 1;
                 this.createAccountEntryForm.reset();
                 this.getRevenueExpense();
+                this.accountListRefreshTrigger.update(value => value + 1);
             }
         });
 

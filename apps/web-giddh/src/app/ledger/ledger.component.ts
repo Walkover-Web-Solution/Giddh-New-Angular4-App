@@ -4261,7 +4261,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.transactions[txnIndex].convertedTotal = res?.total.amount;
         this.lc.blankLedger.transactions[txnIndex].discounts = discounts;
         this.lc.blankLedger.transactions[txnIndex].taxes = res?.taxes ?? [];
-        this.lc.blankLedger.transactions[txnIndex].taxesVm = this.companyTaxesList?.filter(tax => !TCS_TDS_TAXES_TYPES?.includes(tax?.taxType)) || [];
 
         // Other Tax Logic
         let tax: TaxResponse;

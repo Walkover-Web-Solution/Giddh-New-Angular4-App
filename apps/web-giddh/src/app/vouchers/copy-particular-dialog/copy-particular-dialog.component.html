@@ -107,13 +107,14 @@
                     }
                 </tbody>
             </table>
+            <!-- Note: [pageSize]="10" or count 0 only 10 beacause we not support more than ten count due heavery DB query -->
             <mat-paginator
-                *ngIf="inputData?.parent?.copyParticularHistory?.totalItems > inputData?.parent?.pageSizeOptions[0]"
+                *ngIf="inputData?.parent?.copyParticularHistory?.totalItems > 10"
                 (page)="inputData?.parent?.handleCopyParticularPageChange($event)"
                 [length]="inputData?.parent?.copyParticularHistory?.totalItems"
-                [pageSize]="inputData?.parent?.copyParticularPagination.size"
+                [pageSize]="10"
                 [showFirstLastButtons]="true"
-                [pageSizeOptions]="inputData?.parent?.pageSizeOptions"
+                [pageSizeOptions]="[]"
                 [hidePageSize]="false"
                 [pageIndex]="inputData?.parent?.copyParticularPagination.page - 1"
             ></mat-paginator>
