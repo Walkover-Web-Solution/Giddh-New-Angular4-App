@@ -323,6 +323,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
                 this.addClassInBodyIfPageHasTabs();
             }
+            this.generalService.debugLog('Event', event, 'Event type:', event.constructor.name);
+            this.generalService.debugLog('[NavigationEnd Event] Triggered for URL:', this.router.url);
             if (event instanceof NavigationEnd) {
                 if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
@@ -351,6 +353,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
 
                 this.toggleSidebarPane(false, false);
+                this.generalService.debugLog('[NavigationEnd] About to call saveLastState()');
                 this.saveLastState();
             }
             if (event instanceof NavigationStart) {
