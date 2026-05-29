@@ -270,15 +270,15 @@ export class UpdateLedgerVm {
 
         this.selectedLedger?.transactions?.forEach((entry) => {
             if (entry.particular.uniqueName === 'roundoff') {
-                entry.amount = Math.round(this.grandTotal) - this.grandTotal;
+                entry.amount = giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
                 entry.convertedAmount = this.calculateConversionRate(entry.amount);
             }
         });
 
         if (this.entryTotal.drTotal > this.entryTotal.crTotal) {
-            this.entryTotal.drTotal += Math.round(this.grandTotal) - this.grandTotal;
+            this.entryTotal.drTotal += giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
         } else {
-            this.entryTotal.crTotal += Math.round(this.grandTotal) - this.grandTotal;
+            this.entryTotal.crTotal += giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
         }
 
         this.convertedEntryTotal = {
