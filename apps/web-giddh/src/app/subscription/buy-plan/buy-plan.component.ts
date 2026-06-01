@@ -1822,7 +1822,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
             }
 
-            if (this.subscriptionForm.value.secondStepForm.country.value === 'GB') {
+            if (this.subscriptionForm.value.secondStepForm.country.code === 'GB') {
                 request.billingAccount['county'] = {
                     name: this.subscriptionForm.value.secondStepForm.state.name,
                     code: this.subscriptionForm.value.secondStepForm.state.code
