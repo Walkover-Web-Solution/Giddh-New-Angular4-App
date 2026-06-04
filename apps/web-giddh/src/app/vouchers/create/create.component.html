@@ -2766,7 +2766,8 @@
                                                         invoiceType.isSalesInvoice ||
                                                         invoiceType.isPurchaseInvoice ||
                                                         invoiceType.isCreditNote ||
-                                                        invoiceType.isDebitNote
+                                                        invoiceType.isDebitNote ||
+                                                        invoiceType.isCashInvoice
                                                     ) {
                                                         <div class="col-12">
                                                             <mat-card class="mt-4">
@@ -2779,7 +2780,7 @@
                                                                 </mat-card-header>
                                                                 <mat-card-content>
                                                                     <div
-                                                                        class="container px-0 pt-1 pr-2 annexure-charges-wrapper"
+                                                                        class="container annexure-charges-wrapper px-0 pt-1 pr-2 overflow-x-hidden overflow-y-auto"
                                                                         formArrayName="annexureCharges"
                                                                     >
                                                                         @for (
@@ -2918,7 +2919,7 @@
                                                                                 "
                                                                                 (click)="addAnnexureCharge()"
                                                                             >
-                                                                                {{ localeData?.add_annexure_charge }}
+                                                                                + {{ localeData?.add_annexure_charge }}
                                                                             </span>
                                                                         </div>
                                                                     </div>
