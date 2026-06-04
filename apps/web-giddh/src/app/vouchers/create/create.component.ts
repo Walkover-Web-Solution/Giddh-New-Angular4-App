@@ -42,6 +42,7 @@ import { OnboardingFormRequest } from "../../models/api-models/Common";
 import { CommonActions } from "../../actions/common.actions";
 import { CompanyActions } from "../../actions/company.actions";
 import { TaxResponse } from "../../models/api-models/Company";
+import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
 import { WarehouseActions } from "../../settings/warehouse/action/warehouse.action";
 import { SettingsUtilityService } from "../../settings/services/settings-utility.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
@@ -271,6 +272,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public allCompanyTaxes: TaxResponse[] = [];
     /** Holds company tax list  */
     public companyTaxes: TaxResponse[] = [];
+    /** Holds indirect expenses ledgers for annexure charges */
+    public indirectExpensesLedgers: any[] = [];
     /** Allowed taxes list contains the unique name of all
      * tax types within a company and count upto which they are allowed
      */
@@ -917,6 +920,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCompanyBranches();
         this.getCompanyTaxes();
         this.getSalesPersonList();
+        this.fetchIndirectExpensesAccounts();
 
         /** Trigger row-specific stock search whenever the active entry row changes */
         this.activeEntryIndex$
@@ -1595,9 +1599,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
 
                         const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
+                        const annexureChargesArray = this.invoiceForm.get("annexureCharges") as FormArray;
                         entriesFormArray.clear();
+                        annexureChargesArray.clear();
 
                         voucherDetails.entries?.forEach((entry: any, index: number) => {
+                            if (entry.entryClass === "ANNEXURE") {
+                                annexureChargesArray.push(this.getAnnexureChargeFormGroup(entry));
+                                return;
+                            }
                             if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
                                 this.invoiceForm
                                     .get("isAdvanceReceipt")
@@ -1617,6 +1627,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 this.invoiceForm.get("isAdvanceReceipt")?.value
                             );
                         });
+
+                        if (annexureChargesArray.length === 0) {
+                            annexureChargesArray.push(this.getAnnexureChargeFormGroup());
+                        }
 
                         this.checkIfEntriesHasStock();
 
@@ -3520,7 +3534,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             attachedFiles: [],
             salesPurchaseAsReceiptPayment: [null], //temp
             salesPersonName: [''],
-            salesPersonUniqueName: ['']
+            salesPersonUniqueName: [''],
+            annexureCharges: this.formBuilder.array([this.getAnnexureChargeFormGroup()])
         });
     }
 
@@ -3787,6 +3802,42 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             uniqueName: [tax?.uniqueName],
             taxType: [tax?.taxType],
             taxDetail: this.formBuilder.array([taxDetailGroup])
+        });
+    }
+
+    /**
+     * Returns annexure charge form group
+     *
+     * @private
+     * @param {*} [annexureData] - Annexure data for initialization
+     * @return {*}  {FormGroup}
+     * @memberof VoucherCreateComponent
+     */
+    private getAnnexureChargeFormGroup(annexureData?: any): FormGroup {
+        return this.formBuilder.group({
+            date: [annexureData?.date || this.invoiceForm?.get('date')?.value || "", Validators.required],
+            voucherType: [this.voucherType],
+            calculateAmount: [true],
+            entryClass: ["ANNEXURE"],
+            taxes: this.formBuilder.array(annexureData?.taxes || []),
+            totalTaxWithoutCess: [annexureData?.totalTaxWithoutCess || 0],
+            totalCess: [annexureData?.totalCess || 0],
+            total: this.formBuilder.group({
+                amountForAccount: [annexureData?.total?.amountForAccount || 0, [Validators.required, Validators.min(0)]],
+                amountForCompany: [annexureData?.total?.amountForCompany || 0],
+            }),
+            transactions: this.formBuilder.array([
+                this.formBuilder.group({
+                    account: this.formBuilder.group({
+                        name: [annexureData?.transactions?.[0]?.account?.name || annexureData?.accountName || ""],
+                        uniqueName: [annexureData?.transactions?.[0]?.account?.uniqueName || annexureData?.accountUniqueName || "", Validators.required],
+                    }),
+                    amount: this.formBuilder.group({
+                        amountForAccount: [annexureData?.transactions?.[0]?.amount?.amountForAccount || annexureData?.amount || 0, [Validators.required, Validators.min(0)]],
+                        amountForCompany: [annexureData?.transactions?.[0]?.amount?.amountForCompany || 0],
+                    }),
+                }),
+            ]),
         });
     }
 
@@ -5009,6 +5060,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Callback for annexure date change
+     *
+     * @param {FormGroup} annexureCharge
+     * @param {number} index
+     * @memberof VoucherCreateComponent
+     */
+    public onBlurAnnexureDate(annexureCharge: FormGroup, index: number): void {
+        if (typeof annexureCharge.get("date")?.value === "object") {
+            annexureCharge.get("date")?.patchValue(dayjs(annexureCharge.get("date")?.value).format(GIDDH_DATE_FORMAT));
+        }
+    }
+
+    /**
      * Callback for entry date change
      *
      * @param {FormGroup} entry
@@ -5290,6 +5354,193 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             setTimeout(() => {
                 this.addNewParticular.nativeElement.focus();
             }, 100);
+        }
+    }
+
+    /**
+     * Gets the annexure charges FormArray
+     *
+     * @return {*}  {FormArray}
+     * @memberof VoucherCreateComponent
+     */
+    public getAnnexureChargesArray(): FormArray {
+        return this.invoiceForm.get("annexureCharges") as FormArray;
+    }
+
+    /**
+     * Fetches indirect expenses accounts using searchAccountV3 API
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private fetchIndirectExpensesAccounts(): void {
+        let accountSearchRequest = this.vouchersUtilityService.getSearchRequestObject(
+            this.voucherType,
+            "",
+            1,
+            SearchType.CUSTOMER
+        );
+        accountSearchRequest.group = AccountingGroupEnum.IndirectExpenses;
+        accountSearchRequest.isLoading = true;
+
+        this.searchService
+            .searchAccountV3(accountSearchRequest)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((response) => {
+                if (response?.body?.results?.length) {
+                    this.indirectExpensesLedgers = response?.body?.results?.map((res: any) => {
+                        return { label: res.name, value: res.uniqueName, additional: res };
+                    });
+                } else {
+                    this.indirectExpensesLedgers = [];
+                }
+            });
+    }
+
+    /**
+     * Adds a new annexure charge row
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public addAnnexureCharge(): void {
+        const annexureCharges = this.getAnnexureChargesArray();
+        annexureCharges.push(this.getAnnexureChargeFormGroup());
+        this.calculateVoucherTotals();
+    }
+
+    /**
+     * Removes an annexure charge row
+     *
+     * @param {number} index
+     * @memberof VoucherCreateComponent
+     */
+    public removeAnnexureCharge(index: number): void {
+        const annexureCharges = this.getAnnexureChargesArray();
+        
+        if (annexureCharges.length > 1) {
+            annexureCharges.removeAt(index);
+        } else {
+            annexureCharges.at(index).reset({
+                date: this.invoiceForm?.get('date')?.value || "",
+                voucherType: this.voucherType,
+                calculateAmount: true,
+                entryClass: "ANNEXURE",
+                taxes: [],
+                totalTaxWithoutCess: 0,
+                totalCess: 0,
+                total: {
+                    amountForAccount: 0,
+                    amountForCompany: 0
+                },
+                transactions: [
+                    {
+                        account: {
+                            name: "",
+                            uniqueName: ""
+                        },
+                        amount: {
+                            amountForAccount: 0,
+                            amountForCompany: 0
+                        }
+                    }
+                ]
+            });
+        }
+        
+        this.calculateVoucherTotals();
+    }
+
+    /**
+     * Handles annexure account selection change
+     *
+     * @param {number} index
+     * @param {*} event
+     * @memberof VoucherCreateComponent
+     */
+    public onAnnexureAccountChange(index: number, event: any): void {
+        const annexureCharges = this.getAnnexureChargesArray();
+        const annexureCharge = annexureCharges.at(index);
+        
+        if (event && event.name) {
+            annexureCharge.get("transactions.0.account.name")?.patchValue(event.label);
+        }
+    }
+
+    /**
+     * Calculates tax amount for annexure charge
+     *
+     * @param {number} index
+     * @memberof VoucherCreateComponent
+     */
+    public calculateAnnexureChargeTax(index: number, taxes?: any): void {
+        const annexureCharges = this.getAnnexureChargesArray();
+        const annexureCharge = annexureCharges.at(index);
+
+        if (!annexureCharge) {
+            return;
+        }
+
+        const amount = Number(annexureCharge.get("transactions.0.amount.amountForAccount")?.value) || 0;
+
+        if (taxes && taxes.length > 0) {
+            const taxesFormArray = annexureCharge.get("taxes") as FormArray;
+            taxesFormArray.clear();
+            let totalTaxWithoutCess: number = 0;
+            let cessPercentage: number = 0;
+
+            taxes.forEach((tax: any) => {
+                if (tax.taxType === TaxCollectionDeductionType.GST_CESS) {
+                    cessPercentage += tax?.taxDetail?.[0]?.taxValue;
+                } else {
+                    totalTaxWithoutCess += tax?.taxDetail?.[0]?.taxValue;
+                }
+                taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+            });
+
+            annexureCharge
+                .get("totalTaxWithoutCess")
+                ?.patchValue(
+                    giddhRoundOff(
+                        (totalTaxWithoutCess * annexureCharge.get("transactions.0.amount.amountForAccount")?.value) / 100,
+                        this.company.giddhBalanceDecimalPlaces
+                    )
+                );
+            annexureCharge
+                .get("totalCess")
+                ?.patchValue(
+                    giddhRoundOff(
+                        (cessPercentage * annexureCharge.get("transactions.0.amount.amountForAccount")?.value) / 100,
+                        this.company.giddhBalanceDecimalPlaces
+                    )
+                );
+        } else {
+            annexureCharge.get("taxes").reset();
+            annexureCharge.get("taxAmount")?.patchValue(0);
+            annexureCharge.get("totalTaxWithoutCess")?.patchValue(0);
+            annexureCharge.get("totalCess")?.patchValue(0);
+            annexureCharge.get("total.amountForAccount")?.patchValue(amount);
+        }
+
+        this.calculateVoucherTotals();
+    }
+
+    /**
+     * Updates annexure tax amount from common-tax component
+     *
+     * @param {number} taxAmount - Total tax amount
+     * @param {number} index - Index of the annexure charge
+     * @memberof VoucherCreateComponent
+     */
+    public updateAnnexureTaxAmount(taxAmount: number, index: number): void {
+        const annexureCharges = this.getAnnexureChargesArray();
+        const annexureCharge = annexureCharges.at(index);
+
+        if (annexureCharge) {
+            annexureCharge.get("taxAmount")?.patchValue(taxAmount);
+            const amount = Number(annexureCharge.get("transactions.0.amount.amountForAccount")?.value) || 0;
+            const totalAmount = amount + taxAmount;
+            annexureCharge.get("total.amountForAccount")?.patchValue(giddhRoundOff(totalAmount, this.company.giddhBalanceDecimalPlaces));
+            this.calculateVoucherTotals();
         }
     }
 
@@ -6161,6 +6412,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 entries.push(cloneDeep(control?.value));
             }
         });
+
+        const annexureCharges = this.invoiceForm.get("annexureCharges") as FormArray;
+        annexureCharges["controls"]?.forEach((control) => {
+            const annexureCharge = control.value;
+            const accountUniqueName = annexureCharge?.transactions?.[0]?.account?.uniqueName;
+            const amountForAccount = annexureCharge?.transactions?.[0]?.amount?.amountForAccount;
+            
+            if (accountUniqueName && amountForAccount > 0) {
+                const annexureEntry = {
+                    ...annexureCharge, 
+                    voucherType: this.voucherType,
+                    calculateAmount: true,
+                    entryClass: "ANNEXURE",
+                };
+                entries.push(annexureEntry);
+            }
+        });
+
         return entries;
     }
     /**
@@ -6268,6 +6537,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm.entries = entries;
         invoiceForm.deposits = deposits;
+        delete invoiceForm.annexureCharges;
 
         if (
             this.invoiceType.isEstimateInvoice ||
