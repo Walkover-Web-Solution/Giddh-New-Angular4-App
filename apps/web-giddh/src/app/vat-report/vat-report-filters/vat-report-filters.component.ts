@@ -56,7 +56,12 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     @Input() public currentTaxAuthorityUniqueName: string = null;
     /** True if current Tax uniqueName is US */
     @Input() public currentTaxUniqueName: string = null;
-    /** Hold HMRC portal url */
+    /**
+     * Holds HMRC portal url
+     * - null: initial state or API failure (button hidden)
+     * - value: user needs to connect (button enabled with "connect_to_hmrc")
+     * - empty string: already connected (button disabled with "connected_to_hmrc")
+     */
     @Input() public connectToHMRCUrl: string = null;
     /** Holds Current Currency Code for Zimbabwe report */
     @Input() public vatReportCurrencyCode: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR' = 'BWP';
