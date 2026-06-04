@@ -96,16 +96,18 @@
             </button>
         </div>
         <div *ngIf="isUKCompany">
-            <div class="text-right">
-                <a matButton="filled" [href]="connectToHMRCUrl" [disabled]="!connectToHMRCUrl || isTaxRestrictedModule">
-                    <ng-container *ngIf="connectToHMRCUrl || isTaxRestrictedModule">
-                        {{ localeData?.connect_to_hmrc }}
-                    </ng-container>
-                    <ng-container *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
-                        {{ localeData?.connected_to_hmrc }}
-                    </ng-container>
-                </a>
-            </div>
+            @if (connectToHMRCUrl !== null) {
+                <div class="text-right">
+                    <a matButton="filled" [href]="connectToHMRCUrl" [disabled]="!connectToHMRCUrl || isTaxRestrictedModule">
+                        <ng-container *ngIf="connectToHMRCUrl || isTaxRestrictedModule">
+                            {{ localeData?.connect_to_hmrc }}
+                        </ng-container>
+                        <ng-container *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
+                            {{ localeData?.connected_to_hmrc }}
+                        </ng-container>
+                    </a>
+                </div>
+            }
             <restricted-module-message
                 [restrictedModule]="restrictedModules.TaxFilling"
                 (onUpgradePlan)="buyPlan($event)"

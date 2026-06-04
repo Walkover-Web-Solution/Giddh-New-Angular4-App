@@ -130,7 +130,7 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                     <section *ngIf="!tableDataSource?.length">
-                        <div *ngIf="hasTaxNumber">
+                        <div *ngIf="hasTaxNumber && connectToHMRCUrl !== null">
                             <div *ngIf="connectToHMRCUrl || isTaxRestrictedModule" class="position-center position-absolute">
                                 <div class="text-center">
                                     <a [disabled]="isTaxRestrictedModule" matButton="filled" [href]="connectToHMRCUrl">

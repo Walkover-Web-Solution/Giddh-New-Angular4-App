@@ -70,7 +70,12 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public isLoading = signal<boolean>(false);
     /** This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
-    /** Hold HMRC portal url */
+    /**
+     * Holds HMRC portal url
+     * - null: initial state or API failure (button hidden)
+     * - value: user needs to connect (button enabled with "connect_to_hmrc")
+     * - empty string: already connected (button disabled with "connected_to_hmrc")
+     */
     public connectToHMRCUrl: string = null;
     /** Observable to store the Tax Number */
     public taxNumber$: Observable<any> = this.componentStore.select(state => state.taxNumber);
@@ -172,6 +177,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                     this.connectToHMRCUrl = response.body;
                 } else {
                     this.getVatObligations();
+                    this.connectToHMRCUrl = "";
                 }
             }
         });
