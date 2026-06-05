@@ -3814,7 +3814,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getAnnexureChargeFormGroup(annexureData?: any): FormGroup {
-        return this.formBuilder.group({
+                return this.formBuilder.group({
             date: [annexureData?.date || this.invoiceForm?.get('date')?.value || "", Validators.required],
             voucherType: [this.voucherType],
             calculateAmount: [true],
@@ -4658,11 +4658,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public addNewAccount(item: AddAccountRequest): void {
-        this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
-        if (item?.salesPersonCreated) {
-            this.getSalesPersonList();
+            this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
+            if (item?.salesPersonCreated) {
+                this.getSalesPersonList();
+            }
         }
-    }
 
     /**
      * Callback for update account
@@ -4686,12 +4686,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private createUpdateAccountCallback(response: any, fetchStates: boolean = false): void {
-        this.searchAccount();
-        this.invoiceForm.controls["account"]?.get("uniqueName")?.patchValue(response?.uniqueName);
-        this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(response?.name);
-        this.updateAccountDataInForm(response, fetchStates);
-        this.fillDefaultAccountAddresses(response);
-        this.fetchPreviousVouchers();
+        this.getParentGroupForCreateAccount();
+        if (response.parentGroups?.some((group: any) => group.uniqueName === this.accountParentGroup)) {
+            this.searchAccount();
+            this.invoiceForm.controls["account"]?.get("uniqueName")?.patchValue(response?.uniqueName);
+            this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(response?.name);
+            this.updateAccountDataInForm(response, fetchStates);
+            this.fillDefaultAccountAddresses(response);
+            this.fetchPreviousVouchers();
+        }
         this.accountAsideMenuRef?.close();
     }
 
@@ -5554,7 +5557,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private reindexStockSearchRequestByEntry(removedIndex: number): void {
-        if (!this.stockSearchRequestByEntry?.size) {
+        if (this.stockSearchRequestByEntry?.size <= 1) {
+            if (this.activeEntryIndex === 0) {
+                this.searchStock('', 1, 0);
+            }
             return;
         }
         const sortedKeys = Array.from(this.stockSearchRequestByEntry.keys()).sort((a, b) => a - b);
