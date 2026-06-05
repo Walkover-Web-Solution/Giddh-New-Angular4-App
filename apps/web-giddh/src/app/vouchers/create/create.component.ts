@@ -3814,7 +3814,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getAnnexureChargeFormGroup(annexureData?: any): FormGroup {
-                return this.formBuilder.group({
+        return this.formBuilder.group({
             date: [annexureData?.date || this.invoiceForm?.get('date')?.value || "", Validators.required],
             voucherType: [this.voucherType],
             calculateAmount: [true],
