@@ -149,7 +149,7 @@ export class VouchersUtilityService {
         }
 
         const requestObject = {
-            q: encodeURIComponent(query),
+            q: encodeURIComponent(query || ''),
             page,
             count: API_BULK_FETCH_LIMIT,
             group: encodeURIComponent(group)

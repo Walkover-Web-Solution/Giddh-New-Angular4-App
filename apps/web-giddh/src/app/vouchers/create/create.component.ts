@@ -217,6 +217,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public pendingPurchaseOrders$: Observable<any> = this.componentStore.pendingPurchaseOrders$;
     /** Account search request */
     public accountSearchRequest: any;
+    /** Annexure account search request */
+    public annexureAccountSearchRequest: any = { q: "", page: 1, loadMore: false, isLoading: false };
     /** Stock search request by entry row */
     public stockSearchRequestByEntry: Map<number, any> = new Map();
     /** Stores the voucher API version of current company */
@@ -612,6 +614,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public forceClear: boolean = false;
     /** Holds active deposit index */
     public activeDepositIndex: number | null = null;
+    /** Holds active annexure charge index */
+    public activeAnnexureIndex: number | null = null;
     /** Tracks if sidebar was previously open to restore it on component destroy */
     private wasSidebarOpen = false;
     /** Invoice templates */
@@ -920,7 +924,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCompanyBranches();
         this.getCompanyTaxes();
         this.getSalesPersonList();
-        this.fetchIndirectExpensesAccounts();
+        this.searchAnnexureAccount("");
 
         /** Trigger row-specific stock search whenever the active entry row changes */
         this.activeEntryIndex$
@@ -3535,7 +3539,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPurchaseAsReceiptPayment: [null], //temp
             salesPersonName: [''],
             salesPersonUniqueName: [''],
-            annexureCharges: this.formBuilder.array([this.getAnnexureChargeFormGroup()])
+            annexureCharges: this.formBuilder.array([])
         });
     }
 
@@ -3625,7 +3629,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             voucherDate = this.invoiceForm?.get("date")?.value;
         }
-
         return this.formBuilder.group({
             date: [
                 !this.invoiceType.isPurchaseOrder &&
@@ -3814,8 +3817,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getAnnexureChargeFormGroup(annexureData?: any): FormGroup {
+        let voucherDate;
+
+        if (typeof this.invoiceForm?.get("date")?.value === "object") {
+            voucherDate = dayjs(this.invoiceForm?.get("date")?.value).format(GIDDH_DATE_FORMAT);
+        } else {
+            voucherDate = this.invoiceForm?.get("date")?.value;
+        }
         return this.formBuilder.group({
-            date: [annexureData?.date || this.invoiceForm?.get('date')?.value || "", Validators.required],
+            date: [annexureData?.date || voucherDate || this.universalDate || "", Validators.required],
             voucherType: [this.voucherType],
             calculateAmount: [true],
             entryClass: ["ANNEXURE"],
@@ -4561,6 +4571,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.createNewAccount = createNewAccount;
         if (accountType === this.accountType.customer) {
             this.getParentGroupForCreateAccount();
+        } else if (accountType === this.accountType.indirectExpense) {
+            this.accountParentGroup = `${AccountingGroupEnum.IndirectExpenses}, ${AccountingGroupEnum.OtherIncome}`;
         } else {
             this.accountParentGroup = "bankaccounts";
         }
@@ -4658,11 +4670,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public addNewAccount(item: AddAccountRequest): void {
-            this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
-            if (item?.salesPersonCreated) {
-                this.getSalesPersonList();
-            }
+        this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
+        if (item?.salesPersonCreated) {
+            this.getSalesPersonList();
         }
+    }
 
     /**
      * Callback for update account
@@ -4694,6 +4706,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.updateAccountDataInForm(response, fetchStates);
             this.fillDefaultAccountAddresses(response);
             this.fetchPreviousVouchers();
+        } else {
+            if (response.parentGroups?.some((group: any) => group.uniqueName === AccountingGroupEnum.IndirectExpenses)){
+                this.searchAnnexureAccount("");
+            }
         }
         this.accountAsideMenuRef?.close();
     }
@@ -5371,33 +5387,63 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Fetches indirect expenses accounts using searchAccountV3 API
+     * Searches for annexure accounts based on search term and page number
      *
-     * @private
+     * @param {string} searchTerm
+     * @param {number} pageNumber
      * @memberof VoucherCreateComponent
      */
-    private fetchIndirectExpensesAccounts(): void {
+    public searchAnnexureAccount(searchTerm: string, pageNumber: number = 1): void {
+        
+        if (this.annexureAccountSearchRequest?.isLoading) {
+            return;
+        }
+
         let accountSearchRequest = this.vouchersUtilityService.getSearchRequestObject(
             this.voucherType,
-            "",
-            1,
+            searchTerm,
+            pageNumber,
             SearchType.CUSTOMER
         );
-        accountSearchRequest.group = AccountingGroupEnum.IndirectExpenses;
-        accountSearchRequest.isLoading = true;
+        accountSearchRequest.group = `${AccountingGroupEnum.IndirectExpenses}, ${AccountingGroupEnum.OtherIncome}`;
+        accountSearchRequest.q = searchTerm;
+        this.annexureAccountSearchRequest = cloneDeep(accountSearchRequest);
+        this.annexureAccountSearchRequest.isLoading = true;
 
         this.searchService
             .searchAccountV3(accountSearchRequest)
             .pipe(takeUntil(this.destroyed$))
             .subscribe((response) => {
                 if (response?.body?.results?.length) {
-                    this.indirectExpensesLedgers = response?.body?.results?.map((res: any) => {
+                    this.annexureAccountSearchRequest.loadMore = true;
+                    let annexureResults = [];
+                    if (pageNumber > 1) {
+                        annexureResults = this.indirectExpensesLedgers;
+                    }
+                    const newResults = response?.body?.results?.map((res: any) => {
                         return { label: res.name, value: res.uniqueName, additional: res };
                     });
+                    this.indirectExpensesLedgers = annexureResults.concat(...newResults);
                 } else {
-                    this.indirectExpensesLedgers = [];
+                    this.annexureAccountSearchRequest.loadMore = false;
+                    if (pageNumber === 1) {
+                        this.indirectExpensesLedgers = [];
+                    }
                 }
+                this.annexureAccountSearchRequest.isLoading = false;
             });
+    }
+
+    /**
+     * Handles scroll end event for annexure account dropdown pagination
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public handleSearchAnnexureAccountScrollEnd(): void {
+        if (this.annexureAccountSearchRequest?.loadMore) {
+            let page = this.annexureAccountSearchRequest.page + 1;
+            this.searchAnnexureAccount(this.annexureAccountSearchRequest.q, page);
+        }
     }
 
     /**
@@ -5405,10 +5451,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public addAnnexureCharge(): void {
+    public addAnnexureCharge(activeDropdown: boolean = false): void {
         const annexureCharges = this.getAnnexureChargesArray();
         annexureCharges.push(this.getAnnexureChargeFormGroup());
-        this.calculateVoucherTotals();
+        if (activeDropdown) {
+            this.activeAnnexureIndex = annexureCharges.length - 1;
+        }
     }
 
     /**
@@ -5463,6 +5511,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public onAnnexureAccountChange(index: number, event: any): void {
         const annexureCharges = this.getAnnexureChargesArray();
         const annexureCharge = annexureCharges.at(index);
+        this.activeAnnexureIndex = null;
         
         if (event && event.name) {
             annexureCharge.get("transactions.0.account.name")?.patchValue(event.label);
@@ -6423,9 +6472,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         annexureCharges["controls"]?.forEach((control) => {
             const annexureCharge = control.value;
             const accountUniqueName = annexureCharge?.transactions?.[0]?.account?.uniqueName;
-            const amountForAccount = annexureCharge?.transactions?.[0]?.amount?.amountForAccount;
             
-            if (accountUniqueName && amountForAccount > 0) {
+            if (accountUniqueName) {
                 const annexureEntry = {
                     ...annexureCharge, 
                     voucherType: this.voucherType,
@@ -7192,6 +7240,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         
         this.addNewLineEntry(false);
         this.addNewDepositRow();
+        this.addAnnexureCharge();
         if (!initialLoad) {
             this.setInitialRecurrencePreviewRequest();
         }
