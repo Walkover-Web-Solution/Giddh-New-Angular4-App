@@ -1112,6 +1112,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         let entryFields = [];
                         entryFields.push({ key: "date", value: this.universalDate });
                         this.updateEntry(0, entryFields);
+
+                        // Update annexure charges date at index 0
+                        const annexureCharges = this.getAnnexureChargesArray();
+                        if (annexureCharges && annexureCharges.length > 0) {
+                            annexureCharges.at(0)?.get("date")?.patchValue(this.universalDate);
+                        }
                     }
                 } catch (e) {
                     this.universalDate = dayjs().format(GIDDH_DATE_FORMAT);
@@ -3539,7 +3545,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPurchaseAsReceiptPayment: [null], //temp
             salesPersonName: [''],
             salesPersonUniqueName: [''],
-            annexureCharges: this.formBuilder.array([])
+            annexureCharges: this.formBuilder.array([this.getAnnexureChargeFormGroup()])
         });
     }
 
@@ -4707,7 +4713,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.fillDefaultAccountAddresses(response);
             this.fetchPreviousVouchers();
         } else {
-            if (response.parentGroups?.some((group: any) => group.uniqueName === AccountingGroupEnum.IndirectExpenses)){
+            if (response.parentGroups?.some((group: any) => group.uniqueName === AccountingGroupEnum.IndirectExpenses || group.uniqueName === AccountingGroupEnum.OtherIncome)){
                 this.searchAnnexureAccount("");
             }
         }
@@ -7182,6 +7188,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entriesFormArray.clear();
         const depositFormArray = this.invoiceForm.get("deposits") as FormArray;
         depositFormArray.clear();
+        const annexureChargesFormArray = this.invoiceForm.get("annexureCharges") as FormArray;
+        annexureChargesFormArray.clear();
 
         // Store custom fields data before form reset
         const customFieldsFormArray = this.customFieldsFormArray;
