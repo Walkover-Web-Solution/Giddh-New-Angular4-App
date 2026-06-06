@@ -3825,10 +3825,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getAnnexureChargeFormGroup(annexureData?: any): FormGroup {
         let voucherDate;
 
-        if (typeof this.invoiceForm?.get("date")?.value === "object") {
+        if (this.invoiceForm?.get("date")?.value && (typeof this.invoiceForm?.get("date")?.value === "object")) {
             voucherDate = dayjs(this.invoiceForm?.get("date")?.value).format(GIDDH_DATE_FORMAT);
         } else {
-            voucherDate = this.invoiceForm?.get("date")?.value;
+            voucherDate = this.invoiceForm?.get("date")?.value ?? "";
         }
         return this.formBuilder.group({
             date: [annexureData?.date || voucherDate || this.universalDate || "", Validators.required],
