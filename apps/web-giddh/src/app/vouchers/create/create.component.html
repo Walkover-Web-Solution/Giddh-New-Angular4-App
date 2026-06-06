@@ -2657,10 +2657,10 @@
                                                                                         "
                                                                                     ></input-field>
                                                                                 </div>
-                                                                                <div class="col">
+                                                                                <div class="col" *ngIf="showTaxColumn">
                                                                                     <common-tax
                                                                                         #annexureTaxControll
-                                                                                        [date]="annexureCharge.get('date')?.value"
+                                                                                        [date]="invoiceForm.get('date')?.value"
                                                                                         [mask]="company.inputMaskFormat"
                                                                                         [totalForTax]="
                                                                                             annexureCharge.get(
