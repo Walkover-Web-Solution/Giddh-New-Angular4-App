@@ -684,6 +684,17 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will be use for open wallet
+     *
+     * @param {string} subscriptionId
+     * @memberof SubscriptionListComponent
+     */
+    public openWallet(subscriptionId: string): void {
+        this.menu?.closeMenu();
+        this.router.navigate(['/pages/user-details/subscription/wallet/' + subscriptionId]);
+    }
+
+    /**
     *  This will be use for get all subscriptions for add company and move company
     *
     * @param {*} event

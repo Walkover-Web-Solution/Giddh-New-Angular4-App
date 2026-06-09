@@ -1,0 +1,99 @@
+.wallet-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.wallet-header {
+    .header-icon {
+        width: 48px;
+        height: 48px;
+        background-color: var(--theme-primary-light);
+
+        .header-wallet-icon {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+    }
+}
+
+.summary-table {
+    grid-template-columns: 0.7fr 2.3fr;
+}
+
+.summary-right {
+    min-height: 140px;
+}
+
+.status-badge {
+    &.status-active {
+        background-color: var(--color-success-light);
+        color: var(--color-green);
+    }
+
+    &.status-inactive {
+        background-color: var(--color-red-light);
+        color: var(--color-red);
+    }
+}
+
+.card-shadow {
+    box-shadow: 0 1px 3px var(--color-shadow-light);
+}
+
+.payment-providers-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.provider-card {
+    border: 2px solid var(--color-border-medium);
+    transition: all 0.3s ease;
+    align-items: flex-start;
+
+    &:hover {
+        border-color: var(--color-blue);
+        box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1);
+    }
+
+    &.selected {
+        border-color: var(--color-blue);
+        box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+
+        .provider-radio input {
+            accent-color: var(--color-blue);
+        }
+    }
+}
+
+.provider-radio {
+    input[type='radio'] {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.provider-logo {
+    height: 32px;
+    max-width: 120px;
+    object-fit: contain;
+}
+
+.method-badge {
+    background-color: var(--theme-primary-light);
+
+    .method-icon {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+    }
+}
+
+.security-note {
+    .security-icon {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        flex-shrink: 0;
+    }
+}

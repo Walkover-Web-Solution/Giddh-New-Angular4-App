@@ -51,6 +51,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-method-dialog.component';
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
@@ -58,6 +59,7 @@ import { MobileNumberInputComponent } from '../shared/mobile-number-input';
 import { MoveCompanyComponent } from './move-company/move-company.component';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { PaymentProviderSelectorComponent } from './components/payment-provider-selector/payment-provider-selector.component';
+import { WalletComponent } from './wallet/wallet.component';
 
 @NgModule({
     imports: [
@@ -95,6 +97,7 @@ import { PaymentProviderSelectorComponent } from './components/payment-provider-
         MatButtonToggleModule,
         AmountFieldComponentModule,
         MatSlideToggleModule,
+        MatProgressSpinnerModule,
         MatGridListModule,
         MatTabsModule,
         ClickOutsideModule,
@@ -134,7 +137,8 @@ import { PaymentProviderSelectorComponent } from './components/payment-provider-
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
         AllFeaturesComponent,
-        UserDetailsPipe
+        UserDetailsPipe,
+        WalletComponent
     ],
     providers: [
         DecimalPipe

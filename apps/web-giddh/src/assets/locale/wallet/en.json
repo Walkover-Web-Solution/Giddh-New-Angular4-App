@@ -1,0 +1,23 @@
+{
+    "wallet_title": "Wallet",
+    "wallet_description": "View wallet details and add balance to your wallet.",
+    "wallet_summary": "Wallet Summary",
+    "remaining_balance": "Remaining Balance",
+    "available_to_use": "Available to use",
+    "wallet_id": "Wallet ID",
+    "plan": "Plan",
+    "purchased_amount": "Purchased Amount",
+    "currency": "Currency",
+    "wallet_created_on": "Wallet Created On",
+    "last_amount_added_on": "Last Amount Added On",
+    "add_funds_to_wallet": "Add Funds to Wallet",
+    "minimum_amount_should_be": "Minimum amount should be",
+    "select_payment_provider": "Select Payment Provider",
+    "choose_payment_provider": "Choose a payment provider to add money to your wallet.",
+    "processing": "Processing...",
+    "payment_secure_message": "Your payment details are secure and encrypted.",
+    "view_transactions": "View Transactions",
+    "wallet_transactions": "Wallet Transactions",
+    "operation_type": "Operation Type",
+    "no_transactions": "No transactions found."
+}
