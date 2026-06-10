@@ -51,6 +51,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-method-dialog.component';
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
@@ -95,6 +96,7 @@ import { PaymentProviderSelectorComponent } from './components/payment-provider-
         MatButtonToggleModule,
         AmountFieldComponentModule,
         MatSlideToggleModule,
+        MatProgressSpinnerModule,
         MatGridListModule,
         MatTabsModule,
         ClickOutsideModule,
