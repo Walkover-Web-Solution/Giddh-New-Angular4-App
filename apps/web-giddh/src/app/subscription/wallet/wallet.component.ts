@@ -34,8 +34,7 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
         MatTooltipModule,
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
-        FormFieldsModule,
-        WalletTransactionListComponent
+        FormFieldsModule
     ]
 })
 export class WalletComponent {
@@ -45,6 +44,8 @@ export class WalletComponent {
     public walletData = signal<IWalletData | null>(null);
     /** Subscription ID from route params */
     public subscriptionId = signal<string>('');
+    /** Currency from subscription data (planCurrency) */
+    public subscriptionCurrency = signal<{ code: string; symbol: string } | null>(null);
     /** Loading state flag for wallet details */
     public isLoadingWallet = signal<boolean>(false);
     /** Loading state flag for subscription data */
@@ -174,6 +175,11 @@ export class WalletComponent {
                         if (period) {
                             this.walletForm.patchValue({ duration: period });
                         }
+                        // Extract currency from subscription data for payment processing
+                        const planCurrency = response.body?.planCurrency;
+                        if (planCurrency) {
+                            this.subscriptionCurrency.set({ code: planCurrency.code, symbol: planCurrency.symbol });
+                        }
                     } else {
                         this.toasterService.errorToast(response?.message);
                     }
@@ -259,7 +265,7 @@ export class WalletComponent {
      * @returns Minimum amount (100 for INR/IND, 10 for others)
      */
     public getMinimumAmount(): number {
-        const currencyCode = this.walletData()?.currency?.code;
+        const currencyCode = this.subscriptionCurrency()?.code;
         return this.isIndianCurrency(currencyCode) ? this.MIN_AMOUNT_INR : this.MIN_AMOUNT_OTHER;
     }
 
@@ -369,7 +375,7 @@ export class WalletComponent {
                 color: this.BRAND_COLOR
             },
             amount: amount,
-            currency: this.walletData()?.currency?.code,
+            currency: this.subscriptionCurrency()?.code,
             name: this.serviceConfig.BRAND_NAME,
             description: this.serviceConfig.LEGAL_NAME
         };

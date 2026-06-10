@@ -129,7 +129,7 @@
                                 [required]="true"
                                 class="w-50"
                             ></input-field>
-                            <p>{{ localeData?.minimum_amount_should_be }} {{ walletData()?.currency?.symbol }} {{ getMinimumAmount() }}</p>
+                            <p>{{ localeData?.minimum_amount_should_be }} {{ subscriptionCurrency()?.symbol }} {{ getMinimumAmount() }}</p>
                         </div>
 
                         <!-- Payment Provider Selection -->
@@ -193,7 +193,7 @@
                                     !isAmountValid()
                                         ? localeData?.minimum_amount_should_be +
                                           ' ' +
-                                          walletData()?.currency?.symbol +
+                                          subscriptionCurrency()?.symbol +
                                           ' ' +
                                           getMinimumAmount()
                                         : ''
