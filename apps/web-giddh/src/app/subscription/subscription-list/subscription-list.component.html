@@ -307,8 +307,7 @@
                                         {{ localeData?.manage_payment }}
                                     </button>
                                     <button mat-menu-item (click)="openWallet(element?.subscriptionId)" *ngIf="element?.isOwner">
-                                        <span class="icon-wallet"></span>
-                                        {{ localeData?.wallet || 'Wallet' }}
+                                        {{ localeData?.wallet }}
                                     </button>
                                 </div>
                             </mat-menu>

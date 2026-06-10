@@ -59,7 +59,6 @@ import { MobileNumberInputComponent } from '../shared/mobile-number-input';
 import { MoveCompanyComponent } from './move-company/move-company.component';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { PaymentProviderSelectorComponent } from './components/payment-provider-selector/payment-provider-selector.component';
-import { WalletComponent } from './wallet/wallet.component';
 
 @NgModule({
     imports: [
@@ -137,8 +136,7 @@ import { WalletComponent } from './wallet/wallet.component';
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
         AllFeaturesComponent,
-        UserDetailsPipe,
-        WalletComponent
+        UserDetailsPipe
     ],
     providers: [
         DecimalPipe

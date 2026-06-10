@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, Inject, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator, PageEvent } from '@angular/material/paginator';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
+import { signal } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
 import { WalletService } from '../services/wallet.service';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
@@ -26,23 +27,23 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
         GiddhPageLoaderModule
     ]
 })
-export class WalletTransactionListComponent implements OnInit, OnDestroy {
+export class WalletTransactionListComponent {
     /** Subscription ID from dialog data */
-    public subscriptionId: string = '';
+    public subscriptionId = signal<string>('');
     /** Transaction list data source */
     public dataSource = new MatTableDataSource<any>([]);
     /** Display columns for table */
     public displayedColumns: string[] = ['createdAt', 'amount', 'remainingBalance', 'operationType'];
     /** Transaction list loading state */
-    public isLoading: boolean = false;
+    public isLoading = signal<boolean>(false);
     /** Current page for pagination */
-    public currentPage: number = 0;
+    public currentPage = signal<number>(0);
     /** Page size for pagination */
-    public pageSize: number = PAGINATION_LIMIT;
+    public pageSize = signal<number>(PAGINATION_LIMIT);
     /** Holds page Size Options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Total transaction count */
-    public totalTransactions: number = 0;
+    public totalTransactions = signal<number>(0);
     /** Locale data */
     public localeData: any = {};
     /** Common locale data */
@@ -50,23 +51,15 @@ export class WalletTransactionListComponent implements OnInit, OnDestroy {
     /** Paginator reference */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    /** Subject for unsubscribing from observables */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     constructor(
         private walletService: WalletService,
         private toasterService: ToasterService,
-        private cdr: ChangeDetectorRef,
         private dialogRef: MatDialogRef<WalletTransactionListComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
-        this.subscriptionId = data?.subscriptionId || '';
-    }
-
-    /**
-     * Angular lifecycle hook - component initialization
-     */
-    public ngOnInit(): void {
+        this.subscriptionId.set(data?.subscriptionId || '');
+        
+        // Load wallet logs on init
         this.getWalletLogs();
     }
 
@@ -74,31 +67,29 @@ export class WalletTransactionListComponent implements OnInit, OnDestroy {
      * Fetches wallet transaction logs with pagination
      */
     private getWalletLogs(): void {
-        this.isLoading = true;
-        this.cdr.markForCheck();
+        this.isLoading.set(true);
         
         const params = {
-            page: this.currentPage + 1,
-            count: this.pageSize
+            page: this.currentPage() + 1,
+            count: this.pageSize()
         };
 
-        this.walletService.getWalletLogs(this.subscriptionId, params)
-            .pipe(takeUntil(this.destroyed$))
+        this.walletService.getWalletLogs(this.subscriptionId(), params)
+            .pipe(take(1))
             .subscribe({
                 next: (response: any) => {
                     if (response?.status === 'success' && Array.isArray(response?.body?.results)) {
                         this.dataSource.data = response.body.results;
-                        this.totalTransactions = response?.body?.totalItems;
+                        this.totalTransactions.set(response?.body?.totalItems || 0);
                     } else {
                         this.dataSource.data = [];
+                        this.totalTransactions.set(0);
                     }
-                    this.isLoading = false;
-                    this.cdr.markForCheck();
+                    this.isLoading.set(false);
                 },
                 error: (error) => {
                     this.toasterService.errorToast(error?.message);
-                    this.isLoading = false;
-                    this.cdr.markForCheck();
+                    this.isLoading.set(false);
                 }
             });
     }
@@ -108,8 +99,8 @@ export class WalletTransactionListComponent implements OnInit, OnDestroy {
      * @param event - Pagination event
      */
     public onPageChange(event: PageEvent): void {
-        this.currentPage = event.pageIndex;
-        this.pageSize = event.pageSize;
+        this.currentPage.set(event.pageIndex);
+        this.pageSize.set(event.pageSize);
         this.getWalletLogs();
     }
 
@@ -118,13 +109,5 @@ export class WalletTransactionListComponent implements OnInit, OnDestroy {
      */
     public closeDialog(): void {
         this.dialogRef.close();
-    }
-
-    /**
-     * Angular lifecycle hook - component destruction
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
     }
 }

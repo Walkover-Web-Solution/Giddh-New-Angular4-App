@@ -19,5 +19,6 @@
     "view_transactions": "View Transactions",
     "wallet_transactions": "Wallet Transactions",
     "operation_type": "Operation Type",
-    "no_transactions": "No transactions found."
+    "no_transactions": "No transactions found.",
+    "enter_amount": "Enter amount"
 }

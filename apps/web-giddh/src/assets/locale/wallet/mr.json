@@ -19,5 +19,6 @@
     "view_transactions": "व्यवहार पहा",
     "wallet_transactions": "वॉलेट व्यवहार",
     "operation_type": "ऑपरेशन प्रकार",
-    "no_transactions": "कोणतेही व्यवहार आढळले नाहीत."
+    "no_transactions": "कोणतेही व्यवहार आढळले नाहीत.",
+    "enter_amount": "रक्कम प्रविष्ट करा"
 }

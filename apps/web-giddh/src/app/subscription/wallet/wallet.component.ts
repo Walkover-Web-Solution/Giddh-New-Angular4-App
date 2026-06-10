@@ -1,35 +1,58 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Inject, effect, DestroyRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { ReplaySubject, takeUntil, filter, take, tap } from 'rxjs';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { take } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { signal, computed } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
 import { WalletService } from '../services/wallet.service';
 import { ServiceConfig } from '../../services/service.config';
 import { ASIDE_PANE_CONFIG, PaymentProvider } from '../../app.constant';
 import { IPaymentProvider, IWalletData, ICapturePayload } from '../models/wallet.model';
 import { WalletTransactionListComponent } from '../wallet-transaction-list/wallet-transaction-list.component';
+import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
+import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
+import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 
 @Component({
     selector: 'app-wallet',
     templateUrl: './wallet.component.html',
     styleUrls: ['./wallet.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    standalone: true,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        TranslateDirectiveModule,
+        GiddhPageLoaderModule,
+        FormFieldsModule,
+        WalletTransactionListComponent
+    ]
 })
-export class WalletComponent implements OnInit, OnDestroy {
+export class WalletComponent {
     /** Form group for wallet amount and payment provider */
     public walletForm: FormGroup;
     /** Wallet data from API */
-    public walletData: IWalletData | null = null;
+    public walletData = signal<IWalletData | null>(null);
     /** Subscription ID from route params */
-    public subscriptionId: string = '';
-    /** Loading state flag */
-    public isLoading: boolean = false;
+    public subscriptionId = signal<string>('');
+    /** Loading state flag for wallet details */
+    public isLoadingWallet = signal<boolean>(false);
+    /** Loading state flag for subscription data */
+    public isLoadingSubscription = signal<boolean>(false);
     /** Adding amount state flag */
-    public isAddingAmount: boolean = false;
+    public isAddingAmount = signal<boolean>(false);
     /** Currently selected payment provider */
-    public selectedPaymentProvider: string = PaymentProvider.RAZORPAY;
+    public selectedPaymentProvider = signal<string>(PaymentProvider.RAZORPAY);
     /** Available payment providers */
     public readonly paymentProviders: IPaymentProvider[] = [
         {
@@ -68,9 +91,18 @@ export class WalletComponent implements OnInit, OnDestroy {
      * Validates subscription ID
      * @returns true if subscription ID is valid
      */
-    public get isValidSubscriptionId(): boolean {
-        return !!(this.subscriptionId && this.subscriptionId.trim().length > 0);
-    }
+    public readonly isValidSubscriptionId = computed(() => {
+        const id = this.subscriptionId();
+        return !!(id && id.trim().length > 0);
+    });
+
+    /**
+     * Combined loading state for wallet and subscription data
+     * @returns true if either API is loading
+     */
+    public readonly isLoading = computed(() => {
+        return this.isLoadingWallet() || this.isLoadingSubscription();
+    });
     
     /** Constants for minimum amounts */
     private readonly MIN_AMOUNT_INR: number = 100;
@@ -80,8 +112,8 @@ export class WalletComponent implements OnInit, OnDestroy {
     private readonly PAYU_WINDOW_NAME: string = 'PayUPayment';
     private readonly BRAND_COLOR: string = '#F37254';
     
-    /** Subject for unsubscribing from observables */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Route params as signal */
+    private readonly routeParams = toSignal(this.route.params, { initialValue: {} as any });
 
     /**
      * Component constructor
@@ -93,22 +125,21 @@ export class WalletComponent implements OnInit, OnDestroy {
         private router: Router,
         private toasterService: ToasterService,
         private walletService: WalletService,
-        private cdr: ChangeDetectorRef,
         private dialog: MatDialog,
-        @Inject(ServiceConfig) private serviceConfig: any
+        @Inject(ServiceConfig) private serviceConfig: any,
+        private destroyRef: DestroyRef
     ) {
         this.razorpayKey = this.serviceConfig.RAZORPAY_KEY;
         this.initializeForm();
-    }
-
-    /**
-     * Angular lifecycle hook - component initialization
-     * Subscribes to route params and loads subscription data and wallet details
-     */
-    public ngOnInit(): void {
-        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.subscriptionId = params['subscriptionId'];
-            if (this.isValidSubscriptionId) {
+        
+        // Effect to handle route params changes
+        effect((onCleanup) => {
+            const params = this.routeParams();
+            const subscriptionId = params['subscriptionId'];
+            this.subscriptionId.set(subscriptionId || '');
+            
+            // Only call APIs if subscriptionId is valid
+            if (subscriptionId && subscriptionId.trim().length > 0) {
                 this.getWalletDetails();
                 this.getSubscriptionData();
             }
@@ -132,10 +163,9 @@ export class WalletComponent implements OnInit, OnDestroy {
      * @private
      */
     private getSubscriptionData(): void {
-        this.isLoading = true;
-        this.cdr.markForCheck();
-        this.walletService.getSubscriptionData(this.subscriptionId)
-            .pipe(takeUntil(this.destroyed$))
+        this.isLoadingSubscription.set(true);
+        this.walletService.getSubscriptionData(this.subscriptionId())
+            .pipe(take(1))
             .subscribe({
                 next: (response: any) => {
                     if (response?.status === 'success' && response?.body) {
@@ -146,14 +176,12 @@ export class WalletComponent implements OnInit, OnDestroy {
                         }
                     } else {
                         this.toasterService.errorToast(response?.message);
-                        this.isLoading = false;
-                        this.cdr.markForCheck();
                     }
+                    this.isLoadingSubscription.set(false);
                 },
                 error: (error) => {
                     this.toasterService.errorToast(error?.message);
-                    this.isLoading = false;
-                    this.cdr.markForCheck();
+                    this.isLoadingSubscription.set(false);
                 }
             });
     }
@@ -164,29 +192,26 @@ export class WalletComponent implements OnInit, OnDestroy {
      * @private
      */
     private getWalletDetails(): void {
-        if (!this.isValidSubscriptionId) {
+        if (!this.isValidSubscriptionId()) {
             this.toasterService.errorToast('Invalid subscription ID');
             return;
         }
 
-        this.isLoading = true;
-        this.cdr.markForCheck();
-        this.walletService.getWalletDetails(this.subscriptionId)
-            .pipe(takeUntil(this.destroyed$))
+        this.isLoadingWallet.set(true);
+        this.walletService.getWalletDetails(this.subscriptionId())
+            .pipe(take(1))
             .subscribe({
                 next: (response: any) => {
                     if (response?.status === 'success' && response?.body) {
-                        this.walletData = response.body;
+                        this.walletData.set(response.body);
                     } else {
                         this.toasterService.errorToast(response?.message);
                     }
-                    this.isLoading = false;
-                    this.cdr.markForCheck();
+                    this.isLoadingWallet.set(false);
                 },
                 error: (error) => {
                     this.toasterService.errorToast(error?.message);
-                    this.isLoading = false;
-                    this.cdr.markForCheck();
+                    this.isLoadingWallet.set(false);
                 }
             });
     }
@@ -200,7 +225,7 @@ export class WalletComponent implements OnInit, OnDestroy {
             this.toasterService.errorToast('Invalid payment provider');
             return;
         }
-        this.selectedPaymentProvider = provider;
+        this.selectedPaymentProvider.set(provider);
         this.walletForm.patchValue({ paymentProvider: provider });
     }
 
@@ -234,7 +259,7 @@ export class WalletComponent implements OnInit, OnDestroy {
      * @returns Minimum amount (100 for INR/IND, 10 for others)
      */
     public getMinimumAmount(): number {
-        const currencyCode = this.walletData?.currency?.code;
+        const currencyCode = this.walletData()?.currency?.code;
         return this.isIndianCurrency(currencyCode) ? this.MIN_AMOUNT_INR : this.MIN_AMOUNT_OTHER;
     }
 
@@ -268,16 +293,15 @@ export class WalletComponent implements OnInit, OnDestroy {
 
         const formValue = this.walletForm.value;
         const payload = {
-            subscriptionId: this.subscriptionId,
+            subscriptionId: this.subscriptionId(),
             walletAmount: formValue.amount.toString(),
             duration: this.walletForm.get('duration')?.value,
             paymentProvider: formValue.paymentProvider
         };
 
-        this.isAddingAmount = true;
-        this.cdr.markForCheck();
+        this.isAddingAmount.set(true);
         this.walletService.addWalletAmount(payload)
-            .pipe(takeUntil(this.destroyed$))
+            .pipe(take(1))
             .subscribe({
                 next: (response: any) => {
                     if (response?.status === 'success') {
@@ -286,13 +310,11 @@ export class WalletComponent implements OnInit, OnDestroy {
                     } else {
                         this.toasterService.errorToast(response?.message);
                     }
-                    this.isAddingAmount = false;
-                    this.cdr.markForCheck();
+                    this.isAddingAmount.set(false);
                 },
                 error: (error) => {
                     this.toasterService.errorToast(error?.message);
-                    this.isAddingAmount = false;
-                    this.cdr.markForCheck();
+                    this.isAddingAmount.set(false);
                 }
             });
     }
@@ -347,7 +369,7 @@ export class WalletComponent implements OnInit, OnDestroy {
                 color: this.BRAND_COLOR
             },
             amount: amount,
-            currency: this.walletData?.currency?.code,
+            currency: this.walletData()?.currency?.code,
             name: this.serviceConfig.BRAND_NAME,
             description: this.serviceConfig.LEGAL_NAME
         };
@@ -421,7 +443,7 @@ export class WalletComponent implements OnInit, OnDestroy {
      */
     public handleRazorpaySuccess(response: any): void {
         const capturePayload: ICapturePayload = {
-            subscriptionId: this.subscriptionId,
+            subscriptionId: this.subscriptionId(),
             duration: this.walletForm.get('duration')?.value,
             paymentProvider: PaymentProvider.RAZORPAY,
             razorpayOrderId: response?.razorpay_order_id,
@@ -437,7 +459,7 @@ export class WalletComponent implements OnInit, OnDestroy {
      */
     public handlePayuSuccess(response: any): void {
         const capturePayload: ICapturePayload = {
-            subscriptionId: this.subscriptionId,
+            subscriptionId: this.subscriptionId(),
             duration: this.walletForm.get('duration')?.value,
             paymentProvider: PaymentProvider.PAYU,
             payuTransactionId: response?.transactionId
@@ -456,7 +478,7 @@ export class WalletComponent implements OnInit, OnDestroy {
         }
 
         this.walletService.captureWalletPayment(payload)
-            .pipe(takeUntil(this.destroyed$))
+            .pipe(take(1))
             .subscribe({
                 next: (response: any) => {
                     if (response?.status === 'success') {
@@ -488,8 +510,8 @@ export class WalletComponent implements OnInit, OnDestroy {
      * @private
      */
     private resetFormAndRefresh(): void {
-        this.walletForm.reset({ paymentProvider: PaymentProvider.RAZORPAY });
-        this.selectedPaymentProvider = PaymentProvider.RAZORPAY;
+        this.walletForm.patchValue({ paymentProvider: PaymentProvider.RAZORPAY, amount: null });
+        this.selectedPaymentProvider.set(PaymentProvider.RAZORPAY);
         this.getWalletDetails();
     }
 
@@ -498,17 +520,6 @@ export class WalletComponent implements OnInit, OnDestroy {
      * @public
      */
     public openTransactionSidebar(): void {
-        this.dialog.open(WalletTransactionListComponent, { ...ASIDE_PANE_CONFIG, data: { subscriptionId: this.subscriptionId } });
+        this.dialog.open(WalletTransactionListComponent, { ...ASIDE_PANE_CONFIG, data: { subscriptionId: this.subscriptionId() } });
     }
-
-
-    /**
-     * Angular lifecycle hook - component destruction
-     * Cleans up subscriptions
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
 }

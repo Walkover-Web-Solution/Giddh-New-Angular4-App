@@ -19,5 +19,6 @@
     "view_transactions": "लेन-देन देखें",
     "wallet_transactions": "वॉलेट लेन-देन",
     "operation_type": "ऑपरेशन प्रकार",
-    "no_transactions": "कोई लेन-देन नहीं मिला।"
+    "no_transactions": "कोई लेन-देन नहीं मिला।",
+    "enter_amount": "राशि दर्ज करें"
 }
