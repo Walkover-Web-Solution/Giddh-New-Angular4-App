@@ -306,9 +306,11 @@
                                     >
                                         {{ localeData?.manage_payment }}
                                     </button>
-                                    <button mat-menu-item (click)="openWallet(element?.subscriptionId)" *ngIf="element?.isOwner">
-                                        {{ localeData?.wallet }}
-                                    </button>
+                                    @if (element?.isOwner) {
+                                        <button mat-menu-item (click)="openWallet(element?.subscriptionId)">
+                                            {{ localeData?.wallet }}
+                                        </button>
+                                    }
                                 </div>
                             </mat-menu>
                         </td>
