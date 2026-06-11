@@ -385,7 +385,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     // public openEntryDatepicker: boolean = false;
     /** Entry index */
     private updatedEntryIndex: number;
-    /** Date change type (voucher/entry) */
+    /** Annexure charge index */
+    private updatedAnnexureIndex: number;
+    /** Date change type (voucher/entry/annexure) */
     private dateChangeType: string = "";
     /** Date Change modal configuration */
     public dateChangeConfiguration: ConfirmationModalConfiguration;
@@ -1114,7 +1116,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.updateEntry(0, entryFields);
 
                         // Update annexure charges date at index 0
-                        const annexureCharges = this.getAnnexureChargesArray();
+                        const annexureCharges = this.annexureChargesArray;
                         if (annexureCharges && annexureCharges.length > 0) {
                             annexureCharges.at(0)?.get("date")?.patchValue(this.universalDate);
                         }
@@ -5095,23 +5097,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (typeof annexureCharge.get("date")?.value === "object") {
             annexureCharge.get("date")?.patchValue(dayjs(annexureCharge.get("date")?.value).format(GIDDH_DATE_FORMAT));
         }
+        this.updatedAnnexureIndex = index;
+        this.dateChangeType = "annexure";
+
+        this.openDateChangeConfirmationDialog();
     }
 
     /**
-     * Callback for entry date change
+     * Opens confirmation dialog for date change
      *
-     * @param {FormGroup} entry
      * @memberof VoucherCreateComponent
      */
-    public onBlurEntryDate(entryFormGroup: FormGroup, updatedEntryIndex: number): void {
-        if (typeof entryFormGroup.get("date")?.value === "object") {
-            entryFormGroup.get("date")?.patchValue(dayjs(entryFormGroup.get("date")?.value).format(GIDDH_DATE_FORMAT));
-        }
-
+    private openDateChangeConfirmationDialog(): void {
         const entries = this.getEntries();
-        if (entries?.length > 1) {
-            this.dateChangeType = "entry";
-            this.updatedEntryIndex = updatedEntryIndex;
+        if (entries?.length >= 1) {
             const dialogRef = this.openDialogWithFocusManagement(() =>
                 this.dialog.open(NewConfirmationModalComponent, {
                     panelClass: "mat-dialog-sm",
@@ -5125,6 +5124,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.handleDateChangeConfirmation(response);
             });
         }
+    }
+
+    /**
+     * Callback for entry date change
+     *
+     * @param {FormGroup} entry
+     * @memberof VoucherCreateComponent
+     */
+    public onBlurEntryDate(entryFormGroup: FormGroup, updatedEntryIndex: number): void {
+        if (typeof entryFormGroup.get("date")?.value === "object") {
+            entryFormGroup.get("date")?.patchValue(dayjs(entryFormGroup.get("date")?.value).format(GIDDH_DATE_FORMAT));
+        }
+        this.updatedEntryIndex = updatedEntryIndex;
+        this.dateChangeType = "entry";
+
+        this.openDateChangeConfirmationDialog();
     }
 
     /**
@@ -5235,6 +5250,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceForm?.get("entries")["controls"]?.forEach((entry) => {
                     entry.get("date")?.patchValue(dayjs(this.invoiceForm.get("date")?.value).format(GIDDH_DATE_FORMAT));
                 });
+                const annexureCharges = this.annexureChargesArray;
+                const voucherDateValue = dayjs(this.invoiceForm.get("date")?.value).format(GIDDH_DATE_FORMAT);
+                    annexureCharges.controls?.forEach((annexureCharge) => {
+                    annexureCharge.get("date")?.setValue(voucherDateValue);
+                });
                 if (this.queryParams.page) {
                     let voucherDate = this.invoiceForm?.get("date")?.value;
                     if (typeof voucherDate === "object") {
@@ -5246,14 +5266,36 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             } else if (this.dateChangeType === "entry") {
                 let entryFormGroup = this.getEntryFormGroup(this.updatedEntryIndex);
+                let entryDateValue = entryFormGroup.get("date")?.value;
 
                 this.invoiceForm?.get("entries")["controls"]?.forEach((entry, entryLoop) => {
                     if (entryLoop !== this.updatedEntryIndex) {
                         let currentEntryFormGroup = this.getEntryFormGroup(entryLoop);
-                        currentEntryFormGroup.get("date")?.patchValue(entryFormGroup.get("date")?.value);
+                        currentEntryFormGroup.get("date")?.patchValue(entryDateValue);
                     }
                 });
+
+                let annexureCharges = this.annexureChargesArray;
+                annexureCharges.controls?.forEach((annexureCharge) => {
+                    annexureCharge.get("date")?.patchValue(entryDateValue);
+                });
+            } else if (this.dateChangeType === "annexure") {
+                const annexureCharges = this.annexureChargesArray;
+                const updatedAnnexure = annexureCharges.at(this.updatedAnnexureIndex);
+                const annexureDateValue = updatedAnnexure?.get("date")?.value;
+
+                annexureCharges.controls?.forEach((annexureCharge, annexureLoop) => {
+                    if (annexureLoop !== this.updatedAnnexureIndex) {
+                        annexureCharge.get("date")?.patchValue(annexureDateValue);
+                    }
+                });
+
+                this.invoiceForm?.get("entries")["controls"]?.forEach((entry, entryLoop) => {
+                    let currentEntryFormGroup = this.getEntryFormGroup(entryLoop);
+                    currentEntryFormGroup.get("date")?.patchValue(annexureDateValue);
+                });
             }
+            this.changeDetection.detectChanges();
         }
 
         this.dialog.closeAll();
@@ -5388,7 +5430,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @return {*}  {FormArray}
      * @memberof VoucherCreateComponent
      */
-    public getAnnexureChargesArray(): FormArray {
+    public get annexureChargesArray(): FormArray {
         return this.invoiceForm.get("annexureCharges") as FormArray;
     }
 
@@ -5458,7 +5500,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public addAnnexureCharge(activeDropdown: boolean = false): void {
-        const annexureCharges = this.getAnnexureChargesArray();
+        const annexureCharges = this.annexureChargesArray;
         annexureCharges.push(this.getAnnexureChargeFormGroup());
         if (activeDropdown) {
             this.activeAnnexureIndex = annexureCharges.length - 1;
@@ -5472,7 +5514,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public removeAnnexureCharge(index: number): void {
-        const annexureCharges = this.getAnnexureChargesArray();
+        const annexureCharges = this.annexureChargesArray;
         
         if (annexureCharges.length > 1) {
             annexureCharges.removeAt(index);
@@ -5515,7 +5557,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public onAnnexureAccountChange(index: number, event: any): void {
-        const annexureCharges = this.getAnnexureChargesArray();
+        const annexureCharges = this.annexureChargesArray;
         const annexureCharge = annexureCharges.at(index);
         this.activeAnnexureIndex = null;
         
@@ -5530,15 +5572,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {number} index
      * @memberof VoucherCreateComponent
      */
-    public calculateAnnexureChargeTax(index: number, taxes?: any): void {
-        const annexureCharges = this.getAnnexureChargesArray();
+    public calculateAnnexureChargeTax(index: number, amountInclusive: boolean, taxes?: any): void {
+        const annexureCharges = this.annexureChargesArray;
         const annexureCharge = annexureCharges.at(index);
 
         if (!annexureCharge) {
             return;
         }
 
-        const amount = Number(annexureCharge.get("transactions.0.amount.amountForAccount")?.value) || 0;
+        let amount = Number(annexureCharge.get("transactions.0.amount.amountForAccount")?.value) || 0;
 
         if (taxes && taxes.length > 0) {
             const taxesFormArray = annexureCharge.get("taxes") as FormArray;
@@ -5554,6 +5596,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
                 taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
             });
+
+            if (amountInclusive) {
+                let entryTotal = annexureCharge.get("total.amountForAccount")?.value;
+                amount = giddhRoundOff((entryTotal / (1 + 0.01 * Number(cessPercentage + totalTaxWithoutCess))), this.company.giddhBalanceDecimalPlaces);
+                annexureCharge.get("transactions.0.amount.amountForAccount").patchValue(amount);
+            }
 
             annexureCharge
                 .get("totalTaxWithoutCess")
@@ -5590,7 +5638,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public updateAnnexureTaxAmount(taxAmount: number, index: number): void {
-        const annexureCharges = this.getAnnexureChargesArray();
+        const annexureCharges = this.annexureChargesArray;
         const annexureCharge = annexureCharges.at(index);
 
         if (annexureCharge) {
