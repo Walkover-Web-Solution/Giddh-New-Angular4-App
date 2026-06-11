@@ -2548,7 +2548,7 @@
 
                                 <div class="vouchers-other-detail container-lg mt-4 px-0">
                                     <div class="row mx-0">
-                                        <div class="col-8 px-0">
+                                        <div class="col-9 px-0">
                                             <div class="container px-0">
                                                 <div class="row">
                                                     <!-- Annexure Charges Section -->
@@ -2570,18 +2570,18 @@
                                                                 </mat-card-header>
                                                                 <mat-card-content>
                                                                     <div
-                                                                        class="container annexure-charges-wrapper px-0 pt-1 pr-2 overflow-x-hidden overflow-y-auto"
+                                                                        class="container annexure-charges-wrapper px-0 pt-1 pr-2 overflow-auto"
                                                                         formArrayName="annexureCharges"
                                                                     >
                                                                         @for (
-                                                                            annexureCharge of getAnnexureChargesArray().controls;
+                                                                            annexureCharge of annexureChargesArray.controls;
                                                                             track $index
                                                                         ) {
                                                                             <div
-                                                                                class="row align-items-center mb-3"
+                                                                                class="d-flex align-items-center mb-3 row-gap-2"
                                                                                 [formGroupName]="$index"
                                                                             >
-                                                                                <div class="pl-3 w150">
+                                                                                <div class="flex-shrink-0 annexure-datepicker-fixed">
                                                                                     <giddh-datepicker
                                                                                         #annexureDatePicker
                                                                                         class="date-border"
@@ -2594,12 +2594,13 @@
                                                                                         name="annexureDate{{ $index }}"
                                                                                         [label]="'Entry date'"
                                                                                         [placeholder]="'DD-MM-YYYY'"
-                                                                                        formControlName="date"
+                                                                                        [formControl]="annexureCharge.get('date')"
                                                                                         [appearance]="'outline'"
+                                                                                        [disabled]="isUpdateMode"
                                                                                         appEnterNext
                                                                                     ></giddh-datepicker>
                                                                                 </div>
-                                                                                <div class="col">
+                                                                                <div class="flex-grow-1 pl-3 annexure-field-dynamic">
                                                                                     <reactive-dropdown-field
                                                                                         appEnterNext
                                                                                         [label]="commonLocaleData?.app_account"
@@ -2638,7 +2639,7 @@
                                                                                         "
                                                                                     ></reactive-dropdown-field>
                                                                                 </div>
-                                                                                <div class="col">
+                                                                                <div class="flex-grow-1 pl-3 annexure-field-dynamic">
                                                                                     <input-field
                                                                                         [type]="'number'"
                                                                                         [allowDecimalDigitsOnly]="true"
@@ -2652,12 +2653,16 @@
                                                                                         (change)="
                                                                                             calculateAnnexureChargeTax(
                                                                                                 $index,
+                                                                                                false,
                                                                                                 annexureCharge.get('taxes')?.value
                                                                                             )
                                                                                         "
                                                                                     ></input-field>
                                                                                 </div>
-                                                                                <div class="col" *ngIf="showTaxColumn">
+                                                                                <div
+                                                                                    class="flex-grow-1 pl-3 annexure-field-dynamic"
+                                                                                    *ngIf="showTaxColumn"
+                                                                                >
                                                                                     <common-tax
                                                                                         #annexureTaxControll
                                                                                         [date]="invoiceForm.get('date')?.value"
@@ -2681,14 +2686,36 @@
                                                                                         [hasBackdrop]="true"
                                                                                         [showCreateNew]="true"
                                                                                         (selectedTaxEvent)="
-                                                                                            calculateAnnexureChargeTax($index, $event)
+                                                                                            calculateAnnexureChargeTax(
+                                                                                                $index,
+                                                                                                false,
+                                                                                                $event
+                                                                                            )
                                                                                         "
                                                                                         (taxAmountSumEvent)="
                                                                                             updateAnnexureTaxAmount($event, $index)
                                                                                         "
                                                                                     ></common-tax>
                                                                                 </div>
-                                                                                <div class="col-auto">
+                                                                                <div class="flex-grow-1 pl-3 annexure-field-dynamic">
+                                                                                    <input-field
+                                                                                        [type]="'number'"
+                                                                                        [allowDecimalDigitsOnly]="true"
+                                                                                        [label]="commonLocaleData?.app_total"
+                                                                                        [placeholder]="commonLocaleData?.app_total"
+                                                                                        [formControl]="
+                                                                                            annexureCharge.get('total.amountForAccount')
+                                                                                        "
+                                                                                        (change)="
+                                                                                            calculateAnnexureChargeTax(
+                                                                                                $index,
+                                                                                                true,
+                                                                                                annexureCharge.get('taxes')?.value
+                                                                                            )
+                                                                                        "
+                                                                                    ></input-field>
+                                                                                </div>
+                                                                                <div class="flex-shrink-0 pl-3">
                                                                                     <i
                                                                                         tabindex="0"
                                                                                         cdkMonitorElementFocus
@@ -3293,7 +3320,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-4 px-0">
+                                        <div class="col-3 px-0">
                                             <table class="total-amount-wrapper w-100 text-right">
                                                 <tr>
                                                     <td>
