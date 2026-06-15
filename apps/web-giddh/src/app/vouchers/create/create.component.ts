@@ -5624,7 +5624,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             annexureCharge.get("taxAmount")?.patchValue(0);
             annexureCharge.get("totalTaxWithoutCess")?.patchValue(0);
             annexureCharge.get("totalCess")?.patchValue(0);
-            annexureCharge.get("total.amountForAccount")?.patchValue(amount);
+            if (amountInclusive) {
+                const total = annexureCharge.get("total.amountForAccount").value;
+                annexureCharge.get("transactions.0.amount.amountForAccount").patchValue(total);
+            } else {
+                annexureCharge.get("total.amountForAccount")?.patchValue(amount);
+            }
         }
 
         this.calculateVoucherTotals();
