@@ -20,5 +20,12 @@
     "wallet_transactions": "Wallet Transactions",
     "operation_type": "Operation Type",
     "no_transactions": "No transactions found.",
-    "enter_amount": "Enter amount"
+    "enter_amount": "Enter amount",
+    "pay_now": "Pay Now",
+    "current_balance": "Current Balance",
+    "payment_summary": "Payment Summary",
+    "wallet_amount": "Wallet Amount",
+    "total_payable": "Total Payable",
+    "including_tax": "Including tax",
+    "proceed_to_pay": "Proceed to Pay"
 }

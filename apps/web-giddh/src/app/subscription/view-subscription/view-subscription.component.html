@@ -89,6 +89,14 @@
                             >
                                 {{ localeData?.move }}
                             </button>
+                            <button
+                                aria-label="wallet"
+                                mat-menu-item
+                                *ngIf="viewSubscriptionData?.isOwner"
+                                (click)="openWallet(subscriptionId)"
+                            >
+                                {{ localeData?.wallet }}
+                            </button>
                         </mat-menu>
                     </div>
                     <div class="view-subscription">

@@ -230,6 +230,16 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Navigates to the wallet page for the given subscription
+     *
+     * @param subscriptionId Subscription identifier
+     * @memberof ViewSubscriptionComponent
+     */
+    public openWallet(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/wallet/' + subscriptionId]);
+    }
+
+    /**
      * Lifecycle hook that is called when the component is destroyed.
      * Completes the subject indicating component destruction.
      *

@@ -20,5 +20,12 @@
     "wallet_transactions": "वॉलेट लेन-देन",
     "operation_type": "ऑपरेशन प्रकार",
     "no_transactions": "कोई लेन-देन नहीं मिला।",
-    "enter_amount": "राशि दर्ज करें"
+    "enter_amount": "राशि दर्ज करें",
+    "pay_now": "अभी भुगतान करें",
+    "current_balance": "वर्तमान शेष",
+    "payment_summary": "भुगतान सारांश",
+    "wallet_amount": "वॉलेट राशि",
+    "total_payable": "कुल भुगतान योग्य",
+    "including_tax": "कर सहित",
+    "proceed_to_pay": "भुगतान करने के लिए आगे बढ़ें"
 }
