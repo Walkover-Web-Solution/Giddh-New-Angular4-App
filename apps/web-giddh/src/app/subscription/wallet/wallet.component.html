@@ -117,7 +117,7 @@
                             </div>
 
                             <!-- Right: Payment Summary Card -->
-                            <div class="payment-summary-card border-radius-8 p-3 d-flex flex-column row-gap-15 border">
+                            <div class="payment-summary-card border-radius-8 p-3 d-flex flex-column row-gap-15 border text-black">
                                 <div class="d-flex align-items-center column-gap-1">
                                     <i class="font-size-20 icon-summary"></i>
                                     <span class="font-size-16 font-weight-semibold text-primary">{{ localeData?.payment_summary }}</span>
@@ -130,19 +130,23 @@
                                     </span>
                                 </div>
 
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span>GST ({{ GST_RATE * 100 }}%)</span>
-                                    <span class="font-weight-semibold">
-                                        {{ subscriptionCurrency()?.symbol }} {{ taxAmount() | number: '1.2-2' }}
-                                    </span>
-                                </div>
+                                @if (subscriptionCurrency()?.code?.toUpperCase() === 'INR') {
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>GST ({{ GST_RATE * 100 }}%)</span>
+                                        <span class="font-weight-semibold">
+                                            {{ subscriptionCurrency()?.symbol }} {{ taxAmount() | number: '1.2-2' }}
+                                        </span>
+                                    </div>
+                                }
 
                                 <div class="payment-summary-divider"></div>
 
                                 <div class="d-flex justify-content-between align-items-flex-start">
                                     <span class="font-size-16 font-weight-semibold">
                                         Total Payable
-                                        <span class="font-size-12 text-light">(Including tax)</span>
+                                        @if (subscriptionCurrency()?.code?.toUpperCase() === 'INR') {
+                                            <span class="font-size-12 text-light">(Including tax)</span>
+                                        }
                                     </span>
                                     <div class="d-flex flex-column align-items-flex-end">
                                         <span class="font-size-20 font-weight-bold text-primary">

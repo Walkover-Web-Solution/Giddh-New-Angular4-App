@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, effect, forwardRef, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, forwardRef, Inject, input, output, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PaymentProvider, PaymentMethod } from '../../../app.constant';
 import { IPaymentProvider } from '../../models/wallet.model';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'payment-provider-cards',
@@ -48,11 +49,14 @@ export class PaymentProviderCardsComponent implements ControlValueAccessor {
     protected readonly defaultExpandeProvider = signal<string>('');
     /** Whether the control is disabled */
     protected disabled: boolean = false;
+    /** Image path prefix from service config */
+    protected imgPath: string = '';
 
     private onChange: (value: string | null) => void = () => {};
     private onTouched: () => void = () => {};
 
-    constructor() {
+    constructor(@Inject(ServiceConfig) private serviceConfig: any) {
+        this.imgPath = this.serviceConfig.IMG_PATH;
         // Auto-select default method when provider or defaultMethodSelected changes
         effect(() => {
             const defaultMethod = this.defaultMethodSelected();
@@ -79,60 +83,60 @@ export class PaymentProviderCardsComponent implements ControlValueAccessor {
         [PaymentProvider.RAZORPAY]: {
             id: PaymentProvider.RAZORPAY,
             name: 'Razorpay',
-            logo: 'assets/images/icon/RAZORPAY.svg',
+            logo: 'icon/RAZORPAY.svg',
             description: 'Fast, secure and preferred payment gateway in India.',
             features: [
-                { name: 'UPI', icon: 'assets/images/UPI.png', description: 'Pay securely using any UPI app', id: PaymentMethod.UPI },
-                { name: 'Card', icon: 'assets/images/CARD.png', description: 'Visa, Mastercard, RuPay & more', id: PaymentMethod.CARD },
-                { name: 'Net Banking', icon: 'assets/images/NET_BANKING.png', description: 'All major banks supported', id: PaymentMethod.NET_BANKING },
-                { name: 'Wallets', icon: 'assets/images/WALLET.png', description: 'Paytm, Amazon Pay, Mobikwik & more', id: PaymentMethod.WALLET },
-                { name: 'EMI', icon: 'assets/images/EMI_DISCOUNT.png', description: 'No-cost & standard EMI options', id: PaymentMethod.EMI }
+                { name: 'UPI', icon: 'UPI.png', description: 'Pay securely using any UPI app', id: PaymentMethod.UPI },
+                { name: 'Card', icon: 'CARD.png', description: 'Visa, Mastercard, RuPay & more', id: PaymentMethod.CARD },
+                { name: 'Net Banking', icon: 'NET_BANKING.png', description: 'All major banks supported', id: PaymentMethod.NET_BANKING },
+                { name: 'Wallets', icon: 'WALLET.png', description: 'Paytm, Amazon Pay, Mobikwik & more', id: PaymentMethod.WALLET },
+                { name: 'EMI', icon: 'EMI_DISCOUNT.png', description: 'No-cost & standard EMI options', id: PaymentMethod.EMI }
             ],
             subscription: [0 , 1]
         },
         [PaymentProvider.PAYU]: {
             id: PaymentProvider.PAYU,
             name: 'PayU',
-            logo: 'assets/images/icon/PAYU.png',
+            logo: 'icon/PAYU.png',
             description: 'Secure payments powered by PayU',
             features: [
-                { name: 'UPI', icon: 'assets/images/UPI.png', description: 'Pay securely using any UPI app', id: PaymentMethod.UPI },
-                { name: 'Card', icon: 'assets/images/CARD.png', description: 'Visa, Mastercard, RuPay & more', id: PaymentMethod.CARD },
-                { name: 'Net Banking', icon: 'assets/images/NET_BANKING.png', description: 'All major banks supported', id: PaymentMethod.NET_BANKING },
-                { name: 'Wallets', icon: 'assets/images/WALLET.png', description: 'Paytm, Amazon Pay, Mobikwik & more', id: PaymentMethod.WALLET },
-                { name: 'EMI', icon: 'assets/images/EMI_DISCOUNT.png', description: 'No-cost & standard EMI options', id: PaymentMethod.EMI }
+                { name: 'UPI', icon: 'UPI.png', description: 'Pay securely using any UPI app', id: PaymentMethod.UPI },
+                { name: 'Card', icon: 'CARD.png', description: 'Visa, Mastercard, RuPay & more', id: PaymentMethod.CARD },
+                { name: 'Net Banking', icon: 'NET_BANKING.png', description: 'All major banks supported', id: PaymentMethod.NET_BANKING },
+                { name: 'Wallets', icon: 'WALLET.png', description: 'Paytm, Amazon Pay, Mobikwik & more', id: PaymentMethod.WALLET },
+                { name: 'EMI', icon: 'EMI_DISCOUNT.png', description: 'No-cost & standard EMI options', id: PaymentMethod.EMI }
             ]
         },
         [PaymentProvider.STRIPE]: {
             id: PaymentProvider.STRIPE,
             name: 'Stripe',
-            logo: 'assets/images/icon/STRIPE.png',
+            logo: 'icon/STRIPE.png',
             description: 'International cards and global payment solutions',
             features: [
-                { name: 'Card', icon: 'assets/images/CARD.png', description: 'Visa, Mastercard, Amex & more', id: PaymentMethod.CARD },
-                { name: 'Net Banking', icon: 'assets/images/NET_BANKING.png', description: 'All major banks supported', id: PaymentMethod.NET_BANKING },
-                { name: 'Wallets', icon: 'assets/images/WALLET.png', description: 'Apple Pay, Google Pay & more', id: PaymentMethod.WALLET }
+                { name: 'Card', icon: 'CARD.png', description: 'Visa, Mastercard, Amex & more', id: PaymentMethod.CARD },
+                { name: 'Net Banking', icon: 'NET_BANKING.png', description: 'All major banks supported', id: PaymentMethod.NET_BANKING },
+                { name: 'Wallets', icon: 'WALLET.png', description: 'Apple Pay, Google Pay & more', id: PaymentMethod.WALLET }
             ]
         },
         [PaymentProvider.PAYPAL]: {
             id: PaymentProvider.PAYPAL,
             name: 'PayPal',
-            logo: 'assets/images/icon/PAYPAL.svg',
+            logo: 'icon/PAYPAL.svg',
             description: 'Pay with your PayPal balance, card or bank',
             features: [
-                { name: 'Card', icon: 'assets/images/CARD.png', description: 'Visa, Mastercard, Amex & more', id: PaymentMethod.CARD },
-                { name: 'Net Banking', icon: 'assets/images/NET_BANKING.png', description: 'All major banks supported', id: PaymentMethod.NET_BANKING },
-                { name: 'Wallets', icon: 'assets/images/WALLET.png', description: 'PayPal balance & linked wallets', id: PaymentMethod.WALLET }
+                { name: 'Card', icon: 'CARD.png', description: 'Visa, Mastercard, Amex & more', id: PaymentMethod.CARD },
+                { name: 'Net Banking', icon: 'NET_BANKING.png', description: 'All major banks supported', id: PaymentMethod.NET_BANKING },
+                { name: 'Wallets', icon: 'WALLET.png', description: 'PayPal balance & linked wallets', id: PaymentMethod.WALLET }
             ]
         },
         [PaymentProvider.GOCARDLESS]: {
             id: PaymentProvider.GOCARDLESS,
             name: 'GoCardless',
-            logo: 'assets/images/icon/GOCARDLESS.svg',
+            logo: 'icon/GOCARDLESS.svg',
             description: 'Direct debit payments from your bank account',
             features: [
-                { name: 'Bank Transfer', icon: 'assets/images/NET_BANKING.png', description: 'Pay directly from your bank', id: PaymentMethod.BANK_TRANSFER },
-                { name: 'Direct Debit', icon: 'assets/images/CARD.png', description: 'Recurring direct debit authorization', id: PaymentMethod.DIRECT_DEBIT }
+                { name: 'Bank Transfer', icon: 'NET_BANKING.png', description: 'Pay directly from your bank', id: PaymentMethod.BANK_TRANSFER },
+                { name: 'Direct Debit', icon: 'CARD.png', description: 'Recurring direct debit authorization', id: PaymentMethod.DIRECT_DEBIT }
             ]
         }
     };
@@ -144,6 +148,7 @@ export class PaymentProviderCardsComponent implements ControlValueAccessor {
     public getPaymentProviderDetails(providerId: string): IPaymentProvider {
         return this.paymentProviderDetails[providerId];
     }
+
 
     /** Get payment methods filtered by module
      * @param provider Provider object

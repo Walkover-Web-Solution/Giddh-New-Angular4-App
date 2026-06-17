@@ -67,13 +67,19 @@ export class WalletComponent {
     public appliedSuggestions = signal<Set<number>>(new Set<number>());
     /** Global Subject for handling check-mark timeout with RxJS */
     private suggestionSubject = new Subject<number>();
-    /** GST rate applied on wallet amount */
+    /** GST rate applied on wallet amount (India only) */
     public readonly GST_RATE: number = 0.18;
     /** Current amount entered in the form */
     public currentAmount = signal<number>(0);
-    /** Tax amount computed from current amount and GST rate */
-    public readonly taxAmount = computed(() => +(this.currentAmount() * this.GST_RATE).toFixed(2));
-    /** Net amount payable including tax */
+    /** Tax amount computed from current amount and GST rate (India only) */
+    public readonly taxAmount = computed(() => {
+        const currencyCode = this.subscriptionCurrency()?.code?.toUpperCase();
+        if (currencyCode === 'INR') {
+            return +(this.currentAmount() * this.GST_RATE).toFixed(2);
+        }
+        return 0;
+    });
+    /** Net amount payable including tax (India only) */
     public readonly netAmountPayable = computed(() => +(this.currentAmount() + this.taxAmount()).toFixed(2));
 
     /**
