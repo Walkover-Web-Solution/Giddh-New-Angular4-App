@@ -196,7 +196,7 @@
                         <th mat-header-cell *matHeaderCellDef class="text-center">{{ commonLocaleData?.app_status }}</th>
                         <td mat-cell *matCellDef="let element" class="position-relative">
                             <span [ngClass]="{ 'text-green': element?.status?.toLowerCase() === 'active' }">
-                                {{ element?.status | uppercase }} {{ element?.region?.code }}
+                                {{ element?.status | uppercase }}
                             </span>
                         </td>
                     </ng-container>
