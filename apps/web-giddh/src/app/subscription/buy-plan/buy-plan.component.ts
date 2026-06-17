@@ -221,10 +221,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public paypalCaptureOrderId: any = '';
     /** Holds Store Paypal Order Id Success observable*/
     public paypalCaptureOrderIdSuccess$: Observable<boolean> = this.componentStore.select(state => state.paypalCaptureOrderIdSuccess);
-    /** Hold filtered payment providers */
-    public filteredPaymentProviders: any[] = [];
-    /** Hold all payment providers */
-    public allPaymentProviders: any[] = [];
+    /** Hold filtered payment provider IDs */
+    public filteredPaymentProviders: string[] = [];
+    /** Hold all payment provider IDs */
+    public allPaymentProviders: string[] = [];
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
     /** Broadcast channel to sync stripe payment success across multiple open tabs */
@@ -1646,7 +1646,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const entityCode = this.selectedPlan()?.entityCode;
 
         const filterProviders = (providers: string[]) => {
-            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider.value));
+            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider));
             if (this.filteredPaymentProviders?.length === 1) {
                 this.thirdStepForm.get('paymentProvider')?.patchValue(providers[0]);
             }
@@ -1678,6 +1678,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         // Auto-select CARD auth type when Razorpay is chosen for recurring plans
         const isRazorpay = this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY;
         this.thirdStepForm.get('razorpayAuthType')?.patchValue(isRazorpay && (this.isMonthly() || this.isDaily()) ? 'CARD' : null);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Handles per-method selection inside the Razorpay provider card and maps it
+     * to the `razorpayAuthType` form control. Only Cards and UPI methods are
+     * applicable as auth types for Razorpay.
+     *
+     * @param event Event emitted by payment-provider-cards (methodChange)
+     * @memberof BuyPlanComponent
+     */
+    public onRazorpayMethodChange(event: { providerId: string; methodId: string }): void {
+        this.thirdStepForm.get('razorpayAuthType')?.patchValue(event.methodId);
         this.changeDetection.detectChanges();
     }
 
@@ -2431,28 +2444,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.pendingStripeFailureToast = false;
             }
             this.allPaymentProviders = [
-                {
-                    label: this.localeData?.gocardless,
-                    value: PaymentProvider.GOCARDLESS
-                },
-                {
-                    label: this.localeData?.paypal,
-                    value: PaymentProvider.PAYPAL
-                },
-                {
-                    label: this.localeData?.payu,
-                    value: PaymentProvider.PAYU
-                },
-                {
-                    label: this.localeData?.razorpay,
-                    value: PaymentProvider.RAZORPAY,
-                },
-                {
-                    label: this.localeData?.stripe,
-                    value: PaymentProvider.STRIPE
-                }
-            ];
-            this.allPaymentProviders = this.allPaymentProviders.filter(payment => this.serviceConfig.ALL_PAYMENT_PROVIDERS.includes(payment.value));
+                PaymentProvider.GOCARDLESS,
+                PaymentProvider.PAYPAL,
+                PaymentProvider.PAYU,
+                PaymentProvider.RAZORPAY,
+                PaymentProvider.STRIPE
+            ].filter(provider => this.serviceConfig.ALL_PAYMENT_PROVIDERS.includes(provider));
             this.changeDetection.detectChanges();
         }
     }

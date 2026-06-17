@@ -1,7 +1,6 @@
 .wallet-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 24px;
 }
 
 .wallet-header {
@@ -23,7 +22,30 @@
 }
 
 .summary-right {
-    min-height: 140px;
+    min-height: auto;
+}
+
+.amount-summary-grid {
+    grid-template-columns: 1fr 1fr;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.payment-summary-card {
+    background-color: var(--theme-primary-light);
+    // border: 1px solid var(--color-border-light, #e0e8f5);
+}
+
+.payment-summary-divider {
+    border-top: 1px dashed var(--border-color, #c5c5c5);
+}
+
+.suggestion-applied {
+    background-color: var(--color-primary-light, #e6f0ff) !important;
+    border-color: var(--text-primary-color) !important;
+    color: var(--text-primary-color) !important;
 }
 
 .status-badge {
@@ -40,53 +62,6 @@
 
 .card-shadow {
     box-shadow: 0 1px 3px var(--color-shadow-light);
-}
-
-.payment-providers-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
-.provider-card {
-    border: 2px solid var(--color-border-medium);
-    transition: all 0.3s ease;
-    align-items: flex-start;
-
-    &:hover {
-        border-color: var(--color-blue);
-        box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1);
-    }
-
-    &.selected {
-        border-color: var(--color-blue);
-        box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
-
-        .provider-radio input {
-            accent-color: var(--color-blue);
-        }
-    }
-}
-
-.provider-radio {
-    input[type='radio'] {
-        width: 18px;
-        height: 18px;
-    }
-}
-
-.provider-logo {
-    height: 32px;
-    max-width: 120px;
-    object-fit: contain;
-}
-
-.method-badge {
-    background-color: var(--theme-primary-light);
-
-    .method-icon {
-        width: 18px;
-        height: 18px;
-        object-fit: contain;
-    }
 }
 
 .security-note {

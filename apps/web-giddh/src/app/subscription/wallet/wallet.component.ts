@@ -6,14 +6,18 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { take } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { take, delay, debounceTime, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { signal, computed } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
 import { WalletService } from '../services/wallet.service';
 import { ServiceConfig } from '../../services/service.config';
 import { ASIDE_PANE_CONFIG, PaymentProvider } from '../../app.constant';
-import { IPaymentProvider, IWalletData, ICapturePayload } from '../models/wallet.model';
+import { IWalletData, ICapturePayload } from '../models/wallet.model';
+import { PaymentProviderCardsComponent } from '../components/payment-provider-cards/payment-provider-cards.component';
+import { STRIPE_JS_CDN_URL } from '../../app.constant';
+import { StripePaymentDialogComponent, StripePaymentDialogData } from '../buy-plan/stripe-payment-dialog/stripe-payment-dialog.component';
 import { WalletTransactionListComponent } from '../wallet-transaction-list/wallet-transaction-list.component';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
@@ -34,7 +38,8 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
         MatTooltipModule,
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
-        FormFieldsModule
+        FormFieldsModule,
+        PaymentProviderCardsComponent
     ]
 })
 export class WalletComponent {
@@ -52,41 +57,95 @@ export class WalletComponent {
     public isLoadingSubscription = signal<boolean>(false);
     /** Adding amount state flag */
     public isAddingAmount = signal<boolean>(false);
+    /** True while a payment popup / dialog is open (any provider). Used to hide the Proceed-to-Pay button. */
+    public isPaymentPopupOpen = signal<boolean>(false);
     /** Currently selected payment provider */
     public selectedPaymentProvider = signal<string>(PaymentProvider.RAZORPAY);
-    /** Available payment providers */
-    public readonly paymentProviders: IPaymentProvider[] = [
-        {
-            id: PaymentProvider.RAZORPAY,
-            name: 'Razorpay',
-            logo: 'assets/images/icon/RAZORPAY.svg',
-            features: [
-                { name: 'UPI', icon: 'assets/images/UPI.png' },
-                { name: 'Cards', icon: 'assets/images/CARD.png' },
-                { name: 'Net Banking', icon: 'assets/images/NET_BANKING.png' },
-                { name: 'Wallets', icon: 'assets/images/WALLET.png' },
-                { name: 'EMI', icon: 'assets/images/EMI_DISCOUNT.png' }
-            ]
-        },
-        {
-            id: PaymentProvider.PAYU,
-            name: 'PayU',
-            logo: 'assets/images/icon/PAYU.svg',
-            features: [
-                { name: 'UPI', icon: 'assets/images/UPI.png' },
-                { name: 'Cards', icon: 'assets/images/CARD.png' },
-                { name: 'Net Banking', icon: 'assets/images/NET_BANKING.png' },
-                { name: 'Wallets', icon: 'assets/images/WALLET.png' },
-                { name: 'EMI', icon: 'assets/images/EMI_DISCOUNT.png' }
-            ]
+    /** Suggested amount values for quick add buttons */
+    public readonly amountSuggestions: number[] = [500, 1000, 2000, 5000];
+    /** Set of suggestion values currently applied to the amount field */
+    public appliedSuggestions = signal<Set<number>>(new Set<number>());
+    /** Global Subject for handling check-mark timeout with RxJS */
+    private suggestionSubject = new Subject<number>();
+    /** GST rate applied on wallet amount (India only) */
+    public readonly GST_RATE: number = 0.18;
+    /** Current amount entered in the form */
+    public currentAmount = signal<number>(0);
+    /** Tax amount computed from current amount and GST rate (India only) */
+    public readonly taxAmount = computed(() => {
+        const currencyCode = this.subscriptionCurrency()?.code?.toUpperCase();
+        if (currencyCode === 'INR') {
+            return +(this.currentAmount() * this.GST_RATE).toFixed(2);
         }
-    ];
+        return 0;
+    });
+    /** Net amount payable including tax (India only) */
+    public readonly netAmountPayable = computed(() => +(this.currentAmount() + this.taxAmount()).toFixed(2));
+
+    /**
+     * Adds the suggestion amount to the current value. Shows a check-mark
+     * on the clicked button for 1 second as visual feedback using RxJS delay.
+     */
+    public toggleAmountSuggestion(suggestion: number): void {
+        const control = this.walletForm.get('amount');
+        const current = Number(control?.value) || 0;
+        control?.patchValue(current + suggestion);
+
+        this.appliedSuggestions.update((currentSet) => {
+            const applied = new Set(currentSet);
+            applied.add(suggestion);
+            return applied;
+        });
+
+        this.suggestionSubject.next(suggestion);
+    }
+
+    /** Whether a given suggestion is currently applied */
+    public isSuggestionApplied(suggestion: number): boolean {
+        return this.appliedSuggestions().has(suggestion);
+    }
+    /**
+     * Supported payment providers based on subscription currency / region:
+     * - India (INR)  -> Razorpay, PayU
+     * - UK (GBP)     -> PayPal, Stripe
+     * - Other        -> PayPal, Stripe, Razorpay
+     */
+    public readonly supportedPaymentProviders = computed<string[]>(() => {
+        const currencyCode = this.subscriptionCurrency()?.code?.toUpperCase();
+        if (currencyCode === 'INR') {
+            return [PaymentProvider.RAZORPAY, PaymentProvider.PAYU];
+        }
+        if (currencyCode === 'GBP') {
+            return [PaymentProvider.PAYPAL, PaymentProvider.STRIPE];
+        }
+        return [PaymentProvider.RAZORPAY, PaymentProvider.PAYPAL, PaymentProvider.STRIPE];
+    });
     /** Locale data */
     public localeData: any = {};
     /** Common locale data */
     public commonLocaleData: any = {};
     /** Razorpay API key */
     public razorpayKey: string = '';
+    /** Stripe publishable key */
+    public stripeKey: string = '';
+    /** Session storage key prefix used to persist wallet payment context across Stripe 3DS redirect */
+    private readonly STRIPE_SESSION_PREFIX: string = 'wallet_stripe_';
+    /** Last opened PayPal order id (used for capture after the approval window posts back) */
+    private paypalOrderId: string = '';
+    /** Currently opened popup window (PayPal approval) so we can close it after success */
+    private openedPaypalWindow: Window | null = null;
+    /** BroadcastChannel listening for PayPal approval callback from the popup window */
+    private paypalBroadcast: BroadcastChannel | null = null;
+    /** Currently opened PayU popup window so it can be closed on navigation away */
+    private openedPayuWindow: Window | null = null;
+    /** PayU `message` listener reference, kept so it can be removed on cleanup */
+    private payuMessageHandler: ((event: MessageEvent<any>) => void) | null = null;
+    /** Tracks the `setInterval` ids used by `watchPopupClose` so they can be cleared on destroy */
+    private popupCloseIntervals = new Set<ReturnType<typeof setInterval>>();
+    /** Dimensions of the PayPal approval popup window */
+    private readonly PAYPAL_WINDOW_WIDTH: number = 800;
+    private readonly PAYPAL_WINDOW_HEIGHT: number = 900;
+    private readonly PAYPAL_WINDOW_NAME: string = 'PayPalPayment';
 
     /**
      * Validates subscription ID
@@ -131,7 +190,22 @@ export class WalletComponent {
         private destroyRef: DestroyRef
     ) {
         this.razorpayKey = this.serviceConfig.RAZORPAY_KEY;
+        this.stripeKey = this.serviceConfig.STRIPE_PUBLISHABLE_KEY;
         this.initializeForm();
+        this.handleStripeRedirectReturn();
+        this.setupPaypalBroadcastListener();
+        this.destroyRef.onDestroy(() => {
+            this.teardownPaypalBroadcastListener();
+            this.teardownPayuPayment();
+            this.clearAllPopupCloseIntervals();
+        });
+
+        this.suggestionSubject.pipe(
+            debounceTime(700),
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(() => {
+            this.appliedSuggestions.set(new Set<number>());
+        });
         
         // Effect to handle route params changes
         effect((onCleanup) => {
@@ -143,6 +217,20 @@ export class WalletComponent {
             if (subscriptionId && subscriptionId.trim().length > 0) {
                 this.getWalletDetails();
                 this.getSubscriptionData();
+            }
+        });
+
+        // Keep selected payment provider valid for the active region/currency.
+        // If the current selection is not in the supported list, fall back to the first supported one.
+        effect(() => {
+            const providers = this.supportedPaymentProviders();
+            if (!providers?.length) {
+                return;
+            }
+            const current = this.walletForm?.get('paymentProvider')?.value;
+            if (!current || !providers.includes(current)) {
+                this.walletForm?.get('paymentProvider')?.patchValue(providers[0]);
+                this.selectedPaymentProvider.set(providers[0]);
             }
         });
     }
@@ -157,6 +245,12 @@ export class WalletComponent {
             paymentProvider: [PaymentProvider.RAZORPAY, Validators.required],
             duration: ['', Validators.required]
         });
+
+        this.walletForm.get('amount')?.valueChanges
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((value) => {
+                this.currentAmount.set(Number(value) || 0);
+            });
     }
 
     /**
@@ -181,7 +275,7 @@ export class WalletComponent {
                             this.subscriptionCurrency.set({ code: planCurrency.code, symbol: planCurrency.symbol });
                         }
                     } else {
-                        this.toasterService.errorToast(response?.message);
+                        response?.message && this.toasterService.errorToast(response?.message);
                     }
                     this.isLoadingSubscription.set(false);
                 },
@@ -208,10 +302,10 @@ export class WalletComponent {
             .pipe(take(1))
             .subscribe({
                 next: (response: any) => {
-                    if (response?.status === 'success' && response?.body) {
+                    if (response?.status === 'success' && response?.body.uniqueName) {
                         this.walletData.set(response.body);
                     } else {
-                        this.toasterService.errorToast(response?.message);
+                        response?.message && this.toasterService.errorToast(response?.message);
                     }
                     this.isLoadingWallet.set(false);
                 },
@@ -314,7 +408,7 @@ export class WalletComponent {
                         this.toasterService.successToast('Payment initiated successfully');
                         this.handlePaymentInitiation(formValue.paymentProvider, response?.body);
                     } else {
-                        this.toasterService.errorToast(response?.message);
+                        response?.message && this.toasterService.errorToast(response?.message);
                     }
                     this.isAddingAmount.set(false);
                 },
@@ -336,7 +430,210 @@ export class WalletComponent {
             this.openRazorpayPayment(responseBody.orderId);
         } else if (provider === PaymentProvider.PAYU && responseBody?.payuHtml) {
             this.openPayuPayment(responseBody.payuHtml);
+        } else if (provider === PaymentProvider.STRIPE && this.getStripeClientSecret(responseBody)) {
+            this.openStripePayment(responseBody);
+        } else if (provider === PaymentProvider.PAYPAL && responseBody?.approvalUrl) {
+            this.openPaypalPayment(responseBody);
         }
+    }
+
+    /**
+     * Opens the PayPal approval link in a centered popup window. The opened
+     * window is expected to broadcast `{success: true}` on the
+     * `call-back-subscription` channel after the user approves the payment.
+     *
+     * @param responseBody Response from addWalletAmount containing paypal info
+     */
+    public openPaypalPayment(responseBody: any): void {
+        const approvalLink: string = responseBody?.approvalUrl;
+        if (!approvalLink) {
+            this.toasterService.errorToast('Invalid PayPal approval link');
+            return;
+        }
+        this.paypalOrderId = responseBody?.paypalOrderId || '';
+
+        const features = this.getCenteredPopupFeatures(this.PAYPAL_WINDOW_WIDTH, this.PAYPAL_WINDOW_HEIGHT);
+        this.openedPaypalWindow = window.open(approvalLink, this.PAYPAL_WINDOW_NAME, features);
+
+        if (!this.openedPaypalWindow) {
+            this.toasterService.errorToast('Failed to open PayPal window. Please check popup blocker settings.');
+            return;
+        }
+        this.isPaymentPopupOpen.set(true);
+        this.watchPopupClose(this.openedPaypalWindow);
+    }
+
+    /**
+     * Sets up a BroadcastChannel listener that captures the wallet payment as
+     * soon as the PayPal popup window reports a successful approval.
+     *
+     * @private
+     */
+    private setupPaypalBroadcastListener(): void {
+        if (typeof BroadcastChannel === 'undefined') {
+            return;
+        }
+        this.paypalBroadcast = new BroadcastChannel('call-back-subscription');
+        this.paypalBroadcast.onmessage = (event: MessageEvent<{ success?: boolean }>) => {
+            if (!event?.data?.success || !this.paypalOrderId) {
+                return;
+            }
+            const capturePayload: ICapturePayload = {
+                subscriptionId: this.subscriptionId(),
+                duration: this.walletForm.get('duration')?.value,
+                paymentProvider: PaymentProvider.PAYPAL,
+                paypalOrderId: this.paypalOrderId
+            };
+            this.captureWalletPayment(capturePayload);
+            this.paypalOrderId = '';
+            this.closePaypalWindow();
+        };
+    }
+
+    /** Cleans up the PayPal BroadcastChannel listener */
+    private teardownPaypalBroadcastListener(): void {
+        this.paypalBroadcast?.close();
+        this.paypalBroadcast = null;
+        this.closePaypalWindow();
+    }
+
+    /** Closes the open PayPal popup window if any */
+    private closePaypalWindow(): void {
+        if (this.openedPaypalWindow && !this.openedPaypalWindow.closed) {
+            this.openedPaypalWindow.close();
+        }
+        this.openedPaypalWindow = null;
+    }
+
+    /**
+     * Extracts the Stripe client secret from a backend response, supporting
+     * either `clientSecret` or `stripeClientSecret` keys.
+     */
+    private getStripeClientSecret(response: any): string | undefined {
+        return response?.clientSecret ?? response?.stripeClientSecret;
+    }
+
+    /**
+     * Extracts payment intent id from a Stripe client secret (format: `pi_xxx_secret_yyy`)
+     */
+    private extractPaymentIntentId(clientSecret: string): string {
+        return clientSecret?.split('_secret_')[0] || '';
+    }
+
+    /**
+     * Opens the reusable Stripe payment dialog with wallet-specific session data.
+     * If the card requires 3DS, the browser will navigate to `returnUrl`; on return
+     * `handleStripeRedirectReturn()` reads sessionStorage and captures the payment.
+     *
+     * @param responseBody Response from addWalletAmount containing the Stripe client secret
+     */
+    public openStripePayment(responseBody: any): void {
+        const clientSecret = this.getStripeClientSecret(responseBody);
+        if (!clientSecret) {
+            this.toasterService.errorToast('Invalid Stripe configuration');
+            return;
+        }
+        if (!this.stripeKey) {
+            this.toasterService.errorToast('Stripe is not configured');
+            return;
+        }
+
+        const sessionData: Record<string, string> = {
+            [`${this.STRIPE_SESSION_PREFIX}subscription_id`]: this.subscriptionId(),
+            [`${this.STRIPE_SESSION_PREFIX}duration`]: this.walletForm.get('duration')?.value || '',
+            [`${this.STRIPE_SESSION_PREFIX}payment_intent_id`]: responseBody?.paymentIntentId || this.extractPaymentIntentId(clientSecret),
+            [`${this.STRIPE_SESSION_PREFIX}amount`]: String(this.getAmountControl()?.value ?? '')
+        };
+
+        const dialogData: StripePaymentDialogData = {
+            stripeKey: this.stripeKey,
+            clientSecret,
+            sessionData,
+            returnUrl: window.location.origin + window.location.pathname,
+            isSetup: !!responseBody?.isSetup,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        };
+
+        // Pre-load Stripe.js so the payment element renders without delay
+        this.loadStripeScript().then(() => {
+            const stripeDialogRef = this.dialog.open(StripePaymentDialogComponent, {
+                panelClass: ['mat-dialog-sm'],
+                disableClose: true,
+                data: dialogData
+            });
+            this.isPaymentPopupOpen.set(true);
+
+            stripeDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+                // Dialog only closes when user cancels or after non-3DS error.
+                // 3DS success navigates the browser; capture happens on return.
+                this.isPaymentPopupOpen.set(false);
+                this.clearStripeSession();
+            });
+        }).catch(() => {
+            this.toasterService.errorToast('Failed to load Stripe payment library');
+        });
+    }
+
+    /**
+     * Detects a Stripe 3DS redirect return based on URL query params
+     * (`payment_intent`, `redirect_status`). On success, captures the wallet
+     * payment using session data persisted before the redirect.
+     *
+     * @private
+     */
+    private handleStripeRedirectReturn(): void {
+        const params = new URLSearchParams(window.location.search);
+        const paymentIntent = params.get('payment_intent');
+        const redirectStatus = params.get('redirect_status');
+        const storedIntentId = sessionStorage.getItem(`${this.STRIPE_SESSION_PREFIX}payment_intent_id`);
+
+        if (!paymentIntent || !storedIntentId || paymentIntent !== storedIntentId) {
+            return;
+        }
+
+        const subscriptionId = sessionStorage.getItem(`${this.STRIPE_SESSION_PREFIX}subscription_id`) || '';
+        const duration = sessionStorage.getItem(`${this.STRIPE_SESSION_PREFIX}duration`) || '';
+
+        // Clean URL so a refresh doesn't re-trigger this
+        this.router.navigate([], { queryParams: {}, replaceUrl: true });
+
+        if (redirectStatus === 'succeeded') {
+            this.captureWalletPayment({
+                subscriptionId,
+                duration,
+                paymentProvider: PaymentProvider.STRIPE,
+                paymentIntentId: paymentIntent
+            });
+        } else {
+            this.toasterService.errorToast('Stripe payment failed');
+        }
+        this.clearStripeSession();
+    }
+
+    /** Removes any wallet stripe keys from sessionStorage */
+    private clearStripeSession(): void {
+        Object.keys(sessionStorage)
+            .filter(key => key.startsWith(this.STRIPE_SESSION_PREFIX))
+            .forEach(key => sessionStorage.removeItem(key));
+    }
+
+    /**
+     * Dynamically loads the Stripe.js script from CDN if not already present
+     * @private
+     */
+    private loadStripeScript(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            if (window['Stripe']) {
+                resolve();
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = STRIPE_JS_CDN_URL;
+            script.onload = () => resolve();
+            script.onerror = () => reject();
+            document.head.appendChild(script);
+        });
     }
 
     /**
@@ -380,10 +677,19 @@ export class WalletComponent {
             description: this.serviceConfig.LEGAL_NAME
         };
 
+        // Flip the popup-open flag off when the user dismisses the Razorpay modal
+        // without paying, or when payment fails.
+        (options as any).modal = {
+            ondismiss: () => this.isPaymentPopupOpen.set(false)
+        };
+
         try {
             const razorpay = new window['Razorpay'](options);
+            razorpay.on?.('payment.failed', () => this.isPaymentPopupOpen.set(false));
             razorpay.open();
+            this.isPaymentPopupOpen.set(true);
         } catch (error) {
+            this.isPaymentPopupOpen.set(false);
             this.toasterService.errorToast('Failed to open payment gateway');
         }
     }
@@ -399,27 +705,85 @@ export class WalletComponent {
             return;
         }
 
+        // Tear down any previous PayU session (listener + window) before opening a new one.
+        this.teardownPayuPayment();
+
         const blob = new Blob([payuHtml], { type: 'text/html' });
-        const windowFeatures = this.getPayUWindowFeatures();
-        const payuWindow = window.open(URL.createObjectURL(blob), this.PAYU_WINDOW_NAME, windowFeatures);
+        const blobUrl = URL.createObjectURL(blob);
+        const windowFeatures = this.getCenteredPopupFeatures(this.PAYU_WINDOW_WIDTH, this.PAYU_WINDOW_HEIGHT);
+        const payuWindow = window.open(blobUrl, this.PAYU_WINDOW_NAME, windowFeatures);
 
         if (!payuWindow) {
+            URL.revokeObjectURL(blobUrl);
             this.toasterService.errorToast('Failed to open payment window. Please check popup blocker settings.');
             return;
         }
 
+        this.openedPayuWindow = payuWindow;
+        this.isPaymentPopupOpen.set(true);
+        this.watchPopupClose(payuWindow, () => {
+            URL.revokeObjectURL(blobUrl);
+            this.teardownPayuPayment();
+        });
         this.setupPayUMessageListener(payuWindow);
     }
 
     /**
-     * Gets PayU window features string with centered position
+     * Closes any open PayU popup and detaches the `message` listener.
+     * Called on retry, on successful capture, and on component destroy
+     * (e.g. user navigates back in the browser).
+     *
+     * @private
+     */
+    private teardownPayuPayment(): void {
+        if (this.payuMessageHandler) {
+            window.removeEventListener('message', this.payuMessageHandler);
+            this.payuMessageHandler = null;
+        }
+        if (this.openedPayuWindow && !this.openedPayuWindow.closed) {
+            this.openedPayuWindow.close();
+        }
+        this.openedPayuWindow = null;
+    }
+
+    /**
+     * Polls a popup window every 500ms; when it closes, resets the
+     * `isPaymentPopupOpen` flag so the Proceed-to-Pay button reappears.
+     * Used for provider popups (PayU / PayPal) that don't expose a close event.
+     *
+     * @private
+     */
+    private watchPopupClose(popup: Window, onClose?: () => void): void {
+        const interval = setInterval(() => {
+            if (!popup || popup.closed) {
+                clearInterval(interval);
+                this.popupCloseIntervals.delete(interval);
+                this.isPaymentPopupOpen.set(false);
+                onClose?.();
+            }
+        }, 500);
+        this.popupCloseIntervals.add(interval);
+    }
+
+    /** Clears any outstanding `watchPopupClose` intervals (called on destroy). */
+    private clearAllPopupCloseIntervals(): void {
+        this.popupCloseIntervals.forEach(id => clearInterval(id));
+        this.popupCloseIntervals.clear();
+    }
+
+    /**
+     * Builds a `window.open` features string for a centered popup of the given size.
+     * Used by PayU and PayPal provider flows.
+     *
+     * @param width Popup width in pixels
+     * @param height Popup height in pixels
      * @returns Window features string
      * @private
      */
-    private getPayUWindowFeatures(): string {
-        const left = (window.innerWidth - this.PAYU_WINDOW_WIDTH) / 2;
-        const top = (window.innerHeight - this.PAYU_WINDOW_HEIGHT) / 2;
-        return `width=${this.PAYU_WINDOW_WIDTH},height=${this.PAYU_WINDOW_HEIGHT},left=${left},top=${top},resizable=yes,scrollbars=yes`;
+    private getCenteredPopupFeatures(width: number, height: number): string {
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        return `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`;
     }
 
     /**
@@ -429,16 +793,16 @@ export class WalletComponent {
      */
     private setupPayUMessageListener(payuWindow: Window): void {
         const handlePayUMessage = (event: MessageEvent<any>) => {
-            if (event.data?.status?.toLowerCase() === 'success' && event.data.transactionId) {
+            const status = event?.data?.status?.toLowerCase?.();
+            if (status === 'success' && event.data.transactionId) {
                 this.handlePayuSuccess(event.data);
-                window.removeEventListener('message', handlePayUMessage);
-                payuWindow?.close();
-            } else if (event.data?.status?.toLowerCase() === 'failed') {
+                this.teardownPayuPayment();
+            } else if (status === 'failed') {
                 this.toasterService.errorToast('PayU payment failed');
-                window.removeEventListener('message', handlePayUMessage);
-                payuWindow?.close();
+                this.teardownPayuPayment();
             }
         };
+        this.payuMessageHandler = handlePayUMessage;
         window.addEventListener('message', handlePayUMessage);
     }
 
@@ -491,7 +855,7 @@ export class WalletComponent {
                         this.toasterService.successToast('Payment captured successfully');
                         this.resetFormAndRefresh();
                     } else {
-                        this.toasterService.errorToast('Failed to capture payment');
+                        response?.message && this.toasterService.errorToast(response.message);
                     }
                 },
                 error: (error) => {
@@ -508,7 +872,7 @@ export class WalletComponent {
      */
     private isValidCapturePayload(payload: ICapturePayload): boolean {
         return !!(payload?.subscriptionId && payload?.paymentProvider &&
-            (payload?.razorpayOrderId || payload?.payuTransactionId));
+            (payload?.razorpayOrderId || payload?.payuTransactionId || payload?.paymentIntentId || payload?.paypalOrderId));
     }
 
     /**
@@ -516,8 +880,13 @@ export class WalletComponent {
      * @private
      */
     private resetFormAndRefresh(): void {
-        this.walletForm.patchValue({ paymentProvider: PaymentProvider.RAZORPAY, amount: null });
-        this.selectedPaymentProvider.set(PaymentProvider.RAZORPAY);
+        // Reset to the first payment provider supported by the active country/region
+        // (e.g. Razorpay for INR, PayPal for GBP) instead of a hard-coded default.
+        const defaultProvider = this.supportedPaymentProviders()?.[0] ?? PaymentProvider.RAZORPAY;
+        this.walletForm.patchValue({ paymentProvider: defaultProvider, amount: null });
+        this.selectedPaymentProvider.set(defaultProvider);
+        this.appliedSuggestions.set(new Set<number>());
+        this.isPaymentPopupOpen.set(false);
         this.getWalletDetails();
     }
 

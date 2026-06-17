@@ -742,6 +742,17 @@ export const PaymentProvider = {
     STRIPE: 'STRIPE'
 };
 
+/** Payment method IDs (used for default selection and API mapping) */
+export const PaymentMethod = {
+    UPI: 'UPI',
+    CARD: 'CARD',
+    NET_BANKING: 'NET_BANKING',
+    WALLET: 'WALLET',
+    EMI: 'EMI',
+    BANK_TRANSFER: 'BANK_TRANSFER',
+    DIRECT_DEBIT: 'DIRECT_DEBIT'
+};
+
 /** Plan duration */
 export const PlanDuration = {
     MONTHLY: 'MONTHLY',

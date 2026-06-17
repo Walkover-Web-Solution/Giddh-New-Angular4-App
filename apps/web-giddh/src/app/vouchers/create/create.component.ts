@@ -1618,6 +1618,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         voucherDetails.entries?.forEach((entry: any, index: number) => {
                             if (entry.entryClass === "ANNEXURE") {
                                 annexureChargesArray.push(this.getAnnexureChargeFormGroup(entry));
+                                this.calculateAnnexureChargeTax(index, false, entry.taxes);
                                 return;
                             }
                             if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
@@ -5626,7 +5627,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             annexureCharge.get("totalCess")?.patchValue(0);
             if (amountInclusive) {
                 const total = annexureCharge.get("total.amountForAccount").value;
-                annexureCharge.get("transactions.0.amount.amountForAccount").patchValue(total);
+                annexureCharge.get("transactions.0.amount.amountForAccount").patchValue(Number(total));
             } else {
                 annexureCharge.get("total.amountForAccount")?.patchValue(amount);
             }

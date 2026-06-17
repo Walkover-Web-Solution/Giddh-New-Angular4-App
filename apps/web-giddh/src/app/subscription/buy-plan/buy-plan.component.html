@@ -812,41 +812,36 @@
                                     >
                                         <mat-card class="outline-card">
                                             <mat-card-content>
-                                                <payment-provider-selector
-                                                    formControlName="paymentProvider"
-                                                    [providers]="filteredPaymentProviders"
-                                                    [label]="localeData?.payment_provider"
-                                                    [required]="
-                                                        !isFreePlan(selectedPlan(), firstStepForm.get('duration')?.value) &&
-                                                        payType === 'buy'
-                                                    "
-                                                    [showError]="isFormSubmitted() && !thirdStepForm.get('paymentProvider')?.value"
-                                                    [errorMessage]="localeData?.please_select_payment_provider"
-                                                    (valueChange)="onPaymentProviderChange()"
-                                                ></payment-provider-selector>
-
-                                                @if (
-                                                    (isMonthly() || isDaily()) &&
-                                                    selectedPlan()?.entityCode === entityCode.IND &&
-                                                    thirdStepForm.get('paymentProvider')?.value === paymentProvider.RAZORPAY
-                                                ) {
-                                                    <!-- Make sure in at last Razorpay is show in list -->
-                                                    <mat-radio-group
-                                                        class="d-flex flex-column mt-3 ml-4"
-                                                        formControlName="razorpayAuthType"
-                                                    >
-                                                        <mat-radio-button color="primary" value="CARD">
-                                                            {{ localeData?.credit_debit_card }}
-                                                        </mat-radio-button>
-                                                        <mat-radio-button
-                                                            color="primary"
-                                                            value="UPI"
-                                                            *ngIf="selectedPlan()?.entityCode === entityCode.IND"
-                                                        >
-                                                            {{ localeData?.upi }}
-                                                        </mat-radio-button>
-                                                    </mat-radio-group>
-                                                }
+                                                <div class="form-group mb-1">
+                                                    <label class="d-block mb-2">
+                                                        {{ localeData?.payment_provider }}
+                                                        @if (
+                                                            !isFreePlan(selectedPlan(), firstStepForm.get('duration')?.value) &&
+                                                            payType === 'buy'
+                                                        ) {
+                                                            <span class="text-red">*</span>
+                                                        }
+                                                    </label>
+                                                    <payment-provider-cards
+                                                        formControlName="paymentProvider"
+                                                        [cssClass]="'bg-table-background-color'"
+                                                        [supportedProviders]="filteredPaymentProviders"
+                                                        [module]="'subscription'"
+                                                        [showMethodRadio]="
+                                                            (isMonthly() || isDaily()) &&
+                                                            selectedPlan()?.entityCode === entityCode.IND &&
+                                                            thirdStepForm.get('paymentProvider')?.value === paymentProvider.RAZORPAY
+                                                        "
+                                                        [defaultMethodSelected]="thirdStepForm.get('razorpayAuthType')?.value"
+                                                        (valueChange)="onPaymentProviderChange()"
+                                                        (methodChange)="onRazorpayMethodChange($event)"
+                                                    ></payment-provider-cards>
+                                                    @if (isFormSubmitted() && !thirdStepForm.get('paymentProvider')?.value) {
+                                                        <mat-error class="d-block mt-2 font-size-12 text-red">
+                                                            {{ localeData?.please_select_payment_provider }}
+                                                        </mat-error>
+                                                    }
+                                                </div>
                                             </mat-card-content>
                                         </mat-card>
                                     </div>

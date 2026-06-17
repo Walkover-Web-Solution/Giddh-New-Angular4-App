@@ -20,5 +20,12 @@
     "wallet_transactions": "वॉलेट व्यवहार",
     "operation_type": "ऑपरेशन प्रकार",
     "no_transactions": "कोणतेही व्यवहार आढळले नाहीत.",
-    "enter_amount": "रक्कम प्रविष्ट करा"
+    "enter_amount": "रक्कम प्रविष्ट करा",
+    "pay_now": "आता भरणा करा",
+    "current_balance": "वर्तमान शिल्लक",
+    "payment_summary": "पेमेंट सारांश",
+    "wallet_amount": "वॉलेट रक्कम",
+    "total_payable": "एकूण भरण्यायोग्य",
+    "including_tax": "कर समावेश",
+    "proceed_to_pay": "भरण्यासाठी पुढे जा"
 }

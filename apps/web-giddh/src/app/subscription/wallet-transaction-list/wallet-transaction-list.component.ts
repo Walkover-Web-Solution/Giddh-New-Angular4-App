@@ -33,7 +33,7 @@ export class WalletTransactionListComponent {
     /** Transaction list data source */
     public dataSource = new MatTableDataSource<any>([]);
     /** Display columns for table */
-    public displayedColumns: string[] = ['createdAt', 'amount', 'remainingBalance', 'operationType'];
+    public displayedColumns: string[] = ['createdAt', 'amount'];
     /** Transaction list loading state */
     public isLoading = signal<boolean>(false);
     /** Current page for pagination */

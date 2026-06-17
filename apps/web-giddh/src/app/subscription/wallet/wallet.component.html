@@ -2,7 +2,7 @@
     @if (isLoading()) {
         <giddh-page-loader></giddh-page-loader>
     } @else {
-        <div class="wallet-container">
+        <div class="wallet-container pt-4">
             <div class="wallet-header d-flex align-items-flex-start justify-content-between border-bottom mb-4 pb-3 column-gap-15">
                 <div class="d-flex align-items-flex-start flex-grow-1 column-gap-15">
                     <div class="header-icon d-flex align-items-center justify-content-center flex-shrink-0 border-radius-8">
@@ -24,26 +24,33 @@
                 <!-- Wallet Summary Section -->
                 @if (walletData()) {
                     <div class="card-shadow border-radius-8 p-4 border">
-                        <h2 class="font-size-16 border-bottom mb-3 pb-3 font-weight-semibold">{{ localeData?.wallet_summary }}</h2>
+                        <div class="d-flex align-items-center justify-content-between border-bottom mb-3 pb-3">
+                            <h2 class="font-size-16 font-weight-semibold mb-0">{{ localeData?.wallet_summary }}</h2>
+                            <span
+                                class="status-badge font-size-12 d-inline-block px-2 py-1 border-radius-12 font-weight-semibold text-uppercase"
+                                [ngClass]="'status-' + (walletData()?.status?.toLowerCase() === 'active' ? 'active' : 'inactive')"
+                            >
+                                {{ walletData()?.status | uppercase }}
+                            </span>
+                        </div>
 
-                        <div class="summary-table d-grid">
-                            <!-- Left: Remaining Balance -->
-                            <div class="d-flex flex-column border-right">
-                                <div class="d-flex flex-column align-items-center justify-content-center text-center row-gap-1 px-3 py-4">
-                                    <label class="font-size-12 text-light font-weight-semibold text-uppercase letter-spacing-wider">
-                                        {{ localeData?.remaining_balance }}
-                                    </label>
-                                    <div class="amount font-size-20 font-weight-bold text-green">
-                                        {{ walletData()?.currency?.symbol }} {{ walletData()?.amountRemaining | number: '1.2-2' }}
-                                    </div>
-                                    <p class="font-size-12 text-light">{{ localeData?.available_to_use }}</p>
+                        <div class="summary-table d-grid align-items-center">
+                            <!-- Left: Current Balance -->
+                            <div
+                                class="d-flex flex-column align-items-center justify-content-center text-center row-gap-05 px-3 border-right"
+                            >
+                                <label class="font-size-12 text-light font-weight-semibold text-uppercase letter-spacing-wider mb-0">
+                                    {{ localeData?.current_balance }}
+                                </label>
+                                <div class="amount font-size-20 font-weight-bold text-green">
+                                    {{ walletData()?.currency?.symbol }} {{ walletData()?.amountRemaining | number: '1.2-2' }}
                                 </div>
                             </div>
 
                             <!-- Right: Other Details -->
                             <div class="summary-right d-flex flex-column font-size-14">
                                 <!-- Upper Row -->
-                                <div class="d-flex flex-wrap align-items-center border-bottom flex-grow-1">
+                                <div class="d-flex flex-wrap align-items-center">
                                     <div class="d-flex flex-column border-right px-3 flex-grow-1 row-gap-1">
                                         <label class="font-size-12 text-light text-uppercase font-weight-semibold">
                                             {{ localeData?.wallet_id }}
@@ -53,58 +60,16 @@
 
                                     <div class="d-flex flex-column border-right px-3 flex-grow-1 row-gap-1">
                                         <label class="font-size-12 text-light text-uppercase font-weight-semibold">
-                                            {{ commonLocaleData?.app_status }}
+                                            {{ localeData?.last_amount_added_on }}
                                         </label>
-                                        <div>
-                                            <span
-                                                class="status-badge font-size-12 d-inline-block px-2 py-1 border-radius-12 font-weight-semibold text-uppercase"
-                                                [ngClass]="
-                                                    'status-' + (walletData()?.status?.toLowerCase() === 'active' ? 'active' : 'inactive')
-                                                "
-                                            >
-                                                {{ walletData()?.status | uppercase }}
-                                            </span>
-                                        </div>
+                                        <div>{{ walletData()?.updatedAt }}</div>
                                     </div>
 
                                     <div class="d-flex flex-column px-3 flex-grow-1 row-gap-1">
-                                        <label class="font-size-12 text-light text-uppercase font-weight-semibold">
-                                            {{ localeData?.plan }}
-                                        </label>
-                                        <div>{{ walletData()?.plan?.name }}</div>
-                                    </div>
-                                </div>
-
-                                <!-- Lower Row -->
-                                <div class="d-flex flex-wrap align-items-center border-bottom flex-grow-1 border-bottom-none">
-                                    <div class="d-flex flex-column border-right px-3 flex-grow-1 row-gap-1">
-                                        <label class="font-size-12 text-light text-uppercase font-weight-semibold">
-                                            {{ localeData?.purchased_amount }}
-                                        </label>
-                                        <div>
-                                            {{ walletData()?.currency?.symbol }} {{ walletData()?.walletAmountPurchased | number: '1.2-2' }}
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex flex-column border-right px-3 flex-grow-1 row-gap-1">
-                                        <label class="font-size-12 text-light text-uppercase font-weight-semibold">
-                                            {{ localeData?.currency }}
-                                        </label>
-                                        <div>{{ walletData()?.currency?.code }}</div>
-                                    </div>
-
-                                    <div class="d-flex flex-column border-right px-3 flex-grow-1 row-gap-1">
                                         <label class="font-size-12 text-light text-uppercase font-weight-semibold">
                                             {{ localeData?.wallet_created_on }}
                                         </label>
                                         <div>{{ walletData()?.createdAt }}</div>
-                                    </div>
-
-                                    <div class="d-flex flex-column px-3 flex-grow-1 row-gap-1">
-                                        <label class="font-size-12 text-light text-uppercase font-weight-semibold">
-                                            {{ localeData?.last_amount_added_on }}
-                                        </label>
-                                        <div>{{ walletData()?.updatedAt }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -116,103 +81,134 @@
                 <div class="card-shadow border-radius-8 p-4 border">
                     <h2 class="font-size-16 border-bottom mb-3 pb-3 font-weight-semibold">{{ localeData?.add_funds_to_wallet }}</h2>
 
-                    <form [formGroup]="walletForm" class="d-grid row-gap-1">
-                        <!-- Amount Input -->
-                        <div class="d-flex flex-column row-gap-1">
-                            <input-field
-                                [type]="'number'"
-                                [name]="'amount'"
-                                [label]="'Amount'"
-                                [placeholder]="localeData?.enter_amount"
-                                formControlName="amount"
-                                [minValue]="getMinimumAmount()"
-                                [required]="true"
-                                class="w-50"
-                            ></input-field>
-                            <p>{{ localeData?.minimum_amount_should_be }} {{ subscriptionCurrency()?.symbol }} {{ getMinimumAmount() }}</p>
-                        </div>
+                    <form [formGroup]="walletForm" class="d-grid">
+                        <!-- Amount + Payment Summary Grid -->
+                        <div class="amount-summary-grid d-grid column-gap-3 row-gap-3 align-items-flex-start">
+                            <!-- Left: Amount Input -->
+                            <div class="d-flex flex-column row-gap-1">
+                                <input-field
+                                    [type]="'text'"
+                                    [name]="'amount'"
+                                    [label]="'Amount'"
+                                    [placeholder]="localeData?.enter_amount"
+                                    formControlName="amount"
+                                    [minValue]="getMinimumAmount()"
+                                    [required]="true"
+                                ></input-field>
+                                <p class="font-size-14 mb-0">
+                                    {{ localeData?.minimum_amount_should_be }} {{ subscriptionCurrency()?.symbol }}{{ getMinimumAmount() }}
+                                </p>
+                                <div class="d-flex column-gap-1 row-gap-1 flex-wrap pt-2">
+                                    @for (suggestion of amountSuggestions; track suggestion) {
+                                        <button
+                                            type="button"
+                                            matButton="outlined"
+                                            class="font-size-14 d-inline-flex align-items-center column-gap-05"
+                                            [ngClass]="{ 'suggestion-applied': isSuggestionApplied(suggestion) }"
+                                            (click)="toggleAmountSuggestion(suggestion)"
+                                        >
+                                            @if (isSuggestionApplied(suggestion)) {
+                                                <i class="icon-tick font-size-12"></i>
+                                            }
+                                            + {{ subscriptionCurrency()?.symbol }}{{ suggestion }}
+                                        </button>
+                                    }
+                                </div>
+                            </div>
 
-                        <!-- Payment Provider Selection -->
-                        <div class="d-flex flex-column row-gap-1 pt-3">
-                            <label class="font-size-14 font-weight-semibold">{{ localeData?.select_payment_provider }}</label>
-                            <p>{{ localeData?.choose_payment_provider }}</p>
+                            <!-- Right: Payment Summary Card -->
+                            <div class="payment-summary-card border-radius-8 p-3 d-flex flex-column row-gap-15 border text-black">
+                                <div class="d-flex align-items-center column-gap-1">
+                                    <i class="font-size-20 icon-summary"></i>
+                                    <span class="font-size-16 font-weight-semibold text-primary">{{ localeData?.payment_summary }}</span>
+                                </div>
 
-                            <div class="payment-providers-grid d-grid column-gap-2">
-                                @for (provider of paymentProviders; track provider.id) {
-                                    <div
-                                        class="provider-card d-flex align-items-flex-start p-3 border-radius-8 cursor-pointer column-gap-1"
-                                        [ngClass]="{ 'selected': selectedPaymentProvider() === provider.id }"
-                                        (click)="selectPaymentProvider(provider.id)"
-                                    >
-                                        <div class="provider-radio d-flex align-items-center flex-shrink-0">
-                                            <input
-                                                type="radio"
-                                                [id]="'provider-' + provider.id"
-                                                [value]="provider.id"
-                                                [formControl]="walletForm.get('paymentProvider')"
-                                                [attr.aria-label]="provider.name"
-                                            />
-                                        </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>{{ localeData?.wallet_amount }}</span>
+                                    <span class="font-weight-semibold">
+                                        {{ subscriptionCurrency()?.symbol }} {{ currentAmount() | number: '1.2-2' }}
+                                    </span>
+                                </div>
 
-                                        <div class="d-flex flex-column flex-grow-1 row-gap-1">
-                                            <img [src]="provider.logo" [alt]="provider.name" class="provider-logo" />
-
-                                            <div class="d-flex flex-column row-gap-1">
-                                                <div class="d-flex flex-wrap column-gap-1">
-                                                    @for (method of provider.features; track method.name) {
-                                                        <span
-                                                            class="method-badge font-size-12 px-3 py-1 border-radius-12 d-flex align-items-center"
-                                                        >
-                                                            <img [src]="method.icon" [alt]="method.name" class="method-icon mr-1" />
-                                                            {{ method.name }}
-                                                        </span>
-                                                    }
-                                                </div>
-                                                <p class="provider-description font-size-12 line-height-16">
-                                                    Pay using {{ getFeatureNames(provider.features) }}
-                                                    <br />
-                                                    via {{ provider.name }}.
-                                                </p>
-                                            </div>
-                                        </div>
+                                @if (subscriptionCurrency()?.code?.toUpperCase() === 'INR') {
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>GST ({{ GST_RATE * 100 }}%)</span>
+                                        <span class="font-weight-semibold">
+                                            {{ subscriptionCurrency()?.symbol }} {{ taxAmount() | number: '1.2-2' }}
+                                        </span>
                                     </div>
                                 }
+
+                                <div class="payment-summary-divider"></div>
+
+                                <div class="d-flex justify-content-between align-items-flex-start">
+                                    <span class="font-size-16 font-weight-semibold">
+                                        Total Payable
+                                        @if (subscriptionCurrency()?.code?.toUpperCase() === 'INR') {
+                                            <span class="font-size-12 text-light">(Including tax)</span>
+                                        }
+                                    </span>
+                                    <div class="d-flex flex-column align-items-flex-end">
+                                        <span class="font-size-20 font-weight-bold text-primary">
+                                            {{ subscriptionCurrency()?.symbol }} {{ netAmountPayable() | number: '1.2-2' }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
+                        <!-- Payment Provider Selection -->
+                        <div class="d-flex flex-column row-gap-1">
+                            <label class="font-size-14 font-weight-semibold">{{ localeData?.select_payment_provider }}</label>
+                            <p>{{ localeData?.choose_payment_provider }}</p>
+
+                            <payment-provider-cards
+                                formControlName="paymentProvider"
+                                [supportedProviders]="supportedPaymentProviders()"
+                                (valueChange)="selectPaymentProvider($event)"
+                            ></payment-provider-cards>
+                        </div>
+
                         <!-- Add Funds Button -->
-                        <div class="pt-2">
-                            <button
-                                type="button"
-                                matButton="filled"
-                                class="font-size-14"
-                                color="primary"
-                                (click)="addFundsToWallet()"
-                                [disabled]="!isAmountValid() || isAddingAmount()"
-                                [matTooltip]="
-                                    !isAmountValid()
-                                        ? localeData?.minimum_amount_should_be +
-                                          ' ' +
-                                          subscriptionCurrency()?.symbol +
-                                          ' ' +
-                                          getMinimumAmount()
-                                        : ''
-                                "
-                                [matTooltipDisabled]="isAmountValid()"
-                                [matTooltipPosition]="'right'"
-                            >
-                                @if (!isAddingAmount()) {
-                                    <span>
-                                        <span class="icon-plus"></span>
-                                        {{ localeData?.add_funds_to_wallet }}
-                                    </span>
-                                } @else {
-                                    <span class="d-flex align-items-center column-gap-05">
-                                        <mat-spinner diameter="16"></mat-spinner>
-                                        <span>{{ localeData?.processing }}</span>
-                                    </span>
-                                }
-                            </button>
+                        <div class="pt-3">
+                            @if (!isPaymentPopupOpen()) {
+                                <button
+                                    type="button"
+                                    matButton="filled"
+                                    class="font-size-14"
+                                    color="primary"
+                                    (click)="addFundsToWallet()"
+                                    [disabled]="!isAmountValid() || isAddingAmount()"
+                                    [matTooltip]="
+                                        !isAmountValid()
+                                            ? localeData?.minimum_amount_should_be +
+                                              ' ' +
+                                              subscriptionCurrency()?.symbol +
+                                              ' ' +
+                                              getMinimumAmount()
+                                            : ''
+                                    "
+                                    [matTooltipDisabled]="isAmountValid()"
+                                    [matTooltipPosition]="'right'"
+                                >
+                                    @if (!isAddingAmount()) {
+                                        <span>
+                                            <span class="icon-plus"></span>
+                                            @if (isAmountValid()) {
+                                                {{ localeData?.proceed_to_pay }} {{ subscriptionCurrency()?.symbol }}
+                                                {{ netAmountPayable() | number: '1.2-2' }}
+                                            } @else {
+                                                {{ localeData?.proceed_to_pay }}
+                                            }
+                                        </span>
+                                    } @else {
+                                        <span class="d-flex align-items-center column-gap-05">
+                                            <mat-spinner diameter="16"></mat-spinner>
+                                            <span>{{ localeData?.processing }}</span>
+                                        </span>
+                                    }
+                                </button>
+                            }
                         </div>
 
                         <!-- Security Note -->
