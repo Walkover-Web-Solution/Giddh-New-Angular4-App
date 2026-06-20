@@ -311,6 +311,11 @@
                                             {{ localeData?.wallet }}
                                         </button>
                                     }
+                                    @if (element?.isOwner && element.status.toLowerCase() === 'cancelled') {
+                                        <button mat-menu-item (click)="activateSubscription(element?.subscriptionId)">
+                                            {{ localeData?.activate_subscription }}
+                                        </button>
+                                    }
                                 </div>
                             </mat-menu>
                         </td>

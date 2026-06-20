@@ -571,6 +571,16 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Activates a subscription.
+     *
+     * @param id - The ID of the subscription to activate.
+     * @memberof SubscriptionComponent
+     */
+    public activateSubscription(id: any): void {
+        this.router.navigate(['/pages/user-details/subscription/activate-subscription/' + id]);
+    }
+
+    /**
      * Navigates to the page for changing billing information in the SubscriptionComponent.
      *
      * @param data - The subscription data for which billing information is to be changed.

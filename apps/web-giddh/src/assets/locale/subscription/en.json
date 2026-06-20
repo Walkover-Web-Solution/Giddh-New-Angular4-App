@@ -159,5 +159,6 @@
         "pay_now": "Pay now",
         "processing": "Processing...",
         "payment_failed": "Payment failed. Please try again.",
-        "wallet": "Wallet"
+        "wallet": "Wallet",
+        "activate_subscription": "Activate Subscription"
     }
