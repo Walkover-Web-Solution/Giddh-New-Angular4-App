@@ -313,7 +313,7 @@
                                     }
                                     @if (element?.isOwner && element.status.toLowerCase() === 'cancelled') {
                                         <button mat-menu-item (click)="activateSubscription(element?.subscriptionId)">
-                                            {{ localeData?.activate_subscription }}
+                                            {{ localeData?.reactivate_subscription }}
                                         </button>
                                     }
                                 </div>

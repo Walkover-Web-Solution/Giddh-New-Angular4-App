@@ -160,6 +160,6 @@
         "processing": "प्रसंस्करण हो रहा है...",
         "payment_failed": "भुगतान विफल रहा। कृपया पुनः प्रयास करें।",
         "wallet": "वॉलेट",
-        "activate_subscription": "सदस्यता सक्रिय करें"
+        "reactivate_subscription": "सदस्यता पुनः सक्रिय करें"
 
 	}

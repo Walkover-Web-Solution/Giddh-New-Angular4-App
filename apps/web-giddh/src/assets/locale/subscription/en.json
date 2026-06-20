@@ -160,5 +160,5 @@
         "processing": "Processing...",
         "payment_failed": "Payment failed. Please try again.",
         "wallet": "Wallet",
-        "activate_subscription": "Activate Subscription"
+        "reactivate_subscription": "Reactivate Subscription"
     }
