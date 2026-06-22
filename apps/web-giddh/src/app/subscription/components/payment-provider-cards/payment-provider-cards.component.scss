@@ -10,6 +10,7 @@
     border: 2px solid var(--color-border-medium);
     transition: all 0.3s ease;
     align-items: flex-start;
+    max-width: 600px;
 
     &:hover {
         border-color: var(--color-blue);

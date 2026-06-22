@@ -80,143 +80,151 @@
                 <!-- Add Funds Section -->
                 <div class="card-shadow border-radius-8 p-4 border">
                     <h2 class="font-size-16 border-bottom mb-3 pb-3 font-weight-semibold">{{ localeData?.add_funds_to_wallet }}</h2>
-
-                    <form [formGroup]="walletForm" class="d-grid">
-                        <!-- Amount + Payment Summary Grid -->
-                        <div class="amount-summary-grid d-grid column-gap-3 row-gap-3 align-items-flex-start">
-                            <!-- Left: Amount Input -->
-                            <div class="d-flex flex-column row-gap-1">
-                                <input-field
-                                    [type]="'text'"
-                                    [name]="'amount'"
-                                    [label]="'Amount'"
-                                    [placeholder]="localeData?.enter_amount"
-                                    formControlName="amount"
-                                    [minValue]="getMinimumAmount()"
-                                    [required]="true"
-                                ></input-field>
-                                <p class="font-size-14 mb-0">
-                                    {{ localeData?.minimum_amount_should_be }} {{ subscriptionCurrency()?.symbol }}{{ getMinimumAmount() }}
-                                </p>
-                                <div class="d-flex column-gap-1 row-gap-1 flex-wrap pt-2">
-                                    @for (suggestion of amountSuggestions; track suggestion) {
-                                        <button
-                                            type="button"
-                                            matButton="outlined"
-                                            class="font-size-14 d-inline-flex align-items-center column-gap-05"
-                                            [ngClass]="{ 'suggestion-applied': isSuggestionApplied(suggestion) }"
-                                            (click)="toggleAmountSuggestion(suggestion)"
-                                        >
-                                            @if (isSuggestionApplied(suggestion)) {
-                                                <i class="icon-tick font-size-12"></i>
-                                            }
-                                            + {{ subscriptionCurrency()?.symbol }}{{ suggestion }}
-                                        </button>
-                                    }
-                                </div>
-                            </div>
-
-                            <!-- Right: Payment Summary Card -->
-                            <div class="payment-summary-card border-radius-8 p-3 d-flex flex-column row-gap-15 border text-black">
-                                <div class="d-flex align-items-center column-gap-1">
-                                    <i class="font-size-20 icon-summary"></i>
-                                    <span class="font-size-16 font-weight-semibold text-primary">{{ localeData?.payment_summary }}</span>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span>{{ localeData?.wallet_amount }}</span>
-                                    <span class="font-weight-semibold">
-                                        {{ subscriptionCurrency()?.symbol }} {{ currentAmount() | number: '1.2-2' }}
-                                    </span>
-                                </div>
-
-                                @if (subscriptionCurrency()?.code?.toUpperCase() === 'INR') {
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>GST ({{ GST_RATE * 100 }}%)</span>
-                                        <span class="font-weight-semibold">
-                                            {{ subscriptionCurrency()?.symbol }} {{ taxAmount() | number: '1.2-2' }}
-                                        </span>
-                                    </div>
-                                }
-
-                                <div class="payment-summary-divider"></div>
-
-                                <div class="d-flex justify-content-between align-items-flex-start">
-                                    <span class="font-size-16 font-weight-semibold">
-                                        Total Payable
-                                        @if (subscriptionCurrency()?.code?.toUpperCase() === 'INR') {
-                                            <span class="font-size-12 text-light">(Including tax)</span>
+                    @if (supportedPaymentProviders().length) {
+                        <form [formGroup]="walletForm" class="d-grid">
+                            <!-- Amount + Payment Summary Grid -->
+                            <div class="amount-summary-grid d-grid column-gap-3 row-gap-3 align-items-flex-start">
+                                <!-- Left: Amount Input -->
+                                <div class="d-flex flex-column row-gap-1">
+                                    <input-field
+                                        [type]="'text'"
+                                        [name]="'amount'"
+                                        [label]="'Amount'"
+                                        [placeholder]="localeData?.enter_amount"
+                                        formControlName="amount"
+                                        [minValue]="getMinimumAmount()"
+                                        [required]="true"
+                                    ></input-field>
+                                    <p class="font-size-14 mb-0">
+                                        {{ localeData?.minimum_amount_should_be }} {{ subscriptionCurrency()?.symbol
+                                        }}{{ getMinimumAmount() }}
+                                    </p>
+                                    <div class="d-flex column-gap-1 row-gap-1 flex-wrap">
+                                        @for (suggestion of amountSuggestions; track suggestion) {
+                                            <button
+                                                type="button"
+                                                matButton="outlined"
+                                                class="font-size-14 d-inline-flex align-items-center column-gap-05"
+                                                [ngClass]="{ 'suggestion-applied': isSuggestionApplied(suggestion) }"
+                                                (click)="toggleAmountSuggestion(suggestion)"
+                                            >
+                                                @if (isSuggestionApplied(suggestion)) {
+                                                    <i class="icon-tick font-size-12"></i>
+                                                }
+                                                + {{ subscriptionCurrency()?.symbol }}{{ suggestion }}
+                                            </button>
                                         }
-                                    </span>
-                                    <div class="d-flex flex-column align-items-flex-end">
-                                        <span class="font-size-20 font-weight-bold text-primary">
-                                            {{ subscriptionCurrency()?.symbol }} {{ netAmountPayable() | number: '1.2-2' }}
+                                    </div>
+                                </div>
+
+                                <!-- Right: Payment Summary Card -->
+                                <div class="payment-summary-card border-radius-8 p-3 d-flex flex-column row-gap-15 border text-black">
+                                    <div class="d-flex align-items-center column-gap-1">
+                                        <i class="font-size-20 icon-summary"></i>
+                                        <span class="font-size-16 font-weight-semibold text-primary">
+                                            {{ localeData?.payment_summary }}
                                         </span>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>{{ localeData?.wallet_amount }}</span>
+                                        <span class="font-weight-semibold">
+                                            {{ subscriptionCurrency()?.symbol }} {{ currentAmount() | number: '1.2-2' }}
+                                        </span>
+                                    </div>
+
+                                    @if (subscriptionCurrency()?.code?.toUpperCase() === 'INR') {
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>GST ({{ GST_RATE * 100 }}%)</span>
+                                            <span class="font-weight-semibold">
+                                                {{ subscriptionCurrency()?.symbol }} {{ taxAmount() | number: '1.2-2' }}
+                                            </span>
+                                        </div>
+                                    }
+
+                                    <div class="payment-summary-divider"></div>
+
+                                    <div class="d-flex justify-content-between align-items-flex-start">
+                                        <span class="font-size-16 font-weight-semibold">
+                                            Total Payable
+                                            @if (subscriptionCurrency()?.code?.toUpperCase() === 'INR') {
+                                                <span class="font-size-12 text-light">(Including tax)</span>
+                                            }
+                                        </span>
+                                        <div class="d-flex flex-column align-items-flex-end">
+                                            <span class="font-size-20 font-weight-bold text-primary">
+                                                {{ subscriptionCurrency()?.symbol }} {{ netAmountPayable() | number: '1.2-2' }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Payment Provider Selection -->
-                        <div class="d-flex flex-column row-gap-1">
-                            <label class="font-size-14 font-weight-semibold">{{ localeData?.select_payment_provider }}</label>
-                            <p>{{ localeData?.choose_payment_provider }}</p>
+                            <!-- Payment Provider Selection -->
+                            <div class="d-flex flex-column row-gap-1">
+                                <label class="font-size-14 font-weight-semibold">{{ localeData?.select_payment_provider }}</label>
+                                <p>{{ localeData?.choose_payment_provider }}</p>
 
-                            <payment-provider-cards
-                                formControlName="paymentProvider"
-                                [supportedProviders]="supportedPaymentProviders()"
-                                (valueChange)="selectPaymentProvider($event)"
-                            ></payment-provider-cards>
-                        </div>
+                                <payment-provider-cards
+                                    formControlName="paymentProvider"
+                                    [supportedProviders]="supportedPaymentProviders()"
+                                    (valueChange)="selectPaymentProvider($event)"
+                                ></payment-provider-cards>
+                            </div>
 
-                        <!-- Add Funds Button -->
-                        <div class="pt-3">
-                            @if (!isPaymentPopupOpen()) {
-                                <button
-                                    type="button"
-                                    matButton="filled"
-                                    class="font-size-14"
-                                    color="primary"
-                                    (click)="addFundsToWallet()"
-                                    [disabled]="!isAmountValid() || isAddingAmount()"
-                                    [matTooltip]="
-                                        !isAmountValid()
-                                            ? localeData?.minimum_amount_should_be +
-                                              ' ' +
-                                              subscriptionCurrency()?.symbol +
-                                              ' ' +
-                                              getMinimumAmount()
-                                            : ''
-                                    "
-                                    [matTooltipDisabled]="isAmountValid()"
-                                    [matTooltipPosition]="'right'"
-                                >
-                                    @if (!isAddingAmount()) {
-                                        <span>
-                                            <span class="icon-plus"></span>
-                                            @if (isAmountValid()) {
-                                                {{ localeData?.proceed_to_pay }} {{ subscriptionCurrency()?.symbol }}
-                                                {{ netAmountPayable() | number: '1.2-2' }}
-                                            } @else {
-                                                {{ localeData?.proceed_to_pay }}
-                                            }
-                                        </span>
-                                    } @else {
-                                        <span class="d-flex align-items-center column-gap-05">
-                                            <mat-spinner diameter="16"></mat-spinner>
-                                            <span>{{ localeData?.processing }}</span>
-                                        </span>
-                                    }
-                                </button>
-                            }
-                        </div>
+                            <!-- Add Funds Button -->
+                            <div class="pt-3">
+                                @if (!isPaymentPopupOpen()) {
+                                    <button
+                                        type="button"
+                                        matButton="filled"
+                                        class="font-size-14"
+                                        color="primary"
+                                        (click)="addFundsToWallet()"
+                                        [disabled]="!isAmountValid() || isAddingAmount()"
+                                        [matTooltip]="
+                                            !isAmountValid()
+                                                ? localeData?.minimum_amount_should_be +
+                                                  ' ' +
+                                                  subscriptionCurrency()?.symbol +
+                                                  ' ' +
+                                                  getMinimumAmount()
+                                                : ''
+                                        "
+                                        [matTooltipDisabled]="isAmountValid()"
+                                        [matTooltipPosition]="'right'"
+                                    >
+                                        @if (!isAddingAmount()) {
+                                            <span>
+                                                <span class="icon-plus"></span>
+                                                @if (isAmountValid()) {
+                                                    {{ localeData?.proceed_to_pay }} {{ subscriptionCurrency()?.symbol }}
+                                                    {{ netAmountPayable() | number: '1.2-2' }}
+                                                } @else {
+                                                    {{ localeData?.proceed_to_pay }}
+                                                }
+                                            </span>
+                                        } @else {
+                                            <span class="d-flex align-items-center column-gap-05">
+                                                <mat-spinner diameter="16"></mat-spinner>
+                                                <span>{{ localeData?.processing }}</span>
+                                            </span>
+                                        }
+                                    </button>
+                                }
+                            </div>
 
-                        <!-- Security Note -->
-                        <div class="security-note d-flex align-items-center font-size-14 mt-3 column-gap-05 justify-content-center">
-                            <img src="assets/images/protect.png" alt="Secure" class="security-icon" />
-                            {{ localeData?.payment_secure_message }}
+                            <!-- Security Note -->
+                            <div class="security-note d-flex align-items-center font-size-14 mt-3 column-gap-05 justify-content-center">
+                                <img src="assets/images/protect.png" alt="Secure" class="security-icon" />
+                                {{ localeData?.payment_secure_message }}
+                            </div>
+                        </form>
+                    } @else {
+                        <div class="text-center py-4">
+                            <p class="font-size-16 font-weight-semibold">{{ localeData?.please_contact_administrator }}</p>
                         </div>
-                    </form>
+                    }
                 </div>
             </div>
         </div>

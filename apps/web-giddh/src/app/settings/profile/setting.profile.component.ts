@@ -80,7 +80,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         manageInventory: false,
         portalDomain: '',
         withPay: 'false',
-        ledgerView: LedgerViewEnum.TView
+        ledgerView: LedgerViewEnum.TView,
+        autoGenerateNote: false
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -364,7 +365,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         companyName: response.name,
                         balanceDecimalPlaces: response.balanceDecimalPlaces,
                         balanceDisplayFormat: response.balanceDisplayFormat,
-                        ledgerView: response.ledgerView
+                        ledgerView: response.ledgerView,
+                        autoGenerateNote: response.autoGenerateNote
                     }
                 }
                 this.triggerChangeDetection();
@@ -1228,7 +1230,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 isMultipleCurrency: profileObj.isMultipleCurrency,
                 manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false,
                 withPay: profileObj.withPay,
-                ledgerView: profileObj.ledgerView
+                ledgerView: profileObj.ledgerView,
+                autoGenerateNote: profileObj.autoGenerateNote
             };
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 

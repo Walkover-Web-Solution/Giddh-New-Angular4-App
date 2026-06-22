@@ -27,5 +27,6 @@
     "wallet_amount": "वॉलेट रक्कम",
     "total_payable": "एकूण भरण्यायोग्य",
     "including_tax": "कर समावेश",
-    "proceed_to_pay": "भरण्यासाठी पुढे जा"
+    "proceed_to_pay": "भरण्यासाठी पुढे जा",
+    "please_contact_administrator": "वॉलेटमध्ये निधी जोडण्यासाठी कृपया तुमच्या प्रशासकाशी संपर्क साधा."
 }

@@ -27,5 +27,6 @@
     "wallet_amount": "Wallet Amount",
     "total_payable": "Total Payable",
     "including_tax": "Including tax",
-    "proceed_to_pay": "Proceed to Pay"
+    "proceed_to_pay": "Proceed to Pay",
+    "please_contact_administrator": "Please contact your administrator to add funds to the wallet."
 }
