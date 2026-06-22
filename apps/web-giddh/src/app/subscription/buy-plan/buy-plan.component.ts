@@ -58,7 +58,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** True when a Stripe failure redirect is awaiting translation data before showing the toast */
     private pendingStripeFailureToast: boolean = false;
     /** Hold selected tab */
-    public selectedStep: number = 0;
+    public selectedStep = signal<number>(0);
     /** Form Group for subscription first step form form */
     public firstStepForm: FormGroup;
     /** Form Group for subscription second step form */
@@ -288,6 +288,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public optionSelected: boolean = false;
     /** Holds user information  by user ip */
     private detectUserInfoByIp: any = {}
+    /** true if cancel subscription reactivate. */
+    public activateSubscription: boolean = false;
+    /** true if user have at leate one Company. */
+    public atLeatOneCompany: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -376,11 +380,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.razorpaySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.subscriptionId && this.isChangePlan) {
+                if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
                     this.navigateToRoute('/pages/user-details/subscription');
                 } else {
                     this.navigateToNewCompany(this.subscriptionId);
-                };
+                }
+            }
+        });
+
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.atLeatOneCompany = response?.length >= 1;
             }
         });
 
@@ -399,7 +409,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 sessionStorage.removeItem('stripe_selected_plan');
                 sessionStorage.removeItem('stripe_region_value');
                 sessionStorage.removeItem('stripe_region_label');
-                if (isChangePlanSession || this.isChangePlan || this.isRenewPlan) {
+                if (isChangePlanSession || this.isChangePlan || this.isRenewPlan || (this.activateSubscription && this.atLeatOneCompany)) {
                     this.navigateToRoute('/pages/user-details/subscription');
                 } else {
                     this.navigateToNewCompany(subscriptionId);
@@ -418,7 +428,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (response.dueAmount >= value) {
                     this.initializePayment(response, 'generateOrderId');
                 } else {
-                    if (this.subscriptionId && this.isChangePlan) {
+                    if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
                         this.navigateToRoute('/pages/user-details/subscription');
                     } else {
                         this.navigateToNewCompany(this.responseSubscriptionId);
@@ -670,7 +680,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // } else {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
-                if (this.subscriptionId && this.isChangePlan) {
+                if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
                     this.navigateToRoute('/pages/user-details/subscription');
                 } else {
                     this.navigateToNewCompany(this.responseSubscriptionId);
@@ -682,7 +692,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response) {
                 this.setBroadcastEvent();
                 this.isLoading = false;
-                if (this.subscriptionId && this.isChangePlan) {
+                if (this.subscriptionId && (this.isChangePlan || this.activateSubscription&& this.atLeatOneCompany)) {
                     this.navigateToRoute('/pages/user-details/subscription');
                 } else {
                     this.navigateToNewCompany(this.subscriptionId);
@@ -710,7 +720,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         });
                     } else {
                         setTimeout(() => {
-                            if (this.subscriptionId && this.isChangePlan) {
+                            if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
                                 this.navigateToRoute('/pages/user-details/subscription');
                             } else {
                                 this.navigateToNewCompany(this.subscriptionId);
@@ -775,6 +785,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.viewSubscriptionData$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
+            this.activateSubscription = response.status.toLowerCase() === 'cancelled' && this.router.url === ('/pages/user-details/subscription/activate-subscription/' + this.subscriptionId);
+            this.isChangePlan = !this.activateSubscription;
+            setTimeout(()=>{
+                this.selectedStep.set(this.activateSubscription ? 1 : 0);
+            }, 150);
             if (this.subscriptionId && response?.region) {
                 this.newUserSelectCountry({
                     "label": response.region?.code + " - " + response.region?.name,
@@ -859,7 +874,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public paypalCallBackEvent(response: any): void {
-        if (this.subscriptionId && this.isChangePlan) {
+        if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
             this.navigateToRoute('/pages/user-details/subscription');
         } else {
             if (this.payType === 'trial') {
@@ -1449,15 +1464,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted.set(false);
-        if (this.selectedStep === 0 && this.firstStepForm.invalid) {
+        if (this.selectedStep() === 0 && this.firstStepForm.invalid) {
             this.isFormSubmitted.set(true);
             return;
         }
-        if (this.selectedStep === 1 && this.secondStepForm.invalid) {
+        if (this.selectedStep() === 1 && this.secondStepForm.invalid) {
             this.isFormSubmitted.set(true);
             return;
         }
-        if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
+        if (this.selectedStep() === 2 && this.thirdStepForm.invalid) {
             this.isFormSubmitted.set(true);
             return;
         }
@@ -1471,7 +1486,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
         }
 
-        this.selectedStep++;
+        this.selectedStep.update(v => v + 1);
     }
 
 
@@ -1482,9 +1497,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public onSelectedTab(event: any): void {
-        this.selectedStep = event?.selectedIndex;
+        this.selectedStep.set(event?.selectedIndex);
         this.setFinalAmount();
-        if (this.selectedStep !== 2) {
+        if (this.selectedStep() !== 2) {
             this.resetStripeState();
         }
         this.changeDetection.detectChanges();
@@ -1848,6 +1863,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
 
             request['payNow'] = !isTrial;
+            if (this.activateSubscription) {
+                request['reactivateFromSubscriptionId'] = this.subscriptionId;
+            }
             // if (isTrial) {
             //     delete request.razorpayAuthType;
             //     delete request.subscriptionId;
@@ -1855,7 +1873,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             //     delete request.paymentProvider;
             //     delete request.promoCode;
             // }
-            if (this.subscriptionId && this.isChangePlan) {
+            if (this.subscriptionId && this.isChangePlan && !this.activateSubscription) {
                 request.subscriptionId = this.subscriptionId;
                 this.subscriptionRequest = request;
                 this.componentStore.getChangePlanDetails(request);
@@ -2292,7 +2310,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         // screen is correct before the fresh API response arrives.
         this.setFinalAmount();
 
-        this.selectedStep = 2;
+        this.selectedStep.set(2);
         // Defer stepper navigation so the linear stepper sees valid forms after patchValue.
         // Use next() twice instead of selectedIndex because linear stepper validates
         // stepControl before allowing navigation.
@@ -2497,6 +2515,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */ 
     private navigateToNewCompany(subscriptionId: string): void {
+        if (this.subscriptionId && this.activateSubscription && this.atLeatOneCompany) {
+            this.navigateToRoute('/pages/user-details/subscription');
+        }
         const billingForm = this.secondStepForm.value;
         delete billingForm.billingName;
 
