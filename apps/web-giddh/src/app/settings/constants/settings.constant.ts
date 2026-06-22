@@ -49,6 +49,7 @@ export interface OrganizationProfile {
     withPay?: any;
     ledgerView?: LedgerViewEnum;
     showAccountUniqueName?: boolean;
+    autoGenerateNote?: boolean;
 }
 
 /** Form type in setting aside component */

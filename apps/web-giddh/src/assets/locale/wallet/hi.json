@@ -27,5 +27,6 @@
     "wallet_amount": "वॉलेट राशि",
     "total_payable": "कुल भुगतान योग्य",
     "including_tax": "कर सहित",
-    "proceed_to_pay": "भुगतान करने के लिए आगे बढ़ें"
+    "proceed_to_pay": "भुगतान करने के लिए आगे बढ़ें",
+    "please_contact_administrator": "वॉलेट में राशि जोड़ने के लिए कृपया अपने प्रशासक से संपर्क करें।"
 }

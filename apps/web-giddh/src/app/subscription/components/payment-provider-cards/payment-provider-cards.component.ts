@@ -146,7 +146,10 @@ export class PaymentProviderCardsComponent implements ControlValueAccessor {
      * @returns Provider details object
      */
     public getPaymentProviderDetails(providerId: string): IPaymentProvider {
-        return this.paymentProviderDetails[providerId];
+        if (this.serviceConfig.ALL_PAYMENT_PROVIDERS.includes(providerId)) {
+            return this.paymentProviderDetails[providerId];
+        }
+        return null;
     }
 
 

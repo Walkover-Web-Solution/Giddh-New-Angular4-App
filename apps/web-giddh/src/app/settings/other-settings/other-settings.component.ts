@@ -57,7 +57,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         manageInventory: false,
         withPay: false,
         ledgerView: LedgerViewEnum.TView,
-        showAccountUniqueName: false
+        showAccountUniqueName: false,
+        autoGenerateNote: false
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
