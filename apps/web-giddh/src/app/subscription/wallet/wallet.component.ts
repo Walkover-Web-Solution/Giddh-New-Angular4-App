@@ -113,18 +113,18 @@ export class WalletComponent {
     public readonly supportedPaymentProviders = computed<string[]>(() => {
         const currencyCode = this.subscriptionCurrency()?.code?.toUpperCase();
         const allPaymentProviders = this.serviceConfig.ALL_PAYMENT_PROVIDERS;
-        let suppurtedPaymentProviders: string[] = [];
+        let supportedPaymentProviders: string[] = [];
         if (currencyCode === 'INR') {
-            suppurtedPaymentProviders = [PaymentProvider.RAZORPAY, PaymentProvider.PAYU];
+            supportedPaymentProviders = [PaymentProvider.RAZORPAY, PaymentProvider.PAYU];
+        } else if (currencyCode === 'GBP') {
+            supportedPaymentProviders = [PaymentProvider.PAYPAL, PaymentProvider.STRIPE];
+        } else {
+            const isPaypalSupported = PAYPAL_SUPPORTED_CURRENCIES.includes(currencyCode);
+            supportedPaymentProviders = isPaypalSupported
+                ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYPAL, PaymentProvider.STRIPE]
+                : [PaymentProvider.RAZORPAY, PaymentProvider.STRIPE];
         }
-        if (currencyCode === 'GBP') {
-            suppurtedPaymentProviders = [PaymentProvider.PAYPAL, PaymentProvider.STRIPE];
-        }
-        const isPaypalSupported = PAYPAL_SUPPORTED_CURRENCIES.includes(currencyCode);
-        suppurtedPaymentProviders = isPaypalSupported
-            ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYPAL, PaymentProvider.STRIPE]
-            : [PaymentProvider.RAZORPAY, PaymentProvider.STRIPE];
-        return suppurtedPaymentProviders.filter((provider) => allPaymentProviders.includes(provider));
+        return supportedPaymentProviders.filter((provider) => allPaymentProviders.includes(provider));
     });
     /** Locale data */
     public localeData: any = {};
