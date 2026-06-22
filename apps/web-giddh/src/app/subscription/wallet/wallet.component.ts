@@ -13,7 +13,7 @@ import { signal, computed } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
 import { WalletService } from '../services/wallet.service';
 import { ServiceConfig } from '../../services/service.config';
-import { ASIDE_PANE_CONFIG, PaymentProvider } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, PaymentProvider, PAYPAL_SUPPORTED_CURRENCIES } from '../../app.constant';
 import { IWalletData, ICapturePayload } from '../models/wallet.model';
 import { PaymentProviderCardsComponent } from '../components/payment-provider-cards/payment-provider-cards.component';
 import { STRIPE_JS_CDN_URL } from '../../app.constant';
@@ -118,7 +118,10 @@ export class WalletComponent {
         if (currencyCode === 'GBP') {
             return [PaymentProvider.PAYPAL, PaymentProvider.STRIPE];
         }
-        return [PaymentProvider.RAZORPAY, PaymentProvider.PAYPAL, PaymentProvider.STRIPE];
+        const isPaypalSupported = PAYPAL_SUPPORTED_CURRENCIES.includes(currencyCode);
+        return isPaypalSupported
+            ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYPAL, PaymentProvider.STRIPE]
+            : [PaymentProvider.RAZORPAY, PaymentProvider.STRIPE];
     });
     /** Locale data */
     public localeData: any = {};

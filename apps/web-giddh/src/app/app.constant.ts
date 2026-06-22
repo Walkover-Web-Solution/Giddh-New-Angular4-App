@@ -1079,3 +1079,11 @@ export enum FormFieldsType {
 
 /** Round off threshold for standard mathematical rounding */
 export const ROUND_OFF_THRESHOLD = 0.5; 
+
+/** Currencies supported by PayPal */
+export const PAYPAL_SUPPORTED_CURRENCIES: string[] = [
+    'AUD', 'BRL', 'CAD', 'CNY', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'ILS',
+    'JPY', 'MYR', 'MXN', 'TWD', 'NZD', 'NOK', 'PHP', 'PLN', 'GBP', 'SGD',
+    'SEK', 'CHF', 'THB', 'USD'
+];
+
