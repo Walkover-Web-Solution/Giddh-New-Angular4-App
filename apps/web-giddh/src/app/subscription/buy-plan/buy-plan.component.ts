@@ -787,9 +787,24 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.viewSubscriptionData = response;
             this.activateSubscription = response.status.toLowerCase() === 'cancelled' && this.router.url === ('/pages/user-details/subscription/activate-subscription/' + this.subscriptionId);
             this.isChangePlan = !this.activateSubscription;
-            setTimeout(()=>{
-                this.selectedStep.set(this.activateSubscription ? 1 : 0);
-            }, 150);
+            if (this.activateSubscription) {
+                this.selectedStep.set(1);
+                // Force the stepper to the second step. Linear is disabled
+                // when activateSubscription is true so navigation is allowed.
+                // Retry until the stepper view is available, then stop.
+                const intervalId = setInterval(() => {
+                    if (this.stepperIcon) {
+                        this.stepperIcon.selectedIndex = 1;
+                        this.selectedStep.set(1);
+                        this.changeDetection.detectChanges();
+                        if (this.stepperIcon.selectedIndex === 1) {
+                            clearInterval(intervalId);
+                        }
+                    }
+                }, 50);
+                // Safety stop after 5s to avoid running forever.
+                setTimeout(() => clearInterval(intervalId), 5000);
+            }
             if (this.subscriptionId && response?.region) {
                 this.newUserSelectCountry({
                     "label": response.region?.code + " - " + response.region?.name,
