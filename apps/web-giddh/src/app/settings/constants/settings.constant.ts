@@ -50,6 +50,7 @@ export interface OrganizationProfile {
     ledgerView?: LedgerViewEnum;
     showAccountUniqueName?: boolean;
     autoGenerateNote?: boolean;
+    currencyDisplayFormat?: string;
 }
 
 /** Form type in setting aside component */

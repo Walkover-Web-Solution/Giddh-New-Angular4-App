@@ -23,9 +23,25 @@
                     </span>
                 </div>
                 <div class="mb-3">
+                    <label>{{ localeData?.pdf_currency_format }}</label>
+                    <span>
+                        {{
+                            profileData?.currencyDisplayFormat === 'CODE'
+                                ? localeData?.pdf_currency_format_code + ' (' + (profileData?.baseCurrency ?? '') + ')'
+                                : localeData?.pdf_currency_format_symbol + ' (' + (profileData?.baseCurrencySymbol ?? '') + ')'
+                        }}
+                    </span>
+                </div>
+                <div class="mb-3">
                     <label>{{ localeData?.show_account_unique_name }}</label>
                     <span>
                         {{ profileData?.showAccountUniqueName ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                    </span>
+                </div>
+                <div class="mb-3">
+                    <label>{{ localeData?.auto_create_opposite_voucher }}</label>
+                    <span>
+                        {{ profileData?.autoGenerateNote ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
                     </span>
                 </div>
             </div>
@@ -156,6 +172,36 @@
                     color="primary"
                     [checked]="profileData?.autoGenerateNote"
                     (change)="profileData.autoGenerateNote = $event.checked; profileUpdated('autoGenerateNote')"
+                ></mat-slide-toggle>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-xl-3 pr-1">
+            <div class="form-group d-flex align-items-center justify-content-between">
+                <label class="mb-0 d-flex align-items-center column-gap-05">
+                    {{ localeData?.pdf_currency_format }}:
+                    {{
+                        profileData?.currencyDisplayFormat === 'CODE'
+                            ? localeData?.pdf_currency_format_code + ' (' + (profileData?.baseCurrency ?? '') + ')'
+                            : localeData?.pdf_currency_format_symbol + ' (' + (profileData?.baseCurrencySymbol ?? '') + ')'
+                    }}
+                    <i
+                        class="icon-info cursor-pointer mt-1"
+                        [matTooltip]="
+                            localeData?.pdf_currency_format_tooltip
+                                ?.replace('[SYMBOL]', profileData?.baseCurrencySymbol ?? '')
+                                ?.replace('[CODE]', profileData?.baseCurrency ?? '')
+                        "
+                        matTooltipPosition="above"
+                    ></i>
+                </label>
+                <mat-slide-toggle
+                    color="primary"
+                    [checked]="profileData?.currencyDisplayFormat === 'CODE'"
+                    (change)="
+                        profileData.currencyDisplayFormat = $event.checked ? 'CODE' : 'SYMBOL'; profileUpdated('currencyDisplayFormat')
+                    "
                 ></mat-slide-toggle>
             </div>
         </div>

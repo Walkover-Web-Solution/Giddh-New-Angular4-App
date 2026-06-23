@@ -44,7 +44,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
         headQuarterAlias: '',
         taxType: '',
         portalDomain: '',
-        autoGenerateNote: false
+        autoGenerateNote: false,
+        currencyDisplayFormat: "CODE"
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;

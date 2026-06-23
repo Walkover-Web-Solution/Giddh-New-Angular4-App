@@ -97,5 +97,10 @@
     "export_setting_description": "Set the format for exported file names. You can include variables such as the date, account name, entry number, or use custom text",
     "default_file_format": "Walkover_123_14-08-2025",
     "show_account_unique_name": "Display Account Unique Name during Entry/voucher creation",
-    "auto_create_opposite_voucher": "Auto-create opposite voucher on Delivery Challan/Receipt Note generation"
+    "auto_create_opposite_voucher": "Auto-create opposite voucher on Delivery Challan/Receipt Note generation",
+    "pdf_currency_format": "PDF Currency Format",
+    "pdf_currency_format_code": "Code",
+    "pdf_currency_format_symbol": "Symbol",
+    "pdf_currency_format_tooltip": "Choose how currency amounts are displayed in generated PDFs: Symbol ([SYMBOL] 1,000) or Code ([CODE] 1,000)."
+
 }
