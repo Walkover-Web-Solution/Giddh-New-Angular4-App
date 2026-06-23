@@ -10,7 +10,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { UiSettingsService } from '../../services/ui-settings.service';
 import { AppState } from '../../store';
 import { IOption } from '../../app.constant';
-import { OrganizationProfile } from '../constants/settings.constant';
+import { CurrencyDisplayFormat, OrganizationProfile } from '../constants/settings.constant';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 
 @Component({
@@ -58,7 +58,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         withPay: false,
         ledgerView: LedgerViewEnum.TView,
         showAccountUniqueName: false,
-        autoGenerateNote: false
+        autoGenerateNote: false,
+        currencyDisplayFormat: CurrencyDisplayFormat.Code
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -88,6 +89,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** Holds ledger view enum */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
+    /** Holds currency display format enum (exposed for template) */
+    public currencyDisplayFormatEnum: typeof CurrencyDisplayFormat = CurrencyDisplayFormat;
     /** Tracks showAccountUniqueNameInParticularDropdown UI setting */
     public showAccountUniqueName: boolean = false;
 
@@ -254,6 +257,20 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public setActiveTheme(event?: any): void {
         this.store.dispatch(this.commonActions.setActiveTheme({ label: event?.label, value: event?.value }));
+    }
+
+    /**
+     * Builds the PDF currency format tooltip by substituting
+     * [SYMBOL] / [CODE] placeholders with the company's currency values.
+     *
+     * @returns {string}
+     * @memberof OtherSettingsComponent
+     */
+    public get pdfCurrencyFormatTooltip(): string {
+        const tooltip: string = this.localeData?.pdf_currency_format_tooltip ?? '';
+        return tooltip
+            .replace('[SYMBOL]', this.profileData?.baseCurrencySymbol ?? '')
+            .replace('[CODE]', this.profileData?.baseCurrency ?? '');
     }
 
     /**

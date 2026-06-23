@@ -1369,8 +1369,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     mappedTransactions?.forEach(transaction => {
                         let matchedTransaction = bankTransactions?.filter(bankTransaction => bankTransaction.transactionId === transaction?.uniqueName);
                         if (matchedTransaction?.length > 0) {
-                            const account: IOption = { label: transaction.account.name, value: transaction.account.uniqueName, additional: { uniqueName: transaction?.account?.uniqueName } };
-                            matchedTransaction[0].transactions[0].particular = transaction?.account.name;
+                            const account: IOption = { label: transaction.account?.name, value: transaction.account?.uniqueName, additional: { uniqueName: transaction?.account?.uniqueName } };
+                            matchedTransaction[0].transactions[0].particular = transaction?.account?.name;
                             this.selectAccount(account, matchedTransaction[0]?.transactions[0], false, false, true);
                         }
                     });
