@@ -1663,7 +1663,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             planUniqueName: this.selectedPlan()?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
             duration: this.firstStepForm.get('duration').value,
-            countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.code ?? this.viewSubscriptionData?.region?.code)
+            countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.code || this.viewSubscriptionData?.region?.code)
         }
 
         if (this.isChangePlan || this.isRenewPlan) {

@@ -26,7 +26,7 @@
                     <label>{{ localeData?.pdf_currency_format }}</label>
                     <span>
                         {{
-                            profileData?.currencyDisplayFormat === 'CODE'
+                            profileData?.currencyDisplayFormat === currencyDisplayFormatEnum.Code
                                 ? localeData?.pdf_currency_format_code + ' (' + (profileData?.baseCurrency ?? '') + ')'
                                 : localeData?.pdf_currency_format_symbol + ' (' + (profileData?.baseCurrencySymbol ?? '') + ')'
                         }}
@@ -182,25 +182,20 @@
                 <label class="mb-0 d-flex align-items-center column-gap-05">
                     {{ localeData?.pdf_currency_format }}:
                     {{
-                        profileData?.currencyDisplayFormat === 'CODE'
+                        profileData?.currencyDisplayFormat === currencyDisplayFormatEnum.Code
                             ? localeData?.pdf_currency_format_code + ' (' + (profileData?.baseCurrency ?? '') + ')'
                             : localeData?.pdf_currency_format_symbol + ' (' + (profileData?.baseCurrencySymbol ?? '') + ')'
                     }}
-                    <i
-                        class="icon-info cursor-pointer mt-1"
-                        [matTooltip]="
-                            localeData?.pdf_currency_format_tooltip
-                                ?.replace('[SYMBOL]', profileData?.baseCurrencySymbol ?? '')
-                                ?.replace('[CODE]', profileData?.baseCurrency ?? '')
-                        "
-                        matTooltipPosition="above"
-                    ></i>
+                    <i class="icon-info cursor-pointer mt-1" [matTooltip]="pdfCurrencyFormatTooltip" matTooltipPosition="above"></i>
                 </label>
                 <mat-slide-toggle
                     color="primary"
-                    [checked]="profileData?.currencyDisplayFormat === 'CODE'"
+                    [checked]="profileData?.currencyDisplayFormat === currencyDisplayFormatEnum.Code"
                     (change)="
-                        profileData.currencyDisplayFormat = $event.checked ? 'CODE' : 'SYMBOL'; profileUpdated('currencyDisplayFormat')
+                        profileData.currencyDisplayFormat = $event.checked
+                            ? currencyDisplayFormatEnum.Code
+                            : currencyDisplayFormatEnum.Symbol;
+                        profileUpdated('currencyDisplayFormat')
                     "
                 ></mat-slide-toggle>
             </div>
