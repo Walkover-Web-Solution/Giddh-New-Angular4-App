@@ -3536,7 +3536,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const parentGroups = data.body.parentGroups;
                 const isSundryDebtorCreditorGroup = parentGroups.includes(AccountingGroupEnum.SundryCreditors) || parentGroups.includes(AccountingGroupEnum.SundryDebtors);
                 let taxes = [];
-                let otherTax = {};
+                let otherTax = {
+                    appliedOtherTax: {
+                        name: '',
+                        uniqueName: ''
+                    }
+                };
                 const accountApplicableTaxes = this.lc.activeAccount.applicableTaxes ?? [];
                 const accountOtherApplicableTaxes = this.lc.activeAccount.otherApplicableTaxes ?? [];
                 const applicableTaxesExcludingOtherTaxes = accountApplicableTaxes.filter(applicableTax =>
@@ -3559,14 +3564,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                                     data.body.oppositeAccount.taxes ?? [],
                                                     data.body.oppositeAccount.groupTaxes ?? []);
                             otherTax = {
-                                name: '',
-                                uniqueName: stockAccountOtherTax.length ? stockAccountOtherTax[0] : ''
+                                appliedOtherTax: {
+                                    name: '',
+                                    uniqueName: stockAccountOtherTax.length ? stockAccountOtherTax[0] : ''
+                                }
                             };
                         }
                         if (prioritizedApplicableTaxes.length && !otherTax['uniqueName']) {
                             otherTax = {
-                                name: prioritizedApplicableTaxes[0]?.name,
-                                uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
+                                appliedOtherTax: {
+                                    name: prioritizedApplicableTaxes[0]?.name,
+                                    uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
+                                }
                             };
                         }
                 } else {
@@ -3576,13 +3585,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                     !data.body.groupTaxes.includes(tax));
                     if (remainingBodyTaxes.length) {
                         otherTax = {
-                            name: '',
-                            uniqueName: remainingBodyTaxes[0]
+                            appliedOtherTax: {
+                                name: '',
+                                uniqueName: remainingBodyTaxes[0]
+                            }
                         };
                     } else if (data.body.applicableTaxes.length) {
                         otherTax = {
-                            name: data.body.applicableTaxes[0].name,
-                            uniqueName: data.body.applicableTaxes[0].uniqueName
+                            appliedOtherTax: {
+                                name: data.body.applicableTaxes[0].name,
+                                uniqueName: data.body.applicableTaxes[0].uniqueName
+                            }
                         };
                     }
                 }
@@ -3672,6 +3685,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
+                this.lc.blankLedger.otherTaxModal = {
+                    ...this.lc.blankLedger.otherTaxModal,
+                    appliedOtherTax: {
+                        name: otherTax?.appliedOtherTax?.name,
+                        uniqueName: otherTax?.appliedOtherTax?.uniqueName
+                    }
+                };
+                this.lc.blankLedger.isOtherTaxesApplicable = !!otherTax?.appliedOtherTax?.uniqueName;
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
