@@ -174,12 +174,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Advance Filters Applied Status */
     public advanceFiltersApplied: boolean = false;
     /** Holds Voucher Balances */
-    public voucherBalances: VoucherBalances = {
+    public voucherBalances = signal<VoucherBalances>({
         grandTotal: 0,
         totalDue: 0,
         advanceReceiptTotal: 0,
         normalReceiptTotal: 0
-    };
+    });
     /** Holds company specific data */
     public company: any = {
         baseCurrency: '',
@@ -716,7 +716,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.voucherBalances$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.voucherBalances = response;
+                this.voucherBalances.set(response);
             }
         });
 
@@ -738,6 +738,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.getVouchers(this.isUniversalDateApplicable);
+                this.getVoucherBalances();
             }
         });
 
@@ -745,6 +746,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response) {
                     this.getVouchers(this.isUniversalDateApplicable);
+                    this.getVoucherBalances();
                 }
             });
 
@@ -1927,6 +1929,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                                 if (response?.status === 'success') {
                                     this.toasterService.showSnackBar('success', response.body);
                                     this.getRecurringVouchers();
+                                    this.getVoucherBalances();
                                 } else {
                                     this.toasterService.showSnackBar('error', response?.message);
                                 }

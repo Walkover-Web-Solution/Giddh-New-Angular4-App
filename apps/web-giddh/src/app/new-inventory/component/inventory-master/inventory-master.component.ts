@@ -218,6 +218,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             if (response?.status === "success") {
                 this.topLevelGroups.totalPages = response?.body?.totalPages;
                 this.topLevelGroups.results = this.topLevelGroups.results.concat(response.body?.results);
+                this.changeDetectorRef.detectChanges();
             }
             this.loadMoreInProgress = false;
         });
