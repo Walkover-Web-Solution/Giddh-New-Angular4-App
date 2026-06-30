@@ -1,0 +1,74 @@
+.wallet-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.wallet-header {
+    .header-icon {
+        width: 48px;
+        height: 48px;
+        background-color: var(--theme-primary-light);
+
+        .header-wallet-icon {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+    }
+}
+
+.summary-table {
+    grid-template-columns: 0.7fr 2.3fr;
+}
+
+.summary-right {
+    min-height: auto;
+}
+
+.amount-summary-grid {
+    grid-template-columns: 1fr 1fr;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.payment-summary-card {
+    background-color: var(--theme-primary-light);
+    // border: 1px solid var(--color-border-light, #e0e8f5);
+}
+
+.payment-summary-divider {
+    border-top: 1px dashed var(--border-color, #c5c5c5);
+}
+
+.suggestion-applied {
+    background-color: var(--color-primary-light, #e6f0ff) !important;
+    border-color: var(--text-primary-color) !important;
+    color: var(--text-primary-color) !important;
+}
+
+.status-badge {
+    &.status-active {
+        background-color: var(--color-success-light);
+        color: var(--color-green);
+    }
+
+    &.status-inactive {
+        background-color: var(--color-red-light);
+        color: var(--color-red);
+    }
+}
+
+.card-shadow {
+    box-shadow: 0 1px 3px var(--color-shadow-light);
+}
+
+.security-note {
+    .security-icon {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        flex-shrink: 0;
+    }
+}

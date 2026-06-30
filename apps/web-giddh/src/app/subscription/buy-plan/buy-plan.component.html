@@ -17,599 +17,606 @@
                     #stepper
                     [formGroup]="subscriptionForm"
                     name="companyForm"
-                    [selectedIndex]="selectedStep"
+                    [selectedIndex]="selectedStep()"
                     (selectionChange)="onSelectedTab($event)"
                     [disableRipple]="firstStepForm.invalid"
                     class="bg-transparent theme-foreground-color"
+                    [ngClass]="{ 'first-step-disabled': activateSubscription }"
                 >
-                    <mat-step [stepControl]="firstStepForm">
-                        <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
-                            <div class="plan-summary w-fit-content m-auto column-gap-2 row-gap-2 d-flex justify-content-center">
-                                <div class="plan-width">
-                                    <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
-                                    <div class="plan-header d-flex justify-content-between align-items-center mb-3">
-                                        <div
-                                            class="w-100 dropdown-wrapper"
-                                            *ngIf="
-                                                (countrySource$ | async)?.length > 1 &&
-                                                !(planListInProgress$ | async) &&
-                                                !isLoading &&
-                                                !isChangePlan &&
-                                                !isSubscriptionRegion
-                                            "
-                                        >
+                    <mat-step [stepControl]="firstStepForm" [completed]="activateSubscription" [editable]="!activateSubscription">
+                        @if (!activateSubscription) {
+                            <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
+                                <div class="plan-summary w-fit-content m-auto column-gap-2 row-gap-2 d-flex justify-content-center">
+                                    <div class="plan-width">
+                                        <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
+                                        <div class="plan-header d-flex justify-content-between align-items-center mb-3">
                                             <div
-                                                class="country-dropdown d-flex flex-column"
-                                                [ngClass]="{ 'mx-auto': inputData?.length === 0 }"
+                                                class="w-100 dropdown-wrapper"
+                                                *ngIf="
+                                                    (countrySource$ | async)?.length > 1 &&
+                                                    !(planListInProgress$ | async) &&
+                                                    !isLoading &&
+                                                    !isChangePlan &&
+                                                    !isSubscriptionRegion
+                                                "
                                             >
-                                                <span
-                                                    (click)="countryList.open()"
-                                                    class="d-inline-flex align-items-center column-gap-05 cursor-pointer"
+                                                <div
+                                                    class="country-dropdown d-flex flex-column"
+                                                    [ngClass]="{ 'mx-auto': inputData?.length === 0 }"
                                                 >
-                                                    <img
-                                                        [src]="
-                                                            getFlagUrl(
-                                                                currentCountry.value?.additional?.alpha2CountryCode
-                                                                    ? currentCountry.value?.additional?.alpha2CountryCode
-                                                                    : currentCountry.value?.additional?.alpha3CountryCode
-                                                            )
-                                                        "
-                                                        [alt]="currentCountry.value?.additional?.countryName || 'Select Region'"
-                                                        width="32"
-                                                        height="32"
-                                                        class="flag"
-                                                    />
-
-                                                    @if (inputData?.length === 0 || !currentCountry.value) {
-                                                        <i class="icon-arrow-down font-size-14"></i>
-                                                    }
-                                                </span>
-
-                                                <mat-select
-                                                    [name]="'country'"
-                                                    [formControl]="currentCountry"
-                                                    #countryList
-                                                    (selectionChange)="newUserSelectCountry($event.value, false)"
-                                                    panelClass="country-dropdown-list"
-                                                    [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_country"
-                                                >
-                                                    <ng-container *ngFor="let country of countrySource$ | async">
-                                                        <mat-option [value]="country">
-                                                            <div class="d-flex w-100 align-items-center column-gap-1">
-                                                                <img
-                                                                    [src]="
-                                                                        getFlagUrl(
-                                                                            country.additional?.alpha2CountryCode
-                                                                                ? country.additional?.alpha2CountryCode
-                                                                                : country.additional?.alpha3CountryCode
-                                                                        )
-                                                                    "
-                                                                    [alt]="country.label"
-                                                                    width="24"
-                                                                    height="16"
-                                                                />
-                                                                <span>{{ country?.label }}</span>
-                                                            </div>
-                                                        </mat-option>
-                                                    </ng-container>
-                                                </mat-select>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex column-gap-15 align-items-center ml-auto" *ngIf="inputData?.length">
-                                            <div class="custom-tab w-100">
-                                                <mat-button-toggle-group
-                                                    *ngIf="monthlyPlans?.length && yearlyPlans?.length"
-                                                    aria-label="Font Style"
-                                                    (change)="toggleDuration($event)"
-                                                    formControlName="duration"
-                                                >
-                                                    <mat-button-toggle [value]="planDuration.MONTHLY">
-                                                        {{ commonLocaleData?.app_duration?.month }}
-                                                    </mat-button-toggle>
-                                                    <mat-button-toggle [value]="planDuration.YEARLY">
-                                                        {{ commonLocaleData?.app_duration?.year }}
-                                                    </mat-button-toggle>
-                                                    <ng-container *ngIf="!isProdMode">
-                                                        <mat-button-toggle [value]="planDuration.DAILY">
-                                                            {{ commonLocaleData?.app_duration?.daily }}
-                                                        </mat-button-toggle>
-                                                    </ng-container>
-                                                </mat-button-toggle-group>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <ng-container *ngIf="!(planListInProgress$ | async) && !isLoading && inputData?.length">
-                                        <div #tableContent class="plan-table">
-                                            <div class="grid-list-div top-heading">
-                                                <div class="grid-title-left grid-title-left-top">
-                                                    <span class="inner-name inner-name-bold mat-table-sticky"></span>
-                                                </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list list-grid-title font-size-15"
-                                                        [ngClass]="{
-                                                            'active-plan': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
+                                                    <span
+                                                        (click)="countryList.open()"
+                                                        class="d-inline-flex align-items-center column-gap-05 cursor-pointer"
                                                     >
-                                                        <div class="plan-content d-flex flex-column h-100">
-                                                            <p
-                                                                class="font-size-20 plan-title d-flex align-items-center justify-content-center"
-                                                            >
-                                                                {{ plan?.name }}
-                                                            </p>
-                                                            <p *ngIf="plan?.description" class="font-size-15 feature-txt">
-                                                                <span>
-                                                                    {{ plan?.description }}
-                                                                </span>
-                                                            </p>
+                                                        <img
+                                                            [src]="
+                                                                getFlagUrl(
+                                                                    currentCountry.value?.additional?.alpha2CountryCode
+                                                                        ? currentCountry.value?.additional?.alpha2CountryCode
+                                                                        : currentCountry.value?.additional?.alpha3CountryCode
+                                                                )
+                                                            "
+                                                            [alt]="currentCountry.value?.additional?.countryName || 'Select Region'"
+                                                            width="32"
+                                                            height="32"
+                                                            class="flag"
+                                                        />
 
-                                                            <ng-container *ngIf="isYearly()">
-                                                                <ng-container *ngIf="plan?.yearlyAmount > 0 || plan?.yearlyDiscount">
-                                                                    <p
-                                                                        *ngIf="plan?.yearlyDiscountAmount > 0"
-                                                                        [ngClass]="{
-                                                                            'feature-txt': !plan?.yearlyDiscountAmount > 0,
-                                                                        }"
-                                                                    >
-                                                                        <s class="strong">
-                                                                            <amount-field
-                                                                                [useGiddhCurrencyPipe]="false"
-                                                                                [spaceAfterCurrencySymbol]="false"
-                                                                                [amount]="plan?.yearlyAmount"
-                                                                                [currencySymbol]="plan?.currency?.symbol"
-                                                                                [currencyCode]="plan?.currency?.code"
-                                                                            ></amount-field>
-                                                                        </s>
-                                                                    </p>
-                                                                    <p
-                                                                        class="mb-3 mt-2"
+                                                        @if (inputData?.length === 0 || !currentCountry.value) {
+                                                            <i class="icon-arrow-down font-size-14"></i>
+                                                        }
+                                                    </span>
+
+                                                    <mat-select
+                                                        [name]="'country'"
+                                                        [formControl]="currentCountry"
+                                                        #countryList
+                                                        (selectionChange)="newUserSelectCountry($event.value, false)"
+                                                        panelClass="country-dropdown-list"
+                                                        [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_country"
+                                                    >
+                                                        <ng-container *ngFor="let country of countrySource$ | async">
+                                                            <mat-option [value]="country">
+                                                                <div class="d-flex w-100 align-items-center column-gap-1">
+                                                                    <img
+                                                                        [src]="
+                                                                            getFlagUrl(
+                                                                                country.additional?.alpha2CountryCode
+                                                                                    ? country.additional?.alpha2CountryCode
+                                                                                    : country.additional?.alpha3CountryCode
+                                                                            )
+                                                                        "
+                                                                        [alt]="country.label"
+                                                                        width="24"
+                                                                        height="16"
+                                                                    />
+                                                                    <span>{{ country?.label }}</span>
+                                                                </div>
+                                                            </mat-option>
+                                                        </ng-container>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex column-gap-15 align-items-center ml-auto" *ngIf="inputData?.length">
+                                                <div class="custom-tab w-100">
+                                                    <mat-button-toggle-group
+                                                        *ngIf="monthlyPlans?.length && yearlyPlans?.length"
+                                                        aria-label="Font Style"
+                                                        (change)="toggleDuration($event)"
+                                                        formControlName="duration"
+                                                    >
+                                                        <mat-button-toggle [value]="planDuration.MONTHLY">
+                                                            {{ commonLocaleData?.app_duration?.month }}
+                                                        </mat-button-toggle>
+                                                        <mat-button-toggle [value]="planDuration.YEARLY">
+                                                            {{ commonLocaleData?.app_duration?.year }}
+                                                        </mat-button-toggle>
+                                                        <ng-container *ngIf="!isProdMode">
+                                                            <mat-button-toggle [value]="planDuration.DAILY">
+                                                                {{ commonLocaleData?.app_duration?.daily }}
+                                                            </mat-button-toggle>
+                                                        </ng-container>
+                                                    </mat-button-toggle-group>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="!(planListInProgress$ | async) && !isLoading && inputData?.length">
+                                            <div #tableContent class="plan-table">
+                                                <div class="grid-list-div top-heading">
+                                                    <div class="grid-title-left grid-title-left-top">
+                                                        <span class="inner-name inner-name-bold mat-table-sticky"></span>
+                                                    </div>
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list list-grid-title font-size-15"
+                                                            [ngClass]="{
+                                                                'active-plan': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
+                                                            <div class="plan-content d-flex flex-column h-100">
+                                                                <p
+                                                                    class="font-size-20 plan-title d-flex align-items-center justify-content-center"
+                                                                >
+                                                                    {{ plan?.name }}
+                                                                </p>
+                                                                <p *ngIf="plan?.description" class="font-size-15 feature-txt">
+                                                                    <span>
+                                                                        {{ plan?.description }}
+                                                                    </span>
+                                                                </p>
+
+                                                                <ng-container *ngIf="isYearly()">
+                                                                    <ng-container *ngIf="plan?.yearlyAmount > 0 || plan?.yearlyDiscount">
+                                                                        <p
+                                                                            *ngIf="plan?.yearlyDiscountAmount > 0"
+                                                                            [ngClass]="{
+                                                                                'feature-txt': !plan?.yearlyDiscountAmount > 0,
+                                                                            }"
+                                                                        >
+                                                                            <s class="strong">
+                                                                                <amount-field
+                                                                                    [useGiddhCurrencyPipe]="false"
+                                                                                    [spaceAfterCurrencySymbol]="false"
+                                                                                    [amount]="plan?.yearlyAmount"
+                                                                                    [currencySymbol]="plan?.currency?.symbol"
+                                                                                    [currencyCode]="plan?.currency?.code"
+                                                                                ></amount-field>
+                                                                            </s>
+                                                                        </p>
+                                                                        <p
+                                                                            class="mb-3 mt-2"
+                                                                            *ngIf="
+                                                                                plan?.yearlyAmount !== 0 &&
+                                                                                plan?.yearlyAmountAfterDiscount !== 0
+                                                                            "
+                                                                        >
+                                                                            <span class="font-size-24 strong">
+                                                                                <amount-field
+                                                                                    [useGiddhCurrencyPipe]="false"
+                                                                                    [spaceAfterCurrencySymbol]="false"
+                                                                                    [amount]="plan?.yearlyAmountAfterDiscount"
+                                                                                    [currencySymbol]="plan?.currency?.symbol"
+                                                                                    [currencyCode]="plan?.currency?.code"
+                                                                                ></amount-field>
+                                                                            </span>
+                                                                            <span class="font-size-14">
+                                                                                /{{ commonLocaleData?.app_duration?.year }}
+                                                                            </span>
+                                                                        </p>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="isFreePlan(plan, planDuration.YEARLY)">
+                                                                        <span class="font-size-24 strong">{{ localeData?.free }}</span>
+                                                                    </ng-container>
+                                                                    <ng-container
                                                                         *ngIf="
-                                                                            plan?.yearlyAmount !== 0 &&
-                                                                            plan?.yearlyAmountAfterDiscount !== 0
+                                                                            (plan?.yearlyAmount === 0 && plan?.yearlyDiscount) ||
+                                                                            (plan?.yearlyAmount > 0 &&
+                                                                                plan?.yearlyDiscount &&
+                                                                                plan?.yearlyAmountAfterDiscount === 0)
                                                                         "
                                                                     >
-                                                                        <span class="font-size-24 strong">
+                                                                        <p class="mb-3">
+                                                                            <span>
+                                                                                {{ localeData?.free }}
+                                                                                {{ commonLocaleData?.app_to }}
+                                                                                <br />
+                                                                                {{ plan?.yearlyDiscount?.duration }}
+                                                                                {{ commonLocaleData?.app_duration?.year | lowercase }}
+                                                                            </span>
+                                                                        </p>
+                                                                    </ng-container>
+                                                                    <p
+                                                                        class="mb-3"
+                                                                        *ngIf="
+                                                                            plan?.yearlyDiscountAmount > 0 &&
+                                                                            plan?.yearlyAmountAfterDiscount > 0
+                                                                        "
+                                                                    >
+                                                                        <span>
+                                                                            {{ localeData?.save }}
                                                                             <amount-field
                                                                                 [useGiddhCurrencyPipe]="false"
                                                                                 [spaceAfterCurrencySymbol]="false"
-                                                                                [amount]="plan?.yearlyAmountAfterDiscount"
+                                                                                [amount]="plan?.yearlyDiscountAmount"
                                                                                 [currencySymbol]="plan?.currency?.symbol"
                                                                                 [currencyCode]="plan?.currency?.code"
                                                                             ></amount-field>
-                                                                        </span>
-                                                                        <span class="font-size-14">
-                                                                            /{{ commonLocaleData?.app_duration?.year }}
-                                                                        </span>
-                                                                    </p>
-                                                                </ng-container>
-                                                                <ng-container *ngIf="isFreePlan(plan, planDuration.YEARLY)">
-                                                                    <span class="font-size-24 strong">{{ localeData?.free }}</span>
-                                                                </ng-container>
-                                                                <ng-container
-                                                                    *ngIf="
-                                                                        (plan?.yearlyAmount === 0 && plan?.yearlyDiscount) ||
-                                                                        (plan?.yearlyAmount > 0 &&
-                                                                            plan?.yearlyDiscount &&
-                                                                            plan?.yearlyAmountAfterDiscount === 0)
-                                                                    "
-                                                                >
-                                                                    <p class="mb-3">
-                                                                        <span>
-                                                                            {{ localeData?.free }}
-                                                                            {{ commonLocaleData?.app_to }}
-                                                                            <br />
-                                                                            {{ plan?.yearlyDiscount?.duration }}
+                                                                            {{ localeData?.for }}
+                                                                            {{
+                                                                                plan?.yearlyDiscount?.duration
+                                                                                    ? plan?.yearlyDiscount?.duration
+                                                                                    : 0
+                                                                            }}
                                                                             {{ commonLocaleData?.app_duration?.year | lowercase }}
                                                                         </span>
                                                                     </p>
                                                                 </ng-container>
-                                                                <p
-                                                                    class="mb-3"
-                                                                    *ngIf="
-                                                                        plan?.yearlyDiscountAmount > 0 &&
-                                                                        plan?.yearlyAmountAfterDiscount > 0
-                                                                    "
-                                                                >
-                                                                    <span>
-                                                                        {{ localeData?.save }}
-                                                                        <amount-field
-                                                                            [useGiddhCurrencyPipe]="false"
-                                                                            [spaceAfterCurrencySymbol]="false"
-                                                                            [amount]="plan?.yearlyDiscountAmount"
-                                                                            [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="plan?.currency?.code"
-                                                                        ></amount-field>
-                                                                        {{ localeData?.for }}
-                                                                        {{
-                                                                            plan?.yearlyDiscount?.duration
-                                                                                ? plan?.yearlyDiscount?.duration
-                                                                                : 0
-                                                                        }}
-                                                                        {{ commonLocaleData?.app_duration?.year | lowercase }}
-                                                                    </span>
-                                                                </p>
-                                                            </ng-container>
-                                                            <ng-container *ngIf="isMonthly() || isDaily()">
-                                                                <ng-container *ngIf="plan?.monthlyAmount > 0 || plan?.monthlyDiscount">
-                                                                    <p
-                                                                        *ngIf="plan?.monthlyDiscountAmount > 0"
-                                                                        [ngClass]="{
-                                                                            'feature-txt': !plan?.monthlyDiscountAmount > 0,
-                                                                        }"
-                                                                    >
-                                                                        <s class="strong">
-                                                                            <amount-field
-                                                                                [useGiddhCurrencyPipe]="false"
-                                                                                [spaceAfterCurrencySymbol]="false"
-                                                                                [amount]="plan?.monthlyAmount"
-                                                                                [currencySymbol]="plan?.currency?.symbol"
-                                                                                [currencyCode]="plan?.currency?.code"
-                                                                            ></amount-field>
-                                                                        </s>
-                                                                    </p>
-                                                                    <p
-                                                                        class="mb-3 mt-2"
+                                                                <ng-container *ngIf="isMonthly() || isDaily()">
+                                                                    <ng-container *ngIf="plan?.monthlyAmount > 0 || plan?.monthlyDiscount">
+                                                                        <p
+                                                                            *ngIf="plan?.monthlyDiscountAmount > 0"
+                                                                            [ngClass]="{
+                                                                                'feature-txt': !plan?.monthlyDiscountAmount > 0,
+                                                                            }"
+                                                                        >
+                                                                            <s class="strong">
+                                                                                <amount-field
+                                                                                    [useGiddhCurrencyPipe]="false"
+                                                                                    [spaceAfterCurrencySymbol]="false"
+                                                                                    [amount]="plan?.monthlyAmount"
+                                                                                    [currencySymbol]="plan?.currency?.symbol"
+                                                                                    [currencyCode]="plan?.currency?.code"
+                                                                                ></amount-field>
+                                                                            </s>
+                                                                        </p>
+                                                                        <p
+                                                                            class="mb-3 mt-2"
+                                                                            *ngIf="
+                                                                                plan?.monthlyAmount !== 0 &&
+                                                                                plan?.monthlyAmountAfterDiscount !== 0
+                                                                            "
+                                                                        >
+                                                                            <span class="font-size-24 strong">
+                                                                                <amount-field
+                                                                                    [useGiddhCurrencyPipe]="false"
+                                                                                    [spaceAfterCurrencySymbol]="false"
+                                                                                    [amount]="plan?.monthlyAmountAfterDiscount"
+                                                                                    [currencySymbol]="plan?.currency?.symbol"
+                                                                                    [currencyCode]="plan?.currency?.code"
+                                                                                ></amount-field>
+                                                                            </span>
+                                                                            <span class="font-size-14">
+                                                                                /{{ commonLocaleData?.app_duration?.month }}
+                                                                            </span>
+                                                                        </p>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="isFreePlan(plan, planDuration.MONTHLY)">
+                                                                        <span class="font-size-24 strong">{{ localeData?.free }}</span>
+                                                                    </ng-container>
+                                                                    <ng-container
                                                                         *ngIf="
-                                                                            plan?.monthlyAmount !== 0 &&
-                                                                            plan?.monthlyAmountAfterDiscount !== 0
+                                                                            (plan?.monthlyAmount === 0 && plan?.monthlyAmount) ||
+                                                                            (plan?.monthlyAmount > 0 &&
+                                                                                plan?.monthlyAmount &&
+                                                                                plan?.monthlyAmountAfterDiscount === 0)
                                                                         "
                                                                     >
-                                                                        <span class="font-size-24 strong">
+                                                                        <p class="mb-3">
+                                                                            <span>
+                                                                                {{ localeData?.free }}
+                                                                                {{ commonLocaleData?.app_to }}
+                                                                                <br />
+                                                                                {{ plan?.monthlyDiscount?.duration }}
+                                                                                {{ commonLocaleData?.app_duration?.month | lowercase }}
+                                                                            </span>
+                                                                        </p>
+                                                                    </ng-container>
+                                                                    <p
+                                                                        *ngIf="
+                                                                            plan?.monthlyDiscountAmount > 0 &&
+                                                                            plan?.monthlyAmountAfterDiscount > 0
+                                                                        "
+                                                                    >
+                                                                        <span class="strong">
+                                                                            {{ localeData?.save }}
                                                                             <amount-field
                                                                                 [useGiddhCurrencyPipe]="false"
                                                                                 [spaceAfterCurrencySymbol]="false"
-                                                                                [amount]="plan?.monthlyAmountAfterDiscount"
+                                                                                [amount]="plan?.monthlyDiscountAmount"
                                                                                 [currencySymbol]="plan?.currency?.symbol"
                                                                                 [currencyCode]="plan?.currency?.code"
                                                                             ></amount-field>
-                                                                        </span>
-                                                                        <span class="font-size-14">
-                                                                            /{{ commonLocaleData?.app_duration?.month }}
-                                                                        </span>
-                                                                    </p>
-                                                                </ng-container>
-                                                                <ng-container *ngIf="isFreePlan(plan, planDuration.MONTHLY)">
-                                                                    <span class="font-size-24 strong">{{ localeData?.free }}</span>
-                                                                </ng-container>
-                                                                <ng-container
-                                                                    *ngIf="
-                                                                        (plan?.monthlyAmount === 0 && plan?.monthlyAmount) ||
-                                                                        (plan?.monthlyAmount > 0 &&
-                                                                            plan?.monthlyAmount &&
-                                                                            plan?.monthlyAmountAfterDiscount === 0)
-                                                                    "
-                                                                >
-                                                                    <p class="mb-3">
-                                                                        <span>
-                                                                            {{ localeData?.free }}
-                                                                            {{ commonLocaleData?.app_to }}
-                                                                            <br />
+                                                                            {{ localeData?.for }}
                                                                             {{ plan?.monthlyDiscount?.duration }}
                                                                             {{ commonLocaleData?.app_duration?.month | lowercase }}
                                                                         </span>
                                                                     </p>
                                                                 </ng-container>
-                                                                <p
-                                                                    *ngIf="
-                                                                        plan?.monthlyDiscountAmount > 0 &&
-                                                                        plan?.monthlyAmountAfterDiscount > 0
+                                                                <button
+                                                                    *ngIf="firstStepForm.get('planUniqueName').value === plan?.uniqueName"
+                                                                    matButton="filled"
+                                                                    class="selected-plan-button mt-auto"
+                                                                    aria-label="monthly"
+                                                                    [class.selected]="
+                                                                        firstStepForm.get('planUniqueName').value === plan?.uniqueName
                                                                     "
+                                                                    [ngClass]="{
+                                                                        'selected-plan':
+                                                                            firstStepForm.get('planUniqueName').value === plan?.uniqueName,
+                                                                    }"
+                                                                    (click)="selectPlan(plan)"
                                                                 >
-                                                                    <span class="strong">
-                                                                        {{ localeData?.save }}
-                                                                        <amount-field
-                                                                            [useGiddhCurrencyPipe]="false"
-                                                                            [spaceAfterCurrencySymbol]="false"
-                                                                            [amount]="plan?.monthlyDiscountAmount"
-                                                                            [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="plan?.currency?.code"
-                                                                        ></amount-field>
-                                                                        {{ localeData?.for }}
-                                                                        {{ plan?.monthlyDiscount?.duration }}
-                                                                        {{ commonLocaleData?.app_duration?.month | lowercase }}
+                                                                    <span class="font-size-14">
+                                                                        {{ localeData?.select_plan }}
                                                                     </span>
-                                                                </p>
-                                                            </ng-container>
-                                                            <button
-                                                                *ngIf="firstStepForm.get('planUniqueName').value === plan?.uniqueName"
-                                                                matButton="filled"
-                                                                class="selected-plan-button mt-auto"
-                                                                aria-label="monthly"
-                                                                [class.selected]="
-                                                                    firstStepForm.get('planUniqueName').value === plan?.uniqueName
-                                                                "
-                                                                [ngClass]="{
-                                                                    'selected-plan':
-                                                                        firstStepForm.get('planUniqueName').value === plan?.uniqueName,
-                                                                }"
-                                                                (click)="selectPlan(plan)"
-                                                            >
-                                                                <span class="font-size-14">
-                                                                    {{ localeData?.select_plan }}
-                                                                </span>
-                                                            </button>
-                                                            <button
-                                                                *ngIf="firstStepForm.get('planUniqueName').value !== plan?.uniqueName"
-                                                                matButton="outlined"
-                                                                class="selected-plan-button mt-auto"
-                                                                aria-label="monthly"
-                                                                [class.selected]="
-                                                                    firstStepForm.get('planUniqueName').value === plan?.uniqueName
-                                                                "
-                                                                [ngClass]="{
-                                                                    'selected-plan':
-                                                                        firstStepForm.get('planUniqueName').value === plan?.uniqueName,
-                                                                }"
-                                                                (click)="selectPlan(plan)"
-                                                            >
-                                                                <span class="font-size-14">
-                                                                    {{ localeData?.select_plan }}
-                                                                </span>
-                                                            </button>
+                                                                </button>
+                                                                <button
+                                                                    *ngIf="firstStepForm.get('planUniqueName').value !== plan?.uniqueName"
+                                                                    matButton="outlined"
+                                                                    class="selected-plan-button mt-auto"
+                                                                    aria-label="monthly"
+                                                                    [class.selected]="
+                                                                        firstStepForm.get('planUniqueName').value === plan?.uniqueName
+                                                                    "
+                                                                    [ngClass]="{
+                                                                        'selected-plan':
+                                                                            firstStepForm.get('planUniqueName').value === plan?.uniqueName,
+                                                                    }"
+                                                                    (click)="selectPlan(plan)"
+                                                                >
+                                                                    <span class="font-size-14">
+                                                                        {{ localeData?.select_plan }}
+                                                                    </span>
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
+                                                    </ng-container>
+                                                </div>
 
-                                            <div class="grid-list-div">
-                                                <div class="grid-title-left grid-title-left-top">
-                                                    <span class="inner-name inner-name-bold mat-table-sticky">
-                                                        <span>{{ localeData?.invoice_count }}</span>
-                                                        <i
-                                                            class="icon-info cursor-pointer"
-                                                            [matTooltip]="commonLocaleData?.app_invoices"
-                                                            [matTooltipPosition]="'above'"
-                                                        ></i>
-                                                    </span>
-                                                </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list font-size-15 plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <span class="sub-plan-name">
-                                                            <amount-field
-                                                                [useGiddhCurrencyPipe]="false"
-                                                                [amount]="isYearly() ? plan?.invoicesAllowed : plan?.monthlyInvoicesAllowed"
-                                                                [currencySymbol]="false"
-                                                                [currencyCode]="false"
-                                                            ></amount-field>
+                                                <div class="grid-list-div">
+                                                    <div class="grid-title-left grid-title-left-top">
+                                                        <span class="inner-name inner-name-bold mat-table-sticky">
+                                                            <span>{{ localeData?.invoice_count }}</span>
+                                                            <i
+                                                                class="icon-info cursor-pointer"
+                                                                [matTooltip]="commonLocaleData?.app_invoices"
+                                                                [matTooltipPosition]="'above'"
+                                                            ></i>
                                                         </span>
                                                     </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="grid-list-div list-grid">
-                                                <div class="grid-title-left">
-                                                    <span class="inner-name mat-table-sticky">
-                                                        <span>{{ localeData?.bill_count }}</span>
-                                                        <i class="icon-info cursor-pointer"></i>
-                                                    </span>
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list font-size-15 plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
+                                                            <span class="sub-plan-name">
+                                                                <amount-field
+                                                                    [useGiddhCurrencyPipe]="false"
+                                                                    [amount]="
+                                                                        isYearly() ? plan?.invoicesAllowed : plan?.monthlyInvoicesAllowed
+                                                                    "
+                                                                    [currencySymbol]="false"
+                                                                    [currencyCode]="false"
+                                                                ></amount-field>
+                                                            </span>
+                                                        </div>
+                                                    </ng-container>
                                                 </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list list-grid-title plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <span>
-                                                            <amount-field
-                                                                [useGiddhCurrencyPipe]="false"
-                                                                [amount]="isYearly() ? plan?.billsAllowed : plan?.monthlyBillsAllowed"
-                                                                [currencySymbol]="false"
-                                                                [currencyCode]="false"
-                                                            ></amount-field>
+                                                <div class="grid-list-div list-grid">
+                                                    <div class="grid-title-left">
+                                                        <span class="inner-name mat-table-sticky">
+                                                            <span>{{ localeData?.bill_count }}</span>
+                                                            <i class="icon-info cursor-pointer"></i>
                                                         </span>
                                                     </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="grid-list-div list-grid">
-                                                <div class="grid-title-left">
-                                                    <span class="inner-name mat-table-sticky">
-                                                        <span>{{ localeData?.companies_allowed }}</span>
-                                                    </span>
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list list-grid-title plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
+                                                            <span>
+                                                                <amount-field
+                                                                    [useGiddhCurrencyPipe]="false"
+                                                                    [amount]="isYearly() ? plan?.billsAllowed : plan?.monthlyBillsAllowed"
+                                                                    [currencySymbol]="false"
+                                                                    [currencyCode]="false"
+                                                                ></amount-field>
+                                                            </span>
+                                                        </div>
+                                                    </ng-container>
                                                 </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list list-grid-title plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <span>
-                                                            <amount-field
-                                                                [useGiddhCurrencyPipe]="false"
-                                                                [amount]="isYearly() ? plan?.companiesLimit : plan?.monthlyCompaniesLimit"
-                                                                [currencySymbol]="false"
-                                                                [currencyCode]="false"
-                                                            ></amount-field>
+                                                <div class="grid-list-div list-grid">
+                                                    <div class="grid-title-left">
+                                                        <span class="inner-name mat-table-sticky">
+                                                            <span>{{ localeData?.companies_allowed }}</span>
                                                         </span>
                                                     </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="grid-list-div list-grid">
-                                                <div class="grid-title-left">
-                                                    <span class="inner-name mat-table-sticky">
-                                                        {{ localeData?.accountant_consultant }}
-                                                    </span>
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list list-grid-title plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
+                                                            <span>
+                                                                <amount-field
+                                                                    [useGiddhCurrencyPipe]="false"
+                                                                    [amount]="
+                                                                        isYearly() ? plan?.companiesLimit : plan?.monthlyCompaniesLimit
+                                                                    "
+                                                                    [currencySymbol]="false"
+                                                                    [currencyCode]="false"
+                                                                ></amount-field>
+                                                            </span>
+                                                        </div>
+                                                    </ng-container>
                                                 </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list list-grid-title plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                <div class="grid-list-div list-grid">
+                                                    <div class="grid-title-left">
+                                                        <span class="inner-name mat-table-sticky">
+                                                            {{ localeData?.accountant_consultant }}
+                                                        </span>
+                                                    </div>
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list list-grid-title plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
+                                                            <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                                <i class="icon-tick"></i>
+                                                            </span>
+                                                            <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
+                                                                <i class="icon-cross"></i>
+                                                            </span>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="grid-list-div list-grid">
+                                                    <div class="grid-title-left">
+                                                        <span class="inner-name mat-table-sticky">
+                                                            {{ localeData?.desktop_mobile_app }}
+                                                        </span>
+                                                    </div>
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list list-grid-title plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
                                                             <i class="icon-tick"></i>
-                                                        </span>
-                                                        <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
-                                                            <i class="icon-cross"></i>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="grid-list-div list-grid">
+                                                    <div class="grid-title-left">
+                                                        <span class="inner-name mat-table-sticky">
+                                                            {{ localeData?.unlimited_users }}
                                                         </span>
                                                     </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="grid-list-div list-grid">
-                                                <div class="grid-title-left">
-                                                    <span class="inner-name mat-table-sticky">
-                                                        {{ localeData?.desktop_mobile_app }}
-                                                    </span>
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list list-grid-title plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
+                                                            <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                                <i class="icon-tick"></i>
+                                                            </span>
+                                                            <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">1</span>
+                                                        </div>
+                                                    </ng-container>
                                                 </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list list-grid-title plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <i class="icon-tick"></i>
+                                                <div class="grid-list-div list-grid">
+                                                    <div class="grid-title-left">
+                                                        <span class="inner-name mat-table-sticky">{{ localeData?.import_data }}</span>
                                                     </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="grid-list-div list-grid">
-                                                <div class="grid-title-left">
-                                                    <span class="inner-name mat-table-sticky">
-                                                        {{ localeData?.unlimited_users }}
-                                                    </span>
-                                                </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list list-grid-title plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list list-grid-title plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
                                                             <i class="icon-tick"></i>
-                                                        </span>
-                                                        <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">1</span>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="grid-list-div list-grid">
-                                                <div class="grid-title-left">
-                                                    <span class="inner-name mat-table-sticky">{{ localeData?.import_data }}</span>
+                                                        </div>
+                                                    </ng-container>
                                                 </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list list-grid-title plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <i class="icon-tick"></i>
+                                                <div class="grid-list-div list-grid">
+                                                    <div class="grid-title-left">
+                                                        <span class="inner-name mat-table-sticky">{{ localeData?.security }}</span>
                                                     </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="grid-list-div list-grid">
-                                                <div class="grid-title-left">
-                                                    <span class="inner-name mat-table-sticky">{{ localeData?.security }}</span>
-                                                </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list list-grid-title plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <i class="icon-tick"></i>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="grid-list-div list-grid">
-                                                <div class="grid-title-left">
-                                                    <span class="inner-name mat-table-sticky">
-                                                        {{ localeData?.support }}
-                                                    </span>
-                                                </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list bottom-buy-button plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
-                                                            {{ localeData?.chat_voice }}
-                                                        </span>
-                                                        <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
-                                                            <i class="icon-cross"></i>
-                                                        </span>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="grid-list-div list-grid" *ngIf="newUserSelectedCountryValue === entityCode.IND">
-                                                <div class="grid-title-left">
-                                                    <span class="inner-name mat-table-sticky">
-                                                        {{ localeData?.e_invoice }}
-                                                    </span>
-                                                </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list bottom-buy-button plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list list-grid-title plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
                                                             <i class="icon-tick"></i>
-                                                        </span>
-                                                        <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
-                                                            <i class="icon-cross"></i>
-                                                        </span>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="grid-list-div list-grid" *ngIf="newUserSelectedCountryValue === entityCode.IND">
-                                                <div class="grid-title-left">
-                                                    <span class="inner-name mat-table-sticky">
-                                                        {{ localeData?.gst_direct }}
-                                                    </span>
+                                                        </div>
+                                                    </ng-container>
                                                 </div>
-                                                <ng-container *ngFor="let plan of inputData">
-                                                    <div
-                                                        class="grid-title-list bottom-buy-button plan-row-height"
-                                                        [ngClass]="{
-                                                            'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                            'active-plan-td-bottom': selectedPlan()?.uniqueName === plan?.uniqueName,
-                                                        }"
-                                                    >
-                                                        <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
-                                                            <i class="icon-tick"></i>
-                                                        </span>
-                                                        <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
-                                                            <i class="icon-cross"></i>
+                                                <div class="grid-list-div list-grid">
+                                                    <div class="grid-title-left">
+                                                        <span class="inner-name mat-table-sticky">
+                                                            {{ localeData?.support }}
                                                         </span>
                                                     </div>
-                                                </ng-container>
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list bottom-buy-button plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
+                                                            <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                                {{ localeData?.chat_voice }}
+                                                            </span>
+                                                            <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
+                                                                <i class="icon-cross"></i>
+                                                            </span>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="grid-list-div list-grid" *ngIf="newUserSelectedCountryValue === entityCode.IND">
+                                                    <div class="grid-title-left">
+                                                        <span class="inner-name mat-table-sticky">
+                                                            {{ localeData?.e_invoice }}
+                                                        </span>
+                                                    </div>
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list bottom-buy-button plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
+                                                            <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                                <i class="icon-tick"></i>
+                                                            </span>
+                                                            <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
+                                                                <i class="icon-cross"></i>
+                                                            </span>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="grid-list-div list-grid" *ngIf="newUserSelectedCountryValue === entityCode.IND">
+                                                    <div class="grid-title-left">
+                                                        <span class="inner-name mat-table-sticky">
+                                                            {{ localeData?.gst_direct }}
+                                                        </span>
+                                                    </div>
+                                                    <ng-container *ngFor="let plan of inputData">
+                                                        <div
+                                                            class="grid-title-list bottom-buy-button plan-row-height"
+                                                            [ngClass]="{
+                                                                'active-plan-td': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                                'active-plan-td-bottom': selectedPlan()?.uniqueName === plan?.uniqueName,
+                                                            }"
+                                                        >
+                                                            <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                                <i class="icon-tick"></i>
+                                                            </span>
+                                                            <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
+                                                                <i class="icon-cross"></i>
+                                                            </span>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </ng-container>
+                                        @if (inputData?.length === 0) {
+                                            <div class="text-center py-4">
+                                                @if ((countrySource$ | async)?.length > 1) {
+                                                    <no-data
+                                                        [primaryMessage]="localeData?.no_plans_available_for_region"
+                                                        [secondaryMessage]="' '"
+                                                        [primaryMessageClass]="'no-data'"
+                                                    ></no-data>
+                                                } @else {
+                                                    <no-data
+                                                        [primaryMessage]="localeData?.no_plans_available"
+                                                        [secondaryMessage]="' '"
+                                                        [primaryMessageClass]="'no-data'"
+                                                    ></no-data>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                    <ng-container *ngIf="!(planListInProgress$ | async) && !isLoading && inputData?.length">
+                                        <ng-container *ngTemplateOutlet="planSummary"></ng-container>
                                     </ng-container>
-                                    @if (inputData?.length === 0) {
-                                        <div class="text-center py-4">
-                                            @if ((countrySource$ | async)?.length > 1) {
-                                                <no-data
-                                                    [primaryMessage]="localeData?.no_plans_available_for_region"
-                                                    [secondaryMessage]="' '"
-                                                    [primaryMessageClass]="'no-data'"
-                                                ></no-data>
-                                            } @else {
-                                                <no-data
-                                                    [primaryMessage]="localeData?.no_plans_available"
-                                                    [secondaryMessage]="' '"
-                                                    [primaryMessageClass]="'no-data'"
-                                                ></no-data>
-                                            }
-                                        </div>
-                                    }
                                 </div>
-                                <ng-container *ngIf="!(planListInProgress$ | async) && !isLoading && inputData?.length">
-                                    <ng-container *ngTemplateOutlet="planSummary"></ng-container>
-                                </ng-container>
-                            </div>
-                        </form>
+                            </form>
+                        }
                     </mat-step>
                     <mat-step [stepControl]="secondStepForm" name="secondStepForm">
                         <form autocomplete="off" class="mt-5" novalidate [formGroup]="secondStepForm" name="secondStepForm">
@@ -812,41 +819,36 @@
                                     >
                                         <mat-card class="outline-card">
                                             <mat-card-content>
-                                                <payment-provider-selector
-                                                    formControlName="paymentProvider"
-                                                    [providers]="filteredPaymentProviders"
-                                                    [label]="localeData?.payment_provider"
-                                                    [required]="
-                                                        !isFreePlan(selectedPlan(), firstStepForm.get('duration')?.value) &&
-                                                        payType === 'buy'
-                                                    "
-                                                    [showError]="isFormSubmitted() && !thirdStepForm.get('paymentProvider')?.value"
-                                                    [errorMessage]="localeData?.please_select_payment_provider"
-                                                    (valueChange)="onPaymentProviderChange()"
-                                                ></payment-provider-selector>
-
-                                                @if (
-                                                    (isMonthly() || isDaily()) &&
-                                                    selectedPlan()?.entityCode === entityCode.IND &&
-                                                    thirdStepForm.get('paymentProvider')?.value === paymentProvider.RAZORPAY
-                                                ) {
-                                                    <!-- Make sure in at last Razorpay is show in list -->
-                                                    <mat-radio-group
-                                                        class="d-flex flex-column mt-3 ml-4"
-                                                        formControlName="razorpayAuthType"
-                                                    >
-                                                        <mat-radio-button color="primary" value="CARD">
-                                                            {{ localeData?.credit_debit_card }}
-                                                        </mat-radio-button>
-                                                        <mat-radio-button
-                                                            color="primary"
-                                                            value="UPI"
-                                                            *ngIf="selectedPlan()?.entityCode === entityCode.IND"
-                                                        >
-                                                            {{ localeData?.upi }}
-                                                        </mat-radio-button>
-                                                    </mat-radio-group>
-                                                }
+                                                <div class="form-group mb-1">
+                                                    <label class="d-block mb-2">
+                                                        {{ localeData?.payment_provider }}
+                                                        @if (
+                                                            !isFreePlan(selectedPlan(), firstStepForm.get('duration')?.value) &&
+                                                            payType === 'buy'
+                                                        ) {
+                                                            <span class="text-red">*</span>
+                                                        }
+                                                    </label>
+                                                    <payment-provider-cards
+                                                        formControlName="paymentProvider"
+                                                        [cssClass]="'bg-table-background-color'"
+                                                        [supportedProviders]="filteredPaymentProviders"
+                                                        [module]="'subscription'"
+                                                        [showMethodRadio]="
+                                                            (isMonthly() || isDaily()) &&
+                                                            selectedPlan()?.entityCode === entityCode.IND &&
+                                                            thirdStepForm.get('paymentProvider')?.value === paymentProvider.RAZORPAY
+                                                        "
+                                                        [defaultMethodSelected]="thirdStepForm.get('razorpayAuthType')?.value"
+                                                        (valueChange)="onPaymentProviderChange()"
+                                                        (methodChange)="onRazorpayMethodChange($event)"
+                                                    ></payment-provider-cards>
+                                                    @if (isFormSubmitted() && !thirdStepForm.get('paymentProvider')?.value) {
+                                                        <mat-error class="d-block mt-2 font-size-12 text-red">
+                                                            {{ localeData?.please_select_payment_provider }}
+                                                        </mat-error>
+                                                    }
+                                                </div>
                                             </mat-card-content>
                                         </mat-card>
                                     </div>
@@ -994,7 +996,7 @@
                                 color="primary"
                                 class="w-100"
                                 (click)="nextStepForm()"
-                                *ngIf="selectedStep === 0"
+                                *ngIf="selectedStep() === 0"
                             >
                                 {{ localeData?.continue_billing_account }}
                             </button>
@@ -1004,7 +1006,7 @@
                                 color="primary"
                                 class="w-100"
                                 (click)="nextStepForm()"
-                                *ngIf="selectedStep === 1"
+                                *ngIf="selectedStep() === 1"
                             >
                                 {{ localeData?.continue_review }}
                             </button>
@@ -1012,7 +1014,7 @@
                                 aria-label="submit"
                                 matButton="filled"
                                 class="w-100"
-                                *ngIf="selectedStep === 2 && !isChangePlan"
+                                *ngIf="selectedStep() === 2 && !isChangePlan && !activateSubscription"
                                 (click)="onSubmit('trial')"
                             >
                                 {{ localeData?.start_trial }}
@@ -1021,7 +1023,7 @@
                                 aria-label="submit"
                                 matButton="filled"
                                 class="w-100 mt-2"
-                                *ngIf="selectedStep === 2 && !showStripePaymentElement"
+                                *ngIf="selectedStep() === 2 && !showStripePaymentElement"
                                 (click)="onSubmit('buy')"
                             >
                                 {{ localeData?.buy_plan }}
@@ -1030,8 +1032,8 @@
                                 aria-label="back"
                                 matButton="outlined"
                                 class="w-100 mt-2"
-                                (click)="selectedStep = 0; backToPreviousPage()"
-                                *ngIf="selectedStep === 1"
+                                (click)="selectedStep.set(0); backToPreviousPage()"
+                                *ngIf="selectedStep() === 1"
                             >
                                 {{ localeData?.back_plan }}
                             </button>
@@ -1039,8 +1041,8 @@
                                 aria-label="billing"
                                 matButton="outlined"
                                 class="w-100 mt-2"
-                                (click)="selectedStep = 1; backToPreviousPage()"
-                                *ngIf="selectedStep === 2"
+                                (click)="selectedStep.set(1); backToPreviousPage()"
+                                *ngIf="selectedStep() === 2"
                             >
                                 {{ localeData?.back_billing }}
                             </button>

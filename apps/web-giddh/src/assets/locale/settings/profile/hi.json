@@ -96,5 +96,10 @@
     "module_file_format": "यह [module_name] मॉड्यूल फ़ाइल नाम को [file_format] की तरह एक्सपोर्ट करने के लिए उपयोग किया जाएगा",
     "export_setting_description": "निर्यात की गई फ़ाइलों के लिए प्रारूप सेट करें। आप इसमें तिथि, खाता नाम, प्रविष्टि संख्या जैसे वेरिएबल शामिल कर सकते हैं या कस्टम टेक्स्ट का उपयोग कर सकते हैं।",
     "default_file_format": "Walkover_123_14-08-2025",
-    "show_account_unique_name": "एंट्री/वाउचर बनाते समय अकाउंट का यूनिक नाम दिखाएं"
+    "show_account_unique_name": "एंट्री/वाउचर बनाते समय अकाउंट का यूनिक नाम दिखाएं",
+    "auto_create_opposite_voucher": "डिलिवरी चलान/रिसीव नोट जनरेशन पर विपरीत वाउचर स्वचालित रूप से बनाएं",
+    "pdf_currency_format": "पीडीएफ मुद्रा प्रारूप",
+    "pdf_currency_format_code": "कोड",
+    "pdf_currency_format_symbol": "प्रतीक",
+    "pdf_currency_format_tooltip": "चुनें कि जनरेट किए गए पीडीएफ में मुद्रा राशि कैसे प्रदर्शित हो: प्रतीक ([SYMBOL] 1,000) या कोड ([CODE] 1,000)।"
 }

@@ -306,6 +306,16 @@
                                     >
                                         {{ localeData?.manage_payment }}
                                     </button>
+                                    @if (element?.isOwner) {
+                                        <button mat-menu-item (click)="openWallet(element?.subscriptionId)">
+                                            {{ localeData?.wallet }}
+                                        </button>
+                                    }
+                                    @if (element?.isOwner && element.status.toLowerCase() === 'cancelled') {
+                                        <button mat-menu-item (click)="activateSubscription(element?.subscriptionId)">
+                                            {{ localeData?.reactivate_subscription }}
+                                        </button>
+                                    }
                                 </div>
                             </mat-menu>
                         </td>

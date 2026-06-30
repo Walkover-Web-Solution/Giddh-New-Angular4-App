@@ -295,3 +295,15 @@
     line-height: 28px;
     flex-shrink: 0;
 }
+.annexure-charges-wrapper {
+    max-height: 194px;
+
+    .annexure-datepicker-fixed {
+        width: 150px;
+        min-width: 150px;
+    }
+
+    .annexure-field-dynamic {
+        min-width: 0;
+    }
+}

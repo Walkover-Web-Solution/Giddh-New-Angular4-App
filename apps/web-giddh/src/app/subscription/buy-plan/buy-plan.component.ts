@@ -58,7 +58,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** True when a Stripe failure redirect is awaiting translation data before showing the toast */
     private pendingStripeFailureToast: boolean = false;
     /** Hold selected tab */
-    public selectedStep: number = 0;
+    public selectedStep = signal<number>(0);
     /** Form Group for subscription first step form form */
     public firstStepForm: FormGroup;
     /** Form Group for subscription second step form */
@@ -221,10 +221,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public paypalCaptureOrderId: any = '';
     /** Holds Store Paypal Order Id Success observable*/
     public paypalCaptureOrderIdSuccess$: Observable<boolean> = this.componentStore.select(state => state.paypalCaptureOrderIdSuccess);
-    /** Hold filtered payment providers */
-    public filteredPaymentProviders: any[] = [];
-    /** Hold all payment providers */
-    public allPaymentProviders: any[] = [];
+    /** Hold filtered payment provider IDs */
+    public filteredPaymentProviders: string[] = [];
+    /** Hold all payment provider IDs */
+    public allPaymentProviders: string[] = [];
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
     /** Broadcast channel to sync stripe payment success across multiple open tabs */
@@ -288,6 +288,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public optionSelected: boolean = false;
     /** Holds user information  by user ip */
     private detectUserInfoByIp: any = {}
+    /** true if cancel subscription reactivate. */
+    public activateSubscription: boolean = false;
+    /** true if user have at leate one Company. */
+    public atLeatOneCompany: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -376,11 +380,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.razorpaySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.subscriptionId && this.isChangePlan) {
+                if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
                     this.navigateToRoute('/pages/user-details/subscription');
                 } else {
                     this.navigateToNewCompany(this.subscriptionId);
-                };
+                }
+            }
+        });
+
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.atLeatOneCompany = response?.length >= 1;
             }
         });
 
@@ -399,7 +409,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 sessionStorage.removeItem('stripe_selected_plan');
                 sessionStorage.removeItem('stripe_region_value');
                 sessionStorage.removeItem('stripe_region_label');
-                if (isChangePlanSession || this.isChangePlan || this.isRenewPlan) {
+                if (isChangePlanSession || this.isChangePlan || this.isRenewPlan || (this.activateSubscription && this.atLeatOneCompany)) {
                     this.navigateToRoute('/pages/user-details/subscription');
                 } else {
                     this.navigateToNewCompany(subscriptionId);
@@ -418,7 +428,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (response.dueAmount >= value) {
                     this.initializePayment(response, 'generateOrderId');
                 } else {
-                    if (this.subscriptionId && this.isChangePlan) {
+                    if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
                         this.navigateToRoute('/pages/user-details/subscription');
                     } else {
                         this.navigateToNewCompany(this.responseSubscriptionId);
@@ -670,7 +680,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // } else {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
-                if (this.subscriptionId && this.isChangePlan) {
+                if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
                     this.navigateToRoute('/pages/user-details/subscription');
                 } else {
                     this.navigateToNewCompany(this.responseSubscriptionId);
@@ -682,7 +692,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response) {
                 this.setBroadcastEvent();
                 this.isLoading = false;
-                if (this.subscriptionId && this.isChangePlan) {
+                if (this.subscriptionId && (this.isChangePlan || this.activateSubscription&& this.atLeatOneCompany)) {
                     this.navigateToRoute('/pages/user-details/subscription');
                 } else {
                     this.navigateToNewCompany(this.subscriptionId);
@@ -710,7 +720,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         });
                     } else {
                         setTimeout(() => {
-                            if (this.subscriptionId && this.isChangePlan) {
+                            if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
                                 this.navigateToRoute('/pages/user-details/subscription');
                             } else {
                                 this.navigateToNewCompany(this.subscriptionId);
@@ -775,6 +785,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.viewSubscriptionData$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
+            this.activateSubscription = response.status.toLowerCase() === 'cancelled' && this.router.url === ('/pages/user-details/subscription/activate-subscription/' + this.subscriptionId);
+            this.isChangePlan = !this.activateSubscription;
+            if (this.activateSubscription) {
+                this.selectedStep.set(1);
+                // Force the stepper to the second step. Linear is disabled
+                // when activateSubscription is true so navigation is allowed.
+                // Retry until the stepper view is available, then stop.
+                const intervalId = setInterval(() => {
+                    if (this.stepperIcon) {
+                        this.stepperIcon.selectedIndex = 1;
+                        this.selectedStep.set(1);
+                        this.changeDetection.detectChanges();
+                        if (this.stepperIcon.selectedIndex === 1) {
+                            clearInterval(intervalId);
+                        }
+                    }
+                }, 50);
+                // Safety stop after 5s to avoid running forever.
+                setTimeout(() => clearInterval(intervalId), 5000);
+            }
             if (this.subscriptionId && response?.region) {
                 this.newUserSelectCountry({
                     "label": response.region?.code + " - " + response.region?.name,
@@ -859,7 +889,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public paypalCallBackEvent(response: any): void {
-        if (this.subscriptionId && this.isChangePlan) {
+        if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
             this.navigateToRoute('/pages/user-details/subscription');
         } else {
             if (this.payType === 'trial') {
@@ -1449,15 +1479,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted.set(false);
-        if (this.selectedStep === 0 && this.firstStepForm.invalid) {
+        if (this.selectedStep() === 0 && this.firstStepForm.invalid) {
             this.isFormSubmitted.set(true);
             return;
         }
-        if (this.selectedStep === 1 && this.secondStepForm.invalid) {
+        if (this.selectedStep() === 1 && this.secondStepForm.invalid) {
             this.isFormSubmitted.set(true);
             return;
         }
-        if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
+        if (this.selectedStep() === 2 && this.thirdStepForm.invalid) {
             this.isFormSubmitted.set(true);
             return;
         }
@@ -1471,7 +1501,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
         }
 
-        this.selectedStep++;
+        this.selectedStep.update(v => v + 1);
     }
 
 
@@ -1482,9 +1512,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public onSelectedTab(event: any): void {
-        this.selectedStep = event?.selectedIndex;
+        this.selectedStep.set(event?.selectedIndex);
         this.setFinalAmount();
-        if (this.selectedStep !== 2) {
+        if (this.selectedStep() !== 2) {
             this.resetStripeState();
         }
         this.changeDetection.detectChanges();
@@ -1633,7 +1663,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             planUniqueName: this.selectedPlan()?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
             duration: this.firstStepForm.get('duration').value,
-            countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.code ?? this.viewSubscriptionData?.region?.code)
+            countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.code || this.viewSubscriptionData?.region?.code)
         }
 
         if (this.isChangePlan || this.isRenewPlan) {
@@ -1646,7 +1676,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const entityCode = this.selectedPlan()?.entityCode;
 
         const filterProviders = (providers: string[]) => {
-            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider.value));
+            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider));
             if (this.filteredPaymentProviders?.length === 1) {
                 this.thirdStepForm.get('paymentProvider')?.patchValue(providers[0]);
             }
@@ -1678,6 +1708,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         // Auto-select CARD auth type when Razorpay is chosen for recurring plans
         const isRazorpay = this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY;
         this.thirdStepForm.get('razorpayAuthType')?.patchValue(isRazorpay && (this.isMonthly() || this.isDaily()) ? 'CARD' : null);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Handles per-method selection inside the Razorpay provider card and maps it
+     * to the `razorpayAuthType` form control. Only Cards and UPI methods are
+     * applicable as auth types for Razorpay.
+     *
+     * @param event Event emitted by payment-provider-cards (methodChange)
+     * @memberof BuyPlanComponent
+     */
+    public onRazorpayMethodChange(event: { providerId: string; methodId: string }): void {
+        this.thirdStepForm.get('razorpayAuthType')?.patchValue(event.methodId);
         this.changeDetection.detectChanges();
     }
 
@@ -1835,6 +1878,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
 
             request['payNow'] = !isTrial;
+            if (this.activateSubscription) {
+                request['reactivateFromSubscriptionId'] = this.subscriptionId;
+            }
             // if (isTrial) {
             //     delete request.razorpayAuthType;
             //     delete request.subscriptionId;
@@ -1842,7 +1888,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             //     delete request.paymentProvider;
             //     delete request.promoCode;
             // }
-            if (this.subscriptionId && this.isChangePlan) {
+            if (this.subscriptionId && this.isChangePlan && !this.activateSubscription) {
                 request.subscriptionId = this.subscriptionId;
                 this.subscriptionRequest = request;
                 this.componentStore.getChangePlanDetails(request);
@@ -2279,7 +2325,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         // screen is correct before the fresh API response arrives.
         this.setFinalAmount();
 
-        this.selectedStep = 2;
+        this.selectedStep.set(2);
         // Defer stepper navigation so the linear stepper sees valid forms after patchValue.
         // Use next() twice instead of selectedIndex because linear stepper validates
         // stepControl before allowing navigation.
@@ -2431,28 +2477,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.pendingStripeFailureToast = false;
             }
             this.allPaymentProviders = [
-                {
-                    label: this.localeData?.gocardless,
-                    value: PaymentProvider.GOCARDLESS
-                },
-                {
-                    label: this.localeData?.paypal,
-                    value: PaymentProvider.PAYPAL
-                },
-                {
-                    label: this.localeData?.payu,
-                    value: PaymentProvider.PAYU
-                },
-                {
-                    label: this.localeData?.razorpay,
-                    value: PaymentProvider.RAZORPAY,
-                },
-                {
-                    label: this.localeData?.stripe,
-                    value: PaymentProvider.STRIPE
-                }
-            ];
-            this.allPaymentProviders = this.allPaymentProviders.filter(payment => this.serviceConfig.ALL_PAYMENT_PROVIDERS.includes(payment.value));
+                PaymentProvider.GOCARDLESS,
+                PaymentProvider.PAYPAL,
+                PaymentProvider.PAYU,
+                PaymentProvider.RAZORPAY,
+                PaymentProvider.STRIPE
+            ].filter(provider => this.serviceConfig.ALL_PAYMENT_PROVIDERS.includes(provider));
             this.changeDetection.detectChanges();
         }
     }
@@ -2500,6 +2530,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */ 
     private navigateToNewCompany(subscriptionId: string): void {
+        if (this.subscriptionId && this.activateSubscription && this.atLeatOneCompany) {
+            this.navigateToRoute('/pages/user-details/subscription');
+        }
         const billingForm = this.secondStepForm.value;
         delete billingForm.billingName;
 
