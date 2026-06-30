@@ -3536,12 +3536,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const parentGroups = data.body.parentGroups;
                 const isSundryDebtorCreditorGroup = parentGroups.includes(AccountingGroupEnum.SundryCreditors) || parentGroups.includes(AccountingGroupEnum.SundryDebtors);
                 let taxes = [];
-                let otherTax = {
-                    appliedOtherTax: {
-                        name: '',
-                        uniqueName: ''
-                    }
-                };
+                let otherTax = new SalesOtherTaxesModal();
+                
                 const accountApplicableTaxes = this.lc.activeAccount.applicableTaxes ?? [];
                 const accountOtherApplicableTaxes = this.lc.activeAccount.otherApplicableTaxes ?? [];
                 const applicableTaxesExcludingOtherTaxes = accountApplicableTaxes.filter(applicableTax =>
@@ -3563,19 +3559,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                                     [],
                                                     data.body.oppositeAccount.taxes ?? [],
                                                     data.body.oppositeAccount.groupTaxes ?? []);
-                            otherTax = {
-                                appliedOtherTax: {
-                                    name: '',
-                                    uniqueName: stockAccountOtherTax.length ? stockAccountOtherTax[0] : ''
-                                }
+                            otherTax.appliedOtherTax = {
+                                name: '',
+                                uniqueName: stockAccountOtherTax.length ? stockAccountOtherTax[0] : ''
                             };
                         }
                         if (prioritizedApplicableTaxes.length && !otherTax['uniqueName']) {
-                            otherTax = {
-                                appliedOtherTax: {
-                                    name: prioritizedApplicableTaxes[0]?.name,
-                                    uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
-                                }
+                            otherTax.appliedOtherTax = {
+                                name: prioritizedApplicableTaxes[0]?.name,
+                                uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
                             };
                         }
                 } else {
@@ -3584,18 +3576,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     const remainingBodyTaxes = data.body.taxes.filter(tax =>
                                     !data.body.groupTaxes.includes(tax));
                     if (remainingBodyTaxes.length) {
-                        otherTax = {
-                            appliedOtherTax: {
-                                name: '',
-                                uniqueName: remainingBodyTaxes[0]
-                            }
+                        otherTax.appliedOtherTax = {
+                            name: '',
+                            uniqueName: remainingBodyTaxes[0]
                         };
                     } else if (data.body.applicableTaxes.length) {
-                        otherTax = {
-                            appliedOtherTax: {
-                                name: data.body.applicableTaxes[0].name,
-                                uniqueName: data.body.applicableTaxes[0].uniqueName
-                            }
+                        otherTax.appliedOtherTax = {
+                            name: data.body.applicableTaxes[0].name,
+                            uniqueName: data.body.applicableTaxes[0].uniqueName
                         };
                     }
                 }
