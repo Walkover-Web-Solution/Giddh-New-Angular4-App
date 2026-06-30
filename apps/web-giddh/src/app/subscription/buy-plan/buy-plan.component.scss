@@ -242,3 +242,11 @@
         min-width: 70px;
     }
 }
+
+::ng-deep .first-step-disabled .mat-step-header:first-child,
+::ng-deep .first-step-disabled .mat-horizontal-stepper-header:first-child,
+::ng-deep .first-step-disabled .mat-vertical-stepper-header:first-child {
+    pointer-events: none !important;
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}

@@ -35,7 +35,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
             { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
             { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
         ];
-        this.calculationMethodLabel = this.calculationMethodOptions.find(method => method.value === this.defaultOtherTaxesModal.tcsCalculationMethod).label;
+        this.calculationMethodLabel = this.calculationMethodOptions.find(method => method.value === this.defaultOtherTaxesModal.tcsCalculationMethod)?.label;
 
         this.taxesOptions = this.taxes
             ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))

@@ -1,0 +1,125 @@
+@if (showMethodRadio()) {
+    <!-- Accordion / expanded layout: provider header + expandable method list -->
+    <div class="payment-providers-accordion d-flex flex-column row-gap-15">
+        @for (providerId of supportedProviders(); track providerId; let idx = $index) {
+            @let provider = getPaymentProviderDetails(providerId);
+            @let isExpanded = defaultExpandeProvider() === providerId;
+            @if (provider) {
+                <div
+                    class="provider-accordion border-radius-8 border"
+                    [ngClass]="[cssClass(), isExpanded ? 'selected' : '', disabled ? 'disabled' : '']"
+                >
+                    <button
+                        type="button"
+                        class="provider-accordion-header d-flex align-items-flex-start column-gap-1 p-3 cursor-pointer w-100"
+                        [disabled]="disabled"
+                        [attr.aria-expanded]="isExpanded"
+                        (click)="isExpanded ? defaultExpandeProvider.set('') : defaultExpandeProvider.set(provider.id)"
+                    >
+                        <div class="d-flex flex-column flex-grow-1 row-gap-1">
+                            <div class="d-flex align-items-center column-gap-1">
+                                <img [src]="imgPath + provider.logo" [alt]="provider.name" class="provider-logo flex-shrink-0" />
+                                @if (provider.description) {
+                                    <span class="provider-description font-size-14 text-light">{{ provider.description }}</span>
+                                }
+                            </div>
+                            @if (!isExpanded) {
+                                <div class="d-flex flex-column row-gap-1">
+                                    <div class="d-flex flex-wrap column-gap-1 row-gap-1">
+                                        @for (method of getProviderMethods(provider); track method.name) {
+                                            @let methodSelected = value() === provider.id && selectedMethod() === method.id;
+                                            <span
+                                                class="method-badge font-size-12 px-3 py-1 border-radius-12 d-flex align-items-center column-gap-05"
+                                            >
+                                                <img [src]="imgPath + method.icon" [alt]="method.name" class="method-icon mr-1" />
+                                                <span class="text-black">{{ method.name }}</span>
+                                                @if (methodSelected) {
+                                                    <i class="fa fa-check method-checkmark flex-shrink-0 font-size-14 ml-1"></i>
+                                                }
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <i class="icon-arrow-down flex-shrink-0" [class.rotate-180]="isExpanded" aria-hidden="true"></i>
+                    </button>
+
+                    @if (isExpanded) {
+                        <div class="mx-3 my-2 d-flex flex-column border border-radius-8">
+                            @for (method of getProviderMethods(provider); track method.name) {
+                                @let methodSelected = value() === provider.id && selectedMethod() === method.id;
+                                <label class="method-row d-flex align-items-center column-gap-1 px-3 py-2 cursor-pointer border-bottom">
+                                    <input
+                                        type="radio"
+                                        class="method-radio"
+                                        [name]="'method-' + provider.id"
+                                        [value]="method.id"
+                                        [checked]="methodSelected"
+                                        [attr.aria-label]="method.name"
+                                        (change)="selectMethod(provider.id, method.id)"
+                                    />
+                                    <span
+                                        class="method-icon-wrap d-flex align-items-center border-radius-8 justify-content-center flex-shrink-0"
+                                    >
+                                        <img [src]="imgPath + method.icon" [alt]="method.name" class="method-icon" />
+                                    </span>
+                                    <span class="d-flex flex-column flex-grow-1">
+                                        <span class="font-size-14 font-weight-semibold">{{ method.name }}</span>
+                                        @if (method.description) {
+                                            <span class="font-size-12 text-light">{{ method.description }}</span>
+                                        }
+                                    </span>
+                                </label>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        }
+    </div>
+} @else {
+    <!-- Default compact layout (original) -->
+    <div class="payment-providers-grid d-grid column-gap-2 row-gap-15">
+        @for (providerId of supportedProviders(); track providerId) {
+            @let provider = getPaymentProviderDetails(providerId);
+            @if (provider) {
+                <div
+                    class="provider-card d-flex align-items-flex-start p-3 border-radius-8 cursor-pointer column-gap-1"
+                    [ngClass]="[cssClass(), value() === provider.id ? 'selected' : '', disabled ? 'disabled' : '']"
+                    (click)="selectProvider(provider.id)"
+                >
+                    <div class="provider-radio d-flex align-items-center flex-shrink-0">
+                        <input
+                            type="radio"
+                            [id]="'provider-' + provider.id"
+                            [value]="provider.id"
+                            [checked]="value() === provider.id"
+                            [disabled]="disabled"
+                            [attr.aria-label]="provider.name"
+                            (click)="$event.stopPropagation(); selectProvider(provider.id)"
+                        />
+                    </div>
+
+                    <div class="d-flex flex-column flex-grow-1 row-gap-1">
+                        <img [src]="imgPath + provider.logo" [alt]="provider.name" class="provider-logo" />
+
+                        <div class="d-flex flex-column row-gap-1">
+                            <div class="d-flex flex-wrap column-gap-1 row-gap-1">
+                                @for (method of provider.features; track method.name) {
+                                    <span
+                                        class="method-badge font-size-12 px-3 py-1 border-radius-12 d-flex align-items-center column-gap-05"
+                                    >
+                                        <img [src]="imgPath + method.icon" [alt]="method.name" class="method-icon mr-1" />
+                                        <span class="text-black">{{ method.name }}</span>
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}

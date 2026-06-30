@@ -61,7 +61,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public isKenyaCompany: boolean = false;
     /** True if api call in progress */
     public isLoading: boolean = false;
-    /** Hold HMRC portal url */
+    /**
+     * Holds HMRC portal url
+     * - null: initial state or API failure (button hidden)
+     * - value: user needs to connect (button enabled with "connect_to_hmrc")
+     * - empty string: already connected (button disabled with "connected_to_hmrc")
+     */
     public connectToHMRCUrl: string = null;
     /** Holds Current Currency Code for Zimbabwe report */
     public vatReportCurrencyCode: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR' = 'BWP';
@@ -218,8 +223,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     public getURLHMRCAuthorization(): void {
         this.vatService.getHMRCAuthorization(this.activeCompany.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res?.body) {
-                this.connectToHMRCUrl = res?.body;
+            if (res.status === 'success') {
+                if (res?.body) {
+                    this.connectToHMRCUrl = res?.body;
+                } else {
+                    this.connectToHMRCUrl = "";
+                }
             }
         })
     }

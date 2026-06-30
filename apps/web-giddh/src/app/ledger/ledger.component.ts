@@ -1369,8 +1369,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     mappedTransactions?.forEach(transaction => {
                         let matchedTransaction = bankTransactions?.filter(bankTransaction => bankTransaction.transactionId === transaction?.uniqueName);
                         if (matchedTransaction?.length > 0) {
-                            const account: IOption = { label: transaction.account.name, value: transaction.account.uniqueName, additional: { uniqueName: transaction?.account?.uniqueName } };
-                            matchedTransaction[0].transactions[0].particular = transaction?.account.name;
+                            const account: IOption = { label: transaction.account?.name, value: transaction.account?.uniqueName, additional: { uniqueName: transaction?.account?.uniqueName } };
+                            matchedTransaction[0].transactions[0].particular = transaction?.account?.name;
                             this.selectAccount(account, matchedTransaction[0]?.transactions[0], false, false, true);
                         }
                     });
@@ -3536,7 +3536,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const parentGroups = data.body.parentGroups;
                 const isSundryDebtorCreditorGroup = parentGroups.includes(AccountingGroupEnum.SundryCreditors) || parentGroups.includes(AccountingGroupEnum.SundryDebtors);
                 let taxes = [];
-                let otherTax = {};
+                let otherTax = new SalesOtherTaxesModal();
+                
                 const accountApplicableTaxes = this.lc.activeAccount.applicableTaxes ?? [];
                 const accountOtherApplicableTaxes = this.lc.activeAccount.otherApplicableTaxes ?? [];
                 const applicableTaxesExcludingOtherTaxes = accountApplicableTaxes.filter(applicableTax =>
@@ -3558,13 +3559,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                                     [],
                                                     data.body.oppositeAccount.taxes ?? [],
                                                     data.body.oppositeAccount.groupTaxes ?? []);
-                            otherTax = {
+                            otherTax.appliedOtherTax = {
                                 name: '',
                                 uniqueName: stockAccountOtherTax.length ? stockAccountOtherTax[0] : ''
                             };
                         }
                         if (prioritizedApplicableTaxes.length && !otherTax['uniqueName']) {
-                            otherTax = {
+                            otherTax.appliedOtherTax = {
                                 name: prioritizedApplicableTaxes[0]?.name,
                                 uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
                             };
@@ -3575,12 +3576,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     const remainingBodyTaxes = data.body.taxes.filter(tax =>
                                     !data.body.groupTaxes.includes(tax));
                     if (remainingBodyTaxes.length) {
-                        otherTax = {
+                        otherTax.appliedOtherTax = {
                             name: '',
                             uniqueName: remainingBodyTaxes[0]
                         };
                     } else if (data.body.applicableTaxes.length) {
-                        otherTax = {
+                        otherTax.appliedOtherTax = {
                             name: data.body.applicableTaxes[0].name,
                             uniqueName: data.body.applicableTaxes[0].uniqueName
                         };
@@ -3672,6 +3673,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
+                this.lc.blankLedger.otherTaxModal = {
+                    ...this.lc.blankLedger.otherTaxModal,
+                    appliedOtherTax: {
+                        name: otherTax?.appliedOtherTax?.name,
+                        uniqueName: otherTax?.appliedOtherTax?.uniqueName
+                    }
+                };
+                this.lc.blankLedger.isOtherTaxesApplicable = !!otherTax?.appliedOtherTax?.uniqueName;
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }

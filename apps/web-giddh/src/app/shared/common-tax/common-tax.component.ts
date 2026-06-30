@@ -112,6 +112,8 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     public showCreateNew = input<boolean>(false);
     /** Input mask format for tax amount display */
     public mask = input<string>();
+    /** Number of decimal places for balance amounts */
+    public giddhBalanceDecimalPlaces = input<number>(2);
 
     // ==================== OUTPUT EVENTS ====================
     /** Emits the total tax amount when calculated */
@@ -138,8 +140,6 @@ export class CommonTaxComponent implements OnDestroy, OnInit {
     public taxSum = signal<number>(0);
     /** Calculated total tax amount */
     public calculatedTaxAmount = signal<number>(0);
-    /** Number of decimal places for balance amounts */
-    public giddhBalanceDecimalPlaces = signal<number>(2);
     /** Array of selected tax objects */
     public selectedTaxes = signal<string[]>([]);
     /** Internal array of tax render data with UI state */

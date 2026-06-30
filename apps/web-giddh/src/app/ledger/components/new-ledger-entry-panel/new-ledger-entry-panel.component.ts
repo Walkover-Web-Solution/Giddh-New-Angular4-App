@@ -576,29 +576,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public calculatePreAppliedTax(): void {
-        let companyTaxes: TaxResponse[] = [];
-        this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
-
-        this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
-
-        if (companyTaxes.length && this.currentTxn.selectedAccount?.otherTax?.uniqueName) {
-            const taxUniqueName = this.currentTxn.selectedAccount.otherTax.uniqueName;
-            let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === taxUniqueName) : undefined;
-            if (tax) {
-                switch (tax.taxType) {
-                    case 'tcsrc':
-                    case 'tcspay':
-                    case 'tdsrc':
-                    case 'tdspay':
-                        this.blankLedger.otherTaxModal.appliedOtherTax = {
-                            name: tax?.name,
-                            uniqueName: tax?.uniqueName
-                        };
-                        this.blankLedger.isOtherTaxesApplicable = true;
-                        break;
-                }
-            }
-        }
+        this.blankLedger.otherTaxModal = this.currentTxn.selectedAccount?.otherTax;
     }
 
     public ngAfterViewInit(): void {
@@ -1411,6 +1389,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
             this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.giddhBalanceDecimalPlaces);
             this.blankLedger.otherTaxModal = modal;
+            this.currentTxn.selectedAccount.otherTax = this.blankLedger.otherTaxModal;
             this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
             this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), this.giddhBalanceDecimalPlaces);
         } else {
@@ -1418,6 +1397,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.tdsTcsTaxesSum = 0;
             this.blankLedger.isOtherTaxesApplicable = false;
             this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+            this.currentTxn.selectedAccount.otherTax = this.blankLedger.otherTaxModal;
         }
     }
 

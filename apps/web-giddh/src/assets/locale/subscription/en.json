@@ -158,5 +158,7 @@
         "no_plans_available_for_region": "No plans available for selected region",
         "pay_now": "Pay now",
         "processing": "Processing...",
-        "payment_failed": "Payment failed. Please try again."
+        "payment_failed": "Payment failed. Please try again.",
+        "wallet": "Wallet",
+        "reactivate_subscription": "Reactivate Subscription"
     }

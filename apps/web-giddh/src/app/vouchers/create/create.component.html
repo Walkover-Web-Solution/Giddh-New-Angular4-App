@@ -2548,9 +2548,219 @@
 
                                 <div class="vouchers-other-detail container-lg mt-4 px-0">
                                     <div class="row mx-0">
-                                        <div class="col-8 px-0">
+                                        <div class="col-9 px-0">
                                             <div class="container px-0">
                                                 <div class="row">
+                                                    <!-- Annexure Charges Section -->
+                                                    @if (
+                                                        invoiceType.isSalesInvoice ||
+                                                        invoiceType.isPurchaseInvoice ||
+                                                        invoiceType.isCreditNote ||
+                                                        invoiceType.isDebitNote ||
+                                                        invoiceType.isCashInvoice
+                                                    ) {
+                                                        <div class="col-12">
+                                                            <mat-card>
+                                                                <mat-card-header>
+                                                                    <mat-card-title>
+                                                                        <p class="font-size-16 mb-3">
+                                                                            {{ localeData?.annexure_charges }}
+                                                                        </p>
+                                                                    </mat-card-title>
+                                                                </mat-card-header>
+                                                                <mat-card-content>
+                                                                    <div
+                                                                        class="container annexure-charges-wrapper px-0 pt-1 pr-2 overflow-auto"
+                                                                        formArrayName="annexureCharges"
+                                                                    >
+                                                                        @for (
+                                                                            annexureCharge of annexureChargesArray.controls;
+                                                                            track $index
+                                                                        ) {
+                                                                            <div
+                                                                                class="d-flex align-items-center mb-3 row-gap-2"
+                                                                                [formGroupName]="$index"
+                                                                            >
+                                                                                <div class="flex-shrink-0 annexure-datepicker-fixed">
+                                                                                    <giddh-datepicker
+                                                                                        #annexureDatePicker
+                                                                                        class="date-border"
+                                                                                        [showToggleIcon]="false"
+                                                                                        [closeDatepickerOnFocus]="true"
+                                                                                        (dateSelected)="
+                                                                                            onBlurAnnexureDate(annexureCharge, $index)
+                                                                                        "
+                                                                                        id="annexureDate{{ $index }}"
+                                                                                        name="annexureDate{{ $index }}"
+                                                                                        [label]="'Entry date'"
+                                                                                        [placeholder]="'DD-MM-YYYY'"
+                                                                                        [formControl]="annexureCharge.get('date')"
+                                                                                        [appearance]="'outline'"
+                                                                                        [disabled]="isUpdateMode"
+                                                                                        appEnterNext
+                                                                                    ></giddh-datepicker>
+                                                                                </div>
+                                                                                <div class="flex-grow-1 pl-3 annexure-field-dynamic">
+                                                                                    <reactive-dropdown-field
+                                                                                        appEnterNext
+                                                                                        [label]="commonLocaleData?.app_account"
+                                                                                        [placeholder]="commonLocaleData?.app_select_account"
+                                                                                        [options]="indirectExpensesLedgers"
+                                                                                        [openDropdown]="activeAnnexureIndex === $index"
+                                                                                        [showCreateNew]="true"
+                                                                                        [enableDynamicSearch]="true"
+                                                                                        [isPaginationEnabled]="true"
+                                                                                        (dynamicSearchedQuery)="
+                                                                                            searchAnnexureAccount($event, 1)
+                                                                                        "
+                                                                                        (scrollEnd)="handleSearchAnnexureAccountScrollEnd()"
+                                                                                        [createNewText]="commonLocaleData?.app_create_new"
+                                                                                        (selectedOption)="
+                                                                                            onAnnexureAccountChange($index, $event)
+                                                                                        "
+                                                                                        (createOption)="
+                                                                                            toggleAccountAsidePane(
+                                                                                                accountType.indirectExpense,
+                                                                                                true
+                                                                                            )
+                                                                                        "
+                                                                                        [showError]="
+                                                                                            annexureCharge
+                                                                                                .get('transactions.0.account.uniqueName')
+                                                                                                ?.hasError('required') &&
+                                                                                            annexureCharge.get(
+                                                                                                'transactions.0.account.uniqueName'
+                                                                                            )?.touched
+                                                                                        "
+                                                                                        [formControl]="
+                                                                                            annexureCharge.get(
+                                                                                                'transactions.0.account.uniqueName'
+                                                                                            )
+                                                                                        "
+                                                                                    ></reactive-dropdown-field>
+                                                                                </div>
+                                                                                <div class="flex-grow-1 pl-3 annexure-field-dynamic">
+                                                                                    <input-field
+                                                                                        appEnterNext
+                                                                                        [type]="'number'"
+                                                                                        [allowDecimalDigitsOnly]="true"
+                                                                                        [label]="commonLocaleData?.app_amount"
+                                                                                        [placeholder]="commonLocaleData?.app_amount"
+                                                                                        [formControl]="
+                                                                                            annexureCharge.get(
+                                                                                                'transactions.0.amount.amountForAccount'
+                                                                                            )
+                                                                                        "
+                                                                                        (change)="
+                                                                                            calculateAnnexureChargeTax(
+                                                                                                $index,
+                                                                                                false,
+                                                                                                annexureCharge.get('taxes')?.value
+                                                                                            )
+                                                                                        "
+                                                                                    ></input-field>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="flex-grow-1 pl-3 annexure-field-dynamic"
+                                                                                    *ngIf="showTaxColumn"
+                                                                                >
+                                                                                    <common-tax
+                                                                                        #annexureTaxControll
+                                                                                        [date]="invoiceForm.get('date')?.value"
+                                                                                        [mask]="company.inputMaskFormat"
+                                                                                        [totalForTax]="
+                                                                                            annexureCharge.get(
+                                                                                                'transactions.0.amount.amountForAccount'
+                                                                                            )?.value
+                                                                                        "
+                                                                                        [applicableTaxes]="
+                                                                                            annexureCharge.get('taxes')?.value
+                                                                                        "
+                                                                                        [taxes]="allCompanyTaxes"
+                                                                                        [prefixInput]="account.baseCurrencySymbol"
+                                                                                        [suffixInput]="''"
+                                                                                        [commonLocaleData]="commonLocaleData"
+                                                                                        [giddhBalanceDecimalPlaces]="
+                                                                                            company.giddhBalanceDecimalPlaces
+                                                                                        "
+                                                                                        [showMatFormField]="true"
+                                                                                        [hasBackdrop]="true"
+                                                                                        [showCreateNew]="true"
+                                                                                        (selectedTaxEvent)="
+                                                                                            calculateAnnexureChargeTax(
+                                                                                                $index,
+                                                                                                false,
+                                                                                                $event
+                                                                                            )
+                                                                                        "
+                                                                                        (taxAmountSumEvent)="
+                                                                                            updateAnnexureTaxAmount($event, $index)
+                                                                                        "
+                                                                                    ></common-tax>
+                                                                                </div>
+                                                                                <div class="flex-grow-1 pl-3 annexure-field-dynamic">
+                                                                                    <input-field
+                                                                                        appEnterNext
+                                                                                        [type]="'number'"
+                                                                                        [allowDecimalDigitsOnly]="true"
+                                                                                        [label]="commonLocaleData?.app_total"
+                                                                                        [placeholder]="commonLocaleData?.app_total"
+                                                                                        [formControl]="
+                                                                                            annexureCharge.get('total.amountForAccount')
+                                                                                        "
+                                                                                        (change)="
+                                                                                            calculateAnnexureChargeTax(
+                                                                                                $index,
+                                                                                                true,
+                                                                                                annexureCharge.get('taxes')?.value
+                                                                                            )
+                                                                                        "
+                                                                                    ></input-field>
+                                                                                </div>
+                                                                                <div class="flex-shrink-0 pl-3">
+                                                                                    <i
+                                                                                        tabindex="0"
+                                                                                        cdkMonitorElementFocus
+                                                                                        (keydown.enter)="
+                                                                                            $event.preventDefault();
+                                                                                            removeAnnexureCharge($index)
+                                                                                        "
+                                                                                        (keydown.space)="
+                                                                                            $event.preventDefault();
+                                                                                            removeAnnexureCharge($index)
+                                                                                        "
+                                                                                        class="icon-trash font-size-16 cursor-pointer delete-btn"
+                                                                                        (click)="removeAnnexureCharge($index)"
+                                                                                    ></i>
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+                                                                    <div class="row mt-3">
+                                                                        <div class="col-12">
+                                                                            <span
+                                                                                class="text-primary cursor-pointer font-size-14"
+                                                                                tabindex="0"
+                                                                                role="button"
+                                                                                cdkMonitorElementFocus
+                                                                                (keydown.enter)="
+                                                                                    $event.preventDefault(); addAnnexureCharge(true)
+                                                                                "
+                                                                                (keydown.space)="
+                                                                                    $event.preventDefault(); addAnnexureCharge(true)
+                                                                                "
+                                                                                (click)="addAnnexureCharge(true)"
+                                                                            >
+                                                                                + {{ localeData?.add_annexure_charge }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </mat-card-content>
+                                                            </mat-card>
+                                                        </div>
+                                                    }
+
+                                                    <!-- Deposit Section -->
                                                     <div
                                                         class="col-12"
                                                         *ngIf="
@@ -2568,7 +2778,7 @@
                                                                     (isUpdateMode && (vouchersForAdjustment?.length || isAdjustAmount))))
                                                         "
                                                     >
-                                                        <mat-card>
+                                                        <mat-card class="mt-4">
                                                             <mat-card-header
                                                                 *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice"
                                                             >
@@ -2761,6 +2971,8 @@
                                                             </mat-card-content>
                                                         </mat-card>
                                                     </div>
+
+                                                    <!-- Other Details Section -->
                                                     <div class="col-12 mt-3">
                                                         <mat-accordion>
                                                             <mat-expansion-panel [expanded]="ocrDataEnabled">
@@ -3110,7 +3322,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-4 px-0">
+                                        <div class="col-3 px-0">
                                             <table class="total-amount-wrapper w-100 text-right">
                                                 <tr>
                                                     <td>
