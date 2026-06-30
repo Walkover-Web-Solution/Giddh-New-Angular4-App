@@ -488,7 +488,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
-        this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
+        this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName.split(',').length >= 2 ? '' : this.activeGroupUniqueName);
 
         this.getCurrency();
         this.isStateRequired = this.checkActiveGroupCountry();

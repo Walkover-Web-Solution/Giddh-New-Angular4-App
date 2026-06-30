@@ -75,7 +75,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
     public commonCountries$: Observable<any> = this.select(this.store.select(state => state.common.countries), (response) => response);
     public generalState$: Observable<any> = this.select(this.store.select(state => state.general.states), (response) => response);
-
+    public branchList$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
     /**
      * Get All Plans
      *

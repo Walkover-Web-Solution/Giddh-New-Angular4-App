@@ -58,6 +58,8 @@
     "drag_drop_file": "Drag/Drop file or click here",
     "deposit": "Deposit",
     "adjust_amount": "Adjust Amount",
+    "annexure_charges": "Annexure Charges",
+    "add_annexure_charge": "Add Annexure Charge",
     "product_service_description": "Product/Service Description",
     "qty": "Qty",
     "generate_invoice": "Generate Invoice",

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, O
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil, pairwise, filter } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
-import { OrganizationProfile } from '../constants/settings.constant';
+import { CurrencyDisplayFormat, OrganizationProfile } from '../constants/settings.constant';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
@@ -43,7 +43,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
         nameAlias: '',
         headQuarterAlias: '',
         taxType: '',
-        portalDomain: ''
+        portalDomain: '',
+        autoGenerateNote: false,
+        currencyDisplayFormat: CurrencyDisplayFormat.Code
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
