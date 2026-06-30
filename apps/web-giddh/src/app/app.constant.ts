@@ -29,6 +29,8 @@ export const GIDDH_INTERNAL_DOMAINS = [
     'msg91.com',
     'whozzat.com',
 ];
+
+export const INTERNAL_EMAILS_DOMAINS = ['msg91.com', 'giddh.com', 'walkover.in', 'whozzat.com'];
 /** Maps locale placeholder tokens to their corresponding service config keys.
  * To add a new substitution, add an entry: { token: '[TOKEN]', configKey: 'CONFIG_KEY' } */
 export const LOCALE_PLACEHOLDER_MAP: { token: string; configKey: string }[] = [
@@ -740,6 +742,17 @@ export const PaymentProvider = {
     STRIPE: 'STRIPE'
 };
 
+/** Payment method IDs (used for default selection and API mapping) */
+export const PaymentMethod = {
+    UPI: 'UPI',
+    CARD: 'CARD',
+    NET_BANKING: 'NET_BANKING',
+    WALLET: 'WALLET',
+    EMI: 'EMI',
+    BANK_TRANSFER: 'BANK_TRANSFER',
+    DIRECT_DEBIT: 'DIRECT_DEBIT'
+};
+
 /** Plan duration */
 export const PlanDuration = {
     MONTHLY: 'MONTHLY',
@@ -1066,3 +1079,11 @@ export enum FormFieldsType {
 
 /** Round off threshold for standard mathematical rounding */
 export const ROUND_OFF_THRESHOLD = 0.5; 
+
+/** Currencies supported by PayPal */
+export const PAYPAL_SUPPORTED_CURRENCIES: string[] = [
+    'AUD', 'BRL', 'CAD', 'CNY', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'ILS',
+    'JPY', 'MYR', 'MXN', 'TWD', 'NZD', 'NOK', 'PHP', 'PLN', 'GBP', 'SGD',
+    'SEK', 'CHF', 'THB', 'USD'
+];
+

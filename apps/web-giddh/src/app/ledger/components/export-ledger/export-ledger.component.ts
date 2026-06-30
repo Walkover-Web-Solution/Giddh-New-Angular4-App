@@ -240,7 +240,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === "success") {
                     if (response?.body?.type === "message") {
-                        this.toaster.showSnackBar("success", response.body.name);
+                        this.toaster.showSnackBar("success", response.body.file);
                     } else {
                         let blob = this.generalService.base64ToBlob(response?.body?.data, 'application/vnd.ms-excel', 512);
                         return download(response.body.name, blob, 'application/vnd.ms-excel');

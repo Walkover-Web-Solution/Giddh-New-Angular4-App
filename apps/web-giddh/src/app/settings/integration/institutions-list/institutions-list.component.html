@@ -19,7 +19,7 @@
                     (keydown.enter)="$event.preventDefault()"
                     [matPrefixIcon]="'icon-search'"
                 ></input-field>
-                <div class="list-wrapper mt-2">
+                <div class="list-wrapper mt-2 overflow-y-auto flex-1 border border-radius-4 custom-height">
                     <mat-list class="p-0" *ngIf="filteredBanks?.length">
                         <ng-container *ngFor="let item of filteredBanks">
                             <div class="list-item px-2">

@@ -79,7 +79,12 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     private currentBranch: any = {};
     /** Hold true in production environment */
     public isProdMode: boolean = environment.PRODUCTION_ENV;
-    /** Hold HMRC portal url */
+    /**
+     * Holds HMRC portal url
+     * - null: initial state or API failure (button hidden)
+     * - value: user needs to connect (button enabled with "connect_to_hmrc")
+     * - empty string: already connected (button disabled with "connected_to_hmrc")
+     */
     public connectToHMRCUrl: string = null;
     /** True if API Call is in progress */
     public isLoading = signal<boolean>(false);
@@ -192,6 +197,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                     this.connectToHMRCUrl = response.body;
                 } else {
                     this.getLiabilitiesPayment();
+                    this.connectToHMRCUrl = "";
                 }
             }
         });
