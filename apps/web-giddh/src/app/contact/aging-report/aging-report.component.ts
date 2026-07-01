@@ -46,6 +46,7 @@ import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { SettingsFinancialYearActions } from "../../actions/settings/financial-year/financial-year.action";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ServiceConfig } from "../../services/service.config";
+import { ContactsModule } from "../contacts.enum";
 
 @Component({
     selector: "aging-report",
@@ -58,6 +59,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /* This will hold the type of aging report */
+    @Input() public vendorCustomerType: string = "";
     public totalDueSelectedOption: string = "0";
     public totalDueAmount: number = 0;
     public includeName: boolean = false;
@@ -73,7 +76,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public key: string = "name";
     public order: string = "asc";
     public filter: string = "";
-    public searchStr$ = new Subject<string>();
+    public searchStr$ = new Subject<any>();
     public searchStr: string = "";
     /** Page size options for mat-paginator */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
@@ -85,7 +88,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     @ViewChild("unpaidInvoice") public unpaidInvoice: TemplateRef<any>;
     /** Advance search component instance */
     @ViewChild("agingReportAdvanceSearch", { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
-    @Output() public createNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
+    @Output() public createNewCustomerEvent: EventEmitter<string> = new EventEmitter();
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -139,6 +142,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public maxDate: any;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    public ContactsModule = ContactsModule;
 
     constructor(
         public dialog: MatDialog,
@@ -191,7 +195,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public getDueReport() {
-        this.store.dispatch(this.agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest, this.currentBranch?.uniqueName));
+        this.store.dispatch(this.agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest, this.currentBranch?.uniqueName, this.vendorCustomerType));
     }
 
     public detectChanges() {
@@ -209,7 +213,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.imgPath = this.serviceConfig.IMG_PATH;
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.store.dispatch(this.agingReportActions.GetDueRange());
         this.agingDropDownoptions$.subscribe(p => {
             this.agingDropDownoptions = cloneDeep(p);
         });
@@ -217,9 +220,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.searchStr$.pipe(
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
-        ).subscribe(term => {
-            if (term !== undefined && term !== null) {
-                this.dueAmountReportRequest.q = term;
+        ).subscribe(({ restoredQ, vendorCustomerType }) => {
+            if (restoredQ !== undefined && restoredQ !== null) {
+                this.dueAmountReportRequest.q = restoredQ;
+                this.vendorCustomerType = vendorCustomerType;
                 this.getDueReport();
             }
         });
@@ -275,7 +279,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             queryParams$.pipe(take(1)),
             queryParams$.pipe(skip(1), debounceTime(700))
         ).pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
-            if (queryParams.tab === 'aging-report') {
+            if (queryParams.tab === 'purchase-aging-report' || queryParams.tab === 'sales-aging-report') {
+                this.resetAdvanceSearch(false);
                 const restoredQ = queryParams.searchText || '';
                 this.searchStr = restoredQ;
                 this.searchedName.setValue(restoredQ, { emitEvent: false });
@@ -289,10 +294,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     this.applyAdvanceSearch(this.commonRequest, true);
                 } else {
                     this.showClearFilter.set(restoredQ ? true : false);
-                    this.searchStr$.next(restoredQ);
+                    this.searchStr$.next({ restoredQ, vendorCustomerType: this.vendorCustomerType });
                 }
             } else {
-                this.generalService.saveRouteQueryFilters({ tab: 'aging-report', tabIndex: 1 });
+                this.generalService.saveRouteQueryFilters({ tab: this.vendorCustomerType === ContactsModule.vendor ? 'purchase-aging-report' : 'sales-aging-report', tabIndex: 1 });
             }
         });
 
@@ -331,6 +336,15 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Called when component properties change
+     */
+    public ngOnChanges() {
+        if (this.vendorCustomerType) {
+            this.store.dispatch(this.agingReportActions.GetDueRange(this.vendorCustomerType));
+        }
+    }
+
     public openAgingDropDown() {
         this.store.dispatch(this.agingReportActions.OpenDueRange());
     }
@@ -352,7 +366,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      *
      * @memberof AgingReportComponent
      */
-    public resetAdvanceSearch(): void {
+    public resetAdvanceSearch(save:boolean = true): void {
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
         if (this.agingReportAdvanceSearch) {
@@ -363,7 +377,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.showClearFilter.set(false);
         this.dueAmountReportRequest.sortBy = 'name';
         this.dueAmountReportRequest.sort = 'asc';
-        this.generalService.saveRouteQueryFilters(null, true);
+        if (save) {
+            this.generalService.saveRouteQueryFilters(null, true);
+        }
     }
 
     /**
@@ -566,7 +582,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             q: this.dueAmountReportRequest.q
         }
         this.isLoading.set(true);
-        this.agingReportService.exportAgingReport(exportData, this.currentBranch ? this.currentBranch.uniqueName : "").pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.agingReportService.exportAgingReport(exportData, this.currentBranch ? this.currentBranch.uniqueName : "", this.vendorCustomerType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading.set(false);
             if (response?.status === 'success') {
                 this.toaster.showSnackBar("success", response?.body);
@@ -633,7 +649,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             if (model.page === 1) {
                 this.unpaidInvoiceIsLoading = true;
             }
-            this.receiptService.GetAllReceipt(model, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.receiptService.GetAllReceipt(model, this.vendorCustomerType === ContactsModule.customer ? ContactsModule.sales : ContactsModule.purchase).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (model.page === 1) {
                     this.unpaidInvoiceIsLoading = false;
                 }
@@ -749,7 +765,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         if (invoice) {
             let url: string = '';
             if (invoice.voucherNumber !== 'OPENING BALANCE' && invoice.uniqueName && invoice.voucherDate) {
-                url = `/pages/vouchers/view/sales/${invoice.uniqueName}?page=1&from=${invoice.voucherDate}&to=${invoice.voucherDate}`;
+                url = `/pages/vouchers/view/${this.vendorCustomerType === ContactsModule.vendor ? 'purchase' : 'sales'}/${invoice.uniqueName}?page=1&from=${invoice.voucherDate}&to=${invoice.voucherDate}`;
             } else {
                 url = 'javascript:;';
             }

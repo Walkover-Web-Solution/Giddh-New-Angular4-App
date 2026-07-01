@@ -61,7 +61,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
 import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 import { ServiceConfig } from '../services/service.config';
-import { ContactsTab, ContactsColumn } from './contacts.enum';
+import { ContactsModule, ContactsColumn } from './contacts.enum';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
 
 @Component({
@@ -89,7 +89,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public sundryCreditorsAccountsBackup: any = {};
     public sundryCreditorsAccounts$: Observable<any>;
     public sundryCreditorsAccounts: any[] = [];
-    public activeTab: any = "";
     public groupUniqueName: any;
     public selectedAccForPayment: any;
     public dueAmountReportRequest: DueAmountReportQueryRequest;
@@ -257,6 +256,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     private currentUrl: string = "";
     /** Returns only the columns marked as checked */
     public ContactsColumn = ContactsColumn;
+    /** Contact module types */
+    public ContactsModule = ContactsModule;
     /** Observable for custom header columns */
     private customHeaderColumnsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     /** Observable for custom header columns */
@@ -291,7 +292,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-                if (this.activeTab === "vendor" && this.activeCompany?.uniqueName && this.bankAccountsLoadedForCompany !== this.activeCompany?.uniqueName) {
+                if (this.moduleType === ContactsModule.vendor && this.activeCompany?.uniqueName && this.bankAccountsLoadedForCompany !== this.activeCompany?.uniqueName) {
                     this.bankAccountsLoadedForCompany = this.activeCompany?.uniqueName;
                     this.store.dispatch(this.companyActions.getAllIntegratedBankInCompany(this.activeCompany?.uniqueName));
                 }
@@ -329,24 +330,21 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             const lastTabType = this.moduleType;
             const typeParam = params?.type?.toLowerCase();
-            this.moduleType = params?.type?.toUpperCase();
+            this.moduleType = params?.type?.toLowerCase();
 
-            const isCustomer = typeParam?.includes('customer');
-            const isVendor = typeParam?.includes('vendor');
+            const isCustomer = typeParam?.includes(ContactsModule.customer);
+            const isVendor = typeParam?.includes(ContactsModule.vendor);
 
-            const newTab = isCustomer ? 'customer'
-                : isVendor ? 'vendor'
-                    : 'aging-report';
+            const newTab = isCustomer ? ContactsModule.customer
+                : isVendor ? ContactsModule.vendor : ContactsModule.agingReport;
 
-            const previousTab = this.activeTab;
+            const previousTab = this.moduleType;
 
-            if (newTab !== previousTab) {
-                this.selectedRangeLabel = "";
-                this.displayedColumns = [];
-                this.dynamicCustomColumns = [];
-                this.setActiveTab(newTab);
-                this.resetSearchIfSwitched(previousTab);
-            }
+            this.selectedRangeLabel = "";
+            this.displayedColumns = [];
+            this.dynamicCustomColumns = [];
+            this.setActiveTab(newTab);
+            this.resetSearchIfSwitched(previousTab);
 
             if (lastTabType) {
                 this.translationComplete(true);
@@ -354,7 +352,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
 
         this.route.queryParams.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe(queryParams => {
-            if (queryParams.tab === 'customer' || queryParams.tab === 'vendor') {
+            if (queryParams.tab === ContactsModule.customer || queryParams.tab === ContactsModule.vendor) {
                 if (queryParams.fromDate && queryParams.toDate) {
                     this.fromDate = queryParams.fromDate;
                     this.toDate = queryParams.toDate;
@@ -389,7 +387,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                 }
             } else if (queryParams.tab !== this.moduleType.toLowerCase()) {
-                this.generalService.saveRouteQueryFilters({ tab: this.moduleType.toLowerCase(), tabIndex: 1 });
+                this.generalService.saveRouteQueryFilters({ tab: this.moduleType === ContactsModule.customer ? ContactsModule.customer : this.moduleType === ContactsModule.vendor ? ContactsModule.vendor : this.moduleType === ContactsModule.sales ? 'sales-aging-report' : 'purchase-aging-report', tabIndex: 1 });
             }
         });
 
@@ -413,7 +411,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
 
             setTimeout(() => {
-                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                if (this.moduleType === ContactsModule.vendor) {
                     let dynamicCustomColumns = this.dynamicCustomColumns.filter(col => col.value !== 'action');
                     let displayedColumns = this.displayedColumns.filter(col => col !== 'action');
 
@@ -548,7 +546,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 break;
 
             case 2: // go to sales or purchase
-                this.purchaseOrSales = this.activeTab === "customer" ? "sales" : "purchase";
+                this.purchaseOrSales = this.moduleType === ContactsModule.customer ? "sales" : "purchase";
                 if (this.purchaseOrSales === "purchase") {
                     if (this.voucherApiVersion === 2) {
                         this.goToRoute("vouchers/purchase/" + account?.uniqueName + "/create", "", "");
@@ -645,7 +643,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public tabSelected(tabName: "customer" | "aging-report" | "vendor") {
+    public tabSelected(tabName: ContactsModule) {
         if (!this.searchStr) {
             this.searchStr = "";
             this.selectedCheckedContacts = [];
@@ -666,16 +664,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : '';
             }
         }
-        if (tabName === this.activeTab) {
-            this.activeTab = '';
-        }
-        if (tabName !== this.activeTab) {
+        if (tabName === ContactsModule.customer || tabName === ContactsModule.vendor) {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
             this.commonRequest = new ContactAdvanceSearchCommonModal();
             this.isAdvanceSearchApplied = false;
-            this.key = (tabName === "vendor") ? "amountDue" : "name";
-            this.order = (tabName === "vendor") ? "desc" : "asc";
-            this.activeTab = tabName;
+            this.key = (tabName === ContactsModule.vendor) ? "amountDue" : "name";
+            this.order = (tabName === ContactsModule.vendor) ? "desc" : "asc";
+            this.moduleType = tabName;
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {
                 this.selectedDateRange = {
@@ -689,32 +684,28 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.fromDate = "";
                 this.toDate = "";
             }
-
-            if (this.activeTab !== "aging-report") {
-                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-            }
-
+            this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         }
     }
 
-    public setActiveTab(tabName: "customer" | "aging-report" | "vendor") {
+    public setActiveTab(tabName: ContactsModule) {
         this.searchStr = "";
         this.tabSelected(tabName);
-        let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]));
+        let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.moduleType === ContactsModule.vendor ? ContactsModule.vendor : ContactsModule.customer]));
         if (showColumnObj) {
             if (showColumnObj.closingBalance !== undefined) {
                 delete showColumnObj.closingBalance;
             }
         }
 
-        if (tabName === "vendor") {
+        if (tabName === ContactsModule.vendor) {
             this.store.dispatch(this.companyActions.getAllIntegratedBankInCompany(this.activeCompany?.uniqueName));
         }
     }
 
     public ngOnDestroy() {
         this.renderer.removeClass(document.body, 'contact-body');
-        localStorage.removeItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]);
+        localStorage.removeItem(this.localStorageKeysForFilters[this.moduleType === ContactsModule.vendor ? ContactsModule.vendor : ContactsModule.customer]);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -725,16 +716,16 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public updateCustomerAcc(openFor: "customer" | "vendor", account: any) {
+    public updateCustomerAcc(openFor: ContactsModule.customer | ContactsModule.vendor, account: any) {
         this.activeAccountDetails = account;
         this.isUpdateAccount = true;
-        this.selectedGroupForCreateAcc = account ? account.groupUniqueName : openFor === "customer" ? "sundrydebtors" : "sundrycreditors";
+        this.selectedGroupForCreateAcc = account ? account.groupUniqueName : openFor === ContactsModule.customer ? "sundrydebtors" : "sundrycreditors";
         this.openAccountAsidePaneDialog();
     }
 
-    public openAddAndManage(openFor: "customer" | "vendor") {
+    public openAddAndManage(openFor: ContactsModule.customer | ContactsModule.vendor) {
         this.isUpdateAccount = false;
-        this.selectedGroupForCreateAcc = openFor === "customer" ? "sundrydebtors" : "sundrycreditors";
+        this.selectedGroupForCreateAcc = openFor === ContactsModule.customer ? "sundrydebtors" : "sundrycreditors";
         this.openAccountAsidePaneDialog();
     }
 
@@ -846,7 +837,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public canDeleteComment(accountUniqueName): boolean {
         let account;
-        if (this.activeTab === "customer") {
+        if (this.moduleType === ContactsModule.customer) {
             account = find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
                 return o?.uniqueName === accountUniqueName;
             });
@@ -873,7 +864,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public canUpdateComment(accountUniqueName, comment): boolean {
         let account;
-        if (this.activeTab === "customer") {
+        if (this.moduleType === ContactsModule.customer) {
             account = find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
                 return o?.uniqueName === accountUniqueName;
             });
@@ -1029,7 +1020,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.checkboxInfo[this.checkboxInfo.selectedPage] = action;
         this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
         if (action) {
-            if (this.activeTab === "customer") {
+            if (this.moduleType === ContactsModule.customer) {
                 this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
                     element.isSelected = action;
                     this.prepareSelectedContactsList(element, true);
@@ -1044,7 +1035,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
 
         } else {
-            if (this.activeTab === "customer") {
+            if (this.moduleType === ContactsModule.customer) {
                 this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
                     element.isSelected = action;
                     this.prepareSelectedContactsList(element, false);
@@ -1079,8 +1070,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
-        this.key = (this.activeTab === "vendor") ? "amountDue" : "name";
-        this.order = (this.activeTab === "vendor") ? "desc" : "asc";
+        this.key = (this.moduleType === ContactsModule.vendor) ? "amountDue" : "name";
+        this.order = (this.moduleType === ContactsModule.vendor) ? "desc" : "asc";
         this.generalService.saveRouteQueryFilters(null, true);
     }
 
@@ -1149,7 +1140,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public downloadCSV() {
-        if (this.activeTab === "customer") {
+        if (this.moduleType === ContactsModule.customer) {
             this.groupUniqueName = "sundrydebtors";
         } else {
             this.groupUniqueName = "sundrycreditors";
@@ -1205,9 +1196,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         fromDate = (fromDate) ? fromDate : "";
         toDate = (toDate) ? toDate : "";
         this.currentPage = pageNumber;
-        let groupUniqueName = (this.activeTab === "customer") ? "sundrydebtors" : "sundrycreditors";
+        let groupUniqueName = (this.moduleType === ContactsModule.customer) ? "sundrydebtors" : "sundrycreditors";
 
-        if (this.activeTab === "aging-report" || (!this.todaySelected && (!fromDate || !toDate))) {
+        if (this.moduleType === ContactsModule.sales || this.moduleType === ContactsModule.purchase || (!this.todaySelected && (!fromDate || !toDate))) {
             return;
         }
 
@@ -1216,7 +1207,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             if (res && res.body && res.status === "success") {
                 this.openingBalance = res.body.openingBalance;
 
-                if (this.activeTab === "customer" && this.openingBalance) {
+                if (this.moduleType === ContactsModule.customer && this.openingBalance) {
                     if (this.openingBalance.type === "CREDIT") {
                         this.closingBalance = Number("-" + this.openingBalance.amount) || 0;
                     } else if (this.openingBalance.type === "DEBIT") {
@@ -1224,7 +1215,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                if (this.activeTab === "vendor" && this.openingBalance) {
+                if (this.moduleType === ContactsModule.vendor && this.openingBalance) {
                     if (this.openingBalance.type === "CREDIT") {
                         this.closingBalance = Number(this.openingBalance.amount) || 0;
                     } else if (this.openingBalance.type === "DEBIT") {
@@ -1232,14 +1223,14 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                if (this.activeTab === "customer") {
+                if (this.moduleType === ContactsModule.customer) {
                     this.closingBalance = Number((this.closingBalance + (res.body.debitTotal - res.body.creditTotal)).toFixed(this.giddhDecimalPlaces)) || 0;
                 } else {
                     this.closingBalance = Number((this.closingBalance + (res.body.creditTotal - res.body.debitTotal)).toFixed(this.giddhDecimalPlaces)) || 0;
                 }
 
-                this.totalSales = (this.activeTab === "customer" ? res.body.debitTotal : res.body.creditTotal) || 0;
-                this.totalReceipts = (this.activeTab === "customer" ? res.body.creditTotal : res.body.debitTotal) || 0;
+                this.totalSales = (this.moduleType === ContactsModule.customer ? res.body.debitTotal : res.body.creditTotal) || 0;
+                this.totalReceipts = (this.moduleType === ContactsModule.customer ? res.body.creditTotal : res.body.debitTotal) || 0;
 
                 if (groupUniqueName === "sundrydebtors") {
                     this.sundryDebtorsAccountsBackup = cloneDeep(res.body);
@@ -1406,7 +1397,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedCheckedContacts.splice(indexOfEntrySelected, 1);
         }
 
-        if (this.activeTab === "customer") {
+        if (this.moduleType === ContactsModule.customer) {
             this.allSelectionModel = this.sundryDebtorsAccounts?.length === this.selectedCheckedContacts?.length;
         } else {
             this.allSelectionModel = this.sundryCreditorsAccounts?.length === this.selectedCheckedContacts?.length;
@@ -1633,23 +1624,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Callback for tab change event
-     *
-     * @param {*} event
-     * @memberof ContactComponent
-     */
-    public tabChange(event: any): void {
-        if (event?.tab?.textLabel === this.localeData?.customer) {
-            this.tabSelected("customer");
-            this.resetColumns();
-        } else if (event?.tab?.textLabel === this.localeData?.vendor) {
-            this.tabSelected("vendor");
-        } else if (event?.tab?.textLabel === this.localeData?.aging_report) {
-            this.tabSelected("aging-report");
-        }
-    }
-
-    /**
      * This function will use for reset columns
      *
      * @memberof ContactComponent
@@ -1706,7 +1680,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     private resetSearchIfSwitched(previousTab: string): void {
-        if (this.activeTab === previousTab && this.localeData?.page_heading) {
+        if (this.moduleType === previousTab && this.localeData?.page_heading) {
             this.showNameSearch = false;
             this.searchedName?.reset();
             this.translationComplete(true);
@@ -1742,7 +1716,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             queryParams['branchUniqueName'] = this.currentBranch?.uniqueName;
         }
 
-        this.router.navigate([`/pages/contact/${this.activeTab}/${accountUniqueName}`], {
+        this.router.navigate([`/pages/contact/${this.moduleType}/${accountUniqueName}`], {
             queryParams: queryParams
         });
     }

@@ -24,7 +24,10 @@ export class AgingreportingService {
 
     public CreateDueDaysRange(model: DueRangeRequest): Observable<BaseResponse<string, DueRangeRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + DUEDAYSRANGE_API_V2.CREATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        const url = this.config.apiUrl + DUEDAYSRANGE_API_V2.CREATE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vendorCustomerType', encodeURIComponent(model?.vendorCustomerType || ''));
+        return this.http.post(url, { range: model.range }).pipe(
             map((res) => {
                 let data: BaseResponse<string, DueRangeRequest> = res;
                 data.request = model;
@@ -33,9 +36,12 @@ export class AgingreportingService {
             catchError((e) => this.errorHandler.HandleCatch<string, DueRangeRequest>(e, model, {})));
     }
 
-    public GetDueDaysRange(): Observable<BaseResponse<string[], string>> {
+    public GetDueDaysRange(vendorCustomerType?: string): Observable<BaseResponse<string[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + DUEDAYSRANGE_API_V2.CREATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
+        const url = this.config.apiUrl + DUEDAYSRANGE_API_V2.CREATE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vendorCustomerType', encodeURIComponent(vendorCustomerType || ''));
+        return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<string[], string> = res;
                 return data;
@@ -43,7 +49,7 @@ export class AgingreportingService {
             catchError((e) => this.errorHandler.HandleCatch<string[], string>(e, null, {})));
     }
 
-    public GetDueAmountReport(model: DueAmountReportRequest, queryRequest: DueAmountReportQueryRequest, branchUniqueName: string): Observable<BaseResponse<DueAmountReportResponse, DueAmountReportRequest>> {
+    public GetDueAmountReport(model: DueAmountReportRequest, queryRequest: DueAmountReportQueryRequest, branchUniqueName: string, vendorCustomerType?: string): Observable<BaseResponse<DueAmountReportResponse, DueAmountReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DUEAMOUNTREPORT_API_V2.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':q', encodeURIComponent(queryRequest.q || ''))
@@ -51,7 +57,8 @@ export class AgingreportingService {
             ?.replace(':count', encodeURIComponent(queryRequest.count?.toString()))
             ?.replace(':sort', encodeURIComponent(queryRequest.sort?.toString()))
             ?.replace(':sortBy', encodeURIComponent(queryRequest.sortBy?.toString()))
-            ?.replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol?.toString() : ''));
+            ?.replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol?.toString() : ''))
+            ?.replace(':vendorCustomerType', encodeURIComponent(vendorCustomerType || ''));
         if (branchUniqueName) {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
@@ -76,11 +83,13 @@ export class AgingreportingService {
      * @return {*}  {Observable<BaseResponse<string, any>>}
      * @memberof AgingreportingService
      */
-    public exportAgingReport(model: any, branchUniqueName: string): Observable<BaseResponse<string, any>> {
+    public exportAgingReport(model: any, branchUniqueName: string, vendorCustomerType?: string): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + AGINGREPORT_API.EXPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        let url = this.config.apiUrl + AGINGREPORT_API.EXPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vendorCustomerType', encodeURIComponent(vendorCustomerType || ''));
         if (branchUniqueName) {
-            url = url.concat(`?branchUniqueName=${branchUniqueName}`);
+            url = url.concat(`&branchUniqueName=${branchUniqueName}`);
         }
         return this.http.post(url, model).pipe(
             map((res) => {

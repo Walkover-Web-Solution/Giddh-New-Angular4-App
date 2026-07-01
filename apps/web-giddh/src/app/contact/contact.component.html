@@ -10,18 +10,20 @@
         <mat-tab-group
             #staticTabs
             class="custom-mat-tabs customer-aging table-header-sticky"
-            [ngClass]="{ 'hide-header': activeTab === 'vendor' }"
-            (selectedTabChange)="tabChange($event)"
-            [selectedIndex]="activeTab === 'customer' || activeTab === 'vendor' ? 0 : 1"
+            [ngClass]="{ 'hide-header': moduleType === ContactsModule.vendor }"
+            [selectedIndex]="moduleType === ContactsModule.customer || moduleType === ContactsModule.vendor ? 0 : 1"
             animationDuration="0ms"
         >
             <mat-tab
-                [label]="activeTab === 'customer' ? localeData?.customer : localeData?.vendor"
-                [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
+                [label]="moduleType === ContactsModule.customer ? localeData?.customer : localeData?.vendor"
+                [id]="moduleType !== 'sales-aging-report' && moduleType !== 'purchase-aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
                     <div class="header-content-sticky vendor-z-index mb-3">
-                        <div class="top-bar customer-top-bar clear-both" [ngClass]="{ 'vendor-top-bar': activeTab === 'vendor' }">
+                        <div
+                            class="top-bar customer-top-bar clear-both"
+                            [ngClass]="{ 'vendor-top-bar': moduleType === ContactsModule.vendor }"
+                        >
                             <div class="customer-form-inline">
                                 <div class="wrap-search-entity d-flex column-gap-15">
                                     <!-- Branch Dropdown -->
@@ -63,18 +65,18 @@
                                         <div class="btn-group pull-right d-flex column-gap-15">
                                             <button
                                                 matButton="filled"
-                                                *ngIf="activeTab == 'customer' && voucherApiVersion === 2"
+                                                *ngIf="moduleType == ContactsModule.customer && voucherApiVersion === 2"
                                                 class="mr-0"
-                                                (click)="openAddAndManage('customer')"
+                                                (click)="openAddAndManage(ContactsModule.customer)"
                                                 aria-label="new customer"
                                             >
                                                 {{ localeData?.new_customer }}
                                             </button>
                                             <button
                                                 matButton="filled"
-                                                *ngIf="activeTab == 'vendor' && voucherApiVersion === 2"
+                                                *ngIf="moduleType == ContactsModule.vendor && voucherApiVersion === 2"
                                                 class="mr-0"
-                                                (click)="openAddAndManage('vendor')"
+                                                (click)="openAddAndManage(ContactsModule.vendor)"
                                                 aria-label="new vendor"
                                             >
                                                 {{ localeData?.new_vendor }}
@@ -120,9 +122,12 @@
                                                 <span>{{ commonLocaleData?.app_clear }}</span>
                                             </button>
                                         </div>
-                                        <div class="mr-0" *ngIf="activeTab !== 'aging-report'">
+                                        <div
+                                            class="mr-0"
+                                            *ngIf="moduleType === ContactsModule.vendor || moduleType === ContactsModule.customer"
+                                        >
                                             <select-table-column
-                                                [moduleType]="moduleType"
+                                                [moduleType]="moduleType.toUpperCase()"
                                                 [dynamicCustomColumns]="dynamicCustomColumns"
                                                 (selectedDynamicColumns)="getCustomiseDynamicHeaderColumns($event)"
                                                 [localeData]="localeData"
@@ -139,8 +144,8 @@
                             <div
                                 class="d-flex w-100 overflow-x-auto"
                                 [hidden]="
-                                    (activeTab === 'customer' && !sundryDebtorsAccounts?.length) ||
-                                    (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)
+                                    (moduleType === ContactsModule.customer && !sundryDebtorsAccounts?.length) ||
+                                    (moduleType === ContactsModule.vendor && !sundryCreditorsAccounts?.length)
                                 "
                             >
                                 <div
@@ -148,21 +153,25 @@
                                 >
                                     <h5>
                                         <ng-container *ngIf="!selectedCheckedContacts?.length">
-                                            {{ activeTab === 'customer' ? localeData?.customers : localeData?.vendors }}
+                                            {{ moduleType === ContactsModule.customer ? localeData?.customers : localeData?.vendors }}
                                         </ng-container>
                                         <ng-container *ngIf="selectedCheckedContacts?.length">
-                                            {{ activeTab === 'customer' ? localeData?.customers_selected : localeData?.vendors_selected }}
+                                            {{
+                                                moduleType === ContactsModule.customer
+                                                    ? localeData?.customers_selected
+                                                    : localeData?.vendors_selected
+                                            }}
                                         </ng-container>
                                         <div>
                                             <span *ngIf="!selectedCheckedContacts?.length" class="number-total">
-                                                {{ activeTab === 'customer' ? totalCustomers : totalVendors }}
+                                                {{ moduleType === ContactsModule.customer ? totalCustomers : totalVendors }}
                                             </span>
                                             <span
                                                 *ngIf="selectedCheckedContacts?.length > 0"
                                                 class="number-total total-customer-vendor-count"
                                             >
                                                 <strong>{{ selectedCheckedContacts?.length }}</strong>
-                                                /{{ activeTab === 'customer' ? totalCustomers : totalVendors }}
+                                                /{{ moduleType === ContactsModule.customer ? totalCustomers : totalVendors }}
                                             </span>
                                         </div>
                                     </h5>
@@ -182,7 +191,7 @@
                                             </button>
                                             <button
                                                 mat-menu-item
-                                                *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
+                                                *ngIf="selectedAccountsList?.length > 0 && moduleType === ContactsModule.vendor"
                                                 (click)="openBulkPaymentModal()"
                                                 aria-label="bulk payment"
                                             >
@@ -191,7 +200,7 @@
                                             <button
                                                 mat-menu-item
                                                 *ngIf="selectedAccountsList?.length > 0"
-                                                (click)="openCustomEmailDialog(selectedAccountsList, activeTab, true)"
+                                                (click)="openCustomEmailDialog(selectedAccountsList, moduleType, true)"
                                                 aria-label="send bulk email"
                                             >
                                                 {{ localeData?.send_bulk_email }}
@@ -206,7 +215,7 @@
                                             <span
                                                 class="d-inline-flex number-total"
                                                 *ngIf="
-                                                    activeTab === 'customer' &&
+                                                    moduleType === ContactsModule.customer &&
                                                     openingBalance?.type === 'CREDIT' &&
                                                     formatAmountInCurrency(openingBalance?.amount) > 0
                                                 "
@@ -216,7 +225,7 @@
                                             <span
                                                 class="d-inline-flex number-total"
                                                 *ngIf="
-                                                    activeTab === 'vendor' &&
+                                                    moduleType === ContactsModule.vendor &&
                                                     openingBalance?.type === 'DEBIT' &&
                                                     formatAmountInCurrency(openingBalance?.amount) > 0
                                                 "
@@ -236,8 +245,8 @@
                                 </div>
                                 <div class="total-details-box mr-1 border-none sales-purchase min-width-230 max-width-378">
                                     <h5>
-                                        <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_purchase }}</span>
-                                        <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_sales }}</span>
+                                        <span *ngIf="moduleType === ContactsModule.vendor">{{ commonLocaleData?.app_purchase }}</span>
+                                        <span *ngIf="moduleType === ContactsModule.customer">{{ commonLocaleData?.app_sales }}</span>
                                         <div>
                                             <span class="d-inline-flex number-total">
                                                 <amount-field
@@ -252,8 +261,8 @@
                                 </div>
                                 <div class="total-details-box mr-1 border-none payment-receipt min-width-230 max-width-378">
                                     <h5>
-                                        <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
-                                        <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_receipt }}</span>
+                                        <span *ngIf="moduleType === ContactsModule.vendor">{{ commonLocaleData?.app_payment }}</span>
+                                        <span *ngIf="moduleType === ContactsModule.customer">{{ commonLocaleData?.app_receipt }}</span>
                                         <div>
                                             <span class="d-inline-flex number-total">
                                                 <amount-field
@@ -299,17 +308,18 @@
             </mat-tab>
             <mat-tab [label]="localeData?.aging_report">
                 <aging-report
-                    *ngIf="activeTab === 'aging-report'"
+                    *ngIf="moduleType === ContactsModule.sales || moduleType === ContactsModule.purchase"
+                    [vendorCustomerType]="moduleType === ContactsModule.sales ? ContactsModule.customer : ContactsModule.vendor"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
-                    (createNewCustomerEvent)="openAddAndManage('customer')"
+                    (createNewCustomerEvent)="openAddAndManage($event)"
                 ></aging-report>
             </mat-tab>
         </mat-tab-group>
     </div>
 
     <!-- region Modal for Mail/SMS for vendor -->
-    <ng-template #mailModal *ngIf="activeTab === 'vendor'" tabindex="1">
+    <ng-template #mailModal *ngIf="moduleType === ContactsModule.vendor" tabindex="1">
         <div>
             <div cdkFocusInitial class="dialog-header">
                 <span>{{ messageBody.header.set }}</span>
@@ -354,7 +364,7 @@
     <!--endregion-->
 
     <!--region Modal for Mail/SMS for customer-->
-    <ng-template #mailModal *ngIf="activeTab === 'customer'" tabindex="-1" class="email-dialog-box">
+    <ng-template #mailModal *ngIf="moduleType === ContactsModule.customer" tabindex="-1" class="email-dialog-box">
         <div>
             <div cdkFocusInitial class="dialog-header">
                 <span>{{ messageBody.header.set }}</span>
@@ -422,7 +432,7 @@
 
     <ng-template #mainTable>
         <div class="table-responsive vendor-page all-table overflow-visible">
-            <ng-container *ngIf="activeTab === 'customer'">
+            <ng-container *ngIf="moduleType === ContactsModule.customer">
                 <table
                     *ngIf="searchStr || sundryDebtorsAccounts?.length"
                     mat-table
@@ -508,14 +518,14 @@
                                             <div class="d-flex p-0">
                                                 <div class="account-detail-padding flex-fill border-right-none">
                                                     <p class="account-detail-custom-title word-break">
-                                                        <span (click)="updateCustomerAcc('customer', account)">
+                                                        <span (click)="updateCustomerAcc(ContactsModule.customer, account)">
                                                             {{ account?.name }}
                                                         </span>
                                                     </p>
                                                 </div>
                                                 <a
                                                     *ngIf="voucherApiVersion === 2"
-                                                    (click)="updateCustomerAcc('customer', account)"
+                                                    (click)="updateCustomerAcc(ContactsModule.customer, account)"
                                                     class="edit-icon pl-1 pt-1"
                                                 >
                                                     <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
@@ -546,7 +556,7 @@
                                         <button
                                             mat-menu-item
                                             class="menu-table-item"
-                                            (click)="openCustomEmailDialog(account, activeTab, false)"
+                                            (click)="openCustomEmailDialog(account, moduleType, false)"
                                             aria-label="send email"
                                         >
                                             {{ commonLocaleData?.app_send_email }}
@@ -820,7 +830,7 @@
                 </table>
             </ng-container>
 
-            <ng-container *ngIf="activeTab === 'vendor'">
+            <ng-container *ngIf="moduleType === ContactsModule.vendor">
                 <table
                     *ngIf="searchStr || sundryCreditorsAccounts?.length"
                     mat-table
@@ -906,12 +916,14 @@
                                             <div class="d-flex p-0">
                                                 <div class="account-detail-padding flex-fill border-right-none">
                                                     <p class="account-detail-custom-title word-break">
-                                                        <span (click)="updateCustomerAcc('vendor', account)">{{ account?.name }}</span>
+                                                        <span (click)="updateCustomerAcc(ContactsModule.vendor, account)">
+                                                            {{ account?.name }}
+                                                        </span>
                                                     </p>
                                                 </div>
                                                 <a
                                                     *ngIf="voucherApiVersion === 2"
-                                                    (click)="updateCustomerAcc('vendor', account)"
+                                                    (click)="updateCustomerAcc(ContactsModule.vendor, account)"
                                                     class="edit-icon pl-1 pt-1"
                                                 >
                                                     <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
@@ -941,9 +953,8 @@
                                         </button>
                                         <button
                                             mat-menu-item
-                                            (click)="openCustomEmailDialog(account, activeTab, false)"
+                                            (click)="openCustomEmailDialog(account, moduleType, false)"
                                             aria-label="send email"
-                                            (click)="openCustomEmailDialog(account, activeTab, false)"
                                         >
                                             {{ commonLocaleData?.app_send_email }}
                                         </button>
@@ -1304,7 +1315,7 @@
                                             matButton="outlined"
                                             *ngIf="!account?.bankPaymentDetails"
                                             class="btn-small min-width-150 contact-ipad-responsive"
-                                            (click)="updateCustomerAcc('vendor', account)"
+                                            (click)="updateCustomerAcc(ContactsModule.vendor, account)"
                                             aria-label="bank details"
                                         >
                                             {{ commonLocaleData?.app_add_bank_details }}
@@ -1347,7 +1358,7 @@
 
         <ng-container
             *ngIf="
-                activeTab === 'customer' &&
+                moduleType === ContactsModule.customer &&
                 sundryDebtorsAccountsBackup.results &&
                 sundryDebtorsAccountsBackup.results.length &&
                 totalCustomers > pageSizeOptions[0]
@@ -1367,7 +1378,7 @@
 
         <ng-container
             *ngIf="
-                activeTab === 'vendor' &&
+                moduleType === ContactsModule.vendor &&
                 sundryCreditorsAccountsBackup.results &&
                 sundryCreditorsAccountsBackup.results.length &&
                 totalVendors > pageSizeOptions[0]
@@ -1387,7 +1398,8 @@
         <div
             class="no-data"
             *ngIf="
-                (activeTab === 'customer' && !sundryDebtorsAccounts?.length) || (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)
+                (moduleType === ContactsModule.customer && !sundryDebtorsAccounts?.length) ||
+                (moduleType === ContactsModule.vendor && !sundryCreditorsAccounts?.length)
             "
         >
             <div class="d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1">

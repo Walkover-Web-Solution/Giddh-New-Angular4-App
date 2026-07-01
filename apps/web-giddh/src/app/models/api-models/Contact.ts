@@ -1,5 +1,6 @@
 export interface DueRangeRequest {
     range: string[];
+    vendorCustomerType?: string;
 }
 
 /**
