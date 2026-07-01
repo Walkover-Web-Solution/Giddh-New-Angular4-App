@@ -2553,11 +2553,11 @@
                                                 <div class="row">
                                                     <!-- Annexure Charges Section -->
                                                     @if (
-                                                        invoiceType.isSalesInvoice ||
-                                                        invoiceType.isPurchaseInvoice ||
-                                                        invoiceType.isCreditNote ||
-                                                        invoiceType.isDebitNote ||
-                                                        invoiceType.isCashInvoice
+                                                        !(
+                                                            invoiceType.isReceiptInvoice ||
+                                                            invoiceType.isPaymentInvoice ||
+                                                            invoiceForm.get('isAdvanceReceipt').value
+                                                        )
                                                     ) {
                                                         <div class="col-12">
                                                             <mat-card>

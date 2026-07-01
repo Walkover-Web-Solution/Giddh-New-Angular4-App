@@ -7,7 +7,7 @@
             "items": [
                 {
                     "label": "एजिंग रिपोर्ट",
-                    "link": "/pages/contact/aging-report",
+                    "link": "/pages/contact/sales",
                     "icon": "icon-aging-report-new",
                     "description": "मागील दिवस आणि आगामी काळात देय रक्कम",
                     "additional": {
@@ -246,6 +246,18 @@
             "label": "विक्रेता",
             "icon": "icon-vendor",
             "items": [
+                {
+                    "label": "एजिंग रिपोर्ट",
+                    "link": "/pages/contact/purchase",
+                    "icon": "icon-aging-report-new",
+                    "description": "मागील दिवस आणि आगामी काळात देय रक्कम",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "aging-report",
+                            "tabIndex": 2
+                        }
+                    }
+                },
                 {
                     "label": "बिल",
                     "link": "/pages/purchase-management/purchase/bill",

@@ -7,7 +7,7 @@
             "items": [
                 {
                     "label": "Aging Report",
-                    "link": "/pages/contact/aging-report",
+                    "link": "/pages/contact/sales",
                     "icon": "icon-aging-report-new",
                     "description": "Amount Due in previous days & upcoming",
                     "additional": {
@@ -246,6 +246,18 @@
             "label": "Vendor",
             "icon": "icon-vendor",
             "items": [
+                {
+                    "label": "Aging Report",
+                    "link": "/pages/contact/purchase",
+                    "icon": "icon-aging-report-new",
+                    "description": "Amount Due in previous days & upcoming",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "aging-report",
+                            "tabIndex": 2
+                        }
+                    }
+                },
                 {
                     "label": "Bill",
                     "link": "/pages/purchase-management/purchase/bill",
