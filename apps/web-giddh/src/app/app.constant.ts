@@ -22,6 +22,7 @@ export const GIDDH_SUPPORT_EMAIL = 'support@giddh.com';
 export const GIDDH_ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en_IN&gl=US';
 export const GIDDH_IOS_APP_URL = 'https://apps.apple.com/in/app/giddh-books-that-make-sense/id1491003438';
 export const GIDDH_CALENDLY_URL = "https://calendly.com/sales-accounting-software/talk-to-sale";
+export const ATTRIBUTION_TRACKER_SDK_URL = "https://main.d2f49esifpcbwh.amplifyapp.com/tracker.js";
 export const GIDDH_INTERNAL_DOMAINS = [
     'giddh.com',
     'walkover.in',

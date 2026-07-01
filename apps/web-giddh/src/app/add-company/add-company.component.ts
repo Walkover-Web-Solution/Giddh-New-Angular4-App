@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL, RestrictedModules } from '../app.constant';
+import { ATTRIBUTION_TRACKER_SDK_URL, BusinessTypes, Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL, RestrictedModules } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -273,6 +273,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('create-company');
+        // Load Attribution Tracker SDK so it is ready when a new user submits the first-company form
+        this.loadAttributionTrackerSdk();
         this.initCompanyForm();
         this.getStates();
         this.getCurrency();
@@ -1205,6 +1207,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         if (environment.PRODUCTION_ENV && !this.companiesList?.length) {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
+            // New user (no existing companies) - attribute the customer via referral tracker
+            this.identifyAttributionUser();
         }
         this.nextStepForm();
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
@@ -1603,5 +1607,56 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         document.querySelector('body').classList.remove('create-company');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Loads the Attribution Tracker SDK script on the add-company page.
+     * Safe to call multiple times - skips if already present.
+     *
+     * @private
+     * @memberof AddCompanyComponent
+     */
+    private loadAttributionTrackerSdk(): void {
+        try {
+            const scriptId = 'attribution-tracker-sdk';
+            if (document.getElementById(scriptId)) {
+                return;
+            }
+            const scriptTag = document.createElement('script');
+            scriptTag.id = scriptId;
+            scriptTag.src = ATTRIBUTION_TRACKER_SDK_URL;
+            scriptTag.async = true;
+            document.head.appendChild(scriptTag);
+        } catch (_) {
+            // ignore script load errors silently
+        }
+    }
+
+    /**
+     * Calls Tracker.identify() when a new user (no existing companies) creates their
+     * first company, to attribute the customer to the active referral session.
+     * No-op if the SDK is not present on window.
+     *
+     * @private
+     * @memberof AddCompanyComponent
+     */
+    private identifyAttributionUser(): void {
+        try {
+            const tracker: any = (window as any).Tracker;
+            if (!tracker || typeof tracker.identify !== 'function') {
+                return;
+            }
+            const user = this.loggedInUser;
+            if (!user) {
+                return;
+            }
+            tracker.identify({
+                customer_id: user.uniqueName,
+                email: user.email,
+                fullName: user.name
+            });
+        } catch (_) {
+            // ignore tracker errors silently
+        }
     }
 }
