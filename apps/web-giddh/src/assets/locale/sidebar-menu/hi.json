@@ -12,7 +12,7 @@
                     "description": "पिछले दिनों और आगामी दिनों में देय राशि",
                     "additional": {
                         "queryParams": {
-                            "tab": "aging-report",
+                            "tab": "sales-aging-report",
                             "tabIndex": 1
                         }
                     }
@@ -253,8 +253,8 @@
                     "description": "पिछले दिनों और आगामी दिनों में देय राशि",
                     "additional": {
                         "queryParams": {
-                            "tab": "aging-report",
-                            "tabIndex": 2
+                            "tab": "purchase-aging-report",
+                            "tabIndex": 1
                         }
                     }
                 },

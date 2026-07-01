@@ -279,7 +279,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             queryParams$.pipe(take(1)),
             queryParams$.pipe(skip(1), debounceTime(700))
         ).pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
-            if (queryParams.tab === 'aging-report') {
+            if (queryParams.tab === 'purchase-aging-report' || queryParams.tab === 'sales-aging-report') {
                 this.resetAdvanceSearch(false);
                 const restoredQ = queryParams.searchText || '';
                 this.searchStr = restoredQ;
@@ -297,7 +297,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     this.searchStr$.next({ restoredQ, vendorCustomerType: this.vendorCustomerType });
                 }
             } else {
-                this.generalService.saveRouteQueryFilters({ tab: 'aging-report', tabIndex: this.vendorCustomerType === ContactsModule.vendor ? 2 : 1 });
+                this.generalService.saveRouteQueryFilters({ tab: this.vendorCustomerType === ContactsModule.vendor ? 'purchase-aging-report' : 'sales-aging-report', tabIndex: 1 });
             }
         });
 

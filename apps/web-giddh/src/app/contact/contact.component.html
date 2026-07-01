@@ -16,7 +16,7 @@
         >
             <mat-tab
                 [label]="moduleType === ContactsModule.customer ? localeData?.customer : localeData?.vendor"
-                [id]="moduleType !== 'aging-report' ? 'giddh-page-heading' : ''"
+                [id]="moduleType !== 'sales-aging-report' && moduleType !== 'purchase-aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
                     <div class="header-content-sticky vendor-z-index mb-3">

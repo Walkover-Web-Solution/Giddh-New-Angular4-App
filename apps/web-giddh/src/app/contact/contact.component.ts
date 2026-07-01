@@ -387,7 +387,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                 }
             } else if (queryParams.tab !== this.moduleType.toLowerCase()) {
-                this.generalService.saveRouteQueryFilters({ tab: this.moduleType === ContactsModule.customer ? ContactsModule.customer : this.moduleType === ContactsModule.vendor ? ContactsModule.vendor : ContactsModule.agingReport, tabIndex: this.moduleType === ContactsModule.purchase ? 2 : 1 });
+                this.generalService.saveRouteQueryFilters({ tab: this.moduleType === ContactsModule.customer ? ContactsModule.customer : this.moduleType === ContactsModule.vendor ? ContactsModule.vendor : this.moduleType === ContactsModule.sales ? 'sales-aging-report' : 'purchase-aging-report', tabIndex: 1 });
             }
         });
 
