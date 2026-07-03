@@ -160,5 +160,8 @@
         "processing": "Processing...",
         "payment_failed": "Payment failed. Please try again.",
         "wallet": "Wallet",
-        "reactivate_subscription": "Reactivate Subscription"
+        "reactivate_subscription": "Reactivate Subscription",
+        "advance_payment": "Advance Payment",
+        "advance_payment_tooltip": "Pay in advance to renew your subscription before it expires. Your next billing period will start automatically once the current one ends.",
+        "advance_payment_success_message": "Advance payment received for [PLAN_NAME]. Your next subscription period will begin automatically on [START_DATE] and ends on [END_DATE]."
     }

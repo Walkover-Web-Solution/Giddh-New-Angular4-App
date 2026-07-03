@@ -11,6 +11,7 @@ import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
+import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 
 @Component({
     selector: 'view-subscription',
@@ -52,6 +53,26 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** True when advance payment can be shown (autoPay OFF and no prepaid exists) */
     public showAdvancePayment: boolean = false;
+
+    /**
+     * Builds the advance-payment success message by replacing placeholders
+     * ([PLAN_NAME], [START_DATE], [END_DATE]) with values from prepaidSubscription.
+     *
+     * @readonly
+     * @memberof ViewSubscriptionComponent
+     */
+    public get advancePaymentMessage(): string {
+        const prepaid = this.viewSubscriptionData?.prepaidSubscription;
+        const template = this.localeData?.advance_payment_success_message ?? '';
+        if (!template || !prepaid) {
+            return '';
+        }
+        const pipe = new GiddhDatePipe();
+        return template
+            ?.replace('[PLAN_NAME]', prepaid.planName ?? '')
+            ?.replace('[START_DATE]', pipe.transform(prepaid.startDate) ?? '')
+            ?.replace('[END_DATE]', pipe.transform(prepaid.endDate) ?? '');
+    }
 
     /**
      * Returns true when the current subscription is eligible for advance (prepaid) payment.

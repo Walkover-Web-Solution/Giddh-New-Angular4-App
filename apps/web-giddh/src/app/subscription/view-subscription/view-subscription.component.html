@@ -99,13 +99,10 @@
                                 aria-label="advance-payment"
                                 mat-menu-item
                                 (click)="goToAdvancePayment()"
-                                [matTooltip]="
-                                    localeData?.advance_payment_tooltip ||
-                                    'Pay in advance to renew your subscription before it expires. Your next billing period will start automatically once the current one ends.'
-                                "
+                                [matTooltip]="localeData?.advance_payment_tooltip"
                                 matTooltipPosition="right"
                             >
-                                {{ localeData?.advance_payment || 'Advance Payment' }}
+                                {{ localeData?.advance_payment }}
                             </button>
                         </mat-menu>
                     </div>
@@ -114,16 +111,7 @@
                         class="alert alert-success d-flex align-items-center column-gap-1 mt-3 mb-0 p-2 font-size-14"
                     >
                         <i class="icon-check-circle text-success"></i>
-                        <span>
-                            {{ localeData?.advance_payment_success_message || 'Advance payment received for ' }}
-                            <strong>{{ viewSubscriptionData?.prepaidSubscription?.planName }}</strong>
-                            .
-                            {{ localeData?.advance_payment_next_period || 'Your next subscription period will begin automatically on ' }}
-                            <strong>{{ viewSubscriptionData?.prepaidSubscription?.startDate | giddhDate }}</strong>
-                            {{ localeData?.advance_payment_and_end || ' and ends on ' }}
-                            <strong>{{ viewSubscriptionData?.prepaidSubscription?.endDate | giddhDate }}</strong>
-                            .
-                        </span>
+                        <span>{{ advancePaymentMessage }}</span>
                     </div>
                     <div class="view-subscription">
                         <div class="d-flex justify-content-between my-3">

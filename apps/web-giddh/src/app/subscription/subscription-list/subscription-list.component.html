@@ -321,13 +321,10 @@
                                         aria-label="advance-payment"
                                         mat-menu-item
                                         (click)="goToAdvancePayment(element?.subscriptionId)"
-                                        [matTooltip]="
-                                            localeData?.advance_payment_tooltip ||
-                                            'Pay in advance to renew your subscription before it expires. Your next billing period will start automatically once the current one ends.'
-                                        "
+                                        [matTooltip]="localeData?.advance_payment_tooltip"
                                         matTooltipPosition="right"
                                     >
-                                        {{ localeData?.advance_payment || 'Advance Payment' }}
+                                        {{ localeData?.advance_payment }}
                                     </button>
                                 </div>
                             </mat-menu>
