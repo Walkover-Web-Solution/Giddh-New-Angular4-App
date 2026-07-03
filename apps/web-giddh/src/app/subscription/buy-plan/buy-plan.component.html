@@ -21,10 +21,14 @@
                     (selectionChange)="onSelectedTab($event)"
                     [disableRipple]="firstStepForm.invalid"
                     class="bg-transparent theme-foreground-color"
-                    [ngClass]="{ 'first-step-disabled': activateSubscription }"
+                    [ngClass]="{ 'first-step-disabled': activateSubscription || isAdvancePayment }"
                 >
-                    <mat-step [stepControl]="firstStepForm" [completed]="activateSubscription" [editable]="!activateSubscription">
-                        @if (!activateSubscription) {
+                    <mat-step
+                        [stepControl]="firstStepForm"
+                        [completed]="activateSubscription || isAdvancePayment"
+                        [editable]="!activateSubscription && !isAdvancePayment"
+                    >
+                        @if (!activateSubscription && !isAdvancePayment) {
                             <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
                                 <div class="plan-summary w-fit-content m-auto column-gap-2 row-gap-2 d-flex justify-content-center">
                                     <div class="plan-width">
@@ -1014,7 +1018,7 @@
                                 aria-label="submit"
                                 matButton="filled"
                                 class="w-100"
-                                *ngIf="selectedStep() === 2 && !isChangePlan && !activateSubscription"
+                                *ngIf="selectedStep() === 2 && !isChangePlan && !activateSubscription && !isAdvancePayment"
                                 (click)="onSubmit('trial')"
                             >
                                 {{ localeData?.start_trial }}
@@ -1033,7 +1037,7 @@
                                 matButton="outlined"
                                 class="w-100 mt-2"
                                 (click)="selectedStep.set(0); backToPreviousPage()"
-                                *ngIf="selectedStep() === 1"
+                                *ngIf="selectedStep() === 1 && !activateSubscription && !isAdvancePayment"
                             >
                                 {{ localeData?.back_plan }}
                             </button>

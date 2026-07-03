@@ -2,13 +2,14 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSubscriptionComponentStore } from './utility/view-subscription.store';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralService } from '../../services/general.service';
+import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
 
 @Component({
@@ -49,6 +50,41 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public selectedMoveCompany: boolean = false;
     /** This will use for active company */
     public activeCompany: any = {};
+    /** True when advance payment can be shown (autoPay OFF and no prepaid exists) */
+    public showAdvancePayment: boolean = false;
+
+    /**
+     * Returns true when the current subscription is eligible for advance (prepaid) payment.
+     * Rules: auto-pay OFF, status not trial/cancelled/expired, and within
+     * 7 days of expiry (monthly) or 30 days of expiry (yearly).
+     *
+     * @readonly
+     * @memberof ViewSubscriptionComponent
+     */
+    public get isAdvancePaymentEligible(): boolean {
+        if (!this.showAdvancePayment) {
+            return false;
+        }
+        return this.generalService.isAdvancePaymentEligible(this.viewSubscriptionData);
+    }
+
+    /**
+     * Navigates to the advance payment page for the current subscription and
+     * asks the target page to redirect back to view-subscription on success.
+     *
+     * @memberof ViewSubscriptionComponent
+     */
+    public goToAdvancePayment(): void {
+        this.router.navigate(
+            [`/pages/user-details/subscription/advance-payment/${this.subscriptionId}`],
+            {
+                queryParams: {
+                    removeWarning: true,
+                    redirectUrl: `/pages/user-details/subscription/view-subscription/${this.subscriptionId}`
+                }
+            }
+        );
+    }
 
     constructor(
         public dialog: MatDialog,
@@ -58,7 +94,8 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
         private subscriptionComponentStore: SubscriptionComponentStore,
         private generalService: GeneralService,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private settingsProfileService: SettingsProfileService
     ) {
     }
 
@@ -84,6 +121,12 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
 
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
+        });
+
+        this.settingsProfileService.GetProfileInfo().pipe(take(1)).subscribe((response: any) => {
+            if (response?.status === 'success' && response?.body) {
+                this.showAdvancePayment = !(response.body.subscription?.autoPay || response.body.subscription?.isPrepaidExist);
+            }
         });
 
         this.cancelSubscription$.pipe(takeUntil(this.destroyed$)).subscribe(response => {

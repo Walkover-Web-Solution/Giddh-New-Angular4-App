@@ -316,6 +316,19 @@
                                             {{ localeData?.reactivate_subscription }}
                                         </button>
                                     }
+                                    <button
+                                        *ngIf="showAdvancePayment && generalService.isAdvancePaymentEligible(element)"
+                                        aria-label="advance-payment"
+                                        mat-menu-item
+                                        (click)="goToAdvancePayment(element?.subscriptionId)"
+                                        [matTooltip]="
+                                            localeData?.advance_payment_tooltip ||
+                                            'Pay in advance to renew your subscription before it expires. Your next billing period will start automatically once the current one ends.'
+                                        "
+                                        matTooltipPosition="right"
+                                    >
+                                        {{ localeData?.advance_payment || 'Advance Payment' }}
+                                    </button>
                                 </div>
                             </mat-menu>
                         </td>

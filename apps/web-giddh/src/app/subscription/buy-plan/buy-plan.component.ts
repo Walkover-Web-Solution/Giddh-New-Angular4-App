@@ -161,6 +161,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** True if it is change plan */
     public isChangePlan: boolean = false;
+    /** Holds subscription type from route (change-plan, activate-subscription, advance-payment) */
+    public subscriptionType: string = '';
     /** Holds Store Get Billing Details observable*/
     public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
     /** True if it have billing details */
@@ -290,8 +292,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     private detectUserInfoByIp: any = {}
     /** true if cancel subscription reactivate. */
     public activateSubscription: boolean = false;
+    /** true if advance payment. */
+    public isAdvancePayment: boolean = false;
+    /** true if . */
+    public activateAdvancePaymentSuccess$: Observable<boolean> = this.componentStore.select(state => state.activateAdvancePaymentSuccess);
     /** true if user have at leate one Company. */
     public atLeatOneCompany: boolean = false;
+    /** after success redirection url for advance payment */
+    public afterSuccessRedirectionUrl: string = '';
 
     constructor(
         public dialog: MatDialog,
@@ -365,8 +373,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params?.id) {
                 this.subscriptionId = params.id;
+                this.subscriptionType = params?.type || '';
+                if (params?.type === 'advance-payment') {
+                    this.isAdvancePayment = true;
+                } else if (params?.type === 'change-plan') {
+                    this.isChangePlan = true;
+                } else if (params?.type === 'activate-subscription') {
+                    this.activateSubscription = true;
+                }
                 this.viewSubscriptionComponentStore.viewSubscriptionsById(this.subscriptionId);
-                this.isChangePlan = true;
             }
         });
 
@@ -375,6 +390,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.isRenewPlan = true;
             } else if (queryParams?.trial) {
                 this.isTrialPlan = true;
+            }
+            if (queryParams?.redirectUrl) {
+                this.afterSuccessRedirectionUrl = queryParams?.redirectUrl;
             }
         });
 
@@ -391,6 +409,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.atLeatOneCompany = response?.length >= 1;
+            }
+        });
+
+        this.activateAdvancePaymentSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (this.afterSuccessRedirectionUrl) {
+                    this.router.navigate([this.afterSuccessRedirectionUrl]);
+                } else {
+                    this.router.navigate(['/pages/user-details/subscription']);
+                }
             }
         });
 
@@ -559,11 +587,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
-                const model = {
-                    orderId: this.paypalCaptureOrderId,
-                    subscriptionId: this.subscriptionId
+                if (this.isAdvancePayment) {
+                    this.saveAdvancePayment({ paypalOrderId: this.paypalCaptureOrderId });
+                } else {
+                    const model = {
+                        orderId: this.paypalCaptureOrderId,
+                        subscriptionId: this.subscriptionId
+                    }
+                    this.componentStore.paypalCaptureOrderId(model);
                 }
-                this.componentStore.paypalCaptureOrderId(model);
             }
         };
 
@@ -703,6 +735,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         window.addEventListener('message', event => {
             if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
                 if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
+                    if (this.isAdvancePayment) {
+                        this.saveAdvancePayment({ billingRequestId: this.goCardLessBillingRequestId });
+                        return;
+                    }
                     if (this.upgradePlan && this.upgradeRegion === EntityCode.GBR) {
                         const reqObj = {
                             subscriptionId: this.upgradeSubscriptionId,
@@ -785,9 +821,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.viewSubscriptionData$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
-            this.activateSubscription = response.status.toLowerCase() === 'cancelled' && this.router.url === ('/pages/user-details/subscription/activate-subscription/' + this.subscriptionId);
-            this.isChangePlan = !this.activateSubscription;
-            if (this.activateSubscription) {
+            this.activateSubscription = response.status.toLowerCase() === 'cancelled' && this.activateSubscription;
+            if (this.activateSubscription || this.isAdvancePayment) {
                 this.selectedStep.set(1);
                 // Force the stepper to the second step. Linear is disabled
                 // when activateSubscription is true so navigation is allowed.
@@ -1663,6 +1698,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             planUniqueName: this.selectedPlan()?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
             duration: this.firstStepForm.get('duration').value,
+            prePaid: this.isAdvancePayment,
             countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.code || this.viewSubscriptionData?.region?.code)
         }
 
@@ -1888,7 +1924,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             //     delete request.paymentProvider;
             //     delete request.promoCode;
             // }
-            if (this.subscriptionId && this.isChangePlan && !this.activateSubscription) {
+            if (this.subscriptionId && this.isAdvancePayment) {
+                this.componentStore.advancePayment({ request, subscriptionId: this.subscriptionId });
+            } else if (this.subscriptionId && this.isChangePlan && !this.activateSubscription) {
                 request.subscriptionId = this.subscriptionId;
                 this.subscriptionRequest = request;
                 this.componentStore.getChangePlanDetails(request);
@@ -2088,11 +2126,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
             let data = { ...request, ...this.subscriptionRequest };
             if (request.paymentId && (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && payResponse?.region?.code !== 'GBR') {
-                this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId, orderId: request.razorpayOrderId });
+                if (this.isAdvancePayment) {
+                    this.saveAdvancePayment({ razorpayOrderId: request.razorpayOrderId, paymentId: request.paymentId });
+                } else {
+                    this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId, orderId: request.razorpayOrderId });
+                }
             } else {
                 this.componentStore.changePlan(data);
             }
         }
+    }
+
+    public saveAdvancePayment(paymentDetails: any) : void {
+        const payload = {
+            paymentProvider: this.thirdStepForm.get('paymentProvider')?.value,
+            subscriptionId: this.subscriptionId,
+            duration: this.firstStepForm.get('duration')?.value,
+            prepaidUniqueName: this.createSubscriptionSuccess.prepaidUniqueName,
+            ...paymentDetails
+        };
+        this.componentStore.saveAdvancePayment(payload);
     }
 
     /**
@@ -2203,7 +2256,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
         if (subscriptionId) {
             sessionStorage.setItem('stripe_payment_intent_id', piId);
-            this.componentStore.saveStripePayment({ subscriptionId, paymentIntentId: piId });
+            if (this.isAdvancePayment) {
+                this.saveAdvancePayment({ paymentIntentId: piId });
+            } else {
+                this.componentStore.saveStripePayment({ subscriptionId, paymentIntentId: piId });
+            }
         } else {
             this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
             this.toasterService.showSnackBar('error', 'Subscription ID not found.');
@@ -2505,6 +2562,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             provider: string;
         }>) => {
             if (event.data?.status?.toLocaleLowerCase() === 'success' && event.data.transactionId) {
+                if (this.isAdvancePayment) {
+                    this.saveAdvancePayment({ payuTransactionId: event.data.transactionId });
+                    window.removeEventListener("message", handlePayUMessage);
+                    return;
+                }
                 const model = {
                     payuTransactionId: event.data.transactionId,
                     paymentProvider: event.data.provider,
