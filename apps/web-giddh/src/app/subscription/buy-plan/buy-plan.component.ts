@@ -376,7 +376,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionType = params?.type || '';
                 if (params?.type === 'advance-payment') {
                     this.isAdvancePayment = true;
-                } else if (params?.type === 'change-plan') {
+                } else if (params?.type === 'buy-plan') {
                     this.isChangePlan = true;
                 } else if (params?.type === 'activate-subscription') {
                     this.activateSubscription = true;
@@ -733,7 +733,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
-            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
+            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan' || this.router.url.startsWith('/pages/user-details/subscription/activate-subscription/' + this.subscriptionId) || this.router.url.startsWith('/pages/user-details/subscription/advance-payment/' + this.subscriptionId)))) {
                 if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
                     if (this.isAdvancePayment) {
                         this.saveAdvancePayment({ billingRequestId: this.goCardLessBillingRequestId });
