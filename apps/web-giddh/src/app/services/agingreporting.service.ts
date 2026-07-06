@@ -88,7 +88,7 @@ export class AgingreportingService {
         let url = this.config.apiUrl + AGINGREPORT_API.EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         if (branchUniqueName) {
-            url = url.concat(`&branchUniqueName=${branchUniqueName}`);
+            url = url.concat(`?branchUniqueName=${branchUniqueName}`);
         }
         return this.http.post(url, model).pipe(
             map((res) => {
