@@ -142,6 +142,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public maxDate: any;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Contact module types */
     public ContactsModule = ContactsModule;
 
     constructor(
@@ -579,10 +580,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             sortBy: this.dueAmountReportRequest.sortBy,
             sort: this.dueAmountReportRequest.sort === 'asc' ? 'ASC' : 'DESC',
             rangeCol: this.dueAmountReportRequest.rangeCol,
-            q: this.dueAmountReportRequest.q
+            q: this.dueAmountReportRequest.q,
+            vendorCustomerType: this.vendorCustomerType
         }
         this.isLoading.set(true);
-        this.agingReportService.exportAgingReport(exportData, this.currentBranch ? this.currentBranch.uniqueName : "", this.vendorCustomerType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.agingReportService.exportAgingReport(exportData, this.currentBranch ? this.currentBranch.uniqueName : "").pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading.set(false);
             if (response?.status === 'success') {
                 this.toaster.showSnackBar("success", response?.body);

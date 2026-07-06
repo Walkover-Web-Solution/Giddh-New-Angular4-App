@@ -83,11 +83,10 @@ export class AgingreportingService {
      * @return {*}  {Observable<BaseResponse<string, any>>}
      * @memberof AgingreportingService
      */
-    public exportAgingReport(model: any, branchUniqueName: string, vendorCustomerType?: string): Observable<BaseResponse<string, any>> {
+    public exportAgingReport(model: any, branchUniqueName: string): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + AGINGREPORT_API.EXPORT
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':vendorCustomerType', encodeURIComponent(vendorCustomerType || ''));
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         if (branchUniqueName) {
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
         }

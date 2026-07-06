@@ -12,7 +12,7 @@ export const DUEAMOUNTREPORT_API_V2 = {
 
 export const AGINGREPORT_API = {
     // Export Aging Report
-    EXPORT: 'company/:companyUniqueName/exports?vendorCustomerType=:vendorCustomerType'
+    EXPORT: 'company/:companyUniqueName/exports'
 }
 
 

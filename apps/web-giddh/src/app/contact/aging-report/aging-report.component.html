@@ -14,7 +14,7 @@
             <div class="aging-form-inline">
                 <div class="btn-group pull-left on-desktop-view">
                     <button matButton="filled" *ngIf="voucherApiVersion === 2" (click)="createNewCustomerEvent.emit(vendorCustomerType)">
-                        {{ localeData?.new_customer }}
+                        {{ vendorCustomerType === ContactsModule.customer ? localeData?.new_customer : localeData?.new_vendor }}
                     </button>
                 </div>
                 <div class="form-group mr-3 pull-left linked-entities mb-0" *ngIf="isCompanyMode">
@@ -125,7 +125,7 @@
                         (click)="createNewCustomerEvent.emit(vendorCustomerType)"
                         aria-label="new customer"
                     >
-                        {{ localeData?.new_customer }}
+                        {{ vendorCustomerType === ContactsModule.customer ? localeData?.new_customer : localeData?.new_vendor }}
                     </button>
                 </div>
             </div>

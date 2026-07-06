@@ -2191,6 +2191,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const sessionData: Record<string, string> = {
             stripe_subscription_id: subscriptionId,
             stripe_is_change_plan: String(this.isChangePlan),
+            stripe_is_advance_payment: String(this.isAdvancePayment),
+            stripe_prepaid_unique_name: this.createSubscriptionSuccess?.prepaidUniqueName || '',
+            stripe_after_success_redirection_url: this.afterSuccessRedirectionUrl || '',
             stripe_payment_intent_id: this.extractPaymentIntentId(this.stripeClientSecret),
             stripe_plan_unique_name: response?.planDetails?.uniqueName || this.firstStepForm.get('planUniqueName')?.value || '',
             stripe_duration: response?.duration || this.firstStepForm.get('duration')?.value || '',
@@ -2254,10 +2257,20 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.stripePaymentSuccessBroadcast?.postMessage({ success: true });
 
         const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
+        const isAdvancePaymentSession = sessionStorage.getItem('stripe_is_advance_payment') === 'true';
+        this.isAdvancePayment = isAdvancePaymentSession || this.isAdvancePayment;
+        this.afterSuccessRedirectionUrl = sessionStorage.getItem('stripe_after_success_redirection_url') || this.afterSuccessRedirectionUrl;
         if (subscriptionId) {
             sessionStorage.setItem('stripe_payment_intent_id', piId);
-            if (this.isAdvancePayment) {
-                this.saveAdvancePayment({ paymentIntentId: piId });
+            if (isAdvancePaymentSession) {
+                const payload = {
+                    paymentProvider: PaymentProvider.STRIPE,
+                    subscriptionId: subscriptionId,
+                    duration: sessionStorage.getItem('stripe_duration') || this.firstStepForm.get('duration')?.value,
+                    prepaidUniqueName: sessionStorage.getItem('stripe_prepaid_unique_name') || this.createSubscriptionSuccess?.prepaidUniqueName,
+                    paymentIntentId: piId
+                };
+                this.componentStore.saveAdvancePayment(payload);
             } else {
                 this.componentStore.saveStripePayment({ subscriptionId, paymentIntentId: piId });
             }
@@ -2444,6 +2457,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         sessionStorage.removeItem('stripe_plan_unique_name');
         sessionStorage.removeItem('stripe_amount_paid');
         sessionStorage.removeItem('stripe_subscription_request');
+        sessionStorage.removeItem('stripe_is_advance_payment');
+        sessionStorage.removeItem('stripe_prepaid_unique_name');
+        sessionStorage.removeItem('stripe_after_success_redirection_url');
     }
 
     /**

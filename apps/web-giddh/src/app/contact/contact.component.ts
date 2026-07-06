@@ -310,7 +310,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
         this.imgPath = this.serviceConfig.IMG_PATH;
-        this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
 
@@ -345,6 +344,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.dynamicCustomColumns = [];
             this.setActiveTab(newTab);
             this.resetSearchIfSwitched(previousTab);
+            if (isCustomer || isVendor) {
+                this.store.dispatch(this.companyActions.getAllRegistrations());
+            }
 
             if (lastTabType) {
                 this.translationComplete(true);
