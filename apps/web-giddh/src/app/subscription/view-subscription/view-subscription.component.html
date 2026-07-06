@@ -94,7 +94,24 @@
                                     {{ localeData?.wallet }}
                                 </button>
                             }
+                            <button
+                                *ngIf="isAdvancePaymentEligible"
+                                aria-label="advance-payment"
+                                mat-menu-item
+                                (click)="goToAdvancePayment()"
+                                [matTooltip]="localeData?.advance_payment_tooltip"
+                                matTooltipPosition="right"
+                            >
+                                {{ localeData?.advance_payment }}
+                            </button>
                         </mat-menu>
+                    </div>
+                    <div
+                        *ngIf="viewSubscriptionData?.prepaidSubscription?.status?.toUpperCase() === 'PAID'"
+                        class="alert alert-success d-flex align-items-center column-gap-1 mt-3 mb-0 p-2 font-size-14"
+                    >
+                        <i class="icon-check-circle text-success"></i>
+                        <span>{{ advancePaymentMessage }}</span>
                     </div>
                     <div class="view-subscription">
                         <div class="d-flex justify-content-between my-3">

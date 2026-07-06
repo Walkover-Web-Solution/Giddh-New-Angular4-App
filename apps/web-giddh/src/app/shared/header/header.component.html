@@ -577,6 +577,29 @@
             <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isSubscriptionRenewalExpired = false"></i>
         </div>
     </div>
+    <!-- *ngIf="
+        
+    " -->
+    <div
+        *ngIf="
+            showAlertMessage.isPrepaidRenewalAvailable &&
+            subscribedPlan !== undefined &&
+            subscribedPlan?.status === 'active' &&
+            showAdvancePayment &&
+            ((subscribedPlan?.duration === 'MONTHLY' && remainingSubscriptionDays <= 7) ||
+                (subscribedPlan?.duration === 'YEARLY' && remainingSubscriptionDays <= 30))
+        "
+        class="plan-wrapper"
+        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
+    >
+        <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
+            <p>
+                <i class="icon-traingle-info font-size-15 mr-2"></i>
+                <span [innerHTML]="getPrepaidRenewalNote()"></span>
+            </p>
+            <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isPrepaidRenewalAvailable = false"></i>
+        </div>
+    </div>
 
     <div
         class="plan-wrapper"

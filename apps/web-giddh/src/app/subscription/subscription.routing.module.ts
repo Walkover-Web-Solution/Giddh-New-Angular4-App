@@ -36,6 +36,9 @@ import { WalletComponent } from './wallet/wallet.component';
                 path: 'subscription/activate-subscription/:id', component: BuyPlanComponent
             },
             {
+                path: 'subscription/:type/:id', component: BuyPlanComponent
+            },
+            {
                 path: 'subscription/call-back', component: CallBackPageComponent
             },
             {

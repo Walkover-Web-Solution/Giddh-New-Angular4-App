@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { GeneralService } from '../../services/general.service';
+import { SettingsProfileService } from '../../services/settings.profile.service';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { AppState } from '../../store';
 import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
@@ -109,6 +110,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public selectedCompany: any;
     /** This will use for active company */
     public activeCompany: any = {};
+    /** True when advance payment can be shown (autoPay OFF and no prepaid exists) */
+    public showAdvancePayment: boolean = false;
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
     /** This will use for status */
@@ -122,7 +125,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
-        private generalService: GeneralService,
+        public generalService: GeneralService,
         private componentStore: SubscriptionComponentStore,
         private store: Store<AppState>,
         private formBuilder: FormBuilder,
@@ -130,7 +133,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         private readonly componentStoreCompanyListDialog: CompanyListDialogComponentStore,
         private generalActions: GeneralActions,
         private router: Router,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private settingsProfileService: SettingsProfileService
     ) {
         this.store.dispatch(this.generalActions.openSideMenu(true));
     }
@@ -173,6 +177,13 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
+            }
+        });
+
+        this.settingsProfileService.GetProfileInfo().pipe(take(1)).subscribe((response: any) => {
+            if (response?.status === 'success' && response?.body) {
+                this.showAdvancePayment = !(response.body.subscription?.autoPay || response.body.subscription?.isPrepaidExist);
+                this.changeDetection.markForCheck();
             }
         });
 
@@ -702,6 +713,20 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public openWallet(subscriptionId: string): void {
         this.menu?.closeMenu();
         this.router.navigate(['/pages/user-details/subscription/wallet/' + subscriptionId]);
+    }
+
+    /**
+     * Navigates to the advance payment page for the given subscription
+     *
+     * @param {string} subscriptionId
+     * @memberof SubscriptionListComponent
+     */
+    public goToAdvancePayment(subscriptionId: string): void {
+        this.menu?.closeMenu();
+        this.router.navigate(
+            [`/pages/user-details/subscription/advance-payment/${subscriptionId}`],
+            { queryParams: { removeWarning: true } }
+        );
     }
 
     /**
