@@ -383,7 +383,8 @@
         "master": "Master",
         "voucher": "Voucher",
         "account_wise": "Account wise",
-        "voucher_wise": "Voucher wise"
+        "voucher_wise": "Voucher wise",
+        "bank_statement": "Bank Statement"
     },
     "app_please_select": "Please Select",
     "app_company": "Company",

@@ -414,6 +414,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.activateAdvancePaymentSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                // Refresh profile only when the advance payment applies to the
+                // company's currently active subscription.
+                if (this.activeCompany?.subscription?.subscriptionId && this.activeCompany.subscription.subscriptionId === this.subscriptionId) {
+                    this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                }
                 if (this.afterSuccessRedirectionUrl) {
                     this.router.navigate([this.afterSuccessRedirectionUrl]);
                 } else {

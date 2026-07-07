@@ -53,7 +53,9 @@
                     <img src="assets/images/new/import_icon.svg" [style.width.px]="100" alt="import img" />
                 </div>
                 <div class="clear-both pr-4 pl-4">
-                    <label class="clear-both font-size-15">{{ localeData?.upload_message }}</label>
+                    <label class="clear-both font-size-15">
+                        {{ entity === voucherType.BankStatement ? localeData?.upload_message_bank : localeData?.upload_message }}
+                    </label>
 
                     <div class="mt-5">
                         <label class="file-upload-panel" for="csvUploadInput">
@@ -67,9 +69,16 @@
         </div>
     </div>
     <div class="max-width-500 center-block mt-1">
-        <div class="checkbox mt-1">
-            <mat-checkbox [(ngModel)]="isHeaderProvided" color="primary">
+        <div class="checkbox mt-1 d-flex flex-column">
+            <mat-checkbox [(ngModel)]="isHeaderProvided" color="primary" *ngIf="selectedFileExtension !== fileType.PDF">
                 {{ localeData?.header_provided }}
+            </mat-checkbox>
+            <mat-checkbox
+                *ngIf="entity === voucherType.BankStatement && selectedFileExtension && selectedFileExtension !== fileType.PDF"
+                [(ngModel)]="sameDebitCreditAmountColumn"
+                color="primary"
+            >
+                {{ localeData?.same_debit_credit_column }}
             </mat-checkbox>
             <div class="mt-2">
                 <reactive-dropdown-field
@@ -97,6 +106,29 @@
                     (selectedOption)="selectVoucher = $event?.value"
                     [required]="true"
                 ></reactive-dropdown-field>
+                <reactive-dropdown-field
+                    *ngIf="entity === voucherType.BankStatement"
+                    [label]="commonLocaleData?.app_account"
+                    [placeholder]="commonLocaleData?.app_select_account"
+                    [options]="accountSearchResponse$ | async"
+                    [(ngModel)]="accountUniqueName"
+                    [labelValue]="accountLabel"
+                    [enableDynamicSearch]="true"
+                    [isPaginationEnabled]="true"
+                    (scrollEnd)="handleSearchAccountScrollEnd()"
+                    (dynamicSearchedQuery)="searchAccount($event)"
+                    (onClear)="accountUniqueName = null; accountLabel = null"
+                    (selectedOption)="accountUniqueName = $event?.value; accountLabel = $event?.label"
+                    [required]="true"
+                ></reactive-dropdown-field>
+                <div *ngIf="entity === voucherType.BankStatement && selectedFileExtension === fileType.PDF" class="mt-2">
+                    <input-field
+                        [type]="'password'"
+                        [label]="commonLocaleData?.app_password"
+                        [placeholder]="commonLocaleData?.app_password"
+                        [(ngModel)]="bankStatementPassword"
+                    ></input-field>
+                </div>
             </div>
         </div>
         <div class="d-flex justify-content-between mt-2">
@@ -127,7 +159,8 @@
                 [disabled]="
                     file === null ||
                     (entity === voucherType.AccountWise && !accountUniqueName) ||
-                    (entity === voucherType.VoucherWise && !selectVoucher)
+                    (entity === voucherType.VoucherWise && !selectVoucher) ||
+                    (entity === voucherType.BankStatement && !accountUniqueName)
                 "
                 (click)="handleFileUpload(file)"
             >
