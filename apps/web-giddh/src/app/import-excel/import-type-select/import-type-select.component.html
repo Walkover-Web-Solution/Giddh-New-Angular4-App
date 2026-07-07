@@ -68,6 +68,20 @@
                             </a>
                         </li>
                     </ng-container>
+                    <ng-container *ngIf="isBranch || branches?.length === 1">
+                        <li>
+                            <a
+                                class="theme-foreground-color h-100"
+                                [routerLink]="['/pages', 'import', 'banktransactions']"
+                                href="javascript:void(0);"
+                            >
+                                <img [src]="imgPath + 'import-banckstatement.png'" alt="bank statement" />
+                                <p>
+                                    {{ commonLocaleData?.app_import_type?.bank_statement }}
+                                </p>
+                            </a>
+                        </li>
+                    </ng-container>
                 </ul>
             </div>
         </div>
