@@ -5593,7 +5593,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         let amount = Number(annexureCharge.get("transactions.0.amount.amountForAccount")?.value) || 0;
 
-        if (taxes && taxes.length > 0 && this.showTaxColumn) {
+        if (taxes && taxes.length > 0) {
             const taxesFormArray = annexureCharge.get("taxes") as FormArray;
             taxesFormArray.clear();
             let totalTaxWithoutCess: number = 0;
