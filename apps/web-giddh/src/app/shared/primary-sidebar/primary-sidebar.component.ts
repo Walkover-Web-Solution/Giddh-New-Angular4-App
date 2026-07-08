@@ -771,8 +771,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }
                 
-                // Auto-expand parent if it has an active child (only one will be expanded)
-                if (hasActiveChild) {
+                // Auto-expand parent if it has an active child, or its own route matches the current URL
+                const parentRoute = (item as any)?.route ? String((item as any).route).split('?')[0] : '';
+                const isOwnRouteActive = parentRoute && (baseUrlWithoutParams === parentRoute || baseUrlWithoutParams.startsWith(parentRoute + '/'));
+                if (hasActiveChild || isOwnRouteActive) {
                     item.isExpanded = true;
                 }
             }
