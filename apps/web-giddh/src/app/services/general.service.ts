@@ -3436,11 +3436,11 @@ export class GeneralService {
         }
         const period = (subscription.period || subscription.duration || '').toLowerCase();
         const expiryStr = String(subscription.expiry).split('-').reverse().join('-');
-        const remainingDays = (new Date(expiryStr).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
+        const remainingDays = ((new Date(expiryStr).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) + 1;
         if (isNaN(remainingDays) || remainingDays < 0) {
             return false;
         }
-        if (period === 'monthly' && remainingDays <= 7) {
+        if ((period === 'monthly' || period === 'daily') && remainingDays <= 7) {
             return true;
         }
         if (period === 'yearly' && remainingDays <= 30) {
