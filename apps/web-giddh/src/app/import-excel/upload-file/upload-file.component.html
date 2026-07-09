@@ -9,7 +9,9 @@
                   (entity === voucherType.AccountWise
                       ? commonLocaleData?.app_import_type?.account_wise
                       : commonLocaleData?.app_import_type?.voucher_wise)
-                : (title | titlecase)
+                : entity === voucherType.BankStatement
+                  ? commonLocaleData?.app_import_type?.bank_statement
+                  : (title | titlecase)
         }}
     </p>
     <div
@@ -112,6 +114,8 @@
                     [placeholder]="commonLocaleData?.app_select_account"
                     [options]="accountSearchResponse$ | async"
                     [(ngModel)]="accountUniqueName"
+                    [showCreateNew]="true"
+                    (createOption)="createNewAccount()"
                     [labelValue]="accountLabel"
                     [enableDynamicSearch]="true"
                     [isPaginationEnabled]="true"
@@ -170,3 +174,14 @@
     </div>
 </div>
 <!-- upload And Map Content end-->
+
+<ng-template #accountAsideMenu>
+    <generic-aside-menu-account
+        (closeAsideEvent)="accountAsideMenuRef.close()"
+        [selectedGrpUniqueName]="'bankaccounts'"
+        [commonLocaleData]="commonLocaleData"
+        [isBankAccount]="true"
+        [isDebtorCreditor]="false"
+        (addEvent)="addNewAccount($event)"
+    ></generic-aside-menu-account>
+</ng-template>
