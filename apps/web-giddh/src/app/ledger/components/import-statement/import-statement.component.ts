@@ -102,7 +102,9 @@ export class ImportStatementComponent implements OnDestroy {
                 this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(importVoucherSuccessResponse));
                 this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
                 this.dialogRef.close(true);
-                this.router.navigate(['pages', 'import', this.entity === ImportStatementType.BankTransactions ? ImportStatementType.BankTransactions : VoucherType.AccountWise]);
+                this.router.navigate(['pages', 'import', this.entity === ImportStatementType.BankTransactions ? ImportStatementType.BankTransactions : VoucherType.AccountWise], {
+                    queryParams: { returnUrl: this.inputData?.returnUrl }
+                });
             }
         });
     }
@@ -131,7 +133,9 @@ export class ImportStatementComponent implements OnDestroy {
                     this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));
                     this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
                     this.dialogRef.close(true);
-                    this.router.navigate(['/pages/import/banktransactions']);
+                    this.router.navigate(['/pages/import/banktransactions'], {
+                        queryParams: { returnUrl: this.inputData?.returnUrl }
+                    });
                 } else {
                     this.toaster.showSnackBar("error", response?.message, response?.code);
                 }

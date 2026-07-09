@@ -586,6 +586,7 @@
             subscribedPlan !== undefined &&
             subscribedPlan?.status === 'active' &&
             showAdvancePayment &&
+            remainingSubscriptionDays > 0 &&
             (((subscribedPlan?.duration === 'MONTHLY' || subscribedPlan?.duration === 'DAILY') && remainingSubscriptionDays <= 7) ||
                 (subscribedPlan?.duration === 'YEARLY' && remainingSubscriptionDays <= 30))
         "
