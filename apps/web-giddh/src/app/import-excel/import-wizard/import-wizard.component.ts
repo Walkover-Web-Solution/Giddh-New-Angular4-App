@@ -203,7 +203,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public onBack() {
-        if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName && this.returnUrl?.startsWith('/page/ledger')) {
+        if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName && this.returnUrl?.startsWith('/pages/ledger')) {
             this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
         } else {
             this.step.update(s => s - 1);
