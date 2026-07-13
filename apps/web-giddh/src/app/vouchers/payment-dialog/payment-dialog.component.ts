@@ -344,7 +344,8 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         newFormObj.deposits = deposits;
         newFormObj.tagNames = (newFormObj.tagUniqueName) ? [newFormObj.tagUniqueName] : [];
         delete newFormObj.tagUniqueName;
-
+        
+        this.saveInProgress = true;
         this.paymentSubmitted.emit(newFormObj);
     }
 }

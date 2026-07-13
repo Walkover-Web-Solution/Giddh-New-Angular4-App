@@ -163,5 +163,9 @@
         "reactivate_subscription": "सदस्यता पुनः सक्रिय करें",
         "advance_payment": "अग्रिम भुगतान",
         "advance_payment_tooltip": "अपनी सदस्यता समाप्त होने से पहले अग्रिम भुगतान करके नवीनीकरण करें। वर्तमान अवधि समाप्त होते ही आपकी अगली बिलिंग अवधि स्वचालित रूप से शुरू हो जाएगी।",
-        "advance_payment_success_message": "[PLAN_NAME] के लिए अग्रिम भुगतान प्राप्त हुआ। आपकी अगली सदस्यता अवधि स्वचालित रूप से [START_DATE] को शुरू होगी और [END_DATE] को समाप्त होगी।"
+        "advance_payment_success_message": "[PLAN_NAME] के लिए अग्रिम भुगतान प्राप्त हुआ। आपकी अगली सदस्यता अवधि स्वचालित रूप से [START_DATE] को शुरू होगी और [END_DATE] को समाप्त होगी।",
+        "upcoming_prepaid": "आगामी (प्रीपेड)",
+        "app_same_plan_no_changes": "समान प्लान, कोई परिवर्तन नहीं",
+        "subscription_amount": "सदस्यता राशि",
+        "gst_vat": "जीएसटी / वैट"
 	}
