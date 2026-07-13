@@ -103,7 +103,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         if (!prepaid) {
             return 0;
         }
-        return (prepaid.amount || 0) + (prepaid.taxTotal || 0);
+        return Number(prepaid.amount || 0) + Number(prepaid.taxTotal || 0);
     }
 
     /**
