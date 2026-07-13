@@ -30,12 +30,6 @@ import { WalletComponent } from './wallet/wallet.component';
                 path: 'subscription/buy-plan', component: BuyPlanComponent
             },
             {
-                path: 'subscription/buy-plan/:id', component: BuyPlanComponent
-            },
-            {
-                path: 'subscription/activate-subscription/:id', component: BuyPlanComponent
-            },
-            {
                 path: 'subscription/:type/:id', component: BuyPlanComponent
             },
             {
