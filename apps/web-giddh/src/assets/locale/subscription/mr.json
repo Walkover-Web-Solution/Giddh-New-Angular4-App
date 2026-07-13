@@ -163,5 +163,9 @@
         "reactivate_subscription": "सदस्यता पुन्हा सक्रिय करा",
         "advance_payment": "आगाऊ पेमेंट",
         "advance_payment_tooltip": "तुमची सदस्यता संपण्यापूर्वी आगाऊ पेमेंट करून नूतनीकरण करा. सध्याची अवधी संपताच तुमची पुढील बिलिंग अवधी आपोआप सुरू होईल.",
-        "advance_payment_success_message": "[PLAN_NAME] साठी आगाऊ पेमेंट प्राप्त झाले. तुमची पुढील सदस्यता अवधी आपोआप [START_DATE] रोजी सुरू होईल आणि [END_DATE] रोजी संपेल."
+        "advance_payment_success_message": "[PLAN_NAME] साठी आगाऊ पेमेंट प्राप्त झाले. तुमची पुढील सदस्यता अवधी आपोआप [START_DATE] रोजी सुरू होईल आणि [END_DATE] रोजी संपेल.",
+        "upcoming_prepaid": "आगामी (प्रीपेड)",
+        "app_same_plan_no_changes": "समान प्लान, कोणतेही बदल नाहीत",
+        "subscription_amount": "सदस्यता रक्कम",
+        "gst_vat": "जीएसटी / व्हॅट"
 	}

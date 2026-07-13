@@ -648,6 +648,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     if (response?.paypalOrderId && this.payType === 'buy') {
                         this.openWindow(response.paypalApprovalLink);
                     } else {
+                        if (this.isAdvancePayment) {
+                            this.initializePayment(response, 'createSubscription');
+                            return;
+                        }
                         if ((response?.duration === PlanDuration.MONTHLY || response?.duration === PlanDuration.DAILY) && response?.region?.code !== EntityCode.GBR) {
                             if (response.razorpayCustomerId && this.payType === 'buy') {
                                 this.initializePayment(response, 'createSubscription');
@@ -740,10 +744,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         window.addEventListener('message', event => {
             if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan' || this.router.url.startsWith('/pages/user-details/subscription/activate-subscription/' + this.subscriptionId) || this.router.url.startsWith('/pages/user-details/subscription/advance-payment/' + this.subscriptionId)))) {
                 if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
-                    if (this.isAdvancePayment) {
-                        this.saveAdvancePayment({ billingRequestId: this.goCardLessBillingRequestId });
-                        return;
-                    }
                     if (this.upgradePlan && this.upgradeRegion === EntityCode.GBR) {
                         const reqObj = {
                             subscriptionId: this.upgradeSubscriptionId,
@@ -1725,12 +1725,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         if (entityCode === EntityCode.GBR) {
             // GBR: Stripe shown for all durations; GoCardless/PayPal added for monthly & daily
-            if (this.isMonthly()) {
-                filterProviders([PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL]);
+            if (this.isMonthly() || this.isDaily()) {
+                const providers = this.isAdvancePayment
+                    ? [PaymentProvider.STRIPE, PaymentProvider.PAYPAL]
+                    : [PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL];
+                filterProviders(providers);
             } else if (this.isYearly()) {
                 filterProviders([PaymentProvider.STRIPE, PaymentProvider.RAZORPAY]);
-            } else if (this.isDaily()) {
-                filterProviders([PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL]);
             }
         } else if (entityCode !== EntityCode.IND) {
             // Non-IND: Stripe available for all durations; PayPal added for monthly & daily
@@ -2130,12 +2131,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionId = request.subscriptionId;
             }
             let data = { ...request, ...this.subscriptionRequest };
+            if (this.isAdvancePayment) {
+                this.saveAdvancePayment({ razorpayOrderId: request.razorpayOrderId, paymentId: request.paymentId });
+                return;
+            }
             if (request.paymentId && (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && payResponse?.region?.code !== 'GBR') {
-                if (this.isAdvancePayment) {
-                    this.saveAdvancePayment({ razorpayOrderId: request.razorpayOrderId, paymentId: request.paymentId });
-                } else {
-                    this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId, orderId: request.razorpayOrderId });
-                }
+                this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId, orderId: request.razorpayOrderId });
             } else {
                 this.componentStore.changePlan(data);
             }

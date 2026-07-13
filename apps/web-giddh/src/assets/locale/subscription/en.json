@@ -163,5 +163,9 @@
         "reactivate_subscription": "Reactivate Subscription",
         "advance_payment": "Advance Payment",
         "advance_payment_tooltip": "Pay in advance to renew your subscription before it expires. Your next billing period will start automatically once the current one ends.",
-        "advance_payment_success_message": "Advance payment received for [PLAN_NAME]. Your next subscription period will begin automatically on [START_DATE] and ends on [END_DATE]."
+        "advance_payment_success_message": "Your [PLAN_NAME] plan expires in [REMAINING_DAYS] day. Your advance payment has already been received, so your next period starts automatically on [START_DATE] — no action needed.",
+        "upcoming_prepaid": "Upcoming (Prepaid)",
+        "app_same_plan_no_changes": "same plan, no changes",
+        "subscription_amount": "Subscription amount",
+        "gst_vat": "GST / VAT"
     }

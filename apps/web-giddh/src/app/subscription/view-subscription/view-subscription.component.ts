@@ -53,7 +53,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
 
     /**
      * Builds the advance-payment success message by replacing placeholders
-     * ([PLAN_NAME], [START_DATE], [END_DATE]) with values from prepaidSubscription.
+     * ([PLAN_NAME], [REMAINING_DAYS], [START_DATE]) with values from prepaidSubscription.
      *
      * @readonly
      * @memberof ViewSubscriptionComponent
@@ -65,10 +65,19 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
             return '';
         }
         const pipe = new GiddhDatePipe();
+        
+        // Calculate remaining days (same logic as isAdvancePaymentEligible)
+        const expiryStr = String(this.viewSubscriptionData?.expiry).split('-').reverse().join('-');
+        const remainingDays = Math.ceil(((new Date(expiryStr).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) + 1);
+        
+        // Handle pluralization
+        const daysText = remainingDays === 1 ? 'day' : 'days';
+        
         return template
             ?.replace('[PLAN_NAME]', prepaid.planName ?? '')
-            ?.replace('[START_DATE]', pipe.transform(prepaid.startDate) ?? '')
-            ?.replace('[END_DATE]', pipe.transform(prepaid.endDate) ?? '');
+            ?.replace('[REMAINING_DAYS]', remainingDays.toString())
+            ?.replace('day', daysText)
+            ?.replace('[START_DATE]', pipe.transform(prepaid.startDate) ?? '');
     }
 
     /**
@@ -81,6 +90,20 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      */
     public get isAdvancePaymentEligible(): boolean {
         return this.generalService.isAdvancePaymentEligible(this.viewSubscriptionData);
+    }
+
+    /**
+     * Calculates the total amount for prepaid subscription (amount + tax).
+     *
+     * @readonly
+     * @memberof ViewSubscriptionComponent
+     */
+    public get prepaidTotalAmount(): number {
+        const prepaid = this.viewSubscriptionData?.prepaidSubscription;
+        if (!prepaid) {
+            return 0;
+        }
+        return (prepaid.amount || 0) + (prepaid.taxTotal || 0);
     }
 
     /**
