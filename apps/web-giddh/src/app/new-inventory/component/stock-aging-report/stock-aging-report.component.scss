@@ -1,0 +1,143 @@
+// Component-specific dimensions (colors come from the global theme).
+$sar-group-header-height: 64px;
+$sar-group-th-half-height: 32px;
+
+:host {
+    display: block;
+    width: 100%;
+}
+
+// Bucket header pill: discreet by default; edit icon reveals on hover / open.
+.stock-aging-report .sar-bucket-btn.mat-mdc-outlined-button {
+    min-width: 0;
+    height: 24px;
+    line-height: 24px;
+    border-color: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    transition: border-color 0.15s ease-in-out;
+
+    .sar-bucket-edit-icon {
+        visibility: hidden;
+    }
+
+    &[aria-expanded='true'] {
+        border-color: var(--color-blue) !important;
+        .sar-bucket-edit-icon {
+            visibility: visible;
+        }
+    }
+}
+
+.stock-aging-report .sar-mat-table:hover .sar-bucket-btn.mat-mdc-outlined-button {
+    border-color: var(--color-blue) !important;
+
+    .sar-bucket-edit-icon {
+        visibility: visible;
+    }
+}
+
+::ng-deep .sar-aging-menu {
+    .mat-mdc-menu-content {
+        padding: 0 !important;
+    }
+}
+
+.stock-aging-report {
+    min-width: 1572px;
+    max-width: 1600px;
+
+    .filter-dropdown-branch,
+    .filter-dropdown-warehouse,
+    .filter-dropdown-stockCategory,
+    .filter-dropdown-stockgroup,
+    .filter-dropdown-date {
+        min-width: 200px;
+        max-width: 260px;
+        flex: 0 0 auto;
+    }
+
+    .sar-summary-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .sar-summary-card {
+        border: 1px solid var(--color-border-medium);
+    }
+
+    .sar-table-wrapper {
+        overflow: auto;
+    }
+
+    .sar-mat-table {
+        .mat-mdc-header-cell,
+        .mat-mdc-cell,
+        .mat-mdc-footer-cell {
+            background-color: var(--table-background-color);
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            color: inherit;
+        }
+
+        .sar-group-header-row {
+            height: $sar-group-header-height;
+        }
+
+        .sar-group-header-cell {
+            height: $sar-group-header-height !important;
+
+            &.mat-mdc-header-cell {
+                padding: 0 !important;
+                border: none !important;
+            }
+        }
+
+        .sar-group-header-inner {
+            height: $sar-group-header-height;
+        }
+
+        // Shared borders / bg / font-weight / flex sizing come from utility
+        // classes in the template.
+        .sar-group-th--leaf {
+            padding: 8px 10px;
+            white-space: nowrap;
+        }
+
+        .sar-group-th--group {
+            padding: 0;
+        }
+
+        .sar-group-th__label {
+            height: $sar-group-th-half-height;
+            padding: 0 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sar-group-th__children {
+            height: $sar-group-th-half-height;
+        }
+
+        .sar-group-th__child {
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        // Zero-height row used only to register per-column widths.
+        .sar-leaf-header-row {
+            height: 0 !important;
+
+            .mat-mdc-header-cell {
+                height: 0 !important;
+                min-height: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                line-height: 0 !important;
+                overflow: hidden;
+            }
+        }
+
+        .sar-total-row .mat-mdc-footer-cell {
+            font-weight: var(--font-weight-semibold);
+        }
+    }
+}

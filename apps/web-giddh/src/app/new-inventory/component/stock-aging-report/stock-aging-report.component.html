@@ -1,0 +1,456 @@
+<!-- Shared popup used by every bucket header button; only renders the interval the user clicked. -->
+<mat-menu #stockAgingMenu="matMenu" class="sar-aging-menu" [hasBackdrop]="false">
+    <ng-template matMenuContent>
+        <age-range-editor
+            [options]="agingOptions"
+            [activeInterval]="activeInterval"
+            [localeData]="agingEditorLocale"
+            [vendorCustomerType]="INVENTORY_AGING_TYPE"
+            (save)="onAgingRangeSave($event)"
+            (close)="onAgingRangeClose()"
+        ></age-range-editor>
+    </ng-template>
+</mat-menu>
+
+<div
+    class="stock-aging-report p-3"
+    appTranslate
+    [file]="'inventory/stock-aging'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <!-- Filter bar: Branch, Warehouse, Stock Group -->
+    <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-2 mb-3">
+        <!-- As On Date -->
+        <div class="filter-dropdown-date">
+            <giddh-datepicker
+                [placeholder]="localeData.date"
+                name="asOnDate"
+                [appearance]="'outline'"
+                [formControl]="asOnDateControl"
+                [showToggleIcon]="false"
+            ></giddh-datepicker>
+        </div>
+        <!-- Branch multi-select -->
+        @if (isCompany && allBranches?.length > 1) {
+            <div class="filter-dropdown-branch">
+                <mat-form-field appearance="outline">
+                    <mat-select
+                        name="agingSelectedBranch"
+                        [multiple]="true"
+                        [(ngModel)]="selectedBranch"
+                        class="stock-mat-salect"
+                        [placeholder]="localeData.select_branch"
+                        (ngModelChange)="onBranchChange()"
+                    >
+                        <mat-option class="balance-options">
+                            <ngx-mat-select-search
+                                [formControl]="branchesDropdown"
+                                [placeholderLabel]="localeData.select_branch"
+                                [noEntriesFoundLabel]="localeData.no_result_found"
+                                class="mat-select-search-inventory"
+                                [clearSearchInput]="false"
+                            >
+                                <i class="icon-cross" ngxMatSelectSearchClear></i>
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
+                            {{ branch?.name ?? '-' }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        }
+
+        <!-- Warehouse multi-select -->
+        @if (currentWarehouses?.length > 1) {
+            <div class="filter-dropdown-warehouse">
+                <mat-form-field appearance="outline">
+                    <mat-select
+                        name="agingSelectedWarehouse"
+                        [multiple]="true"
+                        [(ngModel)]="selectedWarehouse"
+                        class="stock-mat-salect"
+                        [placeholder]="localeData.select_warehouse"
+                        (ngModelChange)="onWarehouseChange()"
+                    >
+                        <mat-option class="balance-options">
+                            <ngx-mat-select-search
+                                [formControl]="warehousesDropdown"
+                                [placeholderLabel]="localeData.select_warehouse"
+                                [noEntriesFoundLabel]="localeData.no_result_found"
+                                class="mat-select-search-inventory"
+                                [clearSearchInput]="false"
+                            >
+                                <i class="icon-cross" ngxMatSelectSearchClear></i>
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
+                            {{ warehouse?.name ?? '-' }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        }
+
+        <!-- Stock Group -->
+        @if (stockGroups?.length) {
+            <div class="filter-dropdown-stockgroup">
+                <mat-form-field appearance="outline">
+                    <mat-select
+                        name="agingSelectedStockGroup"
+                        [multiple]="true"
+                        [(ngModel)]="selectedStockGroup"
+                        class="stock-mat-salect"
+                        [placeholder]="localeData.select_group"
+                        (ngModelChange)="onStockGroupChange()"
+                    >
+                        <mat-option class="balance-options">
+                            <ngx-mat-select-search
+                                [formControl]="stockGroupsDropdown"
+                                [placeholderLabel]="localeData.select_group"
+                                [noEntriesFoundLabel]="localeData.no_result_found"
+                                class="mat-select-search-inventory"
+                                [clearSearchInput]="false"
+                            >
+                                <i class="icon-cross" ngxMatSelectSearchClear></i>
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option class="balance-options" *ngFor="let group of filteredStockGroups" [value]="group?.value">
+                            {{ group?.label ?? '-' }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        }
+
+        @if (hasActiveFilters) {
+            <button matButton="outlined" class="ml-3 mr-0" (click)="clearFilters()">
+                <span class="icon-cross"></span>
+                {{ localeData.clear_filter }}
+            </button>
+        }
+    </div>
+
+    <!-- Summary Cards -->
+    @if (reportData?.totals) {
+        <div class="sar-summary-grid d-grid mb-3 column-gap-2">
+            <mat-card class="sar-summary-card bg-table-background-color border-radius-8 box-shadow-none">
+                <mat-card-content class="d-flex align-items-center column-gap-2 p-3">
+                    <div class="flex-grow-1">
+                        <p class="font-size-14 mb-1">{{ localeData.total_stock_value }}</p>
+                        <p class="font-size-16 font-weight-semibold mb-1">
+                            <amount-field
+                                [amount]="reportData?.totals?.totalValue"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            ></amount-field>
+                        </p>
+                        <p class="font-size-14 mb-0">
+                            {{ localeData.qty }}:
+                            <amount-field
+                                [amount]="reportData?.totals?.totalQuantity"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            ></amount-field>
+                        </p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            @for (b of reportData?.totals?.buckets; track b.range; let i = $index) {
+                <mat-card class="sar-summary-card bg-table-background-color border-radius-8 box-shadow-none">
+                    <mat-card-content
+                        class="d-flex align-items-center column-gap-2 p-3"
+                        [ngClass]="{ 'opening-box': i === 0, 'sales-purchase': i === 1, 'payment-receipt': i === 2, 'due-box': i === 3 }"
+                    >
+                        <div class="flex-grow-1">
+                            <p class="font-size-14 mb-1">{{ b?.range }}</p>
+                            <p class="font-size-16 font-weight-semibold mb-1">
+                                <amount-field [amount]="b?.value" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                            </p>
+                            <p class="font-size-14 mb-0">
+                                {{ localeData.qty }}:
+                                <amount-field [amount]="b?.quantity" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                            </p>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            }
+        </div>
+    }
+
+    <!-- Table -->
+    @if (isFirstLoad) {
+        <giddh-page-loader [cssClass]="'no-data'"></giddh-page-loader>
+    }
+    @if (!!reportData?.items?.results?.length || !!searchText) {
+        <div class="sar-table-wrapper">
+            <table mat-table [dataSource]="reportData?.items?.results ?? []" class="sar-mat-table w-100" aria-label="Stock aging report">
+                <!-- ── Base leaf columns ─────────────────────────────────── -->
+                <ng-container matColumnDef="sr">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" [style.width.%]="columnWidths.sr">{{ localeData.sr }}</th>
+                    <td mat-cell *matCellDef="let item; let i = index" class="text-center" [style.width.%]="columnWidths.sr">
+                        {{ (reportData?.items?.page - 1) * count + i + 1 }}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef [style.width.%]="columnWidths.sr"></td>
+                </ng-container>
+
+                <ng-container matColumnDef="stockName">
+                    <th mat-header-cell *matHeaderCellDef [style.width.%]="columnWidths.stockName">{{ localeData.item_name }}</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let item"
+                        [style.width.%]="columnWidths.stockName"
+                        [matTooltip]="item?.stockName"
+                        matTooltipPosition="above"
+                        class="text-ellipsis"
+                    >
+                        {{ item?.stockName }}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="font-weight-semibold" [style.width.%]="columnWidths.stockName">
+                        {{ localeData.total }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="uom">
+                    <th mat-header-cell *matHeaderCellDef [style.width.%]="columnWidths.uom">{{ localeData.uom }}</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let item"
+                        [style.width.%]="columnWidths.uom"
+                        [matTooltip]="item?.stockUnitCode"
+                        matTooltipPosition="above"
+                        class="text-ellipsis"
+                    >
+                        {{ item?.stockUnitCode }}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef [style.width.%]="columnWidths.uom"></td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalQty">
+                    <th mat-header-cell *matHeaderCellDef class="text-right" [style.width.%]="columnWidths.base">
+                        {{ localeData.total_qty }}
+                    </th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <amount-field [amount]="item?.totalQty" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="text-right">
+                        <amount-field
+                            [amount]="reportData?.totals?.totalQuantity"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        ></amount-field>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalValue">
+                    <th mat-header-cell *matHeaderCellDef class="text-right" [style.width.%]="columnWidths.base">
+                        {{ localeData.total_value }}
+                    </th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <amount-field [amount]="item?.totalAmount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="text-right">
+                        <amount-field
+                            [amount]="reportData?.totals?.totalValue"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        ></amount-field>
+                    </td>
+                </ng-container>
+
+                <!-- ── Dynamic bucket leaf columns (Qty & Value per range) ── -->
+                @for (col of bucketCols; track col.range; let i = $index) {
+                    <ng-container [matColumnDef]="col.qtyColId">
+                        <th mat-header-cell *matHeaderCellDef class="text-right" [style.width.%]="columnWidths.base">
+                            {{ localeData.qty }}
+                        </th>
+                        <td mat-cell *matCellDef="let item" class="text-right">
+                            <amount-field
+                                [amount]="getBucket(item?.buckets, i)?.quantity"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            ></amount-field>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef class="text-right">
+                            <amount-field
+                                [amount]="getBucket(reportData?.totals?.buckets, i)?.quantity"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            ></amount-field>
+                        </td>
+                    </ng-container>
+
+                    <ng-container [matColumnDef]="col.valueColId">
+                        <th mat-header-cell *matHeaderCellDef class="text-right" [style.width.%]="columnWidths.base">
+                            {{ localeData.value }}
+                        </th>
+                        <td mat-cell *matCellDef="let item" class="text-right">
+                            <amount-field
+                                [amount]="getBucket(item?.buckets, i)?.value"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            ></amount-field>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef class="text-right">
+                            <amount-field
+                                [amount]="getBucket(reportData?.totals?.buckets, i)?.value"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            ></amount-field>
+                        </td>
+                    </ng-container>
+                }
+
+                <!-- ── Spanning group header row (single header) ─────────── -->
+                <ng-container matColumnDef="groupHeader">
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        [attr.colspan]="totalColspan"
+                        class="sar-group-header-cell p-0 border-none vertical-align-top"
+                    >
+                        <div class="d-flex align-items-stretch w-100 sar-group-header-inner">
+                            @for (col of baseColumns; track col.colId; let first = $first) {
+                                <div
+                                    class="sar-group-th sar-group-th--leaf d-flex flex-shrink-0 flex-grow-0 align-items-center border-top border-right bg-table-background-color font-weight-semibold"
+                                    [ngClass]="{
+                                        'border-left': first,
+                                        'justify-content-center': col.align === 'center',
+                                        'justify-content-end': col.align === 'right',
+                                    }"
+                                    [style.flex-basis.%]="columnWidths[col.colId] ?? columnWidths.base"
+                                    [style.width.%]="columnWidths[col.colId] ?? columnWidths.base"
+                                >
+                                    @if (col.colId === 'stockName') {
+                                        <div
+                                            class="w-100"
+                                            #searchStockNameContainer
+                                            (clickOutside)="handleClickOutside($event, searchStockNameContainer, 'stockName')"
+                                        >
+                                            @if (!showStockNameSearchInput) {
+                                                <div class="align-items-center d-flex">
+                                                    <span>{{ col.label }}</span>
+                                                    <button
+                                                        matIconButton
+                                                        (click)="toggleSearch('stockName')"
+                                                        [attr.aria-label]="localeData.search_item_name"
+                                                        class="h-auto"
+                                                    >
+                                                        <span class="icon-search font-size-14"></span>
+                                                    </button>
+                                                </div>
+                                            }
+                                            @if (showStockNameSearchInput) {
+                                                <div>
+                                                    <text-field
+                                                        [type]="'text'"
+                                                        [placeholder]="localeData.item_name"
+                                                        [cssClass]="'form-control border'"
+                                                        [formControl]="searchStockName"
+                                                        [autoFocus]="showStockNameSearchInput"
+                                                    ></text-field>
+                                                </div>
+                                            }
+                                        </div>
+                                    } @else {
+                                        {{ col.label }}
+                                    }
+                                </div>
+                            }
+                            @for (col of bucketCols; track col.range; let i = $index) {
+                                <div
+                                    class="sar-group-th sar-group-th--group overflow-hidden d-flex flex-column flex-shrink-0 flex-grow-0 align-items-stretch border-top border-right bg-table-background-color font-weight-semibold"
+                                    [style.flex-basis.%]="columnWidths.bucketGroup"
+                                    [style.width.%]="columnWidths.bucketGroup"
+                                >
+                                    <div class="sar-group-th__label d-flex align-items-center justify-content-center text-ellipsis w-100">
+                                        <button
+                                            mat-stroked-button
+                                            class="sar-bucket-btn font-style-italic"
+                                            [matMenuTriggerFor]="stockAgingMenu"
+                                            #agingTrigger="matMenuTrigger"
+                                            (click)="openAgingEditor(i, agingTrigger); $event.stopPropagation()"
+                                            [attr.aria-label]="localeData.edit_range + ' ' + col.range"
+                                        >
+                                            <span class="d-inline-flex align-items-center column-gap-05">
+                                                {{ col.range }}
+                                                <span class="icon-edit sar-bucket-edit-icon ml-1 text-primary"></span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="sar-group-th__children d-flex align-items-stretch">
+                                        <div
+                                            class="sar-group-th__child d-flex align-items-center justify-content-end cursor-pointer column-gap-05 font-weight-semibold"
+                                            (click)="toggleBucketSort(i, 'qty')"
+                                        >
+                                            <span class="font-size-14">{{ localeData.qty }}</span>
+                                            @if (getBucketSortDir(i, 'qty') === 'asc') {
+                                                <span class="icon-sort-asc font-size-9 active-text-color"></span>
+                                            } @else if (getBucketSortDir(i, 'qty') === 'desc') {
+                                                <span class="icon-sort-asc font-size-9 active-text-color rotate-180"></span>
+                                            } @else {
+                                                <span class="icon-sort-asc font-size-9 text-light"></span>
+                                            }
+                                        </div>
+                                        <div
+                                            class="sar-group-th__child d-flex align-items-center justify-content-end cursor-pointer column-gap-05 font-weight-semibold border-left"
+                                            (click)="toggleBucketSort(i, 'value')"
+                                        >
+                                            <span class="font-size-14">{{ localeData.value }}</span>
+                                            @if (getBucketSortDir(i, 'value') === 'asc') {
+                                                <span class="icon-sort-asc font-size-9 active-text-color"></span>
+                                            } @else if (getBucketSortDir(i, 'value') === 'desc') {
+                                                <span class="icon-sort-asc font-size-9 active-text-color rotate-180"></span>
+                                            } @else {
+                                                <span class="icon-sort-asc font-size-9 text-light"></span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </th>
+                </ng-container>
+
+                <!-- Leaf-header row rendered FIRST so browsers pick up its
+                    per-column widths for `table-layout: fixed`. The visible
+                    group-header row follows (leaf row is height:0 via CSS). -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns" class="sar-leaf-header-row"></tr>
+                <tr mat-header-row *matHeaderRowDef="groupHeaderColumns; sticky: true" class="sar-group-header-row"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns" class="sar-total-row"></tr>
+
+                <!-- No-data row -->
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center py-4" [attr.colspan]="totalColspan">
+                        @if (!isLoading) {
+                            {{ localeData.no_data_found }}
+                        }
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+    @if (!reportData?.items?.results?.length && !searchText && !isLoading) {
+        <div class="no-data">
+            <no-data [secondaryMessageClass]="'p-0'"></no-data>
+        </div>
+    }
+
+    @if (totalItems > pageSizeOptions[0] && !isLoading && displayedColumns?.length) {
+        <div>
+            <mat-paginator
+                [length]="totalItems"
+                [pageSize]="count"
+                [pageIndex]="page - 1"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)"
+            ></mat-paginator>
+            <section class="mb-custom-80"></section>
+        </div>
+    }
+</div>

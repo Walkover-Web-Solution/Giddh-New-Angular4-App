@@ -21,7 +21,8 @@
         "custom_price":"Custom Price",
         "customer_wise":"Customer Wise",
         "vendor_wise":"Vendor Wise",
-        "inventory_adjustment":"Inventory Adjustment"
+        "inventory_adjustment":"Inventory Adjustment",
+        "stock_aging_report":"Stock Aging Report"
     },
     "reports":{
         "transaction_count":"Transaction Count",

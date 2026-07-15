@@ -63,6 +63,9 @@ import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/a
 import { PreviewVariantImageComponent } from "./component/preview-variant-image/preview-variant-image.component";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
+import { StockAgingReportComponent } from "./component/stock-aging-report/stock-aging-report.component";
+import { MatCardModule } from "@angular/material/card";
+import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-editor.component";
 
 @NgModule({
     declarations: [
@@ -87,7 +90,8 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
         ExportInventoryMasterComponent,
         AdjustInventoryComponent,
         AsideCreateNewReasonComponent,
-        PreviewVariantImageComponent
+        PreviewVariantImageComponent,
+        StockAgingReportComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -132,7 +136,9 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
         ReactiveFormsModule,
         AmountFieldComponentModule,
         GiddhDatePipe,
-        GoToBranchComponent
+        GoToBranchComponent,
+        MatCardModule,
+        AgeRangeEditorComponent
     ],
     exports: [
         NewInventoryComponent,
