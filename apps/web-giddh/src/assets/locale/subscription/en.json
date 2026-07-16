@@ -167,5 +167,10 @@
         "upcoming_prepaid": "Upcoming (Prepaid)",
         "app_same_plan_no_changes": "same plan, no changes",
         "subscription_amount": "Subscription amount",
-        "gst_vat": "GST / VAT"
+        "gst_vat": "GST / VAT",
+        "current_cycle_amount": "Amount for Current Billing Cycle",
+        "next_cycle_amount": "Amount for Next Billing Cycle",
+        "purchase_same_plan_next_cycle": "Purchase same plan for your next billing cycle?",
+        "current_subscription_remain_active": "Your current subscription will remain active until it expires. The same plan will automatically start after that.",
+        "change_plan_pay_next_cycle": "Change Plan & Pay for Next Billing Cycle"
     }

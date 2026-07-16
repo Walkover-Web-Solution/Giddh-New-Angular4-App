@@ -630,7 +630,38 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public changePlan(subscription: any): void {
-        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscription.subscriptionId]);
+        if (subscription?.isPrepaidExist) {
+            this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscription.subscriptionId]);
+        } else if (!subscription?.autoPay) {
+            const confirmDialogRef = this.dialog.open(ConfirmModalComponent, {
+                data: {
+                    title: this.localeData?.change_plan_pay_next_cycle,
+                    body: this.localeData?.purchase_same_plan_next_cycle,
+                    permanentlyDeleteMessage: this.localeData?.current_subscription_remain_active,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                },
+                panelClass: ['change-plan-confirmation-modal', 'mat-dialog-md'],
+                role: 'alertdialog',
+                ariaLabel: 'confirmDialog'
+            });
+
+            confirmDialogRef.afterClosed().subscribe((action) => {
+                if (action) {
+                    this.router.navigate(
+                        ['/pages/user-details/subscription/buy-plan/' + subscription.subscriptionId],
+                        { queryParams: { includeNextBill: true } }
+                    );
+                } else {
+                    this.router.navigate(
+                        ['/pages/user-details/subscription/buy-plan/' + subscription.subscriptionId],
+                        { queryParams: { includeNextBill: false } }
+                    );
+                }
+            });
+        } else {
+            this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscription.subscriptionId]);
+        }
     }
 
     /**

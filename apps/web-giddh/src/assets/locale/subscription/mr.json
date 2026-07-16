@@ -167,5 +167,10 @@
         "upcoming_prepaid": "आगामी (प्रीपेड)",
         "app_same_plan_no_changes": "समान प्लान, कोणतेही बदल नाहीत",
         "subscription_amount": "सदस्यता रक्कम",
-        "gst_vat": "जीएसटी / व्हॅट"
+        "gst_vat": "जीएसटी / व्हॅट",
+        "current_cycle_amount": "वर्तमान बिलिंग चक्रासाठी रक्कम",
+        "next_cycle_amount": "पुढील बिलिंग चक्रासाठी रक्कम",
+        "purchase_same_plan_next_cycle": "तुम्हाला पुढील बिलिंग चक्रासाठी समान प्लान खरेदी करायचे आहे का?",
+        "current_subscription_remain_active": "तुमची वर्तमान सदस्यता संपण्यापर्यंत सक्रिय राहील. त्यानंतर समान प्लान आपोआप सुरू होईल.",
+        "change_plan_pay_next_cycle": "प्लान बदला आणि पुढील बिलिंग चक्रासाठी भरणा करा"
 	}

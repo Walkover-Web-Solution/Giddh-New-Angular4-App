@@ -300,6 +300,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public atLeatOneCompany: boolean = false;
     /** after success redirection url for advance payment */
     public afterSuccessRedirectionUrl: string = '';
+    /** True if plan should be purchased for next billing cycle */
+    public includeNextBill: boolean | null = null;
 
     constructor(
         public dialog: MatDialog,
@@ -393,6 +395,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
             if (queryParams?.redirectUrl) {
                 this.afterSuccessRedirectionUrl = queryParams?.redirectUrl;
+            }
+            if (queryParams?.includeNextBill !== undefined) {
+                this.includeNextBill = queryParams?.includeNextBill === 'true';
             }
         });
 
@@ -1703,12 +1708,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             planUniqueName: this.selectedPlan()?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
             duration: this.firstStepForm.get('duration').value,
-            prePaid: this.isAdvancePayment,
             countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.code || this.viewSubscriptionData?.region?.code)
         }
-
+        if (this.isAdvancePayment) {
+            reqObj['prePaid'] = true;
+        }
         if (this.isChangePlan || this.isRenewPlan) {
             reqObj['subscriptionId'] = this.subscriptionId;
+        }
+        if (this.isChangePlan && this.includeNextBill !== null) {
+            reqObj['includeNextBill'] = this.includeNextBill;
         }
         if (this.selectedPlan()?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
@@ -1934,6 +1943,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.componentStore.advancePayment({ request, subscriptionId: this.subscriptionId });
             } else if (this.subscriptionId && this.isChangePlan && !this.activateSubscription) {
                 request.subscriptionId = this.subscriptionId;
+                request.includeNextBill = this.includeNextBill;
                 this.subscriptionRequest = request;
                 this.componentStore.getChangePlanDetails(request);
             } else {
