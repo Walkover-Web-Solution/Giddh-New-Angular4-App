@@ -1,20 +1,10 @@
 {
-    "date": "तारीख",
-    "select_branch": "शाखा निवडा",
-    "select_warehouse": "गोदाम निवडा",
-    "select_group": "गट निवडा",
-    "no_result_found": "कोणताही परिणाम आढळला नाही",
-    "clear_filter": "फिल्टर साफ करा",
     "total_stock_value": "एकूण स्टॉक मूल्य",
-    "qty": "प्रमाण",
     "item_name": "वस्तूचे नाव",
     "search_item_name": "वस्तूचे नाव शोधा",
     "edit_range": "श्रेणी संपादित करा",
-    "value": "मूल्य",
-    "no_data_found": "डेटा आढळला नाही",
     "uom": "युनिट",
     "total_qty": "एकूण प्रमाण",
     "total_value": "एकूण मूल्य",
-    "total": "एकूण",
     "sr": "#"
 }

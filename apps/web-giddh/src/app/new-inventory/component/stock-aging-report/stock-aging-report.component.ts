@@ -143,6 +143,8 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** Common locale data from translation directive. */
     public commonLocaleData: any = {};
+    /** Active company profile */
+    public activeCompanyProfile: any;
 
     /**
      * Cycle bucket-column sort (asc → desc → off) and refetch.
@@ -233,6 +235,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
         this.refreshLayoutCaches();
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.loadBranchesAndWarehouses();
+        this.getProfile();
         // Route param `:category` drives the stock category filter for this
         // report (e.g. product, service, fixedassets, all).
         // Angular reuses this component when only `:category` changes, so
@@ -315,6 +318,21 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
         });
         // Note: `getReport()` is invoked from the `route.params` subscription
         // above so it fires for the initial category and on every change.
+    }
+
+
+    /**
+     * Gets profile information
+     *
+     * @private
+     * @memberof StockAgingReportComponent
+     */
+    private getProfile(): void {
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
+            if (profile) {
+                this.activeCompanyProfile = profile;
+            }
+        });
     }
 
     /**
@@ -462,7 +480,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     public getReport(): void {
         this.isLoading = true;
         const payload: any = {
-            branchUniqueNames: this.selectedBranch,
+            branchUniqueNames: (this.isCompany && this.allBranches?.length > 1) ? this.selectedBranch : [this.generalService.currentBranchUniqueName],
             warehouseUniqueNames: this.selectedWarehouse,
             stockGroupUniqueNames: this.selectedStockGroup,
             searchText: this.searchText,

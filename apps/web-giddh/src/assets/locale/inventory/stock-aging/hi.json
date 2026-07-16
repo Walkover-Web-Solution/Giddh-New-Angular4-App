@@ -1,20 +1,10 @@
 {
-    "date": "तारीख",
-    "select_branch": "शाखा का चयन करें",
-    "select_warehouse": "गोदाम का चयन करें",
-    "select_group": "समूह चुनें",
-    "no_result_found": "कोई परिणाम नहीं मिला",
-    "clear_filter": "फ़िल्टर साफ़ करें",
     "total_stock_value": "कुल स्टॉक मूल्य",
-    "qty": "मात्रा",
     "item_name": "आइटम का नाम",
     "search_item_name": "आइटम का नाम खोजें",
     "edit_range": "सीमा संपादित करें",
-    "value": "कीमत",
-    "no_data_found": "कोई डेटा नहीं मिला",
     "uom": "इकाई",
     "total_qty": "कुल मात्रा",
     "total_value": "कुल मूल्य",
-    "total": "कुल",
     "sr": "#"
 }

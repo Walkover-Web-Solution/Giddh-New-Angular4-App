@@ -24,7 +24,7 @@
         <!-- As On Date -->
         <div class="filter-dropdown-date">
             <giddh-datepicker
-                [placeholder]="localeData.date"
+                [placeholder]="commonLocaleData?.app_date"
                 name="asOnDate"
                 [appearance]="'outline'"
                 [formControl]="asOnDateControl"
@@ -40,14 +40,14 @@
                         [multiple]="true"
                         [(ngModel)]="selectedBranch"
                         class="stock-mat-salect"
-                        [placeholder]="localeData.select_branch"
+                        [placeholder]="commonLocaleData?.app_select_branch"
                         (ngModelChange)="onBranchChange()"
                     >
                         <mat-option class="balance-options">
                             <ngx-mat-select-search
                                 [formControl]="branchesDropdown"
-                                [placeholderLabel]="localeData.select_branch"
-                                [noEntriesFoundLabel]="localeData.no_result_found"
+                                [placeholderLabel]="commonLocaleData?.app_select_branch"
+                                [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                 class="mat-select-search-inventory"
                                 [clearSearchInput]="false"
                             >
@@ -71,14 +71,14 @@
                         [multiple]="true"
                         [(ngModel)]="selectedWarehouse"
                         class="stock-mat-salect"
-                        [placeholder]="localeData.select_warehouse"
+                        [placeholder]="commonLocaleData?.app_select_warehouse"
                         (ngModelChange)="onWarehouseChange()"
                     >
                         <mat-option class="balance-options">
                             <ngx-mat-select-search
                                 [formControl]="warehousesDropdown"
-                                [placeholderLabel]="localeData.select_warehouse"
-                                [noEntriesFoundLabel]="localeData.no_result_found"
+                                [placeholderLabel]="commonLocaleData?.app_select_warehouse"
+                                [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                 class="mat-select-search-inventory"
                                 [clearSearchInput]="false"
                             >
@@ -102,14 +102,14 @@
                         [multiple]="true"
                         [(ngModel)]="selectedStockGroup"
                         class="stock-mat-salect"
-                        [placeholder]="localeData.select_group"
+                        [placeholder]="commonLocaleData?.app_select_group"
                         (ngModelChange)="onStockGroupChange()"
                     >
                         <mat-option class="balance-options">
                             <ngx-mat-select-search
                                 [formControl]="stockGroupsDropdown"
-                                [placeholderLabel]="localeData.select_group"
-                                [noEntriesFoundLabel]="localeData.no_result_found"
+                                [placeholderLabel]="commonLocaleData?.app_select_group"
+                                [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                 class="mat-select-search-inventory"
                                 [clearSearchInput]="false"
                             >
@@ -127,7 +127,7 @@
         @if (hasActiveFilters) {
             <button matButton="outlined" class="ml-3 mr-0" (click)="clearFilters()">
                 <span class="icon-cross"></span>
-                {{ localeData.clear_filter }}
+                {{ commonLocaleData?.app_clear_filter }}
             </button>
         }
     </div>
@@ -142,12 +142,12 @@
                         <p class="font-size-16 font-weight-semibold mb-1">
                             <amount-field
                                 [amount]="reportData?.totals?.totalValue"
-                                [currencySymbol]="false"
+                                [currencySymbol]="activeCompanyProfile?.baseCurrencySymbol"
                                 [currencyCode]="false"
                             ></amount-field>
                         </p>
                         <p class="font-size-14 mb-0">
-                            {{ localeData.qty }}:
+                            {{ commonLocaleData?.app_quantity }}:
                             <amount-field
                                 [amount]="reportData?.totals?.totalQuantity"
                                 [currencySymbol]="false"
@@ -167,10 +167,14 @@
                         <div class="flex-grow-1">
                             <p class="font-size-14 mb-1">{{ b?.range }}</p>
                             <p class="font-size-16 font-weight-semibold mb-1">
-                                <amount-field [amount]="b?.value" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                                <amount-field
+                                    [amount]="b?.value"
+                                    [currencySymbol]="activeCompanyProfile?.baseCurrencySymbol"
+                                    [currencyCode]="false"
+                                ></amount-field>
                             </p>
                             <p class="font-size-14 mb-0">
-                                {{ localeData.qty }}:
+                                {{ commonLocaleData?.app_quantity }}:
                                 <amount-field [amount]="b?.quantity" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                             </p>
                         </div>
@@ -209,7 +213,7 @@
                         {{ item?.stockName }}
                     </td>
                     <td mat-footer-cell *matFooterCellDef class="font-weight-semibold" [style.width.%]="columnWidths.stockName">
-                        {{ localeData.total }}
+                        {{ commonLocaleData?.app_total }}
                     </td>
                 </ng-container>
 
@@ -264,7 +268,7 @@
                 @for (col of bucketCols; track col.range; let i = $index) {
                     <ng-container [matColumnDef]="col.qtyColId">
                         <th mat-header-cell *matHeaderCellDef class="text-right" [style.width.%]="columnWidths.base">
-                            {{ localeData.qty }}
+                            {{ commonLocaleData?.app_quantity }}
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
                             <amount-field
@@ -284,7 +288,7 @@
 
                     <ng-container [matColumnDef]="col.valueColId">
                         <th mat-header-cell *matHeaderCellDef class="text-right" [style.width.%]="columnWidths.base">
-                            {{ localeData.value }}
+                            {{ commonLocaleData?.app_value }}
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
                             <amount-field
@@ -385,7 +389,7 @@
                                             class="sar-group-th__child d-flex align-items-center justify-content-end cursor-pointer column-gap-05 font-weight-semibold"
                                             (click)="toggleBucketSort(i, 'qty')"
                                         >
-                                            <span class="font-size-14">{{ localeData.qty }}</span>
+                                            <span class="font-size-14">{{ commonLocaleData?.app_quantity }}</span>
                                             @if (getBucketSortDir(i, 'qty') === 'asc') {
                                                 <span class="icon-sort-asc font-size-9 active-text-color"></span>
                                             } @else if (getBucketSortDir(i, 'qty') === 'desc') {
@@ -398,7 +402,7 @@
                                             class="sar-group-th__child d-flex align-items-center justify-content-end cursor-pointer column-gap-05 font-weight-semibold border-left"
                                             (click)="toggleBucketSort(i, 'value')"
                                         >
-                                            <span class="font-size-14">{{ localeData.value }}</span>
+                                            <span class="font-size-14">{{ commonLocaleData?.app_value }}</span>
                                             @if (getBucketSortDir(i, 'value') === 'asc') {
                                                 <span class="icon-sort-asc font-size-9 active-text-color"></span>
                                             } @else if (getBucketSortDir(i, 'value') === 'desc') {
@@ -423,13 +427,13 @@
                 <tr mat-footer-row *matFooterRowDef="displayedColumns" class="sar-total-row"></tr>
 
                 <!-- No-data row -->
-                <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell text-center py-4" [attr.colspan]="totalColspan">
-                        @if (!isLoading) {
-                            {{ localeData.no_data_found }}
-                        }
-                    </td>
-                </tr>
+                @if (!isLoading) {
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell text-center py-4" [attr.colspan]="totalColspan">
+                            {{ commonLocaleData?.app_no_data_found }}
+                        </td>
+                    </tr>
+                }
             </table>
         </div>
     }

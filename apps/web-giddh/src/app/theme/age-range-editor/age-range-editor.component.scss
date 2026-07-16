@@ -1,60 +1,8 @@
 .aging-range-popup {
     min-width: 180px;
     max-width: 220px;
-    background-color: var(--color-white);
-
-    .range-title {
-        font-size: 12px;
-        color: var(--color-medium-gray);
-        text-transform: uppercase;
-        letter-spacing: 0.2px;
-    }
 
     .range-label {
         width: 40px;
-        font-size: 13px;
-        color: var(--color-dark-gray);
-    }
-
-    .range-input {
-        flex: 1;
-        height: 30px;
-        padding: 2px 8px;
-        font-size: 13px;
-        border-radius: 4px;
-        border: 1px solid var(--color-border-medium);
-        outline: none;
-        box-shadow: none;
-        transition: border-color 0.15s ease-in-out;
-
-        &:focus,
-        &:focus-visible {
-            outline: none;
-            box-shadow: none;
-            border-color: var(--color-border-medium);
-        }
-
-        &:disabled {
-            background-color: var(--color-white);
-            color: var(--color-dark-black);
-            opacity: 1;
-        }
-    }
-
-    ::ng-deep text-field .range-input {
-        border: 1px solid var(--color-border-medium) !important;
-        box-shadow: none !important;
-        outline: none !important;
-
-        &:focus,
-        &:focus-visible {
-            border-color: var(--color-border-medium) !important;
-            box-shadow: none !important;
-            outline: none !important;
-        }
-    }
-
-    .range-error {
-        font-size: 11px;
     }
 }

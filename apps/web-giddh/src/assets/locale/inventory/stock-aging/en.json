@@ -1,20 +1,10 @@
 {
-    "date": "Date",
-    "select_branch": "Select Branch",
-    "select_warehouse": "Select Warehouse",
-    "select_group": "Select Group",
-    "no_result_found": "No result found",
-    "clear_filter": "Clear Filter",
     "total_stock_value": "Total Stock Value",
-    "qty": "Qty",
     "item_name": "Item Name",
     "search_item_name": "search item name",
     "edit_range": "edit range",
-    "value": "Value",
-    "no_data_found": "No data Found",
     "uom": "UOM",
-    "total_qty": "Total Qty",
+    "total_qty": "Total Quantity",
     "total_value": "Total Value",
-    "total": "Total",
     "sr": "#"
 }

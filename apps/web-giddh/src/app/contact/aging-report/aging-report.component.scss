@@ -172,27 +172,6 @@ tr.mat-header-row {
     margin: 0 !important;
 }
 
-::ng-deep.aging-dropdown-table {
-    max-width: 260px !important;
-    width: auto;
-    padding: 0;
-    margin-top: 8px;
-    box-shadow: 0 4px 16px var(--color-shadow-light);
-    border-radius: 6px;
-    overflow: hidden;
-
-    .mat-mdc-menu-content {
-        padding: 0 !important;
-    }
-}
-
-.aging-range-edit-icon {
-    font-size: 11px;
-    color: var(--color-blue, #1976d2);
-    margin-left: 4px;
-    line-height: 1;
-}
-
 .icon-cross {
     line-height: 32px;
 }

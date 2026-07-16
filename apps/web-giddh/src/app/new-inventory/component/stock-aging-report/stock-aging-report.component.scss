@@ -1,4 +1,4 @@
-// Component-specific dimensions (colors come from the global theme).
+// Component-specific dimensions (colors come from the global theme)
 $sar-group-header-height: 64px;
 $sar-group-th-half-height: 32px;
 
@@ -7,43 +7,38 @@ $sar-group-th-half-height: 32px;
     width: 100%;
 }
 
-// Bucket header pill: discreet by default; edit icon reveals on hover / open.
-.stock-aging-report .sar-bucket-btn.mat-mdc-outlined-button {
-    min-width: 0;
-    height: 24px;
-    line-height: 24px;
-    border-color: transparent !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    transition: border-color 0.15s ease-in-out;
+// Bucket header pill: discreet by default; edit icon reveals on hover / open
+.stock-aging-report {
+    .sar-bucket-btn.mat-mdc-outlined-button {
+        min-width: 0;
+        height: 24px;
+        line-height: 24px;
+        border-color: transparent !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        transition: border-color 0.15s ease-in-out;
 
-    .sar-bucket-edit-icon {
-        visibility: hidden;
+        .sar-bucket-edit-icon {
+            visibility: hidden;
+        }
+
+        &[aria-expanded='true'] {
+            border-color: var(--color-blue) !important;
+
+            .sar-bucket-edit-icon {
+                visibility: visible;
+            }
+        }
     }
 
-    &[aria-expanded='true'] {
+    .sar-mat-table:hover .sar-bucket-btn.mat-mdc-outlined-button {
         border-color: var(--color-blue) !important;
+
         .sar-bucket-edit-icon {
             visibility: visible;
         }
     }
-}
 
-.stock-aging-report .sar-mat-table:hover .sar-bucket-btn.mat-mdc-outlined-button {
-    border-color: var(--color-blue) !important;
-
-    .sar-bucket-edit-icon {
-        visibility: visible;
-    }
-}
-
-::ng-deep .sar-aging-menu {
-    .mat-mdc-menu-content {
-        padding: 0 !important;
-    }
-}
-
-.stock-aging-report {
     min-width: 1572px;
     max-width: 1600px;
 
@@ -96,8 +91,7 @@ $sar-group-th-half-height: 32px;
             height: $sar-group-header-height;
         }
 
-        // Shared borders / bg / font-weight / flex sizing come from utility
-        // classes in the template.
+        // Shared borders / bg / font-weight / flex sizing come from utility classes in the template
         .sar-group-th--leaf {
             padding: 8px 10px;
             white-space: nowrap;
@@ -122,7 +116,7 @@ $sar-group-th-half-height: 32px;
             padding: 0 10px;
         }
 
-        // Zero-height row used only to register per-column widths.
+        // Zero-height row used only to register per-column widths
         .sar-leaf-header-row {
             height: 0 !important;
 
@@ -139,5 +133,11 @@ $sar-group-th-half-height: 32px;
         .sar-total-row .mat-mdc-footer-cell {
             font-weight: var(--font-weight-semibold);
         }
+    }
+}
+
+::ng-deep .sar-aging-menu {
+    .mat-mdc-menu-content {
+        padding: 0 !important;
     }
 }
