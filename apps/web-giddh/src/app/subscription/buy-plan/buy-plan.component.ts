@@ -1,11 +1,11 @@
 import { ViewSubscriptionComponentStore } from './../view-subscription/utility/view-subscription.store';
 import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild, computed, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { StripePaymentDialogComponent, StripePaymentDialogData } from './stripe-payment-dialog/stripe-payment-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, delay, take, filter } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, delay, take, filter, Subject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
@@ -45,6 +45,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     @ViewChild('countryList', { static: false }) public countryList: MatSelect;
     /** Stripe Payment Element container reference */
     @ViewChild('stripePaymentElement') public stripePaymentElementRef: ElementRef;
+    /** Advance payment dialog template reference */
+    @ViewChild('advancePaymentDialog') advancePaymentDialogTemplate: any;
     /** This will use for hold table data */
     public inputData: any[] | null = null;
     /* This will hold local JSON data */
@@ -117,6 +119,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isFormSubmitted = signal<boolean>(false);
     /** Hold selected plan*/
     public selectedPlan = signal<any>(null);
+    /** Signal to track advance payment dialog step */
+    public advancePaymentDialogStep = signal<number>(0);
+    /** Dialog reference for advance payment confirmation */
+    private advancePaymentDialogRef: MatDialogRef<any> | null = null;
     /** Hold session source observable*/
     public session$: Observable<SessionState>;
     /** Hold state source observable*/
@@ -395,9 +401,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
             if (queryParams?.redirectUrl) {
                 this.afterSuccessRedirectionUrl = queryParams?.redirectUrl;
-            }
-            if (queryParams?.includeNextBill !== undefined) {
-                this.includeNextBill = queryParams?.includeNextBill === 'true';
             }
         });
 
@@ -1716,7 +1719,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.isChangePlan || this.isRenewPlan) {
             reqObj['subscriptionId'] = this.subscriptionId;
         }
-        if (this.isChangePlan && this.includeNextBill !== null) {
+        if (this.isChangePlan && this.advancePaymentDialogRef) {
             reqObj['includeNextBill'] = this.includeNextBill;
         }
         if (this.selectedPlan()?.uniqueName && reqObj?.countryCode) {
@@ -1950,6 +1953,40 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.componentStore.createSubscription(request);
             }
         }, 100);
+    }
+
+    /**
+     * This will use for advance payment confirmation dialog
+     *
+     * @memberof BuyPlanComponent
+     */
+    public confirmationForAdvancePayment(): void {
+        this.advancePaymentDialogStep.set(0);
+        const dialogConfig: MatDialogConfig = {
+            panelClass: ['advance-payment-dialog', 'mat-dialog-md'],
+            role: 'alertdialog',
+            ariaLabel: 'advancePaymentDialog',
+            disableClose: true
+        };
+        this.advancePaymentDialogRef = this.dialog.open(this.advancePaymentDialogTemplate, dialogConfig);
+
+        this.advancePaymentDialogRef.afterClosed().subscribe(result => {
+            this.advancePaymentDialogRef = null;
+            this.includeNextBill = result;
+            this.onSubmit('buy');
+            this.setFinalAmount();
+        });
+    }
+
+    /**
+     * Handle Yes button click in advance payment dialog
+     *
+     * @memberof BuyPlanComponent
+     */
+    public onAdvancePaymentYes(): void {
+        this.includeNextBill = true;
+        this.setFinalAmount();
+        this.advancePaymentDialogStep.set(1);
     }
 
     /**
