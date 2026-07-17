@@ -941,28 +941,6 @@
                                 [currencyCode]="selectedPlan()?.currency?.code"
                             ></amount-field>
                         </div>
-                        @if (isChangePlan && (includeNextBill !== null || viewSubscriptionData?.isPrepaidExist)) {
-                            @if (calculationResponse?.currentUpgradeAmount) {
-                                <div class="d-flex justify-content-between border-bottom py-3 column-gap-2">
-                                    <span>{{ localeData?.current_cycle_amount }}</span>
-                                    <amount-field
-                                        [amount]="calculationResponse?.currentUpgradeAmount ?? 0"
-                                        [currencySymbol]="selectedPlan()?.currency?.symbol"
-                                        [currencyCode]="selectedPlan()?.currency?.code"
-                                    ></amount-field>
-                                </div>
-                            }
-                            @if (calculationResponse?.nextUpgradeAmount) {
-                                <div class="d-flex justify-content-between border-bottom py-3 column-gap-2">
-                                    <span>{{ localeData?.next_cycle_amount }}</span>
-                                    <amount-field
-                                        [amount]="calculationResponse?.nextUpgradeAmount ?? 0"
-                                        [currencySymbol]="selectedPlan()?.currency?.symbol"
-                                        [currencyCode]="selectedPlan()?.currency?.code"
-                                    ></amount-field>
-                                </div>
-                            }
-                        }
                         <div *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="d-flex justify-content-between py-3">
                                 <p class="strong">{{ localeData?.final_amount }}</p>
@@ -1050,7 +1028,11 @@
                                 matButton="filled"
                                 class="w-100 mt-2"
                                 *ngIf="selectedStep() === 2 && !showStripePaymentElement"
-                                (click)="onSubmit('buy')"
+                                (click)="
+                                    isChangePlan && (viewSubscriptionData?.isPrepaidExist || !viewSubscriptionData.autoPay)
+                                        ? confirmationForAdvancePayment()
+                                        : onSubmit('buy')
+                                "
                             >
                                 {{ localeData?.buy_plan }}
                             </button>
@@ -1079,3 +1061,79 @@
         </div>
     </ng-template>
 </div>
+
+<!-- Advance Payment Dialog -->
+<ng-template #advancePaymentDialog>
+    @switch (advancePaymentDialogStep()) {
+        @case (0) {
+            <!-- First step: Confirmation -->
+            <h2 class="dialog-header">{{ localeData?.change_plan_pay_next_cycle }}</h2>
+
+            <mat-dialog-content>
+                <p class="font-size-15 font-weight-semibold">{{ localeData?.purchase_same_plan_next_cycle }}</p>
+                <p class="text-muted">{{ localeData?.current_subscription_remain_active }}</p>
+            </mat-dialog-content>
+
+            <mat-dialog-actions align="end">
+                <button matButton="filled" color="primary" class="ml-2" (click)="onAdvancePaymentYes()">
+                    {{ commonLocaleData?.app_yes }}
+                </button>
+                <button matButton="outlined" (click)="advancePaymentDialogRef.close(false)">
+                    {{ commonLocaleData?.app_no }}
+                </button>
+            </mat-dialog-actions>
+        }
+        @case (1) {
+            <!-- Second step: Summary -->
+            <h2 class="dialog-header">
+                <div class="d-flex align-items-center column-gap-1">
+                    <i class="font-size-20 icon-summary"></i>
+                    <span>{{ localeData?.advance_payment_summary }}</span>
+                </div>
+            </h2>
+
+            <mat-dialog-content class="font-size-14">
+                @if (calculationResponse?.currentUpgradeAmount) {
+                    <div class="d-flex justify-content-between border-bottom py-3 column-gap-2">
+                        <span>{{ localeData?.current_cycle_amount }}</span>
+                        <amount-field
+                            [amount]="calculationResponse?.currentUpgradeAmount ?? 0"
+                            [currencySymbol]="selectedPlan()?.currency?.symbol"
+                            [currencyCode]="selectedPlan()?.currency?.code"
+                        ></amount-field>
+                    </div>
+                }
+                @if (calculationResponse?.nextUpgradeAmount) {
+                    <div class="d-flex justify-content-between border-bottom py-3 column-gap-2">
+                        <span>{{ localeData?.next_cycle_amount }}</span>
+                        <amount-field
+                            [amount]="calculationResponse?.nextUpgradeAmount ?? 0"
+                            [currencySymbol]="selectedPlan()?.currency?.symbol"
+                            [currencyCode]="selectedPlan()?.currency?.code"
+                        ></amount-field>
+                    </div>
+                }
+                <div class="d-flex justify-content-between py-3 column-gap-2 font-weight-bold">
+                    <span>
+                        {{ localeData?.final_amount }}
+                        <p class="d-inline font-weight-regular" *ngIf="selectedPlan()?.taxTotal >= 0">({{ localeData?.including_tax }})</p>
+                    </span>
+                    <amount-field
+                        [amount]="finalPlanAmount"
+                        [currencySymbol]="selectedPlan()?.currency?.symbol"
+                        [currencyCode]="selectedPlan()?.currency?.code"
+                    ></amount-field>
+                </div>
+            </mat-dialog-content>
+
+            <mat-dialog-actions align="end">
+                <button matButton="filled" color="primary" class="ml-2" (click)="advancePaymentDialogRef.close(true)">
+                    {{ localeData?.proceed_to_pay }} {{ selectedPlan()?.currency?.symbol }} {{ finalPlanAmount }}
+                </button>
+                <button matButton="outlined" (click)="advancePaymentDialogStep.set(0)">
+                    {{ commonLocaleData?.app_back }}
+                </button>
+            </mat-dialog-actions>
+        }
+    }
+</ng-template>

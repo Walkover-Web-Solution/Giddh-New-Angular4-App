@@ -172,5 +172,8 @@
         "next_cycle_amount": "Amount for Next Billing Cycle",
         "purchase_same_plan_next_cycle": "Purchase same plan for your next billing cycle?",
         "current_subscription_remain_active": "Your current subscription will remain active until it expires. The same plan will automatically start after that.",
-        "change_plan_pay_next_cycle": "Change Plan & Pay for Next Billing Cycle"
+        "change_plan_pay_next_cycle": "Change Plan & Pay for Next Billing Cycle",
+        "proceed_to_pay": "Proceed to Pay",
+        "advance_payment_summary": "Advance Payment Summary"
+        
     }

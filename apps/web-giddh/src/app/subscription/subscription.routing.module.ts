@@ -24,6 +24,9 @@ import { WalletComponent } from './wallet/wallet.component';
                 path: 'subscription/view-subscription/:id', component: ViewSubscriptionComponent
             },
             {
+                path: 'subscription/wallet/:subscriptionId', component: WalletComponent
+            },
+            {
                 path: 'verify-ownership/:requestId', component: VerifyOwnershipDialogComponent
             },
             {
@@ -34,9 +37,6 @@ import { WalletComponent } from './wallet/wallet.component';
             },
             {
                 path: 'subscription/call-back', component: CallBackPageComponent
-            },
-            {
-                path: 'subscription/wallet/:subscriptionId', component: WalletComponent
             }
         ])
     ],
