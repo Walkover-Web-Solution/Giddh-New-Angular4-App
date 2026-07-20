@@ -1028,11 +1028,7 @@
                                 matButton="filled"
                                 class="w-100 mt-2"
                                 *ngIf="selectedStep() === 2 && !showStripePaymentElement"
-                                (click)="
-                                    isChangePlan && (viewSubscriptionData?.isPrepaidExist || !viewSubscriptionData.autoPay)
-                                        ? confirmationForAdvancePayment()
-                                        : onSubmit('buy')
-                                "
+                                (click)="initiateBuyPlan()"
                             >
                                 {{ localeData?.buy_plan }}
                             </button>
@@ -1067,7 +1063,10 @@
     @switch (advancePaymentDialogStep()) {
         @case (0) {
             <!-- First step: Confirmation -->
-            <h2 class="dialog-header">{{ localeData?.add_next_billing_cycle }}</h2>
+            <h2 class="dialog-header d-flex align-items-center justify-content-between w-100">
+                <span>{{ localeData?.add_next_billing_cycle }}</span>
+                <i class="icon-cross cursor-pointer mr-3" (click)="advancePaymentDialogRef.close(AdvancePaymentDialogAction.Close)"></i>
+            </h2>
 
             <mat-dialog-content>
                 <p class="font-size-15">{{ localeData?.add_next_billing_cycle_description }}</p>
@@ -1077,18 +1076,19 @@
                 <button matButton="filled" color="primary" class="ml-2" (click)="onAdvancePaymentYes()">
                     {{ localeData?.yes_add_next_cycle }}
                 </button>
-                <button matButton="outlined" (click)="advancePaymentDialogRef.close(false)">
+                <button matButton="outlined" (click)="advancePaymentDialogRef.close(AdvancePaymentDialogAction.BuyCurrentCycle)">
                     {{ localeData?.no_current_cycle_only }}
                 </button>
             </mat-dialog-actions>
         }
         @case (1) {
             <!-- Second step: Summary -->
-            <h2 class="dialog-header">
+            <h2 class="dialog-header d-flex align-items-center justify-content-between w-100">
                 <div class="d-flex align-items-center column-gap-1">
                     <i class="font-size-20 icon-summary"></i>
                     <span>{{ localeData?.advance_payment_summary }}</span>
                 </div>
+                <i class="icon-cross cursor-pointer mr-3" (click)="advancePaymentDialogRef.close(AdvancePaymentDialogAction.Close)"></i>
             </h2>
 
             <mat-dialog-content class="font-size-14">
@@ -1147,7 +1147,12 @@
             </mat-dialog-content>
 
             <mat-dialog-actions align="end">
-                <button matButton="filled" color="primary" class="ml-2" (click)="advancePaymentDialogRef.close(true)">
+                <button
+                    matButton="filled"
+                    color="primary"
+                    class="ml-2"
+                    (click)="advancePaymentDialogRef.close(AdvancePaymentDialogAction.BuyNextCycle)"
+                >
                     {{ localeData?.proceed_to_pay }} {{ selectedPlan()?.currency?.symbol }} {{ finalPlanAmount }}
                 </button>
                 <button matButton="outlined" (click)="advancePaymentDialogStep.set(0)">
