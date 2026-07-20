@@ -1971,18 +1971,45 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public initiateBuyPlan(): void {
-        const status = this.viewSubscriptionData?.status?.toLowerCase();
-        const shouldConfirmAdvancePayment =
-            this.isChangePlan &&
-            status === 'active' &&
-            !this.viewSubscriptionData?.isPrepaidExist &&
-            !this.viewSubscriptionData?.autoPay;
-
-        if (shouldConfirmAdvancePayment) {
+        if (this.advancePaymentInChangePlan) {
             this.confirmationForAdvancePayment();
         } else {
             this.onSubmit('buy');
         }
+    }
+
+    /**
+     * Whether advance payment confirmation is required in the change-plan flow
+     * (active subscription without prepaid and without autoPay).
+     *
+     * @readonly
+     * @memberof BuyPlanComponent
+     */
+    public get advancePaymentInChangePlan(): boolean {
+        const status = this.viewSubscriptionData?.status?.toLowerCase();
+        return (
+            this.isChangePlan &&
+            status === 'active' &&
+            !this.viewSubscriptionData?.isPrepaidExist &&
+            !this.viewSubscriptionData?.autoPay
+        );
+    }
+
+    /**
+     * Whether advance payment confirmation is required in the upgrade-plan flow
+     * (active subscription with prepaid existing and without autoPay).
+     *
+     * @readonly
+     * @memberof BuyPlanComponent
+     */
+    public get advancePaymentInUpgradePlan(): boolean {
+        const status = this.viewSubscriptionData?.status?.toLowerCase();
+        return (
+            this.isChangePlan &&
+            status === 'active' &&
+            this.viewSubscriptionData?.isPrepaidExist &&
+            !this.viewSubscriptionData?.autoPay
+        );
     }
 
     /**
