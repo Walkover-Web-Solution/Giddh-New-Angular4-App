@@ -28,6 +28,13 @@ import { ServiceConfig } from '../../services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { SessionState } from '../../store/authentication/authentication.reducer';
 
+/** Enum for advance payment dialog actions */
+enum AdvancePaymentDialogAction {
+    BuyNextCycle = 'buy_next_cycle',
+    BuyCurrentCycle = 'buy_current_cycle',
+    Close = 'close'
+}
+
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
@@ -37,6 +44,8 @@ import { SessionState } from '../../store/authentication/authentication.reducer'
 })
 
 export class BuyPlanComponent implements OnInit, OnDestroy {
+    /** Enum for advance payment dialog actions */
+    public readonly AdvancePaymentDialogAction = AdvancePaymentDialogAction;
     /** Stepper Form instance */
     @ViewChild('stepper') stepperIcon: any;
     /** This will use for table content scroll in mobile */
@@ -1972,9 +1981,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.advancePaymentDialogRef.afterClosed().subscribe(result => {
             this.advancePaymentDialogRef = null;
-            this.includeNextBill = result;
-            this.onSubmit('buy');
-            this.setFinalAmount();
+            if (result === AdvancePaymentDialogAction.BuyNextCycle) {
+                this.includeNextBill = true;
+                this.onSubmit('buy');
+            } else if (result === AdvancePaymentDialogAction.BuyCurrentCycle) {
+                this.includeNextBill = false;
+                this.onSubmit('buy');
+            } else if (result === AdvancePaymentDialogAction.Close) {
+                this.setFinalAmount();
+            }
         });
     }
 
