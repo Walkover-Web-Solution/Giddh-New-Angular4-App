@@ -941,6 +941,30 @@
                                 [currencyCode]="selectedPlan()?.currency?.code"
                             ></amount-field>
                         </div>
+
+                        @if (advancePaymentInUpgradePlan) {
+                            @if (calculationResponse?.currentUpgradeAmount) {
+                                <div class="d-flex justify-content-between py-3 border-bottom column-gap-2">
+                                    <span>{{ localeData?.current_cycle_amount }}</span>
+                                    <amount-field
+                                        [amount]="calculationResponse?.currentUpgradeAmount ?? 0"
+                                        [currencySymbol]="selectedPlan()?.currency?.symbol"
+                                        [currencyCode]="selectedPlan()?.currency?.code"
+                                    ></amount-field>
+                                </div>
+                            }
+                            @if (calculationResponse?.nextUpgradeAmount) {
+                                <div class="d-flex justify-content-between py-3 column-gap-2 border-bottom">
+                                    <span>{{ localeData?.next_cycle_amount }}</span>
+                                    <amount-field
+                                        [amount]="calculationResponse?.nextUpgradeAmount ?? 0"
+                                        [currencySymbol]="selectedPlan()?.currency?.symbol"
+                                        [currencyCode]="selectedPlan()?.currency?.code"
+                                    ></amount-field>
+                                </div>
+                            }
+                        }
+
                         <div *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="d-flex justify-content-between py-3">
                                 <p class="strong">{{ localeData?.final_amount }}</p>
