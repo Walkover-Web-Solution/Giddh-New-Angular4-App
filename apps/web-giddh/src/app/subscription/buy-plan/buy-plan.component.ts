@@ -1965,6 +1965,27 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handles Buy Plan button click. Shows advance payment confirmation dialog
+     * for active change-plan flows without prepaid/autoPay, otherwise proceeds to buy.
+     *
+     * @memberof BuyPlanComponent
+     */
+    public initiateBuyPlan(): void {
+        const status = this.viewSubscriptionData?.status?.toLowerCase();
+        const shouldConfirmAdvancePayment =
+            this.isChangePlan &&
+            status === 'active' &&
+            !this.viewSubscriptionData?.isPrepaidExist &&
+            !this.viewSubscriptionData?.autoPay;
+
+        if (shouldConfirmAdvancePayment) {
+            this.confirmationForAdvancePayment();
+        } else {
+            this.onSubmit('buy');
+        }
+    }
+
+    /**
      * This will use for advance payment confirmation dialog
      *
      * @memberof BuyPlanComponent

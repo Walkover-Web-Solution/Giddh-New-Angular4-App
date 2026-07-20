@@ -1028,14 +1028,7 @@
                                 matButton="filled"
                                 class="w-100 mt-2"
                                 *ngIf="selectedStep() === 2 && !showStripePaymentElement"
-                                (click)="
-                                    isChangePlan &&
-                                    viewSubscriptionData?.status?.toLowerCase() === 'active' &&
-                                    !viewSubscriptionData?.isPrepaidExist &&
-                                    !viewSubscriptionData.autoPay
-                                        ? confirmationForAdvancePayment()
-                                        : onSubmit('buy')
-                                "
+                                (click)="initiateBuyPlan()"
                             >
                                 {{ localeData?.buy_plan }}
                             </button>
@@ -1070,11 +1063,9 @@
     @switch (advancePaymentDialogStep()) {
         @case (0) {
             <!-- First step: Confirmation -->
-            <h2 class="dialog-header">
-                <div class="d-flex align-items-center justify-content-between w-100">
-                    <span>{{ localeData?.add_next_billing_cycle }}</span>
-                    <i class="icon-cross cursor-pointer mr-3" (click)="advancePaymentDialogRef.close(AdvancePaymentDialogAction.Close)"></i>
-                </div>
+            <h2 class="dialog-header d-flex align-items-center justify-content-between w-100">
+                <span>{{ localeData?.add_next_billing_cycle }}</span>
+                <i class="icon-cross cursor-pointer mr-3" (click)="advancePaymentDialogRef.close(AdvancePaymentDialogAction.Close)"></i>
             </h2>
 
             <mat-dialog-content>
@@ -1092,14 +1083,12 @@
         }
         @case (1) {
             <!-- Second step: Summary -->
-            <h2 class="dialog-header">
-                <div class="d-flex align-items-center justify-content-between w-100">
-                    <div class="d-flex align-items-center column-gap-1">
-                        <i class="font-size-20 icon-summary"></i>
-                        <span>{{ localeData?.advance_payment_summary }}</span>
-                    </div>
-                    <i class="icon-cross cursor-pointer mr-3" (click)="advancePaymentDialogRef.close(AdvancePaymentDialogAction.Close)"></i>
+            <h2 class="dialog-header d-flex align-items-center justify-content-between w-100">
+                <div class="d-flex align-items-center column-gap-1">
+                    <i class="font-size-20 icon-summary"></i>
+                    <span>{{ localeData?.advance_payment_summary }}</span>
                 </div>
+                <i class="icon-cross cursor-pointer mr-3" (click)="advancePaymentDialogRef.close(AdvancePaymentDialogAction.Close)"></i>
             </h2>
 
             <mat-dialog-content class="font-size-14">
