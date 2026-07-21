@@ -282,7 +282,7 @@
                                         class="d-inline-block"
                                         [amount]="viewSubscriptionData?.prepaidSubscription?.amount"
                                         [currencySymbol]="viewSubscriptionData?.prepaidSubscription?.planCurrency?.symbol"
-                                        [currencyCode]="false"
+                                        [currencyCode]="viewSubscriptionData?.prepaidSubscription?.planCurrency?.code"
                                     ></amount-field>
                                 </div>
                                 @if (viewSubscriptionData?.prepaidSubscription?.taxTotal) {
@@ -292,7 +292,7 @@
                                             class="d-inline-block"
                                             [amount]="viewSubscriptionData?.prepaidSubscription?.taxTotal"
                                             [currencySymbol]="viewSubscriptionData?.prepaidSubscription?.planCurrency?.symbol"
-                                            [currencyCode]="false"
+                                            [currencyCode]="viewSubscriptionData?.prepaidSubscription?.planCurrency?.code"
                                         ></amount-field>
                                     </div>
                                 }
@@ -302,7 +302,7 @@
                                         class="d-inline-block font-weight-semibold"
                                         [amount]="prepaidTotalAmount"
                                         [currencySymbol]="viewSubscriptionData?.prepaidSubscription?.planCurrency?.symbol"
-                                        [currencyCode]="false"
+                                        [currencyCode]="viewSubscriptionData?.prepaidSubscription?.planCurrency?.code"
                                     ></amount-field>
                                 </div>
                             </div>

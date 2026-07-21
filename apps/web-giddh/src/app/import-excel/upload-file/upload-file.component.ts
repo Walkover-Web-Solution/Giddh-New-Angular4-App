@@ -115,9 +115,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     }
 
     public onFileChange(file: FileList) {
-        let validExts = ['csv', 'xls', 'xlsx'];
+        let validExts = [FileTypeEnum.CSV, FileTypeEnum.XLS, FileTypeEnum.XLSX];
         if (this.entity === this.voucherType.BankStatement) {
-            validExts = ['csv', 'xls', 'xlsx', 'pdf'];
+            validExts = [FileTypeEnum.CSV, FileTypeEnum.XLS, FileTypeEnum.XLSX, FileTypeEnum.PDF];
         }
         let type = (file && file.item(0)) ? this.getExt(file.item(0).name) : 'null';
         let isValidFileType = validExts.some(s => type === s);
@@ -329,7 +329,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         if (isPdf) {
             this.ledgerService.importStatement(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === 'success') {
-                    this.toasterService.successToast(this.localeData?.import_success || 'Import successful');
+                    this.toasterService.showSnackBar("success", this.localeData?.import_success || 'Import successful');
                     this.router.navigate(['/pages', 'ledger', this.accountUniqueName]);
                 } else {
                     this.toasterService.errorToast(response?.message);
