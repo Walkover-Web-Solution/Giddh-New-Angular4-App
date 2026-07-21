@@ -9,6 +9,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { ToasterService } from '../services/toaster.service';
+import { GeneralService } from '../services/general.service';
 import { AllReportsService } from './utility/all-reports.service';
 import { FilterOption, ReportItem } from './utility/all-reports.model';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
@@ -66,6 +67,8 @@ export class AllReportsComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     /** Current activated route (used for query params) */
     private route = inject(ActivatedRoute);
+    /** General service for common utilities */
+    private generalService = inject(GeneralService);
     /** RxJS unsubscribe stream for component teardown */
     private destroy$ = new Subject<void>();
 
@@ -239,11 +242,7 @@ export class AllReportsComponent implements OnInit, OnDestroy {
      */
     public selectCategory(key: string): void {
         this.activeCategory.set(key);
-        this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: { category: key === 'all' ? null : key },
-            queryParamsHandling: 'merge'
-        });
+        this.generalService.updateActivatedRouteQueryParams({ category: key === 'all' ? null : key });
     }
 
     /**
