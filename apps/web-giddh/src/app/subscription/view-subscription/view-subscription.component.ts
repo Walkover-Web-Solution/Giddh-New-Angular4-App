@@ -9,7 +9,6 @@ import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.comp
 import { MatMenuTrigger } from '@angular/material/menu';
 import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralService } from '../../services/general.service';
-import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
 import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 
@@ -51,12 +50,10 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public selectedMoveCompany: boolean = false;
     /** This will use for active company */
     public activeCompany: any = {};
-    /** True when advance payment can be shown (autoPay OFF and no prepaid exists) */
-    public showAdvancePayment: boolean = false;
 
     /**
      * Builds the advance-payment success message by replacing placeholders
-     * ([PLAN_NAME], [START_DATE], [END_DATE]) with values from prepaidSubscription.
+     * ([PLAN_NAME], [REMAINING_DAYS], [START_DATE]) with values from prepaidSubscription.
      *
      * @readonly
      * @memberof ViewSubscriptionComponent
@@ -68,10 +65,19 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
             return '';
         }
         const pipe = new GiddhDatePipe();
+        
+        // Calculate remaining days (same logic as isAdvancePaymentEligible)
+        const expiryStr = String(this.viewSubscriptionData?.expiry).split('-').reverse().join('-');
+        const remainingDays = Math.ceil(((new Date(expiryStr).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) + 1);
+        
+        // Handle pluralization
+        const daysText = remainingDays === 1 ? 'day' : 'days';
+        
         return template
             ?.replace('[PLAN_NAME]', prepaid.planName ?? '')
-            ?.replace('[START_DATE]', pipe.transform(prepaid.startDate) ?? '')
-            ?.replace('[END_DATE]', pipe.transform(prepaid.endDate) ?? '');
+            ?.replace('[REMAINING_DAYS]', remainingDays.toString())
+            ?.replace('day', daysText)
+            ?.replace('[START_DATE]', pipe.transform(prepaid.startDate) ?? '');
     }
 
     /**
@@ -83,10 +89,21 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public get isAdvancePaymentEligible(): boolean {
-        if (!this.showAdvancePayment) {
-            return false;
-        }
         return this.generalService.isAdvancePaymentEligible(this.viewSubscriptionData);
+    }
+
+    /**
+     * Calculates the total amount for prepaid subscription (amount + tax).
+     *
+     * @readonly
+     * @memberof ViewSubscriptionComponent
+     */
+    public get prepaidTotalAmount(): number {
+        const prepaid = this.viewSubscriptionData?.prepaidSubscription;
+        if (!prepaid) {
+            return 0;
+        }
+        return Number(prepaid.amount || 0) + Number(prepaid.taxTotal || 0);
     }
 
     /**
@@ -116,7 +133,6 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         private subscriptionComponentStore: SubscriptionComponentStore,
         private generalService: GeneralService,
         private toasterService: ToasterService,
-        private settingsProfileService: SettingsProfileService
     ) {
     }
 
@@ -142,12 +158,6 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
 
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
-        });
-
-        this.settingsProfileService.GetProfileInfo().pipe(take(1)).subscribe((response: any) => {
-            if (response?.status === 'success' && response?.body) {
-                this.showAdvancePayment = !(response.body.subscription?.autoPay || response.body.subscription?.isPrepaidExist);
-            }
         });
 
         this.cancelSubscription$.pipe(takeUntil(this.destroyed$)).subscribe(response => {

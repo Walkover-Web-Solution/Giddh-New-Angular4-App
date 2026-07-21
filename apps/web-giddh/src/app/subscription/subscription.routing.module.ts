@@ -24,25 +24,19 @@ import { WalletComponent } from './wallet/wallet.component';
                 path: 'subscription/view-subscription/:id', component: ViewSubscriptionComponent
             },
             {
+                path: 'subscription/wallet/:subscriptionId', component: WalletComponent
+            },
+            {
                 path: 'verify-ownership/:requestId', component: VerifyOwnershipDialogComponent
             },
             {
                 path: 'subscription/buy-plan', component: BuyPlanComponent
             },
             {
-                path: 'subscription/buy-plan/:id', component: BuyPlanComponent
-            },
-            {
-                path: 'subscription/activate-subscription/:id', component: BuyPlanComponent
-            },
-            {
                 path: 'subscription/:type/:id', component: BuyPlanComponent
             },
             {
                 path: 'subscription/call-back', component: CallBackPageComponent
-            },
-            {
-                path: 'subscription/wallet/:subscriptionId', component: WalletComponent
             }
         ])
     ],

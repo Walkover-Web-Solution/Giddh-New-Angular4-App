@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
 import { BehaviorSubject, Observable, ReplaySubject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { API_BULK_FETCH_LIMIT, BranchHierarchyType, SAMPLE_FILES_URL, IOption } from '../../app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, SAMPLE_FILES_URL, IOption } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -17,6 +18,8 @@ import { LedgerService } from '../../services/ledger.service';
 import { ImportExcelService } from '../../services/import-excel.service';
 import { CommonActions } from '../../actions/common.actions';
 import { FileTypeEnum } from '../../shared/Enums/common.enum';
+import { GenericAsideMenuAccountComponent } from '../../shared/generic-aside-menu-account/generic.aside.menu.account.component';
+import { AccountsAction } from '../../actions/accounts.actions';
 
 @Component({
     selector: 'upload-file',
@@ -87,6 +90,12 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public selectedFileExtension: string = '';
     /** Same debit credit column toggle for bank statement */
     public sameDebitCreditAmountColumn: boolean = false;
+    /** Dialog reference for the account aside pane */
+    private accountAsideMenuRef: MatDialogRef<any>;
+    /** Template reference for account aside menu */
+    @ViewChild('accountAsideMenu') public accountAsideMenu: any;
+    /** Observable for account creation success */
+    private createAccountIsSuccess$: Observable<boolean>;
 
     constructor(
         private toasterService: ToasterService,
@@ -95,10 +104,12 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private router: Router,
-        private ledgerComponentStore: LedgerComponentStore, // Commented out due to missing import
+        private ledgerComponentStore: LedgerComponentStore,
         private ledgerService: LedgerService,
         private importExcelService: ImportExcelService,
-        private commonAction: CommonActions
+        private commonAction: CommonActions,
+        private dialog: MatDialog,
+        private accountsAction: AccountsAction
     ) {
 
     }
@@ -220,6 +231,14 @@ export class UploadFileComponent implements OnInit, OnDestroy {
 
                 this.accountSearchResponseSubject.next(newOptions);
                 this.accountSearchRequest.isLoading = false;
+            }
+        });
+
+        // Subscribe to account creation success to refresh account list
+        this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
+        this.createAccountIsSuccess$.subscribe(response => {
+            if (response) {
+                this.searchAccount('', 1);
             }
         });
     }
@@ -373,5 +392,29 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         if (this.defaultCount === this.accountSearchRequest.count) {
             this.searchAccount(this.accountSearchRequest.q, this.accountSearchRequest.page + 1);
         }
+    }
+
+    /**
+     * Opens the account creation dialog for creating a new bank account.
+     *
+     * @memberof UploadFileComponent
+     */
+    public createNewAccount(): void {
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
+
+        this.accountAsideMenuRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            this.accountAsideMenuRef = undefined;
+        });
+    }
+
+    /**
+     * Handles the add event from the account aside menu.
+     *
+     * @param {AddAccountRequest} event
+     * @memberof UploadFileComponent
+     */
+    public addNewAccount(event: any): void {
+        this.store.dispatch(this.accountsAction.createAccountV2(event.activeGroupUniqueName, event.accountRequest));
+        this.accountAsideMenuRef.close();
     }
 }

@@ -56,5 +56,14 @@
             height: 40px;
             flex-shrink: 0;
         }
+
+        .star-icon.fa-star-o {
+            opacity: 0.5;
+            transition: opacity 0.15s ease;
+        }
+
+        &:hover .star-icon.fa-star-o {
+            opacity: 1;
+        }
     }
 }

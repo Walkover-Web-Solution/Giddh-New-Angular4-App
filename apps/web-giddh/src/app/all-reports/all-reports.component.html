@@ -1,37 +1,41 @@
-<div class="all-reports-page bg-light-gray min-vh-100">
+<div
+    class="all-reports-page bg-light-gray min-vh-100"
+    appTranslate
+    [file]="'all-reports'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu class="position-absolute"></hamburger-menu>
     <div class="container-lg py-4">
-        <div class="d-flex align-items-center mb-3">
-            <p class="font-size-20 font-weight-semibold mb-0">Reports</p>
-        </div>
-
-        <!-- Category filter chips -->
-        <div class="d-flex flex-wrap align-items-center mb-4 column-gap-1 row-gap-1">
-            @for (cat of categories; track cat.key) {
-                <button
-                    mat-stroked-button
-                    class="bg-table-background-color"
-                    [class.active]="activeCategory() === cat.key"
-                    [style.background]="activeCategory() === cat.key ? cat.bgColor : null"
-                    [style.color]="activeCategory() === cat.key ? cat.color : null"
-                    [style.border-color]="activeCategory() === cat.key ? cat.color : null"
-                    (click)="selectCategory(cat.key)"
-                    type="button"
-                >
-                    {{ cat.label }}
-                </button>
-            }
-        </div>
-
         @if (isLoading()) {
-            <div class="d-flex justify-content-center py-5">
-                <mat-spinner [diameter]="40"></mat-spinner>
-            </div>
+            <giddh-page-loader></giddh-page-loader>
         } @else {
+            <div class="d-flex align-items-center mb-3">
+                <p class="font-size-20 font-weight-semibold mb-0">{{ localeData?.page_heading }}</p>
+            </div>
+
+            <!-- Category filter chips -->
+            <div class="d-flex flex-wrap align-items-center mb-4 column-gap-1 row-gap-1">
+                @for (cat of categories(); track cat.key) {
+                    <button
+                        mat-stroked-button
+                        class="bg-table-background-color"
+                        [class.active]="activeCategory() === cat.key"
+                        [style.background]="activeCategory() === cat.key ? cat.bgColor : null"
+                        [style.color]="activeCategory() === cat.key ? cat.color : null"
+                        [style.border-color]="activeCategory() === cat.key ? cat.color : null"
+                        (click)="selectCategory(cat.key)"
+                        type="button"
+                    >
+                        {{ cat.label }}
+                    </button>
+                }
+            </div>
+
             <!-- Favorites section -->
             @if (favorites().length > 0) {
                 <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h3 class="font-size-16 font-weight-semibold mb-0">Favorites</h3>
+                    <h3 class="font-size-16 font-weight-semibold mb-0">{{ localeData?.favorites }}</h3>
                 </div>
                 <div class="reports-grid d-grid row-gap-3 column-gap-3 mb-4">
                     @for (report of favorites(); track report.uniqueName) {
@@ -47,13 +51,21 @@
                                 [style.background]="reportCategory(activeCategory())?.bgColor"
                                 [style.color]="reportCategory(activeCategory())?.color"
                             >
-                                <i [ngClass]="categoryIcon(report)" class="lh-1 font-size-20"></i>
+                                @if (isSvgIcon(categoryIcon(report))) {
+                                    <img [src]="'assets/images/' + categoryIcon(report)" alt="" width="20" height="20" />
+                                } @else {
+                                    <i [ngClass]="categoryIcon(report)" class="lh-1 font-size-20"></i>
+                                }
                             </div>
                             <div class="flex-grow-1 min-width-0">
                                 <p class="mb-0 font-size-14 font-weight-semibold">{{ displayName(report.name) }}</p>
                                 <p class="mb-0 font-size-12 light-gray mt-1">{{ categoryLabel(report) }}</p>
                             </div>
-                            <button mat-icon-button [matTooltip]="'Remove from favorites'" (click)="toggleFavorite($event, report)">
+                            <button
+                                mat-icon-button
+                                [matTooltip]="localeData?.remove_from_favorites || 'Remove from favorites'"
+                                (click)="toggleFavorite($event, report)"
+                            >
                                 <i class="fa fa-star star-icon filled text-primary"></i>
                             </button>
                         </mat-card>
@@ -76,11 +88,15 @@
                         >
                             <div class="category-card-header d-flex align-items-center mb-3">
                                 <div
-                                    class="font-size-20 border-radius-8 d-flex align-items-center justify-content-center"
+                                    class="font-size-20 border-radius-8 d-flex align-items-center justify-content-center category-icon"
                                     [style.background]="group.category.bgColor"
                                     [style.color]="group.category.color"
                                 >
-                                    <i [ngClass]="group.category.icon" class="lh-1"></i>
+                                    @if (isSvgIcon(group.category.icon)) {
+                                        <img [src]="'assets/images/' + group.category.icon" alt="" width="20" height="20" />
+                                    } @else {
+                                        <i [ngClass]="group.category.icon" class="lh-1"></i>
+                                    }
                                 </div>
                                 <div class="ml-2">
                                     <p class="font-weight-semibold font-size-16 mb-0">{{ group.category.label }} Reports</p>
@@ -103,12 +119,14 @@
                                         </li>
                                     }
                                     @if (group.reports.length > 4) {
-                                        <li class="more-count light-gray cursor-default">+{{ group.reports.length - 4 }} more</li>
+                                        <li class="more-count light-gray cursor-default">
+                                            +{{ group.reports.length - 4 }} {{ commonLocaleData?.app_more }}
+                                        </li>
                                     }
                                 </ul>
-                                <a mat-button class="mt-auto" (click)="selectCategory(group.category.key)">View all</a>
+                                <a mat-button class="mt-auto" (click)="selectCategory(group.category.key)">{{ localeData?.view_all }}</a>
                             } @else {
-                                <p class="empty-hint mb-0 font-size-14 light-gray">No reports available</p>
+                                <p class="empty-hint mb-0 font-size-14 light-gray">{{ localeData?.no_reports_available }}</p>
                             }
                         </mat-card>
                     }
@@ -127,7 +145,11 @@
                                 [style.background]="reportCategory(activeCategory())?.bgColor"
                                 [style.color]="reportCategory(activeCategory())?.color"
                             >
-                                <i [ngClass]="categoryIcon(report)" class="lh-1 font-size-20"></i>
+                                @if (isSvgIcon(categoryIcon(report))) {
+                                    <img [src]="'assets/images/' + categoryIcon(report)" alt="" width="20" height="20" />
+                                } @else {
+                                    <i [ngClass]="categoryIcon(report)" class="lh-1 font-size-20"></i>
+                                }
                             </div>
                             <div class="flex-grow-1 min-width-0">
                                 <p class="mb-0 font-size-14 font-weight-semibold">{{ displayName(report.name) }}</p>
@@ -137,7 +159,7 @@
                             </div>
                             <button
                                 mat-icon-button
-                                [matTooltip]="isFavorite(report) ? 'Remove from favorites' : 'Add to favorites'"
+                                [matTooltip]="isFavorite(report) ? localeData?.remove_from_favorites : localeData?.add_to_favorites"
                                 (click)="toggleFavorite($event, report)"
                             >
                                 <i
@@ -152,7 +174,7 @@
                     }
                 </div>
             } @else {
-                <div class="text-center text-muted py-4">No reports found in this category.</div>
+                <div class="text-center text-muted py-4">{{ localeData?.no_reports_found }}</div>
             }
         }
     </div>

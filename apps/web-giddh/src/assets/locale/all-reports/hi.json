@@ -1,0 +1,221 @@
+{
+    "page_heading": "रिपोर्ट्स",
+    "favorites": "पसंदीदा",
+    "add_to_favorites": "पसंदीदा में जोड़ें",
+    "remove_from_favorites": "पसंदीदा से हटाएं",
+    "view_all": "सभी देखें",
+    "no_reports_available": "कोई रिपोर्ट उपलब्ध नहीं",
+    "no_reports_found": "इस श्रेणी में कोई रिपोर्ट नहीं मिली।",
+    "reportDescriptions": {
+        "TRIAL_BALANCE": {
+            "title": "ट्रायल बैलेंस",
+            "description": "सभी क्रेडिट और डेबिट बैलेंस डाउनलोड करें",
+            "icon": "icon-trial-balance-new"
+        },
+        "BALANCE_SHEET": {
+            "title": "बैलेंस शीट",
+            "description": "बीएस को एक्सेल में डाउनलोड करें, कई प्रकार के एक्सपोर्ट",
+            "icon": "icon-balance-sheet-new"
+        },
+        "PROFIT_AND_LOSS": {
+            "title": "लाभ और हानि",
+            "description": "एक्सेल में डेटा डाउनलोड करें, प्रोजेक्ट-वार रिपोर्ट",
+            "icon": "icon-proft-loss-new"
+        },
+        "GST": {
+            "title": "जीएसटी",
+            "description": "जीएसटी रिटर्न, फाइलिंग और सारांश",
+            "icon": "icon-tax-new"
+        },
+        "DAYBOOK": {
+            "title": "डेबुक",
+            "description": "प्रतिदिन की एंट्रीज़ जो एक्सपोर्ट की जा सकती हैं",
+            "icon": "icon-daybook-new"
+        },
+        "SALES_REGISTER_BY_DURATION": {
+            "title": "सेल्स रजिस्टर (अवधि)",
+            "description": "समयावधि के अनुसार बिक्री",
+            "icon": "icon-register-new"
+        },
+        "SALES_REGISTER_BY_SALES_PERSON": {
+            "title": "विक्रेता-वार बिक्री",
+            "description": "विक्रेता के अनुसार बिक्री",
+            "icon": "icon-register-new"
+        },
+        "SALES_REGISTER_BY_STATE": {
+            "title": "राज्य-वार बिक्री",
+            "description": "राज्य के अनुसार बिक्री",
+            "icon": "icon-register-new"
+        },
+        "SALES_REGISTER_BY_COUNTRY": {
+            "title": "देश-वार बिक्री",
+            "description": "देश के अनुसार बिक्री",
+            "icon": "icon-register-new"
+        },
+        "PURCHASE_REGISTER_BY_DURATION": {
+            "title": "पर्चेज़ रजिस्टर (अवधि)",
+            "description": "समयावधि के अनुसार खरीद",
+            "icon": "icon-register-new"
+        },
+        "PURCHASE_REGISTER_BY_SALES_PERSON": {
+            "title": "विक्रेता-वार खरीद",
+            "description": "विक्रेता के अनुसार खरीद",
+            "icon": "icon-register-new"
+        },
+        "PURCHASE_REGISTER_BY_STATE": {
+            "title": "राज्य-वार खरीद",
+            "description": "राज्य के अनुसार खरीद",
+            "icon": "icon-register-new"
+        },
+        "PURCHASE_REGISTER_BY_COUNTRY": {
+            "title": "देश-वार खरीद",
+            "description": "देश के अनुसार खरीद",
+            "icon": "icon-register-new"
+        },
+        "COLUMNAR_REPORT": {
+            "title": "मासिक कॉलमनार रिपोर्ट",
+            "description": "प्रत्येक समूह की मासिक विस्तृत रिपोर्ट",
+            "icon": "icon-monthly-columnar-report"
+        },
+        "AGING_REPORT_SALES": {
+            "title": "एजिंग रिपोर्ट (बिक्री)",
+            "description": "पिछले और आगामी दिनों में देय राशि",
+            "icon": "icon-aging-report-new"
+        },
+        "AGING_REPORT_PURCHASE": {
+            "title": "एजिंग रिपोर्ट (खरीद)",
+            "description": "पिछले और आगामी दिनों में देय राशि",
+            "icon": "icon-aging-report-new"
+        },
+        "VAT_REPORT": {
+            "title": "वैट रिपोर्ट",
+            "description": "वैट फाइल और समीक्षा करें",
+            "icon": "icon-vat1"
+        },
+        "VAT_OBLIGATION": {
+            "title": "वैट दायित्व",
+            "description": "आगामी वैट फाइलिंग दायित्व",
+            "icon": "icon-vat1"
+        },
+        "VAT_PAYMENT": {
+            "title": "वैट भुगतान",
+            "description": "किए गए वैट भुगतानों का इतिहास",
+            "icon": "icon-vat1"
+        },
+        "VAT_LIABILITIES": {
+            "title": "वैट देनदारियाँ",
+            "description": "वर्तमान वैट देनदारियाँ और बकाया",
+            "icon": "icon-vat1"
+        },
+        "CASH_FLOW_STATEMENT": {
+            "title": "कैश फ्लो स्टेटमेंट",
+            "description": "कैश फ्लो रिपोर्ट डाउनलोड करें",
+            "icon": "icon-cash-flow-statement"
+        },
+        "ACCOUNT_WISE": {
+            "title": "खाता-वार रिपोर्ट",
+            "description": "खाते के अनुसार टैक्स रिपोर्ट",
+            "icon": "icon-vat1"
+        },
+        "RATE_WISE": {
+            "title": "दर-वार रिपोर्ट",
+            "description": "दर के अनुसार टैक्स रिपोर्ट",
+            "icon": "icon-vat1"
+        },
+        "INVENTORY_STOCK_WISE": {
+            "title": "उत्पाद स्टॉक सारांश",
+            "description": "आइटम-वार मात्रा, मूल्य और मूवमेंट",
+            "icon": "stock.svg"
+        },
+        "INVENTORY_GROUP_WISE": {
+            "title": "उत्पाद समूह-वार स्टॉक",
+            "description": "उत्पाद समूह के अनुसार कुल",
+            "icon": "group-wise.svg"
+        },
+        "INVENTORY_VARIANT_WISE": {
+            "title": "वेरिएंट-वार स्टॉक",
+            "description": "वेरिएंट के अनुसार स्टॉक",
+            "icon": "varient-wise.svg"
+        },
+        "INVENTORY_PRODUCT_TRANSACTION": {
+            "title": "उत्पाद लेनदेन",
+            "description": "इनवर्ड, आउटवर्ड और समायोजन",
+            "icon": "transactions.svg"
+        },
+        "INVENTORY_SERVICE_STOCK": {
+            "title": "सेवा सारांश",
+            "description": "सेवा उपयोग और बिलिंग स्थिति",
+            "icon": "service.svg"
+        },
+        "INVENTORY_SERVICE_GROUP": {
+            "title": "सेवा समूह-वार",
+            "description": "सेवा समूह के अनुसार कुल",
+            "icon": "group-wise.svg"
+        },
+        "INVENTORY_SERVICE_VARIANT": {
+            "title": "वेरिएंट-वार सेवाएँ",
+            "description": "वेरिएंट के अनुसार सेवाएँ",
+            "icon": "varient-wise.svg"
+        },
+        "INVENTORY_SERVICE_TRANSACTION": {
+            "title": "सेवा खाता-बही",
+            "description": "सभी सेवा लेनदेन",
+            "icon": "transactions.svg"
+        },
+        "INVENTORY_FIXEDASSETS_STOCK": {
+            "title": "स्थायी संपत्ति सारांश",
+            "description": "संपत्ति-वार मात्रा और बुक मूल्य",
+            "icon": "fixed-assets.svg"
+        },
+        "INVENTORY_FIXEDASSETS_GROUP": {
+            "title": "समूह-वार स्थायी संपत्ति",
+            "description": "संपत्ति समूह के अनुसार कुल",
+            "icon": "group-wise.svg"
+        },
+        "INVENTORY_FIXEDASSETS_VARIANT": {
+            "title": "वेरिएंट-वार स्थायी संपत्ति",
+            "description": "वेरिएंट के अनुसार संपत्ति",
+            "icon": "varient-wise.svg"
+        },
+        "INVENTORY_FIXEDASSETS_TRANSACTION": {
+            "title": "स्थायी संपत्ति खाता-बही",
+            "description": "अधिग्रहण, निपटान और समायोजन",
+            "icon": "transactions.svg"
+        },
+        "INVENTORY_PRICE_CUSTOMER_WISE": {
+            "title": "ग्राहक मूल्य सूची",
+            "description": "ग्राहक के अनुसार विक्रय मूल्य",
+            "icon": "customer-icon.svg"
+        },
+        "INVENTORY_PRICE_VENDOR_WISE": {
+            "title": "विक्रेता मूल्य सूची",
+            "description": "विक्रेता के अनुसार खरीद दर",
+            "icon": "vendor-icon.svg"
+        },
+        "INVENTORY_PRODUCT_BULK_STOCK": {
+            "title": "बल्क स्टॉक अपडेट - उत्पाद",
+            "description": "उत्पाद स्टॉक बल्क में संपादित करें",
+            "icon": "home-icon-black.svg"
+        },
+        "INVENTORY_SERVICE_BULK_STOCK": {
+            "title": "बल्क स्टॉक अपडेट - सेवाएँ",
+            "description": "सेवा दरें बल्क में संपादित करें",
+            "icon": "home-icon-black.svg"
+        },
+        "INVENTORY_FIXEDASSETS_BULK_STOCK": {
+            "title": "बल्क स्टॉक अपडेट - स्थायी संपत्ति",
+            "description": "संपत्ति विवरण बल्क में संपादित करें",
+            "icon": "home-icon-black.svg"
+        },
+        "INVENTORY_BRANCH_TRANSFER": {
+            "title": "शाखा स्थानांतरण",
+            "description": "शाखाओं के बीच स्थानांतरित माल",
+            "icon": "branch-transfer.svg"
+        },
+        "INVENTORY_MANUFACTURING": {
+            "title": "निर्माण",
+            "description": "निर्माण एंट्रीज़ और BOM",
+            "icon": "manufacturing.svg"
+        }
+    }
+}

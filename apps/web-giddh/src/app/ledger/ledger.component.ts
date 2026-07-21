@@ -1364,7 +1364,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isHideBankLedgerPopup = true;
         this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                let mappedTransactions = response?.body?.filter(transaction => transaction?.account !== null);
+                let mappedTransactions = response?.body?.filter(transaction => transaction?.account !== undefined && transaction?.account !== null);
                 if (mappedTransactions?.length > 0) {
                     mappedTransactions?.forEach(transaction => {
                         let matchedTransaction = bankTransactions?.filter(bankTransaction => bankTransaction.transactionId === transaction?.uniqueName);
@@ -3073,7 +3073,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             data: {
                 accountUniqueName: this.lc.accountUnq,
                 localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
+                commonLocaleData: this.commonLocaleData,
+                returnUrl: this.router.url
             },
             role: 'alertdialog',
             ariaLabel: 'import',

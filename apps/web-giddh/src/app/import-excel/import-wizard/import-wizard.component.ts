@@ -26,6 +26,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     public isUploadInProgress: boolean = false;
     public excelState: ImportExcelState;
     public mappedData: ImportExcelResponseData;
+    /** Return URL */
+    public returnUrl: string;
     public UploadExceltableResponse: UploadExceltableResponse = {
         failureCount: 0,
         message: '',
@@ -92,6 +94,9 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(p => this.entity = p[0].path);
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.returnUrl = params['returnUrl'];
+        });
 
         const importStatusRequest: ImportExcelStatusPaginatedResponse = new ImportExcelStatusPaginatedResponse();
 
@@ -198,7 +203,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public onBack() {
-        if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName) {
+        if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName && this.returnUrl?.startsWith('/pages/ledger')) {
             this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
         } else {
             this.step.update(s => s - 1);

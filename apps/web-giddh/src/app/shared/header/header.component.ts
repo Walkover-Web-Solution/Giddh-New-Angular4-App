@@ -239,8 +239,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
-    /** Holds advance payment status from company subscription */
-    public showAdvancePayment: boolean = false;
     /** Tracks the visibility of error messages related to subscription and plan. */
     public showAlertMessage: SubscriptionErrorFlags = {
         isObligationExpired: true,
@@ -343,7 +341,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.router.url.includes("/pages/user-details/auth-key") ||
                     this.router.url.includes("/pages/user-details/session") ||
                     this.router.url.includes("/pages/user-details/subscription/wallet") ||
-                    this.router.url.includes("/pages/user-details/subscription/activate-subscription");
+                    this.router.url.includes("/pages/user-details/subscription/activate-subscription") ||
+                    this.router.url.includes("/pages/user-details/subscription/advance-payment");
 
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
@@ -752,7 +751,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                     if (this.subscribedPlan?.expiry) {
                         let expiry = (this.subscribedPlan?.expiry)?.split("-")?.reverse()?.join("-");
-                        this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+                        this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) + 1;
                     } else {
                         this.remainingSubscriptionDays = false;
                     }
@@ -763,7 +762,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.subscribedPlan.paymentPending = res.paymentPending;
                 }
                 this.activeCompany = res;
-                this.showAdvancePayment = !(res.subscription?.autoPay || res.subscription?.isPrepaidExist);
                 this.isUKCompany = res.country === "United Kingdom";
                 this.obligation = res.obligationsAlert && Object.keys(res.obligationsAlert).length ? res.obligationsAlert : null;
                 this.liabilities = res.liabilitiesAlert && Object.keys(res.liabilitiesAlert).length ? res.liabilitiesAlert : null;

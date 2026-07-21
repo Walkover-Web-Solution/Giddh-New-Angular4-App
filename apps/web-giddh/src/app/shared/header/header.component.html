@@ -577,18 +577,9 @@
             <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isSubscriptionRenewalExpired = false"></i>
         </div>
     </div>
-    <!-- *ngIf="
-        
-    " -->
+
     <div
-        *ngIf="
-            showAlertMessage.isPrepaidRenewalAvailable &&
-            subscribedPlan !== undefined &&
-            subscribedPlan?.status === 'active' &&
-            showAdvancePayment &&
-            ((subscribedPlan?.duration === 'MONTHLY' && remainingSubscriptionDays <= 7) ||
-                (subscribedPlan?.duration === 'YEARLY' && remainingSubscriptionDays <= 30))
-        "
+        *ngIf="showAlertMessage.isPrepaidRenewalAvailable && generalService.isAdvancePaymentEligible(activeCompany?.subscription)"
         class="plan-wrapper"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >

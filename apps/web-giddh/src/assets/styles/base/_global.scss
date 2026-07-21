@@ -5628,6 +5628,9 @@ textarea {
 
 .plan-wrapper {
     padding-left: 60px;
+    position: sticky;
+    top: calc(var(--top-distance) + var(--header-height));
+    z-index: 999;
 
     &.menu_open {
         padding-left: 240px !important;

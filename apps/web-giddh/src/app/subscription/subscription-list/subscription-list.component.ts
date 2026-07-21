@@ -110,8 +110,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public selectedCompany: any;
     /** This will use for active company */
     public activeCompany: any = {};
-    /** True when advance payment can be shown (autoPay OFF and no prepaid exists) */
-    public showAdvancePayment: boolean = false;
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
     /** This will use for status */
@@ -177,13 +175,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
-            }
-        });
-
-        this.settingsProfileService.GetProfileInfo().pipe(take(1)).subscribe((response: any) => {
-            if (response?.status === 'success' && response?.body) {
-                this.showAdvancePayment = !(response.body.subscription?.autoPay || response.body.subscription?.isPrepaidExist);
-                this.changeDetection.markForCheck();
             }
         });
 

@@ -3,24 +3,42 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { Subject, takeUntil } from 'rxjs';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { ToasterService } from '../services/toaster.service';
 import { AllReportsService } from './utility/all-reports.service';
-import { ReportItem } from './utility/all-reports.model';
+import { FilterOption, ReportItem } from './utility/all-reports.model';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 
+/** UI-facing shape of a report category rendered as a chip/card */
 interface CategoryDefinition {
+    /** URL-safe key, e.g. 'cash-flow' */
     key: string;
+    /** Human readable label from API */
     label: string;
+    /** CSS icon class or SVG filename */
     icon: string;
     /** Icon foreground color */
     color: string;
     /** Icon badge background color */
     bgColor: string;
+    /** Raw report `name` values that belong to this category */
     reports: string[];
+}
+
+/** Canonical category names as returned by the API (`filterOption.name`) */
+export enum ReportCategoryName {
+    ALL = 'All',
+    SALES = 'Sales',
+    PURCHASE = 'Purchase',
+    CUSTOMERS = 'Customers',
+    FINANCIAL = 'Financial',
+    ACCOUNTING = 'Accounting',
+    INVENTORY = 'Inventory',
+    CASH_FLOW = 'Cash Flow'
 }
 
 @Component({
@@ -30,58 +48,93 @@ interface CategoryDefinition {
         CommonModule,
         MatButtonModule,
         MatChipsModule,
-        MatProgressSpinnerModule,
         MatTooltipModule,
         MatCardModule,
-        HamburgerMenuModule
+        HamburgerMenuModule,
+        TranslateDirectiveModule,
+        GiddhPageLoaderModule
     ],
     templateUrl: './all-reports.component.html',
     styleUrls: ['./all-reports.component.scss']
 })
 export class AllReportsComponent implements OnInit, OnDestroy {
+    /** Service that fetches reports and manages favorites */
     private allReportsService = inject(AllReportsService);
+    /** Toast notification service */
     private toaster = inject(ToasterService);
+    /** Angular router used for navigation to reports */
     private router = inject(Router);
+    /** Current activated route (used for query params) */
     private route = inject(ActivatedRoute);
+    /** RxJS unsubscribe stream for component teardown */
     private destroy$ = new Subject<void>();
 
-    public isLoading = signal<boolean>(true);
+    /** True while the initial API call is in flight */
+    public isLoading = signal<boolean>(false);
+    /** Full list of reports merged with favorites */
     public allReports = signal<ReportItem[]>([]);
+    /** Reports marked as favorite by the user */
     public favorites = signal<ReportItem[]>([]);
+    /** Currently active category key (e.g. 'all', 'sales') */
     public activeCategory = signal<string>('all');
+    /** Filter options received from API */
+    public filterOptions = signal<FilterOption[]>([]);
 
-    /** Per-report display metadata (title + description) keyed by report `name` */
-    public readonly reportDescriptions: Record<string, { title: string; description: string; icon: string }> = {
-        TRIAL_BALANCE: { title: 'Trial Balance', description: 'Download of all credit & debit balances', icon: 'icon-trial-balance-new' },
-        BALANCE_SHEET: { title: 'Balance Sheet', description: 'Download BS in Excel, multiple type of exports', icon: 'icon-balance-sheet-new' },
-        PROFIT_AND_LOSS: { title: 'Profit & Loss', description: 'Download data in Excel, project wise report', icon: 'icon-proft-loss-new' },
-        GST: { title: 'GST', description: 'GST returns, filings and summaries', icon: 'icon-tax-new' },
-        DAYBOOK: { title: 'Daybook', description: 'Everyday entries that can be exported', icon: 'icon-daybook-new' },
-        SALES_REGISTER: { title: 'Sales Register', description: 'Net & cumulative sales', icon: 'icon-register-new' },
-        PURCHASE_REGISTER: { title: 'Purchase Register', description: 'Net & cumulative purchases', icon: 'icon-register-new' },
-        COLUMNAR_REPORT: { title: 'Monthly Columnar Report', description: 'Monthly detailed report of each group', icon: 'icon-monthly-columnar-report' },
-        AGING_REPORT_SALES: { title: 'Aging Report (Sales)', description: 'Amount Due in previous days & upcoming', icon: 'icon-aging-report-new' },
-        AGING_REPORT_PURCHASE: { title: 'Aging Report (Purchase)', description: 'Amount Due in previous days & upcoming', icon: 'icon-aging-report-new' },
-        VAT_REPORT: { title: 'VAT Report', description: 'File & review VAT', icon: 'icon-vat1' },
-        VAT_OBLIGATION: { title: 'VAT Obligations', description: 'Upcoming VAT filing obligations', icon: 'icon-vat1' },
-        VAT_PAYMENT: { title: 'VAT Payments', description: 'History of VAT payments made', icon: 'icon-vat1' },
-        VAT_LIABILITIES: { title: 'VAT Liabilities', description: 'Current VAT liabilities and dues', icon: 'icon-vat1' },
-        CASH_FLOW_STATEMENT: { title: 'Cash Flow Statement', description: 'Download cash flow report', icon: 'icon-cash-flow-statement' },
-        ACCOUNT_WISE: { title: 'Account-wise Report', description: 'Tax report grouped by account', icon: 'icon-vat1' },
-        RATE_WISE: { title: 'Rate-wise Report', description: 'Tax report grouped by rate', icon: 'icon-vat1' }
+    /** Locale data loaded via appTranslate directive from assets/locale/all-reports/{lang}.json */
+    public localeData: any = {};
+    /** Common locale data shared across the app */
+    public commonLocaleData: any = {};
+
+    /**
+     * Per-report display metadata (title, description, icon) keyed by report `name`.
+     *
+     * @returns {Record<string, { title: string; description: string; icon: string }>}
+     * @memberof AllReportsComponent
+     */
+    public get reportDescriptions(): Record<string, { title: string; description: string; icon: string }> {
+        return this.localeData?.reportDescriptions || {};
+    }
+
+    /** Visual metadata per category name (keyed by API `filterOption.name`) */
+    private readonly categoryMeta: Record<ReportCategoryName, { icon: string; color: string; bgColor: string }> = {
+        [ReportCategoryName.ALL]:       { icon: 'icon-reports', color: '#6559ff', bgColor: '#f0eeff' },
+        [ReportCategoryName.SALES]:     { icon: 'icon-register-new', color: '#3b82f6', bgColor: '#eaf5ff' },
+        [ReportCategoryName.PURCHASE]:  { icon: 'icon-vendor', color: '#22c55e', bgColor: '#eaf9ef' },
+        [ReportCategoryName.CUSTOMERS]: { icon: 'icon-customer', color: '#ff8a4c', bgColor: '#fff4ec' },
+        [ReportCategoryName.FINANCIAL]: { icon: 'icon-tax-new', color: '#6366f1', bgColor: '#eef2ff' },
+        [ReportCategoryName.ACCOUNTING]:{ icon: 'icon-reports', color: '#0ea5e9', bgColor: '#eaf5ff' },
+        [ReportCategoryName.INVENTORY]: { icon: 'icon-inventory', color: '#8b5cf6', bgColor: '#f3f0ff' },
+        [ReportCategoryName.CASH_FLOW]: { icon: 'icon-cash-flow-statement', color: '#ef4444', bgColor: '#ffecec' }
     };
 
-    /** Static category to report name mapping */
-    public readonly categories: CategoryDefinition[] = [
-        { key: 'all', label: 'All', icon: 'icon-reports', color: '#6559ff', bgColor: '#f0eeff', reports: [] },
-        { key: 'sales', label: 'Sales', icon: 'icon-register-new', color: '#3b82f6', bgColor: '#eaf5ff', reports: ['SALES_REGISTER', 'AGING_REPORT_SALES'] },
-        { key: 'purchase', label: 'Purchase', icon: 'icon-vendor', color: '#22c55e', bgColor: '#eaf9ef', reports: ['PURCHASE_REGISTER', 'AGING_REPORT_PURCHASE'] },
-        { key: 'customers', label: 'Customers', icon: 'icon-customer', color: '#ff8a4c', bgColor: '#fff4ec', reports: ['AGING_REPORT_SALES', 'AGING_REPORT_PURCHASE'] },
-        { key: 'financial', label: 'Financial', icon: 'icon-tax-new', color: '#6366f1', bgColor: '#eef2ff', reports: ['TRIAL_BALANCE', 'BALANCE_SHEET', 'PROFIT_AND_LOSS', 'GST', 'VAT_REPORT', 'VAT_OBLIGATION', 'VAT_PAYMENT', 'VAT_LIABILITIES'] },
-        { key: 'accounting', label: 'Accounting', icon: 'icon-reports', color: '#0ea5e9', bgColor: '#eaf5ff', reports: ['DAYBOOK', 'COLUMNAR_REPORT', 'ACCOUNT_WISE', 'RATE_WISE'] },
-        { key: 'inventory', label: 'Inventory', icon: 'icon-inventory', color: '#8b5cf6', bgColor: '#f3f0ff', reports: [] },
-        { key: 'cashflow', label: 'Cash Flow', icon: 'icon-cash-flow-statement', color: '#ef4444', bgColor: '#ffecec', reports: ['CASH_FLOW_STATEMENT'] }
-    ];
+    /** Categories derived from API `filterOption`, prefixed with the "All" pseudo-category */
+    public categories = computed<CategoryDefinition[]>(() => {
+        const allMeta = this.categoryMeta[ReportCategoryName.ALL];
+        const allDef: CategoryDefinition = { key: 'all', label: ReportCategoryName.ALL, icon: allMeta.icon, color: allMeta.color, bgColor: allMeta.bgColor, reports: [] };
+        const dynamic: CategoryDefinition[] = this.filterOptions().map(opt => {
+            const meta = this.categoryMeta[opt.name as ReportCategoryName] || { icon: 'icon-reports', color: '#6559ff', bgColor: '#f0eeff' };
+            return {
+                key: this.toKey(opt.name),
+                label: opt.name,
+                icon: meta.icon,
+                color: meta.color,
+                bgColor: meta.bgColor,
+                reports: opt.reports || []
+            };
+        });
+        return [allDef, ...dynamic];
+    });
+
+    /**
+     * Build a URL-safe key from a category name (e.g. "Cash Flow" -> "cash-flow").
+     *
+     * @param {string} name Raw category name
+     * @returns {string} Lower-cased, hyphen-separated key
+     * @memberof AllReportsComponent
+     */
+    private toKey(name: string): string {
+        return (name || '').toLowerCase().trim().replace(/\s+/g, '-');
+    }
 
     /** Reports filtered by active category, excluding items already in favorites */
     public filteredReports = computed(() => {
@@ -91,7 +144,7 @@ export class AllReportsComponent implements OnInit, OnDestroy {
         if (cat === 'all') {
             return nonFavorite;
         }
-        const def = this.categories.find(c => c.key === cat);
+        const def = this.categories().find(c => c.key === cat);
         if (!def) return nonFavorite;
         return nonFavorite.filter(r => def.reports.includes(r.name));
     });
@@ -99,7 +152,7 @@ export class AllReportsComponent implements OnInit, OnDestroy {
     /** Category groups rendered as cards under All Reports (excludes the 'all' pseudo-category) */
     public categoryGroups = computed(() => {
         const all = this.allReports();
-        return this.categories
+        return this.categories()
             .filter(c => c.key !== 'all')
             .map(cat => ({
                 category: cat,
@@ -110,13 +163,19 @@ export class AllReportsComponent implements OnInit, OnDestroy {
     /** Current category label for display */
     public currentCategoryLabel = computed(() => {
         const cat = this.activeCategory();
-        const def = this.categories.find(c => c.key === cat);
+        const def = this.categories().find(c => c.key === cat);
         return def?.label;
     });
 
     /** Set of favorite unique names for fast lookup */
     public favoriteSet = computed(() => new Set(this.favorites().map(f => f.uniqueName)));
 
+    /**
+     * Subscribes to route params and triggers report load.
+     *
+     * @returns {void}
+     * @memberof AllReportsComponent
+     */
     public ngOnInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
             const category = params['category'] || 'all';
@@ -125,11 +184,23 @@ export class AllReportsComponent implements OnInit, OnDestroy {
         this.loadReports();
     }
 
+    /**
+     * Emits on destroy stream and cleans up all subscriptions.
+     *
+     * @returns {void}
+     * @memberof AllReportsComponent
+     */
     public ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }
 
+    /**
+     * Loads reports and favorites from the API and merges them.
+     *
+     * @returns {void}
+     * @memberof AllReportsComponent
+     */
     private loadReports(): void {
         this.isLoading.set(true);
         this.allReportsService.getAllReports().pipe(takeUntil(this.destroy$)).subscribe({
@@ -137,6 +208,8 @@ export class AllReportsComponent implements OnInit, OnDestroy {
                 if (res?.status === 'success' && res.body) {
                     const reportList = res.body.reportList || [];
                     const favoriteList = res.body.favoriteReportList || [];
+                    const filterOption: FilterOption[] = res.body.filterOption || [];
+                    this.filterOptions.set(filterOption);
                     // Merge favorites into the full list so category cards always show the complete set
                     const merged: ReportItem[] = [...reportList];
                     const seen = new Set(merged.map(r => r.uniqueName));
@@ -157,6 +230,13 @@ export class AllReportsComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Selects a category chip and syncs it to the URL query params.
+     *
+     * @param {string} key Category key to activate
+     * @returns {void}
+     * @memberof AllReportsComponent
+     */
     public selectCategory(key: string): void {
         this.activeCategory.set(key);
         this.router.navigate([], {
@@ -167,7 +247,11 @@ export class AllReportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Get display name from raw report name (e.g. TRIAL_BALANCE -> Trial Balance)
+     * Returns the display title for a raw report name (locale-aware, with fallback).
+     *
+     * @param {string} name Raw report name (e.g. TRIAL_BALANCE)
+     * @returns {string} Localized title or title-cased fallback
+     * @memberof AllReportsComponent
      */
     public displayName(name: string): string {
         if (!name) return '';
@@ -176,43 +260,95 @@ export class AllReportsComponent implements OnInit, OnDestroy {
         return name.toLowerCase().split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     }
 
-    /** Get description for a report */
+    /**
+     * Returns the description for a report, falling back to its category label.
+     *
+     * @param {ReportItem} report Report item
+     * @returns {string} Description text
+     * @memberof AllReportsComponent
+     */
     public reportDescription(report: ReportItem): string {
         return this.reportDescriptions[report?.name]?.description || this.categoryLabel(report);
     }
 
     /**
-     * Get category label for a report
+     * Returns the category label (e.g. "Sales Reports") for a given report.
+     *
+     * @param {ReportItem} report Report item
+     * @returns {string} Category label suffixed with " Reports"
+     * @memberof AllReportsComponent
      */
     public categoryLabel(report: ReportItem): string {
-        const cat = this.categories.find(c => c.key !== 'all' && c.reports.includes(report.name));
+        const cat = this.categories().find(c => c.key !== 'all' && c.reports.includes(report.name));
         return cat ? `${cat.label} Reports` : 'Reports';
     }
 
-    /** Get category key for a report (used to drive per-category color accents in the UI) */
+    /**
+     * Returns the category key for a report (drives per-category color accents).
+     *
+     * @param {ReportItem} report Report item
+     * @returns {string} Category key or empty string
+     * @memberof AllReportsComponent
+     */
     public reportCategoryKey(report: ReportItem): string {
-        const cat = this.categories.find(c => c.key !== 'all' && c.reports.includes(report?.name));
+        const cat = this.categories().find(c => c.key !== 'all' && c.reports.includes(report?.name));
         return cat ? cat.key : '';
     }
 
-    /** Get the category definition for a report (for direct color usage in templates) */
+    /**
+     * Returns the category definition for a given category key.
+     *
+     * @param {string} report Category key
+     * @returns {CategoryDefinition | undefined} Matching definition, if any
+     * @memberof AllReportsComponent
+     */
     public reportCategory(report: string): CategoryDefinition | undefined {
-        return this.categories.find(c => c.key === report);
+        return this.categories().find(c => c.key === report);
     }
 
+    /**
+     * Returns the icon (CSS class or SVG filename) for a report card.
+     *
+     * @param {ReportItem} report Report item
+     * @returns {string} Icon identifier
+     * @memberof AllReportsComponent
+     */
     public categoryIcon(report: ReportItem): string {
         const meta = this.reportDescriptions[report?.name];
         if (meta?.icon) return meta.icon;
-        const cat = this.categories.find(c => c.key !== 'all' && c.reports.includes(report.name));
+        const cat = this.categories().find(c => c.key !== 'all' && c.reports.includes(report.name));
         return cat ? cat.icon : 'icon-reports';
     }
 
+    /**
+     * Returns true when the icon value refers to an SVG asset filename.
+     *
+     * @param {string} icon Icon identifier
+     * @returns {boolean} True if it ends with `.svg`
+     * @memberof AllReportsComponent
+     */
+    public isSvgIcon(icon: string): boolean {
+        return typeof icon === 'string' && icon.toLowerCase().endsWith('.svg');
+    }
+
+    /**
+     * Checks if a report is currently marked as favorite.
+     *
+     * @param {ReportItem} report Report item
+     * @returns {boolean} True if favorited
+     * @memberof AllReportsComponent
+     */
     public isFavorite(report: ReportItem): boolean {
         return this.favoriteSet().has(report.uniqueName);
     }
 
     /**
-     * Toggle a report as favorite and persist to API.
+     * Toggles a report's favorite state and persists it to the API (with rollback on failure).
+     *
+     * @param {Event} event Originating DOM event (its propagation is stopped)
+     * @param {ReportItem} report Report to toggle
+     * @returns {void}
+     * @memberof AllReportsComponent
      */
     public toggleFavorite(event: Event, report: ReportItem): void {
         event.stopPropagation();
@@ -236,7 +372,11 @@ export class AllReportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Navigate to the report page from its uniqueName (URL path with optional query params).
+     * Navigates to the report page derived from its `uniqueName` (path + optional query params).
+     *
+     * @param {ReportItem} report Report to open
+     * @returns {void}
+     * @memberof AllReportsComponent
      */
     public openReport(report: ReportItem): void {
         if (!report?.uniqueName) return;
