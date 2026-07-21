@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImportExcelRequestStates, ImportExcelResponseData, ImportExcelState, ImportExcelStatusPaginatedResponse, UploadExceltableResponse } from '../../models/api-models/import-excel';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -21,11 +21,13 @@ import { ImportStatementType, VoucherType } from '../../ledger/components/import
 })
 
 export class ImportWizardComponent implements OnInit, OnDestroy {
-    public step: number = 1;
+    public step = signal(1);
     public entity: string;
     public isUploadInProgress: boolean = false;
     public excelState: ImportExcelState;
     public mappedData: ImportExcelResponseData;
+    /** Return URL */
+    public returnUrl: string;
     public UploadExceltableResponse: UploadExceltableResponse = {
         failureCount: 0,
         message: '',
@@ -62,7 +64,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
         // if file uploaded successfully
         if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
-            this.step++;
+            this.step.update(s => s + 1);
         }
 
         // if import is done successfully
@@ -77,7 +79,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
                 }
             } else {
                 // go to import success page
-                this.step++;
+                this.step.update(s => s + 1);
                 this.UploadExceltableResponse = this.excelState.importResponse;
             }
         }
@@ -92,6 +94,9 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(p => this.entity = p[0].path);
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.returnUrl = params['returnUrl'];
+        });
 
         const importStatusRequest: ImportExcelStatusPaginatedResponse = new ImportExcelStatusPaginatedResponse();
 
@@ -103,14 +108,10 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.common.importBankTransactions), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.mappedData = response;
-                this.step = 2;
+                this.step.set(2);
             } else {
-                if (this.entity === "banktransactions") {
-                    if (this.mappedData?.accountUniqueName) {
-                        this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
-                    } else {
-                        this.router.navigate(['/pages/import/select-type']);
-                    }
+                if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName) {
+                    this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
                 }
             }
         });
@@ -197,15 +198,15 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public mappingDone(importData: ImportExcelResponseData) {
-        this.step++;
+        this.step.update(s => s + 1);
         this.onNext(importData);
     }
 
     public onBack() {
-        if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName) {
+        if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName && this.returnUrl?.startsWith('/pages/ledger')) {
             this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
         } else {
-            this.step--;
+            this.step.update(s => s - 1);
         }
     }
 

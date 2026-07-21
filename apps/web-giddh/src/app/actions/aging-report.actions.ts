@@ -55,7 +55,7 @@ export class AgingReportActions {
     public getDueRange$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AgingReportActions.GET_DUE_DAY_RANGE),
-            switchMap((action: CustomActions) => this._agingReportService.GetDueDaysRange()),
+            switchMap((action: CustomActions) => this._agingReportService.GetDueDaysRange(action.payload?.vendorCustomerType)),
             map(response => this.GetDueRangeResponse(response))));
 
     public getDueRangeResponse$: Observable<Action> = createEffect(() => this.action$
@@ -77,7 +77,7 @@ export class AgingReportActions {
         .pipe(
             ofType(AgingReportActions.GET_DUE_DAY_REPORT),
             switchMap((action: CustomActions) => {
-                return this._agingReportService.GetDueAmountReport(action.payload.model, action.payload.queryRequest, action.payload.branchUniqueName).pipe(
+                return this._agingReportService.GetDueAmountReport(action.payload.model, action.payload.queryRequest, action.payload.branchUniqueName, action.payload.vendorCustomerType).pipe(
                     map((r) => this.validateResponse<DueAmountReportResponse, DueAmountReportRequest>(r, {
                         type: AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE,
                         payload: r?.body
@@ -109,10 +109,10 @@ export class AgingReportActions {
         };
     }
 
-    public GetDueRange(): CustomActions {
+    public GetDueRange(vendorCustomerType?: string): CustomActions {
         return {
             type: AgingReportActions.GET_DUE_DAY_RANGE,
-            payload: null
+            payload: { vendorCustomerType }
         };
     }
 
@@ -123,10 +123,10 @@ export class AgingReportActions {
         };
     }
 
-    public GetDueReport(model: AgingAdvanceSearchModal, queryRequest: DueAmountReportQueryRequest, branchUniqueName: string): CustomActions {
+    public GetDueReport(model: AgingAdvanceSearchModal, queryRequest: DueAmountReportQueryRequest, branchUniqueName: string, vendorCustomerType?: string): CustomActions {
         return {
             type: AgingReportActions.GET_DUE_DAY_REPORT,
-            payload: { model, queryRequest, branchUniqueName }
+            payload: { model, queryRequest, branchUniqueName, vendorCustomerType }
         };
     }
 

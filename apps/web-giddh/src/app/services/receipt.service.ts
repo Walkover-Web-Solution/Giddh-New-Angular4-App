@@ -58,7 +58,7 @@ export class ReceiptService {
                 catchError((e) => this.errorHandler.HandleCatch<string, ReciptRequest>(e, model)));
     }
 
-    public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
+    public GetAllReceipt(body: InvoiceReceiptFilter, type: string, vendorCustomerType?: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const { branchUniqueName, source, ...bodyWithoutQueryParams } = body;
         const requestPayload = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? this.getPurchaseRecordPayload(body) : body;
@@ -66,7 +66,8 @@ export class ReceiptService {
         const requestParameter = {
             page: body?.page, count: body?.count, from: body?.from, to: body?.to, q: (body?.q) ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy,
             ...(branchUniqueName ? { branchUniqueName } : {}),
-            ...(source ? { source } : {})
+            ...(source ? { source } : {}),
+            ...(vendorCustomerType ? { vendorCustomerType } : {})
         };
 
         if (this.generalService.voucherApiVersion === 2) {

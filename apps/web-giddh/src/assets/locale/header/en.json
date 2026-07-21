@@ -53,5 +53,6 @@
     "obligation_expired_passed": "Alert: VAT return due date has passed! Submit immediately to minimize penalties. <a class='obligations text-primary cursor-pointer'> Click here </a> to submit.",
     "liabilities_expired": "Alert: Your payment is due in [REMAINING_DAY] days! Settle it on time to avoid penalties. <a class='liabilities text-primary cursor-pointer'> Click here </a> to view.",
     "liabilities_today_expired": "Alert: Your payment is due today! Settle it immediately to avoid penalties. <a class='liabilities text-primary cursor-pointer'> Click here </a> to view.",
-    "liabilities_expired_passed": "Alert: Your payment is overdue! Settle it now to minimize penalties. <a class='liabilities text-primary cursor-pointer'> Click here </a> to view."
+    "liabilities_expired_passed": "Alert: Your payment is overdue! Settle it now to minimize penalties. <a class='liabilities text-primary cursor-pointer'> Click here </a> to view.",
+    "subscription_expires": "Your [PLAN_NAME] subscription expires in [REMAINING_DAY] days. <a href='javascript:void(0);' class='advance-payment text-primary cursor-pointer'> Pay now </a> to avoid any interruption — your next billing cycle will start automatically once the current one ends."
 }

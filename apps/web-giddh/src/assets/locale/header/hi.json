@@ -53,5 +53,6 @@
     "obligation_expired_passed": "चेतावनी: वैट रिटर्न की नियत तारीख निकल चुकी है! दंड को कम करने के लिए तुरंत जमा करें। <a class='obligations text-primary cursor-pointer'> यहां क्लिक करें </a> जमा करने के लिए।",
     "liabilities_expired": "चेतावनी: आपका भुगतान [REMAINING_DAY] दिनों में देय है! दंड से बचने के लिए समय पर भुगतान करें। <a class='liabilities text-primary cursor-pointer'> यहां क्लिक करें </a> देखने के लिए।",
     "liabilities_today_expired": "चेतावनी: आपका भुगतान आज देय है! दंड से बचने के लिए तुरंत भुगतान करें। <a class='liabilities text-primary cursor-pointer'> यहां क्लिक करें </a> देखने के लिए।",
-    "liabilities_expired_passed": "चेतावनी: आपका भुगतान ओवरड्यू हो चुका है! दंड को कम करने के लिए अभी भुगतान करें। <a class='liabilities text-primary cursor-pointer'> यहां क्लिक करें </a> देखने के लिए।"
+    "liabilities_expired_passed": "चेतावनी: आपका भुगतान ओवरड्यू हो चुका है! दंड को कम करने के लिए अभी भुगतान करें। <a class='liabilities text-primary cursor-pointer'> यहां क्लिक करें </a> देखने के लिए।",
+    "subscription_expires": "आपकी [PLAN_NAME] सदस्यता [REMAINING_DAY] दिनों में समाप्त हो रही है। <a href='javascript:void(0);' class='advance-payment text-primary cursor-pointer'> अभी भुगतान करें </a> किसी भी बाधा से बचने के लिए — आपका अगला बिलिंग चक्र वर्तमान समाप्त होने के बाद स्वचालित रूप से शुरू हो जाएगा।"
 }
