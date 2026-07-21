@@ -3547,6 +3547,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const prioritizedApplicableTaxes = applicableTaxesExcludingOtherTaxes.length ? applicableTaxesExcludingOtherTaxes : accountOtherApplicableTaxes;
 
                 if (!isSundryDebtorCreditorGroup) {
+                    const stockGroupTax = this.companyTaxesList.filter(otherTax =>
+                        data.body.stock?.groupTaxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
+                    ).map(tax => tax.uniqueName);
+                    const stockTax = this.companyTaxesList.filter(otherTax =>
+                        data.body.stock?.taxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
+                    ).map(tax => tax.uniqueName);
+                    data.body.stock.taxes = data.body.stock?.taxes.filter(tax => !stockTax.includes(tax));
+                    data.body.stock.groupTaxes = data.body.stock?.groupTaxes.filter(tax => !stockGroupTax.includes(tax));
+                    
                     // Take taxes of parent group and stock's own taxes
                     taxes = this.generalService.fetchTaxesOnPriority(
                         data.body.stock?.taxes ?? [],
@@ -3554,10 +3563,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         data.body.taxes ?? [],
                         data.body.groupTaxes ?? []);
                         const isSundryDebtorCreditorAccount = data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryCreditors) || data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryDebtors);
-                        if (data.body.oppositeAccount && isSundryDebtorCreditorAccount) {
+                        if (data.body.oppositeAccount && (isSundryDebtorCreditorAccount || stockGroupTax.length || stockTax.length)) {
                             const stockAccountOtherTax = this.generalService.fetchTaxesOnPriority(
-                                                    [],
-                                                    [],
+                                                    stockGroupTax,
+                                                    stockTax,
                                                     data.body.oppositeAccount.taxes ?? [],
                                                     data.body.oppositeAccount.groupTaxes ?? []);
                             otherTax.appliedOtherTax = {
@@ -3565,10 +3574,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                 uniqueName: stockAccountOtherTax.length ? stockAccountOtherTax[0] : ''
                             };
                         }
-                        if (prioritizedApplicableTaxes.length && !otherTax['uniqueName']) {
+                        const matchedTcsTdsTax = this.companyTaxesList.find(companyTax =>
+                            prioritizedApplicableTaxes.some(tax => tax?.uniqueName === companyTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(companyTax.taxType));
+                        if (prioritizedApplicableTaxes.length && !otherTax.appliedOtherTax?.uniqueName && matchedTcsTdsTax) {
                             otherTax.appliedOtherTax = {
-                                name: prioritizedApplicableTaxes[0]?.name,
-                                uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
+                                name: matchedTcsTdsTax.name,
+                                uniqueName: matchedTcsTdsTax.uniqueName
                             };
                         }
                 } else {
@@ -3588,6 +3599,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         };
                     }
                 }
+
+                this.companyTaxesList.forEach(tax => {
+                    if (tax.uniqueName === otherTax.appliedOtherTax.uniqueName && TCS_TDS_TAXES_TYPES.includes(tax.taxType)) {
+                        otherTax.appliedOtherTax.name = tax.name;
+                    }
+                })
 
                 if (this.profileObj?.baseCurrency === this.lc.activeAccount?.currency) {
                     if (this.lc.activeAccount?.currency !== data.body?.currency.code) {

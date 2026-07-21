@@ -2494,7 +2494,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 model: filterRequest,
                 type: this.invoiceType.isProformaInvoice ? "proformas" : "estimates",
             });
-        } else {
+        } else if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) {
             const baseRequest: Partial<InvoiceReceiptFilter> = {
                 sortBy: "voucherDate",
                 sort: "desc",
