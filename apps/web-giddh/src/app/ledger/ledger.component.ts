@@ -3574,11 +3574,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                 uniqueName: stockAccountOtherTax.length ? stockAccountOtherTax[0] : ''
                             };
                         }
-                        if (prioritizedApplicableTaxes.length && !otherTax['uniqueName'] && this.companyTaxesList.some(otherTax =>
-                            prioritizedApplicableTaxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType))) {
+                        const matchedTcsTdsTax = this.companyTaxesList.find(companyTax =>
+                            prioritizedApplicableTaxes.some(tax => tax?.uniqueName === companyTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(companyTax.taxType));
+                        if (prioritizedApplicableTaxes.length && !otherTax.appliedOtherTax?.uniqueName && matchedTcsTdsTax) {
                             otherTax.appliedOtherTax = {
-                                name: prioritizedApplicableTaxes[0]?.name,
-                                uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
+                                name: matchedTcsTdsTax.name,
+                                uniqueName: matchedTcsTdsTax.uniqueName
                             };
                         }
                 } else {
