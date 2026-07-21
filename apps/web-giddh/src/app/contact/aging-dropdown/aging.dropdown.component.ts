@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, input } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
 import { AgingDropDownoptions } from '../../models/api-models/Contact';
 import { AppState } from '../../store';
@@ -21,6 +21,8 @@ export class AgingDropdownComponent implements OnDestroy {
     @Input() public showComponent: boolean = true;
     @Output() public closeEvent: EventEmitter<any> = new EventEmitter();
     @Input() public options: AgingDropDownoptions;
+    /** Signal input for the vendor/customer type (customer | vendor) */
+    public vendorCustomerType = input<string>();
     public setDueRangeRequestInFlight$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** If dropdown has valid values */
@@ -73,7 +75,10 @@ export class AgingDropdownComponent implements OnDestroy {
     public closeAging(e) {
         this.close.emit();
         if (this.isValid && this.updateRange) {
-            this.store.dispatch(this.agingReportActions.CreateDueRange({ range: [this.options.fourth?.toString(), this.options.fifth?.toString(), this.options.sixth?.toString()] }));
+            this.store.dispatch(this.agingReportActions.CreateDueRange({
+                range: [this.options.fourth?.toString(), this.options.fifth?.toString(), this.options.sixth?.toString()],
+                vendorCustomerType: this.vendorCustomerType()
+            }));
         }
         this.closeAgingDropDown();
     }

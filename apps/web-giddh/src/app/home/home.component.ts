@@ -64,10 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
         // Scroll to top when dashboard loads
         setTimeout(() => {
-            const dashboardElement = document.getElementById('dashboard');
-            if (dashboardElement) {
-                dashboardElement.scrollIntoView({ behavior: 'instant', block: 'start' });
-            }
+            window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
         }, 100);
     }
 

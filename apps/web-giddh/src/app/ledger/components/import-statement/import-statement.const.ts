@@ -15,7 +15,8 @@ export enum ImportStatementType {
 // This enum is used to differentiate between the types of vouchers that can be imported
 export enum VoucherType {
     AccountWise = "account-wise",
-    VoucherWise = "voucher-wise"
+    VoucherWise = "voucher-wise",
+    BankStatement = "banktransactions"
 }
 
 export enum VoucherImportType {

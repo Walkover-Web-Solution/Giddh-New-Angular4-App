@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { GeneralService } from '../../services/general.service';
+import { SettingsProfileService } from '../../services/settings.profile.service';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { AppState } from '../../store';
 import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
@@ -122,7 +123,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
-        private generalService: GeneralService,
+        public generalService: GeneralService,
         private componentStore: SubscriptionComponentStore,
         private store: Store<AppState>,
         private formBuilder: FormBuilder,
@@ -130,7 +131,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         private readonly componentStoreCompanyListDialog: CompanyListDialogComponentStore,
         private generalActions: GeneralActions,
         private router: Router,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private settingsProfileService: SettingsProfileService
     ) {
         this.store.dispatch(this.generalActions.openSideMenu(true));
     }
@@ -702,6 +704,20 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public openWallet(subscriptionId: string): void {
         this.menu?.closeMenu();
         this.router.navigate(['/pages/user-details/subscription/wallet/' + subscriptionId]);
+    }
+
+    /**
+     * Navigates to the advance payment page for the given subscription
+     *
+     * @param {string} subscriptionId
+     * @memberof SubscriptionListComponent
+     */
+    public goToAdvancePayment(subscriptionId: string): void {
+        this.menu?.closeMenu();
+        this.router.navigate(
+            [`/pages/user-details/subscription/advance-payment/${subscriptionId}`],
+            { queryParams: { removeWarning: true } }
+        );
     }
 
     /**

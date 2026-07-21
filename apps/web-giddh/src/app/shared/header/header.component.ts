@@ -52,6 +52,7 @@ interface SubscriptionErrorFlags {
     isSubscriptionRenewalExpired: boolean;
     isSubscriptionEnded: boolean;
     isTransactionLimitExceeded: boolean;
+    isPrepaidRenewalAvailable: boolean;
 };
 
 @Component({
@@ -244,7 +245,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         isLiabilitiesExpired: true,
         isSubscriptionRenewalExpired: true,
         isSubscriptionEnded: true,
-        isTransactionLimitExceeded: true
+        isTransactionLimitExceeded: true,
+        isPrepaidRenewalAvailable: true
     }
     /** Holds obligations alert message */
     public obligation: any = null;
@@ -339,7 +341,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.router.url.includes("/pages/user-details/auth-key") ||
                     this.router.url.includes("/pages/user-details/session") ||
                     this.router.url.includes("/pages/user-details/subscription/wallet") ||
-                    this.router.url.includes("/pages/user-details/subscription/activate-subscription");
+                    this.router.url.includes("/pages/user-details/subscription/activate-subscription") ||
+                    this.router.url.includes("/pages/user-details/subscription/advance-payment");
 
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
@@ -546,6 +549,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (response.tab || response.required) {
                 this.generalService.restoreRouteQueryFilters();
             }
+            if (response.removeWarning === 'true' || response.removeWarning === true) {
+                this.showAlertMessage.isPrepaidRenewalAvailable = false;
+            } else {
+                this.showAlertMessage.isPrepaidRenewalAvailable = true;
+            }
+            this.changeDetection.detectChanges();
         });
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
@@ -742,7 +751,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                     if (this.subscribedPlan?.expiry) {
                         let expiry = (this.subscribedPlan?.expiry)?.split("-")?.reverse()?.join("-");
-                        this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+                        this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) + 1;
                     } else {
                         this.remainingSubscriptionDays = false;
                     }
@@ -770,21 +779,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public addListenerErrorMessage(): void {
-        if (!this.isErrorMessageListenerAdded) {
-            this.isErrorMessageListenerAdded = true;
-            const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
-            (Array.isArray(liabilities) ? liabilities : []).forEach((link: HTMLElement) => {
-                this.renderer.listen(link, 'click', () => {
-                    this.goToLiabilities();
-                });
-            });
-            const obligation = this.elementRef.nativeElement.querySelectorAll('.obligations');
-            (Array.isArray(obligation) ? obligation : []).forEach((link: HTMLElement) => {
-                this.renderer.listen(link, 'click', () => {
-                    this.goToObligation();
-                });
-            });
-        }
+        const bindOnce = (element: HTMLElement, handler: () => void) => {
+            if (!element || element.dataset.listenerAttached === 'true') {
+                return;
+            }
+            element.dataset.listenerAttached = 'true';
+            this.renderer.listen(element, 'click', handler);
+        };
+
+        this.elementRef.nativeElement.querySelectorAll('.liabilities').forEach((link: HTMLElement) => {
+            bindOnce(link, () => this.goToLiabilities());
+        });
+        this.elementRef.nativeElement.querySelectorAll('.obligations').forEach((link: HTMLElement) => {
+            bindOnce(link, () => this.goToObligation());
+        });
+        this.elementRef.nativeElement.querySelectorAll('.advance-payment').forEach((link: HTMLElement) => {
+            bindOnce(link, () => this.goToAdvancePayment());
+        });
     }
 
     public ngAfterViewInit() {
@@ -1817,6 +1828,32 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
             ?.replace("[PLAN_START_DATE]", this.giddhDatePipe.transform(this.subscribedPlan?.startedAt) ?? '');
         return text;
+    }
+
+    /**
+     * This will return prepaid renewal availability note
+     *
+     * @returns {string}
+     * @memberof HeaderComponent
+     */
+    public getPrepaidRenewalNote(): string {
+        let text = this.localeData?.subscription_expires;
+        return text
+            ?.replace("[REMAINING_DAY]", Math.ceil(this.remainingSubscriptionDays)?.toString() ?? '')
+            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '') ?? "";
+    }
+
+    /**
+     * Navigates to advance payment page for prepaid renewal
+     *
+     * @memberof HeaderComponent
+     */
+    public goToAdvancePayment(): void {
+        if (this.subscribedPlan?.subscriptionId) {
+            this.showAlertMessage.isPrepaidRenewalAvailable = false;
+            this.changeDetection.detectChanges();
+            this.router.navigate([`/pages/user-details/subscription/advance-payment/${this.subscribedPlan.subscriptionId}`], { queryParams: { removeWarning: true } });
+        }
     }
 
     /**

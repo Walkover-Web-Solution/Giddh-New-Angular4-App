@@ -22,6 +22,7 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
+import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
         MatCheckboxModule,
         HamburgerMenuModule,
         GiddhDatePipe,
-        GoToBranchComponent
+        GoToBranchComponent,
+        GenericAsideMenuAccountModule
     ],
 })
 export class ImportExcelModule {

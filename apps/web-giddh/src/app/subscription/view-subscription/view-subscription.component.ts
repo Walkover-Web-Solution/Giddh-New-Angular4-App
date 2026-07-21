@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSubscriptionComponentStore } from './utility/view-subscription.store';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
@@ -10,6 +10,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
+import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 
 @Component({
     selector: 'view-subscription',
@@ -50,6 +51,79 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     /** This will use for active company */
     public activeCompany: any = {};
 
+    /**
+     * Builds the advance-payment success message by replacing placeholders
+     * ([PLAN_NAME], [REMAINING_DAYS], [START_DATE]) with values from prepaidSubscription.
+     *
+     * @readonly
+     * @memberof ViewSubscriptionComponent
+     */
+    public get advancePaymentMessage(): string {
+        const prepaid = this.viewSubscriptionData?.prepaidSubscription;
+        const template = this.localeData?.advance_payment_success_message ?? '';
+        if (!template || !prepaid) {
+            return '';
+        }
+        const pipe = new GiddhDatePipe();
+        
+        // Calculate remaining days (same logic as isAdvancePaymentEligible)
+        const expiryStr = String(this.viewSubscriptionData?.expiry).split('-').reverse().join('-');
+        const remainingDays = Math.ceil(((new Date(expiryStr).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) + 1);
+        
+        // Handle pluralization
+        const daysText = remainingDays === 1 ? 'day' : 'days';
+        
+        return template
+            ?.replace('[PLAN_NAME]', prepaid.planName ?? '')
+            ?.replace('[REMAINING_DAYS]', remainingDays.toString())
+            ?.replace('day', daysText)
+            ?.replace('[START_DATE]', pipe.transform(prepaid.startDate) ?? '');
+    }
+
+    /**
+     * Returns true when the current subscription is eligible for advance (prepaid) payment.
+     * Rules: auto-pay OFF, status not trial/cancelled/expired, and within
+     * 7 days of expiry (monthly) or 30 days of expiry (yearly).
+     *
+     * @readonly
+     * @memberof ViewSubscriptionComponent
+     */
+    public get isAdvancePaymentEligible(): boolean {
+        return this.generalService.isAdvancePaymentEligible(this.viewSubscriptionData);
+    }
+
+    /**
+     * Calculates the total amount for prepaid subscription (amount + tax).
+     *
+     * @readonly
+     * @memberof ViewSubscriptionComponent
+     */
+    public get prepaidTotalAmount(): number {
+        const prepaid = this.viewSubscriptionData?.prepaidSubscription;
+        if (!prepaid) {
+            return 0;
+        }
+        return Number(prepaid.amount || 0) + Number(prepaid.taxTotal || 0);
+    }
+
+    /**
+     * Navigates to the advance payment page for the current subscription and
+     * asks the target page to redirect back to view-subscription on success.
+     *
+     * @memberof ViewSubscriptionComponent
+     */
+    public goToAdvancePayment(): void {
+        this.router.navigate(
+            [`/pages/user-details/subscription/advance-payment/${this.subscriptionId}`],
+            {
+                queryParams: {
+                    removeWarning: true,
+                    redirectUrl: `/pages/user-details/subscription/view-subscription/${this.subscriptionId}`
+                }
+            }
+        );
+    }
+
     constructor(
         public dialog: MatDialog,
         private router: Router,
@@ -58,7 +132,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
         private subscriptionComponentStore: SubscriptionComponentStore,
         private generalService: GeneralService,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
     ) {
     }
 

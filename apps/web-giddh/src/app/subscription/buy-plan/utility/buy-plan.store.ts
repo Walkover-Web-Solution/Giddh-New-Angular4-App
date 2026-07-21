@@ -32,6 +32,7 @@ export interface BuyPlanState {
     razorpaySuccess: boolean;
     saveStripePaymentInProgress: boolean;
     saveStripePaymentSuccess: boolean;
+    activateAdvancePaymentSuccess: boolean;
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
@@ -56,7 +57,8 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     calculateData: null,
     razorpaySuccess: false,
     saveStripePaymentInProgress: false,
-    saveStripePaymentSuccess: false
+    saveStripePaymentSuccess: false,
+    activateAdvancePaymentSuccess: false
 };
 
 @Injectable()
@@ -127,6 +129,48 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
             switchMap((req) => {
                 this.patchState({ createSubscriptionInProgress: true });
                 return this.subscriptionService.createSubscription(req).pipe(
+                    tap(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    createSubscriptionInProgress: false,
+                                    createSubscriptionResponse: res?.body ?? null,
+                                    createSubscriptionSuccess: true
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    createSubscriptionResponse: null,
+                                    createSubscriptionInProgress: false,
+                                    createSubscriptionSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+                            return this.patchState({
+                                createSubscriptionInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Advance Payment
+     *
+     * @memberof BuyPlanComponentStore
+     */
+    readonly advancePayment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ createSubscriptionInProgress: true });
+                return this.subscriptionService.createAdvancePayment(req).pipe(
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
@@ -379,6 +423,44 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
                             return this.patchState({
                                 razorpaySuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+    * Save Razorpay Token
+    *
+    * @memberof BuyPlanComponentStore
+    */
+    readonly saveAdvancePayment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ activateAdvancePaymentSuccess: null });
+                return this.subscriptionService.activateAdvancePayment(req).pipe(
+                    tap(
+                        (res: any) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    activateAdvancePaymentSuccess: true
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    activateAdvancePaymentSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+                            return this.patchState({
+                                activateAdvancePaymentSuccess: false
                             });
                         }
                     ),

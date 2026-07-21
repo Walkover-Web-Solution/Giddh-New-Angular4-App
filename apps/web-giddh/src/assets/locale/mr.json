@@ -383,7 +383,8 @@
         "master": "मास्टर",
         "voucher": "व्हाउचर",
         "account_wise": "खाते नुसार",
-        "voucher_wise": "व्हाउचर नुसार"
+        "voucher_wise": "व्हाउचर नुसार",
+        "bank_statement": "बँक स्टेटमेंट"
     },
     "app_please_select": "कृपया निवडा",
     "app_company": "कंपनी",

@@ -7,12 +7,12 @@
             "items": [
                 {
                     "label": "एजिंग रिपोर्ट",
-                    "link": "/pages/contact/aging-report",
+                    "link": "/pages/contact/sales",
                     "icon": "icon-aging-report-new",
                     "description": "पिछले दिनों और आगामी दिनों में देय राशि",
                     "additional": {
                         "queryParams": {
-                            "tab": "aging-report",
+                            "tab": "sales-aging-report",
                             "tabIndex": 1
                         }
                     }
@@ -312,6 +312,18 @@
             "label": "विक्रेता",
             "icon": "icon-vendor",
             "items": [
+                {
+                    "label": "एजिंग रिपोर्ट",
+                    "link": "/pages/contact/purchase",
+                    "icon": "icon-aging-report-new",
+                    "description": "पिछले दिनों और आगामी दिनों में देय राशि",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "purchase-aging-report",
+                            "tabIndex": 1
+                        }
+                    }
+                },
                 {
                     "label": "विक्रेता",
                     "link": "/pages/contact/vendor",

@@ -1618,7 +1618,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         voucherDetails.entries?.forEach((entry: any, index: number) => {
                             if (entry.entryClass === "ANNEXURE") {
                                 annexureChargesArray.push(this.getAnnexureChargeFormGroup(entry));
-                                this.calculateAnnexureChargeTax(index, false, entry.taxes);
+                                this.calculateAnnexureChargeTax(annexureChargesArray.length - 1, false, entry.taxes);
                                 return;
                             }
                             if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
