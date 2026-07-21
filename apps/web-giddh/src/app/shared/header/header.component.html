@@ -578,20 +578,17 @@
         </div>
     </div>
 
-    <div
-        *ngIf="showAlertMessage.isPrepaidRenewalAvailable && generalService.isAdvancePaymentEligible(activeCompany?.subscription)"
-        class="plan-wrapper"
-        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
-    >
-        <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
-            <p>
-                <i class="icon-traingle-info font-size-15 mr-2"></i>
-                <span [innerHTML]="getPrepaidRenewalNote()"></span>
-            </p>
-            <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isPrepaidRenewalAvailable = false"></i>
+    @if (showAlertMessage.isPrepaidRenewalAvailable && generalService.isAdvancePaymentEligible(activeCompany?.subscription)) {
+        <div class="plan-wrapper" [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }">
+            <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
+                <p>
+                    <i class="icon-traingle-info font-size-15 mr-2"></i>
+                    <span [innerHTML]="getPrepaidRenewalNote()"></span>
+                </p>
+                <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isPrepaidRenewalAvailable = false"></i>
+            </div>
         </div>
-    </div>
-
+    }
     <div
         class="plan-wrapper"
         *ngIf="showAlertMessage.isTransactionLimitExceeded && subscribedPlan !== undefined && subscribedPlan.additionalCharges"
