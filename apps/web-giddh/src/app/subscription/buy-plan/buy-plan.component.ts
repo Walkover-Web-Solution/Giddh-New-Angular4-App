@@ -1925,8 +1925,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 subscriptionId: null
             }
 
-            if ((this.isMonthly() || this.isDaily()) && (!isTrial && !this.isAdvancePayment)) {
-                request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
+            if (!isTrial && !this.isAdvancePayment) {
+                if(this.isMonthly() || this.isDaily()) {
+                   request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
+                } else {
+                    request['autoPay'] = false;
+                }
             }
 
             if ((this.isMonthly() || this.isDaily()) && this.selectedPlan()?.entityCode !== EntityCode.GBR) {
