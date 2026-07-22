@@ -3547,14 +3547,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const prioritizedApplicableTaxes = applicableTaxesExcludingOtherTaxes.length ? applicableTaxesExcludingOtherTaxes : accountOtherApplicableTaxes;
 
                 if (!isSundryDebtorCreditorGroup) {
-                    const stockGroupTax = this.companyTaxesList.filter(otherTax =>
-                        data.body.stock?.groupTaxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
-                    ).map(tax => tax.uniqueName);
-                    const stockTax = this.companyTaxesList.filter(otherTax =>
-                        data.body.stock?.taxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
-                    ).map(tax => tax.uniqueName);
-                    data.body.stock.taxes = data.body.stock?.taxes.filter(tax => !stockTax.includes(tax));
-                    data.body.stock.groupTaxes = data.body.stock?.groupTaxes.filter(tax => !stockGroupTax.includes(tax));
+                    const stockGroupTax: string[] = [];
+                    if (data.body?.stock?.groupTaxes) {
+                        stockGroupTax.push(...this.companyTaxesList.filter(otherTax =>
+                            data.body.stock?.groupTaxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
+                        ).map(tax => tax.uniqueName));
+                        data.body.stock.groupTaxes = data.body.stock?.groupTaxes.filter(tax => !stockGroupTax.includes(tax));
+                    }
+                    const stockTax: string[] = [];
+                    if (data.body?.stock?.taxes) {
+                        stockTax.push(...this.companyTaxesList.filter(otherTax =>
+                            data.body.stock?.taxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
+                        ).map(tax => tax.uniqueName));
+                        data.body.stock.taxes = data.body.stock?.taxes.filter(tax => !stockTax.includes(tax));
+                    }
                     
                     // Take taxes of parent group and stock's own taxes
                     taxes = this.generalService.fetchTaxesOnPriority(

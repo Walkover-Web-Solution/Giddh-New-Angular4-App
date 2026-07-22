@@ -14,12 +14,18 @@ import { ExportBodyRequest } from 'apps/web-giddh/src/app/models/api-models/Dayb
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
+import { IOption } from 'apps/web-giddh/src/app/app.constant';
+import { CopyType } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
+import { TributeConfig } from 'apps/web-giddh/src/app/shared/helpers/directives/tributeMention/tributeType';
+import { VoucherComponentStore } from 'apps/web-giddh/src/app/vouchers/utility/vouchers.store';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'export-group-ledger',
     templateUrl: './export-group-ledger.component.html',
     styleUrls: ['./export-group-ledger.component.scss'],
-    standalone: false
+    standalone: false,
+    providers: [VoucherComponentStore]
 })
 
 export class ExportGroupLedgerComponent implements OnInit {
@@ -72,7 +78,12 @@ export class ExportGroupLedgerComponent implements OnInit {
         showDescription: false,
         groupUniqueName: '',
         exportType: 'GROUP_LEDGER_EXPORT',
-        showEntryVoucherNo: false
+        showEntryVoucherNo: false,
+        attachmentExport: false,
+        voucherExport: true,
+        fileNameFormat: '',
+        mergePdf: false,
+        copyTypes: []
     }
     /** To hold export request object */
     public fileType: string = 'CSV';
@@ -86,11 +97,34 @@ export class ExportGroupLedgerComponent implements OnInit {
     public currentGroup: any = {};
     /** Holds Group uniques name from Params */
     public groupUniqueName: string = '';
+    /** Holds the current date */
+    public todayDate: any = new Date();
+    /** List of available file formats with predefined values */
+    public fileFormatList = [
+        { value: 'Voucher Date', label: 'Voucher Date', key: 'DATE', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
+        { value: 'Entry No', label: 'Entry No', key: 'ENTRY_NO', showValue: "3824" },
+        { value: 'Account Name', label: 'Account Name', key: 'ACC_NAME', showValue: "Walkover" }
+    ];
+    /** List of selected file formats */
+    public selectedFormatList: string = "";
+    /** List of copy type */
+    public copyTypes: IOption[] = [];
+    /** Prefix of format file name */
+    public fileFormatPrefix: string = "AS";
+    /** Will check if form is valid */
+    public isValidForm: boolean = true;
+    /** Tribute config */
+    public tributeConfig: TributeConfig = {
+        trigger: '{',
+        suggestionPrefix: '{',
+        suggestionSuffix: '}',
+    };
 
     constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService,
         private ledgerService: LedgerService,
         private toaster: ToasterService,
-        private groupWithAccountsAction: GroupWithAccountsAction) {
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private componentStore: VoucherComponentStore) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -119,6 +153,17 @@ export class ExportGroupLedgerComponent implements OnInit {
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
+
+        this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = false;
+            if (response?.status === "success" && response?.body) {
+                if (response.body.type === "base64") {
+                    let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
+                    saveAs(blob, this.activeGroupUniqueName + `.zip`);
+                    this.closeExportGroupLedgerModal.emit(true);
+                }
+            }
+        });
     }
 
     /**
@@ -127,7 +172,41 @@ export class ExportGroupLedgerComponent implements OnInit {
      * @memberof ExportGroupLedgerComponent
      */
     public exportLedger() {
-        if (this.exportType === 'ledger') {
+        if (this.exportType === 'voucher') {
+            if (this.exportRequest.voucherExport && !this.exportRequest.copyTypes.length) {
+                this.isValidForm = false;
+                return;
+            }
+            this.isLoading = true;
+            let postRequest: any = {
+                attachmentExport: this.exportRequest.attachmentExport,
+                voucherExport: this.exportRequest.voucherExport,
+                groupUniqueName: this.activeGroupUniqueName
+            };
+            if (this.exportRequest.attachmentExport) {
+                let fileNameFormat = this.selectedFormatList?.trim();
+                if (fileNameFormat?.length) {
+                    (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach(format => {
+                        const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
+                        fileNameFormat = fileNameFormat.replace(pattern, `\${${format.key}}`);
+                    });
+                    postRequest.fileNameFormat = fileNameFormat;
+                } else {
+                    postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
+                }
+            }
+            if (this.exportRequest.voucherExport) {
+                postRequest.mergePdf = this.exportRequest.mergePdf;
+                postRequest.copyTypes = this.exportRequest.copyTypes;
+            }
+            const getRequest = {
+                groupUniqueName: this.activeGroupUniqueName,
+                from: this.fromDate,
+                to: this.toDate
+            };
+            this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
+            return;
+        } else if (this.exportType === 'ledger') {
             this.exportRequest.from = this.fromDate;
             this.exportRequest.to = this.toDate;
             this.closeExportGroupLedgerModal.emit({ from: this.fromDate, to: this.toDate, type: this.emailTypeSelected, fileType: this.fileType, order: this.order, body: this.exportRequest });
@@ -266,5 +345,37 @@ export class ExportGroupLedgerComponent implements OnInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Generates a formatted file name based on selected file formats.
+     *
+     * @returns {string} The formatted file name string.
+     * @memberof ExportGroupLedgerComponent
+     */
+    public getFileFormat() {
+        let fileNameFormat = this.selectedFormatList;
+        (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach((format) => {
+            if (this.selectedFormatList.includes(`{${format.value}}`)) {
+                fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
+            }
+        });
+        this.exportRequest.fileNameFormat = fileNameFormat;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ExportGroupLedgerComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.copyTypes = [
+                { value: CopyType.ORIGINAL, label: this.localeData?.invoice_copy_options?.original },
+                { value: CopyType.CUSTOMER, label: this.localeData?.invoice_copy_options?.customer },
+                { value: CopyType.TRANSPORT, label: this.localeData?.invoice_copy_options?.transport }
+            ];
+        }
     }
 }
