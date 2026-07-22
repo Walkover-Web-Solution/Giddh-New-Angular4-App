@@ -39,7 +39,7 @@ export enum ReportCategoryName {
     FINANCIAL = 'Financial',
     ACCOUNTING = 'Accounting',
     INVENTORY = 'Inventory',
-    CASH_FLOW = 'Cash Flow'
+    CASH_FLOW = 'CashFlow'
 }
 
 @Component({
