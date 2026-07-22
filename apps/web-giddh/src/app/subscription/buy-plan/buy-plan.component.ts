@@ -1226,7 +1226,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.thirdStepForm = this.formBuilder.group({
             userUniqueName: [''],
             paymentProvider: [''],
-            razorpayAuthType: ['']
+            razorpayAuthType: [''],
+            autoPay: [true]
         });
 
         this.subscriptionForm = this.formBuilder.group({
@@ -1922,6 +1923,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
                 paymentProvider: this.thirdStepForm.value.paymentProvider,
                 subscriptionId: null
+            }
+
+            if ((this.isMonthly() || this.isDaily()) && (!isTrial && !this.isAdvancePayment)) {
+                request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
             }
 
             if ((this.isMonthly() || this.isDaily()) && this.selectedPlan()?.entityCode !== EntityCode.GBR) {
