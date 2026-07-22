@@ -618,6 +618,7 @@
         {
             "label": "Reports",
             "icon": "icon-reports",
+            "route": "/pages/all-reports",
             "items": [
                 {
                     "label": "Balance Sheet",
