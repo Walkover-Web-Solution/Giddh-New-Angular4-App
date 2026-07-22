@@ -26,7 +26,7 @@
                     [type]="'text'"
                 ></text-field>
             </div>
-            <div class="my-3" *ngIf="invoiceType.isSalesInvoice">
+            <div class="my-3" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
                 <p class="mb-1">{{ localeData?.invoice_copy }}</p>
                 <mat-checkbox
                     color="primary"
@@ -64,7 +64,8 @@
                         invoiceType?.isReceiptInvoice ||
                         invoiceType?.isPaymentInvoice ||
                         invoiceType.isPurchaseOrder ||
-                        invoiceType.isPurchaseInvoice,
+                        invoiceType.isPurchaseInvoice ||
+                        invoiceType.isCashInvoice,
                 }"
             >
                 <button matButton="filled" type="submit">{{ commonLocaleData?.app_send }}</button>

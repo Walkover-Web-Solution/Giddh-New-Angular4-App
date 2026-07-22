@@ -9679,7 +9679,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isReceiptInvoice ||
-            this.invoiceType.isPaymentInvoice
+            this.invoiceType.isPaymentInvoice ||
+            this.invoiceType.isCashInvoice
         );
     }
 
