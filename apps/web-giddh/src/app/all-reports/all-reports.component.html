@@ -9,6 +9,12 @@
     <div class="container-lg py-4">
         @if (isLoading()) {
             <giddh-page-loader></giddh-page-loader>
+        } @else if (!allReports() || allReports().length === 0) {
+            <no-data
+                [primaryMessageClass]="'no-data'"
+                [primaryMessage]="localeData?.no_reports_available"
+                [secondaryMessage]="' '"
+            ></no-data>
         } @else {
             <div class="d-flex align-items-center mb-3">
                 <p class="font-size-20 font-weight-semibold mb-0">{{ localeData?.page_heading }}</p>
@@ -43,8 +49,12 @@
                             appearance="outlined"
                             class="report-card bg-table-background-color border-radius-8 p-4 cursor-pointer position-relative d-flex flex-row align-items-center column-gap-1"
                             (click)="openReport(report)"
+                            (keydown.enter)="openReport(report)"
+                            (keydown.space)="openReport(report)"
                             [matTooltip]="reportDescription(report)"
                             [matTooltipPosition]="'right'"
+                            tabindex="0"
+                            role="button"
                         >
                             <div
                                 class="report-icon border-radius-8 d-flex align-items-center justify-content-center flex-shrink-0"
@@ -139,6 +149,10 @@
                             appearance="outlined"
                             class="report-card cursor-pointer bg-table-background-color border-radius-8 p-4 position-relative d-flex flex-row align-items-center column-gap-1"
                             (click)="openReport(report)"
+                            (keydown.enter)="openReport(report)"
+                            (keydown.space)="openReport(report)"
+                            tabindex="0"
+                            role="button"
                         >
                             <div
                                 class="report-icon border-radius-8 d-flex align-items-center justify-content-center flex-shrink-0"

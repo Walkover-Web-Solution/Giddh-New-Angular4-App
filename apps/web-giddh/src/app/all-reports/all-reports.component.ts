@@ -13,6 +13,7 @@ import { GeneralService } from '../services/general.service';
 import { AllReportsService } from './utility/all-reports.service';
 import { FilterOption, ReportItem } from './utility/all-reports.model';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 
 /** UI-facing shape of a report category rendered as a chip/card */
 interface CategoryDefinition {
@@ -53,7 +54,8 @@ export enum ReportCategoryName {
         MatCardModule,
         HamburgerMenuModule,
         TranslateDirectiveModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        NoDataModule
     ],
     templateUrl: './all-reports.component.html',
     styleUrls: ['./all-reports.component.scss']
