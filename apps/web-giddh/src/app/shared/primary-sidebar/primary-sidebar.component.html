@@ -144,8 +144,8 @@
                                 <div class="main-item-wrapper">
                                     <span
                                         aria-label="menu"
-                                        (click)="toggleNode(node)"
-                                        [routerLink]="node?.route ? [node?.route] : null"
+                                        (click)="!node?.route ? toggleNode(node) : null"
+                                        [routerLink]="node?.route ? [node.route] : null"
                                         class="main-item"
                                     >
                                         <span class="item-label">

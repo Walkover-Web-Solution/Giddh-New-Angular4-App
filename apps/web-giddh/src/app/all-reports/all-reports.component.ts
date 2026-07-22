@@ -11,37 +11,9 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { ToasterService } from '../services/toaster.service';
 import { GeneralService } from '../services/general.service';
 import { AllReportsService } from './utility/all-reports.service';
-import { FilterOption, ReportItem } from './utility/all-reports.model';
+import { FilterOption, ReportItem, CategoryDefinition, ReportCategoryName } from './utility/all-reports.model';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
-
-/** UI-facing shape of a report category rendered as a chip/card */
-interface CategoryDefinition {
-    /** URL-safe key, e.g. 'cash-flow' */
-    key: string;
-    /** Human readable label from API */
-    label: string;
-    /** CSS icon class or SVG filename */
-    icon: string;
-    /** Icon foreground color */
-    color: string;
-    /** Icon badge background color */
-    bgColor: string;
-    /** Raw report `name` values that belong to this category */
-    reports: string[];
-}
-
-/** Canonical category names as returned by the API (`filterOption.name`) */
-export enum ReportCategoryName {
-    ALL = 'All',
-    SALES = 'Sales',
-    PURCHASE = 'Purchase',
-    CUSTOMERS = 'Customers',
-    FINANCIAL = 'Financial',
-    ACCOUNTING = 'Accounting',
-    INVENTORY = 'Inventory',
-    CASH_FLOW = 'CashFlow'
-}
 
 @Component({
     selector: 'app-all-reports',

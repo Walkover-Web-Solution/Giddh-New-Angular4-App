@@ -1,6 +1,4 @@
 .all-reports-page {
-    height: calc(100vh - 60px);
-
     .reports-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
