@@ -787,6 +787,12 @@
             "icon": "icon-reports",
             "items": [
                 {
+                    "label": "All Reports",
+                    "link": "/pages/all-reports",
+                    "icon": "icon-reports",
+                    "description": "View all reports organized by category - Sales, Purchase, Financial, Inventory, Cash Flow and more"
+                },
+                {
                     "label": "Trial balance",
                     "link": "/pages/trial-balance-and-profit-loss",
                     "icon": "icon-trial-balance-new",

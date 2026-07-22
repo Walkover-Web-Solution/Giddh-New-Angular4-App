@@ -783,6 +783,12 @@
             "icon": "icon-reports",
             "items": [
                 {
+                    "label": "सभी रिपोर्ट्स",
+                    "link": "/pages/all-reports",
+                    "icon": "icon-reports",
+                    "description": "श्रेणी के अनुसार व्यवस्थित सभी रिपोर्ट देखें - बिक्री, खरीद, वित्तीय, इन्वेंटरी, कैश फ्लो और अधिक"
+                },
+                {
                     "label": "संतुलन परीक्षण",
                     "link": "/pages/trial-balance-and-profit-loss",
                     "icon": "icon-trial-balance-new",

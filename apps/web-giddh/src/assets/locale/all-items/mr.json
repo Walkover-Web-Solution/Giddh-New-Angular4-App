@@ -783,6 +783,12 @@
             "icon": "icon-reports",
             "items": [
                 {
+                    "label": "सर्व अहवाल",
+                    "link": "/pages/all-reports",
+                    "icon": "icon-reports",
+                    "description": "श्रेणीनुसार व्यवस्थित सर्व अहवाल पहा - विक्री, खरेदी, वित्तीय, इन्व्हेंटरी, कॅश फ्लो आणि अधिक"
+                },
+                {
                     "label": "ताळेबंद",
                     "link": "/pages/trial-balance-and-profit-loss",
                     "icon": "icon-balance-sheet-new",
