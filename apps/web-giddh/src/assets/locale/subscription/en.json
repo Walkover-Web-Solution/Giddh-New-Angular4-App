@@ -178,6 +178,6 @@
         "add_next_billing_cycle": "Add next billing cycle to this payment?",
         "add_next_billing_cycle_description": "You can pay for this plan's next cycle now, in addition to the current one. Your subscription stays active until it expires, then this plan continues automatically.",
         "yes_add_next_cycle": "Yes, add next cycle",
-        "no_current_cycle_only": "No, current cycle only"
-        
+        "no_current_cycle_only": "No, current cycle only",
+        "auto_pay": "Enable automatic payments for future billing cycles"
     }

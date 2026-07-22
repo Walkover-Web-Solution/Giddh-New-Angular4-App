@@ -852,6 +852,18 @@
                                                             {{ localeData?.please_select_payment_provider }}
                                                         </mat-error>
                                                     }
+                                                    @if (isMonthly() || isDaily()) {
+                                                        <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                                                            <span class="text-primary font-weight-semibold">
+                                                                {{ localeData?.auto_pay }}
+                                                            </span>
+                                                            <mat-slide-toggle
+                                                                color="primary"
+                                                                formControlName="autoPay"
+                                                                [attr.aria-label]="localeData?.auto_pay"
+                                                            ></mat-slide-toggle>
+                                                        </div>
+                                                    }
                                                 </div>
                                             </mat-card-content>
                                         </mat-card>
