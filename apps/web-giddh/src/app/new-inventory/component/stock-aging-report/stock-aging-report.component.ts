@@ -8,7 +8,7 @@ import { AppState } from "../../../store";
 import { AgingReportActions } from "../../../actions/aging-report.actions";
 import { AgingDropDownoptions } from "../../../models/api-models/Contact";
 import { PageEvent } from "@angular/material/paginator";
-import { UntypedFormControl, FormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { cloneDeep } from "../../../lodash-optimized";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
@@ -103,13 +103,13 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     /** True when the current org is a company (branch dropdown visible). */
     public isCompany: boolean = false;
     /** Search form control for the branch dropdown. */
-    public branchesDropdown: UntypedFormControl = new UntypedFormControl();
+    public branchesDropdown: FormControl = new FormControl();
     /** Search form control for the warehouse dropdown. */
-    public warehousesDropdown: UntypedFormControl = new UntypedFormControl();
+    public warehousesDropdown: FormControl = new FormControl();
     /** Search form control for the stock-group dropdown. */
-    public stockGroupsDropdown: UntypedFormControl = new UntypedFormControl();
+    public stockGroupsDropdown: FormControl = new FormControl();
     /** Debounced item-name search input; drives `searchText` in the payload. */
-    public searchStockName: UntypedFormControl = new UntypedFormControl();
+    public searchStockName: FormControl = new FormControl();
     /** True when the item-name search input is expanded in the column header. */
     public showStockNameSearchInput: boolean = false;
     /** Latest debounced item-name search text sent to the API. */
