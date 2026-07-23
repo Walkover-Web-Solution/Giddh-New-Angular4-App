@@ -128,12 +128,12 @@
             "icon": "stock.svg"
         },
         "INVENTORY_GROUP_WISE": {
-            "title": "Stock by Product Group",
+            "title": "Product, Group Report",
             "description": "Totals by product group",
             "icon": "group-wise.svg"
         },
         "INVENTORY_VARIANT_WISE": {
-            "title": "Stock by Variant",
+            "title": "Product, Variant Report",
             "description": "Stock split by variant",
             "icon": "varient-wise.svg"
         },
@@ -148,17 +148,17 @@
             "icon": "service.svg"
         },
         "INVENTORY_SERVICE_GROUP": {
-            "title": "Services by Group",
+            "title": "Services, Group Report",
             "description": "Usage totals by service group",
             "icon": "group-wise.svg"
         },
         "INVENTORY_SERVICE_VARIANT": {
-            "title": "Services by Variant",
+            "title": "Services, Variant Report",
             "description": "Services split by variant",
             "icon": "varient-wise.svg"
         },
         "INVENTORY_SERVICE_TRANSACTION": {
-            "title": "Service Ledger",
+            "title": "Service Transactions",
             "description": "All service transactions",
             "icon": "transactions.svg"
         },
@@ -168,17 +168,17 @@
             "icon": "fixed-assets.svg"
         },
         "INVENTORY_FIXEDASSETS_GROUP": {
-            "title": "Fixed Assets by Group",
+            "title": "Fixed Assets, Group Report",
             "description": "Totals by asset group",
             "icon": "group-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_VARIANT": {
-            "title": "Fixed Assets by Variant",
+            "title": "Fixed Assets, Variant Report",
             "description": "Assets split by variant",
             "icon": "varient-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_TRANSACTION": {
-            "title": "Fixed Asset Ledger",
+            "title": "Fixed Asset Transactions",
             "description": "Acquisitions, disposals & adjustments",
             "icon": "transactions.svg"
         },
