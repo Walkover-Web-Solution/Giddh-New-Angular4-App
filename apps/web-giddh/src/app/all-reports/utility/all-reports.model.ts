@@ -41,7 +41,7 @@ export enum ReportCategoryName {
     ALL = 'All',
     SALES = 'Sales',
     PURCHASE = 'Purchase',
-    CUSTOMERS = 'Customers',
+    CUSTOMERS = 'Customers/Vendors',
     FINANCIAL = 'Financial',
     ACCOUNTING = 'Accounting',
     INVENTORY = 'Inventory',

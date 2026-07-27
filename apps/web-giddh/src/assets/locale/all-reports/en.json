@@ -23,8 +23,23 @@
             "icon": "icon-proft-loss-new"
         },
         "GST": {
-            "title": "GST",
+            "title": "GST Dashboard",
             "description": "GST returns, filings and summaries",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-1": {
+            "title": "GSTR-1",
+            "description": "File & view GSTR1",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-2": {
+            "title": "GSTR-2",
+            "description": "File & view GSTR2",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-3B": {
+            "title": "GSTR-3B",
+            "description": "File & view GSTR3B",
             "icon": "icon-tax-new"
         },
         "DAYBOOK": {
@@ -128,12 +143,12 @@
             "icon": "stock.svg"
         },
         "INVENTORY_GROUP_WISE": {
-            "title": "Stock by Product Group",
+            "title": "Product Group Report",
             "description": "Totals by product group",
             "icon": "group-wise.svg"
         },
         "INVENTORY_VARIANT_WISE": {
-            "title": "Stock by Variant",
+            "title": "Product Variant Report",
             "description": "Stock split by variant",
             "icon": "varient-wise.svg"
         },
@@ -148,37 +163,37 @@
             "icon": "service.svg"
         },
         "INVENTORY_SERVICE_GROUP": {
-            "title": "Services by Group",
+            "title": "Service Group Report",
             "description": "Usage totals by service group",
             "icon": "group-wise.svg"
         },
         "INVENTORY_SERVICE_VARIANT": {
-            "title": "Services by Variant",
+            "title": "Service Variant Report",
             "description": "Services split by variant",
             "icon": "varient-wise.svg"
         },
         "INVENTORY_SERVICE_TRANSACTION": {
-            "title": "Service Ledger",
+            "title": "Service Transactions",
             "description": "All service transactions",
             "icon": "transactions.svg"
         },
         "INVENTORY_FIXEDASSETS_STOCK": {
-            "title": "Fixed Assets Summary",
+            "title": "Fixed Asset Summary",
             "description": "Asset-wise quantity & book value",
             "icon": "fixed-assets.svg"
         },
         "INVENTORY_FIXEDASSETS_GROUP": {
-            "title": "Fixed Assets by Group",
+            "title": "Fixed Asset Group Report",
             "description": "Totals by asset group",
             "icon": "group-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_VARIANT": {
-            "title": "Fixed Assets by Variant",
+            "title": "Fixed Asset Variant Report",
             "description": "Assets split by variant",
             "icon": "varient-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_TRANSACTION": {
-            "title": "Fixed Asset Ledger",
+            "title": "Fixed Asset Transactions",
             "description": "Acquisitions, disposals & adjustments",
             "icon": "transactions.svg"
         },
@@ -193,29 +208,54 @@
             "icon": "vendor-icon.svg"
         },
         "INVENTORY_PRODUCT_BULK_STOCK": {
-            "title": "Bulk Stock Update - Products",
+            "title": "Bulk Product Update",
             "description": "Edit product stock in bulk",
             "icon": "home-icon-black.svg"
         },
         "INVENTORY_SERVICE_BULK_STOCK": {
-            "title": "Bulk Stock Update - Services",
+            "title": "Bulk Service Update",
             "description": "Edit service rates in bulk",
             "icon": "home-icon-black.svg"
         },
         "INVENTORY_FIXEDASSETS_BULK_STOCK": {
-            "title": "Bulk Stock Update - Fixed Assets",
+            "title": "Bulk Fixed Asset Update",
             "description": "Edit asset details in bulk",
             "icon": "home-icon-black.svg"
         },
         "INVENTORY_BRANCH_TRANSFER": {
             "title": "Branch Transfers",
-            "description": "Goods moved between branches",
+            "description": "Manage & Transfer inventory",
             "icon": "branch-transfer.svg"
         },
         "INVENTORY_MANUFACTURING": {
             "title": "Manufacturing",
-            "description": "Production entries & BOM",
+            "description": "Find mfg. inventory status",
             "icon": "manufacturing.svg"
+        },
+        "SALES_BIFURCATION": {
+            "title": "Sales Bifurcation",
+            "description": "New vs old invoices breakdown",
+            "icon": "icon-register-new"
+        },
+        "SEARCH": {
+            "title": "Search",
+            "description": "Search across accounts and transactions",
+            "icon": "icon-reports"
+        },
+        "CUSTOMER": {
+            "title": "Customers",
+            "description": "Customer list and details",
+            "icon": "icon-customer"
+        },
+        "VENDOR": {
+            "title": "Vendors",
+            "description": "Vendor list and details",
+            "icon": "icon-vendor"
+        },
+        "WAREHOUSE_WISE_OPENING_BALANCE": {
+            "title": "Warehouse Opening Balance",
+            "description": "Stock opening balance by warehouse",
+            "icon": "warehouse-opening-balance.svg"
         }
     }
 }

@@ -332,12 +332,13 @@ export class AllReportsComponent implements OnInit, OnDestroy {
         } else {
             updated = [...currentFavorites, { name: report.name, uniqueName: report.uniqueName }];
         }
-        this.favorites.set(updated);
         this.allReportsService.saveFavoriteReports(updated).pipe(takeUntil(this.destroy$)).subscribe({
             next: (res) => {
                 if (res?.status !== 'success') {
                     this.favorites.set(currentFavorites);
                     if (res?.message) this.toaster.errorToast(res.message);
+                } else {
+                    this.loadReports();
                 }
             },
             error: () => this.favorites.set(currentFavorites)

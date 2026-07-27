@@ -23,8 +23,23 @@
             "icon": "icon-proft-loss-new"
         },
         "GST": {
-            "title": "जीएसटी",
+            "title": "जीएसटी डॅशबोर्ड",
             "description": "जीएसटी रिटर्न, फाइलिंग आणि सारांश",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-1": {
+            "title": "जीएसटीआर-1",
+            "description": "जीएसटीआर 1 फाइल करा आणि पहा",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-2": {
+            "title": "जीएसटीआर-2",
+            "description": "जीएसटीआर 2 फाइल करा आणि पहा",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-3B": {
+            "title": "जीएसटीआर-3B",
+            "description": "जीएसटीआर 3B फाइल करा आणि पहा",
             "icon": "icon-tax-new"
         },
         "DAYBOOK": {
@@ -128,12 +143,12 @@
             "icon": "stock.svg"
         },
         "INVENTORY_GROUP_WISE": {
-            "title": "उत्पादन गटानुसार स्टॉक",
+            "title": "उत्पादन गट अहवाल",
             "description": "उत्पादन गटानुसार एकूण",
             "icon": "group-wise.svg"
         },
         "INVENTORY_VARIANT_WISE": {
-            "title": "व्हेरिअंटनुसार स्टॉक",
+            "title": "उत्पादन व्हेरिअंट अहवाल",
             "description": "व्हेरिअंटनुसार स्टॉक",
             "icon": "varient-wise.svg"
         },
@@ -148,17 +163,17 @@
             "icon": "service.svg"
         },
         "INVENTORY_SERVICE_GROUP": {
-            "title": "सेवा गटानुसार",
+            "title": "सेवा गट अहवाल",
             "description": "सेवा गटानुसार एकूण",
             "icon": "group-wise.svg"
         },
         "INVENTORY_SERVICE_VARIANT": {
-            "title": "व्हेरिअंटनुसार सेवा",
+            "title": "सेवा व्हेरिअंट अहवाल",
             "description": "व्हेरिअंटनुसार सेवा",
             "icon": "varient-wise.svg"
         },
         "INVENTORY_SERVICE_TRANSACTION": {
-            "title": "सेवा खतावणी",
+            "title": "सेवा व्यवहार",
             "description": "सर्व सेवा व्यवहार",
             "icon": "transactions.svg"
         },
@@ -168,17 +183,17 @@
             "icon": "fixed-assets.svg"
         },
         "INVENTORY_FIXEDASSETS_GROUP": {
-            "title": "स्थिर मालमत्ता गटानुसार",
+            "title": "स्थिर मालमत्ता गट अहवाल",
             "description": "मालमत्ता गटानुसार एकूण",
             "icon": "group-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_VARIANT": {
-            "title": "स्थिर मालमत्ता व्हेरिअंटनुसार",
+            "title": "स्थिर मालमत्ता व्हेरिअंट अहवाल",
             "description": "व्हेरिअंटनुसार मालमत्ता",
             "icon": "varient-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_TRANSACTION": {
-            "title": "स्थिर मालमत्ता खतावणी",
+            "title": "स्थिर मालमत्ता व्यवहार",
             "description": "संपादन, विल्हेवाट आणि समायोजन",
             "icon": "transactions.svg"
         },
@@ -193,29 +208,54 @@
             "icon": "vendor-icon.svg"
         },
         "INVENTORY_PRODUCT_BULK_STOCK": {
-            "title": "बल्क स्टॉक अद्यतन - उत्पादने",
+            "title": "बल्क उत्पादन अद्यतन",
             "description": "उत्पादन स्टॉक बल्कमध्ये संपादित करा",
             "icon": "home-icon-black.svg"
         },
         "INVENTORY_SERVICE_BULK_STOCK": {
-            "title": "बल्क स्टॉक अद्यतन - सेवा",
+            "title": "बल्क सेवा अद्यतन",
             "description": "सेवा दर बल्कमध्ये संपादित करा",
             "icon": "home-icon-black.svg"
         },
         "INVENTORY_FIXEDASSETS_BULK_STOCK": {
-            "title": "बल्क स्टॉक अद्यतन - स्थिर मालमत्ता",
+            "title": "बल्क स्थिर मालमत्ता अद्यतन",
             "description": "मालमत्ता तपशील बल्कमध्ये संपादित करा",
             "icon": "home-icon-black.svg"
         },
         "INVENTORY_BRANCH_TRANSFER": {
             "title": "शाखा हस्तांतरण",
-            "description": "शाखांमध्ये हस्तांतरित माल",
+            "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी",
             "icon": "branch-transfer.svg"
         },
         "INVENTORY_MANUFACTURING": {
             "title": "उत्पादन",
-            "description": "उत्पादन नोंदी आणि BOM",
+            "description": "उत्पादन यादीची स्थिती शोधा",
             "icon": "manufacturing.svg"
+        },
+        "SALES_BIFURCATION": {
+            "title": "विक्री विभाजन",
+            "description": "नवीन विरुद्ध जुन्या चलनांचे विभाजन",
+            "icon": "icon-register-new"
+        },
+        "SEARCH": {
+            "title": "शोध",
+            "description": "खात्यांमध्ये आणि व्यवहारांमध्ये शोधा",
+            "icon": "icon-reports"
+        },
+        "CUSTOMER": {
+            "title": "ग्राहक",
+            "description": "ग्राहक यादी आणि तपशील",
+            "icon": "icon-customer"
+        },
+        "VENDOR": {
+            "title": "विक्रेता",
+            "description": "विक्रेता यादी आणि तपशील",
+            "icon": "icon-vendor"
+        },
+        "WAREHOUSE_WISE_OPENING_BALANCE": {
+            "title": "गोदाम प्रारंभिक शिल्लक",
+            "description": "गोदामानुसार स्टॉक प्रारंभिक शिल्लक",
+            "icon": "warehouse-opening-balance.svg"
         }
     }
 }
