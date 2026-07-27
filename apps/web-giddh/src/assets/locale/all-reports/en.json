@@ -23,23 +23,23 @@
             "icon": "icon-proft-loss-new"
         },
         "GST": {
-            "title": "GST",
+            "title": "GST Dashboard",
             "description": "GST returns, filings and summaries",
             "icon": "icon-tax-new"
         },
         "GSTR-1": {
             "title": "GSTR-1",
-            "description": "Outward supplies return filing",
+            "description": "File & view GSTR1",
             "icon": "icon-tax-new"
         },
         "GSTR-2": {
             "title": "GSTR-2",
-            "description": "Inward supplies return filing",
+            "description": "File & view GSTR2",
             "icon": "icon-tax-new"
         },
         "GSTR-3B": {
             "title": "GSTR-3B",
-            "description": "Monthly summary GST return",
+            "description": "File & view GSTR3B",
             "icon": "icon-tax-new"
         },
         "DAYBOOK": {
@@ -143,12 +143,12 @@
             "icon": "stock.svg"
         },
         "INVENTORY_GROUP_WISE": {
-            "title": "Product, Group Report",
+            "title": "Product Group Report",
             "description": "Totals by product group",
             "icon": "group-wise.svg"
         },
         "INVENTORY_VARIANT_WISE": {
-            "title": "Product, Variant Report",
+            "title": "Product Variant Report",
             "description": "Stock split by variant",
             "icon": "varient-wise.svg"
         },
@@ -163,12 +163,12 @@
             "icon": "service.svg"
         },
         "INVENTORY_SERVICE_GROUP": {
-            "title": "Services, Group Report",
+            "title": "Service Group Report",
             "description": "Usage totals by service group",
             "icon": "group-wise.svg"
         },
         "INVENTORY_SERVICE_VARIANT": {
-            "title": "Services, Variant Report",
+            "title": "Service Variant Report",
             "description": "Services split by variant",
             "icon": "varient-wise.svg"
         },
@@ -178,17 +178,17 @@
             "icon": "transactions.svg"
         },
         "INVENTORY_FIXEDASSETS_STOCK": {
-            "title": "Fixed Assets Summary",
+            "title": "Fixed Asset Summary",
             "description": "Asset-wise quantity & book value",
             "icon": "fixed-assets.svg"
         },
         "INVENTORY_FIXEDASSETS_GROUP": {
-            "title": "Fixed Assets, Group Report",
+            "title": "Fixed Asset Group Report",
             "description": "Totals by asset group",
             "icon": "group-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_VARIANT": {
-            "title": "Fixed Assets, Variant Report",
+            "title": "Fixed Asset Variant Report",
             "description": "Assets split by variant",
             "icon": "varient-wise.svg"
         },
@@ -208,28 +208,28 @@
             "icon": "vendor-icon.svg"
         },
         "INVENTORY_PRODUCT_BULK_STOCK": {
-            "title": "Bulk Stock Update - Products",
+            "title": "Bulk Product Update",
             "description": "Edit product stock in bulk",
             "icon": "home-icon-black.svg"
         },
         "INVENTORY_SERVICE_BULK_STOCK": {
-            "title": "Bulk Stock Update - Services",
+            "title": "Bulk Service Update",
             "description": "Edit service rates in bulk",
             "icon": "home-icon-black.svg"
         },
         "INVENTORY_FIXEDASSETS_BULK_STOCK": {
-            "title": "Bulk Stock Update - Fixed Assets",
+            "title": "Bulk Fixed Asset Update",
             "description": "Edit asset details in bulk",
             "icon": "home-icon-black.svg"
         },
         "INVENTORY_BRANCH_TRANSFER": {
             "title": "Branch Transfers",
-            "description": "Goods moved between branches",
+            "description": "Manage & Transfer inventory",
             "icon": "branch-transfer.svg"
         },
         "INVENTORY_MANUFACTURING": {
             "title": "Manufacturing",
-            "description": "Production entries & BOM",
+            "description": "Find mfg. inventory status",
             "icon": "manufacturing.svg"
         },
         "SALES_BIFURCATION": {

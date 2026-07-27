@@ -790,7 +790,7 @@
                     "label": "All Reports",
                     "link": "/pages/all-reports",
                     "icon": "icon-reports",
-                    "description": "View all reports organized by category - Sales, Purchase, Financial, Inventory, Cash Flow and more"
+                    "description": "Explore reports across categories"
                 },
                 {
                     "label": "Trial balance",

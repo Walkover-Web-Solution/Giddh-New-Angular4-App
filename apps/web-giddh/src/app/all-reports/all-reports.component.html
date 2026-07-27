@@ -51,7 +51,7 @@
                             (click)="openReport(report)"
                             (keydown.enter)="openReport(report)"
                             (keydown.space)="openReport(report)"
-                            [matTooltip]="reportDescription(report)"
+                            [matTooltip]="categoryLabel(report)"
                             [matTooltipPosition]="'right'"
                             tabindex="0"
                             role="button"
@@ -69,7 +69,7 @@
                             </div>
                             <div class="flex-grow-1 min-width-0">
                                 <p class="mb-0 font-size-14 font-weight-semibold">{{ displayName(report.name) }}</p>
-                                <p class="mb-0 font-size-12 light-gray mt-1">{{ categoryLabel(report) }}</p>
+                                <p class="mb-0 font-size-12 light-gray mt-1">{{ reportDescription(report) }}</p>
                             </div>
                             <button
                                 mat-icon-button
