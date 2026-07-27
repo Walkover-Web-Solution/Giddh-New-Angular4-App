@@ -17,7 +17,7 @@
             [formGroup]="sendEmailForm"
             (ngSubmit)="sendEmail()"
         >
-            <div class="w-100 option-value-field" formGroupName="email">
+            <div class="w-100 option-value-field mb-3" formGroupName="email">
                 <text-field
                     [name]="'email'"
                     [placeholder]="localeData?.enter_email_addresses"
@@ -26,7 +26,10 @@
                     [type]="'text'"
                 ></text-field>
             </div>
-            <div class="my-3" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
+            <div
+                class="mb-3"
+                *ngIf="invoiceType.isCashInvoice && !invoiceType.isCreditNote && !invoiceType.isDebitNote && !invoiceType.isPurchaseInvoice"
+            >
                 <p class="mb-1">{{ localeData?.invoice_copy }}</p>
                 <mat-checkbox
                     color="primary"
@@ -53,21 +56,7 @@
                     {{ commonLocaleData?.app_customer }}
                 </mat-checkbox>
             </div>
-            <div
-                class="d-flex column-gap-1"
-                [ngClass]="{
-                    'mt-2':
-                        invoiceType?.isEstimateInvoice ||
-                        invoiceType?.isProformaInvoice ||
-                        invoiceType?.isDebitNote ||
-                        invoiceType?.isCreditNote ||
-                        invoiceType?.isReceiptInvoice ||
-                        invoiceType?.isPaymentInvoice ||
-                        invoiceType.isPurchaseOrder ||
-                        invoiceType.isPurchaseInvoice ||
-                        invoiceType.isCashInvoice,
-                }"
-            >
+            <div class="d-flex column-gap-1">
                 <button matButton="filled" type="submit">{{ commonLocaleData?.app_send }}</button>
                 <button matButton="outlined" mat-dialog-close role="button">{{ commonLocaleData?.app_cancel }}</button>
             </div>

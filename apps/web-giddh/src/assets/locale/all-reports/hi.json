@@ -128,12 +128,12 @@
             "icon": "stock.svg"
         },
         "INVENTORY_GROUP_WISE": {
-            "title": "उत्पाद समूह-वार स्टॉक",
+            "title": "उत्पाद, समूह रिपोर्ट",
             "description": "उत्पाद समूह के अनुसार कुल",
             "icon": "group-wise.svg"
         },
         "INVENTORY_VARIANT_WISE": {
-            "title": "वेरिएंट-वार स्टॉक",
+            "title": "उत्पाद, वेरिएंट रिपोर्ट",
             "description": "वेरिएंट के अनुसार स्टॉक",
             "icon": "varient-wise.svg"
         },
@@ -148,17 +148,17 @@
             "icon": "service.svg"
         },
         "INVENTORY_SERVICE_GROUP": {
-            "title": "सेवा समूह-वार",
+            "title": "सेवा, समूह रिपोर्ट",
             "description": "सेवा समूह के अनुसार कुल",
             "icon": "group-wise.svg"
         },
         "INVENTORY_SERVICE_VARIANT": {
-            "title": "वेरिएंट-वार सेवाएँ",
+            "title": "सेवा, वेरिएंट रिपोर्ट",
             "description": "वेरिएंट के अनुसार सेवाएँ",
             "icon": "varient-wise.svg"
         },
         "INVENTORY_SERVICE_TRANSACTION": {
-            "title": "सेवा खाता-बही",
+            "title": "सेवा लेनदेन",
             "description": "सभी सेवा लेनदेन",
             "icon": "transactions.svg"
         },
@@ -168,17 +168,17 @@
             "icon": "fixed-assets.svg"
         },
         "INVENTORY_FIXEDASSETS_GROUP": {
-            "title": "समूह-वार स्थायी संपत्ति",
+            "title": "स्थायी संपत्ति, समूह रिपोर्ट",
             "description": "संपत्ति समूह के अनुसार कुल",
             "icon": "group-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_VARIANT": {
-            "title": "वेरिएंट-वार स्थायी संपत्ति",
+            "title": "स्थायी संपत्ति, वेरिएंट रिपोर्ट",
             "description": "वेरिएंट के अनुसार संपत्ति",
             "icon": "varient-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_TRANSACTION": {
-            "title": "स्थायी संपत्ति खाता-बही",
+            "title": "स्थायी संपत्ति लेनदेन",
             "description": "अधिग्रहण, निपटान और समायोजन",
             "icon": "transactions.svg"
         },

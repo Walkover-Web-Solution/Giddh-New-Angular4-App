@@ -128,12 +128,12 @@
             "icon": "stock.svg"
         },
         "INVENTORY_GROUP_WISE": {
-            "title": "उत्पादन गटानुसार स्टॉक",
+            "title": "उत्पादन, गट अहवाल",
             "description": "उत्पादन गटानुसार एकूण",
             "icon": "group-wise.svg"
         },
         "INVENTORY_VARIANT_WISE": {
-            "title": "व्हेरिअंटनुसार स्टॉक",
+            "title": "उत्पादन, व्हेरिअंट अहवाल",
             "description": "व्हेरिअंटनुसार स्टॉक",
             "icon": "varient-wise.svg"
         },
@@ -148,17 +148,17 @@
             "icon": "service.svg"
         },
         "INVENTORY_SERVICE_GROUP": {
-            "title": "सेवा गटानुसार",
+            "title": "सेवा, गट अहवाल",
             "description": "सेवा गटानुसार एकूण",
             "icon": "group-wise.svg"
         },
         "INVENTORY_SERVICE_VARIANT": {
-            "title": "व्हेरिअंटनुसार सेवा",
+            "title": "सेवा, व्हेरिअंट अहवाल",
             "description": "व्हेरिअंटनुसार सेवा",
             "icon": "varient-wise.svg"
         },
         "INVENTORY_SERVICE_TRANSACTION": {
-            "title": "सेवा खतावणी",
+            "title": "सेवा व्यवहार",
             "description": "सर्व सेवा व्यवहार",
             "icon": "transactions.svg"
         },
@@ -168,17 +168,17 @@
             "icon": "fixed-assets.svg"
         },
         "INVENTORY_FIXEDASSETS_GROUP": {
-            "title": "स्थिर मालमत्ता गटानुसार",
+            "title": "स्थिर मालमत्ता, गट अहवाल",
             "description": "मालमत्ता गटानुसार एकूण",
             "icon": "group-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_VARIANT": {
-            "title": "स्थिर मालमत्ता व्हेरिअंटनुसार",
+            "title": "स्थिर मालमत्ता, व्हेरिअंट अहवाल",
             "description": "व्हेरिअंटनुसार मालमत्ता",
             "icon": "varient-wise.svg"
         },
         "INVENTORY_FIXEDASSETS_TRANSACTION": {
-            "title": "स्थिर मालमत्ता खतावणी",
+            "title": "स्थिर मालमत्ता व्यवहार",
             "description": "संपादन, विल्हेवाट आणि समायोजन",
             "icon": "transactions.svg"
         },
