@@ -27,7 +27,6 @@ import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { Configuration } from '../app.constant';
 import { environment } from '../../environments/environment.generated';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
-import { TributeMentionModule } from './helpers/directives/tributeMention/tributeMention.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
@@ -45,8 +44,6 @@ import { CheckPermissionModule } from '../permissions/check-permission.module';
 import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/generic.aside.menu.account.module';
 import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { ExportMasterDialogComponent } from './header/components/export-master-dialog/export-master-dialog.component';
@@ -111,7 +108,6 @@ export function provideConfig() {
         MatPaginatorModule,
         Daterangepicker,
         TextCaseChangeModule,
-        TributeMentionModule,
         HighlightModule,
         NgxMaskModule.forRoot(),
         CommandKModule,
@@ -132,8 +128,6 @@ export function provideConfig() {
         CheckPermissionModule,
         AccountUpdateNewDetailsModule,
         MatRadioModule,
-        MatFormFieldModule,
-        MatSelectModule,
         MatButtonModule,
         MatDialogModule,
         MatTooltipModule,

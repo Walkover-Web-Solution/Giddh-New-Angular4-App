@@ -1,10 +1,4 @@
-<div
-    appTranslate
-    [file]="'ledger/export-ledger'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
->
+<div appTranslate [file]="'ledger/export-ledger'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div>
         <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.export_group_ledger }}</span>
@@ -14,7 +8,6 @@
                 <p class="mb-2">{{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}</p>
                 <mat-radio-group color="primary" name="exportType" [(ngModel)]="exportType" class="mb-3">
                     <mat-radio-button id="ledger-entries" [value]="'ledger'">{{ localeData?.ledger_entries }}</mat-radio-button>
-                    <mat-radio-button id="voucher" [value]="'voucher'">{{ commonLocaleData?.app_voucher }}</mat-radio-button>
                     <mat-radio-button id="account" [value]="'account'">{{ localeData?.account }}</mat-radio-button>
                 </mat-radio-group>
 
@@ -111,111 +104,6 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                </ng-container>
-                <ng-container *ngIf="exportType === 'voucher' && exportRequest">
-                    <div class="pb-5">
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}:</label>
-                                <div
-                                    class="custom-datepicker"
-                                    [matMenuTriggerFor]="universalDatepicker"
-                                    #universalDatepickerTrigger="matMenuTrigger"
-                                    role="button"
-                                    aria-haspopup="true"
-                                    aria-controls="universalDatepicker"
-                                >
-                                    <input
-                                        matInput
-                                        type="text"
-                                        name="selectedDateRange"
-                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker"
-                                        readonly
-                                        aria-label="Select date range"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pb-2 clear-both export-type d-flex column-gap-15">
-                        <div class="d-flex align-items-center">
-                            <label class="w125">{{ localeData?.attachment }}:</label>
-                            <mat-slide-toggle color="primary" name="attachmentExport" [(ngModel)]="exportRequest.attachmentExport">
-                                <span>{{ exportRequest?.attachmentExport ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}</span>
-                            </mat-slide-toggle>
-                        </div>
-                        <i
-                            class="icon-info1 cursor-pointer d-flex align-items-center"
-                            [matTooltip]="localeData?.export_attachment_info"
-                            matTooltipPosition="above"
-                        ></i>
-                    </div>
-                    <div
-                        class="d-flex column-gap-15 align-items-center"
-                        *ngIf="exportRequest?.attachmentExport && tributeConfig && fileFormatList"
-                    >
-                        <div class="mb-2">
-                            {{ commonLocaleData?.app_file_format }}
-                        </div>
-                        <div class="d-flex flex-column w-50">
-                            <input
-                                matInput
-                                #tribute="appTributeMention"
-                                (click)="tribute?.open()"
-                                [(ngModel)]="selectedFormatList"
-                                [placeholder]="commonLocaleData?.app_variable_search_hint"
-                                class="form-control radius-none border-none border-bottom"
-                                name="formatList"
-                                (ngModelChange)="getFileFormat()"
-                                [appTributeMention]="tributeConfig"
-                                [appTributeMentionValues]="fileFormatList"
-                            />
-                            <div class="font-size-12 word-break pt-1 pb-1">
-                                {{ exportRequest?.fileNameFormat }}
-                            </div>
-                        </div>
-                    </div>
-                    <mat-divider
-                        [ngClass]="{ 'mt-2': exportRequest?.attachmentExport && !selectedFormatList?.trim().length }"
-                    ></mat-divider>
-                    <div class="pb-4 pt-2 clear-both export-type">
-                        <label class="w125">{{ commonLocaleData?.app_voucher }}:</label>
-                        <mat-slide-toggle color="primary" name="voucherExport" [(ngModel)]="exportRequest.voucherExport">
-                            <span>{{ exportRequest?.voucherExport ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}</span>
-                        </mat-slide-toggle>
-                    </div>
-                    <ng-container *ngIf="exportRequest?.voucherExport">
-                        <div class="pb-2 mb-3">
-                            <mat-radio-group name="mergePdfSelection" [(ngModel)]="exportRequest.mergePdf">
-                                <mat-radio-button color="primary" [value]="false" aria-label="Export as multiple PDFs in single zip file">
-                                    {{ localeData?.multiple_pdf }}
-                                </mat-radio-button>
-                                <mat-radio-button color="primary" [value]="true" aria-label="Export as single PDF">
-                                    {{ localeData?.single_pdf }}
-                                </mat-radio-button>
-                            </mat-radio-group>
-                        </div>
-                        <div
-                            [ngClass]="{
-                                'mat-form-field-invalid': !exportRequest?.copyTypes?.length && !isValidForm,
-                            }"
-                        >
-                            <mat-form-field appearance="outline" class="w-100 mb-3">
-                                <mat-label>{{ localeData?.select_copy }}</mat-label>
-                                <mat-select
-                                    name="copyTypesSelection"
-                                    multiple
-                                    [placeholder]="localeData?.select_copy"
-                                    [(ngModel)]="exportRequest.copyTypes"
-                                >
-                                    <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">
-                                        {{ copyType.label }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
                 </ng-container>
                 <ng-container *ngIf="exportType === 'account'">
                     <div class="account-dialog">
