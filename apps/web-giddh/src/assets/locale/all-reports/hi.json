@@ -27,6 +27,21 @@
             "description": "जीएसटी रिटर्न, फाइलिंग और सारांश",
             "icon": "icon-tax-new"
         },
+        "GSTR-1": {
+            "title": "जीएसटीआर-1",
+            "description": "बाहरी आपूर्ति रिटर्न फाइलिंग",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-2": {
+            "title": "जीएसटीआर-2",
+            "description": "आंतरिक आपूर्ति रिटर्न फाइलिंग",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-3B": {
+            "title": "जीएसटीआर-3B",
+            "description": "मासिक सारांश जीएसटी रिटर्न",
+            "icon": "icon-tax-new"
+        },
         "DAYBOOK": {
             "title": "डेबुक",
             "description": "प्रतिदिन की एंट्रीज़ जो एक्सपोर्ट की जा सकती हैं",
@@ -216,6 +231,31 @@
             "title": "निर्माण",
             "description": "निर्माण एंट्रीज़ और BOM",
             "icon": "manufacturing.svg"
+        },
+        "SALES_BIFURCATION": {
+            "title": "बिक्री विभाजन",
+            "description": "नए बनाम पुराने चालानों का विवरण",
+            "icon": "icon-register-new"
+        },
+        "SEARCH": {
+            "title": "खोज",
+            "description": "खातों और लेनदेन में खोजें",
+            "icon": "icon-reports"
+        },
+        "CUSTOMER": {
+            "title": "ग्राहक",
+            "description": "ग्राहक सूची और विवरण",
+            "icon": "icon-customer"
+        },
+        "VENDOR": {
+            "title": "विक्रेता",
+            "description": "विक्रेता सूची और विवरण",
+            "icon": "icon-vendor"
+        },
+        "WAREHOUSE_WISE_OPENING_BALANCE": {
+            "title": "गोदाम शुरुआती बैलेंस",
+            "description": "गोदाम के अनुसार स्टॉक शुरुआती बैलेंस",
+            "icon": "warehouse-opening-balance.svg"
         }
     }
 }

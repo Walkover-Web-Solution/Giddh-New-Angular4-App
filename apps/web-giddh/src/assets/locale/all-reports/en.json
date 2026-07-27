@@ -27,6 +27,21 @@
             "description": "GST returns, filings and summaries",
             "icon": "icon-tax-new"
         },
+        "GSTR-1": {
+            "title": "GSTR-1",
+            "description": "Outward supplies return filing",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-2": {
+            "title": "GSTR-2",
+            "description": "Inward supplies return filing",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-3B": {
+            "title": "GSTR-3B",
+            "description": "Monthly summary GST return",
+            "icon": "icon-tax-new"
+        },
         "DAYBOOK": {
             "title": "Daybook",
             "description": "Everyday entries that can be exported",
@@ -216,6 +231,31 @@
             "title": "Manufacturing",
             "description": "Production entries & BOM",
             "icon": "manufacturing.svg"
+        },
+        "SALES_BIFURCATION": {
+            "title": "Sales Bifurcation",
+            "description": "New vs old invoices breakdown",
+            "icon": "icon-register-new"
+        },
+        "SEARCH": {
+            "title": "Search",
+            "description": "Search across accounts and transactions",
+            "icon": "icon-reports"
+        },
+        "CUSTOMER": {
+            "title": "Customers",
+            "description": "Customer list and details",
+            "icon": "icon-customer"
+        },
+        "VENDOR": {
+            "title": "Vendors",
+            "description": "Vendor list and details",
+            "icon": "icon-vendor"
+        },
+        "WAREHOUSE_WISE_OPENING_BALANCE": {
+            "title": "Warehouse Opening Balance",
+            "description": "Stock opening balance by warehouse",
+            "icon": "warehouse-opening-balance.svg"
         }
     }
 }
