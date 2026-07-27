@@ -27,6 +27,21 @@
             "description": "जीएसटी रिटर्न, फाइलिंग आणि सारांश",
             "icon": "icon-tax-new"
         },
+        "GSTR-1": {
+            "title": "जीएसटीआर-1",
+            "description": "बाह्य पुरवठा रिटर्न फाइलिंग",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-2": {
+            "title": "जीएसटीआर-2",
+            "description": "आंतरिक पुरवठा रिटर्न फाइलिंग",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-3B": {
+            "title": "जीएसटीआर-3B",
+            "description": "मासिक सारांश जीएसटी रिटर्न",
+            "icon": "icon-tax-new"
+        },
         "DAYBOOK": {
             "title": "डेबुक",
             "description": "दररोजच्या नोंदी ज्या एक्सपोर्ट करता येतात",
@@ -216,6 +231,31 @@
             "title": "उत्पादन",
             "description": "उत्पादन नोंदी आणि BOM",
             "icon": "manufacturing.svg"
+        },
+        "SALES_BIFURCATION": {
+            "title": "विक्री विभाजन",
+            "description": "नवीन विरुद्ध जुन्या चलनांचे विभाजन",
+            "icon": "icon-register-new"
+        },
+        "SEARCH": {
+            "title": "शोध",
+            "description": "खात्यांमध्ये आणि व्यवहारांमध्ये शोधा",
+            "icon": "icon-reports"
+        },
+        "CUSTOMER": {
+            "title": "ग्राहक",
+            "description": "ग्राहक यादी आणि तपशील",
+            "icon": "icon-customer"
+        },
+        "VENDOR": {
+            "title": "विक्रेता",
+            "description": "विक्रेता यादी आणि तपशील",
+            "icon": "icon-vendor"
+        },
+        "WAREHOUSE_WISE_OPENING_BALANCE": {
+            "title": "गोदाम प्रारंभिक शिल्लक",
+            "description": "गोदामानुसार स्टॉक प्रारंभिक शिल्लक",
+            "icon": "warehouse-opening-balance.svg"
         }
     }
 }
