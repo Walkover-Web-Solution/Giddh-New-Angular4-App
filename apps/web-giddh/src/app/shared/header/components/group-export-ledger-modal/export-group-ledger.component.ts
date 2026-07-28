@@ -202,7 +202,10 @@ export class ExportGroupLedgerComponent implements OnInit {
             const getRequest = {
                 groupUniqueName: this.activeGroupUniqueName,
                 from: this.fromDate,
-                to: this.toDate
+                to: this.toDate,
+                type: '',
+                mail: '',
+                q: ''
             };
             this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
             return;
