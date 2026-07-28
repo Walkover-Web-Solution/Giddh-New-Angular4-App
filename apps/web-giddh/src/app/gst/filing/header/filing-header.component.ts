@@ -153,10 +153,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                     this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
                 }
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
-            }
-            this.selectedGst = params['return_type'];
-            if (!this.router.url.includes('transaction') && !this.router.url.includes('hsn-summary')) {
-                this.getOverView();
+                this.selectedGst = params['return_type'];
+                if (!this.router.url.includes('transaction') && !this.router.url.includes('hsn-summary')) {
+                    this.getOverView();
+                }
             }
         });
     }
