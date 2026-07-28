@@ -831,18 +831,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
             } else {
                 if (response) {
-                    if (response.region?.code !== 'IND') {
-                        this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                        this.navigateToRoute('/pages/user-details/subscription');
-                    } else {
-                        this.updateSubscriptionPayment(response, true);
-                    }
+                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
+                    this.navigateToRoute('/pages/user-details/subscription');
                 }
             }
         });
 
         this.viewSubscriptionData$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
+            this.thirdStepForm?.get('autoPay')?.patchValue(response?.autoPay ?? true);
             this.activateSubscription = response.status.toLowerCase() === 'cancelled' && this.activateSubscription;
             if (this.activateSubscription || this.isAdvancePayment) {
                 this.selectedStep.set(1);
@@ -1736,6 +1733,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.componentStore.getCalculationData(reqObj);
         }
 
+        this.updatePaymentProviders();
+    }
+
+    /**
+     * Updates the list of payment providers based on entity code, duration,
+     * advance payment and auto-pay state.
+     *
+     * @memberof BuyPlanComponent
+     */
+    public updatePaymentProviders(): void {
         const entityCode = this.selectedPlan()?.entityCode;
 
         const filterProviders = (providers: string[]) => {
@@ -1748,7 +1755,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (entityCode === EntityCode.GBR) {
             // GBR: Stripe shown for all durations; GoCardless/PayPal added for monthly & daily
             if (this.isMonthly() || this.isDaily()) {
-                const providers = this.isAdvancePayment
+                const autoPay = this.thirdStepForm.get('autoPay')?.value;
+                const currentProvider = this.thirdStepForm.get('paymentProvider')?.value;
+                if (!autoPay && currentProvider === PaymentProvider.GOCARDLESS) {
+                    this.thirdStepForm.get('paymentProvider')?.patchValue(null);
+                }
+                const providers = this.isAdvancePayment || !autoPay
                     ? [PaymentProvider.STRIPE, PaymentProvider.PAYPAL]
                     : [PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL];
                 filterProviders(providers);
