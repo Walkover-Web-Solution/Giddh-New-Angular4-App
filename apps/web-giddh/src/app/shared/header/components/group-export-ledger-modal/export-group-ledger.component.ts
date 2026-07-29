@@ -165,11 +165,14 @@ export class ExportGroupLedgerComponent implements OnInit {
                         let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
                         return saveAs(blob, this.activeGroupUniqueName + `.zip`);
                     } else {
+                        // for close master dialog
+                        this.closeExportGroupLedgerModal.emit('close');
+                        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+                        document.querySelector('body')?.classList?.remove('master-page');
                         this.router.navigate(["/pages/downloads/exports"]);
-                        this.closeExportGroupLedgerModal.emit(true);
                     }
                 } else {
-                    this.closeExportGroupLedgerModal.emit(true);
+                    this.toaster.showSnackBar("error", response?.message);
                 }
             }
         });
