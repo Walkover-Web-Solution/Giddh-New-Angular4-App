@@ -19,6 +19,7 @@ import { CopyType } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
 import { TributeConfig } from 'apps/web-giddh/src/app/shared/helpers/directives/tributeMention/tributeType';
 import { VoucherComponentStore } from 'apps/web-giddh/src/app/vouchers/utility/vouchers.store';
 import { saveAs } from 'file-saver';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'export-group-ledger',
@@ -124,7 +125,8 @@ export class ExportGroupLedgerComponent implements OnInit {
         private ledgerService: LedgerService,
         private toaster: ToasterService,
         private groupWithAccountsAction: GroupWithAccountsAction,
-        private componentStore: VoucherComponentStore) {
+        private componentStore: VoucherComponentStore,
+        private router: Router) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -156,10 +158,17 @@ export class ExportGroupLedgerComponent implements OnInit {
 
         this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
-            if (response?.status === "success" && response?.body) {
-                if (response.body.type === "base64") {
-                    let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
-                    saveAs(blob, this.activeGroupUniqueName + `.zip`);
+            if (response) {
+                if (response?.status === "success" && response?.body) {
+                    if (response.body.type === "base64") {
+                        this.closeExportGroupLedgerModal.emit(true);
+                        let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
+                        return saveAs(blob, this.activeGroupUniqueName + `.zip`);
+                    } else {
+                        this.router.navigate(["/pages/downloads/exports"]);
+                        this.closeExportGroupLedgerModal.emit(true);
+                    }
+                } else {
                     this.closeExportGroupLedgerModal.emit(true);
                 }
             }
