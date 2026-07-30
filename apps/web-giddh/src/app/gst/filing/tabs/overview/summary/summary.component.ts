@@ -78,13 +78,13 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
             }
         });
 
-        let request: GstOverViewRequest = new GstOverViewRequest();
-        request.from = this.currentPeriod.from;
-        request.to = this.currentPeriod.to;
-        request.gstin = this.activeCompanyGstNumber;
-
+        
         this.store.pipe(select(state => state.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$)).subscribe(response => {
             if (!response && (this.selectedGst === GstReport.Gstr1 || this.selectedGst === GstReport.Gstr2)) {
+                let request: GstOverViewRequest = new GstOverViewRequest();
+                request.from = this.currentPeriod.from;
+                request.to = this.currentPeriod.to;
+                request.gstin = this.activeCompanyGstNumber;
                 this.store.dispatch(this.gstAction.GetOverView(this.selectedGst, request));
             }
         });

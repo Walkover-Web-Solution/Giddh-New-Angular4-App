@@ -783,6 +783,12 @@
             "icon": "icon-reports",
             "items": [
                 {
+                    "label": "सर्व अहवाल",
+                    "link": "/pages/all-reports",
+                    "icon": "icon-reports",
+                    "description": "श्रेणींमधील अहवाल पहा"
+                },
+                {
                     "label": "ताळेबंद",
                     "link": "/pages/trial-balance-and-profit-loss",
                     "icon": "icon-balance-sheet-new",

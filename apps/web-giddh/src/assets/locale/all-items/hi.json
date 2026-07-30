@@ -783,6 +783,12 @@
             "icon": "icon-reports",
             "items": [
                 {
+                    "label": "सभी रिपोर्ट्स",
+                    "link": "/pages/all-reports",
+                    "icon": "icon-reports",
+                    "description": "श्रेणियों में रिपोर्ट्स देखें"
+                },
+                {
                     "label": "संतुलन परीक्षण",
                     "link": "/pages/trial-balance-and-profit-loss",
                     "icon": "icon-trial-balance-new",
