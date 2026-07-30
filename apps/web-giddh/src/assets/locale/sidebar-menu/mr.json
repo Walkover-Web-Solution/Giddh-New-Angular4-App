@@ -618,6 +618,7 @@
         {
             "label": "अहवाल",
             "icon": "icon-reports",
+            "route": "/pages/all-reports",
             "items": [
                 {
                     "label": "ताळेबंद",

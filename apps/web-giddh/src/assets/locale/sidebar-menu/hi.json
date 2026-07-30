@@ -618,6 +618,7 @@
         {
             "label": "रिपोर्ट्स",
             "icon": "icon-reports",
+            "route": "/pages/all-reports",
             "items": [
                 {
                     "label": "बैलेंस शीट",

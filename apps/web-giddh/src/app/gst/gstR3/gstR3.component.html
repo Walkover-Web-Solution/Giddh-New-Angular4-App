@@ -9,6 +9,7 @@
         <tax-sidebar
             (navigateEvent)="handleNavigation($event)"
             [selectedGstModule]="selectedGstr"
+            [autoNavigateType]="pendingNavigateType"
             [exclude]="'#primary-new-header'"
             class="gst-sidebar"
             [isMonthSelected]="isMonthSelected"

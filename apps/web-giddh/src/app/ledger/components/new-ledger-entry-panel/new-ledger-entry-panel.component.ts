@@ -1397,7 +1397,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.tdsTcsTaxesSum = 0;
             this.blankLedger.isOtherTaxesApplicable = false;
             this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
-            this.currentTxn.selectedAccount.otherTax = this.blankLedger.otherTaxModal;
+            if (this.currentTxn.selectedAccount) {
+                this.currentTxn.selectedAccount['otherTax'] = this.blankLedger.otherTaxModal;
+            }
         }
     }
 
