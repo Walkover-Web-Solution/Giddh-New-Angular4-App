@@ -478,6 +478,14 @@ export class CustomTemplateResponse {
     public showBankQrCode: boolean;
     public qrCodeId: string;
     public accountCustomFieldUniqueNames: string[] = [];
+    public enableSecondaryLanguage: boolean;
+    public language1Code: string;
+    public language2Code: string;
+    public displayLanguage1: boolean;
+    public displayLanguage2: boolean;
+    public secondaryLabelFirst: boolean;
+    public showLanguage2DisplayedFirst: boolean;
+    public message1?: string;
 }
 
 export class Esignature {

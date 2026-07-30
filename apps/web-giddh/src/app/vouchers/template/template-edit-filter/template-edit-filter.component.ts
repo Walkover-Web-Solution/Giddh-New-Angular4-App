@@ -157,6 +157,20 @@ export class TemplateEditFilterComponent implements OnInit {
     public mainLogoFile: any;
     /** Hold list of account custom fields */
     public accountCustomFields: IOption[] = [];
+    /** Section/field/property path of the input field currently focused, used to show its characters left count */
+    public focusedCharacterField: string = null;
+    /** Hold list of langugae with code */
+    public languageList = signal<IOption[]>([]);
+    /** Holds Selected primary language */
+    public selectedPrimaryLang = signal<IOption>({
+        label: "English",
+        value: "en"
+    });
+    /** Holds Selected secondary language */
+    public selectedSecondaryLang = signal<IOption>({
+        label: null,
+        value: null
+    });
 
     constructor(
         private generalService: GeneralService,
@@ -194,6 +208,44 @@ export class TemplateEditFilterComponent implements OnInit {
     public getRemainingCharacters(maxLength: number, currentValue: string): number {
         const currentLength = currentValue?.length || 0;
         return Math.max(0, maxLength - currentLength);
+    }
+
+    /**
+     * Sets the currently focused field so its characters left count can be shown.
+     * Keyed by the section/field/property path (same literals used in the field's [(ngModel)]
+     * path, e.g. sections['header'].data['companyName'].label), instead of an object reference,
+     * since the template data gets cloned on every change and reference equality would break
+     * while typing. This still stays unique per row without needing arbitrary hardcoded names.
+     *
+     * @param {string} section Section name (e.g. 'header')
+     * @param {string} field Field name within the section's data (e.g. 'companyName')
+     * @param {string} key Property bound via ngModel (e.g. 'label' or 'secondaryLabel')
+     * @memberof TemplateEditFilterComponent
+     */
+    public onCharacterFieldFocus(section: string, field: string, key: string): void {
+        this.focusedCharacterField = `${section}|${field}|${key}`;
+    }
+
+    /**
+     * Clears the focused field when the input loses focus
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public onCharacterFieldBlur(): void {
+        this.focusedCharacterField = null;
+    }
+
+    /**
+     * Checks whether the given section/field/property path is the currently focused field
+     *
+     * @param {string} section Section name
+     * @param {string} field Field name within the section's data
+     * @param {string} key Property bound via ngModel
+     * @returns {boolean} True if this exact field is currently focused
+     * @memberof TemplateEditFilterComponent
+     */
+    public isCharacterFieldFocused(section: string, field: string, key: string): boolean {
+        return this.focusedCharacterField === `${section}|${field}|${key}`;
     }
 
     /**
@@ -302,9 +354,9 @@ export class TemplateEditFilterComponent implements OnInit {
 
             // Tally template-specific logic
 
+            const footerData = this.customTemplate?.sections?.footer?.data;
+            const headerData = this.customTemplate?.sections?.header?.data;
             if (this.customTemplate?.templateType === TemplateTypeEnum.TallyTemplate) {
-                const footerData = this.customTemplate?.sections?.footer?.data;
-                const headerData = this.customTemplate?.sections?.header?.data;
                 if (footerData?.imageSignature) footerData.imageSignature.display = true;
                 if (footerData?.slogan) footerData.slogan.display = false;
                 if (this.voucherType !== VoucherTypeEnum.sales) {
@@ -315,9 +367,50 @@ export class TemplateEditFilterComponent implements OnInit {
                     if (headerData?.voucherNumber && headerData?.invoiceNumber) headerData.voucherNumber.label = headerData.invoiceNumber.label;
                 }
             }
+             
 
+            if (footerData?.message1?.display) {
+                this.customTemplate.message1 = "We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct."; 
+            }
             this.assignImageSignature();
         });
+
+        this.languageList.set([
+            // { label: 'English', value: 'en' }, // This commented due this is our primary lang
+            { label: 'Arabic', value: 'ar' },
+            { label: 'Hindi', value: 'hi' },
+            { label: 'Marathi', value: 'mr' },
+            { label: 'Gujarati', value: 'gu' },
+            { label: 'Punjabi', value: 'pa' },
+            { label: 'Tamil', value: 'ta' },
+            { label: 'Telugu', value: 'te' },
+            { label: 'Kannada', value: 'kn' },
+            { label: 'Malayalam', value: 'ml' },
+            { label: 'Bengali', value: 'bn' },
+            { label: 'Odia', value: 'or' },
+            { label: 'Urdu', value: 'ur' },
+
+            { label: 'French', value: 'fr' },
+            { label: 'German', value: 'de' },
+            { label: 'Spanish', value: 'es' },
+            { label: 'Portuguese', value: 'pt' },
+            { label: 'Italian', value: 'it' },
+            { label: 'Dutch', value: 'nl' },
+            { label: 'Russian', value: 'ru' },
+
+            { label: 'Turkish', value: 'tr' },
+            { label: 'Persian (Farsi)', value: 'fa' },
+            { label: 'Hebrew', value: 'he' },
+
+            { label: 'Chinese (Simplified)', value: 'zh-CN' },
+            { label: 'Chinese (Traditional)', value: 'zh-TW' },
+            { label: 'Japanese', value: 'ja' },
+            { label: 'Korean', value: 'ko' },
+            { label: 'Thai', value: 'th' },
+            { label: 'Vietnamese', value: 'vi' },
+            { label: 'Indonesian', value: 'id' },
+            { label: 'Malay', value: 'ms' }
+        ]);
 
         // Listen for logo path changes
         this.templateService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
@@ -426,10 +519,10 @@ export class TemplateEditFilterComponent implements OnInit {
         template.copyFrom = value;
         this.selectedTemplateUniqueName = value;
         if (template?.sections?.['header']?.data?.['companyName']) {
-            template.sections['header'].data['companyName'].label = this.activeCompanyName;
+            template.sections['header'].data['companyName'].label = template.sections['header'].data['companyName'].label || this.activeCompanyName;
         }
         if (template?.sections?.['footer']?.data?.['companyName']) {
-            template.sections['footer'].data['companyName'].label = this.activeCompanyName;
+            template.sections['footer'].data['companyName'].label = template.sections['footer'].data['companyName'].label || this.activeCompanyName;
         }
        this.deleteLogo();
        this.removeFile();
@@ -459,6 +552,20 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onFontSelect(font: IOption): void {
         this.onValueChange('font', font?.value);
+    }
+
+    /**
+     * Handles secondary language selection for the template label.
+     *
+     * @param {IOption} language The selected language option
+     * @memberof TemplateEditFilterComponent
+     */
+    public onLanguageSelect(language: IOption): void {
+        this.onValueChange('language2Code', language?.value);
+        this.selectedSecondaryLang.set({
+            label: language.label,
+            value: language.value
+        });
     }
 
     /**
@@ -708,6 +815,24 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
+     * Executes one or more callback functions and then refreshes the template state.
+     *
+     * @param {...Array<(() => void) | undefined>} callbacks Callback functions to execute.
+     * @memberof TemplateEditFilterComponent
+     */
+    public runDynamicCallbacks(callbacks?: Array<(() => void) | undefined> | (() => void) | null): void {
+        const callbackList = Array.isArray(callbacks) ? callbacks : callbacks ? [callbacks] : [];
+
+        callbackList.forEach((callback) => {
+            if (typeof callback === 'function' && callback !== this.onChangeFieldVisibility) {
+                callback.call(this);
+            }
+        });
+
+        this.onChangeFieldVisibility();
+    }
+
+    /**
      * Toggles the visibility of the company name in the template.
      *
      * @memberof TemplateEditFilterComponent
@@ -812,7 +937,7 @@ export class TemplateEditFilterComponent implements OnInit {
     private initializeSelectedSignatureType(): void {
         if (this.customTemplate?.sections?.footer?.data?.imageSignature?.display) {
             this.selectedSignatureType = 'image';
-        } else if (this.customTemplate?.sections?.footer?.data?.slogan?.display) {
+        } else if (this.customTemplate?.sections?.footer?.data?.slogan?.display && !(this.customTemplate?.templateType === this.templateTypeEnum.TallyTemplate)) {
             this.selectedSignatureType = 'slogan';
         } else {
             this.selectedSignatureType = '';
@@ -904,6 +1029,24 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
+     * Triggers the invoice date sync callback.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public triggerInvoiceDateChange(): void {
+        this.handleInvoiceDateNumberChange(true);
+    }
+
+    /**
+     * Triggers the invoice number sync callback.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public triggerInvoiceNumberChange(): void {
+        this.handleInvoiceDateNumberChange(false);
+    }
+
+    /**
      * Change voucher number or date based on Invoice number or date
      *
      * @param {boolean} [isDate=true] True, if date is changed
@@ -965,8 +1108,8 @@ export class TemplateEditFilterComponent implements OnInit {
         if (defaultTemplate) {
             const processedTemplate = cloneDeep(defaultTemplate);
             if (companyName) {
-                processedTemplate.sections.header.data.companyName.label = companyName;
-                processedTemplate.sections.footer.data.companyName.label = companyName;
+                processedTemplate.sections.header.data.companyName.label = processedTemplate.sections.header.data.companyName.label || companyName;
+                processedTemplate.sections.footer.data.companyName.label = processedTemplate.sections.footer.data.companyName.label || companyName;
                 processedTemplate.sections.footer.data.companyAddress.label = companyAddress;
             }
             this.templateService.initCustomTemplate(processedTemplate);
@@ -1008,6 +1151,38 @@ export class TemplateEditFilterComponent implements OnInit {
                     this.toasty.errorToast(response.message);
                 }
             }
+        });
+    }
+
+    /**
+     * Handle language setting enable/disable
+     *
+     * @private
+     * @memberof TemplateEditFilterComponent
+     */
+    public handleEnableSecondaryLanguage(): void {
+        this.customTemplate.displayLanguage1 = true;
+        this.customTemplate.displayLanguage2 = this.customTemplate.enableSecondaryLanguage;
+        this.customTemplate.secondaryLabelFirst = false;
+        this.customTemplate.language1Code = "en";
+        this.customTemplate.language2Code = null;
+        this.resetSelectedLanguage();
+    }
+
+    /**
+     * Reset, set intial value
+     *
+     * @private
+     * @memberof TemplateEditFilterComponent
+     */
+    private resetSelectedLanguage(): void {
+        this.selectedPrimaryLang.set({
+            label: "English",
+            value: "en"
+        });
+        this.selectedSecondaryLang.set({
+            label: null,
+            value: null
         });
     }
 }

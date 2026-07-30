@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
@@ -50,6 +50,12 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     /** It will show suffix in the text field */
     @Input() public suffix: any;
     @Input() public customDecimalPlaces: any;
+    /** Emits when the input gains focus */
+    @Output() public onFocus: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
+    /** Emits when the input loses focus */
+    @Output() public onBlurEvent: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
+    /** Emits when the inner value changes */
+    @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
@@ -153,6 +159,10 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public writeValue(value: any): void {
+        if (value === undefined) {
+            return;
+        }
+    
         this.value = value;
         this.changeDetectionRef.detectChanges();
     }
@@ -197,7 +207,28 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
         this.onChangeCallback(this.value);
     }
 
+    /**
+     * Callback for handling focus event
+     *
+     * @param {FocusEvent} event
+     * @memberof TextFieldComponent
+     */
+    public handleFocus(event: FocusEvent): void {
+        this.onFocus.emit(event);
+    }
+
+    /**
+     * Callback for handling blur event
+     * 
+     * @memberof TextFieldComponent
+     */
+    public handleBlur(event: FocusEvent): void {
+        this.onTouchedCallback();
+        this.onBlurEvent.emit(event);
+    }
+
     public handleChange(): void {
+        this.onChange.emit(this.value);
         this.onChangeCallback(this.value);
     }
 }
