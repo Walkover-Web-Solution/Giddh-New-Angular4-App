@@ -3413,4 +3413,39 @@ export class GeneralService {
     public getPostalCodePlaceholder(countryCode: string): string {
         return `Enter ${this.getPostalCodeLabel(countryCode)}`;
     }
+
+    /**
+     * Returns true when the given subscription is eligible for advance (prepaid) payment.
+     * Rules: auto-pay OFF, status not trial/cancelled/expired, and within
+     * 7 days of expiry (monthly) or 30 days of expiry (yearly).
+     *
+     * @param {*} subscription Subscription object (must contain expiry, status, isAutoPay, period/duration)
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isAdvancePaymentEligible(subscription: any): boolean {
+        if (!subscription || !subscription.expiry) {
+            return false;
+        }
+        if (subscription.autoPay || subscription.isPrepaidExist) {
+            return false;
+        }
+        const status = (subscription.status || '').toLowerCase();
+        if (status !== 'active') {
+            return false;
+        }
+        const period = (subscription.period || subscription.duration || '').toLowerCase();
+        const expiryStr = String(subscription.expiry).split('-').reverse().join('-');
+        const remainingDays = ((new Date(expiryStr).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) + 1;
+        if (isNaN(remainingDays) || remainingDays < 0) {
+            return false;
+        }
+        if ((period === 'monthly' || period === 'daily') && remainingDays <= 7) {
+            return true;
+        }
+        if (period === 'yearly' && remainingDays <= 30) {
+            return true;
+        }
+        return false;
+    }
 }

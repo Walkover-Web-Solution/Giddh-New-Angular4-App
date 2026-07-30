@@ -7,12 +7,12 @@
             "items": [
                 {
                     "label": "Aging Report",
-                    "link": "/pages/contact/aging-report",
+                    "link": "/pages/contact/sales",
                     "icon": "icon-aging-report-new",
                     "description": "Amount Due in previous days & upcoming",
                     "additional": {
                         "queryParams": {
-                            "tab": "aging-report",
+                            "tab": "sales-aging-report",
                             "tabIndex": 1
                         }
                     }
@@ -312,6 +312,18 @@
             "label": "Vendor",
             "icon": "icon-vendor",
             "items": [
+                {
+                    "label": "Aging Report",
+                    "link": "/pages/contact/purchase",
+                    "icon": "icon-aging-report-new",
+                    "description": "Amount Due in previous days & upcoming",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "purchase-aging-report",
+                            "tabIndex": 1
+                        }
+                    }
+                },
                 {
                     "label": "Vendor",
                     "link": "/pages/contact/vendor",
@@ -774,6 +786,12 @@
             "label": "Reports",
             "icon": "icon-reports",
             "items": [
+                {
+                    "label": "All Reports",
+                    "link": "/pages/all-reports",
+                    "icon": "icon-reports",
+                    "description": "Explore reports across categories"
+                },
                 {
                     "label": "Trial balance",
                     "link": "/pages/trial-balance-and-profit-loss",

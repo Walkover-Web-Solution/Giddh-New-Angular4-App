@@ -1,0 +1,261 @@
+{
+    "page_heading": "Reports",
+    "favorites": "Favorites",
+    "add_to_favorites": "Add to Favorites",
+    "remove_from_favorites": "Remove from Favorites",
+    "view_all": "View all",
+    "no_reports_available": "No reports available",
+    "no_reports_found": "No reports found in this category.",
+    "reportDescriptions": {
+        "TRIAL_BALANCE": {
+            "title": "Trial Balance",
+            "description": "Download of all credit & debit balances",
+            "icon": "icon-trial-balance-new"
+        },
+        "BALANCE_SHEET": {
+            "title": "Balance Sheet",
+            "description": "Download BS in Excel, multiple type of exports",
+            "icon": "icon-balance-sheet-new"
+        },
+        "PROFIT_AND_LOSS": {
+            "title": "Profit & Loss",
+            "description": "Download data in Excel, project wise report",
+            "icon": "icon-proft-loss-new"
+        },
+        "GST": {
+            "title": "GST Dashboard",
+            "description": "GST returns, filings and summaries",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-1": {
+            "title": "GSTR-1",
+            "description": "File & view GSTR1",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-2": {
+            "title": "GSTR-2",
+            "description": "File & view GSTR2",
+            "icon": "icon-tax-new"
+        },
+        "GSTR-3B": {
+            "title": "GSTR-3B",
+            "description": "File & view GSTR3B",
+            "icon": "icon-tax-new"
+        },
+        "DAYBOOK": {
+            "title": "Daybook",
+            "description": "Everyday entries that can be exported",
+            "icon": "icon-daybook-new"
+        },
+        "SALES_REGISTER_BY_DURATION": {
+            "title": "Sales Register (Duration)",
+            "description": "Sales grouped by time duration",
+            "icon": "icon-register-new"
+        },
+        "SALES_REGISTER_BY_SALES_PERSON": {
+            "title": "Sales by Salesperson",
+            "description": "Sales grouped by salesperson",
+            "icon": "icon-register-new"
+        },
+        "SALES_REGISTER_BY_STATE": {
+            "title": "Sales by State",
+            "description": "Sales grouped by state",
+            "icon": "icon-register-new"
+        },
+        "SALES_REGISTER_BY_COUNTRY": {
+            "title": "Sales by Country",
+            "description": "Sales grouped by country",
+            "icon": "icon-register-new"
+        },
+        "PURCHASE_REGISTER_BY_DURATION": {
+            "title": "Purchase Register (Duration)",
+            "description": "Purchases grouped by time duration",
+            "icon": "icon-register-new"
+        },
+        "PURCHASE_REGISTER_BY_SALES_PERSON": {
+            "title": "Purchase by Salesperson",
+            "description": "Purchases grouped by salesperson",
+            "icon": "icon-register-new"
+        },
+        "PURCHASE_REGISTER_BY_STATE": {
+            "title": "Purchase by State",
+            "description": "Purchases grouped by state",
+            "icon": "icon-register-new"
+        },
+        "PURCHASE_REGISTER_BY_COUNTRY": {
+            "title": "Purchase by Country",
+            "description": "Purchases grouped by country",
+            "icon": "icon-register-new"
+        },
+        "COLUMNAR_REPORT": {
+            "title": "Monthly Columnar Report",
+            "description": "Monthly detailed report of each group",
+            "icon": "icon-monthly-columnar-report"
+        },
+        "AGING_REPORT_SALES": {
+            "title": "Aging Report (Sales)",
+            "description": "Amount Due in previous days & upcoming",
+            "icon": "icon-aging-report-new"
+        },
+        "AGING_REPORT_PURCHASE": {
+            "title": "Aging Report (Purchase)",
+            "description": "Amount Due in previous days & upcoming",
+            "icon": "icon-aging-report-new"
+        },
+        "VAT_REPORT": {
+            "title": "VAT Report",
+            "description": "File & review VAT",
+            "icon": "icon-vat1"
+        },
+        "VAT_OBLIGATION": {
+            "title": "VAT Obligations",
+            "description": "Upcoming VAT filing obligations",
+            "icon": "icon-vat1"
+        },
+        "VAT_PAYMENT": {
+            "title": "VAT Payments",
+            "description": "History of VAT payments made",
+            "icon": "icon-vat1"
+        },
+        "VAT_LIABILITIES": {
+            "title": "VAT Liabilities",
+            "description": "Current VAT liabilities and dues",
+            "icon": "icon-vat1"
+        },
+        "CASH_FLOW_STATEMENT": {
+            "title": "Cash Flow Statement",
+            "description": "Download cash flow report",
+            "icon": "icon-cash-flow-statement"
+        },
+        "ACCOUNT_WISE": {
+            "title": "Account-wise Report",
+            "description": "Tax report grouped by account",
+            "icon": "icon-vat1"
+        },
+        "RATE_WISE": {
+            "title": "Rate-wise Report",
+            "description": "Tax report grouped by rate",
+            "icon": "icon-vat1"
+        },
+        "INVENTORY_STOCK_WISE": {
+            "title": "Product Stock Summary",
+            "description": "Item-wise quantity, value & movement",
+            "icon": "stock.svg"
+        },
+        "INVENTORY_GROUP_WISE": {
+            "title": "Product Group Report",
+            "description": "Totals by product group",
+            "icon": "group-wise.svg"
+        },
+        "INVENTORY_VARIANT_WISE": {
+            "title": "Product Variant Report",
+            "description": "Stock split by variant",
+            "icon": "varient-wise.svg"
+        },
+        "INVENTORY_PRODUCT_TRANSACTION": {
+            "title": "Product Transactions",
+            "description": "Inward, outward & adjustments",
+            "icon": "transactions.svg"
+        },
+        "INVENTORY_SERVICE_STOCK": {
+            "title": "Service Summary",
+            "description": "Service usage & billing status",
+            "icon": "service.svg"
+        },
+        "INVENTORY_SERVICE_GROUP": {
+            "title": "Service Group Report",
+            "description": "Usage totals by service group",
+            "icon": "group-wise.svg"
+        },
+        "INVENTORY_SERVICE_VARIANT": {
+            "title": "Service Variant Report",
+            "description": "Services split by variant",
+            "icon": "varient-wise.svg"
+        },
+        "INVENTORY_SERVICE_TRANSACTION": {
+            "title": "Service Transactions",
+            "description": "All service transactions",
+            "icon": "transactions.svg"
+        },
+        "INVENTORY_FIXEDASSETS_STOCK": {
+            "title": "Fixed Asset Summary",
+            "description": "Asset-wise quantity & book value",
+            "icon": "fixed-assets.svg"
+        },
+        "INVENTORY_FIXEDASSETS_GROUP": {
+            "title": "Fixed Asset Group Report",
+            "description": "Totals by asset group",
+            "icon": "group-wise.svg"
+        },
+        "INVENTORY_FIXEDASSETS_VARIANT": {
+            "title": "Fixed Asset Variant Report",
+            "description": "Assets split by variant",
+            "icon": "varient-wise.svg"
+        },
+        "INVENTORY_FIXEDASSETS_TRANSACTION": {
+            "title": "Fixed Asset Transactions",
+            "description": "Acquisitions, disposals & adjustments",
+            "icon": "transactions.svg"
+        },
+        "INVENTORY_PRICE_CUSTOMER_WISE": {
+            "title": "Customer Price List",
+            "description": "Selling prices per customer",
+            "icon": "customer-icon.svg"
+        },
+        "INVENTORY_PRICE_VENDOR_WISE": {
+            "title": "Vendor Price List",
+            "description": "Purchase rates per vendor",
+            "icon": "vendor-icon.svg"
+        },
+        "INVENTORY_PRODUCT_BULK_STOCK": {
+            "title": "Bulk Product Update",
+            "description": "Edit product stock in bulk",
+            "icon": "home-icon-black.svg"
+        },
+        "INVENTORY_SERVICE_BULK_STOCK": {
+            "title": "Bulk Service Update",
+            "description": "Edit service rates in bulk",
+            "icon": "home-icon-black.svg"
+        },
+        "INVENTORY_FIXEDASSETS_BULK_STOCK": {
+            "title": "Bulk Fixed Asset Update",
+            "description": "Edit asset details in bulk",
+            "icon": "home-icon-black.svg"
+        },
+        "INVENTORY_BRANCH_TRANSFER": {
+            "title": "Branch Transfers",
+            "description": "Manage & Transfer inventory",
+            "icon": "branch-transfer.svg"
+        },
+        "INVENTORY_MANUFACTURING": {
+            "title": "Manufacturing",
+            "description": "Find mfg. inventory status",
+            "icon": "manufacturing.svg"
+        },
+        "SALES_BIFURCATION": {
+            "title": "Sales Bifurcation",
+            "description": "New vs old invoices breakdown",
+            "icon": "icon-register-new"
+        },
+        "SEARCH": {
+            "title": "Search",
+            "description": "Search across accounts and transactions",
+            "icon": "icon-reports"
+        },
+        "CUSTOMER": {
+            "title": "Customers",
+            "description": "Customer list and details",
+            "icon": "icon-customer"
+        },
+        "VENDOR": {
+            "title": "Vendors",
+            "description": "Vendor list and details",
+            "icon": "icon-vendor"
+        },
+        "WAREHOUSE_WISE_OPENING_BALANCE": {
+            "title": "Warehouse Opening Balance",
+            "description": "Stock opening balance by warehouse",
+            "icon": "warehouse-opening-balance.svg"
+        }
+    }
+}

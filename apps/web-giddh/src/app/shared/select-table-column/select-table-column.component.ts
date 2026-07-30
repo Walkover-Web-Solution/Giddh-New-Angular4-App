@@ -4,7 +4,7 @@ import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
 import { ToasterService } from "../../services/toaster.service";
 import { InventoryModuleName } from "../../new-inventory/inventory.enum";
-import { ContactsTab } from "../../contact/contacts.enum";
+import { ContactsModule } from "../../contact/contacts.enum";
 import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.const";
 @Component({
     selector: "select-table-column",
@@ -62,8 +62,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         InventoryModuleName.variant,
         InventoryModuleName.bulk,
         InventoryModuleName.fixedAssetInventory,
-        ContactsTab.customer,
-        ContactsTab.vendor,
+        ContactsModule.customer.toUpperCase(),
+        ContactsModule.vendor.toUpperCase(),
         VoucherReportFilterModuleEnum.Sales,
         VoucherReportFilterModuleEnum.Estimate,
         VoucherReportFilterModuleEnum.Proforma,

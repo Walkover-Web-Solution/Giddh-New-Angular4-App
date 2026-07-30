@@ -206,6 +206,45 @@ export class SubscriptionsService {
     }
 
     /**
+     * Creates a new subscription using the provided model in the SubscriptionsService.
+     *
+     * @param model - Data model for creating a plan.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
+    public createAdvancePayment(model: { request: any, subscriptionId: string }): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.CREATE_PRE_PAID.replace(':subscriptionId', model.subscriptionId), model.request)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    /**
+     * Creates a new subscription using the provided model in the SubscriptionsService.
+     *
+     * @param model - Data model for creating a plan.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
+    public activateAdvancePayment(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.ACTIVATE_PRE_PAID.replace(':subscriptionId', model.subscriptionId), model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+
+    /**
      * Updates a subscription using the provided model in the SubscriptionsService.
      *
      * @param model - Data model for updating a plan.

@@ -1,6 +1,9 @@
-export enum ContactsTab {
-    customer = 'CUSTOMER',
-    vendor = 'VENDOR'
+export enum ContactsModule {
+    customer = 'customer',
+    vendor = 'vendor',
+    sales = 'sales',
+    purchase = 'purchase',
+    agingReport = 'aging-report'
 }
 export const CONTACTS_COMMON_COLUMNS = [
     {

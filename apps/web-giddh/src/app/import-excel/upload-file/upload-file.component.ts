@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
 import { BehaviorSubject, Observable, ReplaySubject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { API_BULK_FETCH_LIMIT, BranchHierarchyType, SAMPLE_FILES_URL, IOption } from '../../app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, SAMPLE_FILES_URL, IOption } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -13,6 +14,12 @@ import { AppState } from '../../store';
 import { cloneDeep, find, forEach, map, some } from '../../lodash-optimized';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
+import { LedgerService } from '../../services/ledger.service';
+import { ImportExcelService } from '../../services/import-excel.service';
+import { CommonActions } from '../../actions/common.actions';
+import { FileTypeEnum } from '../../shared/Enums/common.enum';
+import { GenericAsideMenuAccountComponent } from '../../shared/generic-aside-menu-account/generic.aside.menu.account.component';
+import { AccountsAction } from '../../actions/accounts.actions';
 
 @Component({
     selector: 'upload-file',
@@ -75,6 +82,20 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public voucherListResponse: IOption[] = [];
     /** Holds a reference to the `VoucherType` enum */
     public voucherType: typeof VoucherType = VoucherType; // Commented out due to missing import/
+    /** Password for encrypted PDF bank statements */
+    public bankStatementPassword: string = '';
+    /** File type enum for detecting PDF */
+    public fileType: typeof FileTypeEnum = FileTypeEnum;
+    /** Selected file extension */
+    public selectedFileExtension: string = '';
+    /** Same debit credit column toggle for bank statement */
+    public sameDebitCreditAmountColumn: boolean = false;
+    /** Dialog reference for the account aside pane */
+    private accountAsideMenuRef: MatDialogRef<any>;
+    /** Template reference for account aside menu */
+    @ViewChild('accountAsideMenu') public accountAsideMenu: any;
+    /** Observable for account creation success */
+    private createAccountIsSuccess$: Observable<boolean>;
 
     constructor(
         private toasterService: ToasterService,
@@ -83,13 +104,21 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private router: Router,
-        private ledgerComponentStore: LedgerComponentStore // Commented out due to missing import
+        private ledgerComponentStore: LedgerComponentStore,
+        private ledgerService: LedgerService,
+        private importExcelService: ImportExcelService,
+        private commonAction: CommonActions,
+        private dialog: MatDialog,
+        private accountsAction: AccountsAction
     ) {
 
     }
 
     public onFileChange(file: FileList) {
-        let validExts = ['csv', 'xls', 'xlsx'];
+        let validExts = [FileTypeEnum.CSV, FileTypeEnum.XLS, FileTypeEnum.XLSX];
+        if (this.entity === this.voucherType.BankStatement) {
+            validExts = [FileTypeEnum.CSV, FileTypeEnum.XLS, FileTypeEnum.XLSX, FileTypeEnum.PDF];
+        }
         let type = (file && file.item(0)) ? this.getExt(file.item(0).name) : 'null';
         let isValidFileType = validExts.some(s => type === s);
 
@@ -103,14 +132,17 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         this.file = file.item(0);
         if (this.file) {
             this.selectedFileName = this.file.name;
+            this.selectedFileExtension = type;
         } else {
             this.selectedFileName = '';
+            this.selectedFileExtension = '';
         }
     }
 
     public async downloadSampleFile(entity: string, isCsv: boolean = false) {
-        const fileUrl = SAMPLE_FILES_URL + `${entity}.${isCsv ? 'csv' : 'xlsx'}`;
-        const fileName = `${entity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
+        const sampleEntity = entity === this.voucherType.BankStatement ? 'bank-transaction' : entity;
+        const fileUrl = SAMPLE_FILES_URL + `${sampleEntity}.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileName = `${sampleEntity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
             saveAs(blob, fileName);
@@ -145,8 +177,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                 if (this.entity === this.voucherType.AccountWise && !this.accountSearchRequest.isLoading) {
                     this.searchAccount();
                 }
-                if (this.entity === "banktransactions") {
-                    this.router.navigate(['/pages/import/select-type']);
+                if (this.entity === this.voucherType.BankStatement && !this.accountSearchRequest.isLoading) {
+                    this.searchAccount();
                 }
             }
         });
@@ -201,6 +233,14 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                 this.accountSearchRequest.isLoading = false;
             }
         });
+
+        // Subscribe to account creation success to refresh account list
+        this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
+        this.createAccountIsSuccess$.subscribe(response => {
+            if (response) {
+                this.searchAccount('', 1);
+            }
+        });
     }
 
     /**
@@ -249,6 +289,10 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      * @memberof UploadFileComponent
      */
     public handleFileUpload(file: File): void {
+        if (this.entity === this.voucherType.BankStatement) {
+            this.handleBankStatementUpload(file);
+            return;
+        }
         this.onFileUpload.emit({
             file,
             branchUniqueName: this.entity === 'entries' && this.currentBranch ? this.currentBranch?.uniqueName : '',
@@ -256,6 +300,50 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             accountUniqueName: this.accountUniqueName,
             selectVoucher: this.selectVoucher
         });
+    }
+
+    /**
+     * Handles bank statement upload (backstatement entity).
+     * - PDF: direct import via ledgerService.importStatement then redirect to ledger.
+     * - CSV/XLS/XLSX: upload via importExcelService for mapping, then redirect to wizard mapping page.
+     *
+     * @param {File} file The selected file
+     * @memberof UploadFileComponent
+     */
+    private handleBankStatementUpload(file: File): void {
+        const ext = (this.selectedFileExtension || '').toLowerCase();
+        const isPdf = ext === this.fileType.PDF;
+        const getRequest: any = {
+            entity: ext,
+            companyUniqueName: this.generalService.companyUniqueName,
+            accountUniqueName: this.accountUniqueName
+        };
+        const postRequest: any = {
+            file,
+            password: this.bankStatementPassword,
+            isHeaderProvided: this.isHeaderProvided,
+            accountUniqueName: this.accountUniqueName,
+            sameDebitCreditAmountColumn: this.sameDebitCreditAmountColumn
+        };
+
+        if (isPdf) {
+            this.ledgerService.importStatement(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === 'success') {
+                    this.toasterService.showSnackBar("success", this.localeData?.import_success || 'Import successful');
+                    this.router.navigate(['/pages', 'ledger', this.accountUniqueName]);
+                } else {
+                    this.toasterService.errorToast(response?.message);
+                }
+            });
+        } else {
+            this.importExcelService.uploadFile('BANK_TRANSACTIONS_IMPORT', postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === 'success' && response.body) {
+                    this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));
+                } else {
+                    this.toasterService.errorToast(response?.message);
+                }
+            });
+        }
     }
 
     /**
@@ -286,6 +374,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     */
     public getProjectAccount(requestObject: any): void {
         requestObject.count = this.defaultCount;
+        if (this.entity === this.voucherType.BankStatement) {
+            requestObject.group = 'bankaccounts';
+        }
         this.ledgerComponentStore.getProjectAccount(requestObject); // Commented out due to missing import
     }
 
@@ -301,5 +392,29 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         if (this.defaultCount === this.accountSearchRequest.count) {
             this.searchAccount(this.accountSearchRequest.q, this.accountSearchRequest.page + 1);
         }
+    }
+
+    /**
+     * Opens the account creation dialog for creating a new bank account.
+     *
+     * @memberof UploadFileComponent
+     */
+    public createNewAccount(): void {
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
+
+        this.accountAsideMenuRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            this.accountAsideMenuRef = undefined;
+        });
+    }
+
+    /**
+     * Handles the add event from the account aside menu.
+     *
+     * @param {AddAccountRequest} event
+     * @memberof UploadFileComponent
+     */
+    public addNewAccount(event: any): void {
+        this.store.dispatch(this.accountsAction.createAccountV2(event.activeGroupUniqueName, event.accountRequest));
+        this.accountAsideMenuRef.close();
     }
 }

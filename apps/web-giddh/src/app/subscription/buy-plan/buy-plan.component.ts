@@ -1,11 +1,11 @@
 import { ViewSubscriptionComponentStore } from './../view-subscription/utility/view-subscription.store';
 import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild, computed, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { StripePaymentDialogComponent, StripePaymentDialogData } from './stripe-payment-dialog/stripe-payment-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, delay, take, filter } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, delay, take, filter, Subject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
@@ -28,6 +28,13 @@ import { ServiceConfig } from '../../services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { SessionState } from '../../store/authentication/authentication.reducer';
 
+/** Enum for advance payment dialog actions */
+enum AdvancePaymentDialogAction {
+    BuyNextCycle = 'buy_next_cycle',
+    BuyCurrentCycle = 'buy_current_cycle',
+    Close = 'close'
+}
+
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
@@ -37,6 +44,8 @@ import { SessionState } from '../../store/authentication/authentication.reducer'
 })
 
 export class BuyPlanComponent implements OnInit, OnDestroy {
+    /** Enum for advance payment dialog actions */
+    public readonly AdvancePaymentDialogAction = AdvancePaymentDialogAction;
     /** Stepper Form instance */
     @ViewChild('stepper') stepperIcon: any;
     /** This will use for table content scroll in mobile */
@@ -45,6 +54,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     @ViewChild('countryList', { static: false }) public countryList: MatSelect;
     /** Stripe Payment Element container reference */
     @ViewChild('stripePaymentElement') public stripePaymentElementRef: ElementRef;
+    /** Advance payment dialog template reference */
+    @ViewChild('advancePaymentDialog') advancePaymentDialogTemplate: any;
     /** This will use for hold table data */
     public inputData: any[] | null = null;
     /* This will hold local JSON data */
@@ -117,6 +128,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isFormSubmitted = signal<boolean>(false);
     /** Hold selected plan*/
     public selectedPlan = signal<any>(null);
+    /** Signal to track advance payment dialog step */
+    public advancePaymentDialogStep = signal<number>(0);
+    /** Dialog reference for advance payment confirmation */
+    private advancePaymentDialogRef: MatDialogRef<any> | null = null;
     /** Hold session source observable*/
     public session$: Observable<SessionState>;
     /** Hold state source observable*/
@@ -161,6 +176,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** True if it is change plan */
     public isChangePlan: boolean = false;
+    /** Holds subscription type from route (change-plan, activate-subscription, advance-payment) */
+    public subscriptionType: string = '';
     /** Holds Store Get Billing Details observable*/
     public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
     /** True if it have billing details */
@@ -290,8 +307,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     private detectUserInfoByIp: any = {}
     /** true if cancel subscription reactivate. */
     public activateSubscription: boolean = false;
+    /** true if advance payment. */
+    public isAdvancePayment: boolean = false;
+    /** true if . */
+    public activateAdvancePaymentSuccess$: Observable<boolean> = this.componentStore.select(state => state.activateAdvancePaymentSuccess);
     /** true if user have at leate one Company. */
     public atLeatOneCompany: boolean = false;
+    /** after success redirection url for advance payment */
+    public afterSuccessRedirectionUrl: string = '';
+    /** True if plan should be purchased for next billing cycle */
+    public includeNextBill: boolean | null = null;
 
     constructor(
         public dialog: MatDialog,
@@ -365,8 +390,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params?.id) {
                 this.subscriptionId = params.id;
+                this.subscriptionType = params?.type || '';
+                if (params?.type === 'advance-payment') {
+                    this.isAdvancePayment = true;
+                } else if (params?.type === 'buy-plan') {
+                    this.isChangePlan = true;
+                } else if (params?.type === 'activate-subscription') {
+                    this.activateSubscription = true;
+                }
                 this.viewSubscriptionComponentStore.viewSubscriptionsById(this.subscriptionId);
-                this.isChangePlan = true;
             }
         });
 
@@ -375,6 +407,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.isRenewPlan = true;
             } else if (queryParams?.trial) {
                 this.isTrialPlan = true;
+            }
+            if (queryParams?.redirectUrl) {
+                this.afterSuccessRedirectionUrl = queryParams?.redirectUrl;
             }
         });
 
@@ -391,6 +426,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.atLeatOneCompany = response?.length >= 1;
+            }
+        });
+
+        this.activateAdvancePaymentSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                // Refresh profile only when the advance payment applies to the
+                // company's currently active subscription.
+                if (this.activeCompany?.subscription?.subscriptionId && this.activeCompany.subscription.subscriptionId === this.subscriptionId) {
+                    this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                }
+                if (this.afterSuccessRedirectionUrl) {
+                    this.router.navigate([this.afterSuccessRedirectionUrl]);
+                } else {
+                    this.router.navigate(['/pages/user-details/subscription']);
+                }
             }
         });
 
@@ -559,11 +609,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
-                const model = {
-                    orderId: this.paypalCaptureOrderId,
-                    subscriptionId: this.subscriptionId
+                if (this.isAdvancePayment) {
+                    this.saveAdvancePayment({ paypalOrderId: this.paypalCaptureOrderId });
+                } else {
+                    const model = {
+                        orderId: this.paypalCaptureOrderId,
+                        subscriptionId: this.subscriptionId
+                    }
+                    this.componentStore.paypalCaptureOrderId(model);
                 }
-                this.componentStore.paypalCaptureOrderId(model);
             }
         };
 
@@ -611,6 +665,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     if (response?.paypalOrderId && this.payType === 'buy') {
                         this.openWindow(response.paypalApprovalLink);
                     } else {
+                        if (this.isAdvancePayment) {
+                            this.initializePayment(response, 'createSubscription');
+                            return;
+                        }
                         if ((response?.duration === PlanDuration.MONTHLY || response?.duration === PlanDuration.DAILY) && response?.region?.code !== EntityCode.GBR) {
                             if (response.razorpayCustomerId && this.payType === 'buy') {
                                 this.initializePayment(response, 'createSubscription');
@@ -701,7 +759,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
-            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
+            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan' || this.router.url.startsWith('/pages/user-details/subscription/activate-subscription/' + this.subscriptionId) || this.router.url.startsWith('/pages/user-details/subscription/advance-payment/' + this.subscriptionId)))) {
                 if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
                     if (this.upgradePlan && this.upgradeRegion === EntityCode.GBR) {
                         const reqObj = {
@@ -773,21 +831,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
             } else {
                 if (response) {
-                    if (response.region?.code !== 'IND') {
-                        this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                        this.navigateToRoute('/pages/user-details/subscription');
-                    } else {
-                        this.updateSubscriptionPayment(response, true);
-                    }
+                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
+                    this.navigateToRoute('/pages/user-details/subscription');
                 }
             }
         });
 
         this.viewSubscriptionData$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
-            this.activateSubscription = response.status.toLowerCase() === 'cancelled' && this.router.url === ('/pages/user-details/subscription/activate-subscription/' + this.subscriptionId);
-            this.isChangePlan = !this.activateSubscription;
-            if (this.activateSubscription) {
+            this.thirdStepForm?.get('autoPay')?.patchValue(response?.autoPay ?? true);
+            this.activateSubscription = response.status.toLowerCase() === 'cancelled' && this.activateSubscription;
+            if (this.activateSubscription || this.isAdvancePayment) {
                 this.selectedStep.set(1);
                 // Force the stepper to the second step. Linear is disabled
                 // when activateSubscription is true so navigation is allowed.
@@ -1169,7 +1223,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.thirdStepForm = this.formBuilder.group({
             userUniqueName: [''],
             paymentProvider: [''],
-            razorpayAuthType: ['']
+            razorpayAuthType: [''],
+            autoPay: [true]
         });
 
         this.subscriptionForm = this.formBuilder.group({
@@ -1665,14 +1720,29 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             duration: this.firstStepForm.get('duration').value,
             countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.code || this.viewSubscriptionData?.region?.code)
         }
-
+        if (this.isAdvancePayment) {
+            reqObj['prePaid'] = true;
+        }
         if (this.isChangePlan || this.isRenewPlan) {
             reqObj['subscriptionId'] = this.subscriptionId;
+        }
+        if (this.isChangePlan && this.advancePaymentDialogRef) {
+            reqObj['includeNextBill'] = this.includeNextBill;
         }
         if (this.selectedPlan()?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
 
+        this.updatePaymentProviders();
+    }
+
+    /**
+     * Updates the list of payment providers based on entity code, duration,
+     * advance payment and auto-pay state.
+     *
+     * @memberof BuyPlanComponent
+     */
+    public updatePaymentProviders(): void {
         const entityCode = this.selectedPlan()?.entityCode;
 
         const filterProviders = (providers: string[]) => {
@@ -1684,12 +1754,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         if (entityCode === EntityCode.GBR) {
             // GBR: Stripe shown for all durations; GoCardless/PayPal added for monthly & daily
-            if (this.isMonthly()) {
-                filterProviders([PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL]);
+            if (this.isMonthly() || this.isDaily()) {
+                const autoPay = this.thirdStepForm.get('autoPay')?.value;
+                const currentProvider = this.thirdStepForm.get('paymentProvider')?.value;
+                if (!autoPay && currentProvider === PaymentProvider.GOCARDLESS) {
+                    this.thirdStepForm.get('paymentProvider')?.patchValue(null);
+                }
+                const providers = this.isAdvancePayment || !autoPay
+                    ? [PaymentProvider.STRIPE, PaymentProvider.PAYPAL]
+                    : [PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL];
+                filterProviders(providers);
             } else if (this.isYearly()) {
                 filterProviders([PaymentProvider.STRIPE, PaymentProvider.RAZORPAY]);
-            } else if (this.isDaily()) {
-                filterProviders([PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL]);
             }
         } else if (entityCode !== EntityCode.IND) {
             // Non-IND: Stripe available for all durations; PayPal added for monthly & daily
@@ -1861,6 +1937,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 subscriptionId: null
             }
 
+           if (!isTrial && !this.isAdvancePayment) {
+               if (this.isMonthly() || this.isDaily()) {
+                   request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
+               } else {
+                   request['autoPay'] = false;
+               }
+           }
+
             if ((this.isMonthly() || this.isDaily()) && this.selectedPlan()?.entityCode !== EntityCode.GBR) {
                 request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
             }
@@ -1888,14 +1972,105 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             //     delete request.paymentProvider;
             //     delete request.promoCode;
             // }
-            if (this.subscriptionId && this.isChangePlan && !this.activateSubscription) {
+            if (this.subscriptionId && this.isAdvancePayment) {
+                this.componentStore.advancePayment({ request, subscriptionId: this.subscriptionId });
+            } else if (this.subscriptionId && this.isChangePlan && !this.activateSubscription) {
                 request.subscriptionId = this.subscriptionId;
+                request.includeNextBill = this.includeNextBill;
                 this.subscriptionRequest = request;
                 this.componentStore.getChangePlanDetails(request);
             } else {
                 this.componentStore.createSubscription(request);
             }
         }, 100);
+    }
+
+    /**
+     * Handles Buy Plan button click. Shows advance payment confirmation dialog
+     * for active change-plan flows without prepaid/autoPay, otherwise proceeds to buy.
+     *
+     * @memberof BuyPlanComponent
+     */
+    public initiateBuyPlan(): void {
+        if (this.advancePaymentInChangePlan) {
+            this.confirmationForAdvancePayment();
+        } else {
+            this.onSubmit('buy');
+        }
+    }
+
+    /**
+     * Whether advance payment confirmation is required in the change-plan flow
+     * (active subscription without prepaid and without autoPay).
+     *
+     * @readonly
+     * @memberof BuyPlanComponent
+     */
+    public get advancePaymentInChangePlan(): boolean {
+        const status = this.viewSubscriptionData?.status?.toLowerCase();
+        return (
+            this.isChangePlan &&
+            status === 'active' &&
+            !this.viewSubscriptionData?.isPrepaidExist &&
+            !this.viewSubscriptionData?.autoPay
+        );
+    }
+
+    /**
+     * Whether advance payment confirmation is required in the upgrade-plan flow
+     * (active subscription with prepaid existing and without autoPay).
+     *
+     * @readonly
+     * @memberof BuyPlanComponent
+     */
+    public get advancePaymentInUpgradePlan(): boolean {
+        const status = this.viewSubscriptionData?.status?.toLowerCase();
+        return (
+            this.isChangePlan &&
+            status === 'active' &&
+            this.viewSubscriptionData?.isPrepaidExist &&
+            !this.viewSubscriptionData?.autoPay
+        );
+    }
+
+    /**
+     * This will use for advance payment confirmation dialog
+     *
+     * @memberof BuyPlanComponent
+     */
+    public confirmationForAdvancePayment(): void {
+        this.advancePaymentDialogStep.set(0);
+        const dialogConfig: MatDialogConfig = {
+            panelClass: ['advance-payment-dialog', 'mat-dialog-md'],
+            role: 'alertdialog',
+            ariaLabel: 'advancePaymentDialog',
+            disableClose: true
+        };
+        this.advancePaymentDialogRef = this.dialog.open(this.advancePaymentDialogTemplate, dialogConfig);
+
+        this.advancePaymentDialogRef.afterClosed().subscribe(result => {
+            this.advancePaymentDialogRef = null;
+            if (result === AdvancePaymentDialogAction.BuyNextCycle) {
+                this.includeNextBill = true;
+                this.onSubmit('buy');
+            } else if (result === AdvancePaymentDialogAction.BuyCurrentCycle) {
+                this.includeNextBill = false;
+                this.onSubmit('buy');
+            } else if (result === AdvancePaymentDialogAction.Close) {
+                this.setFinalAmount();
+            }
+        });
+    }
+
+    /**
+     * Handle Yes button click in advance payment dialog
+     *
+     * @memberof BuyPlanComponent
+     */
+    public onAdvancePaymentYes(): void {
+        this.includeNextBill = true;
+        this.setFinalAmount();
+        this.advancePaymentDialogStep.set(1);
     }
 
     /**
@@ -2087,12 +2262,27 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionId = request.subscriptionId;
             }
             let data = { ...request, ...this.subscriptionRequest };
+            if (this.isAdvancePayment) {
+                this.saveAdvancePayment({ razorpayOrderId: request.razorpayOrderId, paymentId: request.paymentId });
+                return;
+            }
             if (request.paymentId && (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && payResponse?.region?.code !== 'GBR') {
                 this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId, orderId: request.razorpayOrderId });
             } else {
                 this.componentStore.changePlan(data);
             }
         }
+    }
+
+    public saveAdvancePayment(paymentDetails: any) : void {
+        const payload = {
+            paymentProvider: this.thirdStepForm.get('paymentProvider')?.value,
+            subscriptionId: this.subscriptionId,
+            duration: this.firstStepForm.get('duration')?.value,
+            prepaidUniqueName: this.createSubscriptionSuccess.prepaidUniqueName,
+            ...paymentDetails
+        };
+        this.componentStore.saveAdvancePayment(payload);
     }
 
     /**
@@ -2138,6 +2328,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const sessionData: Record<string, string> = {
             stripe_subscription_id: subscriptionId,
             stripe_is_change_plan: String(this.isChangePlan),
+            stripe_is_advance_payment: String(this.isAdvancePayment),
+            stripe_prepaid_unique_name: this.createSubscriptionSuccess?.prepaidUniqueName || '',
+            stripe_after_success_redirection_url: this.afterSuccessRedirectionUrl || '',
             stripe_payment_intent_id: this.extractPaymentIntentId(this.stripeClientSecret),
             stripe_plan_unique_name: response?.planDetails?.uniqueName || this.firstStepForm.get('planUniqueName')?.value || '',
             stripe_duration: response?.duration || this.firstStepForm.get('duration')?.value || '',
@@ -2201,9 +2394,23 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.stripePaymentSuccessBroadcast?.postMessage({ success: true });
 
         const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
+        const isAdvancePaymentSession = sessionStorage.getItem('stripe_is_advance_payment') === 'true';
+        this.isAdvancePayment = isAdvancePaymentSession || this.isAdvancePayment;
+        this.afterSuccessRedirectionUrl = sessionStorage.getItem('stripe_after_success_redirection_url') || this.afterSuccessRedirectionUrl;
         if (subscriptionId) {
             sessionStorage.setItem('stripe_payment_intent_id', piId);
-            this.componentStore.saveStripePayment({ subscriptionId, paymentIntentId: piId });
+            if (isAdvancePaymentSession) {
+                const payload = {
+                    paymentProvider: PaymentProvider.STRIPE,
+                    subscriptionId: subscriptionId,
+                    duration: sessionStorage.getItem('stripe_duration') || this.firstStepForm.get('duration')?.value,
+                    prepaidUniqueName: sessionStorage.getItem('stripe_prepaid_unique_name') || this.createSubscriptionSuccess?.prepaidUniqueName,
+                    paymentIntentId: piId
+                };
+                this.componentStore.saveAdvancePayment(payload);
+            } else {
+                this.componentStore.saveStripePayment({ subscriptionId, paymentIntentId: piId });
+            }
         } else {
             this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
             this.toasterService.showSnackBar('error', 'Subscription ID not found.');
@@ -2387,6 +2594,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         sessionStorage.removeItem('stripe_plan_unique_name');
         sessionStorage.removeItem('stripe_amount_paid');
         sessionStorage.removeItem('stripe_subscription_request');
+        sessionStorage.removeItem('stripe_is_advance_payment');
+        sessionStorage.removeItem('stripe_prepaid_unique_name');
+        sessionStorage.removeItem('stripe_after_success_redirection_url');
     }
 
     /**
@@ -2505,6 +2715,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             provider: string;
         }>) => {
             if (event.data?.status?.toLocaleLowerCase() === 'success' && event.data.transactionId) {
+                if (this.isAdvancePayment) {
+                    this.saveAdvancePayment({ payuTransactionId: event.data.transactionId });
+                    window.removeEventListener("message", handlePayUMessage);
+                    return;
+                }
                 const model = {
                     payuTransactionId: event.data.transactionId,
                     paymentProvider: event.data.provider,

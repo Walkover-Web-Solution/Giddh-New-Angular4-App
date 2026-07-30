@@ -1618,7 +1618,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         voucherDetails.entries?.forEach((entry: any, index: number) => {
                             if (entry.entryClass === "ANNEXURE") {
                                 annexureChargesArray.push(this.getAnnexureChargeFormGroup(entry));
-                                this.calculateAnnexureChargeTax(index, false, entry.taxes);
+                                this.calculateAnnexureChargeTax(annexureChargesArray.length - 1, false, entry.taxes);
                                 return;
                             }
                             if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
@@ -2494,7 +2494,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 model: filterRequest,
                 type: this.invoiceType.isProformaInvoice ? "proformas" : "estimates",
             });
-        } else {
+        } else if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) {
             const baseRequest: Partial<InvoiceReceiptFilter> = {
                 sortBy: "voucherDate",
                 sort: "desc",
@@ -4337,6 +4337,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         });
                     }
 
+                    const stockGroupOtherTax: string[] = [];
+                    if (item.additional.stock?.groupTaxes) {
+                        stockGroupOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
+                            item.additional.stock?.groupTaxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
+                        ).map(tax => tax.uniqueName));
+                        item.additional.stock.groupTaxes = item.additional.stock?.groupTaxes.filter(tax => !stockGroupOtherTax.includes(tax));
+                    }
+                    const stockOtherTax: string[] = [];
+                    if (item.additional.stock?.taxes) {
+                        stockOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
+                            item.additional.stock?.taxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
+                        ).map(tax => tax.uniqueName));
+                        item.additional.stock.taxes = item.additional.stock?.taxes.filter(tax => !stockOtherTax.includes(tax));
+                    }
+
                     const taxes = this.generalService.fetchTaxesOnPriority(
                         item.additional.stock?.taxes ?? [],
                         item.additional.stock?.groupTaxes ?? [],
@@ -4344,22 +4359,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         item.additional.groupTaxes ?? []
                     );
 
-                    const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
-                    taxesFormArray.clear();
+                    const otherTaxes = this.generalService.fetchTaxesOnPriority(
+                        stockOtherTax ?? [],
+                        stockGroupOtherTax ?? [],
+                        item.additional.taxes ?? [],
+                        item.additional.groupTaxes ?? []
+                    );
 
                     const selectedTaxes = [];
                     let otherTax = null;
-                    taxes?.forEach((selectedTax) => {
-                        this.allCompanyTaxes?.forEach((tax) => {
-                            if (tax.uniqueName === selectedTax) {
-                                if (this.otherTaxTypes.includes(tax.taxType)) {
-                                    otherTax = tax;
-                                } else {
-                                    selectedTaxes.push(tax);
-                                }
-                            }
-                        });
+                    
+                    this.allCompanyTaxes?.forEach((tax) => {
+                        if (taxes.includes(tax.uniqueName) && !this.otherTaxTypes.includes(tax.taxType)) {
+                            selectedTaxes.push(tax);
+                        } else if (otherTaxes.includes(tax.uniqueName) && this.otherTaxTypes.includes(tax.taxType)) {
+                            otherTax = tax;
+                        }
                     });
+
+                    const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
+                    taxesFormArray.clear();
 
                     selectedTaxes?.forEach((tax) => {
                         taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
@@ -8332,6 +8351,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         }
 
+        const stockGroupOtherTax: string[] = [];
+        if (response.stock?.groupTaxes) {
+            stockGroupOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
+                response.stock?.groupTaxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
+            ).map(tax => tax.uniqueName));
+            response.stock.groupTaxes = response.stock?.groupTaxes.filter(tax => !stockGroupOtherTax.includes(tax));
+        }
+        const stockOtherTax: string[] = [];
+        if (response.stock?.taxes) {
+            stockOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
+                response.stock?.taxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
+            ).map(tax => tax.uniqueName));
+            response.stock.taxes = response.stock?.taxes.filter(tax => !stockOtherTax.includes(tax));
+        }
+
         const taxes = this.generalService.fetchTaxesOnPriority(
             response.stock?.taxes ?? [],
             response.stock?.groupTaxes ?? [],
@@ -8339,18 +8373,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             response.groupTaxes ?? []
         );
 
+        const otherTaxes = this.generalService.fetchTaxesOnPriority(
+            stockOtherTax ?? [],
+            stockGroupOtherTax ?? [],
+            response.taxes ?? [],
+            response.groupTaxes ?? []
+        );
+
         const selectedTaxes = [];
         let otherTax = null;
-        taxes?.forEach((selectedTax) => {
-            this.allCompanyTaxes?.forEach((tax) => {
-                if (tax.uniqueName === selectedTax) {
-                    if (this.otherTaxTypes.includes(tax.taxType)) {
-                        otherTax = tax;
-                    } else {
-                        selectedTaxes.push(tax);
-                    }
-                }
-            });
+        
+        this.allCompanyTaxes?.forEach((tax) => {
+            if (taxes.includes(tax.uniqueName) && !this.otherTaxTypes.includes(tax.taxType)) {
+                selectedTaxes.push(tax);
+            } else if (otherTaxes.includes(tax.uniqueName) && this.otherTaxTypes.includes(tax.taxType)) {
+                otherTax = tax;
+            }
         });
 
         selectedTaxes?.forEach((tax) => {
@@ -9679,7 +9717,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isReceiptInvoice ||
-            this.invoiceType.isPaymentInvoice
+            this.invoiceType.isPaymentInvoice ||
+            this.invoiceType.isCashInvoice
         );
     }
 
