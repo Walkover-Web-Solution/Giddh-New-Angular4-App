@@ -3607,7 +3607,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
 
                 this.companyTaxesList.forEach(tax => {
-                    if (tax.uniqueName === otherTax.appliedOtherTax.uniqueName && TCS_TDS_TAXES_TYPES.includes(tax.taxType)) {
+                    if (tax.uniqueName === otherTax.appliedOtherTax?.uniqueName && TCS_TDS_TAXES_TYPES.includes(tax.taxType)) {
                         otherTax.appliedOtherTax.name = tax.name;
                     }
                 })
