@@ -8,7 +8,7 @@ import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, IOption, SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../../app.constant';
 import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
@@ -120,6 +120,8 @@ export class TemplateEditFilterComponent implements OnInit {
     public selectedSignatureType: string = '';
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds Active company info */
+    public activeCompany: any;
     /** Holds voucher type enum */
     public voucherTypeEnum: any = VoucherTypeEnum;
     /** Holds images folder path */
@@ -171,6 +173,11 @@ export class TemplateEditFilterComponent implements OnInit {
         label: null,
         value: null
     });
+    /** Holds Tax type label like GST/VAT/TRN/ SALES TAX  */
+    public taxType: any = {
+        label: '',
+        placeholder: ''
+    }
 
     constructor(
         private generalService: GeneralService,
@@ -269,7 +276,7 @@ export class TemplateEditFilterComponent implements OnInit {
     public ngOnInit(): void {
         this.imgPath = this.serviceConfig.IMG_PATH;
         // Initialize dialog data
-        const { templateType, voucherType, templateList, mode, localeData, commonLocaleData } = this.dialogData || {};
+        const { templateType, voucherType, templateList, mode, localeData, commonLocaleData, activeCompany } = this.dialogData || {};
         this.templateType = templateType;
         this.voucherType = voucherType;
         this.sampleTemplates = templateList;
@@ -277,6 +284,46 @@ export class TemplateEditFilterComponent implements OnInit {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.localeData = localeData;
         this.commonLocaleData = commonLocaleData;
+        this.activeCompany = activeCompany;
+        if (this.commonLocaleData) {
+            this.handleAfterTranslationOperation();
+        }
+        this.languageList.set([
+            // { label: 'English', value: 'en' }, // This commented due this is our primary lang
+            { label: 'Arabic', value: 'ar' },
+            { label: 'Hindi', value: 'hi' },
+            { label: 'Marathi', value: 'mr' },
+            { label: 'Gujarati', value: 'gu' },
+            { label: 'Punjabi', value: 'pa' },
+            { label: 'Tamil', value: 'ta' },
+            { label: 'Telugu', value: 'te' },
+            { label: 'Kannada', value: 'kn' },
+            { label: 'Malayalam', value: 'ml' },
+            { label: 'Bengali', value: 'bn' },
+            { label: 'Odia', value: 'or' },
+            { label: 'Urdu', value: 'ur' },
+
+            { label: 'French', value: 'fr' },
+            { label: 'German', value: 'de' },
+            { label: 'Spanish', value: 'es' },
+            { label: 'Portuguese', value: 'pt' },
+            { label: 'Italian', value: 'it' },
+            { label: 'Dutch', value: 'nl' },
+            { label: 'Russian', value: 'ru' },
+
+            { label: 'Turkish', value: 'tr' },
+            { label: 'Persian (Farsi)', value: 'fa' },
+            { label: 'Hebrew', value: 'he' },
+
+            { label: 'Chinese (Simplified)', value: 'zh-CN' },
+            { label: 'Chinese (Traditional)', value: 'zh-TW' },
+            { label: 'Japanese', value: 'ja' },
+            { label: 'Korean', value: 'ko' },
+            { label: 'Thai', value: 'th' },
+            { label: 'Vietnamese', value: 'vi' },
+            { label: 'Indonesian', value: 'id' },
+            { label: 'Malay', value: 'ms' }
+        ]);
 
         // Get company info and companies list
         let companies: any = null;
@@ -360,57 +407,39 @@ export class TemplateEditFilterComponent implements OnInit {
                 if (footerData?.imageSignature) footerData.imageSignature.display = true;
                 if (footerData?.slogan) footerData.slogan.display = false;
                 if (this.voucherType !== VoucherTypeEnum.sales) {
-                    if (headerData?.invoiceDate && headerData?.voucherDate) headerData.invoiceDate.label = headerData.voucherDate.label;
-                    if (headerData?.invoiceNumber && headerData?.voucherNumber) headerData.invoiceNumber.label = headerData.voucherNumber.label;
+                    if (headerData?.invoiceDate && headerData?.voucherDate) {
+                        headerData.invoiceDate.label = headerData.voucherDate.label;
+                        headerData.invoiceDate.secondaryLabel = headerData.voucherDate.secondaryLabel;
+                    }
+                    if (headerData?.invoiceNumber && headerData?.voucherNumber) {
+                        headerData.invoiceNumber.label = headerData.voucherNumber.label;
+                        headerData.invoiceNumber.secondaryLabel = headerData.voucherNumber.secondaryLabel;
+                    }
                 } else {
-                    if (headerData?.voucherDate && headerData?.invoiceDate) headerData.voucherDate.label = headerData.invoiceDate.label;
-                    if (headerData?.voucherNumber && headerData?.invoiceNumber) headerData.voucherNumber.label = headerData.invoiceNumber.label;
+                    if (headerData?.voucherDate && headerData?.invoiceDate) {
+                        headerData.voucherDate.label = headerData.invoiceDate.label;
+                        headerData.voucherDate.secondaryLabel = headerData.invoiceDate.secondaryLabel;
+                    }
+                    if (headerData?.voucherNumber && headerData?.invoiceNumber) {
+                        headerData.voucherNumber.label = headerData.invoiceNumber.label;
+                        headerData.voucherNumber.secondaryLabel = headerData.invoiceNumber.secondaryLabel;
+                    }
                 }
             }
              
-
             if (footerData?.message1?.display) {
-                this.customTemplate.message1 = "We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct."; 
+                this.customTemplate.message1 = "We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.";
+                this.customTemplate.secondaryMessage1 = "";
+            }
+
+            if (this.customTemplate?.language2Code && !this.selectedSecondaryLang().value) {
+                const obj = this.languageList().find(lang => lang.value === this.customTemplate.language2Code);
+                if (obj) {
+                    this.selectedSecondaryLang.set(obj);
+                }
             }
             this.assignImageSignature();
         });
-
-        this.languageList.set([
-            // { label: 'English', value: 'en' }, // This commented due this is our primary lang
-            { label: 'Arabic', value: 'ar' },
-            { label: 'Hindi', value: 'hi' },
-            { label: 'Marathi', value: 'mr' },
-            { label: 'Gujarati', value: 'gu' },
-            { label: 'Punjabi', value: 'pa' },
-            { label: 'Tamil', value: 'ta' },
-            { label: 'Telugu', value: 'te' },
-            { label: 'Kannada', value: 'kn' },
-            { label: 'Malayalam', value: 'ml' },
-            { label: 'Bengali', value: 'bn' },
-            { label: 'Odia', value: 'or' },
-            { label: 'Urdu', value: 'ur' },
-
-            { label: 'French', value: 'fr' },
-            { label: 'German', value: 'de' },
-            { label: 'Spanish', value: 'es' },
-            { label: 'Portuguese', value: 'pt' },
-            { label: 'Italian', value: 'it' },
-            { label: 'Dutch', value: 'nl' },
-            { label: 'Russian', value: 'ru' },
-
-            { label: 'Turkish', value: 'tr' },
-            { label: 'Persian (Farsi)', value: 'fa' },
-            { label: 'Hebrew', value: 'he' },
-
-            { label: 'Chinese (Simplified)', value: 'zh-CN' },
-            { label: 'Chinese (Traditional)', value: 'zh-TW' },
-            { label: 'Japanese', value: 'ja' },
-            { label: 'Korean', value: 'ko' },
-            { label: 'Thai', value: 'th' },
-            { label: 'Vietnamese', value: 'vi' },
-            { label: 'Indonesian', value: 'id' },
-            { label: 'Malay', value: 'ms' }
-        ]);
 
         // Listen for logo path changes
         this.templateService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
@@ -1056,11 +1085,13 @@ export class TemplateEditFilterComponent implements OnInit {
         if (isDate) {
             if (this.customTemplate?.sections?.['header']?.data?.['voucherDate'] && this.customTemplate?.sections?.['header']?.data?.['invoiceDate']) {
                 this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate?.sections['header']?.data['invoiceDate']?.label;
+                this.customTemplate.sections['header'].data['voucherDate'].secondaryLabel = this.customTemplate?.sections['header']?.data['invoiceDate']?.secondaryLabel;
                 this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate?.sections['header']?.data['invoiceDate']?.display;
             }
         } else {
             if (this.customTemplate?.sections?.['header']?.data?.['voucherNumber'] && this.customTemplate?.sections?.['header']?.data?.['invoiceNumber']) {
                 this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate?.sections['header']?.data['invoiceNumber']?.label;
+                this.customTemplate.sections['header'].data['voucherNumber'].secondaryLabel = this.customTemplate?.sections['header']?.data['invoiceNumber']?.secondaryLabel;
                 this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate?.sections['header']?.data['invoiceNumber']?.display;
             }
         }
@@ -1184,5 +1215,44 @@ export class TemplateEditFilterComponent implements OnInit {
             label: null,
             value: null
         });
+    }
+
+
+    /**
+     * Trigger when translation commonLocaleData and localeData load
+     *
+     * @memberof TemplateEditDialogComponent
+     */
+    public handleAfterTranslationOperation(): void {
+        this.setTaxTypeLabelPlaceholder();
+    }
+
+    /**
+     * Set tax type label
+     *
+     * @private
+     * @memberof TemplateEditDialogComponent
+     */
+    private setTaxTypeLabelPlaceholder(): void {
+        if (this.activeCompany) {
+            const alpha2CountryCode = this.activeCompany?.countryV2?.alpha2CountryCode;
+            if (VAT_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
+                this.taxType.label = this.commonLocaleData?.app_vat;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_vat;
+            } else if (TRN_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
+                this.taxType.label = this.commonLocaleData?.app_trn;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_trn;
+            } else if (SALES_TAX_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
+                this.taxType.label = this.commonLocaleData?.app_sales_tax;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_sales_tax;
+            } else if (alpha2CountryCode === 'IN') {
+                this.taxType.label = this.commonLocaleData?.app_gstin;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_gstin;
+            } else {
+                // Falback Value for not listed in our code base country  will mark as VAT
+                this.taxType.label = this.commonLocaleData?.app_vat;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_vat;
+            }
+        }
     }
 }

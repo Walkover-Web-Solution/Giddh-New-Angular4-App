@@ -486,6 +486,7 @@ export class CustomTemplateResponse {
     public secondaryLabelFirst: boolean;
     public showLanguage2DisplayedFirst: boolean;
     public message1?: string;
+    public secondaryMessage1?: string;
 }
 
 export class Esignature {

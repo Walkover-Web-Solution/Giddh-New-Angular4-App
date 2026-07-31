@@ -267,6 +267,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
       msg1.display = false;
       msg1.label = msg1.label || '';
       data.message1 = data.message1 || '';
+      data.secondaryMessage1 = data.secondaryMessage1 || '';
     }
   }
 
