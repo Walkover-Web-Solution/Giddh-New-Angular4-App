@@ -50,5 +50,10 @@
     "from_to": "पासून",
     "select_item": "आयटम निवडा",
     "select_query": "क्वेरी निवडा",
-    "company_address": "कंपनीचा पत्ता"
+    "company_address": "कंपनीचा पत्ता",
+    "download_csv_options": {
+        "title": "सीएसव्ही डाउनलोड पर्याय",
+        "note_message": "फक्त सक्षम केलेली फील्ड्स निर्यात केलेल्या सीएसव्हीमध्ये समाविष्ट केली जातील.",
+        "parent_group_name": "मूळ गट नाव"
+    }
 }

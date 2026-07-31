@@ -50,5 +50,10 @@
     "from_to": "From - To",
     "select_item": "Select Item",
     "select_query": "Select Query",
-    "company_address": "Company Address"
+    "company_address": "Company Address",
+    "download_csv_options": {
+        "title": "Download CSV Options",
+        "note_message": "Only enabled fields will be included in the exported CSV.",
+        "parent_group_name": "Parent Group Name"
+    }
 }

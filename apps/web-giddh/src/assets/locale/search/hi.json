@@ -50,5 +50,10 @@
     "from_to": "कब से कब तक",
     "select_item": "वस्तु चुनें",
     "select_query": "क्वेरी का चयन करें",
-    "company_address": "कम्पनी का पता"
+    "company_address": "कम्पनी का पता",
+    "download_csv_options": {
+        "title": "सीएसवी डाउनलोड विकल्प",
+        "note_message": "केवल सक्षम फ़ील्ड ही निर्यातित सीएसवी में शामिल किए जाएंगे।",
+        "parent_group_name": "मूल समूह नाम"
+    }
 }
