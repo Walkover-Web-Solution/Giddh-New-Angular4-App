@@ -42,6 +42,8 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     public isFirstLoad: boolean = true;
     /** Latest aging report response body. */
     public reportData: StockAgingReportBody | null = null;
+    /** Summary totals from the dedicated totals API. */
+    public reportTotals: any = null;
     /** Bucket range labels driving the group-header columns. */
     public bucketRanges: string[] = ["0-30 days", "31-60 days", "61-90 days", "90+ days"];
     /** Editable aging boundaries backing `bucketRanges` and the popup. */
@@ -167,6 +169,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
         }
         this.page = 1;
         this.getReport();
+        this.getReportTotals();
     }
 
     /**
@@ -212,6 +215,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
         this.bucketSort = null;
         this.page = 1;
         this.getReport();
+        this.getReportTotals();
     }
 
     constructor(
@@ -258,6 +262,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
             this.refreshLayoutCaches();
             this.loadStockGroups();
             this.getReport();
+            this.getReportTotals();
         });
 
         // Local search filtering for the branch dropdown
@@ -294,6 +299,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
             this.searchText = (search ?? '').trim();
             this.page = 1;
             this.getReport();
+            this.getReportTotals();
         });
 
         // Refetch when as-on date changes.
@@ -303,6 +309,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
         ).subscribe(() => {
             this.page = 1;
             this.getReport();
+            this.getReportTotals();
         });
 
         // Load persisted aging boundaries for the inventory context and
@@ -416,6 +423,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
         this.recomputeWarehouses();
         this.page = 1;
         this.getReport();
+        this.getReportTotals();
     }
 
     /**
@@ -426,6 +434,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     public onWarehouseChange(): void {
         this.page = 1;
         this.getReport();
+        this.getReportTotals();
     }
 
     /**
@@ -436,6 +445,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     public onStockGroupChange(): void {
         this.page = 1;
         this.getReport();
+        this.getReportTotals();
     }
 
     /**
@@ -520,6 +530,38 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
             }, () => {
                 this.isLoading = false;
                 this.isFirstLoad = false;
+            });
+    }
+
+    /**
+     * Fetch the stock aging report totals (summary cards) with current filters.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    public getReportTotals(): void {
+        const payload: any = {
+            branchUniqueNames: (this.isCompany && this.allBranches?.length > 1) ? this.selectedBranch : [this.generalService.currentBranchUniqueName],
+            warehouseUniqueNames: this.selectedWarehouse,
+            stockGroupUniqueNames: this.selectedStockGroup,
+            categoryUniqueNames: [this.selectedStockCategory]
+        };
+        if (this.asOnDateControl.value) {
+            payload.asOnDate = dayjs(this.asOnDateControl.value).format(GIDDH_DATE_FORMAT);
+        }
+        this.inventoryService.getStockAgingReportTotals(payload)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                const raw: any = response as any;
+                const body = raw?.body ?? raw;
+                const isSuccess = !raw?.status || raw?.status === "success";
+                if (isSuccess && body) {
+                    this.reportTotals = body?.totals || body;
+                    const buckets = this.reportTotals?.buckets;
+                    if (Array.isArray(buckets) && buckets.length && !this.bucketRangesOverridden) {
+                        this.setBucketRanges(buckets.map(b => b.range));
+                    }
+                }
+                this.cdr.detectChanges();
             });
     }
 
