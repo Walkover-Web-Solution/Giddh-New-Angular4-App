@@ -117,5 +117,6 @@ export const INVENTORY_API = {
         UPDATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment/:refNo?voucherVersion=2&branchUniqueName=:branchUniqueName'
     },
     INVENTORY_VARIANT_UPDATE: 'v2/company/:companyUniqueName/stock/:stockUniqueName/variant/:variantUniqueName',
-    STOCK_AGING_REPORT: 'dev/v2/company/:companyUniqueName/stock-aging-report?page=:page&count=:count'
+    STOCK_AGING_REPORT: 'v2/company/:companyUniqueName/stock-aging-report?page=:page&count=:count',
+    STOCK_AGING_REPORT_TOTALS: 'v2/company/:companyUniqueName/stock-aging-report/totals'
 };

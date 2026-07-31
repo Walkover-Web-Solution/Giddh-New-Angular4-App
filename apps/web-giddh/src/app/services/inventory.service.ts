@@ -1909,6 +1909,27 @@ export class InventoryService {
     }
 
     /**
+     * Get stock aging report totals (summary cards)
+     *
+     * @param {any} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getStockAgingReportTotals(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.STOCK_AGING_REPORT_TOTALS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
      * This will be use for update inventory variant
      *
      * @param {*} model
