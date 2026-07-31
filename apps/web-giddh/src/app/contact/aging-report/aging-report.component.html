@@ -190,16 +190,17 @@
 <ng-template #mainTable>
     <div [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
         <div class="d-flex justify-content-end">
-            <mat-menu #agingDropdown="matMenu" class="aging-dropdown-table">
+            <mat-menu #agingDropdown="matMenu" [hasBackdrop]="false">
                 <ng-template matMenuContent>
-                    <aging-dropdown
-                        (close)="onCloseMenu()"
-                        [vendorCustomerType]="vendorCustomerType"
-                        [options]="agingDropDownoptions"
+                    <age-range-editor
                         *ngIf="setDueRangeOpen$ | async"
+                        [options]="agingDropDownoptions"
+                        [activeInterval]="activeInterval"
                         [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                    ></aging-dropdown>
+                        [vendorCustomerType]="vendorCustomerType"
+                        (save)="onAgingRangeSave($event)"
+                        (close)="onAgingRangeClose()"
+                    ></age-range-editor>
                 </ng-template>
             </mat-menu>
         </div>
@@ -269,12 +270,15 @@
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             matButton="outlined"
-                            (click)="openAgingDropDown()"
+                            (click)="openAgingDropDown(0)"
                             [matMenuTriggerFor]="agingDropdown"
                             class="font-style-italic"
                             aria-label="days"
                         >
-                            0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}
+                                <span class="icon-edit text-primary ml-1 font-size-12"></span>
+                            </span>
                         </button>
 
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range0' }"></ng-container>
@@ -307,12 +311,15 @@
                         <button
                             [matMenuTriggerFor]="agingDropdown"
                             matButton="outlined"
-                            (click)="openAgingDropDown()"
+                            (click)="openAgingDropDown(1)"
                             class="font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
-                            {{ (agingDropDownoptions$ | async)?.fourth + 1 }}-{{ (agingDropDownoptions$ | async)?.fifth }}
-                            {{ commonLocaleData?.app_days }}
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                {{ (agingDropDownoptions$ | async)?.fourth + 1 }}-{{ (agingDropDownoptions$ | async)?.fifth }}
+                                {{ commonLocaleData?.app_days }}
+                                <span class="icon-edit text-primary ml-1 font-size-12"></span>
+                            </span>
                         </button>
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range1' }"></ng-container>
                     </div>
@@ -352,13 +359,16 @@
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             matButton="outlined"
-                            (click)="openAgingDropDown()"
+                            (click)="openAgingDropDown(2)"
                             [matMenuTriggerFor]="agingDropdown"
                             class="font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
-                            {{ (agingDropDownoptions$ | async)?.fifth + 1 }}-{{ (agingDropDownoptions$ | async)?.sixth }}
-                            {{ commonLocaleData?.app_days }}
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                {{ (agingDropDownoptions$ | async)?.fifth + 1 }}-{{ (agingDropDownoptions$ | async)?.sixth }}
+                                {{ commonLocaleData?.app_days }}
+                                <span class="icon-edit text-primary ml-1 font-size-12"></span>
+                            </span>
                         </button>
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range2' }"></ng-container>
                     </div>
@@ -396,12 +406,15 @@
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             matButton="outlined"
-                            (click)="openAgingDropDown()"
+                            (click)="openAgingDropDown(3)"
                             [matMenuTriggerFor]="agingDropdown"
                             class="font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
-                            {{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                {{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
+                                <span class="icon-edit text-primary ml-1 font-size-12"></span>
+                            </span>
                         </button>
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range3' }"></ng-container>
                     </div>

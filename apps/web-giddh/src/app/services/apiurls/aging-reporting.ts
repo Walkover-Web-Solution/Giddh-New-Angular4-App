@@ -1,4 +1,4 @@
-const COMMON_URL_FOR_DUEDAYSRANGE_V2 = 'company/:companyUniqueName/due-days-range?vendorCustomerType=:vendorCustomerType';
+const COMMON_URL_FOR_DUEDAYSRANGE_V2 = 'dev/company/:companyUniqueName/due-days-range?vendorCustomerType=:vendorCustomerType';
 const COMMON_URL_FOR_DUEAMOUNTREPORT_V2 = 'company/:companyUniqueName/due-amount-report?q=:q&page=:page&count=:count&sort=:sort&sortBy=:sortBy&rangeCol=:rangeCol&vendorCustomerType=:vendorCustomerType';
 
 

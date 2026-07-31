@@ -4,6 +4,7 @@ import { NewInventoryComponent } from "./new-inventory.component";
 import { ProductServiceListComponent } from "./component/inventory-product-service-list/inventory-product-service-list.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
+import { StockAgingReportComponent } from "./component/stock-aging-report/stock-aging-report.component";
 import { ReportsComponent } from "./component/reports/reports.component";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
@@ -67,6 +68,10 @@ const routes: Routes = [
             {
                 path: "stock-balance",
                 component: StockBalanceComponent,
+            },
+            {
+                path: ":category/stock-aging-report",
+                component: StockAgingReportComponent,
             },
         ],
     },

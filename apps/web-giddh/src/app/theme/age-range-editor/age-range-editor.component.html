@@ -1,0 +1,114 @@
+<div
+    class="aging-range-popup px-3 py-2 bg-table-background-color"
+    (clickOutside)="onClickOutside($event)"
+    [clickOutsideEnabled]="true"
+    [delayClickOutsideInit]="true"
+    (click)="$event.stopPropagation()"
+>
+    <!-- Only render the interval the user clicked on -->
+    @switch (activeInterval) {
+        @case (0) {
+            <!-- First interval: 0 - fourth -->
+            <div class="range-block">
+                <p class="mb-2 font-size-12 text-uppercase text-light font-weight-semibold">{{ localeData?.first_interval }}</p>
+                <div class="d-flex align-items-center mb-2 column-gap-1">
+                    <label class="range-label font-size-14 mb-0">From</label>
+                    <input class="form-control bg-grey" type="number" [value]="0" disabled (click)="$event.stopPropagation()" />
+                </div>
+                <div class="d-flex align-items-center column-gap-1">
+                    <label class="range-label font-size-14 mb-0">To</label>
+                    <text-field
+                        [cssClass]="'form-control range-input'"
+                        [name]="'ageRange_first'"
+                        [type]="'number'"
+                        [allowDecimalDigitsOnly]="true"
+                        [(ngModel)]="model.fourth"
+                        (input)="onValueChange()"
+                        (keyup.enter)="onClickOutside($event)"
+                        (click)="$event.stopPropagation()"
+                    ></text-field>
+                </div>
+            </div>
+        }
+        @case (1) {
+            <!-- Second interval: fourth+1 - fifth -->
+            <div class="range-block">
+                <p class="range-title mb-2 font-weight-semibold">{{ localeData?.second_interval }}</p>
+                <div class="d-flex align-items-center mb-2 column-gap-1">
+                    <label class="range-label font-size-14 mb-0">From</label>
+                    <input
+                        class="form-control bg-grey"
+                        type="number"
+                        [value]="+model.fourth + 1"
+                        disabled
+                        (click)="$event.stopPropagation()"
+                    />
+                </div>
+                <div class="d-flex align-items-center column-gap-1">
+                    <label class="range-label font-size-14 mb-0">To</label>
+                    <text-field
+                        [cssClass]="'form-control range-input'"
+                        [name]="'ageRange_second'"
+                        [type]="'number'"
+                        [allowDecimalDigitsOnly]="true"
+                        [(ngModel)]="model.fifth"
+                        (input)="onValueChange()"
+                        (keyup.enter)="onClickOutside($event)"
+                        (click)="$event.stopPropagation()"
+                    ></text-field>
+                </div>
+            </div>
+        }
+        @case (2) {
+            <!-- Third interval: fifth+1 - sixth -->
+            <div class="range-block">
+                <p class="range-title mb-2 font-weight-semibold">{{ localeData?.third_interval }}</p>
+                <div class="d-flex align-items-center mb-2 column-gap-1">
+                    <label class="range-label font-size-14 mb-0">From</label>
+                    <input
+                        class="form-control bg-grey"
+                        type="number"
+                        [value]="+model.fifth + 1"
+                        disabled
+                        (click)="$event.stopPropagation()"
+                    />
+                </div>
+                <div class="d-flex align-items-center column-gap-1">
+                    <label class="range-label font-size-14 mb-0">To</label>
+                    <text-field
+                        [cssClass]="'form-control range-input'"
+                        [name]="'ageRange_third'"
+                        [type]="'number'"
+                        [allowDecimalDigitsOnly]="true"
+                        [(ngModel)]="model.sixth"
+                        (input)="onValueChange()"
+                        (keyup.enter)="onClickOutside($event)"
+                        (click)="$event.stopPropagation()"
+                    ></text-field>
+                </div>
+            </div>
+        }
+        @case (3) {
+            <!-- Last interval: sixth+1 and above (no upper bound) -->
+            <div class="range-block">
+                <p class="range-title mb-2 font-weight-semibold">{{ localeData?.last_interval }}</p>
+                <div class="d-flex align-items-center mb-2 column-gap-1">
+                    <label class="range-label font-size-14 mb-0">From</label>
+                    <input
+                        class="form-control bg-grey"
+                        type="number"
+                        [value]="+model.sixth + 1"
+                        disabled
+                        (click)="$event.stopPropagation()"
+                    />
+                </div>
+                <div class="d-flex align-items-center column-gap-1">
+                    <label class="range-label font-size-14 mb-0">To</label>
+                    <input class="form-control bg-grey" type="text" value="&infin;" disabled (click)="$event.stopPropagation()" />
+                </div>
+            </div>
+        }
+    }
+
+    <p *ngIf="!isValid" class="font-size-12 text-danger m-0 mt-1">{{ errorMessage }}</p>
+</div>
