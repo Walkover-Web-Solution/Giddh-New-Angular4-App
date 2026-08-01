@@ -430,7 +430,6 @@
     "totalDue": "कुल बकाया",
     "total_quantity": "कुल मात्रा",
     "taxable_amount": "कर योग्य राशि",
-    "thank_you_for_business": "आपके व्यवसाय के लिए धन्यवाद",
     "show_bank_details": "बैंक विवरण दिखाएँ",
     "show_signature": "हस्ताक्षर दिखाएँ",
     "show_terms_and_conditions": "नियम और शर्तें दिखाएँ",
@@ -543,7 +542,7 @@
     "note_1": "नोट 1",
     "textarea": "कोई भी अन्य पाठ दर्ज करें जिसे आप फुटर में चाहते हैं।",
     "note_2": "नोट 2",
-    "thanks": "आपके व्यापार के लिए धन्यवाद",
+    "thanks": "धन्यवाद संदेश",
     "text_under_image_signature": "छवि हस्ताक्षर/स्लोगन के नीचे पाठ",
     "text_under_slogan": "स्लोगन के नीचे पाठ",
     "image_signature": "छवि हस्ताक्षर",
@@ -569,5 +568,6 @@
     "apply_proforma_round_off": "प्रोफार्मा वाउचर पर राउंड ऑफ लागू करें",
     "apply_purchase_order_round_off": "खरीद आदेश वाउचर पर राउंड ऑफ लागू करें",
     "go_to_branch_message": "वाउचर बनाने के लिए, शाखा मोड में जाएं",
-    "eoe": "ई. और ओ.ई. (गलतियां और चूक अपवादित)"
+    "eoe": "ई. और ओ.ई. (गलतियां और चूक अपवादित)",
+    "invoice_grand_total_in_accounts_currency": "चालान का कुल योग"
 }

@@ -25,6 +25,8 @@
         #textField
         (keydown.enter)="$event.preventDefault()"
         [autocomplete]="autocomplete"
+        [attr.lang]="lang"
+        [attr.dir]="direction"
     />
     <input
         matInput
@@ -52,6 +54,8 @@
         #textField
         (keydown.enter)="$event.preventDefault()"
         [autocomplete]="autocomplete"
+        [attr.lang]="lang"
+        [attr.dir]="direction"
     />
     <input
         matInput
@@ -79,6 +83,8 @@
         #textField
         (keydown.enter)="$event.preventDefault()"
         [autocomplete]="autocomplete"
+        [attr.lang]="lang"
+        [attr.dir]="direction"
     />
     <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
 </div>

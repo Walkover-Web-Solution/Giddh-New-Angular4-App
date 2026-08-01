@@ -15,6 +15,11 @@
 @let primaryLabel = showSecondaryLabel ? selectedPrimaryLang().label : localeData?.label_value;
 @let secondaryLabel = selectedSecondaryLang().label;
 
+@let primaryLangCode = customTemplate?.language1Code;
+@let secondaryLangCode = showSecondaryLabel ? customTemplate?.language2Code : null;
+@let primaryLangDirection = getTextDirection(primaryLangCode);
+@let secondaryLangDirection = getTextDirection(secondaryLangCode);
+
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabChanged($event)">
     <mat-tab [label]="localeData?.design_tab">
         <div>
@@ -374,16 +379,15 @@
                                             <th class="font-weight-medium p-2" [width]="isThermalTemplate ? null : '150px'">
                                                 {{ localeData?.label_name }}
                                             </th>
-                                            @if (!isThermalTemplate) {
-                                                <!-- Label Input for Language 1 -->
-                                                <th class="font-weight-medium p-2">{{ primaryLabel }}</th>
-                                                @if (showSecondaryLabel) {
-                                                    <!-- Label Input for Language 2 -->
-                                                    <th class="font-weight-medium p-2">{{ secondaryLabel }}</th>
-                                                }
-                                                <!-- Focused Label Input for Characters left: count -->
-                                                <th class="font-weight-medium p-2" width="60px"></th>
+                                            <!-- Label Input for Language 1 -->
+                                            <th class="font-weight-medium p-2">{{ primaryLabel }}</th>
+
+                                            @if (showSecondaryLabel && !isThermalTemplate) {
+                                                <!-- Label Input for Language 2 -->
+                                                <th class="font-weight-medium p-2">{{ secondaryLabel }}</th>
                                             }
+                                            <!-- Focused Label Input for Characters left: count -->
+                                            <th class="font-weight-medium p-2" width="60px"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -686,7 +690,7 @@
                                                     labelRow;
                                                     context: {
                                                         rowId: 'showCompanyAddressRow',
-                                                        showInputField: !isThermalTemplate,
+                                                        showInputField: false,
                                                         showCheckbox: true,
                                                         section: 'header',
                                                         field: 'showCompanyAddress',
@@ -1068,7 +1072,7 @@
                                                         labelRow;
                                                         context: {
                                                             rowId: 'customerNameRow',
-                                                            showInputField: true,
+                                                            showInputField: !isThermalTemplate,
                                                             showCheckbox: true,
                                                             section: 'header',
                                                             field: 'customerName',
@@ -1076,8 +1080,8 @@
                                                             name: 'headercustomerName',
                                                             label:
                                                                 isTemplateTypePurchaseOrder || isTemplateTypePurchaseBill
-                                                                    ? localeData?.vendor_name
-                                                                    : localeData?.customer_name,
+                                                                    ? commonLocaleData?.app_vendor_name
+                                                                    : commonLocaleData?.app_customer_name,
                                                             maxLength: 15,
                                                             showSecondaryLabel: showSecondaryLabel,
                                                         }
@@ -1309,7 +1313,8 @@
                                             }
 
                                             <!-- shipping state -->
-                                            @if (sectionSettings?.header.shippingState) {
+                                            <!-- Old Code: <div *ngIf="sectionSettings?.header.shippingState" [hidden]="true"> -->
+                                            @if (sectionSettings?.header.shippingState && false) {
                                                 <ng-container
                                                     *ngTemplateOutlet="
                                                         labelRow;
@@ -1350,7 +1355,7 @@
                                                             field: 'shippingGstin',
                                                             callbacks: [onChangeFieldVisibility, changeDisableBilling],
                                                             name: 'headershippingGstin',
-                                                            label: commonLocaleData?.app_state,
+                                                            label: taxType.label,
                                                             maxLength: 15,
                                                             showSecondaryLabel: showSecondaryLabel,
                                                         }
@@ -1551,16 +1556,15 @@
                                                 <th class="font-weight-medium p-2" [width]="isThermalTemplate ? null : '150px'">
                                                     {{ localeData?.label_name }}
                                                 </th>
-                                                @if (!isThermalTemplate) {
-                                                    <!-- Label Input for Language 1 -->
-                                                    <th class="font-weight-medium p-2">{{ primaryLabel }}</th>
-                                                    @if (showSecondaryLabel) {
-                                                        <!-- Label Input for Language 2 -->
-                                                        <th class="font-weight-medium p-2">{{ secondaryLabel }}</th>
-                                                    }
-                                                    <!-- Focused Label Input for Characters left: count -->
-                                                    <th class="font-weight-medium p-2" width="60px"></th>
+                                                <!-- Label Input for Language 1 -->
+                                                <th class="font-weight-medium p-2">{{ primaryLabel }}</th>
+
+                                                @if (showSecondaryLabel && !isThermalTemplate) {
+                                                    <!-- Label Input for Language 2 -->
+                                                    <th class="font-weight-medium p-2">{{ secondaryLabel }}</th>
                                                 }
+                                                <!-- Focused Label Input for Characters left: count -->
+                                                <th class="font-weight-medium p-2" width="60px"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1659,7 +1663,7 @@
                                                         labelRow;
                                                         context: {
                                                             rowId: 'showDescriptionInRowsRow',
-                                                            showInputField: true,
+                                                            showInputField: false,
                                                             showCheckbox: true,
                                                             section: 'table',
                                                             field: 'showDescriptionInRows',
@@ -1739,13 +1743,13 @@
                                             }
 
                                             <!-- quantity -->
-                                            @if (sectionSettings?.table.quantity && !isThermalTemplate) {
+                                            @if (sectionSettings?.table.quantity) {
                                                 <ng-container
                                                     *ngTemplateOutlet="
                                                         labelRow;
                                                         context: {
                                                             rowId: 'quantityRow',
-                                                            showInputField: !isThermalTemplate,
+                                                            showInputField: true,
                                                             showCheckbox: !isThermalTemplate,
                                                             section: 'table',
                                                             field: 'quantity',
@@ -1914,7 +1918,7 @@
                                                         labelRow;
                                                         context: {
                                                             rowId: 'totalRow',
-                                                            showInputField: !isThermalTemplate,
+                                                            showInputField: true,
                                                             showCheckbox: !isThermalTemplate,
                                                             section: 'table',
                                                             field: 'total',
@@ -2251,16 +2255,17 @@
                                             <th class="font-weight-medium p-2" [width]="isThermalTemplate ? null : '150px'">
                                                 {{ localeData?.label_name }}
                                             </th>
-                                            @if (!isThermalTemplate) {
-                                                <!-- Label Input for Language 1 -->
-                                                <th class="font-weight-medium p-2">{{ primaryLabel }}</th>
-                                                @if (showSecondaryLabel) {
-                                                    <!-- Label Input for Language 2 -->
-                                                    <th class="font-weight-medium p-2">{{ secondaryLabel }}</th>
-                                                }
-                                                <!-- Focused Label Input for Characters left: count -->
-                                                <th class="font-weight-medium p-2" width="60px"></th>
+
+                                            <!-- Label Input for Language 1 -->
+                                            <th class="font-weight-medium p-2">{{ primaryLabel }}</th>
+
+                                            @if (showSecondaryLabel && !isThermalTemplate) {
+                                                <!-- Label Input for Language 2 -->
+                                                <th class="font-weight-medium p-2">{{ secondaryLabel }}</th>
                                             }
+
+                                            <!-- Focused Label Input for Characters left: count -->
+                                            <th class="font-weight-medium p-2" width="60px"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -2453,7 +2458,7 @@
                                             ></ng-container>
                                         }
                                         <!-- discount -->
-                                        @if (sectionSettings?.footer?.discount && isThermalTemplate) {
+                                        @if (sectionSettings?.table?.discount && isThermalTemplate) {
                                             <ng-container
                                                 *ngTemplateOutlet="
                                                     labelRow;
@@ -2461,11 +2466,11 @@
                                                         rowId: 'discountRow',
                                                         showInputField: true,
                                                         showCheckbox: true,
-                                                        section: 'footer',
+                                                        section: 'table',
                                                         field: 'discount',
                                                         callbacks: [onChangeFieldVisibility],
                                                         name: 'discount',
-                                                        label: localeData?.discount,
+                                                        label: commonLocaleData?.app_discount,
                                                         maxLength: 10,
                                                         showSecondaryLabel: showSecondaryLabel,
                                                     }
@@ -2488,6 +2493,27 @@
                                                         name: 'taxableAmount',
                                                         label: localeData?.taxable_amount,
                                                         maxLength: 14,
+                                                        showSecondaryLabel: showSecondaryLabel,
+                                                    }
+                                                "
+                                            ></ng-container>
+                                        }
+
+                                        <!-- GrandTotalInAccountsCurrency -->
+                                        @if (sectionSettings?.footer?.grandTotalInAccountsCurrency && isTemplateA) {
+                                            <ng-container
+                                                *ngTemplateOutlet="
+                                                    labelRow;
+                                                    context: {
+                                                        rowId: 'grandTotalInAccountsCurrencyRow',
+                                                        showInputField: true,
+                                                        showCheckbox: true,
+                                                        section: 'footer',
+                                                        field: 'grandTotalInAccountsCurrency',
+                                                        callbacks: [onChangeFieldVisibility],
+                                                        name: 'tableGrandTotalInAccountsCurrency',
+                                                        label: localeData?.invoice_grand_total_in_accounts_currency,
+                                                        maxLength: 30,
                                                         showSecondaryLabel: showSecondaryLabel,
                                                     }
                                                 "
@@ -2688,8 +2714,8 @@
                                                 <td class="p-2 vertical-align-top">
                                                     <span class="pt-2 d-inline-block">{{ localeData?.note_1 }}</span>
                                                 </td>
-                                                @if (!isThermalTemplate) {
-                                                    <td class="p-2" [attr.colspan]="showSecondaryLabel ? 2 : 1">
+                                                <td class="p-2" [attr.colspan]="showSecondaryLabel ? 2 : 1">
+                                                    @if (!isThermalTemplate) {
                                                         <!-- Label for Note 1 (Declaration:) -->
                                                         <div class="mb-3">
                                                             <ng-container
@@ -2707,48 +2733,50 @@
                                                                 "
                                                             ></ng-container>
                                                         </div>
+                                                    }
 
-                                                        <!-- Content for Note 1 which show below Declaration: -->
-                                                        <mat-form-field appearance="outline" class="initial-height w-100 address-text">
-                                                            <mat-label>{{ primaryLabel }}</mat-label>
-                                                            <textarea
-                                                                matInput
-                                                                class="form-control"
-                                                                rows="3"
-                                                                [maxlength]="
-                                                                    customTemplate.sections['footer'].data['showNotesAtLastPage']?.display
-                                                                        ? null
-                                                                        : 200
-                                                                "
-                                                                [class.error-box]="
-                                                                    isCharacterLimitExceeded(200, customTemplate.sections['message1'] || '')
-                                                                "
-                                                                [placeholder]="localeData?.footer_text"
-                                                                [(ngModel)]="customTemplate.message1"
-                                                                name="msg11"
-                                                                (ngModelChange)="onChangeFieldVisibility()"
-                                                                [disabled]="!customTemplate.sections['footer'].data['message1']?.display"
-                                                                [appTributeMention]="{
-                                                                    trigger: '{',
-                                                                    suggestionPrefix: '{',
-                                                                    suggestionSuffix: '}',
-                                                                }"
-                                                                [appTributeMentionValues]="suggestionList"
-                                                                (focus)="onCharacterFieldFocus('', 'message1', '')"
-                                                                (blur)="onCharacterFieldBlur()"
-                                                            ></textarea>
-                                                        </mat-form-field>
-                                                    </td>
-                                                    <td class="p-2 text-center">
-                                                        @if (isCharacterFieldFocused('', 'message1', '')) {
-                                                            <span class="font-size-12">
-                                                                {{ getRemainingCharacters(200, customTemplate?.sections?.['message1']) }}/{{
-                                                                    200
-                                                                }}
-                                                            </span>
-                                                        }
-                                                    </td>
-                                                }
+                                                    <!-- Content for Note 1 which show below Declaration: -->
+                                                    <mat-form-field appearance="outline" class="initial-height w-100 address-text">
+                                                        <mat-label>{{ primaryLabel }}</mat-label>
+                                                        <textarea
+                                                            matInput
+                                                            class="form-control"
+                                                            rows="3"
+                                                            [maxlength]="
+                                                                customTemplate.sections['footer'].data['showNotesAtLastPage']?.display
+                                                                    ? null
+                                                                    : 200
+                                                            "
+                                                            [class.error-box]="
+                                                                isCharacterLimitExceeded(200, customTemplate.sections['message1'] || '')
+                                                            "
+                                                            [placeholder]="localeData?.footer_text"
+                                                            [(ngModel)]="customTemplate.message1"
+                                                            name="msg11"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
+                                                            [disabled]="!customTemplate.sections['footer'].data['message1']?.display"
+                                                            [appTributeMention]="{
+                                                                trigger: '{',
+                                                                suggestionPrefix: '{',
+                                                                suggestionSuffix: '}',
+                                                            }"
+                                                            [appTributeMentionValues]="suggestionList"
+                                                            (focus)="onCharacterFieldFocus('', 'message1', '')"
+                                                            (blur)="onCharacterFieldBlur()"
+                                                            [attr.lang]="primaryLangCode"
+                                                            [attr.dir]="primaryLangDirection"
+                                                        ></textarea>
+                                                    </mat-form-field>
+                                                </td>
+                                                <td class="p-2 text-center">
+                                                    @if (isCharacterFieldFocused('', 'message1', '')) {
+                                                        <span class="font-size-12">
+                                                            {{ getRemainingCharacters(200, customTemplate?.sections?.['message1']) }}/{{
+                                                                200
+                                                            }}
+                                                        </span>
+                                                    }
+                                                </td>
                                             </tr>
 
                                             @if (!isThermalTemplate && showSecondaryLabel) {
@@ -2806,6 +2834,8 @@
                                                                 [appTributeMentionValues]="suggestionList"
                                                                 (focus)="onCharacterFieldFocus('', 'secondaryMessage1', '')"
                                                                 (blur)="onCharacterFieldBlur()"
+                                                                [attr.lang]="secondaryLangCode"
+                                                                [attr.dir]="secondaryLangDirection"
                                                             ></textarea>
                                                         </mat-form-field>
                                                     </td>
@@ -2984,6 +3014,8 @@
                                                                 (focus)="onCharacterFieldFocus('footer', 'slogan', 'label')"
                                                                 (blur)="onCharacterFieldBlur()"
                                                                 [placeholder]="localeData?.slogan"
+                                                                [attr.lang]="primaryLangCode"
+                                                                [attr.dir]="primaryLangDirection"
                                                             ></textarea>
                                                         </mat-form-field>
                                                     </td>
@@ -3020,6 +3052,8 @@
                                                                     (focus)="onCharacterFieldFocus('footer', 'slogan', 'secondaryLabel')"
                                                                     (blur)="onCharacterFieldBlur()"
                                                                     [placeholder]="localeData?.slogan"
+                                                                    [attr.lang]="secondaryLangCode"
+                                                                    [attr.dir]="secondaryLangDirection"
                                                                 ></textarea>
                                                             </mat-form-field>
                                                         </td>
@@ -3068,14 +3102,13 @@
 >
     <tr [id]="rowId">
         <td class="p-2">
-            @if (showCheckbox) {
-                <mat-checkbox
-                    color="primary"
-                    [name]="name + 'Checkbox'"
-                    [(ngModel)]="customTemplate.sections[section].data[field].display"
-                    (ngModelChange)="runDynamicCallbacks(callbacks)"
-                ></mat-checkbox>
-            }
+            <mat-checkbox
+                color="primary"
+                [disabled]="!showCheckbox"
+                [name]="name + 'Checkbox'"
+                [(ngModel)]="customTemplate.sections[section].data[field].display"
+                (ngModelChange)="runDynamicCallbacks(callbacks)"
+            ></mat-checkbox>
         </td>
 
         <td class="p-2">
@@ -3146,6 +3179,7 @@
     let-callbacks="callbacks"
 >
     @if (showInputField) {
+        @let isSecondaryKey = key === 'secondaryLabel';
         <div class="w-100">
             <text-field
                 [type]="'text'"
@@ -3157,6 +3191,8 @@
                 (onFocus)="onCharacterFieldFocus(section, field, key)"
                 (onBlurEvent)="onCharacterFieldBlur()"
                 [readonly]="!customTemplate?.sections?.[section]?.data?.[field]?.display"
+                [lang]="isSecondaryKey ? secondaryLangCode : primaryLangCode"
+                [direction]="isSecondaryKey ? secondaryLangDirection : primaryLangDirection"
             ></text-field>
         </div>
     }
@@ -3189,11 +3225,15 @@
                 (ngModelChange)="onChangeFieldVisibility()"
                 [pattern]="'^[a-zA-Z0-9._%-]{2,256}@[a-zA-Z0-9.-]{2,64}$'"
                 (patternValidation)="onPatternValidation($event)"
+                (onFocus)="onCharacterFieldFocus('', 'qrCodeId', '')"
+                (onBlurEvent)="onCharacterFieldBlur()"
             ></input-field>
         </td>
 
         <td class="p-2 text-center">
-            <span class="font-size-12">{{ getRemainingCharacters(255, customTemplate.qrCodeId) }}/255</span>
+            @if (isCharacterFieldFocused('', 'qrCodeId', '')) {
+                <span class="font-size-12">{{ getRemainingCharacters(255, customTemplate.qrCodeId) }}/255</span>
+            }
         </td>
     </tr>
 </ng-template>

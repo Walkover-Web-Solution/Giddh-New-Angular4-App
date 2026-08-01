@@ -430,7 +430,6 @@
     "totalDue": "Total Due",
     "total_quantity": "Total Quantity",
     "taxable_amount": "Taxable Amount",
-    "thank_you_for_business": "Thank You for your business",
     "show_bank_details": "Show Bank Details",
     "show_signature": "Show Signature",
     "show_terms_and_conditions": "Show Terms & Conditions",
@@ -543,7 +542,7 @@
     "note_1": "Note 1",
     "textarea": "Enter any other text you would like in the footer.",
     "note_2": "Note 2",
-    "thanks": "Thank You for your business",
+    "thanks": "Thank You Message",
     "text_under_image_signature": "Text under Image Signature / Slogan",
     "text_under_slogan":"Text under slogan",
     "image_signature": "Image Signature",
@@ -569,5 +568,6 @@
     "apply_proforma_round_off": "Apply round off on proforma voucher",
     "apply_purchase_order_round_off": "Apply round off on purchase order voucher",
     "go_to_branch_message": "To access create voucher, go to branch mode",
-    "eoe": "E. & O.E. (Errors & Omissions Excepted)"
+    "eoe": "E. & O.E. (Errors & Omissions Excepted)",
+    "invoice_grand_total_in_accounts_currency": "Invoice Grand Total"
 }

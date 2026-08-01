@@ -68,6 +68,10 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public autocomplete: string;
     /** Holds mat suffic */
     @Input() public matSuffix: any;
+    /** BCP-47 language code applied on the input, e.g. 'ar' (drives font/spellcheck/shaping) */
+    @Input() public lang: string = null;
+    /** Text direction applied on the input: 'rtl' | 'ltr' */
+    @Input() public direction: string = null;
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,

@@ -430,7 +430,6 @@
     "totalDue": "एकूण थकबाकी",
     "total_quantity": "एकूण प्रमाण",
     "taxable_amount": "करयोग्य रक्कम",
-    "thank_you_for_business": "आपल्या व्यवसायासाठी धन्यवाद",
     "show_bank_details": "बँक तपशील दाखवा",
     "show_signature": "स्वाक्षरी दाखवा",
     "show_terms_and_conditions": "नियम व अटी दाखवा",
@@ -543,7 +542,7 @@
     "note_1": "नोंद 1",
     "textarea": "तुम्हाला तळटीपेत हवा असलेला इतर कोणताही मजकूर टाका.",
     "note_2": "नोंद 2",
-    "thanks": "तुमच्या व्यवसायाबद्दल धन्यवाद",
+    "thanks": "धन्यवाद संदेश",
     "text_under_image_signature": "प्रतिमा स्वाक्षरी/घोषवाक्याखालील मजकूर",
     "text_under_slogan": "घोषवाक्याखालील मजकूर",
     "image_signature": "प्रतिमा स्वाक्षरी",
@@ -569,5 +568,6 @@
     "apply_proforma_round_off": "प्रोफॉर्मा व्हाउचरवर राउंड ऑफ लागू करा",
     "apply_purchase_order_round_off": "खरेदी ऑर्डर व्हाउचरवर राउंड ऑफ लागू करा",
     "go_to_branch_message": "व्हाउचर तयार करण्यासाठी, शाखा मोडवर जा",
-    "eoe": "त्रुटी आणि वगळणे वगळून"
+    "eoe": "त्रुटी आणि वगळणे वगळून",
+    "invoice_grand_total_in_accounts_currency": "बिल एकूण बेरीज"
 }
