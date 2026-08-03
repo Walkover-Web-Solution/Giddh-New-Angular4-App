@@ -817,7 +817,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response?.payuHtml) {
                 this.openPayUPayment(response.payuHtml);
             } else if (response && response.dueAmount >= value) {
-                if (((this.isMonthly() || this.isDaily() || this.isYearly()) && response?.region?.code !== EntityCode.IND && this.thirdStepForm.value.paymentProvider === PaymentProvider.STRIPE)) {
+                if (((this.isMonthly() || this.isDaily() || this.isYearly()) && response?.region?.code !== EntityCode.IND && this.thirdStepForm.value.paymentProvider !== PaymentProvider.RAZORPAY)) {
                     let model = {
                         planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
                         paymentProvider: this.thirdStepForm.value.paymentProvider,

@@ -53,7 +53,7 @@
     "company_address": "Company Address",
     "download_csv_options": {
         "title": "Download CSV Options",
-        "note_message": "Required fields are included by default. Enable optional fields for export.",
+        "note_message": "The default columns 'Name, Unique Name, Opening Balance, DR Total, CR Total, Closing Balance' will be exported, you also have the option to add custom columns as needed.",
         "parent_group_name": "Parent Group Name"
     }
 }
