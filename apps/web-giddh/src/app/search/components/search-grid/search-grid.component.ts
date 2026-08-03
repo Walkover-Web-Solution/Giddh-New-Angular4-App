@@ -226,6 +226,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         let formattedQuery = this.formatQuery(queryForApi, searchQuery);
         this.formattedQuery = formattedQuery;
         this.selectAllCustomer = false;
+        this.selectedItems = [];
         this.FilterByAPIEvent.emit(formattedQuery);
     }
 
@@ -241,6 +242,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.FilterByAPIEvent.emit(null);
             this.pageChangeEvent.emit(1);
             this.selectAllCustomer = false;
+            this.selectedItems = [];
         }
     }
 

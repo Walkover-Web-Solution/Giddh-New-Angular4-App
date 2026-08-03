@@ -4311,6 +4311,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             otherTaxesModal.tcsCalculationMethod = res.tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
             this.lc.blankLedger.otherTaxModal = otherTaxesModal;
             this.lc.blankLedger.isOtherTaxesApplicable = true;
+            this.lc.blankLedger.transactions[txnIndex].selectedAccount.otherTax = otherTaxesModal;
         }
 
         this.selectAccount(
