@@ -574,6 +574,17 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
+     * Resolves the text direction for the given language code
+     *
+     * @param {string} languageCode Language code, e.g. 'ar'
+     * @returns {string} 'rtl' for right-to-left languages, 'ltr' otherwise and null when no code is selected
+     * @memberof TemplateEditFilterComponent
+     */
+    public getTextDirection(languageCode: string): string {
+        return languageCode ? this.generalService.getTextDirection(languageCode) : null;
+    }
+
+    /**
      * Handles font selection for the template.
      *
      * @param {IOption} font The selected font option
