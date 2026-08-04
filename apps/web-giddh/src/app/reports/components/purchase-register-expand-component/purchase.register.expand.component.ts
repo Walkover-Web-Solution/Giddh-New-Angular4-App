@@ -93,7 +93,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Supported groupBy values for export functionality */
-    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration]);
+    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration, GroupBy.SalesPerson, GroupBy.Country, GroupBy.State]);
     /** Current groupBy value selected in the report form */
     public currentGroupBy = signal<GroupBy | null>(null);
     /** Computed signal that determines if export button should be visible based on current groupBy */
@@ -516,7 +516,13 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public export(): void {
-        let exportData = {
+        const groupBy = this.currentGroupBy();
+        const salesPersonUniqueName = this.getDetailedPurchaseRequestFilter?.salesPersonUniqueName;
+        const countryCode = this.getDetailedPurchaseRequestFilter?.countryCode;
+        const stateCode = this.getDetailedPurchaseRequestFilter?.stateCode;
+        const accountUniqueNames = this.getDetailedPurchaseRequestFilter?.accountUniqueNames ?? [];
+
+        let exportData: any = {
             from: this.from,
             to: this.to,
             exportType: "PURCHASE_REGISTER_DETAILED_EXPORT",
@@ -526,7 +532,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             branchUniqueName: this.getDetailedPurchaseRequestFilter?.branchUniqueName,
             commonLocaleData: this.commonLocaleData,
             localeData: this.localeData,
-            activeCompanyCountryCode: this.activeCompanyCountryCode
+            activeCompanyCountryCode: this.activeCompanyCountryCode,
+            groupBy: groupBy,
+            accountUniqueNames: accountUniqueNames,
+            salesPersonUniqueNames: groupBy === GroupBy.SalesPerson && salesPersonUniqueName ? [salesPersonUniqueName] : [],
+            countryCodes: (groupBy === GroupBy.Country || groupBy === GroupBy.State) && countryCode ? [countryCode] : [],
+            stateCodes: groupBy === GroupBy.State && stateCode ? [stateCode] : []
         };
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
                     width: "630px",

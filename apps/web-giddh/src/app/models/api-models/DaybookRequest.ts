@@ -45,6 +45,12 @@ export class ExportBodyRequest {
     showInAccountCurrency?: boolean;
     ledgerAdvanceFilter?: any;
     type?: string;
+    groupBy?: string;
+    selectAll?: boolean;
+    accountUniqueNames?: string[];
+    salesPersonUniqueNames?: string[];
+    countryCodes?: string[];
+    stateCodes?: string[];
 }
 
 export interface DayBookRequestModel {
