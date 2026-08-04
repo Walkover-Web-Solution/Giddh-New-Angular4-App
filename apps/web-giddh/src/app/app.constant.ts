@@ -15,8 +15,8 @@ export enum GiddhUiDomain {
     WEBSITE = 'https://giddh.com/'
 }
 
-export const GIDDH_API_DOC_URL = `${GiddhUiDomain.WEBSITE}/api`;
-export const GIDDH_HELP_DOC_URL = `${GiddhUiDomain.WEBSITE}/help`;
+export const GIDDH_API_DOC_URL = `${GiddhUiDomain.WEBSITE}api`;
+export const GIDDH_HELP_DOC_URL = `${GiddhUiDomain.WEBSITE}help`;
 export const GIDDH_SUPPORT_PHONE_NUMBER = '+918818888768';
 export const GIDDH_SUPPORT_EMAIL = 'support@giddh.com';
 export const GIDDH_ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en_IN&gl=US';
