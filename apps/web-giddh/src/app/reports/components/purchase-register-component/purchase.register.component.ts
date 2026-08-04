@@ -119,6 +119,13 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public filteredStateList = signal<IOption[]>([]);
     /** Filtered Sales Person List */
     public filteredSalesPersonList = signal<IOption[]>([]);
+    /** Complete option lists used to determine when all items are effectively selected (selectAll) */
+    public allOptions: { salesPerson: IOption[]; country: IOption[]; state: IOption[]; account: any[] } = {
+        salesPerson: [],
+        country: [],
+        state: [],
+        account: []
+    };
     /** Group by enum */
     public groupByEnum: typeof GroupBy = GroupBy;
     /** Date range */
@@ -148,7 +155,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /** Supported groupBy values for export functionality */
-    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration]);
+    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration, GroupBy.SalesPerson, GroupBy.Country, GroupBy.State]);
     /** Current groupBy value selected in the report form */
     public currentGroupBy = signal<GroupBy>(GroupBy.Duration);
     /** Computed signal that determines if export button should be visible based on current groupBy */
@@ -258,7 +265,12 @@ constructor(
 
         this.getSalesPersonList();
         this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
+            this.allOptions.salesPerson = (res as IOption[]) ?? [];
             this.filteredSalesPersonList.set(res as IOption[]);
+        });
+
+        this.accountList$.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+            this.allOptions.account = res?.results ?? res ?? [];
         });
 
         /** Search for sales person dropdown */
@@ -318,6 +330,7 @@ constructor(
                     label: state.name,
                     value: state.code
                 })));
+                this.allOptions.state = this.stateList();
                 this.filteredStateList.set(this.stateList());
             }
         });
@@ -727,11 +740,67 @@ constructor(
     }
 
     /**
+     * Applies the current groupBy specific filters to the overview export request.
+     *
+     * @private
+     * @param {ExportBodyRequest} exportBodyRequest Export payload to be mutated.
+     * @memberof PurchaseRegisterComponent
+     */
+    private applyOverviewGroupByFilters(exportBodyRequest: ExportBodyRequest): void {
+        const groupBy = this.currentGroupBy();
+        const accountUniqueNames = this.reportForm?.get('accountUniqueNames')?.value ?? [];
+        const salesPersonUniqueNames = this.reportForm?.get('salesPersonUniqueNames')?.value ?? [];
+        const countryCodes = this.reportForm?.get('countryCodes')?.value ?? [];
+        const stateCodes = this.reportForm?.get('stateCodes')?.value ?? [];
+
+        
+        exportBodyRequest.groupBy = groupBy;
+        
+        const isAllAccounts = this.isAllSelected(accountUniqueNames, this.allOptions.account?.length);
+        exportBodyRequest.accountUniqueNames = isAllAccounts ? [] : accountUniqueNames;
+        
+        if (groupBy === GroupBy.Duration) {
+            exportBodyRequest.interval = this.interval;
+        } else if (groupBy === GroupBy.SalesPerson) {
+            const isAllSalesPerson = this.isAllSelected(salesPersonUniqueNames, this.allOptions.salesPerson?.length);
+            exportBodyRequest.salesPersonUniqueNames = isAllSalesPerson ? [] : salesPersonUniqueNames;
+            exportBodyRequest.selectAll = isAllSalesPerson || isAllAccounts;
+        } else if (groupBy === GroupBy.Country) {
+            const isAllCountries = this.isAllSelected(countryCodes, this.allOptions.country?.length);
+            exportBodyRequest.countryCodes = isAllCountries ? [] : countryCodes;
+            exportBodyRequest.selectAll = isAllCountries || isAllAccounts;
+        } else if (groupBy === GroupBy.State) {
+            const isAllStates = this.isAllSelected(stateCodes, this.allOptions.state?.length);
+            const countryCode = this.reportForm?.get('countryCode')?.value;
+            exportBodyRequest.stateCodes = isAllStates ? [] : stateCodes;
+            exportBodyRequest.countryCodes = countryCode ? [countryCode] : [];
+            exportBodyRequest.selectAll = isAllStates || isAllAccounts;
+        }
+    }
+
+    /**
+     * Determines whether a multi-select filter effectively represents "select all".
+     * Returns true when nothing is selected (default = all) or when every available option is selected.
+     *
+     * @private
+     * @param {any[]} selected Currently selected values
+     * @param {number} total Total number of available options
+     * @returns {boolean}
+     * @memberof PurchaseRegisterComponent
+     */
+    private isAllSelected(selected: any[], total: number): boolean {
+        const selectedCount = selected?.length ?? 0;
+        const totalCount = total ?? 0;
+        return selectedCount === 0 || selectedCount === totalCount;
+    }
+
+    /**
      * Exports purchase register overview report
      *
      * @memberof PurchaseRegisterComponent
      */
     public export(): void {
+        const groupBy = this.currentGroupBy();
         let startDate = this.activeFinacialYr?.financialYearStarts?.toString();
         let endDate = this.activeFinacialYr?.financialYearEnds?.toString();
         if (this.selectedMonth) {
@@ -739,14 +808,18 @@ constructor(
             startDate = startEndDate.firstDay;
             endDate = startEndDate.lastDay;
         }
+        if (groupBy && groupBy !== GroupBy.Duration && this.dateRange?.from && this.dateRange?.to) {
+            startDate = this.dateRange.from;
+            endDate = this.dateRange.to;
+        }
 
         let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
         exportBodyRequest.from = startDate;
         exportBodyRequest.to = endDate;
         exportBodyRequest.exportType = "PURCHASE_REGISTER_OVERVIEW_EXPORT";
         exportBodyRequest.fileType = "CSV";
-        exportBodyRequest.interval = this.interval;
         exportBodyRequest.branchUniqueName = this.currentBranch?.uniqueName;
+        this.applyOverviewGroupByFilters(exportBodyRequest);
         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this._toaster.successToast(response?.body);
@@ -1002,6 +1075,7 @@ constructor(
                     label: country.countryName || country.name,
                     value: country.alpha2CountryCode || country.code
                 })));
+                this.allOptions.country = this.countryList();
                 this.filteredCountryList.set(this.countryList());
             }
         });

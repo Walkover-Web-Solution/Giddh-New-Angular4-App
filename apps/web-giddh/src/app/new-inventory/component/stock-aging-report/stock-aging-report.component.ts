@@ -238,7 +238,6 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.refreshLayoutCaches();
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.loadBranchesAndWarehouses();
         this.getProfile();
         // Route param `:category` drives the stock category filter for this
         // report (e.g. product, service, fixedassets, all).
@@ -247,7 +246,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
         // category-scoped data — it fires on initial navigation AND on any
         // subsequent category change.
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            const category = params['category']?.toUpperCase() || '';
+            const category = params['category'] == 'fixedassets' ? 'FIXED_ASSETS' : params['category']?.toUpperCase() || '';
             if (category === this.selectedStockCategory) {
                 return;
             }
@@ -261,8 +260,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
             this.showStockNameSearchInput = false;
             this.refreshLayoutCaches();
             this.loadStockGroups();
-            this.getReport();
-            this.getReportTotals();
+            this.loadBranchesAndWarehouses();
         });
 
         // Local search filtering for the branch dropdown
@@ -353,6 +351,8 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
                 this.allBranches = response.body?.results?.filter((branch: any) => branch?.isCompany !== true) ?? [];
                 this.branches = [...this.allBranches];
             }
+            this.getReport();
+            this.getReportTotals();
             this.recomputeWarehouses();
             this.cdr.detectChanges();
         });
@@ -490,7 +490,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     public getReport(): void {
         this.isLoading = true;
         const payload: any = {
-            branchUniqueNames: (this.isCompany && this.allBranches?.length > 1) ? this.selectedBranch : [this.generalService.currentBranchUniqueName],
+            branchUniqueNames: (this.isCompany && this.allBranches?.length > 1) ? (this.selectedBranch ?? []).filter(Boolean) : [this.generalService.currentBranchUniqueName],
             warehouseUniqueNames: this.selectedWarehouse,
             stockGroupUniqueNames: this.selectedStockGroup,
             searchText: this.searchText,
@@ -540,7 +540,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
      */
     public getReportTotals(): void {
         const payload: any = {
-            branchUniqueNames: (this.isCompany && this.allBranches?.length > 1) ? this.selectedBranch : [this.generalService.currentBranchUniqueName],
+            branchUniqueNames: (this.isCompany && this.allBranches?.length > 1) ? (this.selectedBranch ?? []).filter(Boolean) : [this.generalService.currentBranchUniqueName],
             warehouseUniqueNames: this.selectedWarehouse,
             stockGroupUniqueNames: this.selectedStockGroup,
             categoryUniqueNames: [this.selectedStockCategory]
