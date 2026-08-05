@@ -16,6 +16,9 @@ import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { TemplateModeEnum, TemplateTypeEnum, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { ServiceConfig } from '../../../services/service.config';
 import { CustomFieldsService } from '../../../services/custom-fields.service';
+import { MatDialog } from '@angular/material/dialog';
+import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
+import templateSecondaryLabelsData from '../../../../assets/locale/invoice/template-secondary-labels.json';
 
 @Component({
     selector: 'template-edit-filter',
@@ -173,6 +176,8 @@ export class TemplateEditFilterComponent implements OnInit {
         label: null,
         value: null
     });
+    /** Translated static caption labels (per language, per section) used to pre-fill secondaryLabel */
+    private templateSecondaryLabels: any = templateSecondaryLabelsData;
     /** Holds Tax type label like GST/VAT/TRN/ SALES TAX  */
     public taxType: any = {
         label: '',
@@ -188,7 +193,8 @@ export class TemplateEditFilterComponent implements OnInit {
         @Inject(ServiceConfig) private serviceConfig,
         private templateService: InvoiceUiDataService,
         private customFieldsService: CustomFieldsService,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private dialog: MatDialog
     ) {
     }
 
@@ -601,11 +607,94 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onLanguageSelect(language: IOption): void {
+        const previousLang = this.selectedSecondaryLang();
+
+        if (previousLang?.value) {
+            const configuration = this.generalService.getVoucherDeleteConfiguration(
+                this.commonLocaleData?.app_warning,
+                this.localeData?.confirm_change_secondary_language?.replace("[LANGUAGE]", previousLang.label),
+                "",
+                this.commonLocaleData
+            );
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: ['mat-dialog-sm'],
+                data: { configuration },
+                disableClose: true
+            });
+
+            dialogRef.afterClosed().subscribe(response => {
+                if (response === this.commonLocaleData?.app_yes) {
+                    this.applyLanguageChange(language);
+                } else {
+                    this.customTemplate.language2Code = previousLang.value;
+                }
+            });
+        } else {
+            this.applyLanguageChange(language);
+        }
+    }
+
+    /**
+     * Applies the selected secondary language and pre-fills secondaryLabel
+     * for the current template's static captions from the translations file.
+     *
+     * @private
+     * @param {IOption} language The selected language option
+     * @memberof TemplateEditFilterComponent
+     */
+    private applyLanguageChange(language: IOption): void {
         this.onValueChange('language2Code', language?.value);
         this.selectedSecondaryLang.set({
             label: language.label,
             value: language.value
         });
+        this.fillSecondaryLabelsForLanguage(language?.value);
+    }
+
+    /**
+     * Fills secondaryLabel of every known static caption (header/footer/table)
+     * in the current template using the translated labels for the given language.
+     * Keys without a translation entry (blank/dynamic fields) are left untouched.
+     *
+     * @private
+     * @param {string} langCode Selected secondary language code
+     * @memberof TemplateEditFilterComponent
+     */
+    private fillSecondaryLabelsForLanguage(langCode: string): void {
+        const translations = this.templateSecondaryLabels?.[langCode];
+        if (!translations) {
+            return;
+        }
+
+        const template = cloneDeep(this.customTemplate);
+        // These fields are statutory abbreviations that stay identical across every language
+        // (e.g. GSTIN/PAN/HSN/SAC/TDS/TCS). Filling secondaryLabel for them would just show the
+        // exact same text twice (e.g. "TRN TRN", "HSN/SAC HSN/SAC"), so leave them untouched.
+        // "gstin"/"shippingGstin"/"billingGstin" additionally depend on the company's country
+        // (VAT/TRN/Sales Tax/GSTIN) and their primary label already reflects the correct text.
+        const skipKeysBySection: { [section: string]: string[] } = {
+            header: ['gstin', 'shippingGstin', 'billingGstin', 'pan', 'displayLutNumber', 'showElectronicInvoiceIdentifier'],
+            footer: ['tds', 'tcs'],
+            table: ['hsnSac', 'taxBifurcationHsnSac', 'sacIndicator', 'hsnIndicator', 'eoe']
+        };
+        ['header', 'footer', 'table'].forEach(section => {
+            const sectionData = template?.sections?.[section]?.data;
+            const sectionTranslations = translations?.[section];
+            if (!sectionData || !sectionTranslations) {
+                return;
+            }
+            const skipKeys = skipKeysBySection[section] || [];
+            Object.keys(sectionData).forEach(key => {
+                if (skipKeys.includes(key)) {
+                    return;
+                }
+                if (sectionTranslations[key] !== undefined) {
+                    sectionData[key].secondaryLabel = sectionTranslations[key];
+                }
+            });
+        });
+
+        this.templateService.setCustomTemplate(template);
     }
 
     /**

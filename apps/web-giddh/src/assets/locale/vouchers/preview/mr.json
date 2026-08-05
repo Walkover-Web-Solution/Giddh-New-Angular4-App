@@ -569,5 +569,6 @@
     "apply_purchase_order_round_off": "खरेदी ऑर्डर व्हाउचरवर राउंड ऑफ लागू करा",
     "go_to_branch_message": "व्हाउचर तयार करण्यासाठी, शाखा मोडवर जा",
     "eoe": "त्रुटी आणि वगळणे वगळून",
-    "invoice_grand_total_in_accounts_currency": "बिल एकूण बेरीज"
+    "invoice_grand_total_in_accounts_currency": "बिल एकूण बेरीज",
+    "confirm_change_secondary_language": "[LANGUAGE] साठी सर्व पूर्व-भरलेली मूल्ये काढून टाकली जातील. आपण सुरू ठेवू इच्छिता का?"
 }
