@@ -569,5 +569,6 @@
     "apply_purchase_order_round_off": "खरीद आदेश वाउचर पर राउंड ऑफ लागू करें",
     "go_to_branch_message": "वाउचर बनाने के लिए, शाखा मोड में जाएं",
     "eoe": "ई. और ओ.ई. (गलतियां और चूक अपवादित)",
-    "invoice_grand_total_in_accounts_currency": "चालान का कुल योग"
+    "invoice_grand_total_in_accounts_currency": "चालान का कुल योग",
+    "confirm_change_secondary_language": "[LANGUAGE] के लिए सभी पूर्व-भरे मान हटा दिए जाएंगे। क्या आप जारी रखना चाहते हैं?"
 }

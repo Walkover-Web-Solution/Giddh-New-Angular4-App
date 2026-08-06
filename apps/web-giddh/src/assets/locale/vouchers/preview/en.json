@@ -569,5 +569,6 @@
     "apply_purchase_order_round_off": "Apply round off on purchase order voucher",
     "go_to_branch_message": "To access create voucher, go to branch mode",
     "eoe": "E. & O.E. (Errors & Omissions Excepted)",
-    "invoice_grand_total_in_accounts_currency": "Invoice Grand Total"
+    "invoice_grand_total_in_accounts_currency": "Invoice Grand Total",
+    "confirm_change_secondary_language": "All pre-filled values for [LANGUAGE] will be removed. Do you want to continue?"
 }
