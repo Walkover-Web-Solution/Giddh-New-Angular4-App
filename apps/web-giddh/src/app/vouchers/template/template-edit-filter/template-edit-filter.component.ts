@@ -434,8 +434,12 @@ export class TemplateEditFilterComponent implements OnInit {
             }
              
             if (footerData?.message1?.display) {
-                this.customTemplate.message1 = "We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.";
-                this.customTemplate.secondaryMessage1 = "";
+                if (this.customTemplate.message1 === undefined || this.customTemplate.message1 === null) {
+                    this.customTemplate.message1 = "We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.";
+                }
+                if (this.customTemplate.secondaryMessage1 === undefined || this.customTemplate.secondaryMessage1 === null) {
+                    this.customTemplate.secondaryMessage1 = "";
+                }
             }
 
             if (this.customTemplate?.language2Code && !this.selectedSecondaryLang().value) {

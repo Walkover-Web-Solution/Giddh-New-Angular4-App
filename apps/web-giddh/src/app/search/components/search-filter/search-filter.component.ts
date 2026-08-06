@@ -105,6 +105,19 @@ export class SearchFilterComponent implements OnInit {
         this.isFiltered.emit(false);
     }
 
+    /**
+     * Returns the label for a given option value from an options list.
+     * Used to keep dropdown display in sync with the underlying FormControl value
+     * after the filter menu is reopened.
+     */
+    public getOptionLabel(options: { label: string; value: string }[], value: string): string {
+        if (!value || !options?.length) {
+            return '';
+        }
+        const match = options.find(o => o?.value === value);
+        return match ? match.label : '';
+    }
+
     public removeSearchRow() {
         let arr = this.searchQueryForm.controls['searchQuery'] as UntypedFormArray;
         arr.removeAt(-1);

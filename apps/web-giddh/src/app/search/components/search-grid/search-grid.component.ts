@@ -240,7 +240,13 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         if (!isFiltered) {
             this.searchResponseFiltered$ = this.searchResponse$;
             this.FilterByAPIEvent.emit(null);
-            this.pageChangeEvent.emit(1);
+            this.checkboxInfo.selectedPage = 1;
+            const legacyEvent = {
+                page: 1,
+                itemsPerPage: 1,
+                count: this.countPerPage
+            };
+            this.pageChangeEvent.emit(legacyEvent);
             this.selectAllCustomer = false;
             this.selectedItems = [];
         }
