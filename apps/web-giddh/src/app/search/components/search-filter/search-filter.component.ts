@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild, Input } from '@angular/core';
 import { SearchDataSet } from '../../../models/api-models/Search';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../shared/helpers/customValidationHelper';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
@@ -31,8 +31,8 @@ export class SearchFilterComponent implements OnInit {
     public queryTypes = [];
     public queryDiffers = [];
     public balType = [];
-    public searchQueryForm: UntypedFormGroup;
-    public searchDataSet: UntypedFormArray;
+    public searchQueryForm: FormGroup;
+    public searchDataSet: FormArray;
     public toggleFilters: boolean = false;
     /* It reset the status for Filter by Account  */
     public resetValues: boolean = false;
@@ -40,17 +40,24 @@ export class SearchFilterComponent implements OnInit {
     /**
      * TypeScript public modifiers
      */
-    constructor(private fb: UntypedFormBuilder) {
+    constructor(private fb: FormBuilder) {
         this.searchQueryForm = this.fb.group({
-            searchQuery: this.fb.array([this.fb.group({
-                queryType: ['', Validators.required],
-                openingBalanceType: ['DEBIT', Validators.required],
-                closingBalanceType: ['DEBIT', Validators.required],
-                queryDiffer: ['', Validators.required],
-                amount: ['', [Validators.required, digitsOnly]],
-            })])
+            searchQuery: this.fb.array([this.getDefaultSearchFormGroup()])
         });
-        this.searchDataSet = this.searchQueryForm.controls['searchQuery'] as UntypedFormArray;
+        this.searchDataSet = this.searchQueryForm.controls['searchQuery'] as FormArray;
+    }
+
+    /**
+     * Returns the default form group configuration for a search query row
+     */
+    private getDefaultSearchFormGroup() {
+        return this.fb.group({
+            queryType: ['', Validators.required],
+            openingBalanceType: ['DEBIT', Validators.required],
+            closingBalanceType: ['DEBIT', Validators.required],
+            queryDiffer: ['', Validators.required],
+            amount: ['', [Validators.required, digitsOnly]],
+        });
     }
 
     public ngOnInit() {
@@ -99,8 +106,11 @@ export class SearchFilterComponent implements OnInit {
     }
 
     public resetQuery() {
-        this.searchDataSet.controls = [];
-        this.addSearchRow();
+        this.searchDataSet.clear();
+        this.searchDataSet.push(this.getDefaultSearchFormGroup());
+        this.searchQueryForm.markAsPristine();
+        this.searchQueryForm.markAsUntouched();
+        this.searchQueryForm.updateValueAndValidity();
         this.resetValues = true;
         this.isFiltered.emit(false);
     }
@@ -119,7 +129,7 @@ export class SearchFilterComponent implements OnInit {
     }
 
     public removeSearchRow() {
-        let arr = this.searchQueryForm.controls['searchQuery'] as UntypedFormArray;
+        let arr = this.searchQueryForm.controls['searchQuery'] as FormArray;
         arr.removeAt(-1);
     }
 

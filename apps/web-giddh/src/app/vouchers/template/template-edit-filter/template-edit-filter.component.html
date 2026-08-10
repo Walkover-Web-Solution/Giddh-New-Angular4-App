@@ -2743,9 +2743,14 @@
                                                                     ? null
                                                                     : 200
                                                             "
-                                                            [class.error-box]="isCharacterLimitExceeded(200, customTemplate.message1 || '')"
+                                                            [class.error-box]="
+                                                                isCharacterLimitExceeded(
+                                                                    200,
+                                                                    customTemplate.sections['footer'].data['message1']?.value || ''
+                                                                )
+                                                            "
                                                             [placeholder]="localeData?.footer_text"
-                                                            [(ngModel)]="customTemplate.message1"
+                                                            [(ngModel)]="customTemplate.sections['footer'].data['message1'].value"
                                                             name="msg11"
                                                             (ngModelChange)="onChangeFieldVisibility()"
                                                             [disabled]="!customTemplate.sections['footer'].data['message1']?.display"
@@ -2755,7 +2760,7 @@
                                                                 suggestionSuffix: '}',
                                                             }"
                                                             [appTributeMentionValues]="suggestionList"
-                                                            (focus)="onCharacterFieldFocus('', 'message1', '')"
+                                                            (focus)="onCharacterFieldFocus('footer', 'message1', 'value')"
                                                             (blur)="onCharacterFieldBlur()"
                                                             [attr.lang]="primaryLangCode"
                                                             [attr.dir]="primaryLangDirection"
@@ -2764,8 +2769,13 @@
                                                 </td>
                                                 <td class="p-2 text-center">
                                                     <span class="font-size-12">
-                                                        @if (isCharacterFieldFocused('', 'message1', '')) {
-                                                            {{ getRemainingCharacters(200, customTemplate?.message1) }}/{{ 200 }}
+                                                        @if (isCharacterFieldFocused('footer', 'message1', 'value')) {
+                                                            {{
+                                                                getRemainingCharacters(
+                                                                    200,
+                                                                    customTemplate.sections['footer'].data['message1']?.value
+                                                                )
+                                                            }}/{{ 200 }}
                                                         }
                                                     </span>
                                                 </td>
@@ -2832,7 +2842,9 @@
                                                                     )
                                                                 "
                                                                 [placeholder]="localeData?.footer_text"
-                                                                [(ngModel)]="customTemplate.secondaryMessage1"
+                                                                [(ngModel)]="
+                                                                    customTemplate.sections['footer'].data['message1'].secondaryValue
+                                                                "
                                                                 name="msg2"
                                                                 (ngModelChange)="onChangeFieldVisibility()"
                                                                 [disabled]="!customTemplate.sections['footer'].data['message1']?.display"
@@ -2851,10 +2863,13 @@
                                                     </td>
                                                     <td class="p-2 text-center">
                                                         <span class="font-size-12">
-                                                            @if (isCharacterFieldFocused('', 'secondaryMessage1', '')) {
-                                                                {{ getRemainingCharacters(200, customTemplate?.secondaryMessage1) }}/{{
-                                                                    200
-                                                                }}
+                                                            @if (isCharacterFieldFocused('footer', 'message1', 'secondaryValue')) {
+                                                                {{
+                                                                    getRemainingCharacters(
+                                                                        200,
+                                                                        customTemplate.sections['footer'].data['message1']?.secondaryValue
+                                                                    )
+                                                                }}/{{ 200 }}
                                                             }
                                                         </span>
                                                     </td>

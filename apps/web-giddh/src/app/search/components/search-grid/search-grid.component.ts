@@ -239,7 +239,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     public resetFilters(isFiltered) {
         if (!isFiltered) {
             this.searchResponseFiltered$ = this.searchResponse$;
-            this.FilterByAPIEvent.emit(null);
+            const defaultQuery = this.createSearchQueryReqObj();
+            this.formattedQuery = this.formatQuery(defaultQuery, []);
+            this.FilterByAPIEvent.emit(this.formattedQuery);
             this.checkboxInfo.selectedPage = 1;
             const legacyEvent = {
                 page: 1,
