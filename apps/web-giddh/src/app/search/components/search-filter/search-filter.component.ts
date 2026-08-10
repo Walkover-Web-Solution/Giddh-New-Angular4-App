@@ -124,7 +124,7 @@ export class SearchFilterComponent implements OnInit {
         if (!value || !options?.length) {
             return '';
         }
-        const match = options.find(o => o?.value === value);
+        const match = options.find(option => option?.value === value);
         return match ? match.label : '';
     }
 
