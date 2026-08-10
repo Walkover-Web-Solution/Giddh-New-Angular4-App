@@ -1117,7 +1117,7 @@
                                                         labelRow;
                                                         context: {
                                                             rowId: 'customerEmailRow',
-                                                            showInputField: !isThermalTemplate,
+                                                            showInputField: isTallyTemplate,
                                                             showCheckbox: true,
                                                             section: 'header',
                                                             field: 'customerEmail',
@@ -1138,7 +1138,7 @@
                                                         labelRow;
                                                         context: {
                                                             rowId: 'customerMobileNumberRow',
-                                                            showInputField: true,
+                                                            showInputField: isTallyTemplate,
                                                             showCheckbox: true,
                                                             section: 'header',
                                                             field: 'customerMobileNumber',
@@ -1604,27 +1604,6 @@
                                                             name: 'tableshowVariantImage',
                                                             label: localeData?.show_variant_image,
                                                             maxLength: 15,
-                                                            showSecondaryLabel: showSecondaryLabel,
-                                                        }
-                                                    "
-                                                ></ng-container>
-                                            }
-
-                                            <!-- date -->
-                                            @if (sectionSettings?.table.date && !isThermalTemplate) {
-                                                <ng-container
-                                                    *ngTemplateOutlet="
-                                                        labelRow;
-                                                        context: {
-                                                            rowId: 'dateRow',
-                                                            showInputField: true,
-                                                            showCheckbox: true,
-                                                            section: 'table',
-                                                            field: 'date',
-                                                            callbacks: [onChangeFieldVisibility],
-                                                            name: 'tabledate',
-                                                            label: commonLocaleData?.app_date,
-                                                            maxLength: 10,
                                                             showSecondaryLabel: showSecondaryLabel,
                                                         }
                                                     "
@@ -2702,7 +2681,7 @@
 
                                         <!-- Message 1 -->
                                         @if (sectionSettings?.footer?.message1) {
-                                            <tr id="message1Row1">
+                                            <tr id="message1Row1Label">
                                                 <td class="p-2 vertical-align-top">
                                                     <mat-checkbox
                                                         color="primary"
@@ -2717,7 +2696,7 @@
                                                 <td class="p-2" [attr.colspan]="showSecondaryLabel ? 2 : 1">
                                                     @if (!isThermalTemplate) {
                                                         <!-- Label for Note 1 (Declaration:) -->
-                                                        <div class="mb-3">
+                                                        <div class="d-flex align-items-center column-gap-1">
                                                             <ng-container
                                                                 *ngTemplateOutlet="
                                                                     labelRowInput;
@@ -2734,7 +2713,24 @@
                                                             ></ng-container>
                                                         </div>
                                                     }
-
+                                                </td>
+                                                <td class="p-2 text-center">
+                                                    <span class="font-size-12">
+                                                        @if (isCharacterFieldFocused('footer', 'message1', 'label')) {
+                                                            {{
+                                                                getRemainingCharacters(
+                                                                    15,
+                                                                    customTemplate?.sections?.['footer']?.data?.['message1']?.label
+                                                                )
+                                                            }}/{{ 15 }}
+                                                        }
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr id="message1Row1Content">
+                                                <td class="p-2"></td>
+                                                <td class="p-2"></td>
+                                                <td class="p-2" [attr.colspan]="showSecondaryLabel ? 2 : 1">
                                                     <!-- Content for Note 1 which show below Declaration: -->
                                                     <mat-form-field appearance="outline" class="initial-height w-100 address-text">
                                                         <mat-label>{{ primaryLabel }}</mat-label>
@@ -2748,10 +2744,13 @@
                                                                     : 200
                                                             "
                                                             [class.error-box]="
-                                                                isCharacterLimitExceeded(200, customTemplate.sections['message1'] || '')
+                                                                isCharacterLimitExceeded(
+                                                                    200,
+                                                                    customTemplate.sections['footer'].data['message1']?.value || ''
+                                                                )
                                                             "
                                                             [placeholder]="localeData?.footer_text"
-                                                            [(ngModel)]="customTemplate.message1"
+                                                            [(ngModel)]="customTemplate.sections['footer'].data['message1'].value"
                                                             name="msg11"
                                                             (ngModelChange)="onChangeFieldVisibility()"
                                                             [disabled]="!customTemplate.sections['footer'].data['message1']?.display"
@@ -2761,7 +2760,7 @@
                                                                 suggestionSuffix: '}',
                                                             }"
                                                             [appTributeMentionValues]="suggestionList"
-                                                            (focus)="onCharacterFieldFocus('', 'message1', '')"
+                                                            (focus)="onCharacterFieldFocus('footer', 'message1', 'value')"
                                                             (blur)="onCharacterFieldBlur()"
                                                             [attr.lang]="primaryLangCode"
                                                             [attr.dir]="primaryLangDirection"
@@ -2769,23 +2768,26 @@
                                                     </mat-form-field>
                                                 </td>
                                                 <td class="p-2 text-center">
-                                                    @if (isCharacterFieldFocused('', 'message1', '')) {
-                                                        <span class="font-size-12">
-                                                            {{ getRemainingCharacters(200, customTemplate?.sections?.['message1']) }}/{{
-                                                                200
-                                                            }}
-                                                        </span>
-                                                    }
+                                                    <span class="font-size-12">
+                                                        @if (isCharacterFieldFocused('footer', 'message1', 'value')) {
+                                                            {{
+                                                                getRemainingCharacters(
+                                                                    200,
+                                                                    customTemplate.sections['footer'].data['message1']?.value
+                                                                )
+                                                            }}/{{ 200 }}
+                                                        }
+                                                    </span>
                                                 </td>
                                             </tr>
 
                                             @if (!isThermalTemplate && showSecondaryLabel) {
-                                                <tr id="message1Row2">
+                                                <tr id="message1Row2Label">
                                                     <td class="p-2"></td>
                                                     <td class="p-2"></td>
                                                     <td class="p-2" [attr.colspan]="showSecondaryLabel ? 2 : 1">
                                                         <!-- Label for Note 1 (Declaration:) -->
-                                                        <div class="mb-3">
+                                                        <div class="d-flex align-items-center column-gap-1">
                                                             <ng-container
                                                                 *ngTemplateOutlet="
                                                                     labelRowInput;
@@ -2801,7 +2803,25 @@
                                                                 "
                                                             ></ng-container>
                                                         </div>
-
+                                                    </td>
+                                                    <td class="p-2 text-center">
+                                                        <span class="font-size-12">
+                                                            @if (isCharacterFieldFocused('footer', 'message1', 'secondaryLabel')) {
+                                                                {{
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.['footer']?.data?.['message1']
+                                                                            ?.secondaryLabel
+                                                                    )
+                                                                }}/{{ 15 }}
+                                                            }
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr id="message1Row2Content">
+                                                    <td class="p-2"></td>
+                                                    <td class="p-2"></td>
+                                                    <td class="p-2" [attr.colspan]="showSecondaryLabel ? 2 : 1">
                                                         <!-- Content for Note 1 which show below Declaration: -->
                                                         <mat-form-field appearance="outline" class="initial-height w-100 address-text">
                                                             <mat-label>{{ secondaryLabel }}</mat-label>
@@ -2822,7 +2842,9 @@
                                                                     )
                                                                 "
                                                                 [placeholder]="localeData?.footer_text"
-                                                                [(ngModel)]="customTemplate.secondaryMessage1"
+                                                                [(ngModel)]="
+                                                                    customTemplate.sections['footer'].data['message1'].secondaryValue
+                                                                "
                                                                 name="msg2"
                                                                 (ngModelChange)="onChangeFieldVisibility()"
                                                                 [disabled]="!customTemplate.sections['footer'].data['message1']?.display"
@@ -2840,17 +2862,16 @@
                                                         </mat-form-field>
                                                     </td>
                                                     <td class="p-2 text-center">
-                                                        @if (isCharacterFieldFocused('footer', 'message1', 'secondaryLabel')) {
-                                                            <span class="font-size-12">
+                                                        <span class="font-size-12">
+                                                            @if (isCharacterFieldFocused('footer', 'message1', 'secondaryValue')) {
                                                                 {{
                                                                     getRemainingCharacters(
                                                                         200,
-                                                                        customTemplate?.sections?.['footer']?.data?.['message1']
-                                                                            ?.secondaryLabel
+                                                                        customTemplate.sections['footer'].data['message1']?.secondaryValue
                                                                     )
                                                                 }}/{{ 200 }}
-                                                            </span>
-                                                        }
+                                                            }
+                                                        </span>
                                                     </td>
                                                 </tr>
                                             }
@@ -3111,44 +3132,46 @@
             ></mat-checkbox>
         </td>
 
-        <td class="p-2">
+        <td class="p-2" [attr.colspan]="showInputField ? null : showSecondaryLabel && !isThermalTemplate ? 3 : 2">
             {{ label }}
         </td>
 
-        <td class="p-2">
-            <ng-container
-                *ngTemplateOutlet="
-                    labelRowInput;
-                    context: {
-                        key: 'label',
-                        showInputField: showInputField,
-                        section: section,
-                        field: field,
-                        name: name,
-                        maxLength: maxLength,
-                        callbacks: callbacks,
-                    }
-                "
-            ></ng-container>
-        </td>
-
-        @if (showSecondaryLabel && !isThermalTemplate) {
+        @if (showInputField) {
             <td class="p-2">
                 <ng-container
                     *ngTemplateOutlet="
                         labelRowInput;
                         context: {
-                            key: 'secondaryLabel',
+                            key: 'label',
                             showInputField: showInputField,
                             section: section,
                             field: field,
-                            name: name + 'Secondary',
+                            name: name,
                             maxLength: maxLength,
-                            callbacks: [onChangeFieldVisibility],
+                            callbacks: callbacks,
                         }
                     "
                 ></ng-container>
             </td>
+
+            @if (showSecondaryLabel && !isThermalTemplate) {
+                <td class="p-2">
+                    <ng-container
+                        *ngTemplateOutlet="
+                            labelRowInput;
+                            context: {
+                                key: 'secondaryLabel',
+                                showInputField: showInputField,
+                                section: section,
+                                field: field,
+                                name: name + 'Secondary',
+                                maxLength: maxLength,
+                                callbacks: [onChangeFieldVisibility],
+                            }
+                        "
+                    ></ng-container>
+                </td>
+            }
         }
 
         <td class="p-2 text-center">
