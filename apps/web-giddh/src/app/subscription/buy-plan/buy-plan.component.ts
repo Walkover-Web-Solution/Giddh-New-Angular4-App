@@ -643,8 +643,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // }
                 this.subscriptionId = response.subscriptionId;
 
-                if (response.dueAmount < 1) {
-                    this.navigateToNewCompany(response.subscriptionId);
+                if (response.dueAmount < 1 && this.isAdvancePayment) {
+                    this.navigateToRoute('/pages/user-details/subscription');
                     return;
                 }
                 if (this.getStripeClientSecret(response)) {
