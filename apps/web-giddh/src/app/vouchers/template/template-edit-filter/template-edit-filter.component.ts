@@ -671,25 +671,16 @@ export class TemplateEditFilterComponent implements OnInit {
         }
 
         const template = cloneDeep(this.customTemplate);
-        // These fields are statutory abbreviations that stay identical across every language
-        // (e.g. GSTIN/PAN/HSN/SAC/TDS/TCS). Filling secondaryLabel for them would just show the
-        // exact same text twice (e.g. "TRN TRN", "HSN/SAC HSN/SAC"), so leave them untouched.
-        // "gstin"/"shippingGstin"/"billingGstin" additionally depend on the company's country
-        // (VAT/TRN/Sales Tax/GSTIN) and their primary label already reflects the correct text.
-        const skipKeysBySection: { [section: string]: string[] } = {
-            header: ['gstin', 'shippingGstin', 'billingGstin', 'pan', 'displayLutNumber', 'showElectronicInvoiceIdentifier'],
-            footer: ['tds', 'tcs'],
-            table: ['hsnSac', 'taxBifurcationHsnSac', 'sacIndicator', 'hsnIndicator', 'eoe']
-        };
         ['header', 'footer', 'table'].forEach(section => {
             const sectionData = template?.sections?.[section]?.data;
             const sectionTranslations = translations?.[section];
             if (!sectionData || !sectionTranslations) {
                 return;
             }
-            const skipKeys = skipKeysBySection[section] || [];
             Object.keys(sectionData).forEach(key => {
-                if (skipKeys.includes(key)) {
+                if (key === 'message1') {
+                    sectionData[key].secondaryValue = sectionTranslations['message1Value'];
+                    sectionData[key].secondaryLabel = sectionTranslations['message1Label'];
                     return;
                 }
                 if (sectionTranslations[key] !== undefined) {
@@ -1298,7 +1289,7 @@ export class TemplateEditFilterComponent implements OnInit {
     public handleEnableSecondaryLanguage(): void {
         this.customTemplate.displayLanguage1 = true;
         this.customTemplate.displayLanguage2 = this.customTemplate.enableSecondaryLanguage;
-        this.customTemplate.secondaryLabelFirst = false;
+        this.customTemplate.showLanguage2DisplayedFirst = false;
         this.customTemplate.language1Code = "en";
         this.customTemplate.language2Code = null;
         this.resetSelectedLanguage();
