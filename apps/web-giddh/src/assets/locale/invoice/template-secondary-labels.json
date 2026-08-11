@@ -32,7 +32,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "البريد الإلكتروني",
-            "customerMobileNumber": "رقم الهاتف"
+            "customerMobileNumber": "رقم الهاتف",
+            "customField1": "حقل مخصص 1",
+            "customField2": "حقل مخصص 2",
+            "customField3": "حقل مخصص 3"
         },
         "footer": {
             "taxableAmount": "المبلغ الخاضع للضريبة",
@@ -116,7 +119,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ईमेल",
-            "customerMobileNumber": "फ़ोन नंबर"
+            "customerMobileNumber": "फ़ोन नंबर",
+            "customField1": "कस्टम फ़ील्ड 1",
+            "customField2": "कस्टम फ़ील्ड 2",
+            "customField3": "कस्टम फ़ील्ड 3"
         },
         "footer": {
             "taxableAmount": "कर योग्य राशि",
@@ -200,7 +206,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ईमेल",
-            "customerMobileNumber": "फोन नंबर"
+            "customerMobileNumber": "फोन नंबर",
+            "customField1": "कस्टम फील्ड 1",
+            "customField2": "कस्टम फील्ड 2",
+            "customField3": "कस्टम फील्ड 3"
         },
         "footer": {
             "taxableAmount": "करपात्र रक्कम",
@@ -284,7 +293,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ઈમેઈલ",
-            "customerMobileNumber": "ફોન નંબર"
+            "customerMobileNumber": "ફોન નંબર",
+            "customField1": "કસ્ટમ ફીલ્ડ 1",
+            "customField2": "કસ્ટમ ફીલ્ડ 2",
+            "customField3": "કસ્ટમ ફીલ્ડ 3"
         },
         "footer": {
             "taxableAmount": "કરપાત્ર રકમ",
@@ -368,7 +380,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ਈਮੇਲ",
-            "customerMobileNumber": "ਫੋਨ ਨੰਬਰ"
+            "customerMobileNumber": "ਫੋਨ ਨੰਬਰ",
+            "customField1": "ਕਸਟਮ ਫੀਲਡ 1",
+            "customField2": "ਕਸਟਮ ਫੀਲਡ 2",
+            "customField3": "ਕਸਟਮ ਫੀਲਡ 3"
         },
         "footer": {
             "taxableAmount": "ਟੈਕਸਯੋਗ ਰਕਮ",
@@ -452,7 +467,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "மின்னஞ்சல்",
-            "customerMobileNumber": "தொலைபேசி எண்"
+            "customerMobileNumber": "தொலைபேசி எண்",
+            "customField1": "தனிப்பயன் புலம் 1",
+            "customField2": "தனிப்பயன் புலம் 2",
+            "customField3": "தனிப்பயன் புலம் 3"
         },
         "footer": {
             "taxableAmount": "வரி விதிக்கத்தக்க தொகை",
@@ -536,7 +554,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ఇమెయిల్",
-            "customerMobileNumber": "ఫోన్ నంబర్"
+            "customerMobileNumber": "ఫోన్ నంబర్",
+            "customField1": "కస్టమ్ ఫీల్డ్ 1",
+            "customField2": "కస్టమ్ ఫీల్డ్ 2",
+            "customField3": "కస్టమ్ ఫీల్డ్ 3"
         },
         "footer": {
             "taxableAmount": "పన్ను విధించదగిన మొత్తం",
@@ -620,7 +641,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ಇಮೇಲ್",
-            "customerMobileNumber": "ಫೋನ್ ಸಂಖ್ಯೆ"
+            "customerMobileNumber": "ಫೋನ್ ಸಂಖ್ಯೆ",
+            "customField1": "ಕಸ್ಟಮ್ ಫೀಲ್ಡ್ 1",
+            "customField2": "ಕಸ್ಟಮ್ ಫೀಲ್ಡ್ 2",
+            "customField3": "ಕಸ್ಟಮ್ ಫೀಲ್ಡ್ 3"
         },
         "footer": {
             "taxableAmount": "ತೆರಿಗೆ ವಿಧಿಸಬಹುದಾದ ಮೊತ್ತ",
@@ -704,7 +728,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ഇമെയിൽ",
-            "customerMobileNumber": "ഫോൺ നമ്പർ"
+            "customerMobileNumber": "ഫോൺ നമ്പർ",
+            "customField1": "കസ്റ്റം ഫീൽഡ് 1",
+            "customField2": "കസ്റ്റം ഫീൽഡ് 2",
+            "customField3": "കസ്റ്റം ഫീൽഡ് 3"
         },
         "footer": {
             "taxableAmount": "നികുതി വിധേയമായ തുക",
@@ -788,7 +815,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ইমেইল",
-            "customerMobileNumber": "ফোন নম্বর"
+            "customerMobileNumber": "ফোন নম্বর",
+            "customField1": "কাস্টম ফিল্ড 1",
+            "customField2": "কাস্টম ফিল্ড 2",
+            "customField3": "কাস্টম ফিল্ড 3"
         },
         "footer": {
             "taxableAmount": "করযোগ্য পরিমাণ",
@@ -872,7 +902,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ଇମେଲ୍",
-            "customerMobileNumber": "ଫୋନ୍ ନମ୍ବର"
+            "customerMobileNumber": "ଫୋନ୍ ନମ୍ବର",
+            "customField1": "କଷ୍ଟମ୍ ଫିଲ୍ଡ 1",
+            "customField2": "କଷ୍ଟମ୍ ଫିଲ୍ଡ 2",
+            "customField3": "କଷ୍ଟମ୍ ଫିଲ୍ଡ 3"
         },
         "footer": {
             "taxableAmount": "କରଯୋଗ୍ୟ ପରିମାଣ",
@@ -956,7 +989,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ای میل",
-            "customerMobileNumber": "فون نمبر"
+            "customerMobileNumber": "فون نمبر",
+            "customField1": "حسب ضرورت فیلڈ 1",
+            "customField2": "حسب ضرورت فیلڈ 2",
+            "customField3": "حسب ضرورت فیلڈ 3"
         },
         "footer": {
             "taxableAmount": "ٹیکس کے قابل رقم",
@@ -1040,7 +1076,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "E-mail",
-            "customerMobileNumber": "Numéro de téléphone"
+            "customerMobileNumber": "Numéro de téléphone",
+            "customField1": "Champ personnalisé 1",
+            "customField2": "Champ personnalisé 2",
+            "customField3": "Champ personnalisé 3"
         },
         "footer": {
             "taxableAmount": "Montant imposable",
@@ -1124,7 +1163,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "E-Mail",
-            "customerMobileNumber": "Telefonnummer"
+            "customerMobileNumber": "Telefonnummer",
+            "customField1": "Benutzerdefiniertes Feld 1",
+            "customField2": "Benutzerdefiniertes Feld 2",
+            "customField3": "Benutzerdefiniertes Feld 3"
         },
         "footer": {
             "taxableAmount": "Steuerpflichtiger Betrag",
@@ -1208,7 +1250,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "Correo electrónico",
-            "customerMobileNumber": "Número de teléfono"
+            "customerMobileNumber": "Número de teléfono",
+            "customField1": "Campo personalizado 1",
+            "customField2": "Campo personalizado 2",
+            "customField3": "Campo personalizado 3"
         },
         "footer": {
             "taxableAmount": "Monto imponible",
@@ -1292,7 +1337,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "E-mail",
-            "customerMobileNumber": "Número de telefone"
+            "customerMobileNumber": "Número de telefone",
+            "customField1": "Campo personalizado 1",
+            "customField2": "Campo personalizado 2",
+            "customField3": "Campo personalizado 3"
         },
         "footer": {
             "taxableAmount": "Valor tributável",
@@ -1376,7 +1424,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "Email",
-            "customerMobileNumber": "Numero di telefono"
+            "customerMobileNumber": "Numero di telefono",
+            "customField1": "Campo personalizzato 1",
+            "customField2": "Campo personalizzato 2",
+            "customField3": "Campo personalizzato 3"
         },
         "footer": {
             "taxableAmount": "Importo imponibile",
@@ -1460,7 +1511,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "E-mail",
-            "customerMobileNumber": "Telefoonnummer"
+            "customerMobileNumber": "Telefoonnummer",
+            "customField1": "Aangepast veld 1",
+            "customField2": "Aangepast veld 2",
+            "customField3": "Aangepast veld 3"
         },
         "footer": {
             "taxableAmount": "Belastbaar bedrag",
@@ -1544,7 +1598,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "Электронная почта",
-            "customerMobileNumber": "Номер телефона"
+            "customerMobileNumber": "Номер телефона",
+            "customField1": "Пользовательское поле 1",
+            "customField2": "Пользовательское поле 2",
+            "customField3": "Пользовательское поле 3"
         },
         "footer": {
             "taxableAmount": "Налогооблагаемая сумма",
@@ -1628,7 +1685,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "E-posta",
-            "customerMobileNumber": "Telefon numarası"
+            "customerMobileNumber": "Telefon numarası",
+            "customField1": "Özel alan 1",
+            "customField2": "Özel alan 2",
+            "customField3": "Özel alan 3"
         },
         "footer": {
             "taxableAmount": "Vergiye Tabi Tutar",
@@ -1712,7 +1772,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "ایمیل",
-            "customerMobileNumber": "شماره تلفن"
+            "customerMobileNumber": "شماره تلفن",
+            "customField1": "فیلد سفارشی 1",
+            "customField2": "فیلد سفارشی 2",
+            "customField3": "فیلد سفارشی 3"
         },
         "footer": {
             "taxableAmount": "مبلغ مشمول مالیات",
@@ -1796,7 +1859,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "אימייל",
-            "customerMobileNumber": "מספר טלפון"
+            "customerMobileNumber": "מספר טלפון",
+            "customField1": "שדה מותאם אישית 1",
+            "customField2": "שדה מותאם אישית 2",
+            "customField3": "שדה מותאם אישית 3"
         },
         "footer": {
             "taxableAmount": "סכום חייב במס",
@@ -1880,7 +1946,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "电子邮件",
-            "customerMobileNumber": "电话号码"
+            "customerMobileNumber": "电话号码",
+            "customField1": "自定义字段 1",
+            "customField2": "自定义字段 2",
+            "customField3": "自定义字段 3"
         },
         "footer": {
             "taxableAmount": "应税金额",
@@ -1964,7 +2033,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "電子郵件",
-            "customerMobileNumber": "電話號碼"
+            "customerMobileNumber": "電話號碼",
+            "customField1": "自訂欄位 1",
+            "customField2": "自訂欄位 2",
+            "customField3": "自訂欄位 3"
         },
         "footer": {
             "taxableAmount": "應稅金額",
@@ -2048,7 +2120,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "メール",
-            "customerMobileNumber": "電話番号"
+            "customerMobileNumber": "電話番号",
+            "customField1": "カスタムフィールド 1",
+            "customField2": "カスタムフィールド 2",
+            "customField3": "カスタムフィールド 3"
         },
         "footer": {
             "taxableAmount": "課税対象額",
@@ -2132,7 +2207,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "이메일",
-            "customerMobileNumber": "전화번호"
+            "customerMobileNumber": "전화번호",
+            "customField1": "사용자 정의 필드 1",
+            "customField2": "사용자 정의 필드 2",
+            "customField3": "사용자 정의 필드 3"
         },
         "footer": {
             "taxableAmount": "과세 대상 금액",
@@ -2216,7 +2294,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "อีเมล",
-            "customerMobileNumber": "หมายเลขโทรศัพท์"
+            "customerMobileNumber": "หมายเลขโทรศัพท์",
+            "customField1": "ฟิลด์กำหนดเอง 1",
+            "customField2": "ฟิลด์กำหนดเอง 2",
+            "customField3": "ฟิลด์กำหนดเอง 3"
         },
         "footer": {
             "taxableAmount": "จำนวนเงินที่ต้องเสียภาษี",
@@ -2300,7 +2381,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "Email",
-            "customerMobileNumber": "Số điện thoại"
+            "customerMobileNumber": "Số điện thoại",
+            "customField1": "Trường tùy chỉnh 1",
+            "customField2": "Trường tùy chỉnh 2",
+            "customField3": "Trường tùy chỉnh 3"
         },
         "footer": {
             "taxableAmount": "Số tiền chịu thuế",
@@ -2384,7 +2468,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "Email",
-            "customerMobileNumber": "Nomor telepon"
+            "customerMobileNumber": "Nomor telepon",
+            "customField1": "Bidang kustom 1",
+            "customField2": "Bidang kustom 2",
+            "customField3": "Bidang kustom 3"
         },
         "footer": {
             "taxableAmount": "Jumlah Kena Pajak",
@@ -2468,7 +2555,10 @@
             "displayLutNumber": "LUT Number",
             "showElectronicInvoiceIdentifier": "IRN",
             "customerEmail": "E-mel",
-            "customerMobileNumber": "Nombor telefon"
+            "customerMobileNumber": "Nombor telefon",
+            "customField1": "Medan tersuai 1",
+            "customField2": "Medan tersuai 2",
+            "customField3": "Medan tersuai 3"
         },
         "footer": {
             "taxableAmount": "Jumlah Boleh Cukai",
