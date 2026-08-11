@@ -678,7 +678,7 @@ export class TemplateEditFilterComponent implements OnInit {
                 return;
             }
             Object.keys(sectionData).forEach(key => {
-                if(key === 'message1') {
+                if (key === 'message1') {
                     sectionData[key].secondaryValue = sectionTranslations['message1Value'];
                     sectionData[key].secondaryLabel = sectionTranslations['message1Label'];
                     return;
