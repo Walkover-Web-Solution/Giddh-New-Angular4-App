@@ -343,12 +343,14 @@
                                     name="showLanguage2DisplayedFirst"
                                     [(ngModel)]="customTemplate.showLanguage2DisplayedFirst"
                                     (ngModelChange)="
-                                        onChangeDesignFieldVisibility('showLanguage2DisplayedFirst', customTemplate?.showLanguage2DisplayedFirst)
+                                        onChangeDesignFieldVisibility(
+                                            'showLanguage2DisplayedFirst',
+                                            customTemplate?.showLanguage2DisplayedFirst
+                                        )
                                     "
                                 >
                                     {{ localeData?.show_secondary_label_first }}
                                 </mat-checkbox>
-
                             }
                         </div>
                     </mat-expansion-panel>
@@ -1624,7 +1626,7 @@
                                                             callbacks: [onChangeFieldVisibility],
                                                             name: 'tabledate',
                                                             label: commonLocaleData?.app_date,
-                                                            showSecondaryLabel: showSecondaryLabel
+                                                            showSecondaryLabel: showSecondaryLabel,
                                                         }
                                                     "
                                                 ></ng-container>
@@ -2081,6 +2083,7 @@
                                                                     callbacks: [onChangeFieldVisibility],
                                                                     name: 'tableTaxBifurcationHsnSac',
                                                                     label: localeData?.tax_bifurcation_hsn_sac,
+                                                                    maxLength: 15,
                                                                     showSecondaryLabel: showSecondaryLabel,
                                                                 }
                                                             "
@@ -2101,6 +2104,7 @@
                                                                     callbacks: [onChangeFieldVisibility],
                                                                     name: 'tabletaxBifurcationTaxableValue',
                                                                     label: localeData?.tax_bifurcation_taxable_value,
+                                                                    maxLength: 15,
                                                                     showSecondaryLabel: showSecondaryLabel,
                                                                 }
                                                             "
@@ -2121,6 +2125,7 @@
                                                                     callbacks: [onChangeFieldVisibility],
                                                                     name: 'tabletaxBifurcationRate',
                                                                     label: localeData?.tax_bifurcation_rate,
+                                                                    maxLength: 15,
                                                                     showSecondaryLabel: showSecondaryLabel,
                                                                 }
                                                             "
@@ -2141,6 +2146,7 @@
                                                                     callbacks: [onChangeFieldVisibility],
                                                                     name: 'tabletaxBifurcationAmount',
                                                                     label: localeData?.tax_bifurcation_amount,
+                                                                    maxLength: 15,
                                                                     showSecondaryLabel: showSecondaryLabel,
                                                                 }
                                                             "
@@ -2161,6 +2167,7 @@
                                                                     callbacks: [onChangeFieldVisibility],
                                                                     name: 'tabletaxBifurcationTotalTaxAmount',
                                                                     label: localeData?.tax_bifurcation_total_tax_amount,
+                                                                    maxLength: 15,
                                                                     showSecondaryLabel: showSecondaryLabel,
                                                                 }
                                                             "
@@ -2181,6 +2188,7 @@
                                                                     callbacks: [onChangeFieldVisibility],
                                                                     name: 'tabletaxBifurcationTotal',
                                                                     label: localeData?.tax_bifurcation_total,
+                                                                    maxLength: 15,
                                                                     showSecondaryLabel: showSecondaryLabel,
                                                                 }
                                                             "
@@ -2982,7 +2990,7 @@
                                                         name: 'showMessage2',
                                                         label: localeData?.note_2,
                                                         maxLength: 20,
-                                                        showSecondaryLabel: isTallyTemplate,
+                                                        showSecondaryLabel: showSecondaryLabel && isTallyTemplate,
                                                     }
                                                 "
                                             ></ng-container>
