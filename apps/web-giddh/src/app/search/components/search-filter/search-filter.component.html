@@ -26,7 +26,7 @@
                             [options]="queryTypes"
                             [required]="true"
                             (selectedOption)="item?.get('queryType').patchValue($event.value)"
-                            [labelValue]="resetValues ? (item?.get('queryType').value === 'closingBalance' ? 'Closing Balance' : '') : ''"
+                            [labelValue]="getOptionLabel(queryTypes, item?.get('queryType')?.value)"
                             [placeholder]="commonLocaleData?.app_select_type"
                             [label]="localeData?.whose"
                         ></reactive-dropdown-field>
@@ -34,7 +34,7 @@
                             class="width-query-differs mr-3"
                             [options]="queryDiffers"
                             (selectedOption)="item?.get('queryDiffer').patchValue($event.value)"
-                            [labelValue]="resetValues ? item?.get('queryDiffer').value : ''"
+                            [labelValue]="getOptionLabel(queryDiffers, item?.get('queryDiffer')?.value)"
                             [required]="true"
                             [placeholder]="localeData?.select_query"
                             [label]="localeData?.is"

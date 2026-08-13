@@ -3684,7 +3684,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     value: event?.value,
                     isHilighted: true,
                     applicableTaxes: txn.duplicateEntry ? [] : taxes,
-                    otherTax: otherTax,
+                    otherTax: txn?.duplicateEntry ? txn.selectedAccount?.otherTax : otherTax,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
                     email: data.body.emails,
@@ -3697,14 +3697,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
-                this.lc.blankLedger.otherTaxModal = {
-                    ...this.lc.blankLedger.otherTaxModal,
-                    appliedOtherTax: {
-                        name: otherTax?.appliedOtherTax?.name,
-                        uniqueName: otherTax?.appliedOtherTax?.uniqueName
-                    }
-                };
-                this.lc.blankLedger.isOtherTaxesApplicable = !!otherTax?.appliedOtherTax?.uniqueName;
+                if (!txn?.duplicateEntry) {
+                    this.lc.blankLedger.otherTaxModal = {
+                        ...this.lc.blankLedger.otherTaxModal,
+                        appliedOtherTax: {
+                            name: otherTax?.appliedOtherTax?.name,
+                            uniqueName: otherTax?.appliedOtherTax?.uniqueName
+                        }
+                    };
+                    this.lc.blankLedger.isOtherTaxesApplicable = !!otherTax?.appliedOtherTax?.uniqueName;
+                }
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
@@ -3726,7 +3728,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (txn?.selectedAccount?.stock) {
                     const stock = txn?.inventory?.stock;
                     if (txn?.duplicateEntry) {
-                        const unitRate = stock.unitRates.find(unitRate => unitRate.stockUnitUniqueName === txn?.inventory?.unit?.uniqueName) || stock.unitRates[0];
+                        const unitRate = stock.unitRates?.find(unitRate => unitRate.stockUnitUniqueName === txn?.inventory?.unit?.uniqueName) || stock.unitRates?.[0];
                         const defaultUnit = {
                             stockUnitCode: unitRate.stockUnitCode,
                             code: unitRate.stockUnitCode,
@@ -3804,7 +3806,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse.salesPerson?.name || this.lc.blankLedger.salesPersonName || '';
                     }
                 }
-                this.preparePreAppliedDiscounts(txn);
+                if (!txn?.duplicateEntry) { 
+                    this.preparePreAppliedDiscounts(txn);
+                }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
                 txn.showOtherTax = this.showOtherTax(txn);

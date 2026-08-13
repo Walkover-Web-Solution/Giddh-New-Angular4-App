@@ -208,6 +208,9 @@ export class GeneralService {
         if (routerParams['region']) {
             localStorage.setItem('region', routerParams['region']);
         }
+        if (routerParams['ref']) {
+            localStorage.setItem('ref', routerParams['ref']);
+        }
     }
 
     getUtmParameter(param: string): string {
@@ -225,6 +228,7 @@ export class GeneralService {
         localStorage.removeItem("utm_term");
         localStorage.removeItem("utm_content");
         localStorage.removeItem("region");
+        localStorage.removeItem("ref");
     }
 
     getLastElement(array) {

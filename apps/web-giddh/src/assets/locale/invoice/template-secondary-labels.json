@@ -30,7 +30,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "البريد الإلكتروني",
+            "customerMobileNumber": "رقم الهاتف",
+            "customField1": "حقل مخصص 1",
+            "customField2": "حقل مخصص 2",
+            "customField3": "حقل مخصص 3"
         },
         "footer": {
             "taxableAmount": "المبلغ الخاضع للضريبة",
@@ -41,9 +46,12 @@
             "totalInWordsInAccountsCurrency": "إجمالي الفاتورة (بالكلمات)",
             "totalTax": "إجمالي الضريبة*",
             "totalInWords": "إجمالي الفاتورة (بالكلمات)",
-            "message1": "نقر بأن هذه الفاتورة تظهر السعر الفعلي للخدمات المقدمة وأن جميع البيانات صحيحة ودقيقة.",
+            "message1Label": "تصريح:",
+            "message1Value": "نقر بأن هذه الفاتورة تظهر السعر الفعلي للخدمات المقدمة وأن جميع البيانات صحيحة ودقيقة.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "showMessage2": "ملاحظة:",
+            "thanks": "شكراً لتعاملكم معنا!"
         },
         "table": {
             "date": "التاريخ",
@@ -109,7 +117,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ईमेल",
+            "customerMobileNumber": "फ़ोन नंबर",
+            "customField1": "कस्टम फ़ील्ड 1",
+            "customField2": "कस्टम फ़ील्ड 2",
+            "customField3": "कस्टम फ़ील्ड 3"
         },
         "footer": {
             "taxableAmount": "कर योग्य राशि",
@@ -120,9 +133,12 @@
             "totalInWordsInAccountsCurrency": "चालान कुल (शब्दों में)",
             "totalTax": "कुल कर*",
             "totalInWords": "चालान कुल (शब्दों में)",
-            "message1": "हम घोषणा करते हैं कि यह चालान प्रदान की गई सेवाओं की वास्तविक कीमत दर्शाता है और सभी विवरण सत्य और सही हैं।",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "घोषणा:",
+            "message1Value": "हम घोषणा करते हैं कि यह चालान प्रदान की गई सेवाओं की वास्तविक कीमत दर्शाता है और सभी विवरण सत्य और सही हैं।",
+            "showMessage2": "नोट:",
+            "thanks": "आपके व्यवसाय के लिए धन्यवाद!"
         },
         "table": {
             "date": "तिथि",
@@ -188,7 +204,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ईमेल",
+            "customerMobileNumber": "फोन नंबर",
+            "customField1": "कस्टम फील्ड 1",
+            "customField2": "कस्टम फील्ड 2",
+            "customField3": "कस्टम फील्ड 3"
         },
         "footer": {
             "taxableAmount": "करपात्र रक्कम",
@@ -199,9 +220,12 @@
             "totalInWordsInAccountsCurrency": "बीजक एकूण (शब्दात)",
             "totalTax": "एकूण कर*",
             "totalInWords": "बीजक एकूण (शब्दात)",
-            "message1": "आम्ही घोषित करतो की हे बीजक प्रदान केलेल्या सेवांची वास्तविक किंमत दर्शवते आणि सर्व तपशील खरे व बरोबर आहेत.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "घोषणा:",
+            "message1Value": "आम्ही घोषित करतो की हे बीजक प्रदान केलेल्या सेवांची वास्तविक किंमत दर्शवते आणि सर्व तपशील खरे व बरोबर आहेत.",
+            "showMessage2": "टीप:",
+            "thanks": "तुमच्या व्यवसायाबद्दल धन्यवाद!"
         },
         "table": {
             "date": "तारीख",
@@ -267,7 +291,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ઈમેઈલ",
+            "customerMobileNumber": "ફોન નંબર",
+            "customField1": "કસ્ટમ ફીલ્ડ 1",
+            "customField2": "કસ્ટમ ફીલ્ડ 2",
+            "customField3": "કસ્ટમ ફીલ્ડ 3"
         },
         "footer": {
             "taxableAmount": "કરપાત્ર રકમ",
@@ -278,9 +307,12 @@
             "totalInWordsInAccountsCurrency": "ઇનવોઇસ કુલ (શબ્દોમાં)",
             "totalTax": "કુલ કર*",
             "totalInWords": "ઇનવોઇસ કુલ (શબ્દોમાં)",
-            "message1": "અમે જાહેર કરીએ છીએ કે આ ઇનવોઇસ પૂરી પાડવામાં આવેલી સેવાઓની વાસ્તવિક કિંમત દર્શાવે છે અને તમામ વિગતો સાચી અને સચોટ છે.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "ઘોષણા:",
+            "message1Value": "અમે જાહેર કરીએ છીએ કે આ ઇનવોઇસ પૂરી પાડવામાં આવેલી સેવાઓની વાસ્તવિક કિંમત દર્શાવે છે અને તમામ વિગતો સાચી અને સચોટ છે.",
+            "showMessage2": "નોંધ:",
+            "thanks": "તમારા વ્યવસાય માટે આભાર!"
         },
         "table": {
             "date": "તારીખ",
@@ -346,7 +378,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ਈਮੇਲ",
+            "customerMobileNumber": "ਫੋਨ ਨੰਬਰ",
+            "customField1": "ਕਸਟਮ ਫੀਲਡ 1",
+            "customField2": "ਕਸਟਮ ਫੀਲਡ 2",
+            "customField3": "ਕਸਟਮ ਫੀਲਡ 3"
         },
         "footer": {
             "taxableAmount": "ਟੈਕਸਯੋਗ ਰਕਮ",
@@ -357,9 +394,12 @@
             "totalInWordsInAccountsCurrency": "ਇਨਵਾਇਸ ਕੁੱਲ (ਸ਼ਬਦਾਂ ਵਿੱਚ)",
             "totalTax": "ਕੁੱਲ ਟੈਕਸ*",
             "totalInWords": "ਇਨਵਾਇਸ ਕੁੱਲ (ਸ਼ਬਦਾਂ ਵਿੱਚ)",
-            "message1": "ਅਸੀਂ ਐਲਾਨ ਕਰਦੇ ਹਾਂ ਕਿ ਇਹ ਇਨਵਾਇਸ ਪ੍ਰਦਾਨ ਕੀਤੀਆਂ ਸੇਵਾਵਾਂ ਦੀ ਅਸਲ ਕੀਮਤ ਦਰਸਾਉਂਦਾ ਹੈ ਅਤੇ ਸਾਰੇ ਵੇਰਵੇ ਸਹੀ ਹਨ।",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "ਘੋਸ਼ਣਾ:",
+            "message1Value": "ਅਸੀਂ ਐਲਾਨ ਕਰਦੇ ਹਾਂ ਕਿ ਇਹ ਇਨਵਾਇਸ ਪ੍ਰਦਾਨ ਕੀਤੀਆਂ ਸੇਵਾਵਾਂ ਦੀ ਅਸਲ ਕੀਮਤ ਦਰਸਾਉਂਦਾ ਹੈ ਅਤੇ ਸਾਰੇ ਵੇਰਵੇ ਸਹੀ ਹਨ।",
+            "showMessage2": "ਨੋਟ:",
+            "thanks": "ਤੁਹਾਡੇ ਕਾਰੋਬਾਰ ਲਈ ਧੰਨਵਾਦ!"
         },
         "table": {
             "date": "ਮਿਤੀ",
@@ -425,7 +465,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "மின்னஞ்சல்",
+            "customerMobileNumber": "தொலைபேசி எண்",
+            "customField1": "தனிப்பயன் புலம் 1",
+            "customField2": "தனிப்பயன் புலம் 2",
+            "customField3": "தனிப்பயன் புலம் 3"
         },
         "footer": {
             "taxableAmount": "வரி விதிக்கத்தக்க தொகை",
@@ -436,9 +481,12 @@
             "totalInWordsInAccountsCurrency": "விலைப்பட்டியல் மொத்தம் (சொற்களில்)",
             "totalTax": "மொத்த வரி*",
             "totalInWords": "விலைப்பட்டியல் மொத்தம் (சொற்களில்)",
-            "message1": "வழங்கப்பட்ட சேவைகளின் உண்மையான விலையை இந்த விலைப்பட்டியல் காட்டுகிறது என்றும் அனைத்து விவரங்களும் உண்மையானவை மற்றும் சரியானவை என்றும் நாங்கள் அறிவிக்கிறோம்.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "அறிவிப்பு:",
+            "message1Value": "வழங்கப்பட்ட சேவைகளின் உண்மையான விலையை இந்த விலைப்பட்டியல் காட்டுகிறது என்றும் அனைத்து விவரங்களும் உண்மையானவை மற்றும் சரியானவை என்றும் நாங்கள் அறிவிக்கிறோம்.",
+            "showMessage2": "குறிப்பு:",
+            "thanks": "உங்கள் வணிகத்திற்கு நன்றி!"
         },
         "table": {
             "date": "தேதி",
@@ -504,7 +552,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ఇమెయిల్",
+            "customerMobileNumber": "ఫోన్ నంబర్",
+            "customField1": "కస్టమ్ ఫీల్డ్ 1",
+            "customField2": "కస్టమ్ ఫీల్డ్ 2",
+            "customField3": "కస్టమ్ ఫీల్డ్ 3"
         },
         "footer": {
             "taxableAmount": "పన్ను విధించదగిన మొత్తం",
@@ -515,9 +568,12 @@
             "totalInWordsInAccountsCurrency": "ఇన్వాయిస్ మొత్తం (అక్షరాలలో)",
             "totalTax": "మొత్తం పన్ను*",
             "totalInWords": "ఇన్వాయిస్ మొత్తం (అక్షరాలలో)",
-            "message1": "ఈ ఇన్వాయిస్ అందించిన సేవల వాస్తవ ధరను చూపిస్తుందని మరియు అన్ని వివరాలు నిజమైనవి మరియు సరైనవని మేము ప్రకటిస్తున్నాము.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "ప్రకటన:",
+            "message1Value": "ఈ ఇన్వాయిస్ అందించిన సేవల వాస్తవ ధరను చూపిస్తుందని మరియు అన్ని వివరాలు నిజమైనవి మరియు సరైనవని మేము ప్రకటిస్తున్నాము.",
+            "showMessage2": "గమనిక:",
+            "thanks": "మీ వ్యాపారానికి ధన్యవాదాలు!"
         },
         "table": {
             "date": "తేదీ",
@@ -583,7 +639,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ಇಮೇಲ್",
+            "customerMobileNumber": "ಫೋನ್ ಸಂಖ್ಯೆ",
+            "customField1": "ಕಸ್ಟಮ್ ಫೀಲ್ಡ್ 1",
+            "customField2": "ಕಸ್ಟಮ್ ಫೀಲ್ಡ್ 2",
+            "customField3": "ಕಸ್ಟಮ್ ಫೀಲ್ಡ್ 3"
         },
         "footer": {
             "taxableAmount": "ತೆರಿಗೆ ವಿಧಿಸಬಹುದಾದ ಮೊತ್ತ",
@@ -594,9 +655,12 @@
             "totalInWordsInAccountsCurrency": "ಇನ್ವಾಯ್ಸ್ ಒಟ್ಟು (ಪದಗಳಲ್ಲಿ)",
             "totalTax": "ಒಟ್ಟು ತೆರಿಗೆ*",
             "totalInWords": "ಇನ್ವಾಯ್ಸ್ ಒಟ್ಟು (ಪದಗಳಲ್ಲಿ)",
-            "message1": "ಈ ಇನ್ವಾಯ್ಸ್ ಒದಗಿಸಿದ ಸೇವೆಗಳ ನಿಜವಾದ ಬೆಲೆಯನ್ನು ತೋರಿಸುತ್ತದೆ ಮತ್ತು ಎಲ್ಲಾ ವಿವರಗಳು ನಿಜ ಮತ್ತು ಸರಿಯಾಗಿವೆ ಎಂದು ನಾವು ಘೋಷಿಸುತ್ತೇವೆ.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "ಘೋಷಣೆ:",
+            "message1Value": "ಈ ಇನ್ವಾಯ್ಸ್ ಒದಗಿಸಿದ ಸೇವೆಗಳ ನಿಜವಾದ ಬೆಲೆಯನ್ನು ತೋರಿಸುತ್ತದೆ ಮತ್ತು ಎಲ್ಲಾ ವಿವರಗಳು ನಿಜ ಮತ್ತು ಸರಿಯಾಗಿವೆ ಎಂದು ನಾವು ಘೋಷಿಸುತ್ತೇವೆ.",
+            "showMessage2": "ಟಿಪ್ಪಣಿ:",
+            "thanks": "ನಿಮ್ಮ ವ್ಯವಹಾರಕ್ಕೆ ಧನ್ಯವಾದಗಳು!"
         },
         "table": {
             "date": "ದಿನಾಂಕ",
@@ -662,7 +726,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ഇമെയിൽ",
+            "customerMobileNumber": "ഫോൺ നമ്പർ",
+            "customField1": "കസ്റ്റം ഫീൽഡ് 1",
+            "customField2": "കസ്റ്റം ഫീൽഡ് 2",
+            "customField3": "കസ്റ്റം ഫീൽഡ് 3"
         },
         "footer": {
             "taxableAmount": "നികുതി വിധേയമായ തുക",
@@ -673,9 +742,12 @@
             "totalInWordsInAccountsCurrency": "ഇൻവോയ്സ് ആകെ (വാക്കുകളിൽ)",
             "totalTax": "ആകെ നികുതി*",
             "totalInWords": "ഇൻവോയ്സ് ആകെ (വാക്കുകളിൽ)",
-            "message1": "നൽകിയ സേവനങ്ങളുടെ യഥാർത്ഥ വില ഈ ഇൻവോയ്സ് കാണിക്കുന്നുവെന്നും എല്ലാ വിവരങ്ങളും ശരിയും കൃത്യവുമാണെന്നും ഞങ്ങൾ പ്രഖ്യാപിക്കുന്നു.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "പ്രഖ്യാപനം:",
+            "message1Value": "നൽകിയ സേവനങ്ങളുടെ യഥാർത്ഥ വില ഈ ഇൻവോയ്സ് കാണിക്കുന്നുവെന്നും എല്ലാ വിവരങ്ങളും ശരിയും കൃത്യവുമാണെന്നും ഞങ്ങൾ പ്രഖ്യാപിക്കുന്നു.",
+            "showMessage2": "കുറിപ്പ്:",
+            "thanks": "നിങ്ങളുടെ ബിസിനസ്സിന് നന്ദി!"
         },
         "table": {
             "date": "തീയതി",
@@ -741,7 +813,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ইমেইল",
+            "customerMobileNumber": "ফোন নম্বর",
+            "customField1": "কাস্টম ফিল্ড 1",
+            "customField2": "কাস্টম ফিল্ড 2",
+            "customField3": "কাস্টম ফিল্ড 3"
         },
         "footer": {
             "taxableAmount": "করযোগ্য পরিমাণ",
@@ -752,9 +829,12 @@
             "totalInWordsInAccountsCurrency": "চালান মোট (কথায়)",
             "totalTax": "মোট কর*",
             "totalInWords": "চালান মোট (কথায়)",
-            "message1": "আমরা ঘোষণা করছি যে এই চালানটি প্রদত্ত পরিষেবার প্রকৃত মূল্য দেখায় এবং সমস্ত বিবরণ সত্য এবং সঠিক।",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "ঘোষণা:",
+            "message1Value": "আমরা ঘোষণা করছি যে এই চালানটি প্রদত্ত পরিষেবার প্রকৃত মূল্য দেখায় এবং সমস্ত বিবরণ সত্য এবং সঠিক।",
+            "showMessage2": "নোট:",
+            "thanks": "আপনার ব্যবসার জন্য ধন্যবাদ!"
         },
         "table": {
             "date": "তারিখ",
@@ -820,7 +900,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ଇମେଲ୍",
+            "customerMobileNumber": "ଫୋନ୍ ନମ୍ବର",
+            "customField1": "କଷ୍ଟମ୍ ଫିଲ୍ଡ 1",
+            "customField2": "କଷ୍ଟମ୍ ଫିଲ୍ଡ 2",
+            "customField3": "କଷ୍ଟମ୍ ଫିଲ୍ଡ 3"
         },
         "footer": {
             "taxableAmount": "କରଯୋଗ୍ୟ ପରିମାଣ",
@@ -831,9 +916,12 @@
             "totalInWordsInAccountsCurrency": "ଇନଭଏସ୍ ମୋଟ (ଶବ୍ଦରେ)",
             "totalTax": "ମୋଟ କର*",
             "totalInWords": "ଇନଭଏସ୍ ମୋଟ (ଶବ୍ଦରେ)",
-            "message1": "ଆମେ ଘୋଷଣା କରୁଛୁ ଯେ ଏହି ଇନଭଏସ୍ ପ୍ରଦତ୍ତ ସେବାର ପ୍ରକୃତ ମୂଲ୍ୟ ଦର୍ଶାଏ ଏବଂ ସମସ୍ତ ବିବରଣୀ ସତ୍ୟ ଏବଂ ସଠିକ୍।",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "ଘୋଷଣା:",
+            "message1Value": "ଆମେ ଘୋଷଣା କରୁଛୁ ଯେ ଏହି ଇନଭଏସ୍ ପ୍ରଦତ୍ତ ସେବାର ପ୍ରକୃତ ମୂଲ୍ୟ ଦର୍ଶାଏ ଏବଂ ସମସ୍ତ ବିବରଣୀ ସତ୍ୟ ଏବଂ ସଠିକ୍।",
+            "showMessage2": "ନୋଟ୍:",
+            "thanks": "ଆପଣଙ୍କ ବ୍ୟବସାୟ ପାଇଁ ଧନ୍ୟବାଦ!"
         },
         "table": {
             "date": "ତାରିଖ",
@@ -899,7 +987,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ای میل",
+            "customerMobileNumber": "فون نمبر",
+            "customField1": "حسب ضرورت فیلڈ 1",
+            "customField2": "حسب ضرورت فیلڈ 2",
+            "customField3": "حسب ضرورت فیلڈ 3"
         },
         "footer": {
             "taxableAmount": "ٹیکس کے قابل رقم",
@@ -910,9 +1003,12 @@
             "totalInWordsInAccountsCurrency": "انوائس کل (الفاظ میں)",
             "totalTax": "کل ٹیکس*",
             "totalInWords": "انوائس کل (الفاظ میں)",
-            "message1": "ہم اعلان کرتے ہیں کہ یہ انوائس فراہم کردہ خدمات کی اصل قیمت ظاہر کرتا ہے اور تمام تفصیلات درست اور صحیح ہیں۔",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "اعلان:",
+            "message1Value": "ہم اعلان کرتے ہیں کہ یہ انوائس فراہم کردہ خدمات کی اصل قیمت ظاہر کرتا ہے اور تمام تفصیلات درست اور صحیح ہیں۔",
+            "showMessage2": "نوٹ:",
+            "thanks": "آپ کے کاروبار کا شکریہ!"
         },
         "table": {
             "date": "تاریخ",
@@ -978,7 +1074,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "E-mail",
+            "customerMobileNumber": "Numéro de téléphone",
+            "customField1": "Champ personnalisé 1",
+            "customField2": "Champ personnalisé 2",
+            "customField3": "Champ personnalisé 3"
         },
         "footer": {
             "taxableAmount": "Montant imposable",
@@ -989,9 +1090,12 @@
             "totalInWordsInAccountsCurrency": "Total de la facture (en lettres)",
             "totalTax": "Taxe totale*",
             "totalInWords": "Total de la facture (en lettres)",
-            "message1": "Nous déclarons que cette facture indique le prix réel des services rendus et que toutes les informations sont vraies et exactes.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Déclaration :",
+            "message1Value": "Nous déclarons que cette facture indique le prix réel des services rendus et que toutes les informations sont vraies et exactes.",
+            "showMessage2": "Remarque :",
+            "thanks": "Merci pour votre confiance !"
         },
         "table": {
             "date": "Date",
@@ -1057,7 +1161,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "E-Mail",
+            "customerMobileNumber": "Telefonnummer",
+            "customField1": "Benutzerdefiniertes Feld 1",
+            "customField2": "Benutzerdefiniertes Feld 2",
+            "customField3": "Benutzerdefiniertes Feld 3"
         },
         "footer": {
             "taxableAmount": "Steuerpflichtiger Betrag",
@@ -1068,9 +1177,12 @@
             "totalInWordsInAccountsCurrency": "Rechnungssumme (in Worten)",
             "totalTax": "Gesamtsteuer*",
             "totalInWords": "Rechnungssumme (in Worten)",
-            "message1": "Wir erklären, dass diese Rechnung den tatsächlichen Preis der erbrachten Dienstleistungen zeigt und alle Angaben wahr und korrekt sind.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Erklärung:",
+            "message1Value": "Wir erklären, dass diese Rechnung den tatsächlichen Preis der erbrachten Dienstleistungen zeigt und alle Angaben wahr und korrekt sind.",
+            "showMessage2": "Hinweis:",
+            "thanks": "Vielen Dank für Ihr Vertrauen!"
         },
         "table": {
             "date": "Datum",
@@ -1136,7 +1248,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "Correo electrónico",
+            "customerMobileNumber": "Número de teléfono",
+            "customField1": "Campo personalizado 1",
+            "customField2": "Campo personalizado 2",
+            "customField3": "Campo personalizado 3"
         },
         "footer": {
             "taxableAmount": "Monto imponible",
@@ -1147,9 +1264,12 @@
             "totalInWordsInAccountsCurrency": "Total de la factura (en palabras)",
             "totalTax": "Impuesto total*",
             "totalInWords": "Total de la factura (en palabras)",
-            "message1": "Declaramos que esta factura muestra el precio real de los servicios prestados y que todos los datos son verdaderos y correctos.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Declaración:",
+            "message1Value": "Declaramos que esta factura muestra el precio real de los servicios prestados y que todos los datos son verdaderos y correctos.",
+            "showMessage2": "Nota:",
+            "thanks": "¡Gracias por su negocio!"
         },
         "table": {
             "date": "Fecha",
@@ -1215,7 +1335,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "E-mail",
+            "customerMobileNumber": "Número de telefone",
+            "customField1": "Campo personalizado 1",
+            "customField2": "Campo personalizado 2",
+            "customField3": "Campo personalizado 3"
         },
         "footer": {
             "taxableAmount": "Valor tributável",
@@ -1226,9 +1351,12 @@
             "totalInWordsInAccountsCurrency": "Total da fatura (por extenso)",
             "totalTax": "Imposto total*",
             "totalInWords": "Total da fatura (por extenso)",
-            "message1": "Declaramos que esta fatura mostra o preço real dos serviços prestados e que todos os detalhes são verdadeiros e corretos.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Declaração:",
+            "message1Value": "Declaramos que esta fatura mostra o preço real dos serviços prestados e que todos os detalhes são verdadeiros e corretos.",
+            "showMessage2": "Nota:",
+            "thanks": "Obrigado pelo seu negócio!"
         },
         "table": {
             "date": "Data",
@@ -1294,7 +1422,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "Email",
+            "customerMobileNumber": "Numero di telefono",
+            "customField1": "Campo personalizzato 1",
+            "customField2": "Campo personalizzato 2",
+            "customField3": "Campo personalizzato 3"
         },
         "footer": {
             "taxableAmount": "Importo imponibile",
@@ -1305,9 +1438,12 @@
             "totalInWordsInAccountsCurrency": "Totale fattura (in lettere)",
             "totalTax": "Imposta totale*",
             "totalInWords": "Totale fattura (in lettere)",
-            "message1": "Dichiariamo che questa fattura mostra il prezzo reale dei servizi resi e che tutti i dettagli sono veri e corretti.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Dichiarazione:",
+            "message1Value": "Dichiariamo che questa fattura mostra il prezzo reale dei servizi resi e che tutti i dettagli sono veri e corretti.",
+            "showMessage2": "Nota:",
+            "thanks": "Grazie per la vostra fiducia!"
         },
         "table": {
             "date": "Data",
@@ -1373,7 +1509,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "E-mail",
+            "customerMobileNumber": "Telefoonnummer",
+            "customField1": "Aangepast veld 1",
+            "customField2": "Aangepast veld 2",
+            "customField3": "Aangepast veld 3"
         },
         "footer": {
             "taxableAmount": "Belastbaar bedrag",
@@ -1384,9 +1525,12 @@
             "totalInWordsInAccountsCurrency": "Totaal factuur (in woorden)",
             "totalTax": "Totale belasting*",
             "totalInWords": "Totaal factuur (in woorden)",
-            "message1": "Wij verklaren dat deze factuur de werkelijke prijs van de geleverde diensten toont en dat alle gegevens waar en correct zijn.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Verklaring:",
+            "message1Value": "Wij verklaren dat deze factuur de werkelijke prijs van de geleverde diensten toont en dat alle gegevens waar en correct zijn.",
+            "showMessage2": "Opmerking:",
+            "thanks": "Bedankt voor uw zaken!"
         },
         "table": {
             "date": "Datum",
@@ -1452,7 +1596,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "Электронная почта",
+            "customerMobileNumber": "Номер телефона",
+            "customField1": "Пользовательское поле 1",
+            "customField2": "Пользовательское поле 2",
+            "customField3": "Пользовательское поле 3"
         },
         "footer": {
             "taxableAmount": "Налогооблагаемая сумма",
@@ -1463,9 +1612,12 @@
             "totalInWordsInAccountsCurrency": "Итого по счету (прописью)",
             "totalTax": "Общий налог*",
             "totalInWords": "Итого по счету (прописью)",
-            "message1": "Мы заявляем, что данный счет отражает фактическую цену оказанных услуг, и все данные являются достоверными и точными.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Заявление:",
+            "message1Value": "Мы заявляем, что данный счет отражает фактическую цену оказанных услуг, и все данные являются достоверными и точными.",
+            "showMessage2": "Примечание:",
+            "thanks": "Спасибо за ваш бизнес!"
         },
         "table": {
             "date": "Дата",
@@ -1531,7 +1683,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "E-posta",
+            "customerMobileNumber": "Telefon numarası",
+            "customField1": "Özel alan 1",
+            "customField2": "Özel alan 2",
+            "customField3": "Özel alan 3"
         },
         "footer": {
             "taxableAmount": "Vergiye Tabi Tutar",
@@ -1542,9 +1699,12 @@
             "totalInWordsInAccountsCurrency": "Fatura Toplamı (yazıyla)",
             "totalTax": "Toplam Vergi*",
             "totalInWords": "Fatura Toplamı (yazıyla)",
-            "message1": "Bu faturanın verilen hizmetlerin gerçek fiyatını gösterdiğini ve tüm bilgilerin doğru ve eksiksiz olduğunu beyan ederiz.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Beyan:",
+            "message1Value": "Bu faturanın verilen hizmetlerin gerçek fiyatını gösterdiğini ve tüm bilgilerin doğru ve eksiksiz olduğunu beyan ederiz.",
+            "showMessage2": "Not:",
+            "thanks": "İşiniz için teşekkürler!"
         },
         "table": {
             "date": "Tarih",
@@ -1610,7 +1770,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "ایمیل",
+            "customerMobileNumber": "شماره تلفن",
+            "customField1": "فیلد سفارشی 1",
+            "customField2": "فیلد سفارشی 2",
+            "customField3": "فیلد سفارشی 3"
         },
         "footer": {
             "taxableAmount": "مبلغ مشمول مالیات",
@@ -1621,9 +1786,12 @@
             "totalInWordsInAccountsCurrency": "جمع کل فاکتور (به حروف)",
             "totalTax": "مجموع مالیات*",
             "totalInWords": "جمع کل فاکتور (به حروف)",
-            "message1": "ما اعلام می‌کنیم که این فاکتور قیمت واقعی خدمات ارائه‌شده را نشان می‌دهد و تمام جزئیات صحیح و دقیق است.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "اعلام:",
+            "message1Value": "ما اعلام می‌کنیم که این فاکتور قیمت واقعی خدمات ارائه‌شده را نشان می‌دهد و تمام جزئیات صحیح و دقیق است.",
+            "showMessage2": "یادداشت:",
+            "thanks": "از همکاری شما سپاسگزاریم!"
         },
         "table": {
             "date": "تاریخ",
@@ -1689,7 +1857,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "אימייל",
+            "customerMobileNumber": "מספר טלפון",
+            "customField1": "שדה מותאם אישית 1",
+            "customField2": "שדה מותאם אישית 2",
+            "customField3": "שדה מותאם אישית 3"
         },
         "footer": {
             "taxableAmount": "סכום חייב במס",
@@ -1700,9 +1873,12 @@
             "totalInWordsInAccountsCurrency": "סה״כ חשבונית (במילים)",
             "totalTax": "סה״כ מס*",
             "totalInWords": "סה״כ חשבונית (במילים)",
-            "message1": "אנו מצהירים כי חשבונית זו מציגה את המחיר האמיתי של השירותים שניתנו וכי כל הפרטים נכונים ומדויקים.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "הצהרה:",
+            "message1Value": "אנו מצהירים כי חשבונית זו מציגה את המחיר האמיתי של השירותים שניתנו וכי כל הפרטים נכונים ומדויקים.",
+            "showMessage2": "הערה:",
+            "thanks": "תודה על העסקים שלכם!"
         },
         "table": {
             "date": "תאריך",
@@ -1768,7 +1944,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "电子邮件",
+            "customerMobileNumber": "电话号码",
+            "customField1": "自定义字段 1",
+            "customField2": "自定义字段 2",
+            "customField3": "自定义字段 3"
         },
         "footer": {
             "taxableAmount": "应税金额",
@@ -1779,9 +1960,12 @@
             "totalInWordsInAccountsCurrency": "发票总额（大写）",
             "totalTax": "总税额*",
             "totalInWords": "发票总额（大写）",
-            "message1": "我们声明本发票所示为所提供服务的实际价格，所有信息均真实准确。",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "声明：",
+            "message1Value": "我们声明本发票所示为所提供服务的实际价格，所有信息均真实准确。",
+            "showMessage2": "备注：",
+            "thanks": "感谢您的惠顾！"
         },
         "table": {
             "date": "日期",
@@ -1847,7 +2031,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "電子郵件",
+            "customerMobileNumber": "電話號碼",
+            "customField1": "自訂欄位 1",
+            "customField2": "自訂欄位 2",
+            "customField3": "自訂欄位 3"
         },
         "footer": {
             "taxableAmount": "應稅金額",
@@ -1858,9 +2047,12 @@
             "totalInWordsInAccountsCurrency": "發票總額（大寫）",
             "totalTax": "總稅額*",
             "totalInWords": "發票總額（大寫）",
-            "message1": "我們聲明本發票所示為所提供服務的實際價格，所有資訊均真實準確。",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "聲明：",
+            "message1Value": "我們聲明本發票所示為所提供服務的實際價格，所有資訊均真實準確。",
+            "showMessage2": "備註：",
+            "thanks": "感謝您的惠顧！"
         },
         "table": {
             "date": "日期",
@@ -1926,7 +2118,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "メール",
+            "customerMobileNumber": "電話番号",
+            "customField1": "カスタムフィールド 1",
+            "customField2": "カスタムフィールド 2",
+            "customField3": "カスタムフィールド 3"
         },
         "footer": {
             "taxableAmount": "課税対象額",
@@ -1937,9 +2134,12 @@
             "totalInWordsInAccountsCurrency": "請求書合計(大字)",
             "totalTax": "合計税額*",
             "totalInWords": "請求書合計(大字)",
-            "message1": "本請求書は提供されたサービスの実際の価格を示しており、すべての詳細が真実かつ正確であることを宣言します。",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "宣言：",
+            "message1Value": "本請求書は提供されたサービスの実際の価格を示しており、すべての詳細が真実かつ正確であることを宣言します。",
+            "showMessage2": "注記：",
+            "thanks": "ご利用ありがとうございます！"
         },
         "table": {
             "date": "日付",
@@ -2005,7 +2205,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "이메일",
+            "customerMobileNumber": "전화번호",
+            "customField1": "사용자 정의 필드 1",
+            "customField2": "사용자 정의 필드 2",
+            "customField3": "사용자 정의 필드 3"
         },
         "footer": {
             "taxableAmount": "과세 대상 금액",
@@ -2016,9 +2221,12 @@
             "totalInWordsInAccountsCurrency": "송장 총액(문자로)",
             "totalTax": "총 세금*",
             "totalInWords": "송장 총액(문자로)",
-            "message1": "본 송장은 제공된 서비스의 실제 가격을 나타내며 모든 세부 사항이 사실이고 정확함을 선언합니다.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "선언:",
+            "message1Value": "본 송장은 제공된 서비스의 실제 가격을 나타내며 모든 세부 사항이 사실이고 정확함을 선언합니다.",
+            "showMessage2": "참고:",
+            "thanks": "이용해 주셔서 감사합니다!"
         },
         "table": {
             "date": "날짜",
@@ -2084,7 +2292,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "อีเมล",
+            "customerMobileNumber": "หมายเลขโทรศัพท์",
+            "customField1": "ฟิลด์กำหนดเอง 1",
+            "customField2": "ฟิลด์กำหนดเอง 2",
+            "customField3": "ฟิลด์กำหนดเอง 3"
         },
         "footer": {
             "taxableAmount": "จำนวนเงินที่ต้องเสียภาษี",
@@ -2095,9 +2308,12 @@
             "totalInWordsInAccountsCurrency": "ยอดรวมใบแจ้งหนี้ (ตัวอักษร)",
             "totalTax": "ภาษีรวม*",
             "totalInWords": "ยอดรวมใบแจ้งหนี้ (ตัวอักษร)",
-            "message1": "เราขอรับรองว่าใบแจ้งหนี้นี้แสดงราคาจริงของบริการที่ให้และรายละเอียดทั้งหมดเป็นความจริงและถูกต้อง",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "คำประกาศ:",
+            "message1Value": "เราขอรับรองว่าใบแจ้งหนี้นี้แสดงราคาจริงของบริการที่ให้และรายละเอียดทั้งหมดเป็นความจริงและถูกต้อง",
+            "showMessage2": "หมายเหตุ:",
+            "thanks": "ขอบคุณสำหรับธุรกิจของคุณ!"
         },
         "table": {
             "date": "วันที่",
@@ -2163,7 +2379,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "Email",
+            "customerMobileNumber": "Số điện thoại",
+            "customField1": "Trường tùy chỉnh 1",
+            "customField2": "Trường tùy chỉnh 2",
+            "customField3": "Trường tùy chỉnh 3"
         },
         "footer": {
             "taxableAmount": "Số tiền chịu thuế",
@@ -2174,9 +2395,12 @@
             "totalInWordsInAccountsCurrency": "Tổng hóa đơn (bằng chữ)",
             "totalTax": "Tổng thuế*",
             "totalInWords": "Tổng hóa đơn (bằng chữ)",
-            "message1": "Chúng tôi tuyên bố rằng hóa đơn này thể hiện giá thực tế của các dịch vụ đã cung cấp và tất cả các thông tin chi tiết là đúng và chính xác.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Tuyên bố:",
+            "message1Value": "Chúng tôi tuyên bố rằng hóa đơn này thể hiện giá thực tế của các dịch vụ đã cung cấp và tất cả các thông tin chi tiết là đúng và chính xác.",
+            "showMessage2": "Ghi chú:",
+            "thanks": "Cảm ơn quý khách đã hợp tác!"
         },
         "table": {
             "date": "Ngày",
@@ -2242,7 +2466,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "Email",
+            "customerMobileNumber": "Nomor telepon",
+            "customField1": "Bidang kustom 1",
+            "customField2": "Bidang kustom 2",
+            "customField3": "Bidang kustom 3"
         },
         "footer": {
             "taxableAmount": "Jumlah Kena Pajak",
@@ -2253,9 +2482,12 @@
             "totalInWordsInAccountsCurrency": "Total Faktur (Terbilang)",
             "totalTax": "Total Pajak*",
             "totalInWords": "Total Faktur (Terbilang)",
-            "message1": "Kami menyatakan bahwa faktur ini menunjukkan harga sebenarnya dari layanan yang diberikan dan semua detail adalah benar dan akurat.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Pernyataan:",
+            "message1Value": "Kami menyatakan bahwa faktur ini menunjukkan harga sebenarnya dari layanan yang diberikan dan semua detail adalah benar dan akurat.",
+            "showMessage2": "Catatan:",
+            "thanks": "Terima kasih atas bisnis Anda!"
         },
         "table": {
             "date": "Tanggal",
@@ -2321,7 +2553,12 @@
             "billingGstin": "GSTIN",
             "pan": "PAN",
             "displayLutNumber": "LUT Number",
-            "showElectronicInvoiceIdentifier": "IRN"
+            "showElectronicInvoiceIdentifier": "IRN",
+            "customerEmail": "E-mel",
+            "customerMobileNumber": "Nombor telefon",
+            "customField1": "Medan tersuai 1",
+            "customField2": "Medan tersuai 2",
+            "customField3": "Medan tersuai 3"
         },
         "footer": {
             "taxableAmount": "Jumlah Boleh Cukai",
@@ -2332,9 +2569,12 @@
             "totalInWordsInAccountsCurrency": "Jumlah Invois (Dalam Perkataan)",
             "totalTax": "Jumlah Cukai*",
             "totalInWords": "Jumlah Invois (Dalam Perkataan)",
-            "message1": "Kami mengisytiharkan bahawa invois ini menunjukkan harga sebenar perkhidmatan yang diberikan dan semua butiran adalah benar dan tepat.",
             "tds": "TDS",
-            "tcs": "TCS"
+            "tcs": "TCS",
+            "message1Label": "Pengisytiharan:",
+            "message1Value": "Kami mengisytiharkan bahawa invois ini menunjukkan harga sebenar perkhidmatan yang diberikan dan semua butiran adalah benar dan tepat.",
+            "showMessage2": "Nota:",
+            "thanks": "Terima kasih atas perniagaan anda!"
         },
         "table": {
             "date": "Tarikh",

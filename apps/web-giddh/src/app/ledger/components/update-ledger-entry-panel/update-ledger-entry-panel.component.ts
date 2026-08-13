@@ -2953,6 +2953,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public duplicateEntry(): void {
+        this.openAndCloseDiscountDropdown(false);
+        this.openAndCloseTaxDropdown(false);
         this.closeUpdateLedgerModal.emit({
             transactionDetails: this.transactionDetails
         });
