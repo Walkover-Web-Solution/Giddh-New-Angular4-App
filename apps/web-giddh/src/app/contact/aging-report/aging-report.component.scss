@@ -175,3 +175,13 @@ tr.mat-header-row {
 .icon-cross {
     line-height: 32px;
 }
+
+::ng-deep .aging-range-menu {
+    // The editor shows all four intervals side by side, so the default
+    // 280px menu panel cap has to be lifted
+    max-width: none !important;
+
+    .mat-mdc-menu-content {
+        padding: 0 !important;
+    }
+}

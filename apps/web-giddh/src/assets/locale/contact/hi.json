@@ -36,6 +36,9 @@
     "third_interval": "तीसरा अंतराल",
     "last_interval": "अंतिम अंतराल",
     "aging_dropdown_error": "4 वां कॉलम 5 वीं से कम और 5 वां 6 वीं से कम होना चाहिए",
+    "aging_range_error_min": "[INTERVAL] [MIN] से बड़ा होना चाहिए",
+    "aging_range_error_max": "[INTERVAL] [MAX] से छोटा होना चाहिए",
+    "aging_range_error_between": "[INTERVAL] [MIN] से बड़ा और [MAX] से छोटा होना चाहिए",
     "customer_category_options": {
         "opening_balance": "प्रारंभिक शेष",
         "sales": "बिक्री",

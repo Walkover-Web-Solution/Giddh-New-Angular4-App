@@ -1,14 +1,18 @@
-// Component-specific dimensions (colors come from the global theme)
+// Layout values that have no matching global utility
 $sar-group-header-height: 64px;
 $sar-group-th-half-height: 32px;
+$sar-detail-max-height: 500px;
+$sar-age-badge-radius: 12px;
 
 :host {
     display: block;
     width: 100%;
 }
 
-// Bucket header pill: discreet by default; edit icon reveals on hover / open
 .stock-aging-report {
+    min-width: 1572px;
+    max-width: 1600px;
+
     .sar-bucket-btn.mat-mdc-outlined-button {
         min-width: 0;
         height: 24px;
@@ -39,9 +43,6 @@ $sar-group-th-half-height: 32px;
         }
     }
 
-    min-width: 1572px;
-    max-width: 1600px;
-
     .filter-dropdown-branch,
     .filter-dropdown-warehouse,
     .filter-dropdown-stockCategory,
@@ -56,14 +57,6 @@ $sar-group-th-half-height: 32px;
         grid-template-columns: repeat(5, minmax(0, 1fr));
     }
 
-    .sar-summary-card {
-        border: 1px solid var(--color-border-medium);
-    }
-
-    .sar-table-wrapper {
-        overflow: auto;
-    }
-
     .sar-mat-table {
         .mat-mdc-header-cell,
         .mat-mdc-cell,
@@ -74,7 +67,8 @@ $sar-group-th-half-height: 32px;
             color: inherit;
         }
 
-        .sar-group-header-row {
+        .sar-group-header-row,
+        .sar-group-header-inner {
             height: $sar-group-header-height;
         }
 
@@ -87,14 +81,8 @@ $sar-group-th-half-height: 32px;
             }
         }
 
-        .sar-group-header-inner {
-            height: $sar-group-header-height;
-        }
-
-        // Shared borders / bg / font-weight / flex sizing come from utility classes in the template
         .sar-group-th--leaf {
             padding: 8px 10px;
-            white-space: nowrap;
         }
 
         .sar-group-th--group {
@@ -116,7 +104,6 @@ $sar-group-th-half-height: 32px;
             padding: 0 10px;
         }
 
-        // Zero-height row used only to register per-column widths
         .sar-leaf-header-row {
             height: 0 !important;
 
@@ -130,13 +117,86 @@ $sar-group-th-half-height: 32px;
             }
         }
 
-        .sar-total-row .mat-mdc-footer-cell {
-            font-weight: var(--font-weight-semibold);
+        .sar-row--expanded .mat-mdc-cell,
+        .sar-detail-cell {
+            background-color: var(--theme-primary-light) !important;
+            color: var(--color-black) !important;
+        }
+
+        .sar-detail-cell {
+            padding: 0 !important;
+            border: none !important;
+        }
+
+        .sar-detail-scroll {
+            max-height: $sar-detail-max-height;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .sar-detail-table {
+            th,
+            td {
+                box-sizing: border-box;
+                padding: 8px 6px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                background-color: var(--theme-primary-light) !important;
+                color: var(--color-black) !important;
+                border: none;
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: inset -1px 0 0 var(--border-color);
+            }
+
+            th:first-child,
+            td:first-child {
+                box-shadow: inset 1px 0 0 var(--border-color), inset -1px 0 0 var(--border-color);
+            }
+        }
+    }
+}
+
+::ng-deep .sar-details-aside .aside-dialog-wrapper {
+    .sar-detail-scroll {
+        max-height: calc(100vh - 150px);
+    }
+
+    .sar-detail-table {
+        .mat-mdc-header-cell,
+        .mat-mdc-cell,
+        .mat-mdc-footer-cell {
+            box-sizing: border-box;
+            padding: 9px 12px;
+            white-space: nowrap;
+            background-color: var(--table-background-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mat-mdc-row:last-child .mat-mdc-cell {
+            border-bottom: none;
+        }
+
+        .sar-detail-total-row .mat-mdc-footer-cell {
+            border-top: 2px solid var(--border-color) !important;
+            border-bottom: none !important;
+            background-color: var(--theme-primary-light) !important;
+        }
+
+        .sar-age-badge {
+            display: inline-block;
+            min-width: 90px;
+            padding: 2px 10px;
+            border-radius: $sar-age-badge-radius;
+            text-align: center;
         }
     }
 }
 
 ::ng-deep .sar-aging-menu {
+    max-width: none !important;
+
     .mat-mdc-menu-content {
         padding: 0 !important;
     }

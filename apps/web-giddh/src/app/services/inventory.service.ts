@@ -1930,6 +1930,60 @@ export class InventoryService {
     }
 
     /**
+     * Get the variant-level breakup of a single stock in the aging report
+     *
+     * @param {string} stockUniqueName Stock identifier of the expanded row
+     * @param {*} model Request payload containing the same filters as the report
+     * @param {number} [page=1]
+     * @param {number} [count=20]
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getStockAgingReportVariants(stockUniqueName: string, model: any, page: number = 1, count: number = 20): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.STOCK_AGING_REPORT_VARIANTS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
+            ?.replace(':page', encodeURIComponent(String(page ?? 1)))
+            ?.replace(':count', encodeURIComponent(String(count ?? 20)));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Get the transaction level breakup of a stock (or a variant when `variantUniqueName` is in the payload)
+     *
+     * @param {string} stockUniqueName Stock identifier
+     * @param {*} model Request payload containing the same filters as the report
+     * @param {number} [page=1]
+     * @param {number} [count=10]
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getStockAgingReportDetails(stockUniqueName: string, model: any, page: number = 1, count: number = 10): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.STOCK_AGING_REPORT_DETAILS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
+            ?.replace(':page', encodeURIComponent(String(page ?? 1)))
+            ?.replace(':count', encodeURIComponent(String(count ?? 10)));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
      * This will be use for update inventory variant
      *
      * @param {*} model
