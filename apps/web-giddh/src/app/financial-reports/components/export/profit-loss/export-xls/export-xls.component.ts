@@ -17,7 +17,6 @@ selector: 'profit-loss-export-xls',
 export class ProfitLossExportXlsComponent implements OnInit {
     @Input() public fy: number;
     @Input() public filters: any = {};
-    @Input() public view: ProfitLossExportView = ProfitLossExportView.Collapsed;
     public enableDownload: boolean = true;
     public imgPath: string = '';
     @Output() public plBsExportPdfEvent = new EventEmitter<boolean>();
@@ -31,8 +30,8 @@ export class ProfitLossExportXlsComponent implements OnInit {
 
     }
 
-    public downloadPlXls() {
-        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.profit_loss.download_filename, view: this.view };
+    public downloadPlXls(value: boolean): void {
+        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.profit_loss.download_filename, view: (value === true) ? ProfitLossExportView.Expanded : ProfitLossExportView.Collapsed };
         this.store.dispatch(this.tbPlActions.DownloadProfitLossExcel(request));
     }
 

@@ -332,8 +332,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     this.searchLoader$ = of(false);
                     if (res?.status === 'success') {
-                        let blobData = this.generalService.base64ToBlob(res?.body, 'text/csv', 512);
-                        return saveAs(blobData, `${p.groupName}.csv`);
+                        let blobData = this.generalService.base64ToBlob(res?.body, 'text/xlsx', 512);
+                        return saveAs(blobData, `${p.groupName}.xlsx`);
                     }
                 });
 

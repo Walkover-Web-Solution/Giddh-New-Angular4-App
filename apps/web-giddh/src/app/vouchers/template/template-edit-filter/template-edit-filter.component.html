@@ -2721,7 +2721,11 @@
                                                     </td>
                                                     <td class="p-2" [attr.colspan]="showSecondaryLabel ? 2 : 1">
                                                         <!-- Content for Note 1 which show below Declaration: -->
-                                                        <mat-form-field appearance="outline" class="initial-height w-100 address-text">
+                                                        <mat-form-field
+                                                            appearance="outline"
+                                                            class="initial-height w-100 address-text"
+                                                            [ngClass]="{ 'error-box': isMessage1ContentOverLimit('value') }"
+                                                        >
                                                             <mat-label>{{ primaryLabel }}</mat-label>
                                                             <textarea
                                                                 matInput
@@ -2731,12 +2735,6 @@
                                                                     customTemplate.sections['footer'].data['showNotesAtLastPage']?.display
                                                                         ? null
                                                                         : 200
-                                                                "
-                                                                [class.error-box]="
-                                                                    isCharacterLimitExceeded(
-                                                                        200,
-                                                                        customTemplate.sections['footer'].data['message1']?.value || ''
-                                                                    )
                                                                 "
                                                                 [placeholder]="localeData?.footer_text"
                                                                 [(ngModel)]="customTemplate.sections['footer'].data['message1'].value"
@@ -2758,7 +2756,7 @@
                                                     </td>
                                                     <td class="p-2 text-center">
                                                         <span class="font-size-12">
-                                                            @if (isCharacterFieldFocused('footer', 'message1', 'value')) {
+                                                            @if (!customTemplate.sections['footer'].data['showNotesAtLastPage']?.display && isCharacterFieldFocused('footer', 'message1', 'value')) {
                                                                 {{
                                                                     getRemainingCharacters(
                                                                         200,
@@ -2820,7 +2818,11 @@
                                                     <td class="p-2"></td>
                                                     <td class="p-2" [attr.colspan]="showSecondaryLabel ? 2 : 1">
                                                         <!-- Content for Note 1 which show below Declaration: -->
-                                                        <mat-form-field appearance="outline" class="initial-height w-100 address-text">
+                                                        <mat-form-field
+                                                            appearance="outline"
+                                                            class="initial-height w-100 address-text"
+                                                            [ngClass]="{ 'error-box': isMessage1ContentOverLimit('value') }"
+                                                        >
                                                             <mat-label>{{ primaryLabel }}</mat-label>
                                                             <textarea
                                                                 matInput
@@ -2830,12 +2832,6 @@
                                                                     customTemplate.sections['footer'].data['showNotesAtLastPage']?.display
                                                                         ? null
                                                                         : 200
-                                                                "
-                                                                [class.error-box]="
-                                                                    isCharacterLimitExceeded(
-                                                                        200,
-                                                                        customTemplate.sections['footer'].data['message1']?.value || ''
-                                                                    )
                                                                 "
                                                                 [placeholder]="localeData?.footer_text"
                                                                 [(ngModel)]="customTemplate.sections['footer'].data['message1'].value"
@@ -2857,7 +2853,7 @@
                                                     </td>
                                                     <td class="p-2 text-center">
                                                         <span class="font-size-12">
-                                                            @if (isCharacterFieldFocused('footer', 'message1', 'value')) {
+                                                            @if (!customTemplate.sections['footer'].data['showNotesAtLastPage']?.display && isCharacterFieldFocused('footer', 'message1', 'value')) {
                                                                 {{
                                                                     getRemainingCharacters(
                                                                         200,
@@ -2914,7 +2910,11 @@
                                                     <td class="p-2"></td>
                                                     <td class="p-2" [attr.colspan]="showSecondaryLabel ? 2 : 1">
                                                         <!-- Content for Note 1 which show below Declaration: -->
-                                                        <mat-form-field appearance="outline" class="initial-height w-100 address-text">
+                                                        <mat-form-field
+                                                            appearance="outline"
+                                                            class="initial-height w-100 address-text"
+                                                            [ngClass]="{ 'error-box': isMessage1ContentOverLimit('secondaryValue') }"
+                                                        >
                                                             <mat-label>{{ secondaryLabel }}</mat-label>
                                                             <textarea
                                                                 matInput
@@ -2924,13 +2924,6 @@
                                                                     customTemplate.sections['footer'].data['showNotesAtLastPage']?.display
                                                                         ? null
                                                                         : 200
-                                                                "
-                                                                [class.error-box]="
-                                                                    isCharacterLimitExceeded(
-                                                                        200,
-                                                                        customTemplate.sections['footer'].data['message1']
-                                                                            ?.secondaryLabel || ''
-                                                                    )
                                                                 "
                                                                 [placeholder]="localeData?.footer_text"
                                                                 [(ngModel)]="
@@ -2954,7 +2947,7 @@
                                                     </td>
                                                     <td class="p-2 text-center">
                                                         <span class="font-size-12">
-                                                            @if (isCharacterFieldFocused('footer', 'message1', 'secondaryValue')) {
+                                                            @if (!customTemplate.sections['footer'].data['showNotesAtLastPage']?.display && isCharacterFieldFocused('footer', 'message1', 'secondaryValue')) {
                                                                 {{
                                                                     getRemainingCharacters(
                                                                         200,

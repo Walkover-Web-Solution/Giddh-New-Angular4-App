@@ -489,7 +489,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             from: this.from,
             to: this.to,
             exportType: "SALES_REGISTER_DETAILED_EXPORT",
-            fileType: "CSV",
+            fileType: "XLSX",
             isExpanded: this.expand,
             q: this.voucherNumberInput?.value,
             branchUniqueName: this.getDetailedsalesRequestFilter?.branchUniqueName,
