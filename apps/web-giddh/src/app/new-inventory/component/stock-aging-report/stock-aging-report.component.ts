@@ -653,7 +653,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
      * @memberof StockAgingReportComponent
      */
     private getReportTotals(): void {
-        const payload: any = this.buildFilterPayload(false);
+        const payload: any = this.buildFilterPayload();
         this.inventoryService.getStockAgingReportTotals(payload)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
@@ -798,23 +798,23 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         }
         const reachedBottom = (element.scrollTop + element.clientHeight) >= (element.scrollHeight - this.detailScrollThreshold);
         if (reachedBottom) {
-            this.variantPage++;
-            this.loadStockVariants();
+            this.loadStockVariants(this.variantPage + 1);
         }
     }
 
     /**
-     * Fetch `variantPage` of the expanded stock's variants and append them to the list.
+     * Fetch a variants page of the expanded stock and append the rows on success.
+     * @param page 1-based page to request; defaults to the last successful page.
      * @returns void
      * @memberof StockAgingReportComponent
      */
-    private loadStockVariants(): void {
+    private loadStockVariants(page: number = this.variantPage): void {
         const stockCode = this.expandedStockCode;
         if (!stockCode || this.isVariantLoading) {
             return;
         }
         this.isVariantLoading = true;
-        this.inventoryService.getStockAgingReportVariants(stockCode, this.buildFilterPayload(), this.variantPage, this.variantCount)
+        this.inventoryService.getStockAgingReportVariants(stockCode, this.buildFilterPayload(), page, this.variantCount)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 this.isVariantLoading = false;
@@ -829,7 +829,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
                     this.variantTotals = body?.totals ?? null;
                     this.variantRows = [...this.variantRows, ...(body?.items?.results ?? [])];
                     this.variantTotalPages = body?.items?.totalPages ?? 0;
-                    this.variantPage = body?.items?.page ?? this.variantPage;
+                    this.variantPage = body?.items?.page ?? page;
                 } else {
                     this.toaster.showSnackBar("error", raw?.message);
                 }
@@ -889,8 +889,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         }
         const reachedBottom = (element.scrollTop + element.clientHeight) >= (element.scrollHeight - this.detailScrollThreshold);
         if (reachedBottom) {
-            this.detailPage++;
-            this.loadStockDetails();
+            this.loadStockDetails(this.detailPage + 1);
         }
     }
 
@@ -915,17 +914,17 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         }
         const canScroll = element.scrollHeight > (element.clientHeight + 1);
         if (!canScroll) {
-            this.detailPage++;
-            this.loadStockDetails();
+            this.loadStockDetails(this.detailPage + 1);
         }
     }
 
     /**
-     * Fetch `detailPage` of the aside's transactions and append them to the list.
+     * Fetch a details page of the aside's transactions and append them on success.
+     * @param page 1-based page to request; defaults to the last successful page.
      * @returns void
      * @memberof StockAgingReportComponent
      */
-    private loadStockDetails(): void {
+    private loadStockDetails(page: number = this.detailPage): void {
         const stockCode = this.asideStockCode;
         if (!stockCode || this.isDetailLoading) {
             return;
@@ -935,7 +934,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         if (this.asideVariantUniqueName) {
             payload.variantUniqueName = this.asideVariantUniqueName;
         }
-        this.inventoryService.getStockAgingReportDetails(stockCode, payload, this.detailPage, this.detailCount)
+        this.inventoryService.getStockAgingReportDetails(stockCode, payload, page, this.detailCount)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 this.isDetailLoading = false;
@@ -950,12 +949,12 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
                     this.detailData = body;
                     this.detailTransactions = [...this.detailTransactions, ...(body?.transactions?.results ?? [])];
                     this.detailTotalPages = body?.transactions?.totalPages ?? 0;
-                    this.detailPage = body?.transactions?.page ?? this.detailPage;
+                    this.detailPage = body?.transactions?.page ?? page;
+                    this.queueDetailScrollCheck();
                 } else {
                     this.toaster.showSnackBar("error", raw?.message);
                 }
                 this.cdr.detectChanges();
-                this.queueDetailScrollCheck();
             }, () => {
                 this.isDetailLoading = false;
                 this.cdr.detectChanges();
