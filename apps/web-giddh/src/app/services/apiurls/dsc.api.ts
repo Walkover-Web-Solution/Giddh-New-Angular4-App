@@ -1,4 +1,4 @@
 export const DSC_API = {
-    PREPARE: 'dsc/prepare',
-    FINISH: 'dsc/finish'
+    PREPARE: 'company/:companyUniqueName/dsc/prepare',
+    FINISH: 'company/:companyUniqueName/dsc/finish'
 };
