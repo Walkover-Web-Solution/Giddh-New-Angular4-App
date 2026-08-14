@@ -835,7 +835,7 @@ constructor(
         exportBodyRequest.from = startDate;
         exportBodyRequest.to = endDate;
         exportBodyRequest.exportType = "SALES_REGISTER_OVERVIEW_EXPORT";
-        exportBodyRequest.fileType = "CSV";
+        exportBodyRequest.fileType = "XLSX";
         exportBodyRequest.branchUniqueName = this.currentBranch?.uniqueName;
         this.applyOverviewGroupByFilters(exportBodyRequest);
         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {

@@ -123,15 +123,6 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
             }
 
             if (this.organizationType === 'COMPANY') {
-                this.profileForm?.get('name')?.valueChanges?.pipe(
-                    takeUntil(this.destroyed$),
-                    debounceTime(700),
-                    pairwise(), // Emits [previousValue, currentValue]
-                    filter(([prev, curr]) => prev !== curr) // Only proceed if values are different
-                ).subscribe(([prev, curr]) => {
-                    this.profileUpdated('name');
-                });
-
                 this.profileForm?.get('portalDomain')?.valueChanges?.pipe(
                     takeUntil(this.destroyed$),
                     debounceTime(700),

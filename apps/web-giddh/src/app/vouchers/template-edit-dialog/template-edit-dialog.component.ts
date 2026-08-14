@@ -35,6 +35,8 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   public readonly templateModeEnum = TemplateModeEnum;
   /* This will hold the value if Gst Composition will show/hide */
   public showGstComposition: boolean = false;
+  /** Maximum allowed characters for footer message1 value and secondaryValue */
+  private readonly message1MaxLength: number = 200;
 
   constructor(
     public dialog: MatDialog,
@@ -67,10 +69,34 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * Closes the dialog.
-  *
-  * @memberof TemplateEditDialogComponent
-  */
+   * Number of Note 1 fields that exceed the strict 200 character limit.
+   * Strict length applies only when notes are not shown on the last page.
+   *
+   * @readonly
+   * @type {number}
+   * @memberof TemplateEditDialogComponent
+   */
+  public get message1CharacterLimitErrorCount(): number {
+    const footerData = this.customTemplate?.sections?.['footer']?.data;
+    if (footerData?.['showNotesAtLastPage']?.display || !footerData?.['message1']?.display) {
+      return 0;
+    }
+    const message1 = footerData?.['message1'];
+    let errorCount = 0;
+    if (this.isCharacterLimitExceeded(message1?.value)) {
+      errorCount++;
+    }
+    if (this.customTemplate?.enableSecondaryLanguage && this.isCharacterLimitExceeded(message1?.secondaryValue)) {
+      errorCount++;
+    }
+    return errorCount;
+  }
+
+  /**
+   * Closes the dialog.
+   *
+   * @memberof TemplateEditDialogComponent
+   */
   public closeDialog(): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       panelClass: ['mat-dialog-sm'],
@@ -252,6 +278,18 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
       data.fontDefault = data.fontSize;
       data.fontMedium = data.fontSize - 2;
     }
+  }
+
+  /**
+   * Checks whether the given string exceeds the Note 1 character limit.
+   *
+   * @private
+   * @param {string} value Field value
+   * @returns {boolean} True if the value is over the limit
+   * @memberof TemplateEditDialogComponent
+   */
+  private isCharacterLimitExceeded(value: string): boolean {
+    return (value?.length || 0) > this.message1MaxLength;
   }
 
   /**

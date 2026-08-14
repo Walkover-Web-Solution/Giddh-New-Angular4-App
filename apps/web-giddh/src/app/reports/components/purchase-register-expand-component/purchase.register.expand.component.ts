@@ -526,7 +526,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             from: this.from,
             to: this.to,
             exportType: "PURCHASE_REGISTER_DETAILED_EXPORT",
-            fileType: "CSV",
+            fileType: "XLSX",
             isExpanded: this.expand,
             q: this.voucherNumberInput?.value,
             branchUniqueName: this.getDetailedPurchaseRequestFilter?.branchUniqueName,

@@ -5,6 +5,11 @@
         <button
             class="ml-auto"
             matButton="filled"
+            matBadgeColor="warn"
+            [matBadge]="message1CharacterLimitErrorCount"
+            [matBadgeHidden]="!message1CharacterLimitErrorCount"
+            [matTooltip]="message1CharacterLimitErrorCount ? localeData?.message1_character_limit_exceeded : ''"
+            [matTooltipPosition]="'left'"
             (click)="templateData?.mode === templateModeEnum.Create ? createTemplate() : updateTemplate()"
         >
             {{ templateData?.mode === templateModeEnum.Create ? localeData?.create_template : localeData?.update_template }}
