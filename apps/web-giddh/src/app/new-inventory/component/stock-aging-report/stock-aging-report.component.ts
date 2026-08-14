@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { AgeRangeEditorOptions } from "../../../theme/age-range-editor/age-range-editor.component";
 import { Observable, ReplaySubject } from "rxjs";
@@ -8,6 +9,7 @@ import { AppState } from "../../../store";
 import { AgingReportActions } from "../../../actions/aging-report.actions";
 import { AgingDropDownoptions } from "../../../models/api-models/Contact";
 import { PageEvent } from "@angular/material/paginator";
+import { MatTable } from "@angular/material/table";
 import { FormControl } from "@angular/forms";
 import { cloneDeep } from "../../../lodash-optimized";
 import * as dayjs from "dayjs";
@@ -18,12 +20,18 @@ import { GeneralService } from "../../../services/general.service";
 import { ActivatedRoute } from "@angular/router";
 import { OrganizationType } from "../../../models/user-login-state";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
-import { IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
+import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
 import {
     BucketColumn,
     BucketSortState,
     ColumnWidths,
+    StockAgingDetailsBody,
+    StockAgingLeafColumn,
     StockAgingReportBody,
+    StockAgingRow,
+    StockAgingTotals,
+    StockAgingTransaction,
+    StockAgingVariantRow,
 } from "../../../models/interfaces/stock-aging-report.interface";
 
 /** Stock Aging Report: aging buckets + per-stock breakup with summary cards and a grouped-header table. */
@@ -33,7 +41,7 @@ import {
     styleUrls: ["./stock-aging-report.component.scss"],
     standalone: false
 })
-export class StockAgingReportComponent implements OnInit, OnDestroy {
+export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDestroy {
     /** RxJS teardown signal fired on destroy. */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True while a report request is in flight. */
@@ -50,19 +58,12 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     public agingOptions: AgeRangeEditorOptions = { fourth: 30, fifth: 60, sixth: 90 };
     /** Index (0-3) of the bucket whose popup is open. */
     public activeInterval: number = 0;
-    /** Locale strings for the age-range editor popup titles. */
-    public agingEditorLocale: any = {
-        first_interval: 'First Interval',
-        second_interval: 'Second Interval',
-        third_interval: 'Third Interval',
-        last_interval: 'Last Interval',
-    };
     /** True once bucket ranges were overridden locally (user edit or store hydrate); disables API overwrite. */
     private bucketRangesOverridden: boolean = false;
     /** `vendorCustomerType` value sent to the shared due-days-range API for the inventory context. */
     public readonly INVENTORY_AGING_TYPE: string = 'inventory';
     /** Store observable of the persisted aging boundaries. */
-    public agingDropDownoptions$: Observable<AgingDropDownoptions>;
+    private agingDropDownoptions$: Observable<AgingDropDownoptions>;
     /** Current page number (1-based). */
     public page: number = 1;
     /** Page size used in the paginator. */
@@ -73,13 +74,16 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** As-on date form control (defaults to today). */
     public asOnDateControl: FormControl = new FormControl(new Date());
-    /** Fixed leaf column definitions rendered before the bucket group columns. */
-    public readonly baseColumns = [
-        { colId: 'sr',          label: '#',          isLeaf: true, align: 'center' as const },
-        { colId: 'stockName',   label: 'Item Name',   isLeaf: true, align: 'left'   as const },
-        { colId: 'uom',         label: 'UOM',         isLeaf: true, align: 'left'   as const },
-        { colId: 'totalQty',    label: 'Total Qty',   isLeaf: true, align: 'right'  as const },
-        { colId: 'totalValue',  label: 'Total Value', isLeaf: true, align: 'right'  as const }
+    /** Fixed leaf column definitions rendered before the bucket group columns (labels filled on translation complete). */
+    public baseColumns: StockAgingLeafColumn[] = [
+        { colId: 'sr',          label: '', isLeaf: true, align: 'center' },
+        { colId: 'stockName',   label: '', isLeaf: true, align: 'left'   },
+        { colId: 'uom',         label: '', isLeaf: true, align: 'left'   }
+    ];
+    /** Fixed leaf column definitions rendered after the bucket group columns (labels filled on translation complete). */
+    public trailingColumns: StockAgingLeafColumn[] = [
+        { colId: 'totalQty',    label: '', isLeaf: true, align: 'right' },
+        { colId: 'totalValue',  label: '', isLeaf: true, align: 'right' }
     ];
 
     /** Selected branch unique names. */
@@ -126,12 +130,14 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
 
     /** Static column id for the spanning group-header row. */
     public readonly groupHeaderColumns: readonly string[] = ['groupHeader'];
-    /** Fixed percentage width for the Sr column. */
+    /** Static column id for the expandable transaction-detail row. */
+    public readonly detailRowColumns: readonly string[] = ['stockDetail'];
+    /** Predicate for the detail mat-row — only the expanded stock gets a second row. */
+    public isExpandedDetailRow = (_index: number, row: StockAgingRow): boolean => this.isStockExpanded(row);
+    /** Fixed percentage width shared by the Sr and UOM columns. */
     public readonly srColWidthPct: number = 4;
-    /** Extra % width added to Item Name when the inline search is open (donated by UOM). */
+    /** Extra % width given to Item Name on top of the equally shared width. */
     public readonly stockNameSearchExtraPct: number = 10;
-    /** Minimum % width the UOM column must retain when donating space. */
-    private readonly uomMinWidthPct: number = 3;
 
     /** Precomputed column ids per aging bucket (kept in sync with `bucketRanges`). */
     public bucketCols: BucketColumn[] = [];
@@ -145,8 +151,69 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** Common locale data from translation directive. */
     public commonLocaleData: any = {};
-    /** Active company profile */
+    /** Active company profile used for currency display. */
     public activeCompanyProfile: any;
+
+    /** Stock identifier of the row whose variants are expanded (`null` when none). */
+    public expandedStockCode: string | null = null;
+    /** Variant rows accumulated for the expanded stock. */
+    public variantRows: StockAgingVariantRow[] = [];
+    /** Totals of the expanded stock's variants. */
+    public variantTotals: StockAgingTotals | null = null;
+    /** True while a variants page request is in flight. */
+    public isVariantLoading: boolean = false;
+    /** Last variants page fetched (1-based). */
+    private variantPage: number = 1;
+    /** Total variant pages reported by the variants API. */
+    private variantTotalPages: number = 0;
+    /** Variants requested per page. */
+    private readonly variantCount: number = 20;
+    /** Latest transaction-detail response shown in the aside. */
+    public detailData: StockAgingDetailsBody | null = null;
+    /** Leaf column ids for the aside transaction mat-table. */
+    public readonly detailDisplayedColumns: readonly string[] = [
+        'purchaseDate',
+        'purchaseInvoice',
+        'qtyInward',
+        'qtyOutward',
+        'balanceQty',
+        'rate',
+        'stockValue',
+        'ageDays',
+        'ageBucket',
+    ];
+    /** Transactions accumulated across the aside pages fetched so far. */
+    public detailTransactions: StockAgingTransaction[] = [];
+    /** True while a details page request is in flight. */
+    public isDetailLoading: boolean = false;
+    /** Last details page fetched (1-based). */
+    private detailPage: number = 1;
+    /** Total details pages reported by the details API. */
+    private detailTotalPages: number = 0;
+    /** Transactions requested per details page. */
+    private readonly detailCount: number = 10;
+    /** Distance in px from the bottom of a scroll list at which the next page is fetched. */
+    private readonly detailScrollThreshold: number = 40;
+    /** Stock unique name whose transactions are open in the aside. */
+    private asideStockCode: string = '';
+    /** Variant unique name sent with the details API when opened from a variant row. */
+    private asideVariantUniqueName: string = '';
+    /** Scroll container of the aside transaction list. */
+    @ViewChild('detailScroll') private detailScrollRef?: ElementRef<HTMLElement>;
+    /** Aside template for the stock / variant transaction breakup. */
+    @ViewChild('stockDetailsAside') private stockDetailsAside?: TemplateRef<any>;
+    /** Open aside dialog ref. */
+    private stockDetailsAsideRef?: MatDialogRef<any>;
+    /** Main mat-table instance — needed to re-render expand rows on expand/collapse. */
+    @ViewChild(MatTable) private stockAgingTable?: MatTable<StockAgingRow>;
+    /** Native main table element used to copy rendered column widths onto the expand table. */
+    @ViewChild('stockAgingTableEl', { read: ElementRef }) private stockAgingTableEl?: ElementRef<HTMLTableElement>;
+    /** Pixel widths of the parent data columns, applied to the variant table. */
+    public nestedColWidths: number[] = [];
+    /** True when the next `ngAfterViewChecked` should recopy parent column widths. */
+    private pendingWidthSync = false;
+    /** Age-bucket badge classes, ordered to match the colours of the summary cards. */
+    private readonly bucketBadgeClasses: readonly string[] = ['opening-box', 'sales-purchase', 'payment-receipt', 'due-box'];
 
     /**
      * Cycle bucket-column sort (asc → desc → off) and refetch.
@@ -218,6 +285,18 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
         this.getReportTotals();
     }
 
+    /**
+     * Injects report services and hydrates persisted aging boundaries from the store.
+     * @param {ChangeDetectorRef} cdr Marks the view for check after async updates.
+     * @param {InventoryService} inventoryService Stock aging report APIs.
+     * @param {ToasterService} toaster Error toasts for failed requests.
+     * @param {GeneralService} generalService Org, branch and DOM helpers.
+     * @param {Store<AppState>} store App store for profile and due-range options.
+     * @param {AgingReportActions} agingReportActions Due-range load/close actions.
+     * @param {ActivatedRoute} route Category route param.
+     * @param {MatDialog} dialog Aside dialog for stock transactions.
+     * @memberof StockAgingReportComponent
+     */
     constructor(
         private cdr: ChangeDetectorRef,
         private inventoryService: InventoryService,
@@ -226,6 +305,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private agingReportActions: AgingReportActions,
         private route: ActivatedRoute,
+        private dialog: MatDialog,
     ) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
     }
@@ -327,9 +407,28 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
 
 
     /**
-     * Gets profile information
-     *
-     * @private
+     * Assigns translated labels to the fixed leaf columns after locale files load.
+     * @param {*} event Truthy when translation of this view is complete.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            const labels: Record<string, string> = {
+                sr: this.localeData?.sr,
+                stockName: this.localeData?.item_name,
+                uom: this.localeData?.uom,
+                totalQty: this.localeData?.total_qty,
+                totalValue: this.commonLocaleData?.app_total_amount
+            };
+            this.baseColumns = this.baseColumns.map(col => ({ ...col, label: labels[col.colId] ?? col.label }));
+            this.trailingColumns = this.trailingColumns.map(col => ({ ...col, label: labels[col.colId] ?? col.label }));
+        }
+    }
+
+    /**
+     * Subscribe to the company profile for currency symbols on summary cards.
+     * @returns void
      * @memberof StockAgingReportComponent
      */
     private getProfile(): void {
@@ -345,7 +444,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
      * @returns void
      * @memberof StockAgingReportComponent
      */
-    public loadBranchesAndWarehouses(): void {
+    private loadBranchesAndWarehouses(): void {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 this.allBranches = response.body?.results?.filter((branch: any) => branch?.isCompany !== true) ?? [];
@@ -363,7 +462,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
      * @returns void
      * @memberof StockAgingReportComponent
      */
-    public loadStockGroups(): void {
+    private loadStockGroups(): void {
         this.inventoryService.GetGroupsWithStocksFlatten(this.selectedStockCategory).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 const groups: IOption[] = [];
@@ -483,22 +582,36 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Fetch the stock aging report with current filters, sort and pagination.
-     * @returns void
+     * Build the filter payload shared by the report, totals and detail APIs.
+     * @param includeSearchText Whether the item-name search term is part of the payload.
+     * @returns The request payload.
      * @memberof StockAgingReportComponent
      */
-    public getReport(): void {
-        this.isLoading = true;
+    private buildFilterPayload(includeSearchText: boolean = true): any {
         const payload: any = {
             branchUniqueNames: (this.isCompany && this.allBranches?.length > 1) ? (this.selectedBranch ?? []).filter(Boolean) : [this.generalService.currentBranchUniqueName],
             warehouseUniqueNames: this.selectedWarehouse,
             stockGroupUniqueNames: this.selectedStockGroup,
-            searchText: this.searchText,
             categoryUniqueNames: [this.selectedStockCategory]
         };
+        if (includeSearchText) {
+            payload.searchText = this.searchText;
+        }
         if (this.asOnDateControl.value) {
             payload.asOnDate = dayjs(this.asOnDateControl.value).format(GIDDH_DATE_FORMAT);
         }
+        return payload;
+    }
+
+    /**
+     * Fetch the stock aging report with current filters, sort and pagination.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    private getReport(): void {
+        this.isLoading = true;
+        this.collapseStockDetails();
+        const payload: any = this.buildFilterPayload();
         if (this.bucketSort) {
             payload.sortBy = this.bucketSort.sortBy;
             payload.sort = this.bucketSort.sort;
@@ -522,6 +635,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
                     }
                     this.totalItems = this.reportData?.items?.totalItems ?? 0;
                     this.page = this.reportData?.items?.page ?? this.page;
+                    this.pendingWidthSync = true;
                 } else {
                     this.reportData = null;
                     this.toaster.showSnackBar("error", raw?.message);
@@ -538,16 +652,8 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
      * @returns void
      * @memberof StockAgingReportComponent
      */
-    public getReportTotals(): void {
-        const payload: any = {
-            branchUniqueNames: (this.isCompany && this.allBranches?.length > 1) ? (this.selectedBranch ?? []).filter(Boolean) : [this.generalService.currentBranchUniqueName],
-            warehouseUniqueNames: this.selectedWarehouse,
-            stockGroupUniqueNames: this.selectedStockGroup,
-            categoryUniqueNames: [this.selectedStockCategory]
-        };
-        if (this.asOnDateControl.value) {
-            payload.asOnDate = dayjs(this.asOnDateControl.value).format(GIDDH_DATE_FORMAT);
-        }
+    private getReportTotals(): void {
+        const payload: any = this.buildFilterPayload();
         this.inventoryService.getStockAgingReportTotals(payload)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
@@ -563,6 +669,323 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
                 }
                 this.cdr.detectChanges();
             });
+    }
+
+    /**
+     * Expand the clicked stock and load its variants, or collapse it when already open.
+     * @param item Report row the user clicked.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    public toggleStockDetails(item: StockAgingRow): void {
+        const stockCode = this.getStockCode(item);
+        if (!stockCode || this.expandedStockCode === stockCode) {
+            this.collapseStockDetails();
+            return;
+        }
+        this.expandedStockCode = stockCode;
+        this.variantRows = [];
+        this.variantTotals = null;
+        this.variantPage = 1;
+        this.variantTotalPages = 0;
+        this.loadStockVariants();
+        this.refreshDetailRows();
+    }
+
+    /**
+     * True when the given row is the one with its variants expanded.
+     * @param item Report row to test.
+     * @returns boolean
+     * @memberof StockAgingReportComponent
+     */
+    public isStockExpanded(item: StockAgingRow): boolean {
+        const stockCode = this.getStockCode(item);
+        return !!stockCode && this.expandedStockCode === stockCode;
+    }
+
+    /**
+     * Close the expanded variant list and drop its loaded pages.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    public collapseStockDetails(): void {
+        this.expandedStockCode = null;
+        this.variantRows = [];
+        this.variantTotals = null;
+        this.variantPage = 1;
+        this.variantTotalPages = 0;
+        this.refreshDetailRows();
+    }
+
+    /**
+     * Re-evaluate mat-row `when` predicates after expand/collapse state changes.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    private refreshDetailRows(): void {
+        this.stockAgingTable?.renderRows();
+        this.pendingWidthSync = true;
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Recopy parent column widths after the table has painted (expand, data load, resize).
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    public ngAfterViewChecked(): void {
+        if (!this.pendingWidthSync) {
+            return;
+        }
+        this.pendingWidthSync = false;
+        this.syncNestedColumnWidths();
+    }
+
+    /**
+     * Recopy parent column widths when the window size changes.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    @HostListener('window:resize')
+    public onWindowResize(): void {
+        this.pendingWidthSync = true;
+    }
+
+    /**
+     * Read the first parent data row's cell widths and store them for the expand table.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    private syncNestedColumnWidths(): void {
+        const table = this.stockAgingTableEl?.nativeElement;
+        if (!table) {
+            return;
+        }
+        const row = table.querySelector('tr.mat-mdc-row:not(.sar-detail-row)');
+        if (!row) {
+            return;
+        }
+        const cells = Array.from(row.querySelectorAll(':scope > td.mat-mdc-cell')) as HTMLElement[];
+        if (!cells.length) {
+            return;
+        }
+        // Use the visual left/right edges so shared parent borders are not counted twice.
+        const tableLeft = table.getBoundingClientRect().left;
+        const edges = cells.map((cell) => cell.getBoundingClientRect().left - tableLeft);
+        edges.push(cells[cells.length - 1].getBoundingClientRect().right - tableLeft);
+        const widths = [];
+        for (let i = 0; i < edges.length - 1; i++) {
+            widths.push(Math.round(edges[i + 1] - edges[i]));
+        }
+        const changed = widths.length !== this.nestedColWidths.length
+            || widths.some((width, index) => width !== this.nestedColWidths[index]);
+        if (changed) {
+            this.nestedColWidths = widths;
+            this.cdr.detectChanges();
+        }
+    }
+
+    /**
+     * Load the next variants page once the list is scrolled near its bottom.
+     * @param event Scroll event of the variant list container.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    public onVariantScroll(event: Event): void {
+        const element = event?.target as HTMLElement;
+        if (!element || this.isVariantLoading || !this.variantTotalPages || this.variantPage >= this.variantTotalPages) {
+            return;
+        }
+        const reachedBottom = (element.scrollTop + element.clientHeight) >= (element.scrollHeight - this.detailScrollThreshold);
+        if (reachedBottom) {
+            this.loadStockVariants(this.variantPage + 1);
+        }
+    }
+
+    /**
+     * Fetch a variants page of the expanded stock and append the rows on success.
+     * @param page 1-based page to request; defaults to the last successful page.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    private loadStockVariants(page: number = this.variantPage): void {
+        const stockCode = this.expandedStockCode;
+        if (!stockCode || this.isVariantLoading) {
+            return;
+        }
+        this.isVariantLoading = true;
+        this.inventoryService.getStockAgingReportVariants(stockCode, this.buildFilterPayload(), page, this.variantCount)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                this.isVariantLoading = false;
+                if (this.expandedStockCode !== stockCode) {
+                    this.cdr.detectChanges();
+                    return;
+                }
+                const raw: any = response as any;
+                const body = raw?.body ?? raw;
+                const isSuccess = !raw?.status || raw?.status === "success";
+                if (isSuccess && body) {
+                    this.variantTotals = body?.totals ?? null;
+                    this.variantRows = [...this.variantRows, ...(body?.items?.results ?? [])];
+                    this.variantTotalPages = body?.items?.totalPages ?? 0;
+                    this.variantPage = body?.items?.page ?? page;
+                } else {
+                    this.toaster.showSnackBar("error", raw?.message);
+                }
+                this.cdr.detectChanges();
+            }, () => {
+                this.isVariantLoading = false;
+                this.cdr.detectChanges();
+            });
+    }
+
+    /**
+     * Open the transaction-details aside for a stock row, or a variant row when `variant` is passed.
+     * @param item Parent stock row.
+     * @param variant Variant row when the click came from the expand table.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    public openDetailsAside(item: StockAgingRow, variant?: StockAgingVariantRow): void {
+        const stockCode = this.getStockCode(item);
+        if (!stockCode) {
+            return;
+        }
+        this.asideStockCode = stockCode;
+        this.asideVariantUniqueName = variant?.variantUniqueName ?? '';
+        this.detailData = null;
+        this.detailTransactions = [];
+        this.detailPage = 1;
+        this.detailTotalPages = 0;
+        if (!this.stockDetailsAsideRef && this.stockDetailsAside) {
+            this.stockDetailsAsideRef = this.dialog.open(this.stockDetailsAside, {
+                ...ASIDE_PANE_CONFIG,
+                width: '80vw',
+                maxWidth: '80vw',
+                panelClass: 'sar-details-aside',
+            });
+            this.stockDetailsAsideRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(() => {
+                this.stockDetailsAsideRef = undefined;
+                this.asideStockCode = '';
+                this.asideVariantUniqueName = '';
+                this.detailData = null;
+                this.detailTransactions = [];
+            });
+        }
+        this.loadStockDetails();
+    }
+
+    /**
+     * Load the next details page once the aside list is scrolled near its bottom.
+     * @param event Scroll event of the aside list container.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    public onDetailScroll(event: Event): void {
+        const element = event?.target as HTMLElement;
+        if (!element || this.isDetailLoading || !this.detailTotalPages || this.detailPage >= this.detailTotalPages) {
+            return;
+        }
+        const reachedBottom = (element.scrollTop + element.clientHeight) >= (element.scrollHeight - this.detailScrollThreshold);
+        if (reachedBottom) {
+            this.loadStockDetails(this.detailPage + 1);
+        }
+    }
+
+    /**
+     * After a details page is rendered, keep fetching while the aside list still does not overflow.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    private queueDetailScrollCheck(): void {
+        setTimeout(() => this.loadMoreDetailsIfNeeded(), 0);
+    }
+
+    /**
+     * Fetch the next details page when the aside scroll area has no overflow yet.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    private loadMoreDetailsIfNeeded(): void {
+        const element = this.detailScrollRef?.nativeElement;
+        if (!element || this.isDetailLoading || !this.detailTotalPages || this.detailPage >= this.detailTotalPages) {
+            return;
+        }
+        const canScroll = element.scrollHeight > (element.clientHeight + 1);
+        if (!canScroll) {
+            this.loadStockDetails(this.detailPage + 1);
+        }
+    }
+
+    /**
+     * Fetch a details page of the aside's transactions and append them on success.
+     * @param page 1-based page to request; defaults to the last successful page.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    private loadStockDetails(page: number = this.detailPage): void {
+        const stockCode = this.asideStockCode;
+        if (!stockCode || this.isDetailLoading) {
+            return;
+        }
+        this.isDetailLoading = true;
+        const payload: any = this.buildFilterPayload();
+        if (this.asideVariantUniqueName) {
+            payload.variantUniqueName = this.asideVariantUniqueName;
+        }
+        this.inventoryService.getStockAgingReportDetails(stockCode, payload, page, this.detailCount)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                this.isDetailLoading = false;
+                if (this.asideStockCode !== stockCode) {
+                    this.cdr.detectChanges();
+                    return;
+                }
+                const raw: any = response as any;
+                const body = raw?.body ?? raw;
+                const isSuccess = !raw?.status || raw?.status === "success";
+                if (isSuccess && body) {
+                    this.detailData = body;
+                    this.detailTransactions = [...this.detailTransactions, ...(body?.transactions?.results ?? [])];
+                    this.detailTotalPages = body?.transactions?.totalPages ?? 0;
+                    this.detailPage = body?.transactions?.page ?? page;
+                    this.queueDetailScrollCheck();
+                } else {
+                    this.toaster.showSnackBar("error", raw?.message);
+                }
+                this.cdr.detectChanges();
+            }, () => {
+                this.isDetailLoading = false;
+                this.cdr.detectChanges();
+            });
+    }
+
+    /**
+     * Colour class for an age-bucket badge so it matches its summary card.
+     * @param range Bucket label carried by the transaction.
+     * @returns The badge class, or an empty string for an unknown bucket.
+     * @memberof StockAgingReportComponent
+     */
+    public getAgeBucketClass(range: string): string {
+        // Matched against the buckets of the detail response, whose labels are the
+        // ones carried by its transactions; the header labels can differ by a day
+        // when the ranges were edited locally.
+        const ranges = this.detailData?.bucketSummary?.length
+            ? this.detailData.bucketSummary.map(bucket => bucket.range)
+            : this.bucketRanges;
+        const index = ranges?.indexOf(range) ?? -1;
+        return index > -1 ? (this.bucketBadgeClasses[index] ?? '') : '';
+    }
+
+    /**
+     * Resolve the stock identifier used by the detail API for a report row.
+     * @param item Report row.
+     * @returns The stock unique name, or an empty string when unavailable.
+     * @memberof StockAgingReportComponent
+     */
+    private getStockCode(item: StockAgingRow): string {
+        return item?.stockUniqueName ?? '';
     }
 
     /**
@@ -617,18 +1040,17 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
         for (const b of this.bucketCols) {
             leafBucketIds.push(b.qtyColId, b.valueColId);
         }
-        this.displayedColumns = [...this.baseColumns.map(c => c.colId), ...leafBucketIds];
-        this.totalColspan = this.baseColumns.length + this.bucketCols.length * 2;
+        this.displayedColumns = [...this.baseColumns.map(c => c.colId), ...leafBucketIds, ...this.trailingColumns.map(c => c.colId)];
+        this.totalColspan = this.baseColumns.length + this.trailingColumns.length + this.bucketCols.length * 2;
 
-        const nonSrCount = this.totalColspan - 1;
-        const base = nonSrCount > 0 ? (100 - this.srColWidthPct) / nonSrCount : 0;
-        const maxShift = Math.max(0, base - this.uomMinWidthPct);
-        const shift = this.showStockNameSearchInput ? Math.min(this.stockNameSearchExtraPct, maxShift) : 0;
+        const flexibleColumnCount = this.totalColspan - 3;
+        const fixedColumnsWidth = this.srColWidthPct * 2 + this.stockNameSearchExtraPct;
+        const base = flexibleColumnCount > 0 ? (100 - fixedColumnsWidth) / flexibleColumnCount : 0;
         this.columnWidths = {
             sr: this.srColWidthPct,
             base,
-            stockName: base + shift,
-            uom: base - shift,
+            stockName: this.stockNameSearchExtraPct,
+            uom: this.srColWidthPct,
             bucketGroup: base * 2,
         };
     }
@@ -708,6 +1130,7 @@ export class StockAgingReportComponent implements OnInit, OnDestroy {
      * @memberof StockAgingReportComponent
      */
     public ngOnDestroy(): void {
+        this.stockDetailsAsideRef?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

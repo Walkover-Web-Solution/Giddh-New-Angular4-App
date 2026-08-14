@@ -36,6 +36,9 @@
     "third_interval": "तिसरा मध्यांतर",
     "last_interval": "शेवटचा मध्यांतर",
     "aging_dropdown_error": "चौथा स्तंभ 5 व्या पेक्षा कमी आणि 5 वा 6 वा कमी असणे आवश्यक आहे",
+    "aging_range_error_min": "[INTERVAL] हा [MIN] पेक्षा मोठा असावा",
+    "aging_range_error_max": "[INTERVAL] हा [MAX] पेक्षा लहान असावा",
+    "aging_range_error_between": "[INTERVAL] हा [MIN] पेक्षा मोठा आणि [MAX] पेक्षा लहान असावा",
     "customer_category_options": {
         "opening_balance": "प्रारंभिक शिल्लक",
         "sales": "विक्री",
