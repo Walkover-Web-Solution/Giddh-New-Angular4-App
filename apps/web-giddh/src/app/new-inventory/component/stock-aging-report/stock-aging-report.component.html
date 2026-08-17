@@ -213,21 +213,25 @@
                 <ng-container matColumnDef="stockName">
                     <th mat-header-cell *matHeaderCellDef [style.width.%]="columnWidths.stockName">{{ localeData.item_name }}</th>
                     <td mat-cell *matCellDef="let item" [style.width.%]="columnWidths.stockName" class="text-ellipsis">
-                        <a
-                            href="javascript:void(0);"
-                            class="sar-stock-name-link text-color-inherit overflow-hidden d-flex align-items-center justify-content-between column-gap-05 w-100"
-                            [attr.aria-expanded]="isStockExpanded(item)"
-                            [attr.aria-label]="localeData.variant_type + ' ' + item?.stockName"
-                            (click)="toggleStockDetails(item)"
-                        >
+                        @if (item?.hasVariants) {
+                            <a
+                                href="javascript:void(0);"
+                                class="sar-stock-name-link text-color-inherit overflow-hidden d-flex align-items-center justify-content-between column-gap-05 w-100"
+                                [attr.aria-expanded]="isStockExpanded(item)"
+                                [attr.aria-label]="localeData.variant_type + ' ' + item?.stockName"
+                                (click)="toggleStockDetails(item)"
+                            >
+                                <span class="text-ellipsis" [matTooltip]="item?.stockName" matTooltipPosition="above">{{ item?.stockName }}</span>
+                                <span
+                                    class="icon-arrow-down font-size-12 flex-shrink-0 hover-target"
+                                    [ngClass]="{ 'rotate-180': isStockExpanded(item) }"
+                                    [matTooltip]="localeData.variant_type"
+                                    matTooltipPosition="above"
+                                ></span>
+                            </a>
+                        } @else {
                             <span class="text-ellipsis" [matTooltip]="item?.stockName" matTooltipPosition="above">{{ item?.stockName }}</span>
-                            <span
-                                class="icon-arrow-down font-size-12 flex-shrink-0 hover-target"
-                                [ngClass]="{ 'rotate-180': isStockExpanded(item) }"
-                                [matTooltip]="localeData.variant_type"
-                                matTooltipPosition="above"
-                            ></span>
-                        </a>
+                        }
                     </td>
                     <td mat-footer-cell *matFooterCellDef class="font-weight-semibold" [style.width.%]="columnWidths.stockName">
                         {{ commonLocaleData?.app_total }}
@@ -359,19 +363,6 @@
                                                 <col [style.width.%]="columnWidths.base" />
                                             }
                                         </colgroup>
-                                        <!-- <thead>
-                                            <tr>
-                                                <th class="text-center">{{ localeData.sr }}</th>
-                                                <th class="text-left">{{ localeData.variant_name }}</th>
-                                                <th class="text-left">{{ localeData.uom }}</th>
-                                                @for (col of bucketCols; track col.range) {
-                                                    <th class="text-right">{{ commonLocaleData?.app_quantity }}</th>
-                                                    <th class="text-right">{{ commonLocaleData?.app_value }}</th>
-                                                }
-                                                <th class="text-right">{{ localeData.total_qty }}</th>
-                                                <th class="text-right">{{ localeData.total_value }}</th>
-                                            </tr>
-                                        </thead> -->
                                         <tbody>
                                             @for (variant of variantRows; track variant.variantUniqueName; let i = $index; let last = $last) {
                                                 <tr [class.sar-detail-table__row--last]="last">
@@ -489,9 +480,6 @@
                                             </tr>
                                         </table>
                                     </div>
-                                }
-                                @if (isVariantLoading) {
-                                    <div class="sar-detail-panel__loading font-size-12 border-top text-center py-1">{{ commonLocaleData?.app_loading }}</div>
                                 }
                             </div>
                         }

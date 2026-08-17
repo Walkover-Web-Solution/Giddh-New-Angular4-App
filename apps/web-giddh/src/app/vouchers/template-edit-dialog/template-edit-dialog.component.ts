@@ -93,6 +93,45 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * True when the template name is empty.
+   *
+   * @readonly
+   * @type {boolean}
+   * @memberof TemplateEditDialogComponent
+   */
+  public get isTemplateNameMissing(): boolean {
+    return !this.customTemplate?.name?.trim();
+  }
+
+  /**
+   * Total validation errors shown on the save button badge (name + Note 1).
+   *
+   * @readonly
+   * @type {number}
+   * @memberof TemplateEditDialogComponent
+   */
+  public get templateSaveErrorCount(): number {
+    return (this.isTemplateNameMissing ? 1 : 0) + this.message1CharacterLimitErrorCount;
+  }
+
+  /**
+   * Tooltip listing the current save-blocking errors.
+   *
+   * @readonly
+   * @type {string}
+   * @memberof TemplateEditDialogComponent
+   */
+  public get templateSaveErrorTooltip(): string {
+    const errors: string[] = [];
+    if (this.isTemplateNameMissing) {
+      errors.push(this.localeData?.please_enter_template_name);
+    } else if (this.message1CharacterLimitErrorCount) {
+      errors.push(this.localeData?.message1_character_limit_exceeded);
+    }
+    return errors.join(', ');
+  }
+
+  /**
    * Closes the dialog.
    *
    * @memberof TemplateEditDialogComponent
@@ -126,6 +165,10 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     let copiedTemplate = cloneDeep(data);
     if (!data.name) {
       this.toasty.errorToast(this.localeData?.please_enter_template_name);
+      return;
+    }
+    if (this.message1CharacterLimitErrorCount) {
+      this.toasty.errorToast(this.localeData?.message1_character_limit_exceeded);
       return;
     }
 
@@ -237,6 +280,11 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
       this.toasty.errorToast(this.localeData?.please_enter_template_name);
       return;
     }
+    if (this.message1CharacterLimitErrorCount) {
+      this.toasty.errorToast(this.localeData?.message1_character_limit_exceeded);
+      return;
+    }
+
     data.updatedAt = null;
     data.updatedBy = null;
     if (data?.sections?.header?.data?.['address']) {
