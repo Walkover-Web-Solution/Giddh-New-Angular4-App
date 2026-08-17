@@ -415,6 +415,9 @@
                                             <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                                 {{ commonLocaleData?.app_delete }}
                                             </button>
+                                            <button mat-menu-item (click)="downloadSignedInvoicePdf(element)">
+                                                {{ localeData?.download_signed_invoice }}
+                                            </button>
                                         </mat-menu>
                                     </ng-container>
                                 </td>
@@ -840,6 +843,9 @@
                                             </button>
                                             <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                                 {{ commonLocaleData?.app_delete }}
+                                            </button>
+                                            <button mat-menu-item (click)="downloadSignedInvoicePdf(element)">
+                                                {{ localeData?.download_signed_invoice }}
                                             </button>
                                         </mat-menu>
                                     </ng-container>
@@ -1804,6 +1810,9 @@
                                         <button mat-menu-item (click)="generateRecurringVoucher(element)">
                                             {{ localeData?.generate_recurring }}
                                         </button>
+                                        <button mat-menu-item (click)="downloadSignedInvoicePdf(element)">
+                                            {{ localeData?.download_signed_invoice }}
+                                        </button>
                                     </mat-menu>
                                 </td>
                             </ng-container>
@@ -2241,6 +2250,9 @@
                                         </button>
                                         <button mat-menu-item (click)="generateRecurringVoucher(element)">
                                             {{ localeData?.generate_recurring }}
+                                        </button>
+                                        <button mat-menu-item (click)="downloadSignedInvoicePdf(element)">
+                                            {{ localeData?.download_signed_invoice }}
                                         </button>
                                     </mat-menu>
                                 </td>
@@ -3275,6 +3287,9 @@
                                             </button>
                                             <button mat-menu-item (click)="generateRecurringVoucher(element)">
                                                 {{ localeData?.generate_recurring }}
+                                            </button>
+                                            <button mat-menu-item (click)="downloadSignedInvoicePdf(element)">
+                                                {{ localeData?.download_signed_invoice }}
                                             </button>
                                         }
                                     </mat-menu>
@@ -5849,6 +5864,9 @@
                                         </button>
                                         <button mat-menu-item (click)="deleteVoucherDialog(element)">
                                             {{ commonLocaleData?.app_delete }}
+                                        </button>
+                                        <button mat-menu-item (click)="downloadSignedInvoicePdf(element)">
+                                            {{ localeData?.download_signed_invoice }}
                                         </button>
                                     </mat-menu>
                                 </td>

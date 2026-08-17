@@ -4088,7 +4088,11 @@ public generateRecurringVoucher(voucher: any): void {
         ).subscribe({
             next: (pdfBlob: Blob) => {
                 this.closeDscPinDialog();
-                this.downloadBlob(pdfBlob, `${this.currentVoucher?.voucherNumber || 'signed-invoice'}.pdf`);
+                let fileName = this.currentVoucher?.voucherNumber ;
+                if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+                    fileName = this.currentVoucher.proformaNumber || this.currentVoucher.estimateNumber;
+                }
+                this.downloadBlob(pdfBlob, `${fileName || 'signed-invoice'}.pdf`);
                 this.toasterService.showSnackBar('success', this.localeData?.dsc_pin_dialog?.download_success);
             },
             error: (error) => {
