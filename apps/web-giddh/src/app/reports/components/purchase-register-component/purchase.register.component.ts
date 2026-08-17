@@ -265,7 +265,7 @@ constructor(
 
         this.getSalesPersonList();
         this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
-            this.allOptions.salesPerson = (res as IOption[]) ?? [];
+            this.allOptions.salesPerson = this.withOtherSalesPerson(res as IOption[]);
             this.filteredSalesPersonList.set(this.withOtherSalesPerson(res as IOption[]));
         });
 
@@ -334,7 +334,7 @@ constructor(
                     label: state.name,
                     value: state.code
                 })));
-                this.allOptions.state = this.stateList();
+                this.allOptions.state = this.withOtherState(this.stateList());
                 this.filteredStateList.set(this.withOtherState(this.stateList()));
             }
         });
