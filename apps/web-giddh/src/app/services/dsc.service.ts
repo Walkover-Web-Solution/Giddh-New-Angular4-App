@@ -120,7 +120,7 @@ export class DscService {
             ...voucherDetails,
             ...payload
         };
-        const url = `${this.config.apiUrl}${DSC_API.PREPARE}`;
+        const url = `${this.config.apiUrl}${DSC_API.PREPARE.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))}`;
 
         return this.http.post(url, model).pipe(
             map((res: BaseResponse<DscPrepareResponse, any>) => {
@@ -173,7 +173,7 @@ export class DscService {
      */
     public finishDscSigning(nonce: string, signature: string): Observable<Blob> {
         const model: DscFinishRequest = { nonce, signature };
-        const url = `${this.config.apiUrl}${DSC_API.FINISH}`;
+        const url = `${this.config.apiUrl}${DSC_API.FINISH.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))}`;
 
         return this.http.post(url, model, { responseType: 'blob' }).pipe(
             map((res: Blob) => {
