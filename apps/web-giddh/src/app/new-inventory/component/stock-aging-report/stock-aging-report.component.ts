@@ -678,6 +678,9 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
      * @memberof StockAgingReportComponent
      */
     public toggleStockDetails(item: StockAgingRow): void {
+        if (!item?.hasVariants) {
+            return;
+        }
         const stockCode = this.getStockCode(item);
         if (!stockCode || this.expandedStockCode === stockCode) {
             this.collapseStockDetails();
@@ -699,6 +702,9 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
      * @memberof StockAgingReportComponent
      */
     public isStockExpanded(item: StockAgingRow): boolean {
+        if (!item?.hasVariants) {
+            return false;
+        }
         const stockCode = this.getStockCode(item);
         return !!stockCode && this.expandedStockCode === stockCode;
     }
@@ -1092,6 +1098,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         // <age-range-editor> via the [vendorCustomerType] input. We only
         // refetch the report so the backend can regroup by the new buckets.
         this.getReport();
+        this.getReportTotals();
         this.onAgingRangeClose();
     }
 
@@ -1120,7 +1127,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
             `0-${a} days`,
             `${a + 1}-${b} days`,
             `${b + 1}-${c} days`,
-            `${c + 1}+ days`,
+            `${c}+ days`,
         ];
     }
 

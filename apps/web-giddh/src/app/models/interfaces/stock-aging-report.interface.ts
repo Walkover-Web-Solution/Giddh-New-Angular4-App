@@ -13,6 +13,7 @@ export interface StockAgingRow {
     totalQty: number;
     totalAmount: number;
     buckets: StockAgingBucket[];
+    hasVariants?: boolean;
 }
 
 /** One variant row returned by the per-stock variants API. */

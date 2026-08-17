@@ -265,8 +265,8 @@ constructor(
 
         this.getSalesPersonList();
         this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
-            this.allOptions.salesPerson = (res as IOption[]) ?? [];
-            this.filteredSalesPersonList.set(res as IOption[]);
+            this.allOptions.salesPerson = this.withOtherSalesPerson(res as IOption[]);
+            this.filteredSalesPersonList.set(this.withOtherSalesPerson(res as IOption[]));
         });
 
         this.accountList$.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
@@ -278,11 +278,13 @@ constructor(
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 if (!search) {
                     this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList.set(res as IOption[]);
+                        this.filteredSalesPersonList.set(this.withOtherSalesPerson(res as IOption[]));
                     });
                 } else {
                     this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList.set(res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[]);
+                        this.filteredSalesPersonList.set(this.withOtherSalesPerson(
+                            res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[]
+                        ));
                     });
                 }
             });
@@ -311,9 +313,11 @@ constructor(
         this.stateSearch.valueChanges.pipe(debounceTime(200),
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 if (!search) {
-                    this.filteredStateList.set(this.stateList());
+                    this.filteredStateList.set(this.withOtherState(this.stateList()));
                 } else {
-                    this.filteredStateList.set(this.stateList()?.filter(state => state?.label?.toLowerCase()?.includes(search?.toLowerCase())));
+                    this.filteredStateList.set(this.withOtherState(
+                        this.stateList()?.filter(state => state?.label?.toLowerCase()?.includes(search?.toLowerCase()))
+                    ));
                 }
             });
 
@@ -330,8 +334,8 @@ constructor(
                     label: state.name,
                     value: state.code
                 })));
-                this.allOptions.state = this.stateList();
-                this.filteredStateList.set(this.stateList());
+                this.allOptions.state = this.withOtherState(this.stateList());
+                this.filteredStateList.set(this.withOtherState(this.stateList()));
             }
         });
 
@@ -341,7 +345,7 @@ constructor(
                 this.loadStates(countryCode);
             } else {
                 this.stateList.set([]);
-                this.filteredStateList.set([]);
+                this.filteredStateList.set(this.withOtherState([]));
             }
         });
 
@@ -900,6 +904,30 @@ constructor(
     public openSalesPersonDialog(): void {
         const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
         dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
+    }
+
+    /**
+     * Prepends the Other sales person option used by the dropdown.
+     *
+     * @private
+     * @param {IOption[]} list Sales person options from the API
+     * @returns {IOption[]} List with Other first
+     * @memberof PurchaseRegisterComponent
+     */
+    private withOtherSalesPerson(list: IOption[]): IOption[] {
+        return [{ label: 'Other', value: 'OTHER_SALES_PERSON' }, ...(list ?? [])];
+    }
+
+    /**
+     * Prepends the Other state option used by the dropdown.
+     *
+     * @private
+     * @param {IOption[]} list State options from the API
+     * @returns {IOption[]} List with Other first
+     * @memberof PurchaseRegisterComponent
+     */
+    private withOtherState(list: IOption[]): IOption[] {
+        return [{ label: 'Other', value: 'OTHER_STATE' }, ...(list ?? [])];
     }
 
     /**
