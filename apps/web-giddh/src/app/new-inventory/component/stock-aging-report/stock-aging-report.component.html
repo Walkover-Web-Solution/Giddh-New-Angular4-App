@@ -296,7 +296,7 @@
                             {{ commonLocaleData?.app_quantity }}
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
-                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item); $event.stopPropagation()">
+                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, undefined, i); $event.stopPropagation()">
                                 <amount-field
                                     [amount]="getBucket(item?.buckets, i)?.quantity"
                                     [currencySymbol]="false"
@@ -318,7 +318,7 @@
                             {{ commonLocaleData?.app_value }}
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
-                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item); $event.stopPropagation()">
+                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, undefined, i); $event.stopPropagation()">
                                 <amount-field
                                     [amount]="getBucket(item?.buckets, i)?.value"
                                     [currencySymbol]="false"
@@ -373,7 +373,7 @@
                                                     <td class="text-left">{{ variant?.stockUnitCode }}</td>
                                                     @for (col of bucketCols; track col.range; let bucketIndex = $index) {
                                                         <td class="text-right">
-                                                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, variant)">
+                                                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, variant, bucketIndex)">
                                                                 <amount-field
                                                                     [amount]="getBucket(variant?.buckets, bucketIndex)?.quantity"
                                                                     [currencySymbol]="false"
@@ -382,7 +382,7 @@
                                                             </span>
                                                         </td>
                                                         <td class="text-right">
-                                                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, variant)">
+                                                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, variant, bucketIndex)">
                                                                 <amount-field
                                                                     [amount]="getBucket(variant?.buckets, bucketIndex)?.value"
                                                                     [currencySymbol]="false"
