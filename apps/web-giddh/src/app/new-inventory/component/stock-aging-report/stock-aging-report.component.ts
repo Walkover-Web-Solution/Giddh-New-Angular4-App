@@ -191,13 +191,15 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
     /** Total details pages reported by the details API. */
     private detailTotalPages: number = 0;
     /** Transactions requested per details page. */
-    private readonly detailCount: number = 10;
+    private readonly detailCount: number = PAGINATION_LIMIT;
     /** Distance in px from the bottom of a scroll list at which the next page is fetched. */
     private readonly detailScrollThreshold: number = 40;
     /** Stock unique name whose transactions are open in the aside. */
     private asideStockCode: string = '';
     /** Variant unique name sent with the details API when opened from a variant row. */
     private asideVariantUniqueName: string = '';
+    /** Aging interval (`first`…`fourth`) sent with the details API when opened from a bucket cell. */
+    private asideInterval: string = '';
     /** Scroll container of the aside transaction list. */
     @ViewChild('detailScroll') private detailScrollRef?: ElementRef<HTMLElement>;
     /** Aside template for the stock / variant transaction breakup. */
@@ -850,16 +852,18 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
      * Open the transaction-details aside for a stock row, or a variant row when `variant` is passed.
      * @param item Parent stock row.
      * @param variant Variant row when the click came from the expand table.
+     * @param intervalIndex 0-based bucket index when the click came from a Qty/Value cell.
      * @returns void
      * @memberof StockAgingReportComponent
      */
-    public openDetailsAside(item: StockAgingRow, variant?: StockAgingVariantRow): void {
+    public openDetailsAside(item: StockAgingRow, variant?: StockAgingVariantRow, intervalIndex?: number): void {
         const stockCode = this.getStockCode(item);
         if (!stockCode) {
             return;
         }
         this.asideStockCode = stockCode;
         this.asideVariantUniqueName = variant?.variantUniqueName ?? '';
+        this.asideInterval = intervalIndex != null ? (this.intervalOrdinals[intervalIndex] ?? '') : '';
         this.detailData = null;
         this.detailTransactions = [];
         this.detailPage = 1;
@@ -875,6 +879,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
                 this.stockDetailsAsideRef = undefined;
                 this.asideStockCode = '';
                 this.asideVariantUniqueName = '';
+                this.asideInterval = '';
                 this.detailData = null;
                 this.detailTransactions = [];
             });
@@ -939,6 +944,9 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         const payload: any = this.buildFilterPayload();
         if (this.asideVariantUniqueName) {
             payload.variantUniqueName = this.asideVariantUniqueName;
+        }
+        if (this.asideInterval) {
+            payload.interval = this.asideInterval;
         }
         this.inventoryService.getStockAgingReportDetails(stockCode, payload, page, this.detailCount)
             .pipe(takeUntil(this.destroyed$))
@@ -1127,7 +1135,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
             `0-${a} days`,
             `${a + 1}-${b} days`,
             `${b + 1}-${c} days`,
-            `${c}+ days`,
+            `${c + 1}+ days`,
         ];
     }
 
