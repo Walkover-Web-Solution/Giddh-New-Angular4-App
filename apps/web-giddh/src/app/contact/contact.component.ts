@@ -1153,6 +1153,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                 subject: this.messageBody.subject,
                 message: this.messageBody.msg,
                 accounts: this.selectedCheckedContacts,
+                includeMobileNumber: true,
+                includeState: true,
+                includeTaxNumber: true,
             },
             params: {
                 from: this.fromDate,
