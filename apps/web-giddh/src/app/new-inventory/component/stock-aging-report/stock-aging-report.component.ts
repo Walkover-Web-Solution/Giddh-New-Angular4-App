@@ -1018,7 +1018,6 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         if (!url) {
             return;
         }
-        this.stockDetailsAsideRef?.close();
         window.open(url, '_blank');
     }
 
