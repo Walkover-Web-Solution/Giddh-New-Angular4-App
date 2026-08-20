@@ -17,7 +17,7 @@ import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { GeneralService } from "../../../services/general.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { OrganizationType } from "../../../models/user-login-state";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
 import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
@@ -174,6 +174,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
     public readonly detailDisplayedColumns: readonly string[] = [
         'purchaseDate',
         'purchaseInvoice',
+        'voucherNumber',
         'qtyInward',
         'qtyOutward',
         'balanceQty',
@@ -216,6 +217,23 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
     private pendingWidthSync = false;
     /** Age-bucket badge classes, ordered to match the colours of the summary cards. */
     private readonly bucketBadgeClasses: readonly string[] = ['opening-box', 'sales-purchase', 'payment-receipt', 'due-box'];
+    /** Static in-app routes for transaction types that do not open a voucher preview. */
+    private readonly transactionListRoutes: Readonly<Record<string, string>> = {
+        OPENING_BALANCE: '/pages/inventory/v2/stock-balance',
+        JOURNAL: '/pages/journal-voucher',
+        MANUFACTURED: '/pages/inventory/v2/manufacturing/list',
+        RECEIPT_NOTE: '/pages/inventory/v2/branch-transfer/list',
+        DELIVERY_NOTE: '/pages/inventory/v2/branch-transfer/list',
+    };
+    /** Voucher-view path segment for types that open a specific voucher. */
+    private readonly voucherPreviewPaths: Readonly<Record<string, string>> = {
+        PURCHASE: 'purchase',
+        SALES: 'sales',
+        SALES_CREDIT_NOTE: 'credit-note',
+        PURCHASE_CREDIT_NOTE: 'credit-note',
+        SALES_DEBIT_NOTE: 'debit-note',
+        PURCHASE_DEBIT_NOTE: 'debit-note',
+    };
 
     /**
      * Cycle bucket-column sort (asc → desc → off) and refetch.
@@ -226,10 +244,10 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
      */
     public toggleBucketSort(intervalIndex: number, sortBy: 'qty' | 'value'): void {
         const interval = this.intervalOrdinals[intervalIndex] ?? '';
-        const same = this.bucketSort
+        const isSameSortColumn = this.bucketSort
             && this.bucketSort.intervalIndex === intervalIndex
             && this.bucketSort.sortBy === sortBy;
-        if (!same) {
+        if (!isSameSortColumn) {
             this.bucketSort = { sortBy, sort: 'asc', interval, intervalIndex };
         } else if (this.bucketSort!.sort === 'asc') {
             this.bucketSort = { ...this.bucketSort!, sort: 'desc' };
@@ -308,8 +326,12 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         private agingReportActions: AgingReportActions,
         private route: ActivatedRoute,
         private dialog: MatDialog,
+        private router: Router,
     ) {
-        this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
+        this.agingDropDownoptions$ = this.store.pipe(
+            select(state => state.agingreport.agingDropDownoptions),
+            takeUntil(this.destroyed$)
+        );
     }
 
     /**
@@ -347,26 +369,26 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
 
         // Local search filtering for the branch dropdown
         this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            const clone = cloneDeep(this.allBranches);
+            const branchOptions = cloneDeep(this.allBranches);
             this.branches = search
-                ? clone?.filter((b: any) => (b?.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1))
-                : clone;
+                ? branchOptions?.filter((branch: any) => branch?.name?.toLowerCase()?.includes(search?.toLowerCase()))
+                : branchOptions;
         });
 
         // Local search filtering for the warehouse dropdown
         this.warehousesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            const clone = cloneDeep(this.currentWarehouses);
+            const warehouseOptions = cloneDeep(this.currentWarehouses);
             this.warehouses = search
-                ? clone?.filter((w: any) => (w?.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1))
-                : clone;
+                ? warehouseOptions?.filter((warehouse: any) => warehouse?.name?.toLowerCase()?.includes(search?.toLowerCase()))
+                : warehouseOptions;
         });
 
         // Local search filtering for the stock group dropdown
         this.stockGroupsDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            const clone = cloneDeep(this.stockGroups);
+            const stockGroupOptions = cloneDeep(this.stockGroups);
             this.filteredStockGroups = search
-                ? clone?.filter((g: IOption) => (g?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1))
-                : clone;
+                ? stockGroupOptions?.filter((stockGroup: IOption) => stockGroup?.label?.toLowerCase()?.includes(search?.toLowerCase()))
+                : stockGroupOptions;
         });
 
         // Debounced item-name search — refetches the report with the value
@@ -395,9 +417,9 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         // Load persisted aging boundaries for the inventory context and
         // hydrate the local editor options from the store as they arrive.
         this.store.dispatch(this.agingReportActions.GetDueRange(this.INVENTORY_AGING_TYPE));
-        this.agingDropDownoptions$.pipe(takeUntil(this.destroyed$)).subscribe(opts => {
-            if (opts && (opts.fourth || opts.fifth || opts.sixth)) {
-                this.agingOptions = cloneDeep(opts);
+        this.agingDropDownoptions$.pipe(takeUntil(this.destroyed$)).subscribe(options => {
+            if (options && (options.fourth || options.fifth || options.sixth)) {
+                this.agingOptions = cloneDeep(options);
                 this.setBucketRanges(this.buildBucketRangesFromOptions(this.agingOptions));
                 this.bucketRangesOverridden = true;
                 this.cdr.detectChanges();
@@ -423,8 +445,8 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
                 totalQty: this.localeData?.total_qty,
                 totalValue: this.commonLocaleData?.app_total_amount
             };
-            this.baseColumns = this.baseColumns.map(col => ({ ...col, label: labels[col.colId] ?? col.label }));
-            this.trailingColumns = this.trailingColumns.map(col => ({ ...col, label: labels[col.colId] ?? col.label }));
+            this.baseColumns = this.baseColumns.map(column => ({ ...column, label: labels[column.colId] ?? column.label }));
+            this.trailingColumns = this.trailingColumns.map(column => ({ ...column, label: labels[column.colId] ?? column.label }));
         }
     }
 
@@ -503,13 +525,13 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         const branches = this.allBranches ?? [];
         if (this.selectedBranch.length) {
             this.warehouses = branches
-                .filter((b: any) => this.selectedBranch.includes(b?.uniqueName))
-                .flatMap((b: any) => b?.warehouses ?? []);
+                .filter((branch: any) => this.selectedBranch.includes(branch?.uniqueName))
+                .flatMap((branch: any) => branch?.warehouses ?? []);
         } else if (this.isCompany) {
-            this.warehouses = branches.flatMap((b: any) => b?.warehouses ?? []);
+            this.warehouses = branches.flatMap((branch: any) => branch?.warehouses ?? []);
         } else {
-            const current = branches.find((b: any) => b?.uniqueName === this.generalService.currentBranchUniqueName);
-            this.warehouses = current?.warehouses ?? [];
+            const currentBranch = branches.find((branch: any) => branch?.uniqueName === this.generalService.currentBranchUniqueName);
+            this.warehouses = currentBranch?.warehouses ?? [];
         }
         this.currentWarehouses = this.warehouses;
     }
@@ -626,21 +648,21 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
                 this.isFirstLoad = false;
                 // API may return either a BaseResponse-wrapped body ({status, body})
                 // or raw payload (dev endpoint). Support both.
-                const raw: any = response as any;
-                const body = raw?.body ?? raw;
-                const isSuccess = !raw?.status || raw?.status === "success";
-                if (isSuccess && body && (body.totals || body.items)) {
-                    this.reportData = body;
+                const apiResponse: any = response as any;
+                const responseBody = apiResponse?.body ?? apiResponse;
+                const isSuccess = !apiResponse?.status || apiResponse?.status === "success";
+                if (isSuccess && responseBody && (responseBody.totals || responseBody.items)) {
+                    this.reportData = responseBody;
                     const buckets = this.reportData?.totals?.buckets;
                     if (Array.isArray(buckets) && buckets.length && !this.bucketRangesOverridden) {
-                        this.setBucketRanges(buckets.map(b => b.range));
+                        this.setBucketRanges(buckets.map(bucket => bucket.range));
                     }
                     this.totalItems = this.reportData?.items?.totalItems ?? 0;
                     this.page = this.reportData?.items?.page ?? this.page;
                     this.pendingWidthSync = true;
                 } else {
                     this.reportData = null;
-                    this.toaster.showSnackBar("error", raw?.message);
+                    this.toaster.showSnackBar("error", apiResponse?.message);
                 }
                 this.cdr.detectChanges();
             }, () => {
@@ -659,14 +681,14 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         this.inventoryService.getStockAgingReportTotals(payload)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
-                const raw: any = response as any;
-                const body = raw?.body ?? raw;
-                const isSuccess = !raw?.status || raw?.status === "success";
-                if (isSuccess && body) {
-                    this.reportTotals = body?.totals || body;
+                const apiResponse: any = response as any;
+                const responseBody = apiResponse?.body ?? apiResponse;
+                const isSuccess = !apiResponse?.status || apiResponse?.status === "success";
+                if (isSuccess && responseBody) {
+                    this.reportTotals = responseBody?.totals || responseBody;
                     const buckets = this.reportTotals?.buckets;
                     if (Array.isArray(buckets) && buckets.length && !this.bucketRangesOverridden) {
-                        this.setBucketRanges(buckets.map(b => b.range));
+                        this.setBucketRanges(buckets.map(bucket => bucket.range));
                     }
                 }
                 this.cdr.detectChanges();
@@ -769,11 +791,11 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         if (!table) {
             return;
         }
-        const row = table.querySelector('tr.mat-mdc-row:not(.sar-detail-row)');
-        if (!row) {
+        const dataRow = table.querySelector('tr.mat-mdc-row:not(.sar-detail-row)');
+        if (!dataRow) {
             return;
         }
-        const cells = Array.from(row.querySelectorAll(':scope > td.mat-mdc-cell')) as HTMLElement[];
+        const cells = Array.from(dataRow.querySelectorAll(':scope > td.mat-mdc-cell')) as HTMLElement[];
         if (!cells.length) {
             return;
         }
@@ -782,8 +804,8 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         const edges = cells.map((cell) => cell.getBoundingClientRect().left - tableLeft);
         edges.push(cells[cells.length - 1].getBoundingClientRect().right - tableLeft);
         const widths = [];
-        for (let i = 0; i < edges.length - 1; i++) {
-            widths.push(Math.round(edges[i + 1] - edges[i]));
+        for (let edgeIndex = 0; edgeIndex < edges.length - 1; edgeIndex++) {
+            widths.push(Math.round(edges[edgeIndex + 1] - edges[edgeIndex]));
         }
         const changed = widths.length !== this.nestedColWidths.length
             || widths.some((width, index) => width !== this.nestedColWidths[index]);
@@ -830,16 +852,16 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
                     this.cdr.detectChanges();
                     return;
                 }
-                const raw: any = response as any;
-                const body = raw?.body ?? raw;
-                const isSuccess = !raw?.status || raw?.status === "success";
-                if (isSuccess && body) {
-                    this.variantTotals = body?.totals ?? null;
-                    this.variantRows = [...this.variantRows, ...(body?.items?.results ?? [])];
-                    this.variantTotalPages = body?.items?.totalPages ?? 0;
-                    this.variantPage = body?.items?.page ?? page;
+                const apiResponse: any = response as any;
+                const responseBody = apiResponse?.body ?? apiResponse;
+                const isSuccess = !apiResponse?.status || apiResponse?.status === "success";
+                if (isSuccess && responseBody) {
+                    this.variantTotals = responseBody?.totals ?? null;
+                    this.variantRows = [...this.variantRows, ...(responseBody?.items?.results ?? [])];
+                    this.variantTotalPages = responseBody?.items?.totalPages ?? 0;
+                    this.variantPage = responseBody?.items?.page ?? page;
                 } else {
-                    this.toaster.showSnackBar("error", raw?.message);
+                    this.toaster.showSnackBar("error", apiResponse?.message);
                 }
                 this.cdr.detectChanges();
             }, () => {
@@ -956,23 +978,76 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
                     this.cdr.detectChanges();
                     return;
                 }
-                const raw: any = response as any;
-                const body = raw?.body ?? raw;
-                const isSuccess = !raw?.status || raw?.status === "success";
-                if (isSuccess && body) {
-                    this.detailData = body;
-                    this.detailTransactions = [...this.detailTransactions, ...(body?.transactions?.results ?? [])];
-                    this.detailTotalPages = body?.transactions?.totalPages ?? 0;
-                    this.detailPage = body?.transactions?.page ?? page;
+                const apiResponse: any = response as any;
+                const responseBody = apiResponse?.body ?? apiResponse;
+                const isSuccess = !apiResponse?.status || apiResponse?.status === "success";
+                if (isSuccess && responseBody) {
+                    this.detailData = responseBody;
+                    this.detailTransactions = [...this.detailTransactions, ...(responseBody?.transactions?.results ?? [])];
+                    this.detailTotalPages = responseBody?.transactions?.totalPages ?? 0;
+                    this.detailPage = responseBody?.transactions?.page ?? page;
                     this.queueDetailScrollCheck();
                 } else {
-                    this.toaster.showSnackBar("error", raw?.message);
+                    this.toaster.showSnackBar("error", apiResponse?.message);
                 }
                 this.cdr.detectChanges();
             }, () => {
                 this.isDetailLoading = false;
                 this.cdr.detectChanges();
             });
+    }
+
+    /**
+     * True when the aside transaction row has a known voucher type and can be opened.
+     * @param transaction Aside transaction row.
+     * @returns Whether the row should look and behave as a link.
+     * @memberof StockAgingReportComponent
+     */
+    public isTransactionClickable(transaction: StockAgingTransaction): boolean {
+        return !!this.getTransactionRedirectUrl(transaction);
+    }
+
+    /**
+     * Open the page that matches the transaction voucher type in a new tab.
+     * @param transaction Aside transaction row.
+     * @returns void
+     * @memberof StockAgingReportComponent
+     */
+    public openTransaction(transaction: StockAgingTransaction): void {
+        const url = this.getTransactionRedirectUrl(transaction);
+        if (!url) {
+            return;
+        }
+        this.stockDetailsAsideRef?.close();
+        window.open(url, '_blank');
+    }
+
+    /**
+     * Build the redirect URL for a transaction, or `null` when the type is unknown.
+     * @param transaction Aside transaction row.
+     * @returns The in-app URL, or `null` when the row must stay non-clickable.
+     * @memberof StockAgingReportComponent
+     */
+    private getTransactionRedirectUrl(transaction: StockAgingTransaction): string | null {
+        const voucherType = transaction?.purchaseInvoice;
+        if (!voucherType) {
+            return null;
+        }
+        const listRoute = this.transactionListRoutes[voucherType];
+        if (listRoute) {
+            return listRoute;
+        }
+        const voucherPath = this.voucherPreviewPaths[voucherType];
+        const uniqueName = transaction?.purchaseInvoiceUniqueName;
+        if (!voucherPath || !transaction.isVoucher || !uniqueName) {
+            return null;
+        }
+        const date = transaction?.purchaseDate;
+        let url = `/pages/vouchers/view/${voucherPath}/${uniqueName}?page=1&count=${PAGINATION_LIMIT}`;
+        if (date) {
+            url += `&from=${date}&to=${date}`;
+        }
+        return url;
     }
 
     /**
@@ -1051,21 +1126,25 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
             valueColId: this.bucketColId(range, 'value'),
         }));
         const leafBucketIds: string[] = [];
-        for (const b of this.bucketCols) {
-            leafBucketIds.push(b.qtyColId, b.valueColId);
+        for (const bucketColumn of this.bucketCols) {
+            leafBucketIds.push(bucketColumn.qtyColId, bucketColumn.valueColId);
         }
-        this.displayedColumns = [...this.baseColumns.map(c => c.colId), ...leafBucketIds, ...this.trailingColumns.map(c => c.colId)];
+        this.displayedColumns = [
+            ...this.baseColumns.map(column => column.colId),
+            ...leafBucketIds,
+            ...this.trailingColumns.map(column => column.colId)
+        ];
         this.totalColspan = this.baseColumns.length + this.trailingColumns.length + this.bucketCols.length * 2;
 
         const flexibleColumnCount = this.totalColspan - 3;
         const fixedColumnsWidth = this.srColWidthPct * 2 + this.stockNameSearchExtraPct;
-        const base = flexibleColumnCount > 0 ? (100 - fixedColumnsWidth) / flexibleColumnCount : 0;
+        const baseColumnWidth = flexibleColumnCount > 0 ? (100 - fixedColumnsWidth) / flexibleColumnCount : 0;
         this.columnWidths = {
             sr: this.srColWidthPct,
-            base,
+            base: baseColumnWidth,
             stockName: this.stockNameSearchExtraPct,
             uom: this.srColWidthPct,
-            bucketGroup: base * 2,
+            bucketGroup: baseColumnWidth * 2,
         };
     }
 
@@ -1094,12 +1173,12 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
 
     /**
      * Apply new aging boundaries locally, refetch the report and close the popup.
-     * @param next Updated aging boundaries from the editor.
+     * @param updatedOptions Updated aging boundaries from the editor.
      * @returns void
      * @memberof StockAgingReportComponent
      */
-    public onAgingRangeSave(next: AgeRangeEditorOptions): void {
-        this.agingOptions = { ...next };
+    public onAgingRangeSave(updatedOptions: AgeRangeEditorOptions): void {
+        this.agingOptions = { ...updatedOptions };
         this.setBucketRanges(this.buildBucketRangesFromOptions(this.agingOptions));
         this.bucketRangesOverridden = true;
         // Persistence to the due-days-range endpoint is handled inside
@@ -1123,19 +1202,19 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
 
     /**
      * Build the four bucket-range labels from numeric boundaries (pure helper).
-     * @param opts Numeric boundaries `{ fourth, fifth, sixth }`.
+     * @param options Numeric boundaries `{ fourth, fifth, sixth }`.
      * @returns The four bucket labels in ascending order.
      * @memberof StockAgingReportComponent
      */
-    private buildBucketRangesFromOptions(opts: AgeRangeEditorOptions): string[] {
-        const a = Number(opts.fourth) || 0;
-        const b = Number(opts.fifth) || 0;
-        const c = Number(opts.sixth) || 0;
+    private buildBucketRangesFromOptions(options: AgeRangeEditorOptions): string[] {
+        const firstRangeEnd = Number(options.fourth) || 0;
+        const secondRangeEnd = Number(options.fifth) || 0;
+        const thirdRangeEnd = Number(options.sixth) || 0;
         return [
-            `0-${a} days`,
-            `${a + 1}-${b} days`,
-            `${b + 1}-${c} days`,
-            `${c + 1}+ days`,
+            `0-${firstRangeEnd} days`,
+            `${firstRangeEnd + 1}-${secondRangeEnd} days`,
+            `${secondRangeEnd + 1}-${thirdRangeEnd} days`,
+            `${thirdRangeEnd + 1}+ days`,
         ];
     }
 

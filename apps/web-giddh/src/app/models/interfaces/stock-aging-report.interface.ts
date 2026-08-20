@@ -33,6 +33,8 @@ export interface StockAgingTransaction {
     purchaseDate: string | null;
     purchaseInvoice: string;
     purchaseInvoiceUniqueName: string | null;
+    voucherNumber: string | null;
+    isVoucher: boolean;
     warehouse: string;
     qtyInward: number;
     qtyOutward: number;

@@ -161,24 +161,29 @@
                 </mat-card-content>
             </mat-card>
 
-            @for (b of reportTotals?.buckets; track b.range; let i = $index) {
+            @for (bucket of reportTotals?.buckets; track bucket.range; let bucketIndex = $index) {
                 <mat-card class="sar-summary-card bg-table-background-color border border-radius-8 box-shadow-none">
                     <mat-card-content
                         class="d-flex align-items-center column-gap-2 p-3"
-                        [ngClass]="{ 'opening-box': i === 0, 'sales-purchase': i === 1, 'payment-receipt': i === 2, 'due-box': i === 3 }"
+                        [ngClass]="{
+                            'opening-box': bucketIndex === 0,
+                            'sales-purchase': bucketIndex === 1,
+                            'payment-receipt': bucketIndex === 2,
+                            'due-box': bucketIndex === 3
+                        }"
                     >
                         <div class="flex-grow-1">
-                            <p class="font-size-14 mb-1">{{ b?.range }}</p>
+                            <p class="font-size-14 mb-1">{{ bucket?.range }}</p>
                             <p class="font-size-16 font-weight-semibold mb-1">
                                 <amount-field
-                                    [amount]="b?.value"
+                                    [amount]="bucket?.value"
                                     [currencySymbol]="activeCompanyProfile?.baseCurrencySymbol"
                                     [currencyCode]="false"
                                 ></amount-field>
                             </p>
                             <p class="font-size-14 mb-0">
                                 {{ commonLocaleData?.app_quantity }}:
-                                <amount-field [amount]="b?.quantity" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                                <amount-field [amount]="bucket?.quantity" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                             </p>
                         </div>
                     </mat-card-content>
@@ -188,7 +193,7 @@
     }
 
     <!-- Table -->
-    @if (isFirstLoad) {
+    @if (isFirstLoad && isLoading) {
         <giddh-page-loader [cssClass]="'no-data'"></giddh-page-loader>
     }
     @if (!!reportData?.items?.results?.length || !!searchText) {
@@ -204,8 +209,8 @@
                 <!-- ── Base leaf columns ─────────────────────────────────── -->
                 <ng-container matColumnDef="sr">
                     <th mat-header-cell *matHeaderCellDef class="text-center" [style.width.%]="columnWidths.sr">{{ localeData.sr }}</th>
-                    <td mat-cell *matCellDef="let item; let i = dataIndex" class="text-center" [style.width.%]="columnWidths.sr">
-                        {{ (reportData?.items?.page - 1) * count + i + 1 }}
+                    <td mat-cell *matCellDef="let item; let rowIndex = dataIndex" class="text-center" [style.width.%]="columnWidths.sr">
+                        {{ (reportData?.items?.page - 1) * count + rowIndex + 1 }}
                     </td>
                     <td mat-footer-cell *matFooterCellDef [style.width.%]="columnWidths.sr"></td>
                 </ng-container>
@@ -290,15 +295,15 @@
                 </ng-container>
 
                 <!-- ── Dynamic bucket leaf columns (Qty & Value per range) ── -->
-                @for (col of bucketCols; track col.range; let i = $index) {
-                    <ng-container [matColumnDef]="col.qtyColId">
+                @for (bucketColumn of bucketCols; track bucketColumn.range; let bucketIndex = $index) {
+                    <ng-container [matColumnDef]="bucketColumn.qtyColId">
                         <th mat-header-cell *matHeaderCellDef class="text-right" [style.width.%]="columnWidths.base">
                             {{ commonLocaleData?.app_quantity }}
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
-                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, undefined, i); $event.stopPropagation()">
+                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, undefined, bucketIndex); $event.stopPropagation()">
                                 <amount-field
-                                    [amount]="getBucket(item?.buckets, i)?.quantity"
+                                    [amount]="getBucket(item?.buckets, bucketIndex)?.quantity"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 ></amount-field>
@@ -306,21 +311,21 @@
                         </td>
                         <td mat-footer-cell *matFooterCellDef class="text-right">
                             <amount-field
-                                [amount]="getBucket(reportData?.totals?.buckets, i)?.quantity"
+                                [amount]="getBucket(reportData?.totals?.buckets, bucketIndex)?.quantity"
                                 [currencySymbol]="false"
                                 [currencyCode]="false"
                             ></amount-field>
                         </td>
                     </ng-container>
 
-                    <ng-container [matColumnDef]="col.valueColId">
+                    <ng-container [matColumnDef]="bucketColumn.valueColId">
                         <th mat-header-cell *matHeaderCellDef class="text-right" [style.width.%]="columnWidths.base">
                             {{ commonLocaleData?.app_value }}
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
-                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, undefined, i); $event.stopPropagation()">
+                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, undefined, bucketIndex); $event.stopPropagation()">
                                 <amount-field
-                                    [amount]="getBucket(item?.buckets, i)?.value"
+                                    [amount]="getBucket(item?.buckets, bucketIndex)?.value"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 ></amount-field>
@@ -328,7 +333,7 @@
                         </td>
                         <td mat-footer-cell *matFooterCellDef class="text-right">
                             <amount-field
-                                [amount]="getBucket(reportData?.totals?.buckets, i)?.value"
+                                [amount]="getBucket(reportData?.totals?.buckets, bucketIndex)?.value"
                                 [currencySymbol]="false"
                                 [currencyCode]="false"
                             ></amount-field>
@@ -355,7 +360,7 @@
                                                 <col [style.width.%]="columnWidths.sr" />
                                                 <col [style.width.%]="columnWidths.stockName" />
                                                 <col [style.width.%]="columnWidths.uom" />
-                                                @for (col of bucketCols; track col.range) {
+                                                @for (bucketColumn of bucketCols; track bucketColumn.range) {
                                                     <col [style.width.%]="columnWidths.base" />
                                                     <col [style.width.%]="columnWidths.base" />
                                                 }
@@ -364,14 +369,14 @@
                                             }
                                         </colgroup>
                                         <tbody>
-                                            @for (variant of variantRows; track variant.variantUniqueName; let i = $index; let last = $last) {
+                                            @for (variant of variantRows; track variant.variantUniqueName; let variantIndex = $index; let last = $last) {
                                                 <tr [class.sar-detail-table__row--last]="last">
-                                                    <td class="text-center">{{ i + 1 }}</td>
+                                                    <td class="text-center">{{ variantIndex + 1 }}</td>
                                                     <td class="text-left sar-detail-table__label font-weight-semibold text-ellipsis" [matTooltip]="variant?.variantName">
                                                         {{ variant?.variantName }}
                                                     </td>
                                                     <td class="text-left">{{ variant?.stockUnitCode }}</td>
-                                                    @for (col of bucketCols; track col.range; let bucketIndex = $index) {
+                                                    @for (bucketColumn of bucketCols; track bucketColumn.range; let bucketIndex = $index) {
                                                         <td class="text-right">
                                                             <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, variant, bucketIndex)">
                                                                 <amount-field
@@ -435,7 +440,7 @@
                                                     <col [style.width.%]="columnWidths.sr" />
                                                     <col [style.width.%]="columnWidths.stockName" />
                                                     <col [style.width.%]="columnWidths.uom" />
-                                                    @for (col of bucketCols; track col.range) {
+                                                    @for (bucketColumn of bucketCols; track bucketColumn.range) {
                                                         <col [style.width.%]="columnWidths.base" />
                                                         <col [style.width.%]="columnWidths.base" />
                                                     }
@@ -447,7 +452,7 @@
                                                 <td></td>
                                                 <td class="text-left font-weight-semibold">{{ commonLocaleData?.app_total }}</td>
                                                 <td></td>
-                                                @for (col of bucketCols; track col.range; let bucketIndex = $index) {
+                                                @for (bucketColumn of bucketCols; track bucketColumn.range; let bucketIndex = $index) {
                                                     <td class="text-right">
                                                         <amount-field
                                                             [amount]="getBucket(variantTotals?.buckets, bucketIndex)?.quantity"
@@ -495,18 +500,18 @@
                         class="sar-group-header-cell p-0 border-none vertical-align-top"
                     >
                         <div class="d-flex align-items-stretch w-100 sar-group-header-inner">
-                            @for (col of baseColumns; track col.colId; let first = $first) {
+                            @for (baseColumn of baseColumns; track baseColumn.colId; let first = $first) {
                                 <div
                                     class="sar-group-th sar-group-th--leaf nowrap d-flex flex-shrink-0 flex-grow-0 align-items-center border-top border-right bg-table-background-color font-weight-semibold"
                                     [ngClass]="{
                                         'border-left': first,
-                                        'justify-content-center': col.align === 'center',
-                                        'justify-content-end': col.align === 'right',
+                                        'justify-content-center': baseColumn.align === 'center',
+                                        'justify-content-end': baseColumn.align === 'right',
                                     }"
-                                    [style.flex-basis.%]="columnWidths[col.colId] ?? columnWidths.base"
-                                    [style.width.%]="columnWidths[col.colId] ?? columnWidths.base"
+                                    [style.flex-basis.%]="columnWidths[baseColumn.colId] ?? columnWidths.base"
+                                    [style.width.%]="columnWidths[baseColumn.colId] ?? columnWidths.base"
                                 >
-                                    @if (col.colId === 'stockName') {
+                                    @if (baseColumn.colId === 'stockName') {
                                         <div
                                             class="w-100"
                                             #searchStockNameContainer
@@ -514,7 +519,7 @@
                                         >
                                             @if (!showStockNameSearchInput) {
                                                 <div class="align-items-center d-flex">
-                                                    <span>{{ col.label }}</span>
+                                                    <span>{{ baseColumn.label }}</span>
                                                     <button
                                                         matIconButton
                                                         (click)="toggleSearch('stockName')"
@@ -538,11 +543,11 @@
                                             }
                                         </div>
                                     } @else {
-                                        {{ col.label }}
+                                        {{ baseColumn.label }}
                                     }
                                 </div>
                             }
-                            @for (col of bucketCols; track col.range; let i = $index) {
+                            @for (bucketColumn of bucketCols; track bucketColumn.range; let bucketIndex = $index) {
                                 <div
                                     class="sar-group-th sar-group-th--group overflow-hidden d-flex flex-column flex-shrink-0 flex-grow-0 align-items-stretch border-top border-right bg-table-background-color font-weight-semibold"
                                     [style.flex-basis.%]="columnWidths.bucketGroup"
@@ -554,11 +559,11 @@
                                             class="sar-bucket-btn font-style-italic"
                                             [matMenuTriggerFor]="stockAgingMenu"
                                             #agingTrigger="matMenuTrigger"
-                                            (click)="openAgingEditor(i, agingTrigger); $event.stopPropagation()"
-                                            [attr.aria-label]="localeData.edit_range + ' ' + col.range"
+                                            (click)="openAgingEditor(bucketIndex, agingTrigger); $event.stopPropagation()"
+                                            [attr.aria-label]="localeData.edit_range + ' ' + bucketColumn.range"
                                         >
                                             <span class="d-inline-flex align-items-center column-gap-05">
-                                                {{ col.range }}
+                                                {{ bucketColumn.range }}
                                                 <span class="icon-edit sar-bucket-edit-icon ml-1 text-primary"></span>
                                             </span>
                                         </button>
@@ -566,12 +571,12 @@
                                     <div class="sar-group-th__children d-flex align-items-stretch">
                                         <div
                                             class="sar-group-th__child d-flex align-items-center justify-content-end cursor-pointer column-gap-05 font-weight-semibold"
-                                            (click)="toggleBucketSort(i, 'qty')"
+                                            (click)="toggleBucketSort(bucketIndex, 'qty')"
                                         >
                                             <span class="font-size-14">{{ commonLocaleData?.app_quantity }}</span>
-                                            @if (getBucketSortDir(i, 'qty') === 'asc') {
+                                            @if (getBucketSortDir(bucketIndex, 'qty') === 'asc') {
                                                 <span class="icon-sort-asc font-size-9 active-text-color"></span>
-                                            } @else if (getBucketSortDir(i, 'qty') === 'desc') {
+                                            } @else if (getBucketSortDir(bucketIndex, 'qty') === 'desc') {
                                                 <span class="icon-sort-asc font-size-9 active-text-color rotate-180"></span>
                                             } @else {
                                                 <span class="icon-sort-asc font-size-9 text-light"></span>
@@ -579,12 +584,12 @@
                                         </div>
                                         <div
                                             class="sar-group-th__child d-flex align-items-center justify-content-end cursor-pointer column-gap-05 font-weight-semibold border-left"
-                                            (click)="toggleBucketSort(i, 'value')"
+                                            (click)="toggleBucketSort(bucketIndex, 'value')"
                                         >
                                             <span class="font-size-14">{{ commonLocaleData?.app_value }}</span>
-                                            @if (getBucketSortDir(i, 'value') === 'asc') {
+                                            @if (getBucketSortDir(bucketIndex, 'value') === 'asc') {
                                                 <span class="icon-sort-asc font-size-9 active-text-color"></span>
-                                            } @else if (getBucketSortDir(i, 'value') === 'desc') {
+                                            } @else if (getBucketSortDir(bucketIndex, 'value') === 'desc') {
                                                 <span class="icon-sort-asc font-size-9 active-text-color rotate-180"></span>
                                             } @else {
                                                 <span class="icon-sort-asc font-size-9 text-light"></span>
@@ -593,17 +598,17 @@
                                     </div>
                                 </div>
                             }
-                            @for (col of trailingColumns; track col.colId) {
+                            @for (trailingColumn of trailingColumns; track trailingColumn.colId) {
                                 <div
                                     class="sar-group-th sar-group-th--leaf nowrap d-flex flex-shrink-0 flex-grow-0 align-items-center border-top border-right bg-table-background-color font-weight-semibold"
                                     [ngClass]="{
-                                        'justify-content-center': col.align === 'center',
-                                        'justify-content-end': col.align === 'right',
+                                        'justify-content-center': trailingColumn.align === 'center',
+                                        'justify-content-end': trailingColumn.align === 'right',
                                     }"
-                                    [style.flex-basis.%]="columnWidths[col.colId] ?? columnWidths.base"
-                                    [style.width.%]="columnWidths[col.colId] ?? columnWidths.base"
+                                    [style.flex-basis.%]="columnWidths[trailingColumn.colId] ?? columnWidths.base"
+                                    [style.width.%]="columnWidths[trailingColumn.colId] ?? columnWidths.base"
                                 >
-                                    {{ col.label }}
+                                    {{ trailingColumn.label }}
                                 </div>
                             }
                         </div>
@@ -703,7 +708,7 @@
                     [attr.aria-label]="localeData.stock_transactions"
                 >
                     <ng-container matColumnDef="purchaseDate">
-                        <th mat-header-cell *matHeaderCellDef class="text-left">{{ localeData.purchase_date }}</th>
+                        <th mat-header-cell *matHeaderCellDef class="text-left">{{ localeData.voucher_date }}</th>
                         <td mat-cell *matCellDef="let transaction" class="text-left sar-detail-table__label font-weight-semibold">
                             {{ transaction?.purchaseDate | giddhDate }}
                         </td>
@@ -711,7 +716,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="purchaseInvoice">
-                        <th mat-header-cell *matHeaderCellDef class="text-left">{{ localeData.purchase_invoice }}</th>
+                        <th mat-header-cell *matHeaderCellDef class="text-left">{{ localeData.voucher_type }}</th>
                         <td
                             mat-cell
                             *matCellDef="let transaction"
@@ -719,6 +724,19 @@
                             [matTooltip]="transaction?.purchaseInvoice"
                         >
                             {{ transaction?.purchaseInvoice ?? '-' }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="voucherNumber">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData.voucher_number }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let transaction"
+                            class="text-center text-ellipsis"
+                            [matTooltip]="transaction?.voucherNumber"
+                        >
+                            {{ transaction?.voucherNumber ?? '-' }}
                         </td>
                         <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
@@ -824,7 +842,12 @@
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="detailDisplayedColumns; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: detailDisplayedColumns"></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: detailDisplayedColumns"
+                        [class.cursor-pointer]="isTransactionClickable(row)"
+                        (click)="openTransaction(row)"
+                    ></tr>
                     <tr
                         mat-footer-row
                         *matFooterRowDef="detailDisplayedColumns; sticky: true"
