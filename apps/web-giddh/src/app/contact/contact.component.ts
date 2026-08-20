@@ -1167,7 +1167,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""),
         };
 
-        this.companyServices.downloadXlsx(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.searchLoader$ = observableOf(false);
             if (res?.status === "success") {
                 let blobData = this.generalService.base64ToBlob(res?.body, "text/xlsx", 512);
