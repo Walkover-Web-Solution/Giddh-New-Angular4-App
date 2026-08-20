@@ -1042,7 +1042,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
             return null;
         }
         const date = transaction?.purchaseDate;
-        let url = `/pages/vouchers/view/${voucherPath}/${uniqueName}?page=1&count=${PAGINATION_LIMIT}`;
+        let url = `/pages/vouchers/view/${voucherPath}/${uniqueName}?page=1&count=${PAGINATION_LIMIT}&search=${uniqueName}`;
         if (date) {
             url += `&from=${date}&to=${date}`;
         }
