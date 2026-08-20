@@ -178,6 +178,10 @@ $sar-age-badge-radius: 12px;
             border-bottom: none;
         }
 
+        .mat-mdc-row.cursor-pointer:hover .mat-mdc-cell {
+            background-color: var(--theme-primary-light);
+        }
+
         .sar-detail-total-row .mat-mdc-footer-cell {
             border-top: 2px solid var(--border-color) !important;
             border-bottom: none !important;
