@@ -222,8 +222,11 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         OPENING_BALANCE: '/pages/inventory/v2/stock-balance',
         JOURNAL: '/pages/journal-voucher',
         MANUFACTURED: '/pages/inventory/v2/manufacturing/list',
-        RECEIPT_NOTE: '/pages/inventory/v2/branch-transfer/list',
-        DELIVERY_NOTE: '/pages/inventory/v2/branch-transfer/list',
+    };
+    /** In-app edit routes that require the transaction unique name. */
+    private readonly transactionEditRoutes: Readonly<Record<string, string>> = {
+        RECEIPT_NOTE: '/pages/inventory/v2/branch-transfer/receipt-note/edit',
+        DELIVERY_NOTE: '/pages/inventory/v2/branch-transfer/delivery-challan/edit',
     };
     /** Voucher-view path segment for types that open a specific voucher. */
     private readonly voucherPreviewPaths: Readonly<Record<string, string>> = {
@@ -1031,6 +1034,11 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         const voucherType = transaction?.purchaseInvoice;
         if (!voucherType) {
             return null;
+        }
+        const editRoute = this.transactionEditRoutes[voucherType];
+        if (editRoute) {
+            const uniqueName = transaction?.purchaseInvoiceUniqueName;
+            return uniqueName ? `${editRoute}/${uniqueName}` : null;
         }
         const listRoute = this.transactionListRoutes[voucherType];
         if (listRoute) {
