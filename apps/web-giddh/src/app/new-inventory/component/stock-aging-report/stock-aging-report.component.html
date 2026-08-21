@@ -263,7 +263,11 @@
                         {{ localeData.total_qty }}
                     </th>
                     <td mat-cell *matCellDef="let item" class="text-right">
-                        <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item); $event.stopPropagation()">
+                        <span
+                            class="sar-qty-link"
+                            [class.cursor-pointer]="item?.totalQty"
+                            (click)="openDetailsAside(item, null, null, item?.totalQty); $event.stopPropagation()"
+                        >
                             <amount-field [amount]="item?.totalQty" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                         </span>
                     </td>
@@ -281,7 +285,11 @@
                         {{ localeData.total_value }}
                     </th>
                     <td mat-cell *matCellDef="let item" class="text-right">
-                        <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item); $event.stopPropagation()">
+                        <span
+                            class="sar-qty-link"
+                            [class.cursor-pointer]="item?.totalAmount"
+                            (click)="openDetailsAside(item, null, null, item?.totalAmount); $event.stopPropagation()"
+                        >
                             <amount-field [amount]="item?.totalAmount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                         </span>
                     </td>
@@ -301,7 +309,11 @@
                             {{ commonLocaleData?.app_quantity }}
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
-                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, undefined, bucketIndex); $event.stopPropagation()">
+                            <span
+                                class="sar-qty-link"
+                                [class.cursor-pointer]="getBucket(item?.buckets, bucketIndex)?.quantity"
+                                (click)="openDetailsAside(item, null, bucketIndex, getBucket(item?.buckets, bucketIndex)?.quantity); $event.stopPropagation()"
+                            >
                                 <amount-field
                                     [amount]="getBucket(item?.buckets, bucketIndex)?.quantity"
                                     [currencySymbol]="false"
@@ -323,7 +335,11 @@
                             {{ commonLocaleData?.app_value }}
                         </th>
                         <td mat-cell *matCellDef="let item" class="text-right">
-                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, undefined, bucketIndex); $event.stopPropagation()">
+                            <span
+                                class="sar-qty-link"
+                                [class.cursor-pointer]="getBucket(item?.buckets, bucketIndex)?.value"
+                                (click)="openDetailsAside(item, null, bucketIndex, getBucket(item?.buckets, bucketIndex)?.value); $event.stopPropagation()"
+                            >
                                 <amount-field
                                     [amount]="getBucket(item?.buckets, bucketIndex)?.value"
                                     [currencySymbol]="false"
@@ -378,7 +394,11 @@
                                                     <td class="text-left">{{ variant?.stockUnitCode }}</td>
                                                     @for (bucketColumn of bucketCols; track bucketColumn.range; let bucketIndex = $index) {
                                                         <td class="text-right">
-                                                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, variant, bucketIndex)">
+                                                            <span
+                                                                class="sar-qty-link"
+                                                                [class.cursor-pointer]="getBucket(variant?.buckets, bucketIndex)?.quantity"
+                                                                (click)="openDetailsAside(item, variant, bucketIndex, getBucket(variant?.buckets, bucketIndex)?.quantity)"
+                                                            >
                                                                 <amount-field
                                                                     [amount]="getBucket(variant?.buckets, bucketIndex)?.quantity"
                                                                     [currencySymbol]="false"
@@ -387,7 +407,11 @@
                                                             </span>
                                                         </td>
                                                         <td class="text-right">
-                                                            <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, variant, bucketIndex)">
+                                                            <span
+                                                                class="sar-qty-link"
+                                                                [class.cursor-pointer]="getBucket(variant?.buckets, bucketIndex)?.value"
+                                                                (click)="openDetailsAside(item, variant, bucketIndex, getBucket(variant?.buckets, bucketIndex)?.value)"
+                                                            >
                                                                 <amount-field
                                                                     [amount]="getBucket(variant?.buckets, bucketIndex)?.value"
                                                                     [currencySymbol]="false"
@@ -397,7 +421,11 @@
                                                         </td>
                                                     }
                                                     <td class="text-right">
-                                                        <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, variant)">
+                                                        <span
+                                                            class="sar-qty-link"
+                                                            [class.cursor-pointer]="variant?.totalQty"
+                                                            (click)="openDetailsAside(item, variant, null, variant?.totalQty)"
+                                                        >
                                                             <amount-field
                                                                 [amount]="variant?.totalQty"
                                                                 [currencySymbol]="false"
@@ -406,7 +434,11 @@
                                                         </span>
                                                     </td>
                                                     <td class="text-right">
-                                                        <span class="sar-qty-link cursor-pointer" (click)="openDetailsAside(item, variant)">
+                                                        <span
+                                                            class="sar-qty-link"
+                                                            [class.cursor-pointer]="variant?.totalAmount"
+                                                            (click)="openDetailsAside(item, variant, null, variant?.totalAmount)"
+                                                        >
                                                             <amount-field
                                                                 [amount]="variant?.totalAmount"
                                                                 [currencySymbol]="false"
@@ -712,7 +744,6 @@
                         <td mat-cell *matCellDef="let transaction" class="text-left sar-detail-table__label font-weight-semibold">
                             {{ transaction?.purchaseDate | giddhDate }}
                         </td>
-                        <td mat-footer-cell *matFooterCellDef class="text-left font-weight-semibold">{{ commonLocaleData?.app_total }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="purchaseInvoice">
@@ -725,7 +756,6 @@
                         >
                             {{ transaction?.purchaseInvoice ?? '-' }}
                         </td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
 
                     <ng-container matColumnDef="voucherNumber">
@@ -738,7 +768,6 @@
                         >
                             {{ transaction?.voucherNumber ?? '-' }}
                         </td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
 
                     <ng-container matColumnDef="qty">
@@ -746,13 +775,6 @@
                         <td mat-cell *matCellDef="let transaction" class="text-right">
                             <amount-field
                                 [amount]="transaction?.qty"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            ></amount-field>
-                        </td>
-                        <td mat-footer-cell *matFooterCellDef class="text-right">
-                            <amount-field
-                                [amount]="detailData?.total?.qty"
                                 [currencySymbol]="false"
                                 [currencyCode]="false"
                             ></amount-field>
@@ -768,13 +790,6 @@
                                 [currencyCode]="false"
                             ></amount-field>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef class="text-right">
-                            <amount-field
-                                [amount]="detailData?.total?.balanceQty"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            ></amount-field>
-                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="rate">
@@ -786,7 +801,6 @@
                                 [currencyCode]="false"
                             ></amount-field>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
 
                     <ng-container matColumnDef="stockValue">
@@ -798,19 +812,11 @@
                                 [currencyCode]="false"
                             ></amount-field>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef class="text-right">
-                            <amount-field
-                                [amount]="detailData?.total?.stockValue"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            ></amount-field>
-                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="ageDays">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData.age_days }}</th>
                         <td mat-cell *matCellDef="let transaction" class="text-right">{{ transaction?.ageDays ?? '-' }}</td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
 
                     <ng-container matColumnDef="ageBucket">
@@ -820,7 +826,6 @@
                                 {{ transaction?.ageBucket ?? '-' }}
                             </span>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="detailDisplayedColumns; sticky: true"></tr>
@@ -829,12 +834,6 @@
                         *matRowDef="let row; columns: detailDisplayedColumns"
                         [class.cursor-pointer]="isTransactionClickable(row)"
                         (click)="openTransaction(row)"
-                    ></tr>
-                    <tr
-                        mat-footer-row
-                        *matFooterRowDef="detailDisplayedColumns; sticky: true"
-                        class="sar-detail-total-row sky-blue-bg"
-                        [class.d-none]="!detailData?.total || !detailTransactions?.length"
                     ></tr>
                     <tr class="mat-row" *matNoDataRow>
                         <td class="mat-cell text-center py-3" [attr.colspan]="detailDisplayedColumns.length">
