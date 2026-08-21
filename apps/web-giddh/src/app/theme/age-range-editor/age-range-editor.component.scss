@@ -1,0 +1,25 @@
+.aging-range-popup {
+    white-space: nowrap;
+    background-color: var(--theme-background-color);
+
+    .range-title {
+        text-transform: capitalize;
+    }
+
+    .range-bound {
+        white-space: nowrap;
+    }
+
+    // Lives inside <text-field>, so it needs to pierce that component's styles
+    ::ng-deep .range-input {
+        width: 56px;
+        height: 32px;
+        padding: 0 6px;
+        text-align: center;
+    }
+
+    // Keeps the bound-only last interval vertically aligned with the inputs
+    .range-last {
+        height: 32px;
+    }
+}

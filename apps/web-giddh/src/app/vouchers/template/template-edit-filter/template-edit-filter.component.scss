@@ -21,10 +21,6 @@
     display: none;
 }
 
-.start-upload-btn {
-    transform: translateY(100%);
-}
-
 .swatch ul {
     max-width: 260px;
     padding: 20px 0;
@@ -105,4 +101,12 @@
 
 .swatch ul li:nth-child(18) {
     background: var(--color-dark-gray);
+}
+
+:host ::ng-deep .address-text.error-box {
+    .mdc-notched-outline .mdc-notched-outline__leading,
+    .mdc-notched-outline .mdc-notched-outline__notch,
+    .mdc-notched-outline .mdc-notched-outline__trailing {
+        border-color: var(--color-red) !important;
+    }
 }

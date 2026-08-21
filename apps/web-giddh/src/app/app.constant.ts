@@ -90,7 +90,6 @@ export const IPV4_REGEX = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0
 export const APP_DEFAULT_TITLE = '';
 export const SYNC_TALLY_HELP_DOC_URL = `${GIDDH_HELP_DOC_URL}/sync-with-tally-1591360375828781`;
 export const BANK_STATEMENT_HELP_DOC_URL = `${GIDDH_HELP_DOC_URL}/how-to-integrate-icici-bank-account-with-giddh`;
-export const SOCKET_FLOW_API = 'https://flow.sokt.io/func/CMEQnVPyk2a8';
 
 /** Restricted modules */
 export enum RestrictedModules {
@@ -1051,6 +1050,55 @@ export const COUNTRY_LOCALE_MAP: { [key: string]: string } = {
     'CU': 'es-CU',    // Cuba - comma format
     'PR': 'es-PR',    // Puerto Rico - comma format
 };
+
+/** Text direction values for RTL/LTR aware fields */
+export enum TextDirection {
+    LTR = 'ltr',
+    RTL = 'rtl'
+}
+
+/** Language codes (ISO 639-1 / BCP-47 base) that are written right-to-left */
+export const RTL_LANGUAGE_CODES: string[] = [
+    'ar',   // Arabic
+    'arc',  // Aramaic
+    'bal',  // Baluchi
+    'bgn',  // Western Balochi
+    'brh',  // Brahui
+    'ckb',  // Kurdish (Sorani)
+    'dv',   // Divehi / Maldivian
+    'fa',   // Persian (Farsi)
+    'glk',  // Gilaki
+    'he',   // Hebrew
+    'iw',   // Hebrew (legacy code)
+    'ji',   // Yiddish (legacy code)
+    'ks',   // Kashmiri
+    'ku',   // Kurdish
+    'lrc',  // Northern Luri
+    'mzn',  // Mazanderani
+    'nqo',  // N'Ko
+    'prs',  // Dari
+    'ps',   // Pashto
+    'rhg',  // Rohingya
+    'sd',   // Sindhi
+    'sdh',  // Southern Kurdish
+    'syr',  // Syriac
+    'ug',   // Uyghur
+    'ur',   // Urdu
+    'yi'    // Yiddish
+];
+
+/** Script subtags that force RTL regardless of base language (e.g. 'pa-Arab', 'az-Arab') */
+export const RTL_SCRIPT_SUBTAGS: string[] = ['arab', 'hebr', 'syrc', 'thaa', 'nkoo', 'adlm'];
+
+/** Country (alpha-2) codes whose primary script is right-to-left */
+export const RTL_COUNTRY_CODES: string[] = [
+    'AE', 'AF', 'BH', 'DJ', 'DZ', 'EG', 'EH', 'ER', 'IL', 'IQ', 'IR', 'JO', 'KM',
+    'KW', 'LB', 'LY', 'MA', 'MR', 'MV', 'OM', 'PK', 'PS', 'QA', 'SA', 'SD', 'SO',
+    'SY', 'TD', 'TN', 'YE'
+];
+
+/** Currency codes rendered right-to-left */
+export const RTL_CURRENCY_CODES: string[] = ['AED'];
 
 /** Default locale for number formatting */
 export const DEFAULT_NUMBER_FORMAT_LOCALE = 'en-IN';

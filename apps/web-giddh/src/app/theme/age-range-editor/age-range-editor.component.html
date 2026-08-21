@@ -1,0 +1,82 @@
+<div
+    class="aging-range-popup px-3 py-2"
+    [ngClass]="cssClass"
+    (clickOutside)="onClickOutside($event)"
+    [clickOutsideEnabled]="true"
+    [delayClickOutsideInit]="true"
+    (click)="$event.stopPropagation()"
+>
+    <!-- All four intervals are shown together; only the upper bounds are editable -->
+    <div class="d-flex align-items-start column-gap-3">
+        <!-- First interval: 0 - fourth -->
+        <div class="range-block">
+            <p class="range-title mb-2">{{ localeData?.first_interval }}</p>
+            <div class="d-flex align-items-center column-gap-05">
+                <span class="range-bound font-size-14">0 -</span>
+                <text-field
+                    [cssClass]="'form-control range-input'"
+                    [name]="'ageRange_first'"
+                    [type]="'number'"
+                    [allowDecimalDigitsOnly]="true"
+                    [(ngModel)]="model.fourth"
+                    (input)="onValueChange('fourth')"
+                    (keyup.enter)="applyChanges()"
+                    (click)="$event.stopPropagation()"
+                ></text-field>
+            </div>
+        </div>
+
+        <!-- Second interval: fourth+1 - fifth -->
+        <div class="range-block">
+            <p class="range-title mb-2">{{ localeData?.second_interval }}</p>
+            <div class="d-flex align-items-center column-gap-05">
+                <span class="range-bound font-size-14">{{ +model.fourth + 1 }} -</span>
+                <text-field
+                    [cssClass]="'form-control range-input'"
+                    [name]="'ageRange_second'"
+                    [type]="'number'"
+                    [allowDecimalDigitsOnly]="true"
+                    [(ngModel)]="model.fifth"
+                    (input)="onValueChange('fifth')"
+                    (keyup.enter)="applyChanges()"
+                    (click)="$event.stopPropagation()"
+                ></text-field>
+            </div>
+        </div>
+
+        <!-- Third interval: fifth+1 - sixth -->
+        <div class="range-block">
+            <p class="range-title mb-2">{{ localeData?.third_interval }}</p>
+            <div class="d-flex align-items-center column-gap-05">
+                <span class="range-bound font-size-14">{{ +model.fifth + 1 }} -</span>
+                <text-field
+                    [cssClass]="'form-control range-input'"
+                    [name]="'ageRange_third'"
+                    [type]="'number'"
+                    [allowDecimalDigitsOnly]="true"
+                    [(ngModel)]="model.sixth"
+                    (input)="onValueChange('sixth')"
+                    (keyup.enter)="applyChanges()"
+                    (click)="$event.stopPropagation()"
+                ></text-field>
+            </div>
+        </div>
+
+        <!-- Last interval: sixth+1 and above (no upper bound) -->
+        <div class="range-block">
+            <p class="range-title mb-2">{{ localeData?.last_interval }}</p>
+            <div class="d-flex align-items-center range-last">
+                <span class="range-bound font-size-14">+{{ +model.sixth + 1 }}</span>
+            </div>
+        </div>
+    </div>
+
+    <p *ngIf="!isValid" class="text-danger m-0 mt-1">{{ validationMessage }}</p>
+
+    <div class="d-flex justify-content-end column-gap-1 mt-2">
+        <button matButton="outlined" type="button" (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+        <button matButton="filled" type="button" [disabled]="!isValid" (click)="applyChanges()">
+            {{ commonLocaleData?.app_apply }}
+        </button>
+    </div>
+</div>

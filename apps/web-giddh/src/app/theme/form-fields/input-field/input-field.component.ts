@@ -115,6 +115,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Output() public suffixClick: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emits validation status on blur or model change */
     @Output() public patternValidation: EventEmitter<{isValid: boolean, value: string}> = new EventEmitter<{isValid: boolean, value: string}>();
+    /** Emits when the input loses focus */
+    @Output() public onBlurEvent: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -271,10 +273,11 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      *
      * @memberof InputFieldComponent
      */
-    public emitBlurEvent(): void {
+    public emitBlurEvent(event: FocusEvent): void {
         this.validatePatternOnBlur();
         this.validateMinMax();
         this.onChange.emit(this.value);
+        this.onBlurEvent.emit(event);
     }
 
     /**

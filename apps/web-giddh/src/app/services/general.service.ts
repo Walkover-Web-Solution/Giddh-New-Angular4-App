@@ -16,7 +16,7 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, GIDDH_ONLY_ROUTES, GiddhUiDomain, IOption, MOBILE_NUMBER_SELF_URL, GiddhRegion, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, GIDDH_ONLY_ROUTES, GiddhUiDomain, IOption, MOBILE_NUMBER_SELF_URL, GiddhRegion, RTL_COUNTRY_CODES, RTL_CURRENCY_CODES, RTL_LANGUAGE_CODES, RTL_SCRIPT_SUBTAGS, SUPPORTED_OPERATING_SYSTEMS, TextDirection, WeekdaysEnum } from '../app.constant';
 import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -208,6 +208,9 @@ export class GeneralService {
         if (routerParams['region']) {
             localStorage.setItem('region', routerParams['region']);
         }
+        if (routerParams['ref']) {
+            localStorage.setItem('ref', routerParams['ref']);
+        }
     }
 
     getUtmParameter(param: string): string {
@@ -225,6 +228,7 @@ export class GeneralService {
         localStorage.removeItem("utm_term");
         localStorage.removeItem("utm_content");
         localStorage.removeItem("region");
+        localStorage.removeItem("ref");
     }
 
     getLastElement(array) {
@@ -856,13 +860,60 @@ export class GeneralService {
      *  @memberof GeneralService
      */
     public isRtlCurrency(currencyCode: string): boolean {
-        const rtlCurrencyCodes = ['AED'];
-
-        if (rtlCurrencyCodes?.indexOf(currencyCode) > -1) {
+        if (RTL_CURRENCY_CODES?.indexOf(currencyCode) > -1) {
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * This will return true if the given language/locale code is written right-to-left
+     *
+     * @param {string} languageCode Language code, e.g. 'ar', 'ur', 'pa-Arab'
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isRtlLanguage(languageCode: string): boolean {
+        const code = languageCode?.toLowerCase()?.trim();
+        if (!code) {
+            return false;
+        }
+        const parts = code.split(/[-_]/);
+        if (RTL_LANGUAGE_CODES?.indexOf(parts[0]) > -1) {
+            return true;
+        }
+        return parts.slice(1).some(part => RTL_SCRIPT_SUBTAGS?.indexOf(part) > -1);
+    }
+
+    /**
+     * This will return true if the given alpha-2 country code uses a right-to-left script
+     *
+     * @param {string} countryCode Alpha-2 country code, e.g. 'AE'
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isRtlCountry(countryCode: string): boolean {
+        return RTL_COUNTRY_CODES?.indexOf(countryCode?.toUpperCase()) > -1;
+    }
+
+    /**
+     * This will return the text direction of the given language code, falls back
+     * to the country code when no language code is provided
+     *
+     * @param {string} languageCode Language code, e.g. 'ar'
+     * @param {string} [countryCode] Alpha-2 country code, e.g. 'AE'
+     * @returns {TextDirection} 'rtl' when right-to-left else 'ltr'
+     * @memberof GeneralService
+     */
+    public getTextDirection(languageCode: string, countryCode?: string): TextDirection {
+        if (this.isRtlLanguage(languageCode)) {
+            return TextDirection.RTL;
+        }
+        if (!languageCode && this.isRtlCountry(countryCode)) {
+            return TextDirection.RTL;
+        }
+        return TextDirection.LTR;
     }
 
     /**

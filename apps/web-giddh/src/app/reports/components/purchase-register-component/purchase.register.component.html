@@ -109,35 +109,33 @@
                     </div>
                 }
                 @if (reportForm?.get('groupBy')?.value === groupByEnum.SalesPerson) {
-                    @if ((salesPersonList$ | async)?.length) {
-                        <div class="dropdown-width">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
-                                <mat-select
-                                    panelClass="py-0"
-                                    name="salesPerson"
-                                    [multiple]="true"
-                                    (selectionChange)="getPurchaseRegister(dateRange.from, dateRange.to)"
-                                    (closed)="!filteredSalesPersonList()?.length ? salesPerson.reset() : null"
-                                    formControlName="salesPersonUniqueNames"
+                    <div class="dropdown-width">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
+                            <mat-select
+                                panelClass="py-0"
+                                name="salesPerson"
+                                [multiple]="true"
+                                (selectionChange)="getPurchaseRegister(dateRange.from, dateRange.to)"
+                                (closed)="!filteredSalesPersonList()?.length ? salesPerson.reset() : null"
+                                formControlName="salesPersonUniqueNames"
+                            >
+                                <ngx-mat-select-search
+                                    [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
+                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                    [formControl]="salesPerson"
+                                    [clearSearchInput]="false"
                                 >
-                                    <ngx-mat-select-search
-                                        [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                        [formControl]="salesPerson"
-                                        [clearSearchInput]="false"
-                                    >
-                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                    </ngx-mat-select-search>
-                                    @for (salesPerson of filteredSalesPersonList(); track salesPerson?.value) {
-                                        <mat-option [value]="salesPerson?.value">
-                                            {{ salesPerson?.label }}
-                                        </mat-option>
-                                    }
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    }
+                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                </ngx-mat-select-search>
+                                @for (salesPerson of filteredSalesPersonList(); track salesPerson?.value) {
+                                    <mat-option [value]="salesPerson?.value">
+                                        {{ salesPerson?.label }}
+                                    </mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
                 }
                 @if (reportForm?.get('groupBy')?.value === groupByEnum.State) {
                     <div class="dropdown-width">
@@ -151,7 +149,7 @@
                             [required]="true"
                         ></reactive-dropdown-field>
                     </div>
-                    @if (reportForm?.get('countryCode')?.value && stateList()?.length) {
+                    @if (reportForm?.get('countryCode')?.value) {
                         <div class="dropdown-width">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>{{ commonLocaleData?.app_state }}</mat-label>
