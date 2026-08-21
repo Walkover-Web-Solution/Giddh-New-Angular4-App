@@ -15,8 +15,6 @@
     "voucher_date": "Voucher Date",
     "voucher_type": "Voucher Type",
     "voucher_number": "Voucher Number",
-    "qty_inward": "Qty Inward",
-    "qty_outward": "Qty Outward",
     "balance_qty": "Balance Qty",
     "stock_value": "Stock Value",
     "age_days": "Age (Days)",
