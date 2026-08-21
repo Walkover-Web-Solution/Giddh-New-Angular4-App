@@ -36,8 +36,7 @@ export interface StockAgingTransaction {
     voucherNumber: string | null;
     isVoucher: boolean;
     warehouse: string;
-    qtyInward: number;
-    qtyOutward: number;
+    qty: number;
     balanceQty: number;
     rate: number;
     stockValue: number;
@@ -57,8 +56,7 @@ export interface StockAgingTransactionsPage {
 
 /** Aggregate row shown under the transactions of the expanded stock. */
 export interface StockAgingTransactionTotals {
-    qtyInward: number;
-    qtyOutward: number;
+    qty: number;
     balanceQty: number;
     stockValue: number;
 }
