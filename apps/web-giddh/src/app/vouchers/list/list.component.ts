@@ -19,7 +19,7 @@ import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES,
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
-import { DscService, DscCertificate } from "../../services/dsc.service";
+import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
 import { InvoiceService } from "../../services/invoice.service";
 import { InvoiceTemplatesService } from "../../services/invoice.templates.service";
@@ -73,16 +73,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public dataSource: any[] = [];
     /** This will use for displayed table columns */
     public displayedColumns: string[] = [];
-    /** Holds DSC certificate list */
-    public dscCertificates: DscCertificate[] = [];
-    /** Holds selected DSC certificate index */
-    public selectedDscCertificateIndex: number | null = null;
-    /** Holds DSC PIN value */
-    public dscPin: string = '';
-    /** Holds DSC PIN validation error */
-    public dscPinError: string = '';
-    /** Holds DSC certificate loading state */
-    public isDscCertificateLoading: boolean = false;
     /** Holds Table Display columns for Pending Voucher */
     public displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
     /** This will use for dynamic customise column check values */
@@ -100,8 +90,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
     /** Holds adjust payment dailog template reference */
     @ViewChild('adjustPaymentDialog', { static: true }) public adjustPaymentDialog: TemplateRef<any>;
-    /** Holds DSC PIN dialog template reference */
-    @ViewChild('dscPinDialog', { static: true }) public dscPinDialog: TemplateRef<any>;
     // Holds table sorting reference
     @ViewChild(MatSort) sort: MatSort;
     /** Holds table paginator reference */
@@ -264,8 +252,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** Send Email Dialog Ref */
     public sendEmailModalDialogRef: MatDialogRef<any>;
-    /** DSC PIN Dialog Ref */
-    public dscPinDialogRef: MatDialogRef<any>;
     /** Holds Currently used Voucher */
     private currentVoucher: any = null;
     /** Holds Advance Search Filter Temp Keys to show label on filter dialog */
@@ -426,7 +412,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private changeDetectorRef: ChangeDetectorRef,
         private recurrenceService: RecurrenceFormService,
         private settingsBranchAction: SettingsBranchActions,
-        private dscService: DscService
+        private dscSignDialogService: DscSignDialogService
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
@@ -4019,128 +4005,17 @@ public generateRecurringVoucher(voucher: any): void {
     }
 
     /**
-     * Initiates digitally signed invoice PDF download by opening the DSC PIN dialog
-     * and reading available certificates from the token.
+     * Initiates digitally signed invoice PDF download by opening the reusable DSC PIN dialog.
      *
      * @param {*} voucher The voucher for which the signed PDF is requested
      * @memberof VoucherListComponent
      */
     public downloadSignedInvoicePdf(voucher: any): void {
-        if (!this.dscService.isBridgeAvailable()) {
-            this.toasterService.showSnackBar('warning', this.localeData?.dsc_pin_dialog?.bridge_not_found);
-            return;
-        }
-        this.currentVoucher = voucher;
-        this.dscPin = '';
-        this.dscPinError = '';
-        this.dscCertificates = [];
-        this.selectedDscCertificateIndex = null;
-        this.isDscCertificateLoading = true;
-        this.dscPinDialogRef = this.dialog.open(this.dscPinDialog, {
-            panelClass: ['mat-dialog-sm'],
-            disableClose: true
-        });
-
-        this.dscService.getCertificates().pipe(
-            takeUntil(this.destroyed$)
-        ).subscribe({
-            next: (certificates) => {
-                this.dscCertificates = certificates;
-                this.selectedDscCertificateIndex = certificates.length ? 0 : null;
-                this.isDscCertificateLoading = false;
-                this.changeDetectorRef.detectChanges();
-            },
-            error: (error) => {
-                this.isDscCertificateLoading = false;
-                this.changeDetectorRef.detectChanges();
-                this.dscPinError = error?.message;
-            }
-        });
-    }
-
-    /**
-     * Sets the selected DSC certificate index.
-     *
-     * @param {number} index Index of the selected certificate
-     * @memberof VoucherListComponent
-     */
-    public selectDscCertificate(index: number): void {
-        this.selectedDscCertificateIndex = index;
-    }
-
-    /**
-     * Submits the entered PIN and triggers the full DSC signing flow.
-     *
-     * @memberof VoucherListComponent
-     */
-    public submitDscPin(): void {
-        if (!this.dscPin || this.selectedDscCertificateIndex === null || !this.currentVoucher) {
-            return;
-        }
-        this.dscPinError = '';
-        const certificate = this.dscCertificates[this.selectedDscCertificateIndex];
-        const voucherDetails = {
-            uniqueName: this.currentVoucher?.uniqueName,
+        this.dscSignDialogService.openDownloadSignedInvoiceDialog({
+            voucher,
             voucherType: this.voucherType,
-        };
-        this.dscService.downloadSignedInvoice(voucherDetails, certificate, this.dscPin).pipe(
-            takeUntil(this.destroyed$)
-        ).subscribe({
-            next: (pdfBlob: Blob) => {
-                this.closeDscPinDialog();
-                let fileName = this.currentVoucher?.voucherNumber ;
-                if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    fileName = this.currentVoucher.proformaNumber || this.currentVoucher.estimateNumber;
-                }
-                this.downloadBlob(pdfBlob, `${fileName || 'signed-invoice'}.pdf`);
-                this.toasterService.showSnackBar('success', this.localeData?.dsc_pin_dialog?.download_success);
-            },
-            error: (error) => {
-                const message = error?.message || '';
-                if (message.toLowerCase().includes('incorrect pin')) {
-                    this.dscPinError = this.localeData?.dsc_pin_dialog?.incorrect_pin;
-                    this.dscPin = '';
-                } else {
-                    this.closeDscPinDialog();
-                    this.toasterService.showSnackBar('error', message || this.localeData?.dsc_pin_dialog?.download_error);
-                }
-            }
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
         });
     }
-
-    /**
-     * Closes the DSC PIN dialog and resets its state.
-     *
-     * @memberof VoucherListComponent
-     */
-    public closeDscPinDialog(): void {
-        this.dscPinDialogRef?.close();
-        this.dscPinDialogRef = null;
-        this.dscPin = '';
-        this.dscPinError = '';
-        this.dscCertificates = [];
-        this.selectedDscCertificateIndex = null;
-        this.currentVoucher = null;
-    }
-
-    /**
-     * Triggers browser download for a Blob with the given file name.
-     *
-     * @private
-     * @param {Blob} blob The file Blob to download
-     * @param {string} fileName The name to save the downloaded file as
-     * @memberof VoucherListComponent
-     */
-    private downloadBlob(blob: Blob, fileName: string): void {
-        const url = window.URL.createObjectURL(blob);
-        const anchor = document.createElement('a');
-        anchor.href = url;
-        anchor.download = fileName;
-        document.body.appendChild(anchor);
-        anchor.click();
-        document.body.removeChild(anchor);
-        window.URL.revokeObjectURL(url);
-    }
-
-        
 }

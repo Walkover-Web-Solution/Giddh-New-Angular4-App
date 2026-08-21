@@ -100,6 +100,7 @@ import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-particular-dialog.component";
+import { DscPinDialogComponent } from "./dsc-pin-dialog/dsc-pin-dialog.component";
 
 @NgModule({
     declarations: [
@@ -125,6 +126,7 @@ import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-par
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
         AllTemplatesComponent,
+        DscPinDialogComponent,
     ],
     imports: [
         CommonModule,

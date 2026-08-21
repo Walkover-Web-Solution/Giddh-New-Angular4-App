@@ -6,7 +6,7 @@ import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { DSC_API } from './apiurls/dsc.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 /** Single DSC certificate returned by the Giddh bridge extension. */
 export interface DscCertificate {
@@ -152,9 +152,16 @@ export class DscService {
             return throwError(() => new Error('Token PIN is required to sign.'));
         }
 
+        // DEBUG: log inputs to signHash
+        console.log('[DSC DEBUG] signHash input:', { hashBase64, algorithm: 'SHA256', certId: certificate.certId, pinLength: pin?.length });
+
         return this.callBridge(
             (window.GiddhBridge as GiddhBridge).signHash(hashBase64, 'SHA256', certificate.certId, pin)
         ).pipe(
+            tap((response) => {
+                // DEBUG: log raw bridge response
+                console.log('[DSC DEBUG] signHash bridge response:', response);
+            }),
             switchMap((response) => {
                 if (!response?.success || !response?.signature) {
                     return throwError(() => new Error(response?.message || 'Failed to sign hash with DSC token.'));
@@ -175,7 +182,13 @@ export class DscService {
         const model: DscFinishRequest = { nonce, signature };
         const url = `${this.config.apiUrl}${DSC_API.FINISH.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))}`;
 
-        return this.http.post(url, model, { responseType: 'blob' }).pipe(
+        // DEBUG: confirm finish is reached
+        console.log('[DSC DEBUG] calling finishDscSigning:', { nonce, signatureLength: signature?.length });
+
+        return this.http.post(url, model, { responseType: 'blob', headers: { 'Accept': 'application/pdf' } }).pipe(
+            tap((res: Blob) => {
+                console.log('[DSC DEBUG] finish response blob size:', res?.size);
+            }),
             map((res: Blob) => {
                 if (!res || res.size === 0) {
                     throw new Error('Signed PDF is empty.');
@@ -199,6 +212,10 @@ export class DscService {
      */
     public downloadSignedInvoice(voucherDetails: any, certificate: DscCertificate, pin: string): Observable<Blob> {
         return this.prepareDscSigning(voucherDetails, certificate).pipe(
+            tap((prepareResponse) => {
+                // DEBUG: log prepare response to verify hash is present
+                console.log('[DSC DEBUG] prepare response:', prepareResponse);
+            }),
             switchMap((prepareResponse) =>
                 this.signHash(prepareResponse.body.hash, certificate, pin).pipe(
                     switchMap((signedSignature) =>
@@ -239,7 +256,11 @@ export class DscService {
                     subscriber.next(value);
                     subscriber.complete();
                 })
-                .catch((error) => subscriber.error(this.normalizeBridgeError(error)));
+                .catch((error) => {
+                    // DEBUG: log raw bridge rejection
+                    console.error('[DSC DEBUG] bridge rejection:', error);
+                    subscriber.error(this.normalizeBridgeError(error));
+                });
         });
     }
 
