@@ -346,8 +346,36 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         }
     }
 
-    public openAgingDropDown() {
+    /** Index of the interval currently being edited in the aging dropdown popup (0-3) */
+    public activeInterval: number = 0;
+
+    public openAgingDropDown(intervalIndex: number = 0) {
+        this.activeInterval = intervalIndex;
         this.store.dispatch(this.agingReportActions.OpenDueRange());
+    }
+
+    /**
+     * Handler for the age-range editor `save` output.
+     * The editor itself dispatches `CreateDueRange` (using the
+     * `[vendorCustomerType]` we pass in), so here we only reflect the new
+     * values locally for immediate UI feedback.
+     */
+    public onAgingRangeSave(next: AgingDropDownoptions): void {
+        if (this.agingDropDownoptions) {
+            this.agingDropDownoptions.fourth = next.fourth;
+            this.agingDropDownoptions.fifth = next.fifth;
+            this.agingDropDownoptions.sixth = next.sixth;
+        }
+        this.onAgingRangeClose();
+    }
+
+    /**
+     * Handler for the age-range editor `close` output.
+     * Closes the mat-menu and resets the store range-open flag.
+     */
+    public onAgingRangeClose(): void {
+        this.store.dispatch(this.agingReportActions.CloseDueRange());
+        this.onCloseMenu();
     }
 
     /**
@@ -570,7 +598,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         }
         let exportData = {
             exportType: "AGING_REPORT_EXPORT",
-            fileType: "CSV",
+            fileType: "XLSX",
             includeTotalDueAmount: this.agingAdvanceSearchModal.includeTotalDueAmount,
             totalDueAmountGreaterThan: this.agingAdvanceSearchModal.totalDueAmountGreaterThan,
             totalDueAmountLessThan: this.agingAdvanceSearchModal.totalDueAmountLessThan,

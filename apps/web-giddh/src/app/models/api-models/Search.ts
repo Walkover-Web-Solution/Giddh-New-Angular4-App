@@ -100,6 +100,11 @@ export interface BulkEmailRequestData {
     subject: string;
     message: string;
     accounts: string[];
+    includeParentGroup?: boolean;
+    includeMobileNumber?: boolean;
+    includeEmailId?: boolean;
+    includeState?: boolean;
+    includeTaxNumber?: boolean;
 }
 
 export interface BulkEmailRequestParams {

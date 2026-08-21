@@ -8,7 +8,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { ContactAdvanceSearchComponent } from './advanceSearch/contactAdvanceSearch.component';
 import { AgingReportComponent } from './aging-report/aging-report.component';
-import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
 import { PaymentAsideComponent } from './payment-aside/payment-aside.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { LightboxModule } from 'ngx-lightbox';
@@ -51,12 +50,12 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ResizableDirective } from '../shared/directives/resizable.directive';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { AgeRangeEditorComponent } from '../theme/age-range-editor/age-range-editor.component';
 @NgModule({
     declarations: [
         ContactComponent,
         ContactAdvanceSearchComponent,
         AgingReportComponent,
-        AgingDropdownComponent,
         PaymentAsideComponent,
         ContactPreviewComponent,
         AccountStatementComponent
@@ -112,7 +111,8 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
         AmountFieldComponentModule,
         HamburgerMenuModule,
         ResizableDirective,
-        GiddhDatePipe
+        GiddhDatePipe,
+        AgeRangeEditorComponent
     ],
     providers: [
         GiddhNumberFormatPipe

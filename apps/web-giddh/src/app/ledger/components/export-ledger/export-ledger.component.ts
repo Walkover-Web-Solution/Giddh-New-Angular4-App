@@ -219,7 +219,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             body.dataToSend.to = this.toDate;
             body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
             body.dataToSend.exportType = this.exportRequest.exportType;
-            body.dataToSend.fileType = this.fileType;
+            body.dataToSend.fileType = this.emailTypeSelected === this.emailTypeColumnar ? 'XLSX' : this.fileType;
             if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
                 body.dataToSend.showInAccountCurrency = this.exportRequest.showInAccountCurrency;
             }
