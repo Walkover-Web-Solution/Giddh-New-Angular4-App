@@ -877,10 +877,14 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
      * @param item Parent stock row.
      * @param variant Variant row when the click came from the expand table.
      * @param intervalIndex 0-based bucket index when the click came from a Qty/Value cell.
+     * @param amount Clicked qty/value; aside is not opened when this is zero.
      * @returns void
      * @memberof StockAgingReportComponent
      */
-    public openDetailsAside(item: StockAgingRow, variant?: StockAgingVariantRow, intervalIndex?: number): void {
+    public openDetailsAside(item: StockAgingRow, variant?: StockAgingVariantRow | null, intervalIndex?: number | null, amount?: number | string | null): void {
+        if (!Number(amount)) {
+            return;
+        }
         const stockCode = this.getStockCode(item);
         if (!stockCode) {
             return;
