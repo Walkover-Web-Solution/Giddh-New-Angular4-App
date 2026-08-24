@@ -16,20 +16,23 @@
         @if (dscCertificates.length > 0) {
             <div class="mb-3">
                 <p class="mb-2">{{ localeData?.dsc_pin_dialog?.select_certificate }}</p>
-                <div
-                    *ngFor="let cert of dscCertificates; let i = index"
-                    class="cert p-2 border-radius-8 cursor-pointer"
-                    [class.border-primary]="i === selectedDscCertificateIndex"
-                    [class.bg-light]="i === selectedDscCertificateIndex"
-                    [class.border]="i !== selectedDscCertificateIndex"
-                    (click)="selectDscCertificate(i)"
-                >
-                    <b class="font-size-14">{{ cert.subjectCn || localeData?.dsc_pin_dialog?.unknown }}</b>
-                    <span class="d-block font-size-12 text-muted">
-                        {{ localeData?.dsc_pin_dialog?.issued_by }} {{ cert.issuerCn || localeData?.dsc_pin_dialog?.issuer_unknown
-                        }}{{ cert.notAfter ? ' · ' + localeData?.dsc_pin_dialog?.valid_until + ' ' + (cert.notAfter | slice: 0 : 10) : '' }}
-                    </span>
-                </div>
+                @for (cert of dscCertificates; track cert; let i = $index) {
+                    <div
+                        class="cert p-2 mb-2 border border-radius-4 cursor-pointer"
+                        [class.border-primary]="i === selectedDscCertificateIndex"
+                        [class.theme-primary-light]="i === selectedDscCertificateIndex"
+                        [class.border-color-transparent]="i !== selectedDscCertificateIndex"
+                        (click)="selectDscCertificate(i)"
+                    >
+                        <b class="font-size-14">{{ cert.subjectCn || localeData?.dsc_pin_dialog?.unknown }}</b>
+                        <span class="d-block font-size-12 text-muted">
+                            {{ localeData?.dsc_pin_dialog?.issued_by }} {{ cert.issuerCn || localeData?.dsc_pin_dialog?.issuer_unknown
+                            }}{{
+                                cert.notAfter ? ' · ' + localeData?.dsc_pin_dialog?.valid_until + ' ' + (cert.notAfter | slice: 0 : 10) : ''
+                            }}
+                        </span>
+                    </div>
+                }
             </div>
 
             <input-field
