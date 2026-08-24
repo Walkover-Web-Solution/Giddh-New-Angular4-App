@@ -275,6 +275,25 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
+     * True when Note 1 value/secondaryValue exceeds 200 characters and strict length is enabled
+     * (notes are not shown on the last page).
+     *
+     * @param {('value' | 'secondaryValue')} key Note 1 content key
+     * @returns {boolean} True if the field is over the strict character limit
+     * @memberof TemplateEditFilterComponent
+     */
+    public isMessage1ContentOverLimit(key: 'value' | 'secondaryValue'): boolean {
+        const footerData = this.customTemplate?.sections?.['footer']?.data;
+        if (footerData?.['showNotesAtLastPage']?.display || !footerData?.['message1']?.display) {
+            return false;
+        }
+        if (key === 'secondaryValue' && !this.customTemplate?.enableSecondaryLanguage) {
+            return false;
+        }
+        return this.isCharacterLimitExceeded(200, footerData?.['message1']?.[key] || '');
+    }
+
+    /**
      * Angular lifecycle hook that is called after data-bound properties are initialized.
      *
      * @memberof TemplateEditFilterComponent

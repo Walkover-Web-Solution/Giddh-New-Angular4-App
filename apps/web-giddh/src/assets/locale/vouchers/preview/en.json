@@ -484,6 +484,7 @@
     "destination_of_supply": "Destination of Supply",
     "failed_to_get_template_preview": "Failed to get template preview",
     "please_enter_template_name": "Please enter template name.",
+    "message1_character_limit_exceeded": "Note 1 exceeds the 200 character limit.",
     "template_saved_successfully": "Template Saved Successfully.",
     "template_updated_successfully": "Template Updated Successfully.",
     "template_deleted_successfully": "Template Deleted Successfully.",

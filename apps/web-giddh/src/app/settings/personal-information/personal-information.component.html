@@ -10,6 +10,8 @@
                             [type]="'text'"
                             [name]="'companyName'"
                             [label]="localeData?.company_name"
+                            (onBlurEvent)="onNameBlur()"
+                            (input)="onNameInput()"
                         ></input-field>
                         <input-field
                             *ngIf="organizationType === 'BRANCH' || isConsolidatedBranch"

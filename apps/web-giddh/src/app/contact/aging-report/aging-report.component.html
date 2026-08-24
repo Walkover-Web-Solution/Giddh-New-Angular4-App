@@ -190,13 +190,14 @@
 <ng-template #mainTable>
     <div [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
         <div class="d-flex justify-content-end">
-            <mat-menu #agingDropdown="matMenu" [hasBackdrop]="false">
+            <mat-menu #agingDropdown="matMenu" class="aging-range-menu" [hasBackdrop]="false">
                 <ng-template matMenuContent>
                     <age-range-editor
                         *ngIf="setDueRangeOpen$ | async"
                         [options]="agingDropDownoptions"
                         [activeInterval]="activeInterval"
                         [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
                         [vendorCustomerType]="vendorCustomerType"
                         (save)="onAgingRangeSave($event)"
                         (close)="onAgingRangeClose()"
@@ -221,7 +222,7 @@
                                     $implicit: showNameSearch,
                                     fieldName: 'name',
                                     formControl: searchedName,
-                                    title: commonLocaleData?.app_customer_name,
+                                    title: vendorCustomerType === ContactsModule.vendor ? commonLocaleData?.app_vendor_name : commonLocaleData?.app_customer_name,
                                 }
                             "
                         ></ng-container>

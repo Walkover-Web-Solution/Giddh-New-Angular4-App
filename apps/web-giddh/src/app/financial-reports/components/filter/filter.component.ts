@@ -24,7 +24,6 @@ import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { cloneDeep, find, findIndex, get, map, orderBy } from '../../../lodash-optimized';
-import { ProfitLossExportView } from '../export/profit-loss/export-xls/export-xls.component';
 
 @Component({
 selector: 'financial-filter',
@@ -62,8 +61,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public dateOptions: IOption[] = [];
     public imgPath: string;
     public universalDateICurrent: boolean = false;
-    /** Export view enum for template access */
-    public profitLossExportView = ProfitLossExportView;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */

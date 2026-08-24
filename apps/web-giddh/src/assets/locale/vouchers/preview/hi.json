@@ -484,6 +484,7 @@
     "destination_of_supply": "आपूर्ति का गंतव्य",
     "failed_to_get_template_preview": "टेम्पलेट पूर्वावलोकन उपलब्ध नहीं है",
     "please_enter_template_name": "कृपया टेम्पलेट नाम दर्ज करें।",
+    "message1_character_limit_exceeded": "नोट 1, 200 वर्णों की सीमा से अधिक है।",
     "template_saved_successfully": "टेम्पलेट सफलतापूर्वक सहायक बनाया गया।",
     "template_updated_successfully": "टेम्पलेट सफलतापूर्वक सहायक बनाया गया।",
     "template_deleted_successfully": "टेम्पलेट सफलतापूर्वक हटा दिया गया।",

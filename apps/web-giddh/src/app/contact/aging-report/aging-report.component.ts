@@ -598,7 +598,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         }
         let exportData = {
             exportType: "AGING_REPORT_EXPORT",
-            fileType: "CSV",
+            fileType: "XLSX",
             includeTotalDueAmount: this.agingAdvanceSearchModal.includeTotalDueAmount,
             totalDueAmountGreaterThan: this.agingAdvanceSearchModal.totalDueAmountGreaterThan,
             totalDueAmountLessThan: this.agingAdvanceSearchModal.totalDueAmountLessThan,

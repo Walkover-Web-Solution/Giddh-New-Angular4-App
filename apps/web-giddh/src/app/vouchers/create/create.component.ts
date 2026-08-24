@@ -2165,7 +2165,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.useCustomVoucherNumber = true;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
                     this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
-                    this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomDebitNoteNumber;
+                    this.useCustomVoucherNumber = true;
                 } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                     this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
                     this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomCreditNoteNumber;
