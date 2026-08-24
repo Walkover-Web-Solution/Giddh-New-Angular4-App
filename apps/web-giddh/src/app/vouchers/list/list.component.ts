@@ -19,6 +19,7 @@ import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES,
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
+import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
 import { InvoiceService } from "../../services/invoice.service";
 import { InvoiceTemplatesService } from "../../services/invoice.templates.service";
@@ -410,7 +411,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private commonActions: CommonActions,
         private changeDetectorRef: ChangeDetectorRef,
         private recurrenceService: RecurrenceFormService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private dscSignDialogService: DscSignDialogService
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
@@ -4000,5 +4002,20 @@ public generateRecurringVoucher(voucher: any): void {
             this.advanceFilters['from'] = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
             this.advanceFilters['to'] = dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
         }
+    }
+
+    /**
+     * Initiates digitally signed invoice PDF download by opening the reusable DSC PIN dialog.
+     *
+     * @param {*} voucher The voucher for which the signed PDF is requested
+     * @memberof VoucherListComponent
+     */
+    public downloadSignedInvoicePdf(voucher: any): void {
+        this.dscSignDialogService.openDownloadSignedInvoiceDialog({
+            voucher,
+            voucherType: this.voucherType,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        });
     }
 }

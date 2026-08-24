@@ -84,6 +84,7 @@ import { CreateDiscountComponent } from "../../theme/create-discount/create-disc
 import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/confirmation-modal.interface";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
 import { ToasterService } from "../../services/toaster.service";
+import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
 import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
@@ -895,7 +896,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private generalActions: GeneralActions,
         private customFieldsService: CustomFieldsService,
         private recurrenceService: RecurrenceFormService,
-        private domSanitizer: DomSanitizer
+        private domSanitizer: DomSanitizer,
+        private dscSignDialogService: DscSignDialogService
     ) {
         this.imgPath = this.serviceConfig.IMG_PATH;
     }
@@ -9755,5 +9757,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
          setTimeout(() => {
             this.copyVoucherElement?.nativeElement?.focus();
         }, 100);
+    }
+
+     /**
+     * Create and download signed PDF of the voucher 
+     * 
+     * @memberof VoucherCreateComponent
+     */
+    public createDownloadSignedPdf(): void {
+        this.storeFocus();
+        this.saveVoucher((response) => {
+            if (response?.status === 'success' && response.body) {
+                this.dscSignDialogService.openDownloadSignedInvoiceDialog({
+                    voucher: response.body,
+                    voucherType: response.body?.voucherType || response.body?.type || this.voucherType,
+                    localeData: this.localeData,
+                    commonLocaleData: this.commonLocaleData
+                });
+            }
+        });
     }
 }
