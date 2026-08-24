@@ -20,7 +20,7 @@ import { GeneralService } from "../../../services/general.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { OrganizationType } from "../../../models/user-login-state";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
-import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
+import { ASIDE_PANE_CONFIG, IOption, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
 import {
     BucketColumn,
     BucketSortState,
@@ -86,34 +86,22 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         { colId: 'totalValue',  label: '', isLeaf: true, align: 'right' }
     ];
 
-    /** Selected branch unique names. */
+    /** Selected branch unique names, or `[SELECTED_ALL_OPTION]` when All is chosen. */
     public selectedBranch: string[] = [];
-    /** Selected warehouse unique names. */
+    /** Selected warehouse unique names, or `[SELECTED_ALL_OPTION]` when All is chosen. */
     public selectedWarehouse: string[] = [];
     /** Currently active stock category (from route param). */
     public selectedStockCategory: string = '';
-    /** Selected stock group unique names (multi-select). */
+    /** Selected stock group unique names, or `[SELECTED_ALL_OPTION]` when All is chosen. */
     public selectedStockGroup: string[] = [];
-    /** Stock groups filtered by the dropdown search. */
-    public filteredStockGroups: IOption[] = [];
     /** Full branches list from API. */
     public allBranches: any[] = [];
-    /** Branches filtered by the dropdown search. */
-    public branches: any[] = [];
-    /** Warehouses filtered by the dropdown search. */
-    public warehouses: any[] = [];
-    /** Warehouses source list (before dropdown search). */
+    /** Warehouses available for the current branch selection. */
     public currentWarehouses: any[] = [];
     /** Full stock groups list. */
     public stockGroups: IOption[] = [];
     /** True when the current org is a company (branch dropdown visible). */
     public isCompany: boolean = false;
-    /** Search form control for the branch dropdown. */
-    public branchesDropdown: FormControl = new FormControl();
-    /** Search form control for the warehouse dropdown. */
-    public warehousesDropdown: FormControl = new FormControl();
-    /** Search form control for the stock-group dropdown. */
-    public stockGroupsDropdown: FormControl = new FormControl();
     /** Debounced item-name search input; drives `searchText` in the payload. */
     public searchStockName: FormControl = new FormControl();
     /** True when the item-name search input is expanded in the column header. */
@@ -277,13 +265,14 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
 
     /**
      * True when any filter (branch, warehouse, stock-group, search or sort) is active.
+     * All (`[SELECTED_ALL_OPTION]`) is treated as no filter.
      * @returns boolean
      * @memberof StockAgingReportComponent
      */
     public get hasActiveFilters(): boolean {
-        return (this.selectedBranch?.length > 0)
-            || (this.selectedWarehouse?.length > 0)
-            || (this.selectedStockGroup?.length > 0)
+        return this.hasSpecificSelection(this.selectedBranch)
+            || this.hasSpecificSelection(this.selectedWarehouse)
+            || this.hasSpecificSelection(this.selectedStockGroup)
             || !!this.searchText
             || !!this.bucketSort;
     }
@@ -297,6 +286,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         this.selectedBranch = [];
         this.selectedWarehouse = [];
         this.selectedStockGroup = [];
+        this.recomputeWarehouses();
         this.searchText = '';
         this.searchStockName.setValue('', { emitEvent: false });
         this.showStockNameSearchInput = false;
@@ -367,30 +357,6 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
             this.refreshLayoutCaches();
             this.loadStockGroups();
             this.loadBranchesAndWarehouses();
-        });
-
-        // Local search filtering for the branch dropdown
-        this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            const branchOptions = cloneDeep(this.allBranches);
-            this.branches = search
-                ? branchOptions?.filter((branch: any) => branch?.name?.toLowerCase()?.includes(search?.toLowerCase()))
-                : branchOptions;
-        });
-
-        // Local search filtering for the warehouse dropdown
-        this.warehousesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            const warehouseOptions = cloneDeep(this.currentWarehouses);
-            this.warehouses = search
-                ? warehouseOptions?.filter((warehouse: any) => warehouse?.name?.toLowerCase()?.includes(search?.toLowerCase()))
-                : warehouseOptions;
-        });
-
-        // Local search filtering for the stock group dropdown
-        this.stockGroupsDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            const stockGroupOptions = cloneDeep(this.stockGroups);
-            this.filteredStockGroups = search
-                ? stockGroupOptions?.filter((stockGroup: IOption) => stockGroup?.label?.toLowerCase()?.includes(search?.toLowerCase()))
-                : stockGroupOptions;
         });
 
         // Debounced item-name search — refetches the report with the value
@@ -474,7 +440,6 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 this.allBranches = response.body?.results?.filter((branch: any) => branch?.isCompany !== true) ?? [];
-                this.branches = [...this.allBranches];
             }
             this.getReport();
             this.getReportTotals();
@@ -494,7 +459,6 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
                 const groups: IOption[] = [];
                 this.arrangeStockGroups(response.body?.results ?? [], groups);
                 this.stockGroups = groups;
-                this.filteredStockGroups = cloneDeep(groups);
                 this.cdr.detectChanges();
             }
         });
@@ -519,23 +483,22 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
     }
 
     /**
-     * Recompute `warehouses` from `allBranches` given the current branch selection.
+     * Recompute `currentWarehouses` from `allBranches` given the current branch selection.
      * @returns void
      * @memberof StockAgingReportComponent
      */
     private recomputeWarehouses(): void {
         const branches = this.allBranches ?? [];
-        if (this.selectedBranch.length) {
-            this.warehouses = branches
+        if (this.hasSpecificSelection(this.selectedBranch)) {
+            this.currentWarehouses = branches
                 .filter((branch: any) => this.selectedBranch.includes(branch?.uniqueName))
                 .flatMap((branch: any) => branch?.warehouses ?? []);
         } else if (this.isCompany) {
-            this.warehouses = branches.flatMap((branch: any) => branch?.warehouses ?? []);
+            this.currentWarehouses = branches.flatMap((branch: any) => branch?.warehouses ?? []);
         } else {
             const currentBranch = branches.find((branch: any) => branch?.uniqueName === this.generalService.currentBranchUniqueName);
-            this.warehouses = currentBranch?.warehouses ?? [];
+            this.currentWarehouses = currentBranch?.warehouses ?? [];
         }
-        this.currentWarehouses = this.warehouses;
     }
 
     /**
@@ -608,6 +571,26 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
     }
 
     /**
+     * True when the multi-select has real values (not empty and not All).
+     * @param selected Current control value.
+     * @returns boolean
+     * @memberof StockAgingReportComponent
+     */
+    private hasSpecificSelection(selected: string[]): boolean {
+        return !!selected?.length && !isSelectedAllOption(selected);
+    }
+
+    /**
+     * Unique names to send to the API. All is sent as an empty array (same as no filter).
+     * @param selected Current control value.
+     * @returns The unique names, or `[]` when All / nothing is selected.
+     * @memberof StockAgingReportComponent
+     */
+    private getSelectedUniqueNames(selected: string[]): string[] {
+        return this.hasSpecificSelection(selected) ? selected.filter(Boolean) : [];
+    }
+
+    /**
      * Build the filter payload shared by the report, totals and detail APIs.
      * @param includeSearchText Whether the item-name search term is part of the payload.
      * @returns The request payload.
@@ -615,9 +598,11 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
      */
     private buildFilterPayload(includeSearchText: boolean = true): any {
         const payload: any = {
-            branchUniqueNames: (this.isCompany && this.allBranches?.length > 1) ? (this.selectedBranch ?? []).filter(Boolean) : [this.generalService.currentBranchUniqueName],
-            warehouseUniqueNames: this.selectedWarehouse,
-            stockGroupUniqueNames: this.selectedStockGroup,
+            branchUniqueNames: (this.isCompany && this.allBranches?.length > 1)
+                ? this.getSelectedUniqueNames(this.selectedBranch)
+                : [this.generalService.currentBranchUniqueName],
+            warehouseUniqueNames: this.getSelectedUniqueNames(this.selectedWarehouse),
+            stockGroupUniqueNames: this.getSelectedUniqueNames(this.selectedStockGroup),
             categoryUniqueNames: [this.selectedStockCategory]
         };
         if (includeSearchText) {
