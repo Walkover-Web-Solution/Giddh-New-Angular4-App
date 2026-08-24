@@ -14,6 +14,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { forEach, includes, indexOf } from '../../../lodash-optimized';
+import { DownloadCsvOptions, DownloadCsvOptionsDialogComponent } from '../../../shared/download-csv-options-dialog/download-csv-options-dialog.component';
 
 export interface SearchTable {
     name: string;
@@ -225,6 +226,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         let formattedQuery = this.formatQuery(queryForApi, searchQuery);
         this.formattedQuery = formattedQuery;
         this.selectAllCustomer = false;
+        this.selectedItems = [];
         this.FilterByAPIEvent.emit(formattedQuery);
     }
 
@@ -237,9 +239,18 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     public resetFilters(isFiltered) {
         if (!isFiltered) {
             this.searchResponseFiltered$ = this.searchResponse$;
-            this.FilterByAPIEvent.emit(null);
-            this.pageChangeEvent.emit(1);
+            const defaultQuery = this.createSearchQueryReqObj();
+            this.formattedQuery = this.formatQuery(defaultQuery, []);
+            this.FilterByAPIEvent.emit(this.formattedQuery);
+            this.checkboxInfo.selectedPage = 1;
+            const legacyEvent = {
+                page: 1,
+                itemsPerPage: 1,
+                count: this.countPerPage
+            };
+            this.pageChangeEvent.emit(legacyEvent);
             this.selectAllCustomer = false;
+            this.selectedItems = [];
         }
     }
 
@@ -281,36 +292,52 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         let queryForApi = this.createSearchQueryReqObj();
         let formattedQuery = this.formatQuery(queryForApi, searchQuery);
 
-        // New logic (download CSV from API)
-        this.searchLoader$ = of(true);
-        this.searchRequest$.pipe(take(1)).subscribe(p => {
-            if (!p) {
+        const dialogRef = this.dialog.open(DownloadCsvOptionsDialogComponent, {
+            panelClass: ['mat-dialog-sm'],
+            disableClose: true,
+            data: { localeData: this.localeData, commonLocaleData: this.commonLocaleData }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe((options: DownloadCsvOptions | undefined) => {
+            if (!options) {
                 return;
             }
-            let request: BulkEmailRequest = {
-                data: {
-                    subject: this.messageBody.subject,
-                    message: this.messageBody.msg,
-                    accounts: this.selectedItems,
-                },
-                params: {
-                    from: p.fromDate,
-                    to: p.toDate,
-                    groupUniqueName: p.groupName
-                },
-                branchUniqueName: this.currentBranchUniqueName
-            };
 
-            request.data = Object.assign({}, request.data, formattedQuery);
-
-            this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                this.searchLoader$ = of(false);
-                if (res?.status === 'success') {
-                    let blobData = this.generalService.base64ToBlob(res?.body, 'text/csv', 512);
-                    return saveAs(blobData, `${p.groupName}.csv`);
+            this.searchLoader$ = of(true);
+            this.searchRequest$.pipe(take(1)).subscribe(p => {
+                if (!p) {
+                    return;
                 }
-            });
+                let request: BulkEmailRequest = {
+                    data: {
+                        subject: this.messageBody.subject,
+                        message: this.messageBody.msg,
+                        accounts: this.selectedItems,
+                        includeParentGroup: options.includeParentGroup,
+                        includeMobileNumber: options.includeMobileNumber,
+                        includeEmailId: options.includeEmailId,
+                        includeState: options.includeState,
+                        includeTaxNumber: options.includeTaxNumber,
+                    },
+                    params: {
+                        from: p.fromDate,
+                        to: p.toDate,
+                        groupUniqueName: p.groupName
+                    },
+                    branchUniqueName: this.currentBranchUniqueName
+                };
 
+                request.data = Object.assign({}, request.data, formattedQuery);
+
+                this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    this.searchLoader$ = of(false);
+                    if (res?.status === 'success') {
+                        let blobData = this.generalService.base64ToBlob(res?.body, 'text/xlsx', 512);
+                        return saveAs(blobData, `${p.groupName}.xlsx`);
+                    }
+                });
+
+            });
         });
     }
 
