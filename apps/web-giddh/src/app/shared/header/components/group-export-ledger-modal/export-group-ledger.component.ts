@@ -211,6 +211,7 @@ export class ExportGroupLedgerComponent implements OnInit {
                 postRequest.mergePdf = this.exportRequest.mergePdf;
                 postRequest.copyTypes = this.exportRequest.copyTypes;
             }
+            this.generalService.replaceSelectedAllOptions(postRequest);
             const getRequest = {
                 groupUniqueName: this.activeGroupUniqueName,
                 from: this.fromDate,

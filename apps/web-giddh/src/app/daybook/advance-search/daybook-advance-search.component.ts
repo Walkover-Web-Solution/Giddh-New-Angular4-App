@@ -1,6 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, filter, take, takeUntil } from 'rxjs/operators';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { takeUntil } from 'rxjs/operators';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
@@ -107,10 +107,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public tags$: Observable<IOption[]>;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    /** This will use for instance of sales person Dropdown */
-    public salesPersonDropdown: FormControl = new FormControl();
-    /** Filtered Sales Person List */
-    public filteredSalesPersonList: IOption[] = [];
 
     constructor(
         private inventoryService: InventoryService,
@@ -153,24 +149,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' },
             { label: this.commonLocaleData?.app_comparision_filters?.exclude, value: 'exclude' }
         ]);
-
-        this.salesPersonList$.pipe(filter(Boolean), take(1)).subscribe(res => {
-            this.filteredSalesPersonList = res as IOption[];
-        });
-
-        this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
-            takeUntil(this.destroyed$)).subscribe((search: string) => {
-                if (!search) {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res as IOption[];
-                    });
-                } else {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res?.filter((salesPerson: IOption) => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
-                    });
-                }
-                this.changeDetectionRef.detectChanges();
-            });
     }
 
     /**

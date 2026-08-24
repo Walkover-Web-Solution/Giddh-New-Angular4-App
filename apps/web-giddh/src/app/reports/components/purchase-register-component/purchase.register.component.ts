@@ -19,7 +19,7 @@ import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, isSelectedAllOption } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 import { DurationEnum } from '../../constants/reports.constant';
@@ -101,24 +101,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public groupByOptions: IOption[] = [];
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    /** This will use for instance of sales person Dropdown */
-    public salesPerson: FormControl = new FormControl();
-    /** This will use for instance of account Dropdown */
-    public account: FormControl = new FormControl();
     /** Country list */
     public countryList = signal<IOption[]>([]);
     /** State list */
     public stateList = signal<IOption[]>([]);
-    /** This will use for instance of country search */
-    public countrySearch: FormControl = new FormControl();
-    /** Filtered Country List */
-    public filteredCountryList = signal<IOption[]>([]);
-    /** This will use for instance of state search */
-    public stateSearch: FormControl = new FormControl();
-    /** Filtered State List */
-    public filteredStateList = signal<IOption[]>([]);
-    /** Filtered Sales Person List */
-    public filteredSalesPersonList = signal<IOption[]>([]);
     /** Complete option lists used to determine when all items are effectively selected (selectAll) */
     public allOptions: { salesPerson: IOption[]; country: IOption[]; state: IOption[]; account: any[] } = {
         salesPerson: [],
@@ -266,60 +252,16 @@ constructor(
         this.getSalesPersonList();
         this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
             this.allOptions.salesPerson = this.withOtherSalesPerson(res as IOption[]);
-            this.filteredSalesPersonList.set(this.withOtherSalesPerson(res as IOption[]));
         });
 
         this.accountList$.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
             this.allOptions.account = res?.results ?? res ?? [];
         });
 
-        /** Search for sales person dropdown */
-        this.salesPerson.valueChanges.pipe(debounceTime(200),
-            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
-                if (!search) {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList.set(this.withOtherSalesPerson(res as IOption[]));
-                    });
-                } else {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList.set(this.withOtherSalesPerson(
-                            res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[]
-                        ));
-                    });
-                }
-            });
         this.getAccounts();
-
-        /** Search for account dropdown */
-        this.account.valueChanges.pipe(debounceTime(300),
-            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
-                this.getAccounts(search ? search : '');
-            });
 
         /** Load countries on init */
         this.loadCountries();
-
-        /** Search for country dropdown */
-        this.countrySearch.valueChanges.pipe(debounceTime(200),
-            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
-                if (!search) {
-                    this.filteredCountryList.set(this.countryList());
-                } else {
-                    this.filteredCountryList.set(this.countryList()?.filter(country => country?.label?.toLowerCase()?.includes(search?.toLowerCase())));
-                }
-            });
-
-        /** Search for state dropdown */
-        this.stateSearch.valueChanges.pipe(debounceTime(200),
-            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
-                if (!search) {
-                    this.filteredStateList.set(this.withOtherState(this.stateList()));
-                } else {
-                    this.filteredStateList.set(this.withOtherState(
-                        this.stateList()?.filter(state => state?.label?.toLowerCase()?.includes(search?.toLowerCase()))
-                    ));
-                }
-            });
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -335,7 +277,6 @@ constructor(
                     value: state.code
                 })));
                 this.allOptions.state = this.withOtherState(this.stateList());
-                this.filteredStateList.set(this.withOtherState(this.stateList()));
             }
         });
 
@@ -345,7 +286,7 @@ constructor(
                 this.loadStates(countryCode);
             } else {
                 this.stateList.set([]);
-                this.filteredStateList.set(this.withOtherState([]));
+                this.allOptions.state = this.withOtherState([]);
             }
         });
 
@@ -784,7 +725,8 @@ constructor(
 
     /**
      * Determines whether a multi-select filter effectively represents "select all".
-     * Returns true when nothing is selected (default = all) or when every available option is selected.
+     * Returns true when nothing is selected (default = all), when All was chosen ([SELECTED_ALL_OPTION]),
+     * or when every available option is selected.
      *
      * @private
      * @param {any[]} selected Currently selected values
@@ -793,6 +735,9 @@ constructor(
      * @memberof PurchaseRegisterComponent
      */
     private isAllSelected(selected: any[], total: number): boolean {
+        if (isSelectedAllOption(selected)) {
+            return true;
+        }
         const selectedCount = selected?.length ?? 0;
         const totalCount = total ?? 0;
         return selectedCount === 0 || selectedCount === totalCount;
@@ -938,18 +883,6 @@ constructor(
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT, archive: '' } });
     }
-
-    /**
-     * Reset account dropdown 
-     * @returns void
-    */
-    public accountReset(): void {
-        this.accountList$.pipe(take(1)).subscribe((res: any) => {
-            if (!res?.results?.length) {
-                this.account.reset();
-            }
-        });
-    }
     
     /**
      * Get accounts
@@ -1026,6 +959,11 @@ constructor(
         }
         this.savePreferences();
         const requestObject = cloneDeep(this.reportForm.value);
+        ["salesPersonUniqueNames", "stateCodes", "countryCodes", "accountUniqueNames"].forEach((key: string) => {
+            if (isSelectedAllOption(requestObject[key])) {
+                requestObject[key] = [];
+            }
+        });
         const groupByValue = this.reportForm?.get('groupBy')?.value;
 
         /** Map of keys to remove for each group by type */
@@ -1104,7 +1042,6 @@ constructor(
                     value: country.alpha2CountryCode || country.code
                 })));
                 this.allOptions.country = this.countryList();
-                this.filteredCountryList.set(this.countryList());
             }
         });
     }

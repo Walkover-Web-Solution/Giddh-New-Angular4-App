@@ -113,7 +113,6 @@
                                 inputData?.voucherType === 'payment' ||
                                 inputData?.voucherType === 'credit note' ||
                                 inputData?.voucherType === 'debit note',
-                            'mat-form-field-invalid': !exportForm.get('copyTypes').value?.length && !isValidForm,
                         }"
                         *ngIf="
                             (exportForm.get('exportType').value === exportTypeEnum.multiplePdf ||
@@ -122,14 +121,16 @@
                             exportForm.get('voucherExport').value
                         "
                     >
-                        <mat-form-field appearance="outline" class="initial-height w-100 mb-2 mt-3">
-                            <mat-label>{{ localeData?.select_copy }}</mat-label>
-                            <mat-select multiple [placeholder]="localeData?.select_copy" formControlName="copyTypes">
-                                <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">
-                                    {{ copyType.label }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <multi-select-dropdown
+                            class="mb-2 mt-3"
+                            [name]="'copyTypes'"
+                            [appearance]="'outline'"
+                            [label]="localeData?.select_copy"
+                            [options]="copyTypes"
+                            [showAllOption]="true"
+                            [showError]="!exportForm.get('copyTypes').value?.length && !isValidForm"
+                            formControlName="copyTypes"
+                        ></multi-select-dropdown>
                     </div>
 
                     <!-- Export Excel Columns -->

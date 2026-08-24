@@ -29,7 +29,7 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
-import { Configuration, INTERNAL_EMAILS_DOMAINS } from '../app.constant';
+import { Configuration, INTERNAL_EMAILS_DOMAINS, isSelectedAllOption } from '../app.constant';
 import { cloneDeep, find,orderBy } from '../lodash-optimized';
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
@@ -149,6 +149,32 @@ export class GeneralService {
             }
         });
         return url;
+    }
+
+    /**
+     * Replaces a selected-all sentinel array with an empty array and marks its
+     * containing request object with `selectAll: true`.
+     *
+     * @param node Request object or nested request object
+     * @param createCopy When true, transforms and returns a deep clone without changing the original object
+     * @returns The transformed request object
+     * @memberof GeneralService
+     */
+    public replaceSelectedAllOptions<T>(node: T, createCopy: boolean = false): T {
+        const requestNode: any = createCopy ? cloneDeep(node) : node;
+        if (!requestNode || typeof requestNode !== 'object') {
+            return requestNode;
+        }
+        Object.keys(requestNode).forEach(key => {
+            const value = requestNode[key];
+            if (isSelectedAllOption(value)) {
+                requestNode[key] = [];
+                requestNode['selectAll'] = true;
+            } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+                this.replaceSelectedAllOptions(value);
+            }
+        });
+        return requestNode;
     }
 
     public setIsMobileView(isMobileView: boolean) {

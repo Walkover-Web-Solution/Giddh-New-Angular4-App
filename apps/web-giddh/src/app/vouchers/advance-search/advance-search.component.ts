@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { debounceTime, filter, Observable, ReplaySubject, skip, take, takeUntil, tap } from 'rxjs';
+import { filter, Observable, ReplaySubject, take, tap } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../../shared/helpers/defaultDateFormat';
 import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, DATE_REGEX, IOption } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../shared/sales-person/sales-person.component';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'app-advance-search',
@@ -53,6 +54,10 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public toDate: string;
     /** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
+    /** Payment status options for invoice advance search */
+    public paymentStatusOptions: IOption[] = [];
+    /** Purchase order status options */
+    public purchaseOrderStatusOptions: IOption[] = [];
     /** Holds field label values */
     public fieldLabelValues: any = {
         invoiceDateRange: '',
@@ -69,16 +74,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public adjustmentVoucherOptions: IOption[] = [];
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    /** This will use for instance of sales person Dropdown */
-    public salesPersonDropdown: FormControl = new FormControl();
-    /** Filtered Sales Person List */
-    public filteredSalesPersonList: IOption[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
         private dialog: MatDialog,
-        private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore,
+        private generalService: GeneralService
     ) { }
 
     /**
@@ -106,6 +108,31 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_date_options?.on, value: 'on' },
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
+        ];
+
+        this.paymentStatusOptions = [
+            { label: this.commonLocaleData?.app_payment_status?.paid, value: 'paid' },
+            { label: this.commonLocaleData?.app_payment_status?.partially_paid, value: 'partial-paid' },
+            { label: this.commonLocaleData?.app_payment_status?.unpaid, value: 'unpaid' },
+            { label: this.commonLocaleData?.app_payment_status?.hold, value: 'hold' },
+            { label: this.commonLocaleData?.app_payment_status?.cancel, value: 'cancel' }
+        ];
+
+        this.purchaseOrderStatusOptions = [
+            { label: this.commonLocaleData?.app_payment_status?.open, value: 'open' },
+            { label: this.commonLocaleData?.app_payment_status?.converted, value: 'converted' },
+            { label: this.commonLocaleData?.app_payment_status?.partially_converted, value: 'partially-converted' },
+            { label: this.commonLocaleData?.app_payment_status?.expired, value: 'expired' }
+        ];
+
+        this.eInvoiceStatusDropdownOptions = [
+            { label: this.localeData?.e_invoice_statuses_label?.yet_to_be_pushed, value: this.localeData?.e_invoice_statuses_label?.yet_to_be_pushed },
+            { label: this.localeData?.e_invoice_statuses_label?.pushed, value: this.localeData?.e_invoice_statuses_label?.pushed },
+            { label: this.localeData?.e_invoice_statuses_label?.push_initiated, value: this.localeData?.e_invoice_statuses_label?.push_initiated },
+            { label: this.localeData?.e_invoice_statuses_label?.cancelled, value: this.localeData?.e_invoice_statuses_label?.cancelled },
+            { label: this.localeData?.e_invoice_statuses_label?.mark_as_cancelled, value: this.localeData?.e_invoice_statuses_label?.mark_as_cancelled },
+            { label: this.localeData?.e_invoice_statuses_label?.failed, value: this.localeData?.e_invoice_statuses_label?.failed },
+            { label: this.localeData?.e_invoice_statuses_label?.na, value: this.localeData?.e_invoice_statuses_label?.na }
         ];
 
         this.adjustmentVoucherOptions = [
@@ -139,8 +166,8 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             dueDate: [this.advanceFilters?.dueDate ?? ''],
             amountFieldSelector: [this.advanceFilters?.amountFieldSelector ?? ''],
             balanceDue: [this.advanceFilters?.balanceDue ?? ''],
-            balanceStatus: [this.advanceFilters?.balanceStatus ?? ''],
-            eInvoiceStatus: [this.advanceFilters?.eInvoiceStatus ?? ''],
+            balanceStatus: [this.advanceFilters?.balanceStatus ?? []],
+            eInvoiceStatus: [this.advanceFilters?.eInvoiceStatus ?? []],
             description: [this.advanceFilters?.description ?? ''],
             amount: [this.advanceFilters?.amount ?? ''],
             invoiceTotalAmount: [this.advanceFilters?.invoiceTotalAmount ?? ''],
@@ -154,7 +181,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             dueTo: [(this.advanceFilters?.dueTo && dayjs(this.advanceFilters?.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
             receiptType: [''],
             salesPersonName: [this.advanceFilters?.salesPersonName ?? ''],
-            salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? '']
+            salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? []]
         });
 
         const invoiceDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.invoiceDateRange);
@@ -186,23 +213,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             this.fieldLabelValues.adjustmentVoucherOptions = adjustmentVoucherOptions[0]?.label;
         }
         this.getSalesPersonList();
-        this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
-            this.filteredSalesPersonList = res as IOption[];
-        });
-
-        /** Search for action dropdown */
-        this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
-        takeUntil(this.destroyed$)).subscribe((search: string) => {
-            if (!search) {
-                this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                    this.filteredSalesPersonList = res as IOption[];
-                });
-            } else {
-                this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                    this.filteredSalesPersonList = res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
-                });
-            }
-        });
     }
 
     /**
@@ -440,7 +450,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      */
     public search(): void {
         this.parseAllDateField();
-        this.applyFilterEvent.emit(this.searchForm?.value);
+        this.applyFilterEvent.emit(this.generalService.replaceSelectedAllOptions(this.searchForm?.value, true));
         this.closeDialogEvent.emit();
     }
 

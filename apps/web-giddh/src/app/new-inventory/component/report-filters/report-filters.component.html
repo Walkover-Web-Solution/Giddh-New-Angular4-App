@@ -24,55 +24,30 @@
         </div>
     </div>
     <div class="pl-1 filter-dropdown-branch" *ngIf="(isCompany || isConsolidatedBranch) && allBranches?.length > 1">
-        <mat-select
-            name="selectedBranch"
-            [multiple]="true"
+        <multi-select-dropdown
+            [name]="'selectedBranch'"
+            [showAllOption]="true"
+            [label]="localeData?.header?.select_branch"
+            [noEntriesFoundLabel]="localeData?.header?.no_result_found"
+            [options]="allBranches"
+            [optionValue]="'uniqueName'"
+            [optionLabel]="'name'"
             [(ngModel)]="selectedBranch"
-            class="stock-mat-salect"
-            [placeholder]="localeData?.header?.select_branch"
-            (ngModelChange)="resetWarehouse(); getBranches()"
-        >
-            <mat-option class="balance-options">
-                <ngx-mat-select-search
-                    [noEntriesFoundLabel]="localeData?.header?.no_result_found"
-                    [formControl]="branchesDropdown"
-                    [placeholderLabel]="localeData?.header?.select_branch"
-                    class="mat-select-search-inventory"
-                    [clearSearchInput]="false"
-                >
-                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                </ngx-mat-select-search>
-            </mat-option>
-
-            <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
-                {{ branch?.name ?? '-' }}
-            </mat-option>
-        </mat-select>
+            (selectionChange)="resetWarehouse(); getBranches()"
+        ></multi-select-dropdown>
     </div>
     <div class="pl-1 filter-dropdown-warehouse" *ngIf="currentWarehouses?.length > 1">
-        <mat-select
-            name="selectedWarehouse"
-            [multiple]="true"
+        <multi-select-dropdown
+            [name]="'selectedWarehouse'"
+            [showAllOption]="true"
+            [label]="localeData?.header?.select_warehouse"
+            [noEntriesFoundLabel]="localeData?.header?.no_result_found"
+            [options]="currentWarehouses"
+            [optionValue]="'uniqueName'"
+            [optionLabel]="'name'"
             [(ngModel)]="selectedWarehouse"
-            class="stock-mat-salect"
-            [placeholder]="localeData?.header?.select_warehouse"
-            (ngModelChange)="getWarehouses()"
-        >
-            <mat-option class="balance-options">
-                <ngx-mat-select-search
-                    [noEntriesFoundLabel]="localeData?.header?.no_result_found"
-                    [formControl]="warehousesDropdown"
-                    [placeholderLabel]="localeData?.header?.select_warehouse"
-                    class="mat-select-search-inventory"
-                    [clearSearchInput]="false"
-                >
-                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                </ngx-mat-select-search>
-            </mat-option>
-            <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
-                {{ warehouse?.name ?? '-' }}
-            </mat-option>
-        </mat-select>
+            (selectionChange)="getWarehouses()"
+        ></multi-select-dropdown>
     </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
         <button matButton="outlined" class="create-btn-inventory ml-3 mr-0" (click)="resetFilter()">

@@ -100,6 +100,7 @@
                                         [label]="localeData?.merge_accounts"
                                         [placeholder]="commonLocaleData?.app_select_accounts"
                                         [options]="accounts$ | async"
+                                        [showAllOption]="true"
                                         (scrollEnd)="handleScrollEnd()"
                                         [enableDynamicSearch]="true"
                                         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
@@ -127,6 +128,7 @@
                                         [label]="localeData?.merge_group"
                                         [placeholder]="localeData?.select_groups"
                                         [options]="groups$ | async"
+                                        [showAllOption]="true"
                                         (scrollEnd)="handleGroupScrollEnd()"
                                         [enableDynamicSearch]="true"
                                         (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
@@ -174,6 +176,7 @@
                                                 [label]="commonLocaleData?.app_particulars"
                                                 [placeholder]="commonLocaleData?.app_select_accounts"
                                                 [options]="accounts$ | async"
+                                                [showAllOption]="true"
                                                 (scrollEnd)="handleScrollEnd()"
                                                 [enableDynamicSearch]="true"
                                                 (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
@@ -222,6 +225,7 @@
                                                 [label]="commonLocaleData?.app_voucher_type"
                                                 [placeholder]="commonLocaleData?.app_select_accounts"
                                                 [options]="voucherTypeList | async"
+                                                [showAllOption]="true"
                                             ></select-multiple-fields>
                                         </div>
                                     </div>
@@ -254,31 +258,15 @@
                                     </div>
                                     <div class="col-sm-9 col-8 col-12">
                                         <div class="mt-3">
-                                            <mat-form-field appearance="outline" class="initial-height">
-                                                <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
-                                                <mat-select
-                                                    panelClass="py-0"
-                                                    name="salesPerson"
-                                                    [multiple]="true"
-                                                    [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
-                                                >
-                                                    <mat-option class="mt-0">
-                                                        <ngx-mat-select-search
-                                                            [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                                            [formControl]="salesPersonDropdown"
-                                                        >
-                                                            <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                                        </ngx-mat-select-search>
-                                                    </mat-option>
-                                                    <mat-option
-                                                        *ngFor="let salesPerson of filteredSalesPersonList"
-                                                        [value]="salesPerson?.value"
-                                                    >
-                                                        {{ salesPerson?.label }}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
+                                            <multi-select-dropdown
+                                                [name]="'salesPerson'"
+                                                [appearance]="'outline'"
+                                                [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
+                                                [label]="commonLocaleData?.app_sales_person"
+                                                [placeholder]="commonLocaleData?.app_sales_person_placeholder"
+                                                [options]="salesPersonList$ | async"
+                                                [showAllOption]="true"
+                                            ></multi-select-dropdown>
                                         </div>
                                     </div>
                                 </div>
@@ -395,6 +383,7 @@
                                                             [label]="commonLocaleData?.app_inventory"
                                                             [placeholder]="commonLocaleData?.app_select_accounts"
                                                             [options]="stockListDropDown$ | async"
+                                                            [showAllOption]="true"
                                                             (scrollEnd)="handleStockScrollEnd()"
                                                             [enableDynamicSearch]="true"
                                                             (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"

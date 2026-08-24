@@ -67,6 +67,55 @@ ngx-mat-select-search {
     }
 }
 
+.multi-select-dropdown-panel {
+
+    .mat-mdc-option {
+        min-height: 40px;
+        padding-left: 16px;
+        padding-right: 16px;
+        margin-bottom: 5px;
+    }
+
+    .mat-mdc-option.contains-mat-select-search {
+        min-height: 40px;
+        padding-left: 0;
+        padding-right: 0;
+
+        &.mdc-list-item--disabled,
+        &.mdc-list-item--disabled * {
+            cursor: default !important;
+        }
+
+        .mat-select-search-input {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 44px 0 16px;
+            cursor: text !important;
+        }
+
+        .mat-select-search-clear,
+        .mat-select-search-clear *,
+        .icon-cross {
+            cursor: pointer !important;
+        }
+
+        &.mat-select-search-no-entries-found {
+            --mdc-list-list-item-one-line-container-height: auto;
+            --mdc-list-list-item-two-line-container-height: auto;
+            --mdc-list-list-item-three-line-container-height: auto;
+            height: auto !important;
+            min-height: 0 !important;
+            padding: 0 !important;
+        }
+    }
+
+    div.mat-select-search-no-entries-found {
+        padding: 8px 16px 12px;
+        line-height: 1.3;
+        text-align: center;
+    }
+}
+
 .custom-input-field {
     .mdc-text-field--filled {
         padding: 0;
