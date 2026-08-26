@@ -572,7 +572,6 @@
     "eoe": "ई. और ओ.ई. (गलतियां और चूक अपवादित)",
     "invoice_grand_total_in_accounts_currency": "चालान का कुल योग",
     "confirm_change_secondary_language": "[LANGUAGE] के लिए सभी पूर्व-भरे मान हटा दिए जाएंगे। क्या आप जारी रखना चाहते हैं?",
-    "download_signed_invoice": "डिजिटली साइन किया हुआ इनवॉइस डाउनलोड करें",
     "dsc_pin_dialog": {
         "title": "डिजिटल हस्ताक्षर पिन",
         "message": "इस चालान पर हस्ताक्षर करने के लिए अपना DSC टोकन PIN दर्ज करें।",

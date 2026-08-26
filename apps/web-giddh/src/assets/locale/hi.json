@@ -825,5 +825,6 @@
     "app_you_in_company_mode": "आप कंपनी मोड में हैं",
     "app_you_in_consolidate_mode": "आप समेकित मोड में हैं",
     "go_to_branch": "शाखा पर जाएँ",
-    "switch_to_branch": "शाखा मोड पर स्विच करें"
+    "switch_to_branch": "शाखा मोड पर स्विच करें",
+    "app_download_signed_invoice": "डिजिटली साइन किया हुआ इनवॉइस डाउनलोड करें"
 }

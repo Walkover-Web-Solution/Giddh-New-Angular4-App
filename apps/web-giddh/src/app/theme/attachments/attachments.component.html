@@ -132,6 +132,26 @@
                             <i class="icon-download-circle"></i>
                         </a>
                     </span>
+                    @if (
+                        selectedItem?.voucherGeneratedType !== VoucherTypeEnum.receipt &&
+                        selectedItem?.voucherGeneratedType !== VoucherTypeEnum.payment
+                    ) {
+                        <span>
+                            <a
+                                (click)="!isDscPreloading && downloadSignedInvoicePdf()"
+                                [matTooltip]="commonLocaleData?.app_download_signed_invoice"
+                                [matTooltipPosition]="'above'"
+                                [class.disabled]="isDscPreloading"
+                                aria-label="icon file"
+                            >
+                                @if (isDscPreloading) {
+                                    <mat-spinner [diameter]="14"></mat-spinner>
+                                } @else {
+                                    <i class="icon-download-circle"></i>
+                                }
+                            </a>
+                        </span>
+                    }
                     <span>
                         <a
                             (click)="printFiles()"

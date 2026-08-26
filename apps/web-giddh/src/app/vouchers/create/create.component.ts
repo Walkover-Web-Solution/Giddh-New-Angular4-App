@@ -35,6 +35,7 @@ import {
     takeUntil,
     tap
 } from "rxjs";
+import { finalize } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
 import { UiSettingsService } from "../../services/ui-settings.service";
@@ -85,6 +86,7 @@ import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/c
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
 import { ToasterService } from "../../services/toaster.service";
 import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
+import { DscService } from "../../services/dsc.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
 import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
@@ -196,6 +198,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public imgPath: string = '';
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
+    /** True while DSC certificates are being preloaded; disables signed-PDF download button. */
+    public isDscPreloading: boolean = true;
     /** Discounts list Observable */
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
     /** Discounts list Observable */
@@ -897,7 +901,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private customFieldsService: CustomFieldsService,
         private recurrenceService: RecurrenceFormService,
         private domSanitizer: DomSanitizer,
-        private dscSignDialogService: DscSignDialogService
+        private dscSignDialogService: DscSignDialogService,
+        private dscService: DscService
     ) {
         this.imgPath = this.serviceConfig.IMG_PATH;
     }
@@ -909,6 +914,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public ngOnInit(): void {
         this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
+        this.dscService.preloadCertificates().pipe(
+            takeUntil(this.destroyed$),
+            finalize(() => {
+                this.isDscPreloading = false;
+                this.changeDetection.detectChanges();
+            })
+        ).subscribe();
         
         // Set up global interaction tracking
         this.setupGlobalInteractionTracking();
@@ -9770,9 +9782,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (response?.status === 'success' && response.body) {
                 this.dscSignDialogService.openDownloadSignedInvoiceDialog({
                     voucher: response.body,
-                    voucherType: response.body?.voucherType || response.body?.type || this.voucherType,
-                    localeData: this.localeData,
-                    commonLocaleData: this.commonLocaleData
+                    voucherType: response.body?.voucherType || response.body?.type || this.voucherType
                 });
             }
         });

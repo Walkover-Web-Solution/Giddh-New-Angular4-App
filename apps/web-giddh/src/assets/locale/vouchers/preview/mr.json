@@ -572,7 +572,6 @@
     "eoe": "त्रुटी आणि वगळणे वगळून",
     "invoice_grand_total_in_accounts_currency": "बिल एकूण बेरीज",
     "confirm_change_secondary_language": "[LANGUAGE] साठी सर्व पूर्व-भरलेली मूल्ये काढून टाकली जातील. आपण सुरू ठेवू इच्छिता का?",
-    "download_signed_invoice": "डिजिटल स्वाक्षरी केलेले चलन डाउनलोड करा",
     "dsc_pin_dialog": {
         "title": "डिजिटल स्वाक्षरी पिन",
         "message": "हा व्हाउचर साइन करण्यासाठी तुमचा DSC टोकन PIN प्रविष्ट करा.",

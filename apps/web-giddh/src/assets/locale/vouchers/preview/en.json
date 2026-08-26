@@ -572,7 +572,6 @@
     "eoe": "E. & O.E. (Errors & Omissions Excepted)",
     "invoice_grand_total_in_accounts_currency": "Invoice Grand Total",
     "confirm_change_secondary_language": "All pre-filled values for [LANGUAGE] will be removed. Do you want to continue?",
-    "download_signed_invoice": "Download Digitally Signed Invoice",
     "dsc_pin_dialog": {
         "title": "Digital Signature PIN",
         "message": "Enter your DSC token PIN to sign this invoice.",
