@@ -443,6 +443,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public onLedgerView(type: string): void {
-        this.fileType = type ? 'XLSX' : 'CSV';
+        this.fileType = type;
     }
 }

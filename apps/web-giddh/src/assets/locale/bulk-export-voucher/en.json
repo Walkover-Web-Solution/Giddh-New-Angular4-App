@@ -30,5 +30,6 @@
     "mobile_number": "Mobile Number",
     "attention_to": "Attention To",
     "other_tax_value": "Other Tax Value",
-    "export_note": "The default columns 'Voucher date, Voucher number, Customer name, Voucher amount, Due amount, Due date, Status' will be exported, you also have the option to add custom columns as needed."
+    "export_note": "The default columns 'Voucher date, Voucher number, Customer name, Voucher amount, Due amount, Due date, Status' will be exported, you also have the option to add custom columns as needed.",
+    "csv_semicolon_separator_note": "CSV exports use a semicolon (;) as the field separator."
 }

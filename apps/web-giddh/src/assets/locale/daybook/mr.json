@@ -17,5 +17,6 @@
     "cheque_number": "चेक संख्या",
     "clearance_date": "मंजुरीची तारीख",
     "tags": "टॅग्ज",
-    "select_tags": "टॅग निवडा"
+    "select_tags": "टॅग निवडा",
+    "csv_semicolon_separator_note": "CSV निर्यातात फील्ड विभाजक म्हणून अर्धविराम (;) वापरला जातो."
 }
