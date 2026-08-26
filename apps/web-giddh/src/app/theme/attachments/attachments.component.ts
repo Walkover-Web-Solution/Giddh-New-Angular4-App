@@ -68,6 +68,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** True while DSC certificates are being preloaded; disables signed-PDF download button. */
     public isDscPreloading: boolean = true;
+    /** Holds VoucherType Enum */
+    public voucherTypeEnum:any = VoucherTypeEnum;
 
     constructor(
         private commonService: CommonService,
