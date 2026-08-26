@@ -133,15 +133,14 @@
                         </a>
                     </span>
                     @if (
-                        selectedItem?.voucherGeneratedType !== VoucherTypeEnum.receipt &&
-                        selectedItem?.voucherGeneratedType !== VoucherTypeEnum.payment
+                        selectedItem?.voucherGeneratedType !== voucherTypeEnum.receipt &&
+                        selectedItem?.voucherGeneratedType !== voucherTypeEnum.payment
                     ) {
-                        <span>
+                        <span [class.disabled]="isDscPreloading">
                             <a
                                 (click)="!isDscPreloading && downloadSignedInvoicePdf()"
                                 [matTooltip]="commonLocaleData?.app_download_signed_invoice"
                                 [matTooltipPosition]="'above'"
-                                [class.disabled]="isDscPreloading"
                                 aria-label="icon file"
                             >
                                 @if (isDscPreloading) {
