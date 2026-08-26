@@ -22,6 +22,7 @@
         "condensed_report": "कंडेन्डेड रिपोर्ट",
         "account_wise_report": "खातेनिहाय अहवाल",
         "flat_report": "सपाट अहवाल",
+        "csv_semicolon_separator_note": "CSV निर्यातात फील्ड विभाजक म्हणून अर्धविराम (;) वापरला जातो.",
         "trial_balance": {
             "name": "नाव",
             "opening_balance": "प्रारंभिक शिल्लक",

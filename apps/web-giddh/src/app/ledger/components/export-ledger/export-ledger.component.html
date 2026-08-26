@@ -11,7 +11,8 @@
         </div>
         <mat-dialog-content class="dialog-body max-height-65vh" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
-                <p class="mb-2">{{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}</p>
+                <p class="mb-1">{{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}</p>
+                <p class="mb-2">{{ commonLocaleData?.app_note }}: {{ localeData?.csv_semicolon_separator_note }}</p>
                 <div class="clear-both">
                     <div class="form-inline">
                         <div class="form-group">
@@ -59,13 +60,13 @@
                             name="emailTypeSelected"
                             [(ngModel)]="emailTypeSelected"
                         >
-                            <mat-radio-button id="detailed" (change)="handleReportTypeChange($event)" [value]="emailTypeDetail">
+                            <mat-radio-button id="detailed" (change)="handleReportTypeChange($event); fileType = 'CSV'" [value]="emailTypeDetail">
                                 {{ localeData?.ledger }}
                             </mat-radio-button>
                             <mat-radio-button
                                 *ngIf="!exportRequest.ledgerView"
                                 id="columnar"
-                                (change)="handleReportTypeChange($event)"
+                                (change)="handleReportTypeChange($event); fileType = 'XLSX'"
                                 [value]="emailTypeColumnar"
                             >
                                 {{ localeData?.columnar }}
@@ -73,7 +74,7 @@
                             <mat-radio-button
                                 id="bill"
                                 *ngIf="voucherApiVersion === 2 && enableBillToBill && !exportRequest.ledgerView"
-                                (change)="handleReportTypeChange($event)"
+                                (change)="handleReportTypeChange($event); fileType = 'XLSX'"
                                 [value]="emailTypeBillToBill"
                             >
                                 {{ localeData?.bill_to_bill }}
