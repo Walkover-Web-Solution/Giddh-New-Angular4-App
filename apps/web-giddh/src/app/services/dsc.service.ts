@@ -5,8 +5,8 @@ import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { DSC_API } from './apiurls/dsc.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, from, merge, Observable, of, throwError } from 'rxjs';
+import { catchError, filter, finalize, map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
 
 /** Single DSC certificate returned by the Giddh bridge extension. */
 export interface DscCertificate {
@@ -70,6 +70,13 @@ export interface DscFinishRequest {
     providedIn: 'root'
 })
 export class DscService {
+    /** In-memory cache of certificates read from the token (null until first load). */
+    private certificatesCache$: BehaviorSubject<DscCertificate[] | null> = new BehaviorSubject<DscCertificate[] | null>(null);
+    /** Shared in-flight token read so concurrent callers don't trigger duplicate bridge reads. */
+    private pendingCertificatesRead$: Observable<DscCertificate[]> | null = null;
+    /** localStorage key used to persist the last certificate list for instant rendering. */
+    private static readonly CERTIFICATES_STORE_KEY = 'giddh_dsc_certificates';
+
     constructor(
         private http: HttpWrapperService,
         private errorHandler: GiddhErrorHandler,
@@ -87,6 +94,201 @@ export class DscService {
     }
 
     /**
+     * Loads the last-read certificate list from localStorage so the dialog can render
+     * immediately without waiting for the token. Returns an empty array when nothing
+     * is stored or the data is unreadable.
+     *
+     * @returns {DscCertificate[]}
+     * @memberof DscService
+     */
+    public getStoredCertificates(): DscCertificate[] {
+        try {
+            const raw = localStorage.getItem(DscService.CERTIFICATES_STORE_KEY);
+            return raw ? JSON.parse(raw) : [];
+        } catch {
+            return [];
+        }
+    }
+
+    /**
+     * Persists the certificate list to localStorage and the in-memory cache.
+     *
+     * @private
+     * @param {DscCertificate[]} certificates Certificates to persist
+     * @memberof DscService
+     */
+    private storeCertificates(certificates: DscCertificate[]): void {
+        try {
+            localStorage.setItem(DscService.CERTIFICATES_STORE_KEY, JSON.stringify(certificates));
+        } catch {
+            // ignore private-browsing / quota errors
+        }
+        console.info('[DSC] Certificate list cached/stored:', certificates.length, 'certificates');
+        this.certificatesCache$.next(certificates);
+    }
+
+    /**
+     * Fetches the real certificate list from the token on parent page init and keeps
+     * the cache/localStorage in sync. If the token is unplugged, any previously cached
+     * list is cleared so the dialog never renders stale devices.
+     *
+     * Returns an observable so the parent page can track when the preload is done and
+     * enable the download button only after the response is available.
+     *
+     * @param {boolean} [force=false] Re-read the token even if already cached
+     * @returns {Observable<DscCertificate[]>}
+     * @memberof DscService
+     */
+    public preloadCertificates(force: boolean = false): Observable<DscCertificate[]> {
+        if (!this.isBridgeAvailable()) {
+            console.info('[DSC] preloadCertificates skipped - bridge not available');
+            return of([]);
+        }
+        console.info('[DSC] preloadCertificates started');
+        if (force) {
+            this.clearCertificatesCache();
+        }
+        return this.syncCertificates().pipe(
+            tap((certificates) => {
+                console.info('[DSC] preloadCertificates loaded real devices:', certificates.length);
+            }),
+            catchError((error) => {
+                console.error('[DSC] preloadCertificates failed - clearing stale cache:', error?.message);
+                this.clearCertificatesCache();
+                return of([]);
+            })
+        );
+    }
+
+    /**
+     * Returns cached certificates when available, otherwise falls back to the stored
+     * list. If neither exists, triggers a token read.
+     *
+     * When a parent preload is still in flight, the cached/stored list is emitted
+     * immediately for fast rendering and the fresh result is emitted once the preload
+     * completes. This avoids duplicating the slow token read inside the dialog.
+     *
+     * @returns {Observable<DscCertificate[]>}
+     * @memberof DscService
+     */
+    public getCachedCertificates(): Observable<DscCertificate[]> {
+        const cached = this.certificatesCache$.getValue();
+        const stored = this.getStoredCertificates();
+
+        // Seed cache from localStorage if memory is empty.
+        if (cached === null && stored.length) {
+            this.certificatesCache$.next(stored);
+        }
+
+        // If a real token read is already in flight (e.g. parent preload), show the
+        // cache immediately and then update with the fresh result when it arrives.
+        if (this.pendingCertificatesRead$) {
+            const immediate$ = this.certificatesCache$.pipe(
+                filter((value): value is DscCertificate[] => value !== null),
+                take(1)
+            );
+            return merge(
+                immediate$,
+                this.pendingCertificatesRead$.pipe(
+                    catchError(() => of(this.certificatesCache$.getValue() ?? []))
+                )
+            );
+        }
+
+        const current = this.certificatesCache$.getValue();
+        if (current !== null) {
+            return of(current);
+        }
+
+        return this.syncCertificates();
+    }
+
+    /**
+     * Reads the certificate list from the token in the background, updates the cache
+     * and localStorage, and emits the fresh list. Multiple concurrent callers share the
+     * same underlying bridge call.
+     *
+     * @returns {Observable<DscCertificate[]>}
+     * @memberof DscService
+     */
+    public syncCertificates(): Observable<DscCertificate[]> {
+        if (!this.isBridgeAvailable()) {
+            console.info('[DSC] syncCertificates skipped - bridge not available');
+            return throwError(() => new Error('Bridge not available'));
+        }
+        console.info('[DSC] syncCertificates started');
+        if (!this.pendingCertificatesRead$) {
+            this.pendingCertificatesRead$ = this.getCertificates().pipe(
+                catchError((error) => {
+                    if (this.certificatesCache$.getValue() === null) {
+                        this.certificatesCache$.next([]);
+                    }
+                    return throwError(() => error);
+                }),
+                finalize(() => { this.pendingCertificatesRead$ = null; }),
+                shareReplay({ bufferSize: 1, refCount: false })
+            );
+        }
+        return this.pendingCertificatesRead$;
+    }
+
+    /**
+     * Clears the certificate cache and localStorage so the next read re-queries the token
+     * (used by the dialog's manual "refresh certificates" action).
+     *
+     * @memberof DscService
+     */
+    public clearCertificatesCache(): void {
+        this.certificatesCache$.next(null);
+        this.pendingCertificatesRead$ = null;
+        try {
+            localStorage.removeItem(DscService.CERTIFICATES_STORE_KEY);
+        } catch { /* ignore */ }
+    }
+
+    /**
+     * Validates the token PIN by signing a fixed dummy hash before running the
+     * real signing flow. Emits on success; forwards the raw bridge error message
+     * on failure so the caller can show it verbatim.
+     *
+     * @param {DscCertificate} certificate Selected DSC certificate
+     * @param {string} pin Token PIN to verify
+     * @returns {Observable<void>}
+     * @memberof DscService
+     */
+    public verifyPin(certificate: DscCertificate, pin: string): Observable<void> {
+        console.info('[DSC] verifyPin started for certificate:', {
+            subjectCn: certificate.subjectCn,
+            serial: certificate.serial,
+            certId: certificate.certId
+        });
+        return from(this.computeDummyHashBase64()).pipe(
+            switchMap((hashBase64) => this.signHash(hashBase64, certificate, pin)),
+            tap(() => console.info('[DSC] verifyPin successful for certificate:', certificate.certId)),
+            map(() => void 0)
+        );
+    }
+
+    /**
+     * Computes the base64 SHA-256 of a constant dummy string used purely to
+     * verify the PIN can unlock the token.
+     *
+     * @private
+     * @returns {Promise<string>}
+     * @memberof DscService
+     */
+    private async computeDummyHashBase64(): Promise<string> {
+        const data = new TextEncoder().encode('giddh-dsc-pin-check');
+        const digest = await crypto.subtle.digest('SHA-256', data);
+        const bytes = new Uint8Array(digest);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
+    }
+
+    /**
      * Reads certificates from the USB token via the bridge extension.
      *
      * @returns {Observable<DscCertificate[]>}
@@ -97,13 +299,28 @@ export class DscService {
         }
 
         return this.callBridge((window.GiddhBridge as GiddhBridge).getCertificate()).pipe(
+            tap(() => console.info('[DSC] Reading certificates from token...')),
             switchMap((response) => {
                 if (!response?.success) {
                     return throwError(() => new Error(response?.message || 'Failed to read DSC certificates.'));
                 }
                 const certificates = response.certificates || [];
-                return certificates.length ? of(certificates) : throwError(() => new Error('No DSC certificate found on the token.'));
-            })
+                if (certificates.length) {
+                    console.info('[DSC] Device connected. Certificates found:', certificates.length);
+                    certificates.forEach((cert, index) => {
+                        console.info(`[DSC] Certificate #${index + 1}:`, {
+                            subjectCn: cert.subjectCn,
+                            serial: cert.serial,
+                            certId: cert.certId,
+                            issuerCn: cert.issuerCn,
+                            notAfter: cert.notAfter
+                        });
+                    });
+                    return of(certificates);
+                }
+                return throwError(() => new Error('No DSC certificate found on the token.'));
+            }),
+            tap((certificates) => this.storeCertificates(certificates))
         );
     }
 
@@ -115,6 +332,11 @@ export class DscService {
      * @returns {Observable<BaseResponse<DscPrepareResponse, any>>}
      */
     public prepareDscSigning(voucherDetails: any, certificate: DscCertificate): Observable<BaseResponse<DscPrepareResponse, any>> {
+        console.info('[DSC] prepareDscSigning started for certificate:', {
+            subjectCn: certificate.subjectCn,
+            serial: certificate.serial,
+            certId: certificate.certId
+        });
         const payload = this.buildCertificatePayload(certificate);
         const model = { 
             ...voucherDetails,
@@ -152,20 +374,23 @@ export class DscService {
             return throwError(() => new Error('Token PIN is required to sign.'));
         }
 
-        // DEBUG: log inputs to signHash
-        console.log('[DSC DEBUG] signHash input:', { hashBase64, algorithm: 'SHA256', certId: certificate.certId, pinLength: pin?.length });
+        console.info('[DSC] signHash started for certificate:', {
+            subjectCn: certificate.subjectCn,
+            serial: certificate.serial,
+            certId: certificate.certId
+        });
 
         return this.callBridge(
             (window.GiddhBridge as GiddhBridge).signHash(hashBase64, 'SHA256', certificate.certId, pin)
         ).pipe(
             tap((response) => {
-                // DEBUG: log raw bridge response
-                console.log('[DSC DEBUG] signHash bridge response:', response);
+                console.info('[DSC] signHash bridge response:', response);
             }),
             switchMap((response) => {
                 if (!response?.success || !response?.signature) {
                     return throwError(() => new Error(response?.message || 'Failed to sign hash with DSC token.'));
                 }
+                console.info('[DSC] signHash successful for certificate:', certificate.certId, 'signature length:', response.signature.length);
                 return of(response.signature);
             })
         );
@@ -182,12 +407,11 @@ export class DscService {
         const model: DscFinishRequest = { nonce, signature };
         const url = `${this.config.apiUrl}${DSC_API.FINISH.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))}`;
 
-        // DEBUG: confirm finish is reached
-        console.log('[DSC DEBUG] calling finishDscSigning:', { nonce, signatureLength: signature?.length });
+        console.info('[DSC] finishDscSigning started:', { nonce, signatureLength: signature?.length });
 
         return this.http.post(url, model, { responseType: 'blob', headers: { 'Accept': 'application/pdf' } }).pipe(
             tap((res: Blob) => {
-                console.log('[DSC DEBUG] finish response blob size:', res?.size);
+                console.info('[DSC] finishDscSigning response blob size:', res?.size);
             }),
             map((res: Blob) => {
                 if (!res || res.size === 0) {
@@ -196,33 +420,6 @@ export class DscService {
                 return res;
             }),
             catchError((error) => throwError(() => this.normalizeError(error)))
-        );
-    }
-
-    /**
-     * Orchestrates the complete DSC signing flow:
-     * 1. Prepare PDF hash on server
-     * 2. Sign hash with token PIN
-     * 3. Finish signing and receive the signed PDF Blob
-     *
-     * @param {*} voucherDetails Voucher data forwarded to the PDF server
-     * @param {DscCertificate} certificate Selected DSC certificate
-     * @param {string} pin Token PIN
-     * @returns {Observable<Blob>}
-     */
-    public downloadSignedInvoice(voucherDetails: any, certificate: DscCertificate, pin: string): Observable<Blob> {
-        return this.prepareDscSigning(voucherDetails, certificate).pipe(
-            tap((prepareResponse) => {
-                // DEBUG: log prepare response to verify hash is present
-                console.log('[DSC DEBUG] prepare response:', prepareResponse);
-            }),
-            switchMap((prepareResponse) =>
-                this.signHash(prepareResponse.body.hash, certificate, pin).pipe(
-                    switchMap((signedSignature) =>
-                        this.finishDscSigning(prepareResponse.body.nonce, signedSignature)
-                    )
-                )
-            )
         );
     }
 
@@ -257,8 +454,7 @@ export class DscService {
                     subscriber.complete();
                 })
                 .catch((error) => {
-                    // DEBUG: log raw bridge rejection
-                    console.error('[DSC DEBUG] bridge rejection:', error);
+                    console.error('[DSC] bridge rejection:', error);
                     subscriber.error(this.normalizeBridgeError(error));
                 });
         });

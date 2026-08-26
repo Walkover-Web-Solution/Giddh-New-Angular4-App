@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, Te
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, takeUntil } from "rxjs";
+import { finalize } from "rxjs/operators";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
@@ -26,6 +27,8 @@ import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 import { DownloadVoucherComponent } from "../download-voucher/download-voucher.component";
 import { ServiceConfig } from "../../services/service.config";
+import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
+import { DscService } from "../../services/dsc.service";
 
 @Component({
     selector: "preview",
@@ -177,6 +180,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public pdfPreviewHasError: boolean = false;
     /** Hold true if searching */
     public isSearching: boolean;
+    /** True while DSC certificates are being preloaded; disables signed-PDF download button. */
+    public isDscPreloading: boolean = true;
     /** Holds true if invoice load more data is trigger */
     public isLoadMore: boolean;
     /** Holds Get all api call count */
@@ -213,7 +218,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private changeDetection: ChangeDetectorRef,
         private invoiceReceiptActions: InvoiceReceiptActions,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private dscSignDialogService: DscSignDialogService,
+        private dscService: DscService
     ) { }
 
 
@@ -288,6 +295,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.getAllVouchers();
             }
         });
+        if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
+            this.dscService.preloadCertificates().pipe(
+                takeUntil(this.destroyed$),
+                finalize(() => {
+                    this.isDscPreloading = false;
+                    this.changeDetection.detectChanges();
+                })
+            ).subscribe();
+        }
     }
 
     /**
@@ -1049,6 +1065,22 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.componentStore.uploadFile({ postRequestObject: { file: blob, fileName: file.name } });
             });
         }
+    }
+
+    /**
+     * Download Invoice PDF
+     *
+     * @return {*}  {void}
+     * @memberof VouchersPreviewComponent
+     */
+    public downloadSignedInvoicePdf(): void {
+        if (!this.selectedInvoice) {
+            return;
+        }
+        this.dscSignDialogService.openDownloadSignedInvoiceDialog({
+            voucher: this.selectedInvoice,
+            voucherType: this.voucherType
+        });
     }
 
     /**

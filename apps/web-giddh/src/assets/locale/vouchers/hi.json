@@ -181,22 +181,5 @@
     "destination_of_supply": "आपूर्ति का गंतव्य",
     "all_invoices": "सभी इनवॉइस",
     "account_invoices": "खाता इनवॉइस",
-    "view_past_invoices_using_this_item": "इस आइटम का उपयोग करने वाले पिछले चालान देखें",
-    "dsc_pin_dialog": {
-        "title": "डिजिटल हस्ताक्षर पिन",
-        "message": "इस चालान पर हस्ताक्षर करने के लिए अपना DSC टोकन PIN दर्ज करें।",
-        "pin_label": "टोकन PIN",
-        "pin_placeholder": "PIN दर्ज करें",
-        "select_certificate": "प्रमाणपत्र चुनें",
-        "issued_by": "जारीकर्ता",
-        "valid_until": "मान्यता समाप्ति तिथि",
-        "no_certificates": "टोकन पर कोई DSC प्रमाणपत्र नहीं मिला।",
-        "loading_certificates": "प्रमाणपत्र पढ़े जा रहे हैं...",
-        "incorrect_pin": "गलत PIN। कृपया पुनः प्रयास करें।",
-        "bridge_not_found": "डिजिटल हस्ताक्षर ब्रिज नहीं मिला। कृपया Giddh DSC एक्सटेंशन और नेटिव होस्ट इंस्टॉल करें, फिर पृष्ठ रिफ़्रेश करें।",
-        "download_success": "हस्ताक्षरित चालान PDF सफलतापूर्वक डाउनलोड हो गया।",
-        "download_error": "हस्ताक्षरित चालान डाउनलोड करते समय एक त्रुटि हुई।",
-        "unknown": "अज्ञात",
-        "issuer_unknown": "?"
-    }
+    "view_past_invoices_using_this_item": "इस आइटम का उपयोग करने वाले पिछले चालान देखें"
 }
