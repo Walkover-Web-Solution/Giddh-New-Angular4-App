@@ -300,7 +300,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             return;
         }
         this.dscSignDialogService.openDownloadSignedInvoiceDialog({
-            voucher: this.selectedItem,
+            voucher: {...this.selectedItem, uniqueName: this.selectedItem.voucherUniqueName},
             voucherType: this.selectedItem.voucherGeneratedType
         });
     }
