@@ -2003,4 +2003,96 @@ export class InventoryService {
             }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
     }
 
+    /**
+     * Get all batches with filters and pagination
+     *
+     * @param {*} queryParams Query params (`q`, `page`, `count`)
+     * @param {*} model Filter payload
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getAllBatches(queryParams: any, model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.GET_ALL
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':q', encodeURIComponent(queryParams?.q ?? ''))
+            ?.replace(':page', encodeURIComponent(String(queryParams?.page ?? 1)))
+            ?.replace(':count', encodeURIComponent(String(queryParams?.count ?? PAGINATION_LIMIT)));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Create a batch
+     *
+     * @param {*} model Create batch payload
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public createBatch(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.CREATE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Get batch details
+     *
+     * @param {string} batchUniqueName Batch unique name
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getBatch(batchUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.GET
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':batchUniqueName', encodeURIComponent(batchUniqueName));
+        return this.http.get(url).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.queryString = { batchUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', { batchUniqueName }))
+        );
+    }
+
+    /**
+     * Update a batch
+     *
+     * @param {string} batchUniqueName Batch unique name
+     * @param {*} model Update batch payload
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public updateBatch(batchUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.UPDATE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':batchUniqueName', encodeURIComponent(batchUniqueName));
+        return this.http.put(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                data.queryString = { batchUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, { batchUniqueName }))
+        );
+    }
+
 }

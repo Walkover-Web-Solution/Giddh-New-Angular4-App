@@ -22,7 +22,8 @@
         "customer_wise":"Customer Wise",
         "vendor_wise":"Vendor Wise",
         "inventory_adjustment":"Inventory Adjustment",
-        "stock_aging_report":"Aging Report"
+        "stock_aging_report":"Aging Report",
+        "batch_report":"Batch Report"
     },
     "reports":{
         "transaction_count":"Transaction Count",

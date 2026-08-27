@@ -11,7 +11,16 @@
  * API domain is resolved from the whiteLabel localStorage config set by the server.
  */
 window.onload = function () {
-    var whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
+    var whiteLabelConfig = null;
+    try {
+        var whiteLabelRaw = localStorage.getItem('whiteLabel');
+        if (whiteLabelRaw) {
+            whiteLabelConfig = JSON.parse(whiteLabelRaw);
+        }
+    } catch (e) {
+        console.warn('Invalid whiteLabel in localStorage, clearing it', e);
+        localStorage.removeItem('whiteLabel');
+    }
     const GIDDH_DOMAINS = ['localhost', 'test.giddh.com', 'books.giddh.com'];
     const isGiddhDomain = GIDDH_DOMAINS.includes(window.location.hostname);
 

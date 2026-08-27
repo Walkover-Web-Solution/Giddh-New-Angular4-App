@@ -22,7 +22,8 @@
         "customer_wise":"ग्राहक समझदार",
         "vendor_wise":"विक्रेता समझदार",
         "inventory_adjustment":"माल - सूची का समायोजन",
-        "stock_aging_report":"एजिंग रिपोर्ट"
+        "stock_aging_report":"एजिंग रिपोर्ट",
+        "batch_report":"बैच रिपोर्ट"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",

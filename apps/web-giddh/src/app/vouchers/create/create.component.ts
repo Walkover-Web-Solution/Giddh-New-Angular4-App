@@ -9737,6 +9737,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * True when Create & Download Signed PDF is allowed for the current voucher type.
+     *
+     * @protected
+     * @returns {boolean} True if signed PDF action should be displayed
+     * @memberof VoucherCreateComponent
+     */
+    protected shouldShowDownloadSignedPdf(): boolean {
+        return !this.invoiceType.isPurchaseOrder &&
+            !this.invoiceType.isEstimateInvoice &&
+            !this.invoiceType.isProformaInvoice &&
+            !this.invoiceType.isReceiptInvoice &&
+            !this.invoiceType.isPaymentInvoice;
+    }
+
+    /**
      * Gets the update button label text
      *
      * @protected

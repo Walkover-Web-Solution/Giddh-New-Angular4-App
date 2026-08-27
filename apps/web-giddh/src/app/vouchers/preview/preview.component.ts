@@ -295,7 +295,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.getAllVouchers();
             }
         });
-        if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
+        if (this.shouldShowDownloadSignedPdf()) {
             this.dscService.preloadCertificates().pipe(
                 takeUntil(this.destroyed$),
                 finalize(() => {
@@ -304,6 +304,20 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 })
             ).subscribe();
         }
+    }
+    /**
+     * True when Download Signed PDF is allowed for the current voucher type.
+     *
+     * @protected
+     * @returns {boolean} True if signed PDF action should be displayed
+     * @memberof VouchersPreviewComponent
+     */
+    protected shouldShowDownloadSignedPdf(): boolean {
+        return !this.invoiceType.isPurchaseOrder &&
+            !this.invoiceType.isEstimateInvoice &&
+            !this.invoiceType.isProformaInvoice &&
+            !this.invoiceType.isReceiptInvoice &&
+            !this.invoiceType.isPaymentInvoice;
     }
 
     /**
