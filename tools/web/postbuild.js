@@ -164,11 +164,21 @@ curl_close($ch);
 ?>`;
 
 // JavaScript to append to index.html
+// curl_exec returns a JSON string on success, or false on failure.
+// json_encode($response) emits a JS string/null literal — do NOT wrap it in
+// extra quotes or use slice(1,-1). When curl fails, json_encode(false) is
+// "false"; the old '...' + slice(1,-1) turned that into "als" and crashed boot.
 const whiteLabelScript = `
 <script>
-    var response = '<?php echo json_encode($response) ?>';
-    if (response) {
-        localStorage.setItem('whiteLabel', response.slice(1,-1));
+    var response = <?php echo ($response === false || $response === null || $response === '') ? 'null' : json_encode($response); ?>;
+    console.warn('WhiteLabel response from server', response);
+    if (typeof response === 'string' && response) {
+        try {
+            JSON.parse(response);
+            localStorage.setItem('whiteLabel', response);
+        } catch (e) {
+            console.warn('Invalid whiteLabel response from server, skipping localStorage write', e);
+        }
     }
 </script>`;
 

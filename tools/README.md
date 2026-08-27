@@ -154,10 +154,18 @@ if (!empty($queryParams['region']) && in_array(strtolower($queryParams['region']
 ### Client-Side Integration
 
 ```javascript
-// White-label data is stored in localStorage
-var response = '<?php echo json_encode($response) ?>';
-if (response) {
-    localStorage.setItem('whiteLabel', response.slice(1,-1));
+// White-label data is stored in localStorage.
+// json_encode emits a JS string literal (or null when curl failed).
+// Never wrap the PHP output in quotes or use slice(1,-1) — that turns
+// json_encode(false) ("false") into "als" and crashes JSON.parse on boot.
+var response = <?php echo ($response === false || $response === null || $response === '') ? 'null' : json_encode($response); ?>;
+if (typeof response === 'string' && response) {
+    try {
+        JSON.parse(response);
+        localStorage.setItem('whiteLabel', response);
+    } catch (e) {
+        console.warn('Invalid whiteLabel response from server, skipping localStorage write', e);
+    }
 }
 ```
 
