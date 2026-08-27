@@ -181,22 +181,5 @@
     "destination_of_supply": "पुरवठ्याचे गंतव्य",
     "all_invoices": "सर्व इनव्हॉइस",
     "account_invoices": "खाते इनव्हॉइस",
-    "view_past_invoices_using_this_item": "हा आयटम वापरून मागील बीजके पहा",
-    "dsc_pin_dialog": {
-        "title": "डिजिटल स्वाक्षरी पिन",
-        "message": "हा व्हाउचर साइन करण्यासाठी तुमचा DSC टोकन PIN प्रविष्ट करा.",
-        "pin_label": "टोकन PIN",
-        "pin_placeholder": "PIN टाका",
-        "select_certificate": "प्रमाणपत्र निवडा",
-        "issued_by": "द्वारा जारी",
-        "valid_until": "वैधता",
-        "no_certificates": "टोकनवर DSC प्रमाणपत्रे सापडली नाहीत.",
-        "loading_certificates": "प्रमाणपत्रे वाचत आहे...",
-        "incorrect_pin": "चुकीचा PIN. कृपया पुन्हा प्रयत्न करा.",
-        "bridge_not_found": "डिजिटल स्वाक्षरी ब्रिज सापडला नाही. कृपया Giddh DSC एक्सटेंशन आणि नेटिव्ह होस्ट इन्स्टॉल करा आणि पृष्ठ रिफ्रेश करा.",
-        "download_success": "साइन केलेला चालान PDF यशस्वीरित्या डाउनलोड झाला.",
-        "download_error": "साइन केलेला चालान डाउनलोड करताना त्रुटी आली.",
-        "unknown": "माहित नाही",
-        "issuer_unknown": "?"
-    }
+    "view_past_invoices_using_this_item": "हा आयटम वापरून मागील बीजके पहा"
 }

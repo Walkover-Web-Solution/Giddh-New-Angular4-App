@@ -827,5 +827,6 @@
     "app_you_in_company_mode": "You are in Company Mode",
     "app_you_in_consolidate_mode": "You are in Consolidated Mode",
     "go_to_branch": "Go to Branch",
-    "switch_to_branch": "Switch to Branch Mode"
+    "switch_to_branch": "Switch to Branch Mode",
+    "app_download_signed_invoice": "Download Digitally Signed Invoice"
 }

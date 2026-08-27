@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inje
 import { DomSanitizer } from "@angular/platform-browser";
 import { select, Store } from "@ngrx/store";
 import { ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { take, takeUntil, finalize } from "rxjs/operators";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { BranchHierarchyType, FILE_ATTACHMENT_TYPE } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
@@ -17,6 +17,8 @@ import { ConfirmModalComponent } from "../new-confirm-modal/confirm-modal.compon
 import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interface";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
+import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
+import { DscService } from "../../services/dsc.service";
 import printJS from 'print-js';
 import { OrganizationType } from "../../models/user-login-state";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
@@ -64,6 +66,10 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public isCompany: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True while DSC certificates are being preloaded; disables signed-PDF download button. */
+    public isDscPreloading: boolean = true;
+    /** Holds VoucherType Enum */
+    public voucherTypeEnum:any = VoucherTypeEnum;
 
     constructor(
         private commonService: CommonService,
@@ -78,7 +84,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         private ledgerService: LedgerService,
         private invoiceAction: InvoiceActions,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private dialogRef: MatDialogRef<AttachmentsComponent>
+        private dialogRef: MatDialogRef<AttachmentsComponent>,
+        private dscSignDialogService: DscSignDialogService,
+        private dscService: DscService
     ) {
 
     }
@@ -122,6 +130,29 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
 
         this.getFiles();
         document.querySelector('body')?.classList?.add('ledger-attachments-popup');
+        
+        if (this.shouldShowDownloadSignedPdf(this.selectedItem?.voucherGeneratedType)) {
+            this.dscService.preloadCertificates().pipe(
+                takeUntil(this.destroyed$),
+                finalize(() => {
+                    this.isDscPreloading = false;
+                    this.changeDetectionRef.detectChanges();
+                })
+            ).subscribe();
+        }
+    }
+
+    /** */
+    /**
+     * True when Download Signed PDF is allowed for the current voucher type.
+     *
+     * @protected
+     * @param {string} voucherType - Voucher type
+     * @returns {boolean} True if signed PDF action should be displayed
+     * @memberof AttachmentsComponent
+     */
+    protected shouldShowDownloadSignedPdf(voucherType: string): boolean {
+        return voucherType !== VoucherTypeEnum.purchaseOrder && voucherType !== VoucherTypeEnum.estimate && voucherType !== VoucherTypeEnum.proforma && voucherType !== VoucherTypeEnum.receipt && voucherType !== VoucherTypeEnum.payment;
     }
 
     /**
@@ -270,6 +301,21 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public closeAttachmentDialog(): void {
         this.dialogRef?.close(true);
+    }
+
+    /**
+     * Downloads the digitally signed invoice PDF for the selected voucher.
+     *
+     * @memberof AttachmentsComponent
+     */
+    public downloadSignedInvoicePdf(): void {
+        if (!this.selectedItem) {
+            return;
+        }
+        this.dscSignDialogService.openDownloadSignedInvoiceDialog({
+            voucher: {...this.selectedItem, uniqueName: this.selectedItem.voucherUniqueName},
+            voucherType: this.selectedItem.voucherGeneratedType
+        });
     }
 
     /**
