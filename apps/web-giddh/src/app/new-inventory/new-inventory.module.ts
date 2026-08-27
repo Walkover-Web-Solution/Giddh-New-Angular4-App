@@ -64,6 +64,8 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 import { StockAgingReportComponent } from "./component/stock-aging-report/stock-aging-report.component";
+import { BatchReportComponent } from "./component/batch-report/batch-report.component";
+import { BatchCreateEditComponent } from "./component/batch-create-edit/batch-create-edit.component";
 import { MatCardModule } from "@angular/material/card";
 import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-editor.component";
 
@@ -91,7 +93,9 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         AdjustInventoryComponent,
         AsideCreateNewReasonComponent,
         PreviewVariantImageComponent,
-        StockAgingReportComponent
+        StockAgingReportComponent,
+        BatchReportComponent,
+        BatchCreateEditComponent
     ],
     imports: [
         NewInventoryRoutingModule,
