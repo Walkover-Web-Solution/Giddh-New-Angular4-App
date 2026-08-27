@@ -131,7 +131,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         this.getFiles();
         document.querySelector('body')?.classList?.add('ledger-attachments-popup');
         
-        if ((this.selectedItem?.voucherGeneratedType !== VoucherTypeEnum.receipt) && (this.selectedItem?.voucherGeneratedType !== VoucherTypeEnum.payment)) {
+        if (this.shouldShowDownloadSignedPdf(this.selectedItem?.voucherGeneratedType)) {
             this.dscService.preloadCertificates().pipe(
                 takeUntil(this.destroyed$),
                 finalize(() => {
@@ -140,6 +140,19 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 })
             ).subscribe();
         }
+    }
+
+    /** */
+    /**
+     * True when Download Signed PDF is allowed for the current voucher type.
+     *
+     * @protected
+     * @param {string} voucherType - Voucher type
+     * @returns {boolean} True if signed PDF action should be displayed
+     * @memberof AttachmentsComponent
+     */
+    protected shouldShowDownloadSignedPdf(voucherType: string): boolean {
+        return voucherType !== VoucherTypeEnum.purchaseOrder && voucherType !== VoucherTypeEnum.estimate && voucherType !== VoucherTypeEnum.proforma && voucherType !== VoucherTypeEnum.receipt && voucherType !== VoucherTypeEnum.payment;
     }
 
     /**

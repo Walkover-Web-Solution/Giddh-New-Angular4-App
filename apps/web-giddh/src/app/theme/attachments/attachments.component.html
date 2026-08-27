@@ -132,10 +132,7 @@
                             <i class="icon-download-circle"></i>
                         </a>
                     </span>
-                    @if (
-                        selectedItem?.voucherGeneratedType !== voucherTypeEnum.receipt &&
-                        selectedItem?.voucherGeneratedType !== voucherTypeEnum.payment
-                    ) {
+                    @if (shouldShowDownloadSignedPdf(selectedItem?.voucherGeneratedType)) {
                         <span [class.disabled]="isDscPreloading">
                             <a
                                 (click)="!isDscPreloading && downloadSignedInvoicePdf()"

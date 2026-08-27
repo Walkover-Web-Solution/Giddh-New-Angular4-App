@@ -177,7 +177,7 @@
                             >
                                 <i class="icon-download-circle"></i>
                             </button>
-                            @if (!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice) {
+                            @if (shouldShowDownloadSignedPdf()) {
                                 <button
                                     matButton="outlined"
                                     class="btn-stroked-icon"
