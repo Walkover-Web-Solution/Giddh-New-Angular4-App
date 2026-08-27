@@ -5513,7 +5513,7 @@
             <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1 || activeTabGroup === 2">
                 <div class="vouchers-wrapper p-3" *ngIf="activeModule === 'templates'">
                     <reactive-dropdown-field
-                        *ngIf="(voucherType === voucherTypeEnum.purchase || voucherType === voucherTypeEnum.sales) && selectedTemplate?.label"
+                        *ngIf="voucherType === voucherTypeEnum.purchase && selectedTemplate?.label"
                         [name]="'design'"
                         [label]="localeData?.select_design_for"
                         [placeholder]="commonLocaleData?.app_select"
