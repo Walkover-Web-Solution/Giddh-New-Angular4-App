@@ -170,11 +170,12 @@ export class DscPinDialogComponent implements OnDestroy {
     }
 
     /**
-     * Renders the cached certificate list immediately (no spinner when a cache exists)
-     * and always re-reads the token in the background. When the fresh read succeeds,
-     * certificates missing from it are kept but marked as not connected; when it fails,
-     * cached certificates are marked not connected (or an error is shown when nothing
-     * was cached). The spinner is only shown when there is no cached device at all.
+     * Renders the cached certificate list immediately (no spinner when a cache exists).
+     * When a token read already completed in this session (parent preload or a previous
+     * sync), its result is reused directly - the token is not read again. When a preload
+     * is still in flight, the dialog joins that same in-flight read instead of starting
+     * a duplicate one. Only when no read has happened yet does the dialog trigger the
+     * token read itself. The spinner is only shown when there is no cached device at all.
      *
      * @private
      * @param {boolean} [force=false] Force a fresh token read (bypasses the cache)
@@ -190,6 +191,18 @@ export class DscPinDialogComponent implements OnDestroy {
         this.dscCertificates = cached.map((certificate) => ({ ...certificate, connected: true }));
         this.isDscCertificateLoading = cached.length === 0;
         this.updateSelection(previousCertId, previousCertId);
+
+        if (!force && this.dscService.hasCompletedCertificateSync()) {
+            // A token read already completed (parent preload) - reuse its result instead
+            // of reading the token again.
+            console.info('[DSC Dialog] Reusing completed certificate read. Success:', this.dscService.wasLastCertificateSyncSuccessful());
+            if (!this.dscService.wasLastCertificateSyncSuccessful()) {
+                this.applyFailedReadState(this.dscService.getCertificateSyncError());
+            }
+            this.isDscCertificateLoading = false;
+            this.changeDetectorRef.detectChanges();
+            return;
+        }
 
         this.dscService.syncCertificates().pipe(
             takeUntil(this.destroyed$)
@@ -212,19 +225,31 @@ export class DscPinDialogComponent implements OnDestroy {
             error: (error) => {
                 console.error('[DSC Dialog] Background certificate read failed:', error?.message);
                 this.isDscCertificateLoading = false;
-                if (this.dscCertificates.length) {
-                    this.dscCertificates = this.dscCertificates.map((certificate) => ({ ...certificate, connected: false }));
-                    this.selectedDscCertificateIndex = null;
-                    this.dscPin = '';
-                    this.usedRememberedPin = false;
-                    this.rememberedPinValue = null;
-                } else {
-                    this.selectedDscCertificateIndex = null;
-                    this.dscPinError = error?.message || this.localeData?.device_not_connected;
-                }
+                this.applyFailedReadState(error?.message);
                 this.changeDetectorRef.detectChanges();
             }
         });
+    }
+
+    /**
+     * Applies the UI state for a failed token read: cached certificates are marked as
+     * not connected, or an error message is shown when nothing was cached.
+     *
+     * @private
+     * @param {(string | null | undefined)} message Error message from the failed read
+     * @memberof DscPinDialogComponent
+     */
+    private applyFailedReadState(message: string | null | undefined): void {
+        if (this.dscCertificates.length) {
+            this.dscCertificates = this.dscCertificates.map((certificate) => ({ ...certificate, connected: false }));
+            this.selectedDscCertificateIndex = null;
+            this.dscPin = '';
+            this.usedRememberedPin = false;
+            this.rememberedPinValue = null;
+        } else {
+            this.selectedDscCertificateIndex = null;
+            this.dscPinError = message || this.localeData?.device_not_connected;
+        }
     }
 
     /**
