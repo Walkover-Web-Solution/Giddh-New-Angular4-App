@@ -14,18 +14,18 @@
     "verifying_pin": "Verifying PIN...",
     "preparing_pdf": "Preparing invoice PDF...",
     "signing_pdf": "Signing PDF...",
-    "bridge_not_found": "Digital signature bridge not found. Please install the Giddh DSC extension and native host, then refresh the page.",
+    "bridge_not_found": "Digital signature bridge not found. Please install the Giddh DSC extension and native host, then refresh the page. <a class='text-primary cursor-pointer' href='/download?module=dsc'> Click here </a>",
     "download_success": "Signed invoice PDF downloaded successfully.",
     "download_error": "An error occurred while downloading signed invoice.",
     "unknown": "Unknown",
     "issuer_unknown": "?",
     "remember_pin": "Remember PIN on this browser",
-    "remember_pin_hint": "Your PIN is never sent to our servers. It is stored securely in encrypted form on your browser and cannot be read directly.",
+    "remember_pin_hint": "Stored for 15 min by default, encrypted on this device, and never sent to our servers. You can set a different duration below.",
     "remember_duration_15m": "For 15 minutes",
     "remember_duration_2h": "For 2 hours",
     "remember_duration_1d": "For 1 day",
     "remember_duration_7d": "For 7 days",
-    "remember_duration_permanent": "Until I remove it",
+    "remember_duration_30d": "For 30 days",
     "refresh_certificates": "Refresh certificates",
-    "forget_pin": "Forget saved PIN"
+    "not_connected": "Not connected"
 }

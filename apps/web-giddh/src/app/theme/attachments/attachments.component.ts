@@ -132,6 +132,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         document.querySelector('body')?.classList?.add('ledger-attachments-popup');
         
         if (this.shouldShowDownloadSignedPdf(this.selectedItem?.voucherGeneratedType)) {
+            this.isDscPreloading = !this.dscService.hasCachedCertificates();
             this.dscService.preloadCertificates().pipe(
                 takeUntil(this.destroyed$),
                 finalize(() => {

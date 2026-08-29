@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DscCertificate } from './dsc.service';
 
 /** Supported "remember PIN" durations. `permanent` never expires. */
-export type DscPinDuration = '15m' | '2h' | '1d' | '7d' | 'permanent';
+export type DscPinDuration = '15m' | '2h' | '1d' | '7d' | '30d';
 
 /** Single encrypted PIN entry persisted in localStorage, keyed by certificate serial. */
 interface StoredPinEntry {
@@ -49,7 +49,7 @@ export class DscPinStorageService {
         '2h': 2 * 60 * 60 * 1000,
         '1d': 24 * 60 * 60 * 1000,
         '7d': 7 * 24 * 60 * 60 * 1000,
-        'permanent': null
+        '30d': 30 * 24 * 60 * 60 * 1000
     };
 
     /**
@@ -113,7 +113,7 @@ export class DscPinStorageService {
         }
         const serial = certificate.serial;
         const entry = this.readStore()[serial];
-        const duration = entry?.duration ?? (entry?.expiresAt === null ? 'permanent' : '15m');
+        const duration = entry?.duration ?? '15m';
         console.info('[DSC Storage] Remembered PIN found with duration:', duration);
         return { pin, duration };
     }

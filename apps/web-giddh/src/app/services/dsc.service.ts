@@ -111,6 +111,37 @@ export class DscService {
     }
 
     /**
+     * Returns true when a certificate list is available from the in-memory cache or
+     * localStorage, so callers can render instantly without a preload spinner.
+     *
+     * @returns {boolean}
+     * @memberof DscService
+     */
+    public hasCachedCertificates(): boolean {
+        return (this.certificatesCache$.getValue()?.length ?? 0) > 0 || this.getStoredCertificates().length > 0;
+    }
+
+    /**
+     * Returns a synchronous snapshot of the cached certificate list (in-memory cache,
+     * falling back to localStorage which then seeds the cache). Used by the dialog to
+     * render instantly while a fresh token read happens in the background.
+     *
+     * @returns {DscCertificate[]}
+     * @memberof DscService
+     */
+    public getCachedCertificatesSnapshot(): DscCertificate[] {
+        const cached = this.certificatesCache$.getValue();
+        if (cached?.length) {
+            return cached;
+        }
+        const stored = this.getStoredCertificates();
+        if (stored.length) {
+            this.certificatesCache$.next(stored);
+        }
+        return stored;
+    }
+
+    /**
      * Persists the certificate list to localStorage and the in-memory cache.
      *
      * @private
@@ -129,11 +160,11 @@ export class DscService {
 
     /**
      * Fetches the real certificate list from the token on parent page init and keeps
-     * the cache/localStorage in sync. If the token is unplugged, any previously cached
-     * list is cleared so the dialog never renders stale devices.
+     * the cache/localStorage in sync. Runs in the background: on read error the cached
+     * list is intentionally kept so the dialog can show those devices as "not connected"
+     * instead of dropping them.
      *
-     * Returns an observable so the parent page can track when the preload is done and
-     * enable the download button only after the response is available.
+     * Returns an observable so the parent page can track when the preload is done.
      *
      * @param {boolean} [force=false] Re-read the token even if already cached
      * @returns {Observable<DscCertificate[]>}
@@ -153,8 +184,7 @@ export class DscService {
                 console.info('[DSC] preloadCertificates loaded real devices:', certificates.length);
             }),
             catchError((error) => {
-                console.error('[DSC] preloadCertificates failed - clearing stale cache:', error?.message);
-                this.clearCertificatesCache();
+                console.error('[DSC] preloadCertificates failed - keeping cached list:', error?.message);
                 return of([]);
             })
         );
