@@ -1049,6 +1049,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             });
         }
 
+        this.isDscPreloading = !this.dscService.hasCachedCertificates();
         this.dscService.preloadCertificates().pipe(
             takeUntil(this.destroyed$),
             finalize(() => {

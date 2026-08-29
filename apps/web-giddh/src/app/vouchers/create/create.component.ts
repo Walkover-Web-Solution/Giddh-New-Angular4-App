@@ -914,6 +914,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public ngOnInit(): void {
         this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
+        this.isDscPreloading = !this.dscService.hasCachedCertificates();
         this.dscService.preloadCertificates().pipe(
             takeUntil(this.destroyed$),
             finalize(() => {

@@ -701,6 +701,11 @@
         "marathi": "मराठी"
     },
     "app_download_here": "यहाँ से डाउनलोड करें",
+    "app_dsc_download_title": "डिजिटल हस्ताक्षर सेटअप",
+    "app_dsc_download_note": "Giddh में डिजिटल हस्ताक्षर का उपयोग करने के लिए, अपने ऑपरेटिंग सिस्टम के लिए ब्रिज एप्लिकेशन डाउनलोड और इंस्टॉल करें तथा Giddh DSC ब्राउज़र एक्सटेंशन जोड़ें।",
+    "app_dsc_browser_extension": "ब्राउज़र एक्सटेंशन",
+    "app_dsc_windows_app": "Windows ऐप",
+    "app_dsc_mac_app": "Mac ऐप",
     "app_irn": "आईआरएन",
     "app_dashboard": "डैशबोर्ड",
     "app_giddh_no_permissions": "आपको इसे देखने की अनुमति नहीं है",

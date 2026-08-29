@@ -20,6 +20,12 @@ export interface DscPinDialogData {
 /** Stage of the signing flow the dialog is currently blocked on, used to pick the progress message. */
 export type DscSigningStage = 'verifying_device' | 'verifying_pin' | 'preparing' | 'signing' | null;
 
+/** Certificate list item rendered in the dialog; `connected` reflects the latest token read. */
+export interface DscCertificateItem extends DscCertificate {
+    /** False when the certificate only exists in the cache and was not found in the latest token read. */
+    connected: boolean;
+}
+
 /**
  * Dialog component that lets the user select a DSC certificate, enter the token PIN,
  * and download the digitally signed invoice PDF.
@@ -42,8 +48,8 @@ export class DscPinDialogComponent implements OnDestroy {
     public voucher: any;
     /** Voucher type forwarded to the signing API */
     public voucherType: string;
-    /** List of certificates read from the token */
-    public dscCertificates: DscCertificate[] = [];
+    /** List of certificates rendered in the dialog (cached + freshly read, with connection state) */
+    public dscCertificates: DscCertificateItem[] = [];
     /** Index of the currently selected certificate */
     public selectedDscCertificateIndex: number | null = null;
     /** Token PIN entered by the user */
@@ -56,14 +62,14 @@ export class DscPinDialogComponent implements OnDestroy {
     public rememberPin: boolean = false;
     /** Reactive form control for the chosen retention duration of the remembered PIN. */
     public rememberDurationControl: FormControl<string | null> = new FormControl<string | null>('15m');
-    /** True when a remembered PIN exists for the selected certificate */
-    public hasSavedPin: boolean = false;
     /** Duration options rendered in the retention dropdown */
     public durationOptions: IOption[] = [];
     /** Current signing stage (null when not signing); drives the busy overlay message */
     public signingStage: DscSigningStage = null;
     /** True when the current PIN was auto-filled from storage (used to forget on failure) */
     private usedRememberedPin: boolean = false;
+    /** Exact PIN value auto-filled from storage; distinguishes a real user edit from the ngModel echo fired when the value is written programmatically */
+    private rememberedPinValue: string | null = null;
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -119,9 +125,8 @@ export class DscPinDialogComponent implements OnDestroy {
     }
 
     /**
-     * Lifecycle hook: reads cached certificate list immediately (localStorage or parent
-     * preload) so the dialog opens quickly. If the parent preload is still in flight,
-     * the list updates automatically when the real response arrives.
+     * Lifecycle hook: renders the cached certificate list immediately so the dialog opens
+     * instantly, then refreshes the list from the token in the background.
      *
      * @memberof DscPinDialogComponent
      */
@@ -157,7 +162,7 @@ export class DscPinDialogComponent implements OnDestroy {
      * @memberof DscPinDialogComponent
      */
     private buildDurationOptions(): IOption[] {
-        const keys: DscPinDuration[] = ['15m', '2h', '1d', '7d', 'permanent'];
+        const keys: DscPinDuration[] = ['15m', '2h', '1d', '7d', '30d'];
         return keys.map((key) => ({
             value: key,
             label: this.localeData?.[`remember_duration_${key}`]
@@ -165,42 +170,86 @@ export class DscPinDialogComponent implements OnDestroy {
     }
 
     /**
-     * Reads certificates from the DSC token via the bridge extension.
+     * Renders the cached certificate list immediately (no spinner when a cache exists)
+     * and always re-reads the token in the background. When the fresh read succeeds,
+     * certificates missing from it are kept but marked as not connected; when it fails,
+     * cached certificates are marked not connected (or an error is shown when nothing
+     * was cached). The spinner is only shown when there is no cached device at all.
      *
      * @private
      * @param {boolean} [force=false] Force a fresh token read (bypasses the cache)
      * @memberof DscPinDialogComponent
      */
     private loadCertificates(force: boolean = false): void {
-        this.dscPin = '';
         this.dscPinError = '';
-        this.isDscCertificateLoading = true;
         if (force) {
             this.dscService.clearCertificatesCache();
         }
+        const previousCertId = this.getSelectedCertificate()?.certId ?? null;
+        const cached = force ? [] : this.dscService.getCachedCertificatesSnapshot();
+        this.dscCertificates = cached.map((certificate) => ({ ...certificate, connected: true }));
+        this.isDscCertificateLoading = cached.length === 0;
+        this.updateSelection(previousCertId, previousCertId);
 
-        const read$ = force ? this.dscService.syncCertificates() : this.dscService.getCachedCertificates();
-        read$.pipe(
+        this.dscService.syncCertificates().pipe(
             takeUntil(this.destroyed$)
         ).subscribe({
             next: (certificates) => {
-                console.info('[DSC Dialog] Certificate read loaded certificates:', certificates.length);
-                this.dscCertificates = certificates;
-                this.selectedDscCertificateIndex = certificates.length ? 0 : null;
+                console.info('[DSC Dialog] Background certificate read completed:', certificates.length);
+                const selectedCertId = this.getSelectedCertificate()?.certId ?? null;
+                const freshIds = new Set(certificates.map((certificate) => certificate.certId));
+                const disconnected = this.dscCertificates
+                    .filter((certificate) => !freshIds.has(certificate.certId))
+                    .map((certificate) => ({ ...certificate, connected: false }));
+                this.dscCertificates = [
+                    ...certificates.map((certificate) => ({ ...certificate, connected: true })),
+                    ...disconnected
+                ];
                 this.isDscCertificateLoading = false;
-                this.applyRememberedPin();
+                this.updateSelection(selectedCertId, selectedCertId);
                 this.changeDetectorRef.detectChanges();
             },
             error: (error) => {
-                console.error('[DSC Dialog] Certificate read failed:', error?.message);
+                console.error('[DSC Dialog] Background certificate read failed:', error?.message);
                 this.isDscCertificateLoading = false;
-                this.dscService.clearCertificatesCache();
-                this.dscCertificates = [];
-                this.selectedDscCertificateIndex = null;
-                this.dscPinError = error?.message || this.localeData?.device_not_connected;
+                if (this.dscCertificates.length) {
+                    this.dscCertificates = this.dscCertificates.map((certificate) => ({ ...certificate, connected: false }));
+                    this.selectedDscCertificateIndex = null;
+                    this.dscPin = '';
+                    this.usedRememberedPin = false;
+                    this.rememberedPinValue = null;
+                } else {
+                    this.selectedDscCertificateIndex = null;
+                    this.dscPinError = error?.message || this.localeData?.device_not_connected;
+                }
                 this.changeDetectorRef.detectChanges();
             }
         });
+    }
+
+    /**
+     * Selects the certificate matching the preferred certId when it is connected,
+     * otherwise the first connected certificate. Only re-applies the remembered PIN
+     * when the effective selection changed, so a PIN typed before the background read
+     * completed is never wiped.
+     *
+     * @private
+     * @param {string | null} preferredCertId Cert to keep selected when possible
+     * @param {string | null} previousCertId Previously selected cert used for change detection
+     * @memberof DscPinDialogComponent
+     */
+    private updateSelection(preferredCertId: string | null, previousCertId: string | null): void {
+        let nextIndex = preferredCertId
+            ? this.dscCertificates.findIndex((certificate) => certificate.certId === preferredCertId && certificate.connected)
+            : -1;
+        if (nextIndex < 0) {
+            nextIndex = this.dscCertificates.findIndex((certificate) => certificate.connected);
+        }
+        this.selectedDscCertificateIndex = nextIndex >= 0 ? nextIndex : null;
+        const nextCertId = this.getSelectedCertificate()?.certId ?? null;
+        if (nextCertId !== previousCertId) {
+            this.applyRememberedPin();
+        }
     }
 
     /**
@@ -215,7 +264,7 @@ export class DscPinDialogComponent implements OnDestroy {
         console.info('[DSC Dialog] applyRememberedPin for certificate:', certificate?.certId);
         this.dscPin = '';
         this.usedRememberedPin = false;
-        this.hasSavedPin = false;
+        this.rememberedPinValue = null;
         this.pendingRememberDuration = null;
         if (!certificate) {
             this.applyRememberDuration('15m');
@@ -225,8 +274,8 @@ export class DscPinDialogComponent implements OnDestroy {
             if (result) {
                 console.info('[DSC Dialog] Remembered PIN auto-filled for certificate:', certificate.certId, 'duration:', result.duration);
                 this.dscPin = result.pin;
+                this.rememberedPinValue = result.pin;
                 this.usedRememberedPin = true;
-                this.hasSavedPin = true;
                 this.rememberPin = true;
                 this.applyRememberDuration(result.duration);
                 this.changeDetectorRef.detectChanges();
@@ -260,10 +309,10 @@ export class DscPinDialogComponent implements OnDestroy {
      * Returns the currently selected certificate, or null.
      *
      * @private
-     * @returns {(DscCertificate | null)}
+     * @returns {(DscCertificateItem | null)}
      * @memberof DscPinDialogComponent
      */
-    private getSelectedCertificate(): DscCertificate | null {
+    private getSelectedCertificate(): DscCertificateItem | null {
         if (this.selectedDscCertificateIndex === null) {
             return null;
         }
@@ -272,12 +321,16 @@ export class DscPinDialogComponent implements OnDestroy {
 
     /**
      * Sets the selected DSC certificate index and refreshes any remembered PIN.
+     * Disconnected (cached-only) certificates cannot be selected.
      *
      * @param {number} index Index of the selected certificate
      * @memberof DscPinDialogComponent
      */
     public selectDscCertificate(index: number): void {
         const certificate = this.dscCertificates[index];
+        if (!certificate?.connected) {
+            return;
+        }
         console.info('[DSC Dialog] Certificate selected:', { index, subjectCn: certificate?.subjectCn, serial: certificate?.serial, certId: certificate?.certId });
         this.selectedDscCertificateIndex = index;
         this.dscPinError = '';
@@ -294,57 +347,55 @@ export class DscPinDialogComponent implements OnDestroy {
     }
 
     /**
-     * Removes the remembered PIN for the selected certificate.
-     *
-     * @memberof DscPinDialogComponent
-     */
-    public forgetSavedPin(): void {
-        const certificate = this.getSelectedCertificate();
-        console.info('[DSC Dialog] Forgetting saved PIN for certificate:', certificate?.certId);
-        if (!certificate) {
-            return;
-        }
-        this.dscPinStorage.forgetPin(certificate);
-        this.dscPin = '';
-        this.rememberPin = false;
-        this.hasSavedPin = false;
-        this.usedRememberedPin = false;
-        this.changeDetectorRef.detectChanges();
-    }
-
-    /**
-     * Called whenever the PIN input value changes. Once the user edits an auto-filled
-     * remembered PIN it is no longer considered the verified stored PIN, so the next
-     * submit must run the dummy-hash PIN verification.
+     * Called whenever the PIN input value changes. Only a real user edit (value differs
+     * from the auto-filled remembered PIN) marks the PIN as non-remembered - the
+     * programmatic auto-fill also fires ngModelChange through the input-field's
+     * writeValue, and that echo must be ignored.
      *
      * @memberof DscPinDialogComponent
      */
     public onDscPinChange(): void {
-        if (this.usedRememberedPin) {
+        if (this.usedRememberedPin && this.dscPin !== this.rememberedPinValue) {
             console.info('[DSC Dialog] PIN edited by user - marking as non-remembered');
             this.usedRememberedPin = false;
         }
     }
 
     /**
-     * Starts the DSC signing flow. Before calling any API the selected certificate is
-     * re-read from the token to make sure the device is still plugged in. If it is not,
-     * the list is updated and the user is asked to insert the token - no server API is
-     * called in that case.
+     * Starts the DSC signing flow.
      *
-     * PIN verification is skipped when the current PIN value is the unmodified one that
-     * was auto-filled from encrypted storage. If the user edited the PIN, or entered a
-     * new one, the dummy-hash verification runs first.
+     * When the current PIN is the unmodified one auto-filled from encrypted storage, it was
+     * already verified when saved, so the token certificate re-read and the dummy-hash PIN
+     * verification are skipped entirely - signing proceeds with the cached certificate data
+     * and the device is only used to sign the real hash.
+     *
+     * For a new or edited PIN the certificate is first re-read from the token to make sure
+     * the device is still plugged in (no server API is called when it is not), followed by
+     * the dummy-hash PIN verification.
      *
      * @memberof DscPinDialogComponent
      */
     public submitDscPin(): void {
         const certificate = this.getSelectedCertificate();
         console.info('[DSC Dialog] Confirm clicked. Selected certificate:', { subjectCn: certificate?.subjectCn, serial: certificate?.serial, certId: certificate?.certId });
-        if (!this.dscPin || !certificate || !this.voucher || this.isBusy) {
+        if (!this.dscPin || !certificate || !certificate.connected || !this.voucher || this.isBusy) {
             return;
         }
         this.dscPinError = '';
+
+        if (!this.rememberPin) {
+            // Confirmed with the remember toggle off -> forget the saved PIN for this certificate.
+            this.dscPinStorage.forgetPin(certificate);
+        }
+
+        if (this.usedRememberedPin && this.dscPin === this.rememberedPinValue) {
+            console.info('[DSC Dialog] Remembered PIN unchanged. Signing directly with cached certificate - skipping device re-read and dummy PIN verification.');
+            this.runSigning(certificate).pipe(
+                takeUntil(this.destroyed$)
+            ).subscribe();
+            return;
+        }
+
         this.signingStage = 'verifying_device';
 
         this.dscService.syncCertificates().pipe(
@@ -354,19 +405,12 @@ export class DscPinDialogComponent implements OnDestroy {
                 if (!stillConnected) {
                     console.info('[DSC Dialog] Selected device not connected. Available certificates:', certificates.length);
                     this.signingStage = null;
-                    this.dscCertificates = certificates;
+                    this.dscCertificates = certificates.map((cert) => ({ ...cert, connected: true }));
                     this.selectedDscCertificateIndex = certificates.length ? 0 : null;
                     this.applyRememberedPin();
                     this.dscPinError = this.localeData?.device_not_connected;
                     this.changeDetectorRef.detectChanges();
                     return EMPTY;
-                }
-
-                if (this.usedRememberedPin) {
-                    console.info('[DSC Dialog] Device connected and remembered PIN is unchanged. Skipping dummy PIN verification.');
-                    this.signingStage = 'preparing';
-                    this.changeDetectorRef.detectChanges();
-                    return this.runSigning(certificate);
                 }
 
                 console.info('[DSC Dialog] Selected device is connected. Proceeding to PIN verification.');
@@ -433,15 +477,16 @@ export class DscPinDialogComponent implements OnDestroy {
                         return this.dscService.finishDscSigning(prepareResponse.body.nonce, signature);
                     }),
                     catchError((error) => {
-                        // Token sign failed -> almost certainly a PIN/session issue. Keep dialog open.
+                        // Token sign failed -> wrong PIN, locked token or device unplugged. Keep dialog open
+                        // and show the bridge error verbatim (e.g. "Device not connected").
                         this.signingStage = null;
                         if (this.usedRememberedPin) {
                             this.dscPinStorage.forgetPin(certificate);
                             this.usedRememberedPin = false;
-                            this.hasSavedPin = false;
+                            this.rememberedPinValue = null;
                         }
                         this.dscPin = '';
-                        this.dscPinError = this.localeData?.incorrect_pin || error?.message;
+                        this.dscPinError = error?.message || this.localeData?.incorrect_pin;
                         this.changeDetectorRef.detectChanges();
                         return EMPTY;
                     })

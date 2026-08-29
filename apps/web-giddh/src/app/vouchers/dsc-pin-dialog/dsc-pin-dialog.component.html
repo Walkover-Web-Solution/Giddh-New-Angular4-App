@@ -12,7 +12,7 @@
             </div>
         } @else {
             @if (dscCertificates.length === 0) {
-                <p class="text-muted">{{ localeData?.no_certificates }}</p>
+                <p class="text-muted">{{ dscPinError || localeData?.no_certificates }}</p>
             }
             @if (dscCertificates.length > 0) {
                 <div class="mb-3">
@@ -23,15 +23,20 @@
                             {{ localeData?.refresh_certificates }}
                         </a>
                     </div>
-                    @for (cert of dscCertificates; track cert; let i = $index) {
+                    @for (cert of dscCertificates; track cert.certId; let i = $index) {
                         <div
-                            class="cert p-2 mb-2 border border-radius-4 cursor-pointer"
+                            class="cert p-2 mb-2 border border-radius-4"
+                            [class.cursor-pointer]="cert.connected"
+                            [class.cert-disconnected]="!cert.connected"
                             [class.border-primary]="i === selectedDscCertificateIndex"
                             [class.theme-primary-light]="i === selectedDscCertificateIndex"
                             [class.border-color-transparent]="i !== selectedDscCertificateIndex"
                             (click)="selectDscCertificate(i)"
                         >
                             <b class="font-size-14">{{ cert.subjectCn || localeData?.unknown }}</b>
+                            @if (!cert.connected) {
+                                <span class="not-connected-tag">{{ localeData?.not_connected }}</span>
+                            }
                             <span class="d-block font-size-12 text-muted">
                                 {{ localeData?.issued_by }} {{ cert.issuerCn || localeData?.issuer_unknown
                                 }}{{ cert.notAfter ? ' · ' + localeData?.valid_until + ' ' + (cert.notAfter | slice: 0 : 10) : '' }}
@@ -57,34 +62,36 @@
                 }
 
                 <div class="mt-2">
-                    <mat-checkbox [(ngModel)]="rememberPin" [name]="'rememberPin'">
-                        {{ localeData?.remember_pin }}
-                    </mat-checkbox>
-                    <div class="pl-5">
-                        <p class="font-size-12 text-muted mb-2">{{ localeData?.remember_pin_hint }}</p>
-                        @if (rememberPin) {
-                            <div class="mt-2">
-                                <reactive-dropdown-field
-                                    class="w-100"
-                                    [label]="commonLocaleData?.app_duration?.duration"
-                                    [options]="durationOptions"
-                                    [formControl]="rememberDurationControl"
-                                    [name]="'rememberDuration'"
-                                ></reactive-dropdown-field>
-                            </div>
-                        }
-                        @if (hasSavedPin) {
-                            <button type="button" class="mt-2" matButton="outlined" color="warn" (click)="forgetSavedPin()">
-                                {{ localeData?.forget_pin }}
-                            </button>
-                        }
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <!-- <mat-checkbox [(ngModel)]="rememberPin" [name]="'rememberPin'">
+                            {{ localeData?.remember_pin }}
+                        </mat-checkbox> -->
+                        <p>{{ localeData?.remember_pin }}</p>
+                        <mat-slide-toggle
+                            aria-label="remember dsc password"
+                            [(ngModel)]="rememberPin"
+                            name="rememberPin"
+                            color="primary"
+                        ></mat-slide-toggle>
                     </div>
+                    <p class="font-size-12 text-muted mb-2">{{ localeData?.remember_pin_hint }}</p>
+                    @if (rememberPin) {
+                        <div class="mt-2">
+                            <reactive-dropdown-field
+                                class="w-100"
+                                [label]="commonLocaleData?.app_duration?.duration"
+                                [options]="durationOptions"
+                                [formControl]="rememberDurationControl"
+                                [name]="'rememberDuration'"
+                            ></reactive-dropdown-field>
+                        </div>
+                    }
                 </div>
             }
         }
     </mat-dialog-content>
     <mat-dialog-actions class="dialog-footer d-flex justify-content-end column-gap-1">
-        <button (click)="closeDscPinDialog()" [disabled]="isBusy" matButton="outlined">{{ commonLocaleData?.app_cancel }}</button>
+        <button (click)="closeDscPinDialog()" matButton="outlined">{{ commonLocaleData?.app_cancel }}</button>
         <button (click)="submitDscPin()" [disabled]="!dscPin || selectedDscCertificateIndex === null || isBusy" matButton="filled">
             {{ commonLocaleData?.app_confirm }}
         </button>

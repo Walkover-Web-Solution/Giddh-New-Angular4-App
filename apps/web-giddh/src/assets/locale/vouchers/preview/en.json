@@ -571,22 +571,5 @@
     "go_to_branch_message": "To access create voucher, go to branch mode",
     "eoe": "E. & O.E. (Errors & Omissions Excepted)",
     "invoice_grand_total_in_accounts_currency": "Invoice Grand Total",
-    "confirm_change_secondary_language": "All pre-filled values for [LANGUAGE] will be removed. Do you want to continue?",
-    "dsc_pin_dialog": {
-        "title": "Digital Signature PIN",
-        "message": "Enter your DSC token PIN to sign this invoice.",
-        "pin_label": "Token PIN",
-        "pin_placeholder": "Enter PIN",
-        "select_certificate": "Select certificate",
-        "issued_by": "Issued by",
-        "valid_until": "valid until",
-        "no_certificates": "No DSC certificates found on the token.",
-        "loading_certificates": "Reading certificates...",
-        "incorrect_pin": "Incorrect PIN. Please try again.",
-        "bridge_not_found": "Digital signature bridge not found. Please install the Giddh DSC extension and native host, then refresh the page.",
-        "download_success": "Signed invoice PDF downloaded successfully.",
-        "download_error": "An error occurred while downloading signed invoice.",
-        "unknown": "Unknown",
-        "issuer_unknown": "?"
-    }
+    "confirm_change_secondary_language": "All pre-filled values for [LANGUAGE] will be removed. Do you want to continue?"
 }

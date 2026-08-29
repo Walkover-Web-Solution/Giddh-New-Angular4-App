@@ -296,6 +296,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
         if (this.shouldShowDownloadSignedPdf()) {
+            this.isDscPreloading = !this.dscService.hasCachedCertificates();
             this.dscService.preloadCertificates().pipe(
                 takeUntil(this.destroyed$),
                 finalize(() => {
