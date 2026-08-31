@@ -1,20 +1,62 @@
 <div appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <header class="header">
+    <header class="header d-flex">
         <div class="brand-logo">
             <a href="/" target="_blank"><img [src]="brandLogoUrl" height="30" alt="brand-logo" /></a>
         </div>
+
+        <!-- Back Button -->
+        <button matButton="filled" (click)="goToPreviousPage()" class="ml-auto bg-white text-black">
+            {{ commonLocaleData?.app_back }}
+        </button>
     </header>
-    <div class="download-button flex-column d-flex justify-content-center align-items-center">
-        <span class="mb-3"><img [src]="imgPath + 'download-illustrator.svg'" /></span>
-        <p class="mb-3">{{ commonLocaleData?.app_download_here }}</p>
-        <a
-            matButton="filled"
-            class="mr-0 min-width-160 d-flex align-items-center justify-content-center"
-            [href]="downloadUrl"
-            download
-            target="_blank"
-        >
-            {{ commonLocaleData?.app_download }}
-        </a>
-    </div>
+    @if (isDscModule) {
+        <div class="download-button flex-column d-flex justify-content-center align-items-center">
+            <span class="mb-3"><img [src]="imgPath + 'download-illustrator.svg'" /></span>
+            <h4 class="mb-2">{{ commonLocaleData?.app_dsc_download_title }}</h4>
+            <p class="mb-4 text-center px-3">{{ commonLocaleData?.app_dsc_download_note }}</p>
+            <div class="d-flex flex-wrap justify-content-center column-gap-2 row-gap-2">
+                <a
+                    matButton="outlined"
+                    class="mr-0 min-width-160 d-flex align-items-center justify-content-center"
+                    [href]="dscExtensionUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    {{ commonLocaleData?.app_dsc_browser_extension }}
+                </a>
+                <a
+                    matButton="filled"
+                    class="mr-0 min-width-160 d-flex align-items-center justify-content-center"
+                    [href]="dscWindowsAppUrl"
+                    download
+                >
+                    <i class="icon-windows mr-2"></i>
+                    {{ commonLocaleData?.app_dsc_windows_app }}
+                </a>
+                <a
+                    matButton="filled"
+                    class="mr-0 min-width-160 d-flex align-items-center justify-content-center"
+                    [href]="dscMacAppUrl"
+                    download
+                >
+                    <i class="icon-mac mr-2"></i>
+                    {{ commonLocaleData?.app_dsc_mac_app }}
+                </a>
+            </div>
+        </div>
+    } @else {
+        <div class="download-button flex-column d-flex justify-content-center align-items-center">
+            <span class="mb-3"><img [src]="imgPath + 'download-illustrator.svg'" /></span>
+            <p class="mb-3">{{ commonLocaleData?.app_download_here }}</p>
+            <a
+                matButton="filled"
+                class="mr-0 min-width-160 d-flex align-items-center justify-content-center"
+                [href]="downloadUrl"
+                download
+                target="_blank"
+            >
+                {{ commonLocaleData?.app_download }}
+            </a>
+        </div>
+    }
 </div>

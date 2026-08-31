@@ -704,6 +704,11 @@
         "marathi": "Marathi"
     },
     "app_download_here": "Download from here",
+    "app_dsc_download_title": "Digital Signature Setup",
+    "app_dsc_download_note": "To use Digital Signature in Giddh, download and install the bridge application for your operating system and add the Giddh DSC browser extension.",
+    "app_dsc_browser_extension": "Browser Extension",
+    "app_dsc_windows_app": "Windows App",
+    "app_dsc_mac_app": "Mac App",
     "app_irn": "IRN",
     "app_dashboard": "Dashboard",
     "app_giddh_no_permissions": "You don't have permission to view this",
@@ -827,5 +832,6 @@
     "app_you_in_company_mode": "You are in Company Mode",
     "app_you_in_consolidate_mode": "You are in Consolidated Mode",
     "go_to_branch": "Go to Branch",
-    "switch_to_branch": "Switch to Branch Mode"
+    "switch_to_branch": "Switch to Branch Mode",
+    "app_download_signed_invoice": "Download Digitally Signed Invoice"
 }

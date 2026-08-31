@@ -35,6 +35,7 @@ import {
     takeUntil,
     tap
 } from "rxjs";
+import { finalize } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
 import { UiSettingsService } from "../../services/ui-settings.service";
@@ -84,6 +85,8 @@ import { CreateDiscountComponent } from "../../theme/create-discount/create-disc
 import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/confirmation-modal.interface";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
 import { ToasterService } from "../../services/toaster.service";
+import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
+import { DscService } from "../../services/dsc.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
 import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
@@ -195,6 +198,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public imgPath: string = '';
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
+    /** True while DSC certificates are being preloaded; disables signed-PDF download button. */
+    public isDscPreloading: boolean = true;
     /** Discounts list Observable */
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
     /** Discounts list Observable */
@@ -895,7 +900,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private generalActions: GeneralActions,
         private customFieldsService: CustomFieldsService,
         private recurrenceService: RecurrenceFormService,
-        private domSanitizer: DomSanitizer
+        private domSanitizer: DomSanitizer,
+        private dscSignDialogService: DscSignDialogService,
+        private dscService: DscService
     ) {
         this.imgPath = this.serviceConfig.IMG_PATH;
     }
@@ -907,6 +914,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public ngOnInit(): void {
         this.showAccountUniqueName = this.uiSettingsService.getShowAccountUniqueName();
+        this.isDscPreloading = !this.dscService.hasCachedCertificates();
+        this.dscService.preloadCertificates().pipe(
+            takeUntil(this.destroyed$),
+            finalize(() => {
+                this.isDscPreloading = false;
+                this.changeDetection.detectChanges();
+            })
+        ).subscribe();
         
         // Set up global interaction tracking
         this.setupGlobalInteractionTracking();
@@ -9723,6 +9738,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * True when Create & Download Signed PDF is allowed for the current voucher type.
+     *
+     * @protected
+     * @returns {boolean} True if signed PDF action should be displayed
+     * @memberof VoucherCreateComponent
+     */
+    protected shouldShowDownloadSignedPdf(): boolean {
+        return !this.invoiceType.isPurchaseOrder &&
+            !this.invoiceType.isEstimateInvoice &&
+            !this.invoiceType.isProformaInvoice &&
+            !this.invoiceType.isReceiptInvoice &&
+            !this.invoiceType.isPaymentInvoice;
+    }
+
+    /**
      * Gets the update button label text
      *
      * @protected
@@ -9755,5 +9785,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
          setTimeout(() => {
             this.copyVoucherElement?.nativeElement?.focus();
         }, 100);
+    }
+
+     /**
+     * Create and download signed PDF of the voucher 
+     * 
+     * @memberof VoucherCreateComponent
+     */
+    public createDownloadSignedPdf(): void {
+        this.storeFocus();
+        this.saveVoucher((response) => {
+            if (response?.status === 'success' && response.body) {
+                this.dscSignDialogService.openDownloadSignedInvoiceDialog({
+                    voucher: response.body,
+                    voucherType: response.body?.voucherType || response.body?.type || this.voucherType
+                });
+            }
+        });
     }
 }
