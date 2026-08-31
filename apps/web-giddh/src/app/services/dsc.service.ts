@@ -74,6 +74,12 @@ export class DscService {
     private certificatesCache$: BehaviorSubject<DscCertificate[] | null> = new BehaviorSubject<DscCertificate[] | null>(null);
     /** Shared in-flight token read so concurrent callers don't trigger duplicate bridge reads. */
     private pendingCertificatesRead$: Observable<DscCertificate[]> | null = null;
+    /** True once a token read (preload or dialog sync) has completed in this session, regardless of outcome. */
+    private certificateSyncCompleted: boolean = false;
+    /** True when the last completed token read succeeded. */
+    private certificateSyncSucceeded: boolean = false;
+    /** Error message from the last failed token read, reused by the dialog without re-reading the token. */
+    private certificateSyncError: string | null = null;
     /** localStorage key used to persist the last certificate list for instant rendering. */
     private static readonly CERTIFICATES_STORE_KEY = 'giddh_dsc_certificates';
 
@@ -249,7 +255,15 @@ export class DscService {
         console.info('[DSC] syncCertificates started');
         if (!this.pendingCertificatesRead$) {
             this.pendingCertificatesRead$ = this.getCertificates().pipe(
+                tap(() => {
+                    this.certificateSyncCompleted = true;
+                    this.certificateSyncSucceeded = true;
+                    this.certificateSyncError = null;
+                }),
                 catchError((error) => {
+                    this.certificateSyncCompleted = true;
+                    this.certificateSyncSucceeded = false;
+                    this.certificateSyncError = error?.message || null;
                     if (this.certificatesCache$.getValue() === null) {
                         this.certificatesCache$.next([]);
                     }
@@ -263,6 +277,37 @@ export class DscService {
     }
 
     /**
+     * True once a token read has completed in this session (via preload or any sync),
+     * regardless of outcome. Callers can reuse that result instead of re-reading the token.
+     *
+     * @returns {boolean}
+     * @memberof DscService
+     */
+    public hasCompletedCertificateSync(): boolean {
+        return this.certificateSyncCompleted;
+    }
+
+    /**
+     * True when the last completed token read succeeded.
+     *
+     * @returns {boolean}
+     * @memberof DscService
+     */
+    public wasLastCertificateSyncSuccessful(): boolean {
+        return this.certificateSyncSucceeded;
+    }
+
+    /**
+     * Error message from the last failed token read, or null when the last read succeeded.
+     *
+     * @returns {(string | null)}
+     * @memberof DscService
+     */
+    public getCertificateSyncError(): string | null {
+        return this.certificateSyncError;
+    }
+
+    /**
      * Clears the certificate cache and localStorage so the next read re-queries the token
      * (used by the dialog's manual "refresh certificates" action).
      *
@@ -271,6 +316,9 @@ export class DscService {
     public clearCertificatesCache(): void {
         this.certificatesCache$.next(null);
         this.pendingCertificatesRead$ = null;
+        this.certificateSyncCompleted = false;
+        this.certificateSyncSucceeded = false;
+        this.certificateSyncError = null;
         try {
             localStorage.removeItem(DscService.CERTIFICATES_STORE_KEY);
         } catch { /* ignore */ }
@@ -319,6 +367,29 @@ export class DscService {
     }
 
     /**
+     * Removes duplicate certificate entries returned by the bridge. On Windows the native
+     * host can enumerate the same token certificate through two CSP provider paths that
+     * differ only in casing (e.g. C:\Windows\... vs C:\WINDOWS\...), producing two entries
+     * with different certIds but the same certificate serial. The first occurrence wins.
+     *
+     * @private
+     * @param {DscCertificate[]} certificates Raw certificate list from the bridge
+     * @returns {DscCertificate[]}
+     * @memberof DscService
+     */
+    private deduplicateCertificates(certificates: DscCertificate[]): DscCertificate[] {
+        const seen = new Set<string>();
+        return certificates.filter((certificate) => {
+            const key = certificate.serial || certificate.certId;
+            if (!key || seen.has(key)) {
+                return false;
+            }
+            seen.add(key);
+            return true;
+        });
+    }
+
+    /**
      * Reads certificates from the USB token via the bridge extension.
      *
      * @returns {Observable<DscCertificate[]>}
@@ -332,9 +403,9 @@ export class DscService {
             tap(() => console.info('[DSC] Reading certificates from token...')),
             switchMap((response) => {
                 if (!response?.success) {
-                    return throwError(() => new Error(response?.message || 'Failed to read DSC certificates.'));
+                    return throwError(() => this.normalizeBridgeError(new Error(response?.message || 'Failed to read DSC certificates.')));
                 }
-                const certificates = response.certificates || [];
+                const certificates = this.deduplicateCertificates(response.certificates || []);
                 if (certificates.length) {
                     console.info('[DSC] Device connected. Certificates found:', certificates.length);
                     certificates.forEach((cert, index) => {
@@ -418,7 +489,7 @@ export class DscService {
             }),
             switchMap((response) => {
                 if (!response?.success || !response?.signature) {
-                    return throwError(() => new Error(response?.message || 'Failed to sign hash with DSC token.'));
+                    return throwError(() => this.normalizeBridgeError(new Error(response?.message || 'Failed to sign hash with DSC token.')));
                 }
                 console.info('[DSC] signHash successful for certificate:', certificate.certId, 'signature length:', response.signature.length);
                 return of(response.signature);
@@ -501,19 +572,38 @@ export class DscService {
         const rawMessage = error instanceof Error ? error.message : error?.message || String(error);
         const normalized = rawMessage.toLowerCase();
 
+        if (normalized.includes('no_token') || normalized.includes('no token')) {
+            return new Error('No token found. Ensure your DSC token is plugged in and its driver is installed.');
+        }
         if (normalized.includes('incorrect pin') || normalized.includes('wrong pin')) {
             return new Error('Incorrect PIN. Please try again.');
         }
+        const cleanMessage = this.stripTechnicalDetails(rawMessage);
         if (normalized.includes('pin')) {
-            return new Error(`PIN error: ${rawMessage}`);
+            return new Error(`PIN error: ${cleanMessage}`);
         }
         if (normalized.includes('certificate')) {
-            return new Error(`Certificate error: ${rawMessage}`);
+            return new Error(`Certificate error: ${cleanMessage}`);
         }
-        if (rawMessage) {
-            return new Error(rawMessage);
+        if (cleanMessage) {
+            return new Error(cleanMessage);
         }
         return new Error('An unexpected error occurred while communicating with the DSC bridge.');
+    }
+
+    /**
+     * Removes technical detail dumps from a bridge error message (e.g. the
+     * "(driver issues: WDPKCS.dll:NO_TOKEN; ...)" suffix the native host appends),
+     * keeping only the human-readable part.
+     *
+     * @private
+     * @param {string} message Raw bridge error message
+     * @returns {string}
+     */
+    private stripTechnicalDetails(message: string): string {
+        return (message || '')
+            .replace(/\s*\([^)]*(?:\.dll|no_token|driver issues|debug)[^)]*\)/gi, '')
+            .trim();
     }
 
     /**
