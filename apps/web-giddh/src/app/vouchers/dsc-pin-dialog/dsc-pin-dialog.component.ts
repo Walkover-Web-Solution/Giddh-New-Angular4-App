@@ -186,11 +186,11 @@ export class DscPinDialogComponent implements OnDestroy {
         if (force) {
             this.dscService.clearCertificatesCache();
         }
-        const previousCertId = this.getSelectedCertificate()?.certId ?? null;
+        const previousCertificate = this.getSelectedCertificate();
         const cached = force ? [] : this.dscService.getCachedCertificatesSnapshot();
         this.dscCertificates = cached.map((certificate) => ({ ...certificate, connected: true }));
         this.isDscCertificateLoading = cached.length === 0;
-        this.updateSelection(previousCertId, previousCertId);
+        this.updateSelection(previousCertificate, previousCertificate);
 
         if (!force && this.dscService.hasCompletedCertificateSync()) {
             // A token read already completed (parent preload) - reuse its result instead
@@ -209,17 +209,16 @@ export class DscPinDialogComponent implements OnDestroy {
         ).subscribe({
             next: (certificates) => {
                 console.info('[DSC Dialog] Background certificate read completed:', certificates.length);
-                const selectedCertId = this.getSelectedCertificate()?.certId ?? null;
-                const freshIds = new Set(certificates.map((certificate) => certificate.certId));
+                const selectedCertificate = this.getSelectedCertificate();
                 const disconnected = this.dscCertificates
-                    .filter((certificate) => !freshIds.has(certificate.certId))
+                    .filter((certificate) => !certificates.some((fresh) => this.isSameCertificate(fresh, certificate)))
                     .map((certificate) => ({ ...certificate, connected: false }));
                 this.dscCertificates = [
                     ...certificates.map((certificate) => ({ ...certificate, connected: true })),
                     ...disconnected
                 ];
                 this.isDscCertificateLoading = false;
-                this.updateSelection(selectedCertId, selectedCertId);
+                this.updateSelection(selectedCertificate, selectedCertificate);
                 this.changeDetectorRef.detectChanges();
             },
             error: (error) => {
@@ -253,26 +252,50 @@ export class DscPinDialogComponent implements OnDestroy {
     }
 
     /**
-     * Selects the certificate matching the preferred certId when it is connected,
+     * True when two certificates refer to the same physical token certificate. Matching
+     * prefers the serial because Windows enumerations can return different certIds
+     * (CSP provider path casing) for the same certificate across reads.
+     *
+     * @private
+     * @param {(DscCertificate | null)} a First certificate
+     * @param {(DscCertificate | null)} b Second certificate
+     * @returns {boolean}
+     * @memberof DscPinDialogComponent
+     */
+    private isSameCertificate(a: DscCertificate | null, b: DscCertificate | null): boolean {
+        if (!a || !b) {
+            return false;
+        }
+        if (a.serial && b.serial) {
+            return a.serial === b.serial;
+        }
+        return a.certId === b.certId;
+    }
+
+    /**
+     * Selects the certificate matching the preferred certificate when it is connected,
      * otherwise the first connected certificate. Only re-applies the remembered PIN
      * when the effective selection changed, so a PIN typed before the background read
      * completed is never wiped.
      *
      * @private
-     * @param {string | null} preferredCertId Cert to keep selected when possible
-     * @param {string | null} previousCertId Previously selected cert used for change detection
+     * @param {(DscCertificate | null)} preferredCertificate Cert to keep selected when possible
+     * @param {(DscCertificate | null)} previousCertificate Previously selected cert used for change detection
      * @memberof DscPinDialogComponent
      */
-    private updateSelection(preferredCertId: string | null, previousCertId: string | null): void {
-        let nextIndex = preferredCertId
-            ? this.dscCertificates.findIndex((certificate) => certificate.certId === preferredCertId && certificate.connected)
+    private updateSelection(preferredCertificate: DscCertificate | null, previousCertificate: DscCertificate | null): void {
+        let nextIndex = preferredCertificate
+            ? this.dscCertificates.findIndex((certificate) => certificate.connected && this.isSameCertificate(certificate, preferredCertificate))
             : -1;
         if (nextIndex < 0) {
             nextIndex = this.dscCertificates.findIndex((certificate) => certificate.connected);
         }
         this.selectedDscCertificateIndex = nextIndex >= 0 ? nextIndex : null;
-        const nextCertId = this.getSelectedCertificate()?.certId ?? null;
-        if (nextCertId !== previousCertId) {
+        const nextCertificate = this.getSelectedCertificate();
+        const unchanged = nextCertificate && previousCertificate
+            ? this.isSameCertificate(nextCertificate, previousCertificate)
+            : nextCertificate === previousCertificate;
+        if (!unchanged) {
             this.applyRememberedPin();
         }
     }
@@ -426,8 +449,10 @@ export class DscPinDialogComponent implements OnDestroy {
         this.dscService.syncCertificates().pipe(
             takeUntil(this.destroyed$),
             switchMap((certificates) => {
-                const stillConnected = certificates.some((cert) => cert.certId === certificate.certId);
-                if (!stillConnected) {
+                // Match by serial: Windows enumerations can return a different certId
+                // (provider path casing) for the same token on every read.
+                const freshCertificate = certificates.find((cert) => this.isSameCertificate(cert, certificate));
+                if (!freshCertificate) {
                     console.info('[DSC Dialog] Selected device not connected. Available certificates:', certificates.length);
                     this.signingStage = null;
                     this.dscCertificates = certificates.map((cert) => ({ ...cert, connected: true }));
@@ -441,14 +466,14 @@ export class DscPinDialogComponent implements OnDestroy {
                 console.info('[DSC Dialog] Selected device is connected. Proceeding to PIN verification.');
                 this.signingStage = 'verifying_pin';
                 this.changeDetectorRef.detectChanges();
-                return this.dscService.verifyPin(certificate, this.dscPin).pipe(
+                return this.dscService.verifyPin(freshCertificate, this.dscPin).pipe(
                     switchMap(() => {
                         if (this.rememberPin) {
-                            this.dscPinStorage.savePin(certificate, this.dscPin, this.rememberDurationControl.value as DscPinDuration);
+                            this.dscPinStorage.savePin(freshCertificate, this.dscPin, this.rememberDurationControl.value as DscPinDuration);
                         } else {
-                            this.dscPinStorage.forgetPin(certificate);
+                            this.dscPinStorage.forgetPin(freshCertificate);
                         }
-                        return this.runSigning(certificate);
+                        return this.runSigning(freshCertificate);
                     }),
                     catchError((error) => {
                         this.signingStage = null;
