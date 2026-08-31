@@ -519,11 +519,9 @@ export class DscPinDialogComponent implements OnDestroy {
                 this.changeDetectorRef.detectChanges();
                 return this.dscService.signHash(prepareResponse.body.hash, certificate, this.dscPin).pipe(
                     switchMap((signature) => {
-                        if (this.rememberPin) {
-                            this.dscPinStorage.savePin(certificate, this.dscPin, this.rememberDurationControl.value as DscPinDuration);
-                        } else {
-                            this.dscPinStorage.forgetPin(certificate);
-                        }
+                        // The PIN is deliberately NOT re-saved here. Saving already happened
+                        // after verifyPin for a new/edited PIN, and re-saving on every sign
+                        // would reset the expiry clock so the remembered PIN never expires.
                         return this.dscService.finishDscSigning(prepareResponse.body.nonce, signature);
                     }),
                     catchError((error) => {
