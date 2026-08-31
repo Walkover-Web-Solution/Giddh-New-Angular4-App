@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DscCertificate } from './dsc.service';
 
-/** Supported "remember PIN" durations. `permanent` never expires. */
+/** Supported "remember PIN" durations. */
 export type DscPinDuration = '15m' | '2h' | '1d' | '7d' | '30d';
 
 /** Single encrypted PIN entry persisted in localStorage, keyed by certificate serial. */
@@ -143,7 +143,9 @@ export class DscPinStorageService {
             this.forgetPin(certificate);
             return null;
         }
-        if (entry.expiresAt !== null && Date.now() > entry.expiresAt) {
+        // Entries without an expiry are legacy "permanent" entries from before fixed
+        // durations were enforced - they are no longer supported and count as expired.
+        if (entry.expiresAt === null || Date.now() > entry.expiresAt) {
             this.forgetPin(certificate);
             return null;
         }
@@ -179,11 +181,12 @@ export class DscPinStorageService {
         if (!entry) {
             return false;
         }
-        if (entry.expiresAt !== null && Date.now() > entry.expiresAt) {
+        if (entry.expiresAt === null || Date.now() > entry.expiresAt) {
             this.forgetPin(certificate);
             return false;
         }
-        return entry.certId === certificate.certId;
+        // Same serial-based device binding as decryptPin (certId varies across Windows reads).
+        return entry.serial === serial;
     }
 
     /**
