@@ -136,8 +136,10 @@ export class DscPinStorageService {
         if (!entry) {
             return null;
         }
-        // Device binding: only reuse when the exact same certificate is present.
-        if (entry.certId !== certificate.certId || entry.serial !== serial) {
+        // Device binding: only reuse when the same certificate is present. Matching is by
+        // serial because Windows can enumerate the same token with different certIds
+        // (CSP provider path casing) across reads, while the serial stays stable.
+        if (entry.serial !== serial) {
             this.forgetPin(certificate);
             return null;
         }
