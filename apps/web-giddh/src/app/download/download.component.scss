@@ -6,3 +6,210 @@
 .download-button {
     height: calc(100vh - 150px);
 }
+
+.dsc-page {
+    padding: 32px 16px 48px;
+    background-color: var(--theme-background-color);
+    height: 100vh;
+}
+
+.dsc-hero {
+    margin-bottom: 32px;
+    margin-top: var(--header-height);
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .dsc-hero-line {
+        display: inline-block;
+        width: 50px;
+        height: 3px;
+        background-color: var(--theme-primary-color);
+        border-radius: 3px;
+    }
+}
+
+.dsc-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto 24px;
+}
+
+.dsc-step-card {
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+    transition: box-shadow 0.2s ease;
+    color: var(--color-black);
+
+    &:hover {
+        box-shadow: 0 8px 24px color-mix(in oklch, var(--color-black) 6%, transparent);
+    }
+}
+
+.dsc-step-header {
+    margin-bottom: 10px;
+}
+
+.dsc-step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--theme-primary-color);
+    color: var(--color-white);
+}
+
+.dsc-step-desc {
+    margin: 0 0 20px;
+    line-height: 1.5;
+}
+
+.dsc-step-illustration {
+    height: 150px;
+    margin-bottom: 20px;
+
+    svg {
+        height: 100%;
+        width: auto;
+    }
+}
+
+.dsc-feature-list {
+    margin: 0 auto 20px;
+
+    li i {
+        font-size: 16px;
+        color: var(--theme-primary-color);
+    }
+}
+
+.dsc-info-box {
+    background-color: var(--theme-primary-light);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 20px;
+    text-align: left;
+
+    i {
+        font-size: 18px;
+        margin-top: 2px;
+        color: var(--theme-primary-color);
+    }
+
+    p {
+        margin: 0;
+        line-height: 1.5;
+    }
+}
+
+.dsc-download-buttons {
+    margin-top: auto;
+}
+
+.dsc-step-button {
+    min-width: 260px;
+    text-decoration: none;
+
+    i {
+        font-size: 16px;
+    }
+}
+
+.dsc-chrome-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.dsc-external-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.dsc-bottom-bar {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px 24px;
+}
+
+.dsc-why-icon {
+    width: 36px;
+    height: 36px;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.dsc-help-icon {
+    width: 36px;
+    height: 36px;
+
+    i {
+        font-size: 28px;
+        color: var(--theme-primary-color);
+    }
+}
+
+.dsc-why-content,
+.dsc-help-content {
+    p {
+        margin: 0;
+        line-height: 1.5;
+    }
+}
+
+.dsc-help-contact {
+    a {
+        color: var(--theme-primary-color);
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        i {
+            font-size: 14px;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .dsc-page {
+        padding: 24px 12px 36px;
+    }
+
+    .dsc-hero h1 {
+        font-size: 24px;
+    }
+
+    .dsc-step-card {
+        padding: 20px;
+    }
+
+    .dsc-download-buttons {
+        flex-direction: column;
+        width: 100%;
+
+        .dsc-step-button {
+            width: 100%;
+        }
+    }
+
+    .dsc-step-button {
+        width: 100%;
+    }
+}
