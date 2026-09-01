@@ -66,7 +66,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
     private setDscDownloadUrls(): void {
         this.dscWindowsAppUrl = 'https://s3-ap-south-1.amazonaws.com/hello-electron-app/prod/windows/latest/GiddhDSCBridge-Setup.exe';
         this.dscMacAppUrl = 'https://s3-ap-south-1.amazonaws.com/hello-electron-app/prod/macos/latest/GiddhDSCBridge.dmg';
-        this.dscExtensionUrl = 'https://chrome.google.com/webstore/detail/giddh-dsc';
+        this.dscExtensionUrl = 'https://chromewebstore.google.com/detail/giddh-dsc-bridge/pbnmboohmdoknhpflpmeocccojkkjgng';
     }
 
     /**
