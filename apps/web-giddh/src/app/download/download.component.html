@@ -10,23 +10,23 @@
         </button>
     </header>
     @if (isDscModule) {
-        <div class="dsc-page">
+        <div class="dsc-page overflow-auto">
             <div class="dsc-hero text-center">
-                <h1>{{ commonLocaleData?.app_dsc?.download_title }}</h1>
-                <p>{{ commonLocaleData?.app_dsc?.subtitle }}</p>
+                <h1 class="font-weight-semibold text-primary">{{ commonLocaleData?.app_dsc?.download_title }}</h1>
+                <p class="font-size-15">{{ commonLocaleData?.app_dsc?.subtitle }}</p>
                 <span class="dsc-hero-line"></span>
             </div>
 
-            <div class="dsc-steps">
+            <div class="dsc-steps text-black">
                 <!-- Step 1: Browser Extension -->
                 <div class="dsc-step-card">
-                    <div class="dsc-step-header">
+                    <div class="dsc-step-header d-flex align-items-center justify-content-center column-gap-1">
                         <span class="dsc-step-number">1</span>
-                        <h2>{{ commonLocaleData?.app_dsc?.step_1_title }}</h2>
+                        <h2 class="font-size-20 font-weight-semibold text-primary m-0">{{ commonLocaleData?.app_dsc?.step_1_title }}</h2>
                     </div>
-                    <p class="dsc-step-desc">{{ commonLocaleData?.app_dsc?.step_1_desc }}</p>
+                    <p class="dsc-step-desc font-size-14">{{ commonLocaleData?.app_dsc?.step_1_desc }}</p>
 
-                    <div class="dsc-step-illustration">
+                    <div class="dsc-step-illustration d-flex align-items-center justify-content-center">
                         <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
                             <rect x="20" y="15" width="160" height="110" rx="6" fill="#ffffff" stroke="#e0e4ea" stroke-width="2" />
                             <circle cx="35" cy="28" r="3" fill="#ff5f57" />
@@ -51,24 +51,24 @@
                         </svg>
                     </div>
 
-                    <ul class="dsc-feature-list">
-                        <li>
+                    <ul class="dsc-feature-list list-unstyled text-left d-inline-flex flex-column row-gap-1">
+                        <li class="d-flex align-items-center column-gap-1">
                             <i class="icon-security"></i>
-                            <span>{{ commonLocaleData?.app_dsc?.secure_trusted }}</span>
+                            <span class="font-size-14 text-black">{{ commonLocaleData?.app_dsc?.secure_trusted }}</span>
                         </li>
-                        <li>
+                        <li class="d-flex align-items-center column-gap-1">
                             <i class="icon-settings-cog"></i>
-                            <span>{{ commonLocaleData?.app_dsc?.one_time_setup }}</span>
+                            <span class="font-size-14 text-black">{{ commonLocaleData?.app_dsc?.one_time_setup }}</span>
                         </li>
-                        <li>
+                        <li class="d-flex align-items-center column-gap-1">
                             <i class="icon-accounts-new"></i>
-                            <span>{{ commonLocaleData?.app_dsc?.works_seamlessly }}</span>
+                            <span class="font-size-14 text-black">{{ commonLocaleData?.app_dsc?.works_seamlessly }}</span>
                         </li>
                     </ul>
 
                     <a
                         matButton="filled"
-                        class="dsc-step-button max-w-150 mx-auto mt-auto"
+                        class="dsc-step-button d-inline-flex align-items-center justify-content-center max-w-150 mx-auto mt-auto"
                         [href]="dscExtensionUrl"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -136,13 +136,13 @@
 
                 <!-- Step 2: Application Download -->
                 <div class="dsc-step-card">
-                    <div class="dsc-step-header">
+                    <div class="dsc-step-header d-flex align-items-center justify-content-center column-gap-1">
                         <span class="dsc-step-number">2</span>
-                        <h2>{{ commonLocaleData?.app_dsc?.step_2_title }}</h2>
+                        <h2 class="font-size-20 font-weight-semibold text-primary m-0">{{ commonLocaleData?.app_dsc?.step_2_title }}</h2>
                     </div>
-                    <p class="dsc-step-desc">{{ commonLocaleData?.app_dsc?.step_2_desc }}</p>
+                    <p class="dsc-step-desc font-size-14">{{ commonLocaleData?.app_dsc?.step_2_desc }}</p>
 
-                    <div class="dsc-step-illustration">
+                    <div class="dsc-step-illustration d-flex align-items-center justify-content-center">
                         <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
                             <rect x="35" y="20" width="130" height="90" rx="8" fill="#ffffff" stroke="#4285f4" stroke-width="3" />
                             <rect x="45" y="32" width="110" height="65" rx="3" fill="#f0f7ff" />
@@ -160,19 +160,29 @@
                         </svg>
                     </div>
 
-                    <div class="dsc-info-box">
+                    <div class="dsc-info-box d-flex align-items-start column-gap-1">
                         <i class="icon-info"></i>
-                        <p>{{ commonLocaleData?.app_dsc?.bridge_note }}</p>
+                        <p class="text-black font-size-14">{{ commonLocaleData?.app_dsc?.bridge_note }}</p>
                     </div>
 
-                    <div class="dsc-download-buttons">
-                        <a matButton="filled" class="dsc-step-button" [href]="dscWindowsAppUrl" download>
+                    <div class="dsc-download-buttons d-flex flex-wrap justify-content-center column-gap-1 row-gap-1">
+                        <a
+                            matButton="filled"
+                            class="dsc-step-button d-inline-flex align-items-center justify-content-center"
+                            [href]="dscWindowsAppUrl"
+                            download
+                        >
                             <span class="d-inline-flex align-items-center column-gap-1">
                                 <i class="icon-windows"></i>
                                 <span>{{ commonLocaleData?.app_dsc?.download_windows }}</span>
                             </span>
                         </a>
-                        <a matButton="filled" class="dsc-step-button" [href]="dscMacAppUrl" download>
+                        <a
+                            matButton="filled"
+                            class="dsc-step-button d-inline-flex align-items-center justify-content-center"
+                            [href]="dscMacAppUrl"
+                            download
+                        >
                             <span class="d-inline-flex align-items-center column-gap-1">
                                 <i class="icon-mac"></i>
                                 <span>{{ commonLocaleData?.app_dsc?.download_mac }}</span>
@@ -182,9 +192,9 @@
                 </div>
             </div>
 
-            <div class="dsc-bottom-bar">
-                <div class="dsc-why-need">
-                    <div class="dsc-why-icon">
+            <div class="dsc-bottom-bar d-grid text-black">
+                <div class="dsc-why-need d-flex align-items-start column-gap-1">
+                    <div class="dsc-why-icon flex-shrink-0">
                         <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M16 2L4 7v7c0 7.5 5.1 14.4 12 16 6.9-1.6 12-8.5 12-16V7L16 2z"
@@ -204,28 +214,38 @@
                         </svg>
                     </div>
                     <div class="dsc-why-content">
-                        <h3>{{ commonLocaleData?.app_dsc?.why_need_title }}</h3>
-                        <p>{{ commonLocaleData?.app_dsc?.why_need_desc }}</p>
+                        <h3 class="font-size-15 font-weight-semibold text-primary m-0 mb-1">
+                            {{ commonLocaleData?.app_dsc?.why_need_title }}
+                        </h3>
+                        <p class="font-size-14">{{ commonLocaleData?.app_dsc?.why_need_desc }}</p>
                     </div>
                 </div>
 
-                <div class="dsc-help">
-                    <div class="dsc-help-icon">
+                <div class="dsc-help d-flex align-items-start column-gap-1">
+                    <div class="dsc-help-icon d-flex align-items-center justify-content-center flex-shrink-0">
                         <i class="icon-support"></i>
                     </div>
                     <div class="dsc-help-content">
-                        <h3>{{ commonLocaleData?.app_need_help }}</h3>
-                        <p>{{ commonLocaleData?.app_dsc?.contact_support }}</p>
+                        <h3 class="font-size-15 font-weight-semibold text-primary m-0 mb-1">{{ commonLocaleData?.app_need_help }}</h3>
+                        <p class="font-size-14">{{ commonLocaleData?.app_dsc?.contact_support }}</p>
                         @if (isSupportEmailorPhoneAvailable) {
-                            <div class="dsc-help-contact">
+                            <div class="dsc-help-contact d-flex flex-wrap column-gap-1 row-gap-1 mt-2">
                                 @if (supportEmail) {
-                                    <a [href]="'mailto:' + supportEmail" aria-label="mail">
+                                    <a
+                                        [href]="'mailto:' + supportEmail"
+                                        aria-label="mail"
+                                        class="d-inline-flex align-items-center column-gap-05"
+                                    >
                                         <i class="icon-mail"></i>
                                         {{ supportEmail }}
                                     </a>
                                 }
                                 @if (supportPhoneNumber) {
-                                    <a [href]="'tel:' + supportPhoneNumber" aria-label="contact">
+                                    <a
+                                        [href]="'tel:' + supportPhoneNumber"
+                                        aria-label="contact"
+                                        class="d-inline-flex align-items-center column-gap-05"
+                                    >
                                         <i class="icon-mobile"></i>
                                         {{ supportPhoneNumber }}
                                     </a>

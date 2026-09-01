@@ -10,7 +10,7 @@
 .dsc-page {
     padding: 32px 16px 48px;
     background-color: var(--theme-background-color);
-    min-height: calc(100vh - 60px);
+    height: 100vh;
 }
 
 .dsc-hero {
@@ -19,14 +19,6 @@
 
     h1 {
         font-size: 28px;
-        font-weight: 600;
-        margin: 0 0 8px;
-    }
-
-    p {
-        color: var(--color-dark-gray);
-        font-size: 15px;
-        margin: 0 0 12px;
     }
 
     .dsc-hero-line {
@@ -51,10 +43,9 @@
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 28px;
-    display: flex;
-    flex-direction: column;
     text-align: center;
     transition: box-shadow 0.2s ease;
+    color: var(--color-black);
 
     &:hover {
         box-shadow: 0 8px 24px color-mix(in oklch, var(--color-black) 6%, transparent);
@@ -62,45 +53,27 @@
 }
 
 .dsc-step-header {
-    display: flex;
+    margin-bottom: 10px;
+}
+
+.dsc-step-number {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px;
-
-    .dsc-step-number {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background-color: var(--theme-primary-color);
-        color: var(--color-white);
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-    h2 {
-        color: var(--text-primary-color);
-        font-size: 20px;
-        font-weight: 600;
-        margin: 0;
-    }
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--theme-primary-color);
+    color: var(--color-white);
 }
 
 .dsc-step-desc {
-    color: var(--color-medium-gray);
-    font-size: 14px;
-    line-height: 1.5;
     margin: 0 0 20px;
+    line-height: 1.5;
 }
 
 .dsc-step-illustration {
     height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-bottom: 20px;
 
     svg {
@@ -110,32 +83,15 @@
 }
 
 .dsc-feature-list {
-    list-style: none;
-    padding: 0;
     margin: 0 auto 20px;
-    text-align: left;
-    display: inline-flex;
-    flex-direction: column;
-    gap: 10px;
 
-    li {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: var(--color-black);
-        font-size: 14px;
-
-        i {
-            font-size: 16px;
-            color: var(--theme-primary-color);
-        }
+    li i {
+        font-size: 16px;
+        color: var(--theme-primary-color);
     }
 }
 
 .dsc-info-box {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
     background-color: var(--theme-primary-light);
     border-radius: 8px;
     padding: 14px;
@@ -150,25 +106,15 @@
 
     p {
         margin: 0;
-        color: var(--color-black);
-        font-size: 13px;
         line-height: 1.5;
     }
 }
 
 .dsc-download-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
     margin-top: auto;
 }
 
 .dsc-step-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
     min-width: 260px;
     text-decoration: none;
 
@@ -188,7 +134,6 @@
 }
 
 .dsc-bottom-bar {
-    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 16px;
     max-width: 900px;
@@ -199,17 +144,9 @@
     padding: 20px 24px;
 }
 
-.dsc-why-need,
-.dsc-help {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-}
-
 .dsc-why-icon {
     width: 36px;
     height: 36px;
-    flex-shrink: 0;
 
     svg {
         width: 100%;
@@ -220,10 +157,6 @@
 .dsc-help-icon {
     width: 36px;
     height: 36px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     i {
         font-size: 28px;
@@ -233,33 +166,15 @@
 
 .dsc-why-content,
 .dsc-help-content {
-    h3 {
-        color: var(--text-primary-color);
-        font-size: 15px;
-        font-weight: 600;
-        margin: 0 0 4px;
-    }
-
     p {
-        color: var(--color-medium-gray);
-        font-size: 13px;
-        line-height: 1.5;
         margin: 0;
+        line-height: 1.5;
     }
 }
 
 .dsc-help-contact {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 8px;
-
     a {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
         color: var(--theme-primary-color);
-        font-size: 13px;
         text-decoration: none;
 
         &:hover {
