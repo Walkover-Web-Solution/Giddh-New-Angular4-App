@@ -73,12 +73,18 @@
 }
 
 .dsc-step-illustration {
-    height: 150px;
+    height: 200px;
     margin-bottom: 20px;
 
     svg {
         height: 100%;
         width: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .dsc-step-illustration {
+        height: 160px;
     }
 }
 
@@ -198,6 +204,10 @@
 
     .dsc-step-card {
         padding: 20px;
+    }
+
+    .dsc-step-illustration {
+        height: 160px;
     }
 
     .dsc-download-buttons {
