@@ -32,6 +32,14 @@ export class DownloadComponent implements OnInit, OnDestroy {
     public dscWindowsAppUrl: string = '';
     /** Giddh DSC bridge installer for macOS */
     public dscMacAppUrl: string = '';
+    /** Giddh support email address */
+    public supportEmail: string = '';
+    /** Giddh support phone number */
+    public supportPhoneNumber: string = '';
+    /** True when either support email or phone is configured */
+    public get isSupportEmailorPhoneAvailable(): boolean {
+        return !!this.serviceConfig.SUPPORT_EMAIL || !!this.serviceConfig.SUPPORT_PHONE;
+    }
 
     constructor(@Inject(ServiceConfig) private serviceConfig, private route: ActivatedRoute, private generalService: GeneralService, private location: Location, private router: Router) {
     }
@@ -44,6 +52,8 @@ export class DownloadComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.imgPath = this.serviceConfig.IMG_PATH;
         this.brandLogoUrl = this.serviceConfig.LOGOS.light;
+        this.supportEmail = this.serviceConfig.SUPPORT_EMAIL;
+        this.supportPhoneNumber = this.serviceConfig.SUPPORT_PHONE;
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isDscModule = response?.module === 'dsc';
