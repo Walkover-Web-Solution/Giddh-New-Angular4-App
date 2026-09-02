@@ -29,5 +29,6 @@
     "single_pdf": "एकल पीडीएफ",
     "multiple_pdf": "एकाधिक पीडीएफ",
     "select_copy": "प्रतिलिपि चुनें",
-    "select_order": "क्रम चुनें"
+    "select_order": "क्रम चुनें",
+    "csv_semicolon_separator_note": "CSV निर्यात में फ़ील्ड विभाजक के रूप में अर्धविराम (;) का उपयोग होता है।"
 }
