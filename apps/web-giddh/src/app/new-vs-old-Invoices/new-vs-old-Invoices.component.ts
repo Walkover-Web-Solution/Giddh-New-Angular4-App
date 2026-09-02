@@ -14,7 +14,7 @@ import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
-import { ASIDE_PANE_CONFIG, AppThemeClassEnum, GetBifurcationType, IOption, resolveSelectedOptions } from '../app.constant';
+import { ASIDE_PANE_CONFIG, AppThemeClassEnum, GetBifurcationType, IOption, isSelectedAllOption } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 import { find, slice } from '../lodash-optimized';
 import { SalesPersonComponentStore } from '../shared/sales-person/utility/sales-person.store';
@@ -400,8 +400,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
         this.reportYear = this.selectedYear;
 
-        const realPersonSelections = resolveSelectedOptions(this.selectedSalesPersonUniqueNames, this.fullSalesPersonList) as string[];
-        const hasSalesPersonFilter = this.selectedSalesPersonUniqueNames.length > 0 && this.fullSalesPersonList.length > 0;
+        const realPersonSelections = isSelectedAllOption(this.selectedSalesPersonUniqueNames) ? this.fullSalesPersonList.map((list: IOption) => list.value) : this.selectedSalesPersonUniqueNames;
+        const hasSalesPersonFilter = realPersonSelections?.length > 0 && this.fullSalesPersonList?.length > 0;
         this.NewVsOldInvoicesQueryRequest.salesPersonUniqueNames = hasSalesPersonFilter ? realPersonSelections : undefined;
 
         const apiCall$ = hasSalesPersonFilter

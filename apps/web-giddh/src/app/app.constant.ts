@@ -820,24 +820,6 @@ export function isSelectedAllOption(selected: Array<string | number> | null | un
     return Array.isArray(selected) && selected.length === 1 && selected[0] === SELECTED_ALL_OPTION;
 }
 
-/**
- * Expands a multi-select value to real option values.
- * When All is selected, returns every option value; otherwise returns the selected values.
- *
- * @param {Array<string | number>} selected Form control value
- * @param {IOption[]} options Full option list
- * @returns {Array<string | number>}
- */
-export function resolveSelectedOptions(selected: Array<string | number> | null | undefined, options: IOption[]): Array<string | number> {
-    if (!selected?.length) {
-        return [];
-    }
-    if (isSelectedAllOption(selected)) {
-        return (options ?? []).map(option => option.value);
-    }
-    return selected.filter(value => value !== SELECTED_ALL_OPTION);
-}
-
 /** Number Format Locale Mapping for GiddhNumberFormatPipe */
 export const NUMBER_FORMAT_LOCALE_MAP: { [key: string]: string } = {
     'IND_COMMA_SEPARATED': 'en-IN',        // Indian format: 12,34,567.89 (India, Bangladesh, Pakistan, Sri Lanka, Nepal)
