@@ -144,25 +144,16 @@
                                 </mat-radio-button>
                             </mat-radio-group>
                         </div>
-                        <div
-                            [ngClass]="{
-                                'mat-form-field-invalid': !exportRequest.copyTypes?.length && !isValidForm,
-                            }"
-                        >
-                            <mat-form-field appearance="outline" class="w-100 mb-3">
-                                <mat-label>{{ localeData?.select_copy }}</mat-label>
-                                <mat-select
-                                    name="copyTypesSelection"
-                                    multiple
-                                    [placeholder]="localeData?.select_copy"
-                                    [(ngModel)]="exportRequest.copyTypes"
-                                >
-                                    <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">
-                                        {{ copyType.label }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
+                        <multi-select-dropdown
+                            class="mb-3"
+                            [name]="'copyTypesSelection'"
+                            [appearance]="'outline'"
+                            [label]="localeData?.select_copy"
+                            [showAllOption]="true"
+                            [options]="copyTypes"
+                            [showError]="!exportRequest.copyTypes?.length && !isValidForm"
+                            [(ngModel)]="exportRequest.copyTypes"
+                        ></multi-select-dropdown>
                     </ng-container>
                 </ng-container>
                 <div class="pb-4 export-type" [hidden]="['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)">

@@ -55,6 +55,7 @@ export class ReportsDetailedRequestFilter {
     public branchUniqueName?: string;
     public salesPersonUniqueName?: string;
     public accountUniqueNames?: string[];
+    public selectAll?: boolean;
     public stateCode?: string;
     public countryCode: string;
 }

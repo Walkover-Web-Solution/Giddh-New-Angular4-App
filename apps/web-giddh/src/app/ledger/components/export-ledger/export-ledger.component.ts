@@ -282,6 +282,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     from: this.fromDate,
                     to: this.toDate
                 };
+                this.generalService.replaceSelectedAllOptions(postRequest);
                 this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
                 return;
             }

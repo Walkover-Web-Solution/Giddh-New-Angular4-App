@@ -37,93 +37,49 @@
         <!-- Branch multi-select -->
         @if (isCompany && allBranches?.length > 1) {
             <div class="filter-dropdown-branch">
-                <mat-form-field appearance="outline">
-                    <mat-select
-                        name="agingSelectedBranch"
-                        [multiple]="true"
-                        [(ngModel)]="selectedBranch"
-                        class="stock-mat-salect"
-                        [placeholder]="commonLocaleData?.app_select_branch"
-                        (ngModelChange)="onBranchChange()"
-                    >
-                        <mat-option class="balance-options">
-                            <ngx-mat-select-search
-                                [formControl]="branchesDropdown"
-                                [placeholderLabel]="commonLocaleData?.app_select_branch"
-                                [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                class="mat-select-search-inventory"
-                                [clearSearchInput]="false"
-                            >
-                                <i class="icon-cross" ngxMatSelectSearchClear></i>
-                            </ngx-mat-select-search>
-                        </mat-option>
-                        <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
-                            {{ branch?.name ?? '-' }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <multi-select-dropdown
+                    name="agingSelectedBranch"
+                    [showAllOption]="true"
+                    [label]="commonLocaleData?.app_select_branch"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                    [options]="allBranches"
+                    [optionValue]="'uniqueName'"
+                    [optionLabel]="'name'"
+                    [(ngModel)]="selectedBranch"
+                    (selectionChange)="onBranchChange()"
+                ></multi-select-dropdown>
             </div>
         }
 
         <!-- Warehouse multi-select -->
         @if (currentWarehouses?.length > 1) {
             <div class="filter-dropdown-warehouse">
-                <mat-form-field appearance="outline">
-                    <mat-select
-                        name="agingSelectedWarehouse"
-                        [multiple]="true"
-                        [(ngModel)]="selectedWarehouse"
-                        class="stock-mat-salect"
-                        [placeholder]="commonLocaleData?.app_select_warehouse"
-                        (ngModelChange)="onWarehouseChange()"
-                    >
-                        <mat-option class="balance-options">
-                            <ngx-mat-select-search
-                                [formControl]="warehousesDropdown"
-                                [placeholderLabel]="commonLocaleData?.app_select_warehouse"
-                                [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                class="mat-select-search-inventory"
-                                [clearSearchInput]="false"
-                            >
-                                <i class="icon-cross" ngxMatSelectSearchClear></i>
-                            </ngx-mat-select-search>
-                        </mat-option>
-                        <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
-                            {{ warehouse?.name ?? '-' }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <multi-select-dropdown
+                    name="agingSelectedWarehouse"
+                    [showAllOption]="true"
+                    [label]="commonLocaleData?.app_select_warehouse"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                    [options]="currentWarehouses"
+                    [optionValue]="'uniqueName'"
+                    [optionLabel]="'name'"
+                    [(ngModel)]="selectedWarehouse"
+                    (selectionChange)="onWarehouseChange()"
+                ></multi-select-dropdown>
             </div>
         }
 
         <!-- Stock Group -->
         @if (stockGroups?.length) {
             <div class="filter-dropdown-stockgroup">
-                <mat-form-field appearance="outline">
-                    <mat-select
-                        name="agingSelectedStockGroup"
-                        [multiple]="true"
-                        [(ngModel)]="selectedStockGroup"
-                        class="stock-mat-salect"
-                        [placeholder]="commonLocaleData?.app_select_group"
-                        (ngModelChange)="onStockGroupChange()"
-                    >
-                        <mat-option class="balance-options">
-                            <ngx-mat-select-search
-                                [formControl]="stockGroupsDropdown"
-                                [placeholderLabel]="commonLocaleData?.app_select_group"
-                                [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                class="mat-select-search-inventory"
-                                [clearSearchInput]="false"
-                            >
-                                <i class="icon-cross" ngxMatSelectSearchClear></i>
-                            </ngx-mat-select-search>
-                        </mat-option>
-                        <mat-option class="balance-options" *ngFor="let group of filteredStockGroups" [value]="group?.value">
-                            {{ group?.label ?? '-' }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <multi-select-dropdown
+                    name="agingSelectedStockGroup"
+                    [showAllOption]="true"
+                    [label]="commonLocaleData?.app_select_group"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                    [options]="stockGroups"
+                    [(ngModel)]="selectedStockGroup"
+                    (selectionChange)="onStockGroupChange()"
+                ></multi-select-dropdown>
             </div>
         }
 

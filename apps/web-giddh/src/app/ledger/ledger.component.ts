@@ -540,7 +540,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.trxRequest.q = '';
         }
         this.ledgerComponentStore.getLedgerBalance({
-            payload: this.advanceSearchRequest.dataToSend, trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
+            payload: this.generalService.replaceSelectedAllOptions(this.advanceSearchRequest.dataToSend, true),
+            trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
         });
     }
 
@@ -1538,6 +1539,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
         if (blankTransactionObj && blankTransactionObj?.transactions && blankTransactionObj?.transactions.length > 0) {
+            this.generalService.replaceSelectedAllOptions(blankTransactionObj);
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
@@ -1579,6 +1581,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             delete blankTransactionObj['voucherType'];
 
             if (blankTransactionObj && blankTransactionObj?.transactions && blankTransactionObj?.transactions.length > 0) {
+                this.generalService.replaceSelectedAllOptions(blankTransactionObj);
                 blankTransactionsObjArray.push(blankTransactionObj);
             }
         })
@@ -1988,6 +1991,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (eWayBillResponse && Object.keys(eWayBillResponse).length > 0) {
                 model.ewayBillDetails = eWayBillResponse;
             }
+            this.generalService.replaceSelectedAllOptions(model);
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(model, this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
