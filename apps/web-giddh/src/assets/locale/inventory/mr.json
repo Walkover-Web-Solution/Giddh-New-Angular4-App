@@ -54,6 +54,7 @@
         "closing_amount":"बंद मूल्य",
         "stock_name":"स्टॉकचे नाव",
         "variant_name":"भिन्न नाव",
+        "batch":"बॅच",
         "no_entries_found_1":"दिलेल्या निकषांमध्ये कोणत्याही नोंदी आढळल्या नाहीत.",
         "no_entries_found_2":"काही इतर तारखांसह शोधा",
         "voucher_type":"व्हाउचर प्रकार",

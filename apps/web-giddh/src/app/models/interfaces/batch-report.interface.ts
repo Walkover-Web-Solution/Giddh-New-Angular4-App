@@ -22,20 +22,38 @@ export interface BatchReportItem {
     manufacturingDate?: string;
     expiryDate?: string;
     availableQuantity?: number;
+    openingQuantity?: number;
+    inwardQuantity?: number;
+    outwardQuantity?: number;
     daysRemaining?: number;
     stock?: BatchEntityRef;
     variant?: BatchEntityRef;
     warehouse?: BatchEntityRef;
-    openingQuantity?: number;
     rate?: number;
+    isVariant?: boolean;
+    isUsed?: boolean;
+    archiveStatus?: string;
+    archiveOnly?: boolean;
+    belongsToVariant?: boolean;
+    linkedEntities?: string[];
+}
+
+/** Totals returned with the batch list. */
+export interface BatchReportTotals {
+    openingQuantity?: number;
+    inwardQuantity?: number;
+    outwardQuantity?: number;
+    availableQuantity?: number;
 }
 
 /** Paginated batch list response body. */
-export interface BatchReportListBody {
+export interface BatchReportListBody extends BatchReportTotals {
     page: number;
     count: number;
     totalPages: number;
     totalItems: number;
+    fromDate?: string;
+    toDate?: string;
     results: BatchReportItem[];
 }
 

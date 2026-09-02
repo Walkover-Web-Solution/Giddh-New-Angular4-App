@@ -82,7 +82,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         withPay: 'false',
         ledgerView: LedgerViewEnum.TView,
         autoGenerateNote: false,
-        currencyDisplayFormat: 'CODE'
+        currencyDisplayFormat: 'CODE',
+        batchTrackingEnabled: false
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -368,7 +369,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         balanceDisplayFormat: response.balanceDisplayFormat,
                         ledgerView: response.ledgerView,
                         autoGenerateNote: response.autoGenerateNote,
-                        currencyDisplayFormat: response.currencyDisplayFormat
+                        currencyDisplayFormat: response.currencyDisplayFormat,
+                        batchTrackingEnabled: response.batchTrackingEnabled
                     }
                 }
                 this.triggerChangeDetection();
@@ -1234,7 +1236,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 withPay: profileObj.withPay,
                 ledgerView: profileObj.ledgerView,
                 autoGenerateNote: profileObj.autoGenerateNote,
-                currencyDisplayFormat: profileObj.currencyDisplayFormat
+                currencyDisplayFormat: profileObj.currencyDisplayFormat,
+                batchTrackingEnabled: profileObj.batchTrackingEnabled
             };
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 

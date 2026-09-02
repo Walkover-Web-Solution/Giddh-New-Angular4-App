@@ -54,6 +54,7 @@
         "closing_amount":"Closing Value",
         "stock_name":"Stock Name",
         "variant_name":"Variant Name",
+        "batch":"Batch",
         "no_entries_found_1":"No entries found within given criteria.",
         "no_entries_found_2":"Do search with some other dates",
         "voucher_type":"Voucher Type",

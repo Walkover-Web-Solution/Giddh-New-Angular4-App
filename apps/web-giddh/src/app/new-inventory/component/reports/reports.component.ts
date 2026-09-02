@@ -192,7 +192,12 @@ export class ReportsComponent implements OnInit, OnDestroy {
         this.imgPath = this.serviceConfig.IMG_PATH;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
+                const wasEnabled = this.activeCompany?.batchTrackingEnabled;
                 this.activeCompany = activeCompany;
+                if (wasEnabled !== activeCompany.batchTrackingEnabled && this.displayedColumns?.length) {
+                    this.displayedColumns = this.withBatchColumn(this.displayedColumns);
+                    this.changeDetection.detectChanges();
+                }
             }
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -388,9 +393,11 @@ export class ReportsComponent implements OnInit, OnDestroy {
      */
     private handleDynamicColumnsChange(event: any): void {
         if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
-            this.displayedColumns = event
-                .filter(item => item?.checked)
-                .map(item => item?.value);
+            this.displayedColumns = this.withBatchColumn(
+                event
+                    .filter(item => item?.checked)
+                    .map(item => item?.value)
+            );
         }
     }
 
@@ -671,7 +678,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @memberof ReportsComponent
      */
     public getCustomiseHeaderColumns(event: any): void {
-        this.displayedColumns = event;
+        this.displayedColumns = this.withBatchColumn(event);
     }
 
     /**
@@ -789,6 +796,101 @@ export class ReportsComponent implements OnInit, OnDestroy {
         }
 
         this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName], { queryParams: { tab: 1 } });
+    }
+
+    /**
+     * Inserts the batch column when company batch tracking is enabled.
+     *
+     * @private
+     * @param {string[]} columns Current displayed columns
+     * @return {*}  {string[]}
+     * @memberof ReportsComponent
+     */
+    private withBatchColumn(columns: string[]): string[] {
+        const cols = (columns ?? []).filter(column => column !== 'batch');
+        if (!this.activeCompany?.batchTrackingEnabled || this.reportType === InventoryReportType.group) {
+            return cols;
+        }
+        let insertIndex = 0;
+        ['variant_name', 'stock_name', 'group_name', 'unit_name'].forEach(column => {
+            const index = cols.indexOf(column);
+            if (index >= insertIndex) {
+                insertIndex = index + 1;
+            }
+        });
+        cols.splice(insertIndex, 0, 'batch');
+        return cols;
+    }
+
+    /**
+     * Batch count from a report row.
+     *
+     * @param {*} element Report row
+     * @return {*}  {number}
+     * @memberof ReportsComponent
+     */
+    public getBatchCount(element: any): number {
+        return Number(element?.batchCount) || 0;
+    }
+
+    /**
+     * Label for the batch column (`-`, batch name, or `{count} Batch`).
+     *
+     * @param {*} element Report row
+     * @return {*}  {string}
+     * @memberof ReportsComponent
+     */
+    public getBatchDisplay(element: any): string {
+        const count = this.getBatchCount(element);
+        if (count <= 0) {
+            return '-';
+        }
+        if (count === 1) {
+            return element?.batchName || '-';
+        }
+        return `${count} ${this.localeData?.reports?.batch || 'Batch'}`;
+    }
+
+    /**
+     * Opens the batch report for the current module with stock/variant/warehouse filters.
+     *
+     * @param {*} element Report row
+     * @param {Event} [event] Click event
+     * @memberof ReportsComponent
+     */
+    public openBatchReport(element: any, event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+        if (this.getBatchCount(element) <= 0) {
+            return;
+        }
+        const type = this.moduleType?.toUpperCase() === 'FIXED_ASSETS' ? 'fixedassets' : this.moduleType?.toLowerCase();
+        const stockUniqueNames = element?.stock?.uniqueName
+            ? [element.stock.uniqueName]
+            : (this.stockReportRequest?.stockUniqueNames ?? []);
+        const variantUniqueNames = element?.variant?.uniqueName
+            ? [element.variant.uniqueName]
+            : (this.stockReportRequest?.variantUniqueNames ?? []);
+        const warehouseUniqueNames = this.stockReportRequest?.warehouseUniqueNames ?? [];
+        const queryParams: any = {};
+        if (stockUniqueNames?.length) {
+            queryParams.stockUniqueNames = stockUniqueNames.join(',');
+        }
+        if (variantUniqueNames?.length) {
+            queryParams.variantUniqueNames = variantUniqueNames.join(',');
+        }
+        if (warehouseUniqueNames?.length) {
+            queryParams.warehouseUniqueNames = warehouseUniqueNames.join(',');
+        }
+        const from = this.fromDate || this.stockReportRequest?.from;
+        const to = this.toDate || this.stockReportRequest?.to;
+        if (from) {
+            queryParams.from = from;
+        }
+        if (to) {
+            queryParams.to = to;
+        }
+        this.router.navigate(['/pages/inventory/v2', type, 'batch'], { queryParams });
     }
 
     /**

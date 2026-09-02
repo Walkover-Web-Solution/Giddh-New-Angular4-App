@@ -118,10 +118,14 @@ export const INVENTORY_API = {
     },
     INVENTORY_VARIANT_UPDATE: 'v2/company/:companyUniqueName/stock/:stockUniqueName/variant/:variantUniqueName',
     BATCH: {
-        GET_ALL: 'company/:companyUniqueName/batch/all?q=:q&page=:page&count=:count',
+        GET_ALL: 'company/:companyUniqueName/batch/all?q=:q&page=:page&count=:count&from=:from&to=:to',
         CREATE: 'company/:companyUniqueName/batch',
         GET: 'company/:companyUniqueName/batch/:batchUniqueName',
-        UPDATE: 'company/:companyUniqueName/batch/:batchUniqueName'
+        UPDATE: 'company/:companyUniqueName/batch/:batchUniqueName',
+        DELETE: 'company/:companyUniqueName/batch/:batchUniqueName',
+        AVAILABILITY: 'company/:companyUniqueName/batch/availability?uniqueName=:uniqueName&isVariant=:isVariant&page=:page&count=:count&excludeBatchUniqueName=:excludeBatchUniqueName',
+        ARCHIVE: 'company/:companyUniqueName/batch/:batchUniqueName/archive',
+        TRANSFER: 'company/:companyUniqueName/batch/transfer'
     },
     STOCK_AGING_REPORT: 'v2/company/:companyUniqueName/stock-aging-report?page=:page&count=:count',
     STOCK_AGING_REPORT_TOTALS: 'v2/company/:companyUniqueName/stock-aging-report/totals',

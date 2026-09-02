@@ -13,4 +13,48 @@
     .batch-empty-state {
         min-height: 360px;
     }
+
+    .advance-filter-label {
+        position: relative;
+    }
+
+    .advance-filter-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        min-width: 14px;
+        height: 14px;
+        padding: 0 3px;
+        border-radius: 50%;
+        background: var(--color-blue);
+        color: var(--color-white);
+        font-size: 9px;
+        line-height: 14px;
+        text-align: center;
+    }
+
+    .applied-filter-chip {
+        display: inline-flex;
+        align-items: center;
+        column-gap: 6px;
+        padding: 4px 10px;
+        border-radius: 16px;
+        background: var(--color-border-light);
+        font-size: var(--font-size-13);
+    }
+
+    .applied-filter-remove,
+    .applied-filter-clear-all {
+        border: none;
+        background: transparent;
+        padding: 0;
+        cursor: pointer;
+        line-height: 1;
+    }
+
+    .batch-total-row .mat-mdc-footer-cell {
+        border-top: 2px solid var(--border-color);
+        background-color: var(--theme-primary-light);
+        font-weight: var(--font-weight-semibold);
+    }
 }

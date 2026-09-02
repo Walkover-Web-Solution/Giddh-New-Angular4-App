@@ -406,6 +406,27 @@
                                     <span class="report-quantity">{{ element?.stockUnit?.code ?? '-' }}</span>
                                 </td>
                             </ng-container>
+                            <ng-container matColumnDef="batch" *ngIf="reportType !== 'GROUP'">
+                                <th class="report-th-column text-center" mat-header-cell *matHeaderCellDef>
+                                    {{ localeData?.reports?.batch }}
+                                </th>
+                                <td
+                                    [data-title]="localeData?.reports?.batch"
+                                    class="text-center word-wrap report-td-column"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                >
+                                    <a
+                                        *ngIf="getBatchCount(element) > 0"
+                                        href="javascript:void(0)"
+                                        class="text-primary cursor-pointer"
+                                        (click)="openBatchReport(element, $event)"
+                                    >
+                                        {{ getBatchDisplay(element) }}
+                                    </a>
+                                    <span *ngIf="getBatchCount(element) <= 0">-</span>
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="opening_quantity">
                                 <th
                                     class="group-column text-right"

@@ -423,6 +423,10 @@ export class VouchersUtilityService {
 
                 if (entry.transactions[0].stock) {
                     delete entry.transactions[0].stock.maxQuantity;
+                    delete entry.transactions[0].stock.batch;
+                    if (!entry.transactions[0].stock.batches?.length) {
+                        delete entry.transactions[0].stock.batches;
+                    }
                 }
 
                 delete entry.otherTax;

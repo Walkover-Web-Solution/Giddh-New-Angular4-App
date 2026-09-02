@@ -57,8 +57,6 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
     public variantLabel: string = "";
     /** Display label for the selected warehouse. */
     public warehouseLabel: string = "";
-    /** Available quantity shown on edit (read-only). */
-    public availableQuantity: number | null = null;
     /** Universal from date used by stock/variant report APIs. */
     private fromDate: string = "";
     /** Universal to date used by stock/variant report APIs. */
@@ -228,6 +226,9 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     public selectStock(option?: IOption): void {
+        if (this.isUpdateMode) {
+            return;
+        }
         const nextValue = option?.value ?? null;
         const previousValue = this.batchForm.get("stockUniqueName")?.value;
         this.stockLabel = option?.label ?? "";
@@ -403,7 +404,6 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
         this.stockLabel = details?.stock?.name ?? this.stockLabel;
         this.variantLabel = details?.variant?.name ?? this.variantLabel;
         this.warehouseLabel = warehouseRef?.name ?? this.warehouseLabel;
-        this.availableQuantity = details?.availableQuantity ?? this.availableQuantity;
         this.batchForm.patchValue({
             batchNumber: details?.batchNumber ?? "",
             name: details?.name ?? "",

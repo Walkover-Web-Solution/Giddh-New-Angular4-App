@@ -51,7 +51,8 @@
                         [options]="stocks$ | async"
                         [labelValue]="stockLabel"
                         formControlName="stockUniqueName"
-                        [enableDynamicSearch]="true"
+                        [enableDynamicSearch]="!isUpdateMode"
+                        [readonly]="isUpdateMode"
                         (dynamicSearchedQuery)="loadStocks($event)"
                         (selectedOption)="selectStock($event)"
                         (onClear)="selectStock(null)"
@@ -111,13 +112,6 @@
                         [showError]="isFormSubmitted && batchForm.get('rate')?.invalid"
                     ></input-field>
                 </div>
-                @if (isUpdateMode && availableQuantity !== null) {
-                    <div class="col-12 mt-3">
-                        <span class="font-size-16">
-                            {{ localeData?.available_quantity }}: {{ availableQuantity }}
-                        </span>
-                    </div>
-                }
                 <div class="col-12 mt-3">
                     <giddh-datepicker
                         [label]="localeData?.manufacturing_date"

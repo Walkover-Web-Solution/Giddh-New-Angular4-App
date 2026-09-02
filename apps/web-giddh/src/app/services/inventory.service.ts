@@ -2006,7 +2006,7 @@ export class InventoryService {
     /**
      * Get all batches with filters and pagination
      *
-     * @param {*} queryParams Query params (`q`, `page`, `count`)
+     * @param {*} queryParams Query params (`q`, `page`, `count`, `from`, `to`)
      * @param {*} model Filter payload
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InventoryService
@@ -2017,7 +2017,9 @@ export class InventoryService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':q', encodeURIComponent(queryParams?.q ?? ''))
             ?.replace(':page', encodeURIComponent(String(queryParams?.page ?? 1)))
-            ?.replace(':count', encodeURIComponent(String(queryParams?.count ?? PAGINATION_LIMIT)));
+            ?.replace(':count', encodeURIComponent(String(queryParams?.count ?? PAGINATION_LIMIT)))
+            ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
+            ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''));
         return this.http.post(url, model).pipe(
             map((res) => {
                 const data: BaseResponse<any, any> = res;
@@ -2092,6 +2094,100 @@ export class InventoryService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, { batchUniqueName }))
+        );
+    }
+
+    /**
+     * List batches available to transfer when archiving.
+     *
+     * @param {{ uniqueName: string; isVariant: boolean; page?: number; count?: number; excludeBatchUniqueName?: string }} queryParams Availability query
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getBatchAvailability(queryParams: { uniqueName: string; isVariant: boolean; page?: number; count?: number; excludeBatchUniqueName?: string }): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.AVAILABILITY
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':uniqueName', encodeURIComponent(queryParams?.uniqueName ?? ''))
+            ?.replace(':isVariant', encodeURIComponent(String(!!queryParams?.isVariant)))
+            ?.replace(':page', encodeURIComponent(String(queryParams?.page ?? 1)))
+            ?.replace(':count', encodeURIComponent(String(queryParams?.count ?? 50)))
+            ?.replace(':excludeBatchUniqueName', encodeURIComponent(queryParams?.excludeBatchUniqueName ?? ''));
+            
+        return this.http.get(url).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.queryString = queryParams;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', queryParams))
+        );
+    }
+
+    /**
+     * Archive, transfer or unarchive a batch.
+     *
+     * @param {string} batchUniqueName Batch unique name
+     * @param {*} model Archive payload
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public archiveBatch(batchUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.ARCHIVE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':batchUniqueName', encodeURIComponent(batchUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                data.queryString = { batchUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, { batchUniqueName }))
+        );
+    }
+
+    /**
+     * Transfer quantity from one batch to another.
+     *
+     * @param {*} model Transfer payload
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public transferBatch(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.TRANSFER
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Delete a batch
+     *
+     * @param {string} batchUniqueName Batch unique name
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public deleteBatch(batchUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.DELETE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':batchUniqueName', encodeURIComponent(batchUniqueName));
+        return this.http.delete(url).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.queryString = { batchUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', { batchUniqueName }))
         );
     }
 

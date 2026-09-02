@@ -1,24 +1,33 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { MatMenuTrigger } from "@angular/material/menu";
+import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
-import { ASIDE_PANE_CONFIG, DROPDOWN_ITEMS_COUNT_LIMIT, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
-import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
+import * as customParseFormat from "dayjs/plugin/customParseFormat";
+import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { InventoryReportRequest } from "../../../models/api-models/Inventory";
-import { BatchReportFilter, BatchReportItem } from "../../../models/interfaces/batch-report.interface";
+import { BatchReportFilter, BatchReportItem, BatchReportTotals } from "../../../models/interfaces/batch-report.interface";
 import { OrganizationType } from "../../../models/user-login-state";
 import { cloneDeep } from "../../../lodash-optimized";
 import { GeneralService } from "../../../services/general.service";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { AppState } from "../../../store";
+import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
 import { BatchCreateEditComponent } from "../batch-create-edit/batch-create-edit.component";
+import { BatchArchiveDialogComponent } from "../batch-archive-dialog/batch-archive-dialog.component";
+import { BatchTransferDialogComponent } from "../batch-transfer-dialog/batch-transfer-dialog.component";
+
+export { mapAvailabilityBatches } from "./batch-report.helper";
+
+dayjs.extend(customParseFormat);
 
 @Component({
     selector: "batch-report",
@@ -41,13 +50,15 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     /** Table data source. */
     public dataSource: MatTableDataSource<BatchReportItem> = new MatTableDataSource<BatchReportItem>([]);
     /** Table column ids. */
-    public displayedColumns: string[] = ["batchNumber", "name", "stock", "variant", "manufacturingDate", "expiryDate", "availableQuantity", "daysRemaining", "action"];
+    public displayedColumns: string[] = ["batchNumber", "name", "stock", "warehouse", "manufacturingDate", "expiryDate", "openingQuantity", "inwardQuantity", "outwardQuantity", "availableQuantity", "action"];
     /** Current page (1-based). */
     public page: number = 1;
     /** Page size. */
     public count: number = PAGINATION_LIMIT;
     /** Total rows from API. */
     public totalItems: number = 0;
+    /** Quantity totals from the list response. */
+    public totals: BatchReportTotals = {};
     /** Paginator page index (0-based). */
     public pageIndex: number = 0;
     /** Page-size options. */
@@ -100,13 +111,32 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public withinDaysControl: FormControl = new FormControl("");
     /** Expired-only filter (`true` already expired, `false` will expire). */
     public expiredOnly: boolean | null = null;
-    /** Universal from date used by stock/variant report APIs. */
-    private fromDate: string = "";
-    /** Universal to date used by stock/variant report APIs. */
-    private toDate: string = "";
+    /** From date sent on get-all (`DD-MM-YYYY`). */
+    public fromDate: string = "";
+    /** To date sent on get-all (`DD-MM-YYYY`). */
+    public toDate: string = "";
+    /** Selected date range object for the datepicker. */
+    public selectedDateRange: any;
+    /** Selected date range text shown on the datepicker input. */
+    public selectedDateRangeUi: string = "";
+    /** Datepicker preset ranges. */
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** Selected range label in the datepicker. */
+    public selectedRangeLabel: string = "";
+    /** Datepicker menu trigger. */
+    @ViewChild("universalDatepickerTrigger", { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+    /** Advance filter dialog template. */
+    @ViewChild("advanceFilterDialog") public advanceFilterDialog: TemplateRef<any>;
+    /** Draft within-days value while the filter dialog is open. */
+    public filterWithinDays: FormControl = new FormControl("");
+    /** Draft expiry-status value while the filter dialog is open. */
+    public filterExpiredOnly: boolean | null = null;
+    /** True when from/to came from reports query params, so universal date must not overwrite them. */
+    private useQueryDateRange: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private cdr: ChangeDetectorRef,
         private inventoryService: InventoryService,
         private toaster: ToasterService,
@@ -125,12 +155,18 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
-                this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                if (!this.useQueryDateRange) {
+                    this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                    this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                }
                 if (this.categoryUniqueName) {
                     this.loadStocks();
                     this.loadVariants();
+                    this.getBatches();
                 }
+                this.cdr.detectChanges();
             }
         });
 
@@ -143,9 +179,27 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.inventoryType = type;
             this.categoryUniqueName = category;
             this.resetFilters(false);
+            const query = this.route.snapshot.queryParams;
+            this.applyQueryFilters(query);
             this.loadStocks();
             this.loadVariants();
             this.loadBranchesAndWarehouses();
+            if (this.hasQueryFilters(query)) {
+                this.clearQueryParams();
+            }
+        });
+
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(query => {
+            if (!this.hasQueryFilters(query) || !this.inventoryType) {
+                return;
+            }
+            this.applyQueryFilters(query);
+            this.clearQueryParams();
+            this.page = 1;
+            this.pageIndex = 0;
+            this.loadVariants();
+            this.getBatches();
+            this.cdr.detectChanges();
         });
 
         this.stocksDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
@@ -191,15 +245,6 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.getBatches();
         });
 
-        this.withinDaysControl.valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$)
-        ).subscribe(() => {
-            this.page = 1;
-            this.pageIndex = 0;
-            this.getBatches();
-        });
     }
 
     /**
@@ -217,6 +262,63 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             || this.nameSearchText
             || this.withinDaysControl.value
             || this.expiredOnly !== null);
+    }
+
+    /**
+     * True when within-days or expiry-status advance filters are applied.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchReportComponent
+     */
+    public get hasAdvanceFilters(): boolean {
+        return this.withinDaysValue > 0 || this.expiredOnly !== null;
+    }
+
+    /**
+     * Count of applied advance filters (badge on the Filters button).
+     *
+     * @readonly
+     * @type {number}
+     * @memberof BatchReportComponent
+     */
+    public get advanceFilterCount(): number {
+        let count = 0;
+        if (this.withinDaysValue > 0) {
+            count++;
+        }
+        if (this.expiredOnly !== null) {
+            count++;
+        }
+        return count;
+    }
+
+    /**
+     * Applied within-days value as a number (0 when empty).
+     *
+     * @readonly
+     * @type {number}
+     * @memberof BatchReportComponent
+     */
+    public get withinDaysValue(): number {
+        return Number(this.withinDaysControl.value) || 0;
+    }
+
+    /**
+     * Label for the applied expiry-status chip.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BatchReportComponent
+     */
+    public get expiryStatusLabel(): string {
+        if (this.expiredOnly === true) {
+            return this.localeData?.already_expired ?? "";
+        }
+        if (this.expiredOnly === false) {
+            return this.localeData?.will_expire ?? "";
+        }
+        return "";
     }
 
     /**
@@ -255,14 +357,65 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Expired-only toggle changed — refetch from page 1.
+     * Open the advance filter dialog with the current applied values.
      *
      * @memberof BatchReportComponent
      */
-    public onExpiredOnlyChange(): void {
+    public openAdvanceFilterDialog(): void {
+        this.filterWithinDays.setValue(this.withinDaysControl.value ?? "", { emitEvent: false });
+        this.filterExpiredOnly = this.expiredOnly;
+        this.dialog.open(this.advanceFilterDialog, {
+            width: "500px",
+            autoFocus: false,
+            role: "alertdialog",
+            ariaLabel: "Advance filter Dialog"
+        });
+    }
+
+    /**
+     * Apply draft advance filters and refetch from page 1.
+     *
+     * @memberof BatchReportComponent
+     */
+    public applyAdvanceFilters(): void {
+        this.withinDaysControl.setValue(this.filterWithinDays.value ?? "", { emitEvent: false });
+        this.expiredOnly = this.filterExpiredOnly;
         this.page = 1;
         this.pageIndex = 0;
         this.getBatches();
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Remove one applied advance filter and refetch.
+     *
+     * @param {("withinDays" | "expiredOnly")} type Filter to clear
+     * @memberof BatchReportComponent
+     */
+    public removeAdvanceFilter(type: "withinDays" | "expiredOnly"): void {
+        if (type === "withinDays") {
+            this.withinDaysControl.setValue("", { emitEvent: false });
+        } else {
+            this.expiredOnly = null;
+        }
+        this.page = 1;
+        this.pageIndex = 0;
+        this.getBatches();
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Clear only the two advance filters (within days and expiry status).
+     *
+     * @memberof BatchReportComponent
+     */
+    public clearAdvanceFilters(): void {
+        this.withinDaysControl.setValue("", { emitEvent: false });
+        this.expiredOnly = null;
+        this.page = 1;
+        this.pageIndex = 0;
+        this.getBatches();
+        this.cdr.detectChanges();
     }
 
     /**
@@ -382,6 +535,211 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Confirm and delete a batch.
+     *
+     * @param {BatchReportItem} row Selected row
+     * @memberof BatchReportComponent
+     */
+    public deleteBatch(row: BatchReportItem): void {
+        if (!row?.uniqueName) {
+            return;
+        }
+        if (this.isBatchUsed(row)) {
+            const entities = (row.linkedEntities ?? []).filter(item => !!item).join(", ") || "entry/voucher";
+            const dialogRef = this.dialog.open(ConfirmModalComponent, {
+                width: "40%",
+                role: "alertdialog",
+                ariaLabel: "Confirm Archive Dialog",
+                data: {
+                    title: this.commonLocaleData?.app_confirmation,
+                    body: (this.localeData?.cannot_delete_used_batch ?? "").replace("[ENTITIES]", entities),
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
+            });
+            dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(confirmed => {
+                if (confirmed) {
+                    this.openArchiveDialog(row);
+                }
+            });
+            return;
+        }
+        const dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: "40%",
+            role: "alertdialog",
+            ariaLabel: "Confirm Delete Dialog",
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.delete_batch,
+                permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(confirmed => {
+            if (!confirmed) {
+                return;
+            }
+            this.inventoryService.deleteBatch(row.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success") {
+                    this.toaster.showSnackBar("success", this.localeData?.batch_deleted);
+                    this.getBatches();
+                } else if (response?.message) {
+                    this.toaster.errorToast(response.message);
+                }
+                this.cdr.detectChanges();
+            });
+        });
+    }
+
+    /**
+     * True when the batch is already used on an entry or voucher.
+     *
+     * @param {BatchReportItem} row Selected row
+     * @return {*}  {boolean}
+     * @memberof BatchReportComponent
+     */
+    public isBatchUsed(row: BatchReportItem): boolean {
+        return !!(row?.isUsed || row?.linkedEntities?.length);
+    }
+
+    /**
+     * True when the batch can be edited, deleted or archived.
+     *
+     * @param {BatchReportItem} row Selected row
+     * @return {*}  {boolean}
+     * @memberof BatchReportComponent
+     */
+    public isBatchUnarchived(row: BatchReportItem): boolean {
+        return (row?.archiveStatus ?? "UNARCHIVED") === "UNARCHIVED";
+    }
+
+    /**
+     * Open the archive / transfer dialog from the action menu.
+     *
+     * @param {BatchReportItem} row Selected row
+     * @memberof BatchReportComponent
+     */
+    public archiveBatch(row: BatchReportItem): void {
+        this.openArchiveDialog(row);
+    }
+
+    /**
+     * Open the batch-to-batch transfer dialog.
+     *
+     * @param {BatchReportItem} row Source batch
+     * @memberof BatchReportComponent
+     */
+    public transferBatch(row: BatchReportItem): void {
+        if (!row?.uniqueName) {
+            return;
+        }
+        const dialogRef = this.dialog.open(BatchTransferDialogComponent, {
+            width: "500px",
+            autoFocus: false,
+            role: "alertdialog",
+            ariaLabel: "Transfer Batch Dialog",
+            data: {
+                batch: row,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
+        });
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(payload => {
+            if (!payload) {
+                return;
+            }
+            this.inventoryService.transferBatch(payload).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success") {
+                    this.toaster.showSnackBar("success", this.localeData?.batch_transferred);
+                    this.getBatches();
+                } else if (response?.message) {
+                    this.toaster.errorToast(response.message);
+                }
+                this.cdr.detectChanges();
+            });
+        });
+    }
+
+    /**
+     * Confirm and unarchive a batch.
+     *
+     * @param {BatchReportItem} row Selected row
+     * @memberof BatchReportComponent
+     */
+    public unarchiveBatch(row: BatchReportItem): void {
+        if (!row?.uniqueName) {
+            return;
+        }
+        const dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: "40%",
+            role: "alertdialog",
+            ariaLabel: "Confirm Unarchive Dialog",
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.unarchive_batch,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(confirmed => {
+            if (confirmed) {
+                this.submitArchiveAction(row.uniqueName, { action: "UNARCHIVED" }, this.localeData?.batch_unarchived);
+            }
+        });
+    }
+
+    /**
+     * Open the archive dialog and post transfer or unassigned archive.
+     *
+     * @private
+     * @param {BatchReportItem} row Selected row
+     * @memberof BatchReportComponent
+     */
+    private openArchiveDialog(row: BatchReportItem): void {
+        if (!row?.uniqueName) {
+            return;
+        }
+        const dialogRef = this.dialog.open(BatchArchiveDialogComponent, {
+            width: "500px",
+            autoFocus: false,
+            role: "alertdialog",
+            ariaLabel: "Archive Batch Dialog",
+            data: {
+                batch: row,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
+        });
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(payload => {
+            if (payload) {
+                this.submitArchiveAction(row.uniqueName, payload, this.localeData?.batch_archived);
+            }
+        });
+    }
+
+    /**
+     * POST archive / transfer / unarchive and refresh the list.
+     *
+     * @private
+     * @param {string} batchUniqueName Batch unique name
+     * @param {*} payload Archive payload
+     * @param {string} successMessage Toast on success
+     * @memberof BatchReportComponent
+     */
+    private submitArchiveAction(batchUniqueName: string, payload: any, successMessage: string): void {
+        this.inventoryService.archiveBatch(batchUniqueName, payload).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toaster.showSnackBar("success", successMessage);
+                this.getBatches();
+            } else if (response?.message) {
+                this.toaster.errorToast(response.message);
+            }
+            this.cdr.detectChanges();
+        });
+    }
+
+    /**
      * Fetch the batch list with current filters.
      *
      * @private
@@ -412,102 +770,24 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         if (this.expiredOnly !== null) {
             payload.expiredOnly = this.expiredOnly;
         }
-        this.inventoryService.getAllBatches({ q: name, page: this.page, count: this.count }, payload)
+        this.inventoryService.getAllBatches({ q: name, page: this.page, count: this.count, from: this.fromDate, to: this.toDate }, payload)
             .pipe(takeUntil(this.cancelApi$), takeUntil(this.destroyed$))
             .subscribe(response => {
                 this.isLoading = false;
-                response =  {
-                        "status": "success",
-                        "body": {
-                            "page": 1,
-                            "count": 4,
-                            "totalPages": 1,
-                            "totalItems": 4,
-                            "results": [
-                                {
-                                    "uniqueName": "l7o1787058642557",
-                                    "name": "Batch B002",
-                                    "batchNumber": "B002",
-                                    "archive": false,
-                                    "manufacturingDate": "18-08-2026",
-                                    "expiryDate": "01-02-2027",
-                                    "availableQuantity": -200.00,
-                                    "daysRemaining": 159,
-                                    "stock": {
-                                        "name": "Jeans",
-                                        "uniqueName": "jeans"
-                                    },
-                                    "variant": {
-                                        "name": "Baggy",
-                                        "uniqueName": "baggy178654239161072p2z6r5m0"
-                                    }
-                                },
-                                {
-                                    "uniqueName": "hfd1787308330055",
-                                    "name": "Batch B003",
-                                    "batchNumber": "B003",
-                                    "archive": false,
-                                    "manufacturingDate": "01-08-2026",
-                                    "expiryDate": "01-02-2027",
-                                    "availableQuantity": 100.00,
-                                    "daysRemaining": 159,
-                                    "stock": {
-                                        "name": "Batch1Stock",
-                                        "uniqueName": "batch1stock"
-                                    },
-                                    "variant": {
-                                        "name": "A2",
-                                        "uniqueName": "a217873280029105l2o0kiitg"
-                                    }
-                                },
-                                {
-                                    "uniqueName": "e2b1787559673527",
-                                    "name": "W-B001",
-                                    "batchNumber": "W-B001",
-                                    "archive": false,
-                                    "manufacturingDate": "01-08-2026",
-                                    "expiryDate": "01-02-2027",
-                                    "availableQuantity": 600.00,
-                                    "daysRemaining": 159,
-                                    "stock": {
-                                        "name": "Cloth 3",
-                                        "uniqueName": "cloth3"
-                                    },
-                                    "variant": {
-                                        "name": "white",
-                                        "uniqueName": "white17875596726475cqc1yug7k"
-                                    }
-                                },
-                                {
-                                    "uniqueName": "pbg1787559673672",
-                                    "name": "W-B002",
-                                    "batchNumber": "W-B002",
-                                    "archive": false,
-                                    "manufacturingDate": "15-08-2026",
-                                    "expiryDate": "15-02-2027",
-                                    "availableQuantity": 400.00,
-                                    "daysRemaining": 173,
-                                    "stock": {
-                                        "name": "Cloth 3",
-                                        "uniqueName": "cloth3"
-                                    },
-                                    "variant": {
-                                        "name": "white",
-                                        "uniqueName": "white17875596726475cqc1yug7k"
-                                    }
-                                }
-                            ]
-                        }
-                    }
                 if (response?.status === "success" && response?.body) {
                     this.dataSource = new MatTableDataSource<BatchReportItem>(response.body.results ?? []);
                     this.totalItems = response.body.totalItems ?? 0;
-                    this.page = response.body.page ?? this.page;
-                    this.count = response.body.count ?? this.count;
                     this.pageIndex = (this.page || 1) - 1;
+                    this.totals = {
+                        openingQuantity: response.body.openingQuantity,
+                        inwardQuantity: response.body.inwardQuantity,
+                        outwardQuantity: response.body.outwardQuantity,
+                        availableQuantity: response.body.availableQuantity
+                    };
                 } else {
                     this.dataSource = new MatTableDataSource<BatchReportItem>([]);
                     this.totalItems = 0;
+                    this.totals = {};
                     if (response?.message) {
                         this.toaster.errorToast(response.message);
                     }
@@ -531,7 +811,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         }
         const stockReportRequest = new InventoryReportRequest();
         stockReportRequest["inventoryType"] = this.categoryUniqueName;
-        const queryParams = { from: this.fromDate, to: this.toDate, count: DROPDOWN_ITEMS_COUNT_LIMIT, page: 1, sort: "", sortBy: "" };
+        const queryParams = { from: this.fromDate, to: this.toDate, count: PAGINATION_LIMIT, page: 1, sort: "", sortBy: "" };
         this.inventoryService.getItemWiseReport(queryParams, stockReportRequest)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
@@ -563,7 +843,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         const stockReportRequest = new InventoryReportRequest();
         stockReportRequest["inventoryType"] = this.categoryUniqueName;
         stockReportRequest.stockUniqueNames = this.selectedStock ?? [];
-        const queryParams = { from: this.fromDate, to: this.toDate, count: DROPDOWN_ITEMS_COUNT_LIMIT, page: 1, sort: "", sortBy: "" };
+        const queryParams = { from: this.fromDate, to: this.toDate, count: PAGINATION_LIMIT, page: 1, sort: "", sortBy: "" };
         this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
@@ -614,6 +894,160 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.warehouses = currentBranch?.warehouses ?? [];
         }
         this.currentWarehouses = this.warehouses;
+    }
+
+    /**
+     * Color class for days remaining under expiry date.
+     *
+     * @param {number} daysRemaining Days until expiry (negative if expired)
+     * @return {*}  {string} Utility class
+     * @memberof BatchReportComponent
+     */
+    public getDaysRemainingClass(daysRemaining: number): string {
+        if (daysRemaining < 0) {
+            return "text-danger";
+        }
+        if (daysRemaining <= 30) {
+            return "text-orange";
+        }
+        return "text-green";
+    }
+
+    /**
+     * Date range selected in the datepicker.
+     *
+     * @param {*} [value] Selected range
+     * @memberof BatchReportComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.toggleGiddhDatepicker(false);
+            return;
+        }
+        this.selectedRangeLabel = "";
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.toggleGiddhDatepicker(false);
+        if (value && value.startDate && value.endDate) {
+            this.useQueryDateRange = false;
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.page = 1;
+            this.pageIndex = 0;
+            this.loadStocks();
+            this.loadVariants();
+            this.getBatches();
+        }
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Open or close the datepicker menu.
+     *
+     * @param {boolean} isOpen True to open
+     * @memberof BatchReportComponent
+     */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
+        }
+    }
+
+    /**
+     * Apply stock/variant/warehouse/date query params from the reports page.
+     *
+     * @private
+     * @param {*} query Route query params
+     * @memberof BatchReportComponent
+     */
+    private applyQueryFilters(query: any): void {
+        if (!this.hasQueryFilters(query)) {
+            return;
+        }
+        const stock = this.parseQueryList(query?.stockUniqueNames);
+        const variant = this.parseQueryList(query?.variantUniqueNames);
+        const warehouse = this.parseQueryList(query?.warehouseUniqueNames);
+        if (stock.length) {
+            this.selectedStock = stock;
+        }
+        if (variant.length) {
+            this.selectedVariant = variant;
+        }
+        if (warehouse.length) {
+            this.selectedWarehouse = warehouse;
+        }
+        this.applyQueryDateRange(query?.from, query?.to);
+    }
+
+    /**
+     * Set the datepicker and get-all range from reports `from`/`to` query params.
+     *
+     * @private
+     * @param {string} from From date (`DD-MM-YYYY`)
+     * @param {string} to To date (`DD-MM-YYYY`)
+     * @memberof BatchReportComponent
+     */
+    private applyQueryDateRange(from: string, to: string): void {
+        if (!from || !to) {
+            return;
+        }
+        const startDate = dayjs(from, GIDDH_DATE_FORMAT);
+        const endDate = dayjs(to, GIDDH_DATE_FORMAT);
+        if (!startDate.isValid() || !endDate.isValid()) {
+            return;
+        }
+        this.useQueryDateRange = true;
+        this.fromDate = startDate.format(GIDDH_DATE_FORMAT);
+        this.toDate = endDate.format(GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate, endDate };
+        this.selectedDateRangeUi = startDate.format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + endDate.format(GIDDH_NEW_DATE_FORMAT_UI);
+    }
+
+    /**
+     * True when the URL has stock, variant, warehouse or date query params.
+     *
+     * @private
+     * @param {*} query Route query params
+     * @return {*}  {boolean}
+     * @memberof BatchReportComponent
+     */
+    private hasQueryFilters(query: any): boolean {
+        return !!(query?.stockUniqueNames || query?.variantUniqueNames || query?.warehouseUniqueNames || query?.from || query?.to);
+    }
+
+    /**
+     * Parse a query param that may be a string or string[].
+     *
+     * @private
+     * @param {(string | string[])} value Query value
+     * @return {*}  {string[]}
+     * @memberof BatchReportComponent
+     */
+    private parseQueryList(value: string | string[]): string[] {
+        if (!value) {
+            return [];
+        }
+        const values = Array.isArray(value) ? value : String(value).split(',');
+        return values.map(item => item?.trim()).filter(item => !!item);
+    }
+
+    /**
+     * Strip filter query params from the URL after they are applied.
+     *
+     * @private
+     * @memberof BatchReportComponent
+     */
+    private clearQueryParams(): void {
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {},
+            replaceUrl: true
+        });
     }
 
     /**

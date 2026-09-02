@@ -39,6 +39,7 @@
     "custom_field": "अनुकूलित फील्ड",
     "opening_balance": "प्रारंभिक जमा",
     "opening_qty": "उद्घाटन मात्रा",
+    "qty": "मात्रा",
     "enter_amount": "राशि डालें",
     "enter_qty": "मात्रा दर्ज करें",
     "enter_rate": "दर दर्ज करें",
@@ -101,5 +102,13 @@
     "attachment_deleted": "अनुलग्न हटाया गया।",
     "add_image": "छवि जोड़ें",
     "preview_image": "छवि पूर्वावलोकन",
-    "no_file_chosen": "कोई फाइल चयनित नहीं"
+    "no_file_chosen": "कोई फाइल चयनित नहीं",
+    "add_batch": "बैच जोड़ें",
+    "manage_batches": "बैच प्रबंधित करें",
+    "add_batch_row": "+ बैच पंक्ति जोड़ें",
+    "batch_no": "बैच नं",
+    "batch_name": "बैच नाम",
+    "manufacturing_date": "निर्माण तिथि",
+    "expiry_date": "समाप्ति तिथि",
+    "opening_balance_batch_wise": "प्रारंभिक शेष — बैच अनुसार"
 }

@@ -65,7 +65,9 @@ import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 import { StockAgingReportComponent } from "./component/stock-aging-report/stock-aging-report.component";
 import { BatchReportComponent } from "./component/batch-report/batch-report.component";
-import { BatchCreateEditComponent } from "./component/batch-create-edit/batch-create-edit.component";
+import { BatchCreateEditModule } from "./component/batch-create-edit/batch-create-edit.module";
+import { BatchArchiveDialogComponent } from "./component/batch-archive-dialog/batch-archive-dialog.component";
+import { BatchTransferDialogComponent } from "./component/batch-transfer-dialog/batch-transfer-dialog.component";
 import { MatCardModule } from "@angular/material/card";
 import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-editor.component";
 
@@ -95,12 +97,14 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         PreviewVariantImageComponent,
         StockAgingReportComponent,
         BatchReportComponent,
-        BatchCreateEditComponent
+        BatchArchiveDialogComponent,
+        BatchTransferDialogComponent
     ],
     imports: [
         NewInventoryRoutingModule,
         SharedModule,
         CommonModule,
+        BatchCreateEditModule,
         FormFieldsModule,
         TranslateDirectiveModule,
         DecimalDigitsModule,

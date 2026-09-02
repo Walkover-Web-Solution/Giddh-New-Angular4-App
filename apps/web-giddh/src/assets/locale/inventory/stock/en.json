@@ -39,6 +39,7 @@
     "custom_field": "Custom Field",
     "opening_balance": "Opening Balance",
     "opening_qty": "Opening Qty",
+    "qty": "Qty",
     "enter_amount": "Enter amount",
     "enter_qty": "Enter Qty",
     "enter_rate": "Enter Rate",
@@ -101,5 +102,13 @@
     "attachment_deleted": "Attachment deleted.",
     "add_image": "Add Image",
     "preview_image":"Preview Image",
-    "no_file_chosen":"No file chosen"
+    "no_file_chosen":"No file chosen",
+    "add_batch": "Add batch",
+    "manage_batches": "Manage batches",
+    "add_batch_row": "+ Add batch row",
+    "batch_no": "Batch no",
+    "batch_name": "Batch name",
+    "manufacturing_date": "Mfg date",
+    "expiry_date": "Expiry date",
+    "opening_balance_batch_wise": "Opening balance — batch wise"
 }
