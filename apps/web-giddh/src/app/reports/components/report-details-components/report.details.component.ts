@@ -699,34 +699,23 @@ constructor(
      */
     private applyOverviewGroupByFilters(exportBodyRequest: ExportBodyRequest): void {
         const groupBy = this.currentGroupBy();
-        const accountUniqueNames = this.reportForm?.get('accountUniqueNames')?.value ?? [];
-        const salesPersonUniqueNames = this.reportForm?.get('salesPersonUniqueNames')?.value ?? [];
-        const countryCodes = this.reportForm?.get('countryCodes')?.value ?? [];
-        const stateCodes = this.reportForm?.get('stateCodes')?.value ?? [];
-
-        
+        exportBodyRequest.accountUniqueNames = this.reportForm?.get('accountUniqueNames')?.value ?? [];
         exportBodyRequest.groupBy = groupBy;
-        
-        const isAllAccounts = this.isAllSelected(accountUniqueNames, this.allOptions.account?.length);
-        exportBodyRequest.accountUniqueNames = isAllAccounts ? [] : accountUniqueNames;
         
         if (groupBy === GroupBy.Duration) {
             exportBodyRequest.interval = this.interval;
         } else if (groupBy === GroupBy.SalesPerson) {
-            const isAllSalesPerson = this.isAllSelected(salesPersonUniqueNames, this.allOptions.salesPerson?.length);
-            exportBodyRequest.salesPersonUniqueNames = isAllSalesPerson ? [] : salesPersonUniqueNames;
-            exportBodyRequest.selectAll = isAllSalesPerson || isAllAccounts;
+            exportBodyRequest.salesPersonUniqueNames = this.reportForm?.get('salesPersonUniqueNames')?.value ?? [];
         } else if (groupBy === GroupBy.Country) {
-            const isAllCountries = this.isAllSelected(countryCodes, this.allOptions.country?.length);
-            exportBodyRequest.countryCodes = isAllCountries ? [] : countryCodes;
-            exportBodyRequest.selectAll = isAllCountries || isAllAccounts;
+            exportBodyRequest.countryCodes = this.reportForm?.get('countryCodes')?.value ?? [];
         } else if (groupBy === GroupBy.State) {
-            const isAllStates = this.isAllSelected(stateCodes, this.allOptions.state?.length);
             const countryCode = this.reportForm?.get('countryCode')?.value;
-            exportBodyRequest.stateCodes = isAllStates ? [] : stateCodes;
             exportBodyRequest.countryCodes = countryCode ? [countryCode] : [];
-            exportBodyRequest.selectAll = isAllStates || isAllAccounts;
+            exportBodyRequest.stateCodes = this.reportForm?.get('stateCodes')?.value ?? [];
         }
+
+        this.generalService.replaceSelectedAllOptions(exportBodyRequest);
+
     }
 
     /**
@@ -740,13 +729,11 @@ constructor(
      * @returns {boolean}
      * @memberof ReportsDetailsComponent
      */
-    private isAllSelected(selected: any[], total: number): boolean {
+    private isAllSelected(selected: any[]): boolean {
         if (isSelectedAllOption(selected)) {
             return true;
         }
-        const selectedCount = selected?.length ?? 0;
-        const totalCount = total ?? 0;
-        return selectedCount === 0 || selectedCount === totalCount;
+        return false;
     }
 
     /**
@@ -963,12 +950,7 @@ constructor(
         }
         this.savePreferences();
         this.salesRegisterTotal.particular = this.getCustomParticular();
-        const requestObject = cloneDeep(this.reportForm.value);
-        ["salesPersonUniqueNames", "stateCodes", "countryCodes", "accountUniqueNames"].forEach((key: string) => {
-            if (isSelectedAllOption(requestObject[key])) {
-                requestObject[key] = [];
-            }
-        });
+        const requestObject = this.generalService.replaceSelectedAllOptions(this.reportForm.value, true);
         const groupByValue = this.reportForm?.get('groupBy')?.value;
 
         /** Map of keys to remove for each group by type */

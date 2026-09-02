@@ -450,7 +450,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      */
     public search(): void {
         this.parseAllDateField();
-        this.applyFilterEvent.emit(this.generalService.replaceSelectedAllOptions(this.searchForm?.value, true));
+        this.applyFilterEvent.emit(this.searchForm?.value);
         this.closeDialogEvent.emit();
     }
 
