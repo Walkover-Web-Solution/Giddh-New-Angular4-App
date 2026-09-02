@@ -15,6 +15,7 @@
     "preparing_pdf": "चालान PDF तयार करत आहे...",
     "signing_pdf": "PDF वर स्वाक्षरी करत आहे...",
     "bridge_not_found": "डिजिटल स्वाक्षरी ब्रिज सापडला नाही. कृपया Giddh DSC एक्सटेंशन आणि नेटिव्ह होस्ट इन्स्टॉल करा आणि पृष्ठ रिफ्रेश करा. <a class='text-primary cursor-pointer' href='/download?module=dsc'> Click here </a>",
+    "download_native_host": "नेटिव्ह होस्ट डाउनलोड करा",
     "download_success": "साइन केलेला चालान PDF यशस्वीरित्या डाउनलोड झाला.",
     "download_error": "साइन केलेला चालान डाउनलोड करताना त्रुटी आली.",
     "unknown": "माहित नाही",
