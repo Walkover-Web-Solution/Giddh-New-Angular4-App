@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EMPTY, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { switchMap, catchError, tap } from 'rxjs/operators';
 import { IOption } from '../../app.constant';
@@ -59,13 +60,15 @@ export class DscPinDialogComponent implements OnDestroy {
     /** True while certificates are being read from the token */
     public isDscCertificateLoading: boolean = false;
     /** Whether to remember the PIN in this browser */
-    public rememberPin: boolean = false;
+    public rememberPin: boolean = true;
     /** Reactive form control for the chosen retention duration of the remembered PIN. */
     public rememberDurationControl: FormControl<string | null> = new FormControl<string | null>('15m');
     /** Duration options rendered in the retention dropdown */
     public durationOptions: IOption[] = [];
     /** Current signing stage (null when not signing); drives the busy overlay message */
     public signingStage: DscSigningStage = null;
+    /** True when the current error is a missing bridge/native-host setup issue, so a download action is offered. */
+    public showDownloadButton = false;
     /** True when the current PIN was auto-filled from storage (used to forget on failure) */
     private usedRememberedPin: boolean = false;
     /** Exact PIN value auto-filled from storage; distinguishes a real user edit from the ngModel echo fired when the value is written programmatically */
@@ -82,7 +85,8 @@ export class DscPinDialogComponent implements OnDestroy {
         private dscService: DscService,
         private dscPinStorage: DscPinStorageService,
         private changeDetectorRef: ChangeDetectorRef,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private router: Router
     ) {
         this.voucher = data.voucher;
         this.voucherType = data.voucherType;
@@ -183,6 +187,7 @@ export class DscPinDialogComponent implements OnDestroy {
      */
     private loadCertificates(force: boolean = false): void {
         this.dscPinError = '';
+        this.showDownloadButton = false;
         if (force) {
             this.dscService.clearCertificatesCache();
         }
@@ -239,6 +244,7 @@ export class DscPinDialogComponent implements OnDestroy {
      * @memberof DscPinDialogComponent
      */
     private applyFailedReadState(message: string | null | undefined): void {
+        this.showDownloadButton = false;
         if (this.dscCertificates.length) {
             this.dscCertificates = this.dscCertificates.map((certificate) => ({ ...certificate, connected: false }));
             this.selectedDscCertificateIndex = null;
@@ -247,8 +253,52 @@ export class DscPinDialogComponent implements OnDestroy {
             this.rememberedPinValue = null;
         } else {
             this.selectedDscCertificateIndex = null;
-            this.dscPinError = message || this.localeData?.device_not_connected;
+            this.dscPin = '';
+            this.usedRememberedPin = false;
+            this.rememberedPinValue = null;
+            if (this.isBridgeOrHostError(message)) {
+                this.showDownloadButton = true;
+                this.dscPinError = this.localeData?.bridge_not_found || message;
+            } else {
+                this.dscPinError = message || this.localeData?.device_not_connected;
+            }
         }
+    }
+
+    /**
+     * Determines whether an error message indicates a missing bridge extension or
+     * native host installation issue rather than a disconnected token.
+     *
+     * @private
+     * @param {(string | null | undefined)} message Error message to inspect
+     * @returns {boolean}
+     * @memberof DscPinDialogComponent
+     */
+    private isBridgeOrHostError(message: string | null | undefined): boolean {
+        if (!message) {
+            return false;
+        }
+        const normalized = message.toLowerCase();
+        return (
+            normalized.includes('bridge not available') ||
+            normalized.includes('bridge not found') ||
+            normalized.includes('native host') ||
+            normalized.includes('native messaging host') ||
+            normalized.includes('forbidden') ||
+            normalized.includes('could not establish') ||
+            normalized.includes('not installed')
+        );
+    }
+
+    /**
+     * Closes the dialog and navigates to the DSC download page so the user can install
+     * the missing native host.
+     *
+     * @memberof DscPinDialogComponent
+     */
+    public goToDownload(): void {
+        this.dialogRef.close();
+        this.router.navigate(['/download'], { queryParams: { module: 'dsc' } });
     }
 
     /**
@@ -430,6 +480,7 @@ export class DscPinDialogComponent implements OnDestroy {
             return;
         }
         this.dscPinError = '';
+        this.showDownloadButton = false;
 
         if (!this.rememberPin) {
             // Confirmed with the remember toggle off -> forget the saved PIN for this certificate.
@@ -478,15 +529,17 @@ export class DscPinDialogComponent implements OnDestroy {
                     catchError((error) => {
                         this.signingStage = null;
                         this.dscPin = '';
-                        this.dscPinError = this.localeData?.incorrect_pin || error?.message;
+                        this.dscPinError = error?.message || this.localeData?.incorrect_pin;
                         this.changeDetectorRef.detectChanges();
                         return EMPTY;
                     })
                 );
             })
         ).subscribe({
-            error: () => {
+            error: (error) => {
                 this.signingStage = null;
+                this.dscPinError = error?.message || this.localeData?.device_not_connected;
+                this.showDownloadButton = this.dscCertificates.length === 0 && this.isBridgeOrHostError(this.dscPinError);
                 this.changeDetectorRef.detectChanges();
             }
         });
