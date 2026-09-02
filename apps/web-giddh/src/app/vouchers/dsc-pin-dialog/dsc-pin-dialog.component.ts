@@ -258,7 +258,7 @@ export class DscPinDialogComponent implements OnDestroy {
             this.rememberedPinValue = null;
             if (this.isBridgeOrHostError(message)) {
                 this.showDownloadButton = true;
-                this.dscPinError = this.localeData?.bridge_not_found || message;
+                this.dscPinError = (this.localeData?.bridge_not_found || message)?.replace(/<[^>]*>/g, '');
             } else {
                 this.dscPinError = message || this.localeData?.device_not_connected;
             }
