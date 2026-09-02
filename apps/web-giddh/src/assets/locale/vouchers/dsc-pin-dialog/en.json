@@ -14,7 +14,7 @@
     "verifying_pin": "Verifying PIN...",
     "preparing_pdf": "Preparing invoice PDF...",
     "signing_pdf": "Signing PDF...",
-    "bridge_not_found": "Digital signature bridge not found. Please install the Giddh DSC extension and native host, then refresh the page.",
+    "bridge_not_found": "Digital signature bridge not found. Please install the Giddh DSC extension and native host, then refresh the page. <a class='text-primary cursor-pointer' href='/download?module=dsc'> Click here </a>",
     "download_native_host": "Download native host",
     "download_success": "Signed invoice PDF downloaded successfully.",
     "download_error": "An error occurred while downloading signed invoice.",
