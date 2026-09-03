@@ -89,6 +89,10 @@ export class DscPinDialogComponent implements OnDestroy {
 
     /** Pending duration from a remembered PIN, applied once locale/options are ready. */
     private pendingRememberDuration: DscPinDuration | null = null;
+    /** Raw bridge/extension error kept so locale remapping can use the original message. */
+    private lastRawErrorMessage: string | null = null;
+    /** Locale key chosen when the error was first set; used to remap after translations load. */
+    private lastErrorFallbackKey: string | null = null;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: DscPinDialogData,
@@ -172,8 +176,13 @@ export class DscPinDialogComponent implements OnDestroy {
             this.dscPinError = this.localeData?.bridge_not_found || this.dscPinError;
         } else if (this.isNativeHostMissing) {
             this.dscPinError = this.localeData?.native_host_missing || this.dscPinError;
-        } else if (this.dscPinError) {
-            this.dscPinError = this.getFriendlyErrorMessage(this.dscPinError, 'generic_error');
+        } else if (this.lastRawErrorMessage || this.lastErrorFallbackKey || this.dscPinError) {
+            // Remap from the original raw error — never from the already-friendly display text,
+            // which would lose specific messages like "No token found" after the locale loads.
+            this.dscPinError = this.getFriendlyErrorMessage(
+                this.lastRawErrorMessage,
+                this.lastErrorFallbackKey || 'generic_error'
+            );
         }
     }
 
@@ -206,6 +215,8 @@ export class DscPinDialogComponent implements OnDestroy {
      */
     private loadCertificates(force: boolean = false): void {
         this.dscPinError = '';
+        this.lastRawErrorMessage = null;
+        this.lastErrorFallbackKey = null;
         this.isExtensionMissing = false;
         this.isNativeHostMissing = false;
         this.dscOs = null;
@@ -301,6 +312,8 @@ export class DscPinDialogComponent implements OnDestroy {
                 this.isNativeHostMissing = true;
                 this.dscPinError = this.getFriendlyErrorMessage(message, 'native_host_missing');
                 this.setDscDownloadUrl();
+            } else if (this.isNoTokenError(message)) {
+                this.dscPinError = this.getFriendlyErrorMessage(message, 'token_not_found');
             } else if (this.isDriverMissingError(message)) {
                 this.dscPinError = this.getFriendlyErrorMessage(message, 'driver_missing');
             } else {
@@ -352,7 +365,24 @@ export class DscPinDialogComponent implements OnDestroy {
     }
 
     /**
+     * Determines whether an error message indicates no DSC token is plugged in / detected.
+     *
+     * @private
+     * @param {(string | null | undefined)} message Error message to inspect
+     * @returns {boolean}
+     * @memberof DscPinDialogComponent
+     */
+    private isNoTokenError(message: string | null | undefined): boolean {
+        if (!message) {
+            return false;
+        }
+        const normalized = message.toLowerCase();
+        return normalized.includes('no_token') || normalized.includes('no token');
+    }
+
+    /**
      * Determines whether an error message indicates a missing or broken token driver/CSP.
+     * Token-not-found messages are handled separately via {@link isNoTokenError}.
      *
      * @private
      * @param {(string | null | undefined)} message Error message to inspect
@@ -360,7 +390,7 @@ export class DscPinDialogComponent implements OnDestroy {
      * @memberof DscPinDialogComponent
      */
     private isDriverMissingError(message: string | null | undefined): boolean {
-        if (!message) {
+        if (!message || this.isNoTokenError(message)) {
             return false;
         }
         const normalized = message.toLowerCase();
@@ -371,8 +401,6 @@ export class DscPinDialogComponent implements OnDestroy {
             normalized.includes('csp') ||
             normalized.includes('pkcs') ||
             normalized.includes('cryptoki') ||
-            normalized.includes('no_token') ||
-            normalized.includes('no token') ||
             /\bckr_/.test(normalized) ||
             /\bscard_/.test(normalized) ||
             /\b0x[0-9a-f]{6,}\b/.test(normalized)
@@ -382,6 +410,8 @@ export class DscPinDialogComponent implements OnDestroy {
     /**
      * Maps a raw extension/native-host error to a short, non-technical, translated message.
      * The raw message is always logged to the console; only the friendly text is returned.
+     * When locale data is not ready yet, the already-humanized raw bridge message is shown
+     * instead of a generic fallback so specific errors (e.g. "No token found") are not lost.
      *
      * @private
      * @param {(string | null | undefined)} rawMessage Raw error from the bridge/extension/API
@@ -390,8 +420,12 @@ export class DscPinDialogComponent implements OnDestroy {
      * @memberof DscPinDialogComponent
      */
     private getFriendlyErrorMessage(rawMessage: string | null | undefined, fallbackKey: string): string {
+        this.lastErrorFallbackKey = fallbackKey;
         if (rawMessage) {
+            this.lastRawErrorMessage = rawMessage;
             console.info('[DSC Dialog] Raw extension error (console only):', rawMessage);
+        } else {
+            this.lastRawErrorMessage = null;
         }
 
         if (!rawMessage) {
@@ -407,6 +441,8 @@ export class DscPinDialogComponent implements OnDestroy {
             key = 'native_host_missing';
         } else if (normalized.includes('incorrect pin') || normalized.includes('wrong pin') || normalized.includes('invalid pin') || normalized.includes('pin incorrect')) {
             key = 'incorrect_pin';
+        } else if (this.isNoTokenError(rawMessage)) {
+            key = 'token_not_found';
         } else if (this.isDriverMissingError(rawMessage)) {
             key = 'driver_missing';
         } else if (normalized.includes('certificate') || normalized.includes('certificates')) {
@@ -415,7 +451,14 @@ export class DscPinDialogComponent implements OnDestroy {
             key = 'signing_error';
         }
 
-        return this.localeData?.[key] || this.localeData?.[fallbackKey] || this.localeData?.generic_error || 'Something went wrong. Please try again.';
+        this.lastErrorFallbackKey = key;
+        return (
+            this.localeData?.[key] ||
+            this.localeData?.[fallbackKey] ||
+            rawMessage ||
+            this.localeData?.generic_error ||
+            'Something went wrong. Please try again.'
+        );
     }
 
     /**
@@ -582,6 +625,8 @@ export class DscPinDialogComponent implements OnDestroy {
         console.info('[DSC Dialog] Certificate selected:', { index, subjectCn: certificate?.subjectCn, serial: certificate?.serial, certId: certificate?.certId });
         this.selectedDscCertificateIndex = index;
         this.dscPinError = '';
+        this.lastRawErrorMessage = null;
+        this.lastErrorFallbackKey = null;
         this.applyRememberedPin();
     }
 
@@ -637,6 +682,8 @@ export class DscPinDialogComponent implements OnDestroy {
         }
 
         this.dscPinError = '';
+        this.lastRawErrorMessage = null;
+        this.lastErrorFallbackKey = null;
 
         if (!this.rememberPin) {
             // Confirmed with the remember toggle off -> forget the saved PIN for this certificate.

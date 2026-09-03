@@ -21,6 +21,7 @@
     "download_native_app": "Download native app",
     "reload_page": "Reload page",
     "driver_missing": "Your token driver is missing or not responding. Please install the driver and try again.",
+    "token_not_found": "No token found. Ensure your DSC token is plugged in and its driver is installed.",
     "certificate_error": "Could not read DSC certificates. Please make sure the token is connected.",
     "signing_error": "Signing failed. Please try again.",
     "generic_error": "Something went wrong. Please try again.",
