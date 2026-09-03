@@ -2100,11 +2100,11 @@ export class InventoryService {
     /**
      * List batches available to transfer when archiving.
      *
-     * @param {{ uniqueName: string; isVariant: boolean; page?: number; count?: number; excludeBatchUniqueName?: string }} queryParams Availability query
+     * @param {{ uniqueName: string; isVariant: boolean; page?: number; count?: number; excludeBatchUniqueName?: string; sort?: string; sortBy?: string; q?: string }} queryParams Availability query
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InventoryService
      */
-    public getBatchAvailability(queryParams: { uniqueName: string; isVariant: boolean; page?: number; count?: number; excludeBatchUniqueName?: string }): Observable<BaseResponse<any, any>> {
+    public getBatchAvailability(queryParams: { uniqueName: string; isVariant: boolean; page?: number; count?: number; excludeBatchUniqueName?: string; sort?: string; sortBy?: string; q?: string }): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const url = this.config.apiUrl + INVENTORY_API.BATCH.AVAILABILITY
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -2112,7 +2112,10 @@ export class InventoryService {
             ?.replace(':isVariant', encodeURIComponent(String(!!queryParams?.isVariant)))
             ?.replace(':page', encodeURIComponent(String(queryParams?.page ?? 1)))
             ?.replace(':count', encodeURIComponent(String(queryParams?.count ?? 50)))
-            ?.replace(':excludeBatchUniqueName', encodeURIComponent(queryParams?.excludeBatchUniqueName ?? ''));
+            ?.replace(':excludeBatchUniqueName', encodeURIComponent(queryParams?.excludeBatchUniqueName ?? ''))
+            ?.replace(':sort', encodeURIComponent(queryParams?.sort ?? ''))
+            ?.replace(':sortBy', encodeURIComponent(queryParams?.sortBy ?? ''))
+            ?.replace(':q', encodeURIComponent(queryParams?.q ?? ''));
             
         return this.http.get(url).pipe(
             map((res) => {

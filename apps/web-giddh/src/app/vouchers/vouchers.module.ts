@@ -101,8 +101,8 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-particular-dialog.component";
 import { DscPinDialogComponent } from "./dsc-pin-dialog/dsc-pin-dialog.component";
-import { BatchSelectDialogComponent } from "./batch-select-dialog/batch-select-dialog.component";
-import { BatchCreateEditModule } from "../new-inventory/component/batch-create-edit/batch-create-edit.module";
+import { BatchSelectDialogModule } from "./batch-select-dialog/batch-select-dialog.module";
+import { BatchChipListModule } from "../shared/batch-chip-list/batch-chip-list.module";
 
 @NgModule({
     declarations: [
@@ -118,7 +118,6 @@ import { BatchCreateEditModule } from "../new-inventory/component/batch-create-e
         BulkUpdateComponent,
         HistoryDialogComponent,
         CopyParticularDialogComponent,
-        BatchSelectDialogComponent,
         EmailSendDialogComponent,
         TemplatePreviewDialogComponent,
         TemplateEditDialogComponent,
@@ -137,7 +136,8 @@ import { BatchCreateEditModule } from "../new-inventory/component/batch-create-e
         RouterModule,
         FormsModule,
         FormFieldsModule,
-        BatchCreateEditModule,
+        BatchSelectDialogModule,
+        BatchChipListModule,
         VouchersRoutingModule,
         MatTabsModule,
         MatTableModule,

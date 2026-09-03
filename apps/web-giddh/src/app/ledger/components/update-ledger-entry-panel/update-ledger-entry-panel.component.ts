@@ -72,6 +72,7 @@ import { SettingsDiscountService } from '../../../services/settings.discount.ser
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
+import { BatchSelectDialogComponent, BatchSelectDialogResult, VoucherSelectedBatch } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -958,6 +959,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
                     transaction.inventory.warehouse.name = this.selectedWarehouseName;
                 }
+                if (!this.activeCompany?.batchTrackingEnabled || !transaction.inventory.batches?.length) {
+                    delete transaction.inventory.batches;
+                }
+                if (transaction.inventory.batch) {
+                    delete transaction.inventory.batch;
+                }
             }
         });
 
@@ -1526,7 +1533,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public handleQuantityChange(value: string): void {
         if (this.vm && this.vm.stockTrxEntry && this.vm.stockTrxEntry.inventory) {
-            this.vm.stockTrxEntry.inventory.quantity = Number(this.vm.stockTrxEntry.inventory.quantity);
+            this.vm.stockTrxEntry.inventory.quantity = Number(value);
         }
         this.vm.inventoryQuantityChanged(value);
     }
@@ -2362,6 +2369,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
             if (t.inventory) {
+                t.inventory.batches = this.getInitialInventoryBatches(t.inventory);
                 this.selectedStockVariant = { name: t.inventory.variant?.name, uniqueName: t.inventory.variant?.uniqueName };
                 if (this.selectedStockUniquenName !== t.inventory.stock?.uniqueName) {
                     /** Load stock variant only when stock has changed (stock will not be changed if the
@@ -2589,6 +2597,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public variantChanged(event: IOption): void {
+        if (event?.value && event.value !== this.selectedStockVariant?.uniqueName) {
+            this.resetEntryBatch();
+        }
         this.selectedStockVariant = { name: event.label, uniqueName: event.value };
         const stockEntry = this.vm.selectedLedger.transactions.find(transaction => transaction.inventory);
         const stockLinkedAcccount = stockEntry?.particular?.uniqueName?.split('#')?.shift();
@@ -2601,6 +2612,115 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         };
         this.selectAccount(eventDetails, stockEntry, null, false, true);
+    }
+
+    /**
+     * Opens the Select Batches aside for the current stock line.
+     *
+     * @param {Event} [event]
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public openBatchSelectDialog(event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+
+        if (!this.activeCompany?.batchTrackingEnabled || this.isEinvoiceGenerated) {
+            return;
+        }
+
+        const inventory = this.vm.stockTrxEntry?.inventory;
+        const stockUniqueName = inventory?.stock?.uniqueName;
+        if (!stockUniqueName) {
+            return;
+        }
+
+        const variants = this.stockVariants.getValue() || [];
+        const hasVariants = variants.length > 1;
+        const variantUniqueName = this.selectedStockVariant?.uniqueName || inventory?.variant?.uniqueName;
+        if (hasVariants && !variantUniqueName) {
+            this.toaster.showSnackBar("warning", this.localeData?.select_variant_first);
+            return;
+        }
+
+        const dialogRef = this.dialog.open(BatchSelectDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                stockName: inventory?.stock?.name,
+                stockUniqueName,
+                variantUniqueName,
+                variantName: this.selectedStockVariant?.name || inventory?.variant?.name,
+                hasVariants,
+                inventoryType: "PRODUCT",
+                warehouseName: this.selectedWarehouseName,
+                warehouseUniqueName: this.selectedWarehouse || this.defaultWarehouse,
+                unitCode: inventory?.unit?.stockUnitCode || inventory?.unit?.code,
+                lineQuantity: Number(inventory?.quantity) || 0,
+                selectedBatches: cloneDeep(inventory?.batches) || [],
+                currencySymbol: this.vm.selectedPrefixForCurrency,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
+            if (!result || !this.vm.stockTrxEntry?.inventory) {
+                return;
+            }
+            this.vm.stockTrxEntry.inventory.batches = result.batches ?? [];
+            if (result.overrideLineQuantity) {
+                this.handleQuantityChange(String(result.allocatedQuantity));
+            }
+            this.changeDetectorRef.detectChanges();
+        });
+    }
+
+    /**
+     * Selected batches on the current stock line.
+     *
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getEntryBatches(): VoucherSelectedBatch[] {
+        const batches = this.vm.stockTrxEntry?.inventory?.batches;
+        return Array.isArray(batches) ? batches : [];
+    }
+
+    /**
+     * Prefill batches from ledger inventory payload.
+     *
+     * @private
+     * @param {*} [inventory]
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private getInitialInventoryBatches(inventory?: any): VoucherSelectedBatch[] {
+        if (Array.isArray(inventory?.batches) && inventory.batches.length) {
+            return cloneDeep(inventory.batches);
+        }
+        if (inventory?.batch?.uniqueName) {
+            return [{
+                uniqueName: inventory.batch.uniqueName,
+                name: inventory.batch.name,
+                batchNumber: inventory.batch.batchNumber,
+                quantity: Number(inventory.quantity) || 0,
+                rate: Number(inventory.batch.rate) || 0,
+                availableQuantity: Number(inventory.batch.availableQuantity) || 0,
+                expiryDate: inventory.batch.expiryDate
+            }];
+        }
+        return [];
+    }
+
+    /**
+     * Clears selected batches on the current stock line.
+     *
+     * @private
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private resetEntryBatch(): void {
+        if (this.vm.stockTrxEntry?.inventory) {
+            this.vm.stockTrxEntry.inventory.batches = [];
+        }
     }
 
     /**
@@ -2748,7 +2868,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             uniqueName: stockUnitUniqueName,
                         },
                         amount: 0,
-                        rate
+                        rate,
+                        batches: []
                     };
                     // Stock item, show the warehouse & variant drop down
                     if (!this.isStockPresent) {

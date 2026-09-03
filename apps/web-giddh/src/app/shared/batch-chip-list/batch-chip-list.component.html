@@ -1,0 +1,27 @@
+<div
+    *ngIf="selectedBatches.length"
+    class="batch-select-trigger text-left"
+    (click)="$event.stopPropagation()"
+>
+    <div class="batch-chip-list">
+        <span *ngIf="selectedBatches.length > 1" class="batch-count-chip batch-total-chip">
+            <i class="icon-tick"></i>
+            {{ countLabel }}
+        </span>
+        <span *ngIf="negativeCount > 0" class="batch-over-chip">
+            {{ negativeLabel }}
+        </span>
+        <span *ngFor="let batch of selectedBatches" class="batch-count-chip">
+            {{ (batch?.batchNumber || batch?.name) + " · " + batch?.quantity }}
+        </span>
+        <a
+            *ngIf="showEdit"
+            href="javascript:void(0)"
+            class="batch-select-link text-primary"
+            (click)="edit.emit($event)"
+        >
+            <i class="icon-edit"></i>
+            {{ commonLocaleData?.app_edit }}
+        </a>
+    </div>
+</div>

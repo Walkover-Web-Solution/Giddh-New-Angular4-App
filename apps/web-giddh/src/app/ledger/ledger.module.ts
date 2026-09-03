@@ -71,6 +71,8 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { CommonTaxComponent } from '../shared/common-tax/common-tax.component';
 import { CommonDiscountComponent } from '../shared/common-discount/common-discount.component';
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
+import { BatchSelectDialogModule } from '../vouchers/batch-select-dialog/batch-select-dialog.module';
+import { BatchChipListModule } from '../shared/batch-chip-list/batch-chip-list.module';
 
 @NgModule({
     declarations: [
@@ -159,7 +161,9 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
         GiddhNumberFormatModule,
         KeyboardShortutModule,
         GiddhDatePipe,
-        GoToBranchComponent
+        GoToBranchComponent,
+        BatchSelectDialogModule,
+        BatchChipListModule
     ]
 })
 export class LedgerModule {

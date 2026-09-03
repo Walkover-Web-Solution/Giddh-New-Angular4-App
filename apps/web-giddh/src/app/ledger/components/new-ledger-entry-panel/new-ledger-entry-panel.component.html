@@ -52,6 +52,19 @@
         </div>
         <!-- Variant dropdown for stock selection -->
         <ng-container *ngTemplateOutlet="variantAndWarehouseDropdown"></ng-container>
+        <batch-chip-list
+            *ngIf="
+                activeCompany?.batchTrackingEnabled &&
+                currentTxn?.selectedAccount?.stock &&
+                currentTxn?.inventory?.batches?.length
+            "
+            class="d-block my-2"
+            [batches]="currentTxn?.inventory?.batches"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [showEdit]="!isReadOnly"
+            (edit)="openBatchSelectDialog($event)"
+        ></batch-chip-list>
         <!-- reverse charge transction end  -->
         <!--  tourist scheme template start      -->
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
@@ -78,6 +91,24 @@
                             [allowDecimalDigitsOnly]="true"
                             [customDecimalPlaces]="4"
                         ></input-field>
+                        <div
+                            *ngIf="
+                                activeCompany?.batchTrackingEnabled &&
+                                currentTxn?.selectedAccount?.stock &&
+                                !getEntryBatches()?.length &&
+                                !isReadOnly
+                            "
+                            class="batch-select-trigger mt-1"
+                            (click)="$event.stopPropagation()"
+                        >
+                            <a
+                                href="javascript:void(0)"
+                                class="batch-select-link"
+                                (click)="openBatchSelectDialog($event)"
+                            >
+                                {{ localeData?.select_batch }}
+                            </a>
+                        </div>
                     </div>
                     <!-- Unit -->
                     <div *ngIf="currentTxn?.unitRate">

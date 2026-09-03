@@ -3275,46 +3275,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Quantity allocated above the line quantity.
-     *
-     * @param {AbstractControl} transaction
-     * @return {*}  {number}
-     * @memberof VoucherCreateComponent
-     */
-    public getEntryBatchOverflow(transaction: AbstractControl): number {
-        const allocated = this.getEntryBatches(transaction).reduce((total, batch) => total + (Number(batch?.quantity) || 0), 0);
-        const lineQuantity = Number(transaction?.get("stock.quantity")?.value) || 0;
-        return Math.max(allocated - lineQuantity, 0);
-    }
-
-    /**
-     * Count of selected batches issued beyond available stock.
-     *
-     * @param {AbstractControl} transaction
-     * @return {*}  {number}
-     * @memberof VoucherCreateComponent
-     */
-    public getEntryNegativeBatchCount(transaction: AbstractControl): number {
-        return this.getEntryBatches(transaction).filter(batch => {
-            const quantity = Number(batch?.quantity) || 0;
-            const available = Number(batch?.availableQuantity) || 0;
-            return quantity > available;
-        }).length;
-    }
-
-    /**
-     * Replace placeholders in a locale string.
-     *
-     * @param {string} [text]
-     * @param {Record<string, string | number>} values
-     * @return {*}  {string}
-     * @memberof VoucherCreateComponent
-     */
-    public interpolateLocale(text: string | undefined, values: Record<string, string | number>): string {
-        return Object.keys(values).reduce((result, key) => result.replace(`[${key}]`, String(values[key])), text ?? "");
-    }
-
-    /**
      * Clears selected batches when stock or variant changes.
      *
      * @private

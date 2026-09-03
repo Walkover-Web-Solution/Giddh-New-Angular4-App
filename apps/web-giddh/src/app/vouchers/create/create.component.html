@@ -1970,53 +1970,18 @@
                                                             formArrayName="transactions"
                                                         >
                                                             <ng-container formGroupName="0">
-                                                                <div
+                                                                <batch-chip-list
                                                                     *ngIf="
                                                                         activeCompany?.batchTrackingEnabled &&
                                                                         transaction.get('stock.uniqueName')?.value &&
                                                                         getEntryBatches(transaction)?.length
                                                                     "
-                                                                    class="batch-select-trigger text-left mt-2"
-                                                                    (click)="$event.stopPropagation()"
-                                                                >
-                                                                    <div class="batch-chip-list">
-                                                                        <span class="batch-count-chip batch-total-chip">
-                                                                            <i class="icon-tick"></i>
-                                                                            {{
-                                                                                interpolateLocale(localeData?.n_batches, {
-                                                                                    COUNT: getEntryBatches(transaction).length
-                                                                                })
-                                                                            }}
-                                                                        </span>
-                                                                        <span
-                                                                            *ngIf="getEntryNegativeBatchCount(transaction) > 0"
-                                                                            class="batch-over-chip"
-                                                                        >
-                                                                            {{
-                                                                                interpolateLocale(
-                                                                                    getEntryNegativeBatchCount(transaction) === 1
-                                                                                        ? localeData?.one_batch_negative
-                                                                                        : localeData?.n_batches_negative,
-                                                                                    { COUNT: getEntryNegativeBatchCount(transaction) }
-                                                                                )
-                                                                            }}
-                                                                        </span>
-                                                                        <span
-                                                                            *ngFor="let batch of getEntryBatches(transaction)"
-                                                                            class="batch-count-chip"
-                                                                        >
-                                                                            {{ (batch?.batchNumber || batch?.name) + ' · ' + batch?.quantity }}
-                                                                        </span>
-                                                                    </div>
-                                                                    <a
-                                                                        href="javascript:void(0)"
-                                                                        class="batch-select-link text-primary"
-                                                                        (click)="openBatchSelectDialog(entryIndex, $event)"
-                                                                    >
-                                                                        <i class="icon-edit"></i>
-                                                                        {{ commonLocaleData?.app_edit }}
-                                                                    </a>
-                                                                </div>
+                                                                    class="d-block mt-2"
+                                                                    [batches]="getEntryBatches(transaction)"
+                                                                    [localeData]="localeData"
+                                                                    [commonLocaleData]="commonLocaleData"
+                                                                    (edit)="openBatchSelectDialog(entryIndex, $event)"
+                                                                ></batch-chip-list>
                                                             </ng-container>
                                                         </ng-container>
                                                     </td>

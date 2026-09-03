@@ -137,7 +137,7 @@
     "quick_add_batch": "+ बॅच कोड टाइप करून थेट जोडा",
     "add_batch": "+ बॅच जोडा",
     "quick_add_hint": "जोडण्यासाठी Enter · प्रमाणावर जाण्यासाठी Tab",
-    "search_batch_number": "बॅच क्रमांक शोधा",
+    "search_batch_number_or_name": "बॅच क्रमांक किंवा नाव शोधा",
     "sorted_by_expiry": "सर्वात लवकर संपणारे आधी",
     "batch_expiry": "कालबाह्यता",
     "batch_available": "उपलब्ध",

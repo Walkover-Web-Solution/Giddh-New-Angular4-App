@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { Observable, of, ReplaySubject, Subject } from "rxjs";
+import { catchError, debounceTime, distinctUntilChanged, switchMap, take, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import * as customParseFormat from "dayjs/plugin/customParseFormat";
 import { ASIDE_PANE_CONFIG } from "../../app.constant";
@@ -76,6 +76,10 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
     public showQuickAdd: boolean = false;
     /** True while availability is loading. */
     public isLoading: boolean = false;
+    /** Debounced search text for the availability API. */
+    private searchQuery$: Subject<string> = new Subject();
+    /** True after the user has typed a search. */
+    private hasUserSearched: boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public dialogData: BatchSelectDialogData,
@@ -95,7 +99,13 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @memberof BatchSelectDialogComponent
      */
     public ngOnInit(): void {
-        this.loadBatches();
+        this.searchQuery$.pipe(
+            debounceTime(400),
+            distinctUntilChanged(),
+            switchMap(query => this.fetchAvailability(query)),
+            takeUntil(this.destroyed$)
+        ).subscribe(({ query, response }) => this.applyAvailability(query, response));
+        this.loadBatches("");
     }
 
     /**
@@ -217,19 +227,17 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Filter the list by batch number or name.
+     * Search batches from the availability API.
      *
      * @memberof BatchSelectDialogComponent
      */
     public applySearch(): void {
-        const term = this.searchTerm?.trim().toLowerCase();
-        this.filteredRows = term
-            ? this.rows.filter(row =>
-                (row.batchNumber ?? "").toLowerCase().includes(term) ||
-                (row.name ?? "").toLowerCase().includes(term)
-            )
-            : [...this.rows];
-        this.cdr.markForCheck();
+        const query = this.searchTerm?.trim() ?? "";
+        if (!this.hasUserSearched && !query) {
+            return;
+        }
+        this.hasUserSearched = true;
+        this.searchQuery$.next(query);
     }
 
     /**
@@ -238,21 +246,24 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @memberof BatchSelectDialogComponent
      */
     public addByCode(): void {
-        const code = (this.quickAddCode || this.searchTerm)?.trim().toLowerCase();
+        const code = (this.quickAddCode || this.searchTerm)?.trim();
         if (!code) {
             return;
         }
-        const row = this.rows.find(item => (item.batchNumber ?? "").toLowerCase() === code);
-        if (!row) {
-            this.toasterService.showSnackBar("warning", this.localeData?.batch_not_found);
+        const match = this.findExactBatch(code);
+        if (match) {
+            this.selectExactBatch(match);
             return;
         }
-        if (!row.selected) {
-            this.toggleRow(row, true);
-        }
-        this.quickAddCode = "";
-        this.searchTerm = "";
-        this.applySearch();
+        this.fetchAvailability(code).pipe(take(1), takeUntil(this.destroyed$)).subscribe(({ query, response }) => {
+            this.applyAvailability(query, response);
+            const row = this.findExactBatch(code);
+            if (!row) {
+                this.toasterService.showSnackBar("warning", this.localeData?.batch_not_found);
+                return;
+            }
+            this.selectExactBatch(row);
+        });
     }
 
     /**
@@ -281,7 +292,7 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(saved => {
             if (saved) {
-                this.loadBatches();
+                this.loadBatches(this.searchTerm?.trim() ?? "");
             }
         });
     }
@@ -392,43 +403,126 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Fetch availability and merge any already selected batches.
+     * Fetch availability for the current stock or variant.
      *
      * @private
+     * @param {string} [query]
      * @memberof BatchSelectDialogComponent
      */
-    private loadBatches(): void {
+    private loadBatches(query: string = ""): void {
+        this.fetchAvailability(query).pipe(take(1), takeUntil(this.destroyed$)).subscribe(({ query: searchQuery, response }) => {
+            this.applyAvailability(searchQuery, response);
+        });
+    }
+
+    /**
+     * Call the availability API. Selected batches stay in memory for apply.
+     *
+     * @private
+     * @param {string} [query]
+     * @return {*}  {Observable<{ query: string; response: any }>}
+     * @memberof BatchSelectDialogComponent
+     */
+    private fetchAvailability(query: string = ""): Observable<{ query: string; response: any }> {
         const isVariant = !!(this.dialogData?.variantUniqueName);
         const uniqueName = isVariant ? this.dialogData.variantUniqueName : this.dialogData?.stockUniqueName;
         if (!uniqueName) {
             this.rows = [];
             this.filteredRows = [];
-            return;
+            this.cdr.markForCheck();
+            return of({ query, response: { status: "error" } });
         }
 
         this.isLoading = true;
-        this.inventoryService.getBatchAvailability({ uniqueName, isVariant, page: 1, count: 50 })
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe({
-                next: (response) => {
-                    this.isLoading = false;
-                    this.rows = response?.status === "success"
-                        ? this.mapRows(response, this.dialogData?.selectedBatches ?? [])
-                        : this.mapRows({ body: { results: [] } }, this.dialogData?.selectedBatches ?? []);
-                    this.applySearch();
-                    this.cdr.markForCheck();
-                },
-                error: () => {
-                    this.isLoading = false;
-                    this.rows = this.mapRows({ body: { results: [] } }, this.dialogData?.selectedBatches ?? []);
-                    this.applySearch();
-                    this.cdr.markForCheck();
-                }
-            });
+        this.cdr.markForCheck();
+        return this.inventoryService.getBatchAvailability({
+            uniqueName,
+            isVariant,
+            page: 1,
+            count: 50,
+            sort: "asc",
+            sortBy: "expiry",
+            q: query
+        }).pipe(
+            catchError(() => of({ status: "error" })),
+            switchMap(response => of({ query, response }))
+        );
     }
 
     /**
-     * Map availability results and keep previously selected rows.
+     * Map API results, keep current selections, and pin selected rows when search is empty.
+     *
+     * @private
+     * @param {string} query
+     * @param {*} response
+     * @memberof BatchSelectDialogComponent
+     */
+    private applyAvailability(query: string, response: any): void {
+        this.isLoading = false;
+        const selected = this.getSelectedBatchesForMerge();
+        const apiResponse = response?.status === "success" ? response : { body: { results: [] } };
+        const apiRows = this.mapApiRows(apiResponse, selected);
+        const mergedRows = this.mergeMissingSelected(apiRows, selected);
+        const displayRows = query ? apiRows : this.pinSelectedToTop(mergedRows, selected);
+        this.rows = mergedRows;
+        this.filteredRows = displayRows;
+        this.cdr.markForCheck();
+    }
+
+    /**
+     * Selected batches to keep across API searches.
+     *
+     * @private
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof BatchSelectDialogComponent
+     */
+    private getSelectedBatchesForMerge(): VoucherSelectedBatch[] {
+        const current = this.rows
+            .filter(row => row.selected && Number(row.quantity) > 0)
+            .map(row => ({
+                uniqueName: row.uniqueName,
+                name: row.name,
+                batchNumber: row.batchNumber,
+                quantity: Number(row.quantity) || 0,
+                rate: Number(row.rate) || 0,
+                availableQuantity: Number(row.availableQuantity) || 0,
+                expiryDate: row.expiryDate
+            }));
+        return current.length ? current : (this.dialogData?.selectedBatches ?? []);
+    }
+
+    /**
+     * Find a batch by exact batch number.
+     *
+     * @private
+     * @param {string} code
+     * @return {*}  {(BatchSelectRow | undefined)}
+     * @memberof BatchSelectDialogComponent
+     */
+    private findExactBatch(code: string): BatchSelectRow | undefined {
+        const exact = code.toLowerCase();
+        return this.filteredRows.find(item => (item.batchNumber ?? "").toLowerCase() === exact)
+            ?? this.rows.find(item => (item.batchNumber ?? "").toLowerCase() === exact);
+    }
+
+    /**
+     * Select the matched batch and reset the search field.
+     *
+     * @private
+     * @param {BatchSelectRow} row
+     * @memberof BatchSelectDialogComponent
+     */
+    private selectExactBatch(row: BatchSelectRow): void {
+        if (!row.selected) {
+            this.toggleRow(row, true);
+        }
+        this.quickAddCode = "";
+        this.searchTerm = "";
+        this.loadBatches("");
+    }
+
+    /**
+     * Map availability API results and restore quantities for selected batches.
      *
      * @private
      * @param {*} response
@@ -436,12 +530,12 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @return {*}  {BatchSelectRow[]}
      * @memberof BatchSelectDialogComponent
      */
-    private mapRows(response: any, selected: VoucherSelectedBatch[]): BatchSelectRow[] {
+    private mapApiRows(response: any, selected: VoucherSelectedBatch[]): BatchSelectRow[] {
         const body = response?.body ?? response;
         const results: BatchReportItem[] = Array.isArray(body) ? body : (body?.results ?? []);
         const selectedMap = new Map((selected ?? []).map(item => [item.uniqueName, item]));
 
-        const rows = (Array.isArray(results) ? results : []).reduce((list: BatchSelectRow[], item) => {
+        return (Array.isArray(results) ? results : []).reduce((list: BatchSelectRow[], item) => {
             if (!item?.uniqueName) {
                 return list;
             }
@@ -458,7 +552,19 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
             });
             return list;
         }, []);
+    }
 
+    /**
+     * Keep selected batches that are not in the current API page so apply still has them.
+     *
+     * @private
+     * @param {BatchSelectRow[]} apiRows
+     * @param {VoucherSelectedBatch[]} selected
+     * @return {*}  {BatchSelectRow[]}
+     * @memberof BatchSelectDialogComponent
+     */
+    private mergeMissingSelected(apiRows: BatchSelectRow[], selected: VoucherSelectedBatch[]): BatchSelectRow[] {
+        const rows = [...apiRows];
         (selected ?? []).forEach(item => {
             if (item?.uniqueName && !rows.some(row => row.uniqueName === item.uniqueName)) {
                 rows.push({
@@ -473,21 +579,33 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
                 });
             }
         });
+        return rows;
+    }
 
-        return rows.sort((left, right) => {
-            const leftDate = this.parseDate(left.expiryDate);
-            const rightDate = this.parseDate(right.expiryDate);
-            if (!leftDate && !rightDate) {
-                return 0;
+    /**
+     * Puts currently selected batches at the top when search is empty.
+     *
+     * @private
+     * @param {BatchSelectRow[]} rows
+     * @param {VoucherSelectedBatch[]} selected
+     * @return {*}  {BatchSelectRow[]}
+     * @memberof BatchSelectDialogComponent
+     */
+    private pinSelectedToTop(rows: BatchSelectRow[], selected: VoucherSelectedBatch[]): BatchSelectRow[] {
+        const selectedNames = new Set((selected ?? []).map(item => item?.uniqueName).filter(Boolean));
+        if (!selectedNames.size) {
+            return rows;
+        }
+        const pinned: BatchSelectRow[] = [];
+        const rest: BatchSelectRow[] = [];
+        rows.forEach(row => {
+            if (selectedNames.has(row.uniqueName)) {
+                pinned.push(row);
+            } else {
+                rest.push(row);
             }
-            if (!leftDate) {
-                return 1;
-            }
-            if (!rightDate) {
-                return -1;
-            }
-            return leftDate.valueOf() - rightDate.valueOf();
         });
+        return [...pinned, ...rest];
     }
 
     /**
@@ -533,6 +651,7 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @memberof BatchSelectDialogComponent
      */
     public ngOnDestroy(): void {
+        this.searchQuery$.complete();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

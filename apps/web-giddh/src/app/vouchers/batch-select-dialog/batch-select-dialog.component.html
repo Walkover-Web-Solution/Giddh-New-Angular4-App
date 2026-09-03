@@ -70,8 +70,8 @@
             <input-field
                 [name]="'searchBatchNumber'"
                 [type]="'text'"
-                [label]="localeData?.search_batch_number"
-                [placeholder]="localeData?.search_batch_number"
+                [label]="commonLocaleData?.app_search"
+                [placeholder]="localeData?.search_batch_number_or_name"
                 [matPrefixIcon]="'icon-search pl-1'"
                 [(ngModel)]="searchTerm"
                 (ngModelChange)="applySearch()"

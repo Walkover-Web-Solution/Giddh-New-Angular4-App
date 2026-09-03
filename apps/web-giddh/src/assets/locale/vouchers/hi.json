@@ -137,7 +137,7 @@
     "quick_add_batch": "+ बैच कोड लिखकर सीधे जोड़ें",
     "add_batch": "+ बैच जोड़ें",
     "quick_add_hint": "जोड़ने के लिए Enter · मात्रा पर जाने के लिए Tab",
-    "search_batch_number": "बैच नंबर खोजें",
+    "search_batch_number_or_name": "बैच नंबर या नाम खोजें",
     "sorted_by_expiry": "सबसे पहले समाप्त होने वाले के अनुसार क्रमबद्ध",
     "batch_expiry": "समाप्ति",
     "batch_available": "उपलब्ध",

@@ -137,7 +137,7 @@
     "quick_add_batch": "+ Type a batch code to add it directly",
     "add_batch": "+ Add batch",
     "quick_add_hint": "Enter to add · Tab to move to quantity",
-    "search_batch_number": "Search batch number",
+    "search_batch_number_or_name": "Search batch number or name",
     "sorted_by_expiry": "Sorted by earliest expiry first",
     "batch_expiry": "Expiry",
     "batch_available": "Available",
