@@ -38,6 +38,7 @@
     "archive_batch_message": "ट्रान्सफरसाठी बॅच निवडा, किंवा फक्त आर्काइव्ह करण्यासाठी अनअसाइन केलेले निवडा.",
     "select_batch": "बॅच निवडा",
     "transfer": "ट्रान्सफर",
+    "transfer_and_archive": "ट्रान्सफर आणि आर्काइव्ह",
     "transfer_batch": "बॅच ट्रान्सफर",
     "enter_quantity": "प्रमाण प्रविष्ट करा",
     "quantity_exceeds_available": "प्रमाण उपलब्ध प्रमाण ([QTY]) पेक्षा जास्त असू शकत नाही.",

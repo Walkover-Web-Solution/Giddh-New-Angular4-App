@@ -2697,17 +2697,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (Array.isArray(inventory?.batches) && inventory.batches.length) {
             return cloneDeep(inventory.batches);
         }
-        if (inventory?.batch?.uniqueName) {
-            return [{
-                uniqueName: inventory.batch.uniqueName,
-                name: inventory.batch.name,
-                batchNumber: inventory.batch.batchNumber,
-                quantity: Number(inventory.quantity) || 0,
-                rate: Number(inventory.batch.rate) || 0,
-                availableQuantity: Number(inventory.batch.availableQuantity) || 0,
-                expiryDate: inventory.batch.expiryDate
-            }];
-        }
         return [];
     }
 

@@ -38,6 +38,7 @@
     "archive_batch_message": "ट्रांसफर के लिए बैच चुनें, या केवल आर्काइव करने के लिए अनअसाइन्ड चुनें।",
     "select_batch": "बैच चुनें",
     "transfer": "ट्रांसफर",
+    "transfer_and_archive": "ट्रांसफर और आर्काइव",
     "transfer_batch": "बैच ट्रांसफर",
     "enter_quantity": "मात्रा दर्ज करें",
     "quantity_exceeds_available": "मात्रा उपलब्ध मात्रा ([QTY]) से अधिक नहीं हो सकती।",

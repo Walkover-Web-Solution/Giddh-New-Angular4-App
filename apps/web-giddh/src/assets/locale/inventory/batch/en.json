@@ -38,6 +38,7 @@
     "archive_batch_message": "Select a batch to transfer, or choose Unassigned to archive only.",
     "select_batch": "Select Batch",
     "transfer": "Transfer",
+    "transfer_and_archive": "Transfer & Archive",
     "transfer_batch": "Transfer Batch",
     "enter_quantity": "Enter Quantity",
     "quantity_exceeds_available": "Quantity cannot be more than the available quantity ([QTY]).",

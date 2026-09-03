@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, Optional } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, Optional, computed, signal } from "@angular/core";
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
 import { select, Store } from "@ngrx/store";
-import { Observable, ReplaySubject, of as observableOf } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { ReplaySubject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption } from "../../../app.constant";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { InventoryReportRequest } from "../../../models/api-models/Inventory";
@@ -12,6 +13,10 @@ import { GeneralService } from "../../../services/general.service";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { AppState } from "../../../store";
+import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
+import { GiddhDatepickerModule } from "../../../theme/giddh-datepicker/giddh-datepicker.module";
+import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
+import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 import * as dayjs from "dayjs";
 import * as customParseFormat from "dayjs/plugin/customParseFormat";
 
@@ -22,55 +27,88 @@ dayjs.extend(customParseFormat);
     templateUrl: "./batch-create-edit.component.html",
     styleUrls: ["./batch-create-edit.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    standalone: true,
+    imports: [
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        FormFieldsModule,
+        GiddhDatepickerModule,
+        TranslateDirectiveModule,
+        GiddhPageLoaderModule
+    ]
 })
 export class BatchCreateEditComponent implements OnInit, OnDestroy {
     /** RxJS teardown signal fired on destroy. */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Locale data from translation directive. */
-    public localeData: any = {};
+    public readonly localeData = signal<any>({});
     /** Common locale data from translation directive. */
-    public commonLocaleData: any = {};
+    public readonly commonLocaleData = signal<any>({});
     /** Create / update form. */
     public batchForm: FormGroup;
     /** True while loading details or saving. */
-    public isLoading: boolean = false;
+    public readonly isLoading = signal(false);
     /** True after a save attempt with an invalid form. */
-    public isFormSubmitted: boolean = false;
+    public readonly isFormSubmitted = signal(false);
     /** True when editing an existing batch. */
-    public isUpdateMode: boolean = false;
-    /** Route inventory type (`product` / `service` / `fixedassets`). */
-    public inventoryType: string = "";
-    /** Category unique name sent on save. */
-    public categoryUniqueName: string = "";
+    public readonly isUpdateMode = signal(false);
     /** Batch unique name in edit mode. */
     public batchUniqueName: string = "";
     /** Stock dropdown options. */
-    public stocks$: Observable<IOption[]> = observableOf([]);
+    public readonly stocks = signal<IOption[]>([]);
     /** Variant dropdown options. */
-    public variants$: Observable<IOption[]> = observableOf([]);
+    public readonly variants = signal<IOption[]>([]);
     /** Warehouse dropdown options. */
-    public warehouses$: Observable<IOption[]> = observableOf([]);
+    public readonly warehouses = signal<IOption[]>([]);
     /** Display label for the selected stock. */
-    public stockLabel: string = "";
+    public readonly stockLabel = signal("");
     /** Display label for the selected variant. */
-    public variantLabel: string = "";
+    public readonly variantLabel = signal("");
     /** Display label for the selected warehouse. */
-    public warehouseLabel: string = "";
+    public readonly warehouseLabel = signal("");
+    /** Manufacturing date value mirrored from the form (for computed min/expiry checks). */
+    private readonly manufacturingDateValue = signal<any>(null);
+    /** Expiry date value mirrored from the form (for computed date-range checks). */
+    private readonly expiryDateValue = signal<any>(null);
     /** Universal from date used by stock/variant report APIs. */
     private fromDate: string = "";
     /** Universal to date used by stock/variant report APIs. */
     private toDate: string = "";
 
+    /**
+     * Minimum selectable expiry date (manufacturing date).
+     *
+     * @readonly
+     * @type {Date | null}
+     * @memberof BatchCreateEditComponent
+     */
+    public readonly expiryMinDate = computed(() => this.toDayjs(this.manufacturingDateValue())?.toDate() ?? null);
+
+    /**
+     * True when manufacturing date is after expiry date.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchCreateEditComponent
+     */
+    public readonly isDateRangeInvalid = computed(() => {
+        const manufacturing = this.toDayjs(this.manufacturingDateValue());
+        const expiry = this.toDayjs(this.expiryDateValue());
+        if (!manufacturing || !expiry) {
+            return false;
+        }
+        return manufacturing.isAfter(expiry);
+    });
+
     constructor(
         private formBuilder: FormBuilder,
-        private cdr: ChangeDetectorRef,
         private inventoryService: InventoryService,
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
         @Optional() private dialogRef: MatDialogRef<BatchCreateEditComponent>,
-        @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: { inventoryType?: string; batchUniqueName?: string; batch?: BatchReportItem | BatchDetails }
+        @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: { batchUniqueName?: string; batch?: BatchReportItem | BatchDetails }
     ) {
         this.batchForm = this.formBuilder.group({
             batchNumber: ["", Validators.required],
@@ -86,65 +124,38 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Minimum selectable expiry date (manufacturing date).
-     *
-     * @readonly
-     * @type {Date}
-     * @memberof BatchCreateEditComponent
-     */
-    public get expiryMinDate(): Date | null {
-        return this.toDayjs(this.batchForm?.get("manufacturingDate")?.value)?.toDate() ?? null;
-    }
-
-    /**
-     * True when manufacturing date is after expiry date.
-     *
-     * @readonly
-     * @type {boolean}
-     * @memberof BatchCreateEditComponent
-     */
-    public get isDateRangeInvalid(): boolean {
-        return this.batchForm?.hasError("invalidDateRange");
-    }
-
-    /**
      * Initializes route params and dropdown data.
      *
      * @memberof BatchCreateEditComponent
      */
     public ngOnInit(): void {
-        this.inventoryType = this.dialogData?.inventoryType || "";
-        this.categoryUniqueName = this.inventoryType?.toLowerCase() === "fixedassets" ? "FIXED_ASSETS" : this.inventoryType?.toUpperCase();
         this.batchUniqueName = this.dialogData?.batchUniqueName || "";
-        this.isUpdateMode = !!this.batchUniqueName;
+        this.isUpdateMode.set(!!this.batchUniqueName);
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                if (this.categoryUniqueName) {
-                    this.loadStocks();
-                    if (this.batchForm.get("stockUniqueName")?.value) {
-                        this.loadVariants();
-                    }
+                this.loadStocks();
+                if (this.batchForm.get("stockUniqueName")?.value) {
+                    this.loadVariants();
                 }
             }
         });
 
-        this.loadStocks();
         this.loadWarehouses();
         if (this.dialogData?.batch) {
             this.applyFormFromDetails(this.dialogData.batch);
         }
-        if (this.isUpdateMode) {
+        if (this.isUpdateMode()) {
             this.getBatchDetails();
         }
 
-        this.batchForm.get("manufacturingDate")?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.cdr.detectChanges();
+        this.batchForm.get("manufacturingDate")?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            this.manufacturingDateValue.set(value);
         });
-        this.batchForm.get("expiryDate")?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.cdr.detectChanges();
+        this.batchForm.get("expiryDate")?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            this.expiryDateValue.set(value);
         });
     }
 
@@ -155,11 +166,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     public loadStocks(query: string = ""): void {
-        if (!this.categoryUniqueName) {
-            return;
-        }
         const stockReportRequest = new InventoryReportRequest();
-        stockReportRequest["inventoryType"] = this.categoryUniqueName;
         const queryParams = { from: this.fromDate, to: this.toDate, count: DROPDOWN_ITEMS_COUNT_LIMIT, page: 1, sort: "", sortBy: "" };
         this.inventoryService.getItemWiseReport(queryParams, stockReportRequest)
             .pipe(takeUntil(this.destroyed$))
@@ -176,8 +183,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
                     if (query) {
                         options = options.filter(option => option.label?.toLowerCase()?.includes(query.toLowerCase()));
                     }
-                    this.stocks$ = observableOf(this.ensureSelectedOption(options, this.batchForm.get("stockUniqueName")?.value, this.stockLabel));
-                    this.cdr.detectChanges();
+                    this.stocks.set(this.ensureSelectedOption(options, this.batchForm.get("stockUniqueName")?.value, this.stockLabel()));
                 }
             });
     }
@@ -190,12 +196,11 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      */
     public loadVariants(query: string = ""): void {
         const stockUniqueName = this.batchForm.get("stockUniqueName")?.value;
-        if (!this.categoryUniqueName || !stockUniqueName) {
-            this.variants$ = observableOf([]);
+        if (!stockUniqueName) {
+            this.variants.set([]);
             return;
         }
         const stockReportRequest = new InventoryReportRequest();
-        stockReportRequest["inventoryType"] = this.categoryUniqueName;
         stockReportRequest.stockUniqueNames = [stockUniqueName];
         const queryParams = { from: this.fromDate, to: this.toDate, count: DROPDOWN_ITEMS_COUNT_LIMIT, page: 1, sort: "", sortBy: "" };
         this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest)
@@ -213,8 +218,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
                     if (query) {
                         options = options.filter(option => option.label?.toLowerCase()?.includes(query.toLowerCase()));
                     }
-                    this.variants$ = observableOf(this.ensureSelectedOption(options, this.batchForm.get("variantUniqueName")?.value, this.variantLabel));
-                    this.cdr.detectChanges();
+                    this.variants.set(this.ensureSelectedOption(options, this.batchForm.get("variantUniqueName")?.value, this.variantLabel()));
                 }
             });
     }
@@ -226,16 +230,16 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     public selectStock(option?: IOption): void {
-        if (this.isUpdateMode) {
+        if (this.isUpdateMode()) {
             return;
         }
         const nextValue = option?.value ?? null;
         const previousValue = this.batchForm.get("stockUniqueName")?.value;
-        this.stockLabel = option?.label ?? "";
+        this.stockLabel.set(option?.label ?? "");
         this.batchForm.get("stockUniqueName")?.patchValue(nextValue);
         if (previousValue !== nextValue) {
             this.batchForm.get("variantUniqueName")?.patchValue(null);
-            this.variantLabel = "";
+            this.variantLabel.set("");
         }
         this.loadVariants();
     }
@@ -247,7 +251,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     public selectVariant(option?: IOption): void {
-        this.variantLabel = option?.label ?? "";
+        this.variantLabel.set(option?.label ?? "");
         this.batchForm.get("variantUniqueName")?.patchValue(option?.value ?? null);
     }
 
@@ -258,7 +262,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     public selectWarehouse(option?: IOption): void {
-        this.warehouseLabel = option?.label ?? "";
+        this.warehouseLabel.set(option?.label ?? "");
         this.batchForm.get("warehouseUniqueName")?.patchValue(option?.value ?? null);
     }
 
@@ -268,11 +272,12 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     public save(): void {
-        this.isFormSubmitted = true;
+        this.isFormSubmitted.set(true);
+        if (this.isDateRangeInvalid() || this.batchForm.hasError("invalidDateRange")) {
+            this.toaster.showSnackBar("error", this.localeData()?.invalid_date_range);
+            return;
+        }
         if (this.batchForm.invalid) {
-            if (this.isDateRangeInvalid) {
-                this.toaster.showSnackBar("error", this.localeData?.invalid_date_range);
-            }
             return;
         }
         const formValue = this.batchForm.value;
@@ -285,25 +290,25 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
             openingQuantity: Number(formValue.openingQuantity),
             rate: Number(formValue.rate),
             manufacturingDate: this.formatDate(formValue.manufacturingDate),
-            expiryDate: this.formatDate(formValue.expiryDate),
-            categoryUniqueNames: this.categoryUniqueName ? [this.categoryUniqueName] : []
+            expiryDate: this.formatDate(formValue.expiryDate)
         };
-        this.isLoading = true;
-        const request$ = this.isUpdateMode
+        this.isLoading.set(true);
+        const request$ = this.isUpdateMode()
             ? this.inventoryService.updateBatch(this.batchUniqueName, payload)
             : this.inventoryService.createBatch(payload);
-        request$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;
-            if (response?.status === "success") {
-                this.toaster.showSnackBar("success", this.isUpdateMode ? this.localeData?.batch_updated : this.localeData?.batch_created);
-                this.closeDialog(true);
-            } else {
-                this.toaster.errorToast(response?.message);
+        request$.pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response) => {
+                this.isLoading.set(false);
+                if (response?.status === "success") {
+                    this.toaster.showSnackBar("success", this.isUpdateMode() ? this.localeData()?.batch_updated : this.localeData()?.batch_created);
+                    this.closeDialog(true);
+                } else {
+                    this.toaster.errorToast(response?.message);
+                }
+            },
+            error: () => {
+                this.isLoading.set(false);
             }
-            this.cdr.detectChanges();
-        }, () => {
-            this.isLoading = false;
-            this.cdr.detectChanges();
         });
     }
 
@@ -332,13 +337,12 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
                     (currentBranch?.warehouses ?? branches.flatMap((branch: any) => branch?.warehouses ?? []))
                         .map((warehouse: any) => ({ label: warehouse?.name, value: warehouse?.uniqueName })),
                     this.batchForm.get("warehouseUniqueName")?.value,
-                    this.warehouseLabel
+                    this.warehouseLabel()
                 );
-                this.warehouses$ = observableOf(warehouses);
-                if (!this.isUpdateMode && warehouses?.length === 1 && !this.batchForm.get("warehouseUniqueName")?.value) {
+                this.warehouses.set(warehouses);
+                if (!this.isUpdateMode() && warehouses?.length === 1 && !this.batchForm.get("warehouseUniqueName")?.value) {
                     this.selectWarehouse(warehouses[0]);
                 }
-                this.cdr.detectChanges();
             }
         });
     }
@@ -351,20 +355,21 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      */
     private getBatchDetails(): void {
         if (!this.dialogData?.batch) {
-            this.isLoading = true;
+            this.isLoading.set(true);
         }
-        this.inventoryService.getBatch(this.batchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;
-            const details = this.extractBatchDetails(response);
-            if (details) {
-                this.applyFormFromDetails(details);
-            } else if (response?.message) {
-                this.toaster.errorToast(response.message);
+        this.inventoryService.getBatch(this.batchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response) => {
+                this.isLoading.set(false);
+                const details = this.extractBatchDetails(response);
+                if (details) {
+                    this.applyFormFromDetails(details);
+                } else if (response?.message) {
+                    this.toaster.errorToast(response.message);
+                }
+            },
+            error: () => {
+                this.isLoading.set(false);
             }
-            this.cdr.detectChanges();
-        }, () => {
-            this.isLoading = false;
-            this.cdr.detectChanges();
         });
     }
 
@@ -401,9 +406,11 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
         const openingAmount = (details as BatchDetails)?.openingAmount ?? warehouseEntry?.openingAmount;
         const rate = details?.rate ?? warehouseEntry?.rate
             ?? (openingQuantity ? (openingAmount ?? 0) / openingQuantity : null);
-        this.stockLabel = details?.stock?.name ?? this.stockLabel;
-        this.variantLabel = details?.variant?.name ?? this.variantLabel;
-        this.warehouseLabel = warehouseRef?.name ?? this.warehouseLabel;
+        this.stockLabel.set(details?.stock?.name ?? this.stockLabel());
+        this.variantLabel.set(details?.variant?.name ?? this.variantLabel());
+        this.warehouseLabel.set(warehouseRef?.name ?? this.warehouseLabel());
+        const manufacturingDate = this.parseDate(details?.manufacturingDate);
+        const expiryDate = this.parseDate(details?.expiryDate);
         this.batchForm.patchValue({
             batchNumber: details?.batchNumber ?? "",
             name: details?.name ?? "",
@@ -412,24 +419,19 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
             warehouseUniqueName: warehouseRef?.uniqueName ?? this.batchForm.get("warehouseUniqueName")?.value ?? "",
             openingQuantity: openingQuantity ?? "",
             rate: rate ?? "",
-            manufacturingDate: this.parseDate(details?.manufacturingDate),
-            expiryDate: this.parseDate(details?.expiryDate)
+            manufacturingDate,
+            expiryDate
         }, { emitEvent: false });
-        this.stocks$.pipe(take(1)).subscribe(options => {
-            this.stocks$ = observableOf(this.ensureSelectedOption(options ?? [], details?.stock?.uniqueName, this.stockLabel));
-        });
-        this.variants$.pipe(take(1)).subscribe(options => {
-            this.variants$ = observableOf(this.ensureSelectedOption(options ?? [], details?.variant?.uniqueName, this.variantLabel));
-        });
+        this.manufacturingDateValue.set(manufacturingDate);
+        this.expiryDateValue.set(expiryDate);
+        this.stocks.update(options => this.ensureSelectedOption(options ?? [], details?.stock?.uniqueName, this.stockLabel()));
+        this.variants.update(options => this.ensureSelectedOption(options ?? [], details?.variant?.uniqueName, this.variantLabel()));
         if (warehouseRef?.uniqueName) {
-            this.warehouses$.pipe(take(1)).subscribe(options => {
-                this.warehouses$ = observableOf(this.ensureSelectedOption(options ?? [], warehouseRef.uniqueName, this.warehouseLabel));
-            });
+            this.warehouses.update(options => this.ensureSelectedOption(options ?? [], warehouseRef.uniqueName, this.warehouseLabel()));
         }
         if (details?.stock?.uniqueName) {
             this.loadVariants();
         }
-        this.cdr.detectChanges();
     }
 
     /**

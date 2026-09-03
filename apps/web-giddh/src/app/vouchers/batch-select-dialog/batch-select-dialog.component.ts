@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { catchError, debounceTime, distinctUntilChanged, switchMap, take, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
@@ -10,6 +14,8 @@ import { BatchReportItem } from "../../models/interfaces/batch-report.interface"
 import { InventoryService } from "../../services/inventory.service";
 import { ToasterService } from "../../services/toaster.service";
 import { BatchCreateEditComponent } from "../../new-inventory/component/batch-create-edit/batch-create-edit.component";
+import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
+import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
 
 dayjs.extend(customParseFormat);
 
@@ -55,7 +61,17 @@ interface BatchSelectRow extends VoucherSelectedBatch {
     templateUrl: "./batch-select-dialog.component.html",
     styleUrls: ["./batch-select-dialog.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        FormFieldsModule,
+        GiddhPageLoaderModule,
+        BatchCreateEditComponent
+    ]
 })
 export class BatchSelectDialogComponent implements OnInit, OnDestroy {
     /** RxJS teardown signal fired on destroy. */

@@ -296,6 +296,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public deleteAttachedFileDialogRef: MatDialogRef<any>;
     /** Delete attached file dialog ref */
     public salesPersonDialogRef: MatDialogRef<any>;
+    /** Batch select dialog ref — keeps ledger panel open while aside is open */
+    public batchSelectDialogRef: MatDialogRef<any>;
     /** Reference variant dropdown */
     @ViewChild("variantDropdownRef") public variantDropdownRef: ReactiveDropdownFieldComponent;
     /** Reference warehouse dropdown */
@@ -1178,7 +1180,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxControl?.isTaxDialogOpen || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxControl?.isTaxDialogOpen || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.batchSelectDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
             return;
         }
 
@@ -1979,7 +1981,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         const warehouse = this.warehouses?.find(item => item.value === this.selectedWarehouse);
-        const dialogRef = this.dialog.open(BatchSelectDialogComponent, {
+        this.batchSelectDialogRef = this.dialog.open(BatchSelectDialogComponent, {
             ...ASIDE_PANE_CONFIG,
             data: {
                 stockName: this.currentTxn?.inventory?.stock?.name || this.currentTxn?.selectedAccount?.stock?.name,
@@ -1999,7 +2001,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
+        this.batchSelectDialogRef.afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
+            this.batchSelectDialogRef = undefined;
             if (!result || !this.currentTxn?.inventory) {
                 return;
             }
