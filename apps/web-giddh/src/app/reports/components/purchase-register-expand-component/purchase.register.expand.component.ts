@@ -8,7 +8,7 @@ import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
 import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -161,7 +161,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.getDetailedPurchaseRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
                 this.getDetailedPurchaseRequestFilter.stateCode = params.stateCode;
                 this.getDetailedPurchaseRequestFilter.countryCode = params.countryCode;
-                this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
+                this.getDetailedPurchaseRequestFilter.accountUniqueNames = isSelectedAllOption(registerReportFilters?.accountUniqueNames) ? [] : registerReportFilters?.accountUniqueNames;
+                this.getDetailedPurchaseRequestFilter.selectAll = isSelectedAllOption(registerReportFilters?.accountUniqueNames);
                 this.currentGroupBy.set(params.groupBy);
                 this.params = params;
                 this.setDataPickerDateRange();
@@ -535,6 +536,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             activeCompanyCountryCode: this.activeCompanyCountryCode,
             groupBy: groupBy,
             accountUniqueNames: accountUniqueNames,
+            selectAll: this.getDetailedPurchaseRequestFilter?.selectAll,
             salesPersonUniqueNames: groupBy === GroupBy.SalesPerson && salesPersonUniqueName ? [salesPersonUniqueName] : [],
             countryCodes: (groupBy === GroupBy.Country || groupBy === GroupBy.State) && countryCode ? [countryCode] : [],
             stateCodes: groupBy === GroupBy.State && stateCode ? [stateCode] : []

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ChangeDetectorRef, NgZone, ChangeDetectionStrategy, signal, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
-import { FormControl } from '@angular/forms';
 import { Angular21ChangeDetectionService } from '../services/angular21-change-detection.service';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 import { AppState } from '../store';
@@ -15,7 +14,7 @@ import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
-import { ASIDE_PANE_CONFIG, AppThemeClassEnum, GetBifurcationType, IOption } from '../app.constant';
+import { ASIDE_PANE_CONFIG, AppThemeClassEnum, GetBifurcationType, IOption, isSelectedAllOption } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 import { find, slice } from '../lodash-optimized';
 import { SalesPersonComponentStore } from '../shared/sales-person/utility/sales-person.store';
@@ -73,20 +72,12 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     protected readonly SbpSubType = SbpSubType;
     /** Sales person list for dropdown (raw observable from store, never search-filtered) */
     public salesPersonList$: any;
-    /** Full unfiltered sales person list — used for label resolution only */
-    private fullSalesPersonList: IOption[] = [];
-    /** Filtered sales person list for dropdown */
-    public filteredSalesPersonList = signal<IOption[]>([]);
-    /** Search control for sales person multi-select */
-    public salesPersonSearch: FormControl = new FormControl();
-    /** Sentinel value representing the "All" pseudo-option in the sales person dropdown */
-    public readonly ALL_SALES_PERSONS = '__ALL__';
+    /** Full unfiltered sales person list passed to the dropdown and used for label resolution */
+    public fullSalesPersonList: IOption[] = [];
     /** Sentinel value representing the "Others" (no sales person assigned) option */
     public readonly NO_SALES_PERSON = '__no_sales_person__';
-    /** Selected sales person unique names (real unique names only, no sentinel) */
+    /** Selected sales person unique names. All is stored as [SELECTED_ALL_OPTION]. */
     public selectedSalesPersonUniqueNames: string[] = [];
-    /** Whether the "All" pseudo-option is selected in the sales person dropdown */
-    public isAllSalesPersonSelected = signal<boolean>(false);
     /** Canvas for the Top Salespersons vertical bar chart */
     @ViewChild('sbpTopCanvas') private sbpTopCanvas!: ElementRef<HTMLCanvasElement>;
     /** Canvas for the New vs Old Sales grouped bar chart */
@@ -317,16 +308,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((list: any) => {
             const options: IOption[] = Array.isArray(list) ? list : [];
             this.fullSalesPersonList = [{ label: this.localeData?.others, value: this.NO_SALES_PERSON }, ...options];
-            this.filteredSalesPersonList.set(this.fullSalesPersonList);
-        });
-        this.salesPersonSearch.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((search: string) => {
-            this.salesPersonList$.pipe(take(1)).subscribe((list: any) => {
-                const options: IOption[] = Array.isArray(list) ? list : [];
-                const term = (search ?? '').toLowerCase();
-                const othersOption: IOption = { label: this.localeData?.others, value: this.NO_SALES_PERSON };
-                const allOptions: IOption[] = [othersOption, ...options];
-                this.filteredSalesPersonList.set(term ? allOptions.filter(o => o.label?.toLowerCase().includes(term)) : allOptions);
-            });
         });
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile?.baseCurrencySymbol) {
@@ -419,8 +400,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
         this.reportYear = this.selectedYear;
 
-        const realPersonSelections = (this.selectedSalesPersonUniqueNames ?? []).filter(v => v !== this.ALL_SALES_PERSONS);
-        const hasSalesPersonFilter = this.selectedSalesPersonUniqueNames.length > 0 && this.filteredSalesPersonList().length > 0;
+        const realPersonSelections = isSelectedAllOption(this.selectedSalesPersonUniqueNames) ? this.fullSalesPersonList.map((list: IOption) => list.value) : this.selectedSalesPersonUniqueNames;
+        const hasSalesPersonFilter = realPersonSelections?.length > 0 && this.fullSalesPersonList?.length > 0;
         this.NewVsOldInvoicesQueryRequest.salesPersonUniqueNames = hasSalesPersonFilter ? realPersonSelections : undefined;
 
         const apiCall$ = hasSalesPersonFilter
@@ -469,42 +450,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 .filter(u => u !== this.NO_SALES_PERSON && !returnedIds.has(u))
                 .map(u => list.find(o => o.value === u)?.label ?? u)
         );
-    }
-
-    /**
-     * Handles mat-select ngModelChange for the sales person dropdown.
-     * If the __ALL__ sentinel is in the new selection, selects all real persons and removes the sentinel.
-     * If __ALL__ was previously selected and is now absent, clears all.
-     * Otherwise syncs isAllSalesPersonSelected based on whether every person is selected.
-     *
-     * @param {string[]} selected
-     * @memberof NewVsOldInvoicesComponent
-     */
-    public onSalesPersonSelectionChange(selected: string[]): void {
-        const allValues = this.filteredSalesPersonList().map(o => o.value);
-        const allSentinel = this.ALL_SALES_PERSONS;
-        const hadAll = this.isAllSalesPersonSelected();
-        const hasAllNow = selected.includes(allSentinel);
-        const realSelections = selected.filter(v => v !== allSentinel);
-
-        if (hasAllNow && !hadAll) {
-            /** User just clicked All → select everything */
-            this.isAllSalesPersonSelected.set(true);
-            this.selectedSalesPersonUniqueNames = [...allValues, allSentinel];
-        } else if (!hasAllNow && hadAll) {
-            /** User clicked All to uncheck it and uncheck all individual selections */
-            this.isAllSalesPersonSelected.set(false);
-            if (selected.length === allValues.length) {
-                this.selectedSalesPersonUniqueNames = [];
-            } else {
-                this.selectedSalesPersonUniqueNames = realSelections;
-            }
-        } else {
-            /** Individual selection changed — auto-activate All if every person is now selected */
-            const allSelected = allValues.length > 0 && allValues.every(v => realSelections.includes(v));
-            this.isAllSalesPersonSelected.set(allSelected);
-            this.selectedSalesPersonUniqueNames = allSelected ? [...allValues, allSentinel] : realSelections;
-        }
     }
 
     public showErrorToast(msg) {

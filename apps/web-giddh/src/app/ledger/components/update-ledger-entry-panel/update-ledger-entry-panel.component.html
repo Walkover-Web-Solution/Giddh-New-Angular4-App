@@ -2145,10 +2145,11 @@
                                             [allowAddChip]="false"
                                             [commonLocaleData]="commonLocaleData"
                                             [appearance]="'outline'"
+                                            [(ngModel)]="vm.selectedLedger.tagNames"
                                             class="select-multiple-chiplist w-100"
                                             [name]="'tagNames'"
                                             [selectedValues]="vm.selectedLedger.tagNames"
-                                            (selectedOption)="vm.selectedLedger.tagNames = $event"
+                                            [showAllOption]="true"
                                         ></select-multiple-fields>
                                     </div>
                                 </mat-expansion-panel>

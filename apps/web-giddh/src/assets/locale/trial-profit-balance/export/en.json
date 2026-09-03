@@ -22,6 +22,7 @@
         "condensed_report": "Condensed Report",
         "account_wise_report": "Account Wise Report",
         "flat_report": "Flat Report",
+        "csv_semicolon_separator_note": "CSV exports use a semicolon (;) as the field separator.",
         "trial_balance": {
             "name": "Name",
             "opening_balance": "Opening Balance",

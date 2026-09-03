@@ -1,0 +1,39 @@
+<div appTranslate (commonLocaleData)="commonLocaleData = $event" (translationComplete)="onTranslationComplete()">
+    <mat-form-field [appearance]="appearance" [ngClass]="[cssClass, showError ? 'mat-form-field-invalid' : '']">
+        <mat-label>{{ label }}</mat-label>
+        <mat-select
+            [panelClass]="(panelClass ? panelClass + ' ' : '') + 'multi-select-dropdown-panel'"
+            [name]="name"
+            [multiple]="true"
+            [required]="required"
+            [disabled]="disabled"
+            [ngModel]="uiSelectedValues"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onSelectionChange($event)"
+            (openedChange)="onOpenedChange($event)"
+            (closed)="onClosed()"
+        >
+            <ngx-mat-select-search
+                [placeholderLabel]="placeholder || commonLocaleData?.app_search"
+                [noEntriesFoundLabel]="noEntriesFoundLabel || commonLocaleData?.app_no_result_found"
+                [formControl]="searchControl"
+                [clearSearchInput]="false"
+            >
+                <i class="icon-cross" ngxMatSelectSearchClear></i>
+            </ngx-mat-select-search>
+            <mat-select-trigger *ngIf="showAllOption && isAllSelected()">
+                <span>{{ allOptionLabel || commonLocaleData?.app_all }}</span>
+            </mat-select-trigger>
+            @if (showAllOption && !isSearching()) {
+                <mat-option [value]="allOptionValue">
+                    {{ allOptionLabel || commonLocaleData?.app_all }}
+                </mat-option>
+            }
+            @for (option of filteredOptions(); track option?.value) {
+                <mat-option [value]="option?.value" [disabled]="option?.disabled">
+                    {{ option?.label }}
+                </mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+</div>

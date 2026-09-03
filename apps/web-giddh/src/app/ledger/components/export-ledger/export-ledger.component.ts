@@ -282,6 +282,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     from: this.fromDate,
                     to: this.toDate
                 };
+                this.generalService.replaceSelectedAllOptions(postRequest);
                 this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
                 return;
             }
@@ -443,6 +444,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public onLedgerView(type: string): void {
-        this.fileType = type ? 'XLSX' : 'CSV';
+        this.fileType = type;
     }
 }

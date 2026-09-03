@@ -91,44 +91,24 @@
             ></input-field>
         </div>
         <div>
-            <mat-form-field appearance="outline" class="initial-height w-100 mb-3">
-                <mat-label>{{ commonLocaleData?.app_status }}</mat-label>
-                <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="balanceStatus">
-                    <mat-option value="paid">{{ commonLocaleData?.app_payment_status?.paid }}</mat-option>
-                    <mat-option value="partial-paid">{{ commonLocaleData?.app_payment_status?.partially_paid }}</mat-option>
-                    <mat-option value="unpaid">{{ commonLocaleData?.app_payment_status?.unpaid }}</mat-option>
-                    <mat-option value="hold">{{ commonLocaleData?.app_payment_status?.hold }}</mat-option>
-                    <mat-option value="cancel">{{ commonLocaleData?.app_payment_status?.cancel }}</mat-option>
-                </mat-select>
-            </mat-form-field>
+            <multi-select-dropdown
+                class="mb-3"
+                [name]="'balanceStatus'"
+                [label]="commonLocaleData?.app_status"
+                [options]="paymentStatusOptions"
+                [showAllOption]="true"
+                formControlName="balanceStatus"
+            ></multi-select-dropdown>
         </div>
-        <div>
-            <mat-form-field appearance="outline" class="initial-height w-100 mb-3" *ngIf="isEInvoiceEnabled">
-                <mat-label>{{ localeData?.e_invoice_status }}</mat-label>
-                <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="eInvoiceStatus">
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.yet_to_be_pushed">
-                        {{ localeData?.e_invoice_statuses_label?.yet_to_be_pushed }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.pushed">
-                        {{ localeData?.e_invoice_statuses_label?.pushed }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.push_initiated">
-                        {{ localeData?.e_invoice_statuses_label?.push_initiated }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.cancelled">
-                        {{ localeData?.e_invoice_statuses_label?.cancelled }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.mark_as_cancelled">
-                        {{ localeData?.e_invoice_statuses_label?.mark_as_cancelled }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.failed">
-                        {{ localeData?.e_invoice_statuses_label?.failed }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.na">
-                        {{ localeData?.e_invoice_statuses_label?.na }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+        <div *ngIf="isEInvoiceEnabled">
+            <multi-select-dropdown
+                class="mb-3"
+                [name]="'eInvoiceStatus'"
+                [label]="localeData?.e_invoice_status"
+                [options]="eInvoiceStatusDropdownOptions"
+                [showAllOption]="true"
+                formControlName="eInvoiceStatus"
+            ></multi-select-dropdown>
         </div>
         <mat-form-field appearance="outline" class="initial-height w-100">
             <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
@@ -181,33 +161,15 @@
                 formControlName="total"
             ></input-field>
         </div>
-        <div>
-            <mat-form-field appearance="outline" class="initial-height w-100 mb-3" *ngIf="isEInvoiceEnabled">
-                <mat-label>{{ localeData?.e_invoice_status }}</mat-label>
-                <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="eInvoiceStatus">
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.yet_to_be_pushed">
-                        {{ localeData?.e_invoice_statuses_label?.yet_to_be_pushed }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.pushed">
-                        {{ localeData?.e_invoice_statuses_label?.pushed }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.push_initiated">
-                        {{ localeData?.e_invoice_statuses_label?.push_initiated }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.cancelled">
-                        {{ localeData?.e_invoice_statuses_label?.cancelled }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.mark_as_cancelled">
-                        {{ localeData?.e_invoice_statuses_label?.mark_as_cancelled }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.failed">
-                        {{ localeData?.e_invoice_statuses_label?.failed }}
-                    </mat-option>
-                    <mat-option [value]="localeData?.e_invoice_statuses_label?.na">
-                        {{ localeData?.e_invoice_statuses_label?.na }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+        <div *ngIf="isEInvoiceEnabled">
+            <multi-select-dropdown
+                class="mb-3"
+                [name]="'eInvoiceStatus'"
+                [label]="localeData?.e_invoice_status"
+                [options]="eInvoiceStatusDropdownOptions"
+                [showAllOption]="true"
+                formControlName="eInvoiceStatus"
+            ></multi-select-dropdown>
         </div>
     </ng-container>
 
@@ -418,15 +380,14 @@
                 </div>
             </div>
             <div class="w-50">
-                <mat-form-field appearance="outline" class="initial-height w-100 mb-3">
-                    <mat-label>{{ commonLocaleData?.app_status }}</mat-label>
-                    <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="statuses">
-                        <mat-option value="open">{{ commonLocaleData?.app_payment_status?.open }}</mat-option>
-                        <mat-option value="converted">{{ commonLocaleData?.app_payment_status?.converted }}</mat-option>
-                        <mat-option value="partially-converted">{{ commonLocaleData?.app_payment_status?.partially_converted }}</mat-option>
-                        <mat-option value="expired">{{ commonLocaleData?.app_payment_status?.expired }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <multi-select-dropdown
+                    class="mb-3"
+                    [name]="'statuses'"
+                    [label]="commonLocaleData?.app_status"
+                    [options]="purchaseOrderStatusOptions"
+                    [showAllOption]="true"
+                    formControlName="statuses"
+                ></multi-select-dropdown>
             </div>
         </div>
         <div class="d-flex column-gap-1 mb-3 w-100">
@@ -454,23 +415,13 @@
 
     <!-- Sales Person -->
     <div class="mt-3" *ngIf="(salesPersonList$ | async)?.length">
-        <mat-form-field appearance="outline" class="initial-height w-100">
-            <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
-            <mat-select panelClass="py-0" name="salesPerson" [multiple]="true" [formControl]="searchForm?.controls?.salesPersonUniqueNames">
-                <mat-option class="mt-0">
-                    <ngx-mat-select-search
-                        [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                        [formControl]="salesPersonDropdown"
-                    >
-                        <i class="icon-cross" ngxMatSelectSearchClear></i>
-                    </ngx-mat-select-search>
-                </mat-option>
-                <mat-option *ngFor="let salesPerson of filteredSalesPersonList" [value]="salesPerson?.value">
-                    {{ salesPerson?.label }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+        <multi-select-dropdown
+            [name]="'salesPerson'"
+            [label]="commonLocaleData?.app_sales_person"
+            [options]="salesPersonList$ | async"
+            [showAllOption]="true"
+            [formControl]="searchForm?.controls?.salesPersonUniqueNames"
+        ></multi-select-dropdown>
     </div>
 
     <div class="d-flex justify-content-end column-gap-1 mt-3">

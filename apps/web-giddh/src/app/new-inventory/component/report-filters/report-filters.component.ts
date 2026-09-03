@@ -5,7 +5,7 @@ import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable, ReplaySubject, of as observableOf, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../../app.constant";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, isSelectedAllOption } from "../../../app.constant";
 import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest, StockTransactionReportRequestExport } from "../../../models/api-models/Inventory";
 import { NewInventoryAdvanceSearch } from "../new-inventory-advance-search/new-inventory-advance-search.component";
 import * as dayjs from "dayjs";
@@ -72,10 +72,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public selectedDynamicColumns: EventEmitter<any> = new EventEmitter();
     /** True if show advance search model*/
     public showAdvanceSearchModal: boolean = false;
-    /** This will use for instance of warehouses Dropdown */
-    public warehousesDropdown: UntypedFormControl = new UntypedFormControl();
-    /** This will use for instance of branches Dropdown */
-    public branchesDropdown: UntypedFormControl = new UntypedFormControl();
     /** Search field form control */
     public searchFilters: UntypedFormControl = new UntypedFormControl();
 /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -100,8 +96,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public warehouses: any[] = [];
     /** Hold branches checked  */
     public selectedBranch: any[] = [];
-    /**Hold branches */
-    public branches: any[] = [];
     /** Hold all warehouses */
     public allWarehouses: any[] = [];
     /** Hold all warehouses */
@@ -225,22 +219,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.getBranchWiseWarehouse();
-
-        this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            let branchesClone = cloneDeep(this.allBranches);
-            if (search) {
-                branchesClone = this.allBranches?.filter(branch => (branch.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
-            }
-            this.branches = branchesClone;
-        });
-
-        this.warehousesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            let warehousesClone = cloneDeep(this.currentWarehouses);
-            if (search) {
-                warehousesClone = this.currentWarehouses?.filter(warehouse => (warehouse.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
-            }
-            this.warehouses = warehousesClone;
-        });
 
         this.searchFilters?.valueChanges.pipe(
             debounceTime(700),
@@ -565,7 +543,15 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             mappedDynamicValues = this.displayedColumns;
         }
-        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: mappedDynamicValues, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse, stockReportRequestExport: this.stockReportRequestExport });
+        this.filters.emit(this.generalService.replaceSelectedAllOptions({
+            stockReportRequest: this.stockReportRequest,
+            balanceStockReportRequest: this.balanceStockReportRequest,
+            displayedColumns: mappedDynamicValues,
+            todaySelected: this.todaySelected,
+            showClearFilter: this.showClearFilter,
+            advanceSearchModalResponse: this.advanceSearchModalResponse,
+            stockReportRequestExport: this.stockReportRequestExport
+        }, true));
     }
 
     /**
@@ -657,7 +643,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if (response && response.body) {
                 this.allBranchWarehouses = response.body;
                 this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
-                this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
                 if (!this.isCompany && !this.isConsolidatedBranch) {
@@ -687,11 +672,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses);
             });
         }
-        if (this.selectedBranch?.length === 0) {
+        if (this.selectedBranch?.length === 0 || isSelectedAllOption(this.selectedBranch)) {
             this.warehouses = this.allWarehouses;
         } else {
             let warehouses = [];
-            this.branches?.filter(value => this.selectedBranch?.includes(value?.uniqueName))?.forEach((branches) => {
+            this.allBranches?.filter(value => this.selectedBranch?.includes(value?.uniqueName))?.forEach((branches) => {
                 warehouses = warehouses?.concat(branches?.warehouses);
             });
             this.warehouses = warehouses;

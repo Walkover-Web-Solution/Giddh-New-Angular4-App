@@ -70,12 +70,16 @@ export interface DayBookRequestModel {
     defaultVouchersLabel?: string;
     defaultTagsLabel?: string;
     defaultParticularsLabel?: string;
+    includeTag?: boolean;
+    salesPersonUniqueNames?: string[];
+    selectAll?: boolean;
 }
 
 export interface Inventory {
     includeInventory: boolean;
     inventories: any[];
     defaultInventoriesLabel?: any[];
+    selectAll?: boolean;
     quantity?: any;
     includeQuantity: boolean;
     quantityLessThan: boolean;

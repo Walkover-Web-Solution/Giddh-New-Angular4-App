@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DscCertificate } from './dsc.service';
 
-/** Supported "remember PIN" durations. `permanent` never expires. */
-export type DscPinDuration = '15m' | '2h' | '1d' | '7d' | 'permanent';
+/** Supported "remember PIN" durations. */
+export type DscPinDuration = '15m' | '2h' | '1d' | '7d' | '30d';
 
 /** Single encrypted PIN entry persisted in localStorage, keyed by certificate serial. */
 interface StoredPinEntry {
@@ -49,7 +49,7 @@ export class DscPinStorageService {
         '2h': 2 * 60 * 60 * 1000,
         '1d': 24 * 60 * 60 * 1000,
         '7d': 7 * 24 * 60 * 60 * 1000,
-        'permanent': null
+        '30d': 30 * 24 * 60 * 60 * 1000
     };
 
     /**
@@ -113,7 +113,7 @@ export class DscPinStorageService {
         }
         const serial = certificate.serial;
         const entry = this.readStore()[serial];
-        const duration = entry?.duration ?? (entry?.expiresAt === null ? 'permanent' : '15m');
+        const duration = entry?.duration ?? '15m';
         console.info('[DSC Storage] Remembered PIN found with duration:', duration);
         return { pin, duration };
     }
@@ -136,12 +136,16 @@ export class DscPinStorageService {
         if (!entry) {
             return null;
         }
-        // Device binding: only reuse when the exact same certificate is present.
-        if (entry.certId !== certificate.certId || entry.serial !== serial) {
+        // Device binding: only reuse when the same certificate is present. Matching is by
+        // serial because Windows can enumerate the same token with different certIds
+        // (CSP provider path casing) across reads, while the serial stays stable.
+        if (entry.serial !== serial) {
             this.forgetPin(certificate);
             return null;
         }
-        if (entry.expiresAt !== null && Date.now() > entry.expiresAt) {
+        // Entries without an expiry are legacy "permanent" entries from before fixed
+        // durations were enforced - they are no longer supported and count as expired.
+        if (entry.expiresAt === null || Date.now() > entry.expiresAt) {
             this.forgetPin(certificate);
             return null;
         }
@@ -177,11 +181,12 @@ export class DscPinStorageService {
         if (!entry) {
             return false;
         }
-        if (entry.expiresAt !== null && Date.now() > entry.expiresAt) {
+        if (entry.expiresAt === null || Date.now() > entry.expiresAt) {
             this.forgetPin(certificate);
             return false;
         }
-        return entry.certId === certificate.certId;
+        // Same serial-based device binding as decryptPin (certId varies across Windows reads).
+        return entry.serial === serial;
     }
 
     /**

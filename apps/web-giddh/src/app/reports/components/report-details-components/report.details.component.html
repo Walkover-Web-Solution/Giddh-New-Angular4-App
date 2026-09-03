@@ -108,31 +108,15 @@
                 }
                 @if (reportForm?.get('groupBy')?.value === groupByEnum.SalesPerson) {
                     <div class="dropdown-width">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
-                            <mat-select
-                                panelClass="py-0"
-                                name="salesPerson"
-                                [multiple]="true"
-                                (selectionChange)="saveSalesPersonFilter()"
-                                (closed)="!filteredSalesPersonList()?.length ? salesPerson.reset() : null"
-                                formControlName="salesPersonUniqueNames"
-                            >
-                                <ngx-mat-select-search
-                                    [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                    [formControl]="salesPerson"
-                                    [clearSearchInput]="false"
-                                >
-                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                </ngx-mat-select-search>
-                                @for (salesPerson of filteredSalesPersonList(); track salesPerson?.value) {
-                                    <mat-option [value]="salesPerson?.value">
-                                        {{ salesPerson?.label }}
-                                    </mat-option>
-                                }
-                            </mat-select>
-                        </mat-form-field>
+                        <multi-select-dropdown
+                            [label]="commonLocaleData?.app_sales_person"
+                            [placeholder]="commonLocaleData?.app_sales_person_placeholder"
+                            [options]="allOptions.salesPerson"
+                            [showAllOption]="true"
+                            name="salesPerson"
+                            formControlName="salesPersonUniqueNames"
+                            (selectionChange)="saveSalesPersonFilter()"
+                        ></multi-select-dropdown>
                     </div>
                 }
                 @if (reportForm?.get('groupBy')?.value === groupByEnum.State) {
@@ -149,61 +133,29 @@
                     </div>
                     @if (reportForm?.get('countryCode')?.value) {
                         <div class="dropdown-width">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>{{ commonLocaleData?.app_state }}</mat-label>
-                                <mat-select
-                                    panelClass="py-0"
-                                    name="state"
-                                    [multiple]="true"
-                                    formControlName="stateCodes"
-                                    (selectionChange)="saveStateCodesFilter()"
-                                    (closed)="!filteredStateList().length ? stateSearch.reset() : null"
-                                >
-                                    <ngx-mat-select-search
-                                        [placeholderLabel]="commonLocaleData?.app_select"
-                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                        [formControl]="stateSearch"
-                                        [clearSearchInput]="false"
-                                    >
-                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                    </ngx-mat-select-search>
-                                    @for (state of filteredStateList(); track state?.value) {
-                                        <mat-option [value]="state?.value">
-                                            {{ state?.label }}
-                                        </mat-option>
-                                    }
-                                </mat-select>
-                            </mat-form-field>
+                            <multi-select-dropdown
+                                [label]="commonLocaleData?.app_state"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [options]="allOptions.state"
+                                [showAllOption]="true"
+                                name="state"
+                                formControlName="stateCodes"
+                                (selectionChange)="saveStateCodesFilter()"
+                            ></multi-select-dropdown>
                         </div>
                     }
                 }
                 @if (reportForm?.get('groupBy')?.value === groupByEnum.Country) {
                     <div class="dropdown-width">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{ localeData?.country || 'Country' }}</mat-label>
-                            <mat-select
-                                panelClass="py-0"
-                                name="country"
-                                [multiple]="true"
-                                formControlName="countryCodes"
-                                (selectionChange)="saveCountryCodesFilter()"
-                                (closed)="!filteredCountryList()?.length ? countrySearch.reset() : null"
-                            >
-                                <ngx-mat-select-search
-                                    [placeholderLabel]="commonLocaleData?.app_select"
-                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                    [formControl]="countrySearch"
-                                    [clearSearchInput]="false"
-                                >
-                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                </ngx-mat-select-search>
-                                @for (country of filteredCountryList(); track country?.value) {
-                                    <mat-option [value]="country?.value">
-                                        {{ country?.label }}
-                                    </mat-option>
-                                }
-                            </mat-select>
-                        </mat-form-field>
+                        <multi-select-dropdown
+                            [label]="localeData?.country || 'Country'"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [options]="allOptions.country"
+                            [showAllOption]="true"
+                            name="country"
+                            formControlName="countryCodes"
+                            (selectionChange)="saveCountryCodesFilter()"
+                        ></multi-select-dropdown>
                     </div>
                 }
                 @if (reportForm?.get('groupBy')?.value !== groupByEnum.Duration) {
@@ -229,31 +181,19 @@
                     </div>
                 }
                 <div class="dropdown-width">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{ commonLocaleData?.app_account }}</mat-label>
-                        <mat-select
-                            panelClass="py-0"
-                            name="account"
-                            [multiple]="true"
-                            formControlName="accountUniqueNames"
-                            (selectionChange)="saveAccountFilter()"
-                            (closed)="accountReset()"
-                        >
-                            <ngx-mat-select-search
-                                [placeholderLabel]="commonLocaleData?.app_select"
-                                [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                [formControl]="account"
-                                [clearSearchInput]="false"
-                            >
-                                <i class="icon-cross" ngxMatSelectSearchClear></i>
-                            </ngx-mat-select-search>
-                            @for (account of (accountList$ | async)?.results || []; track account?.uniqueName) {
-                                <mat-option [value]="account?.uniqueName">
-                                    {{ account?.name }}
-                                </mat-option>
-                            }
-                        </mat-select>
-                    </mat-form-field>
+                    <multi-select-dropdown
+                        [label]="commonLocaleData?.app_account"
+                        [placeholder]="commonLocaleData?.app_select"
+                        [options]="(accountList$ | async)?.results"
+                        [optionValue]="'uniqueName'"
+                        [optionLabel]="'name'"
+                        [enableDynamicSearch]="true"
+                        [showAllOption]="true"
+                        name="account"
+                        formControlName="accountUniqueNames"
+                        (selectionChange)="saveAccountFilter()"
+                        (dynamicSearchedQuery)="getAccounts($event)"
+                    ></multi-select-dropdown>
                 </div>
             </div>
             <button

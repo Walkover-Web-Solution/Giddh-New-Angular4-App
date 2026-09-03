@@ -1054,6 +1054,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             });
         }
 
+        this.isDscPreloading = !this.dscService.hasCachedCertificates();
         this.dscService.preloadCertificates().pipe(
             takeUntil(this.destroyed$),
             finalize(() => {
@@ -1540,7 +1541,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public getVoucherBalances(): void {
         if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote || this.voucherType === VoucherTypeEnum.purchase || this.voucherType === VoucherTypeEnum.payment || this.voucherType === VoucherTypeEnum.receipt) {
-            this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: cloneDeep(this.advanceFilters) });
+            this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true) });
         }
     }
 
@@ -1553,11 +1554,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private getAllVouchers(): void {
         if (this.voucherTypes?.length) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+                this.componentStore.getPreviousProformaEstimates({ model: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true), type: this.voucherType });
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                this.componentStore.getPurchaseOrders({ request: cloneDeep(this.advanceFilters) });
+                this.componentStore.getPurchaseOrders({ request: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true) });
             } else {
-                this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+                this.componentStore.getPreviousVouchers({ model: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true), type: this.voucherType });
             }
         }
     }
