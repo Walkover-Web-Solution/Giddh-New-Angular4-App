@@ -5,8 +5,27 @@ import { GeneralService } from './general.service';
 import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { DSC_API } from './apiurls/dsc.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { BehaviorSubject, from, merge, Observable, of, throwError } from 'rxjs';
-import { catchError, delay, filter, finalize, map, retryWhen, scan, shareReplay, switchMap, take, takeWhile, tap } from 'rxjs/operators';
+import {
+    BehaviorSubject,
+    from,
+    merge,
+    Observable,
+    of,
+    throwError,
+    timer
+} from 'rxjs';
+
+import {
+    catchError,
+    filter,
+    finalize,
+    map,
+    shareReplay,
+    switchMap,
+    take,
+    takeWhile,
+    tap
+} from 'rxjs/operators';
 
 /** Single DSC certificate returned by the Giddh bridge extension. */
 export interface DscCertificate {
@@ -100,30 +119,43 @@ export class DscService {
     }
 
     /**
-     * Waits briefly for the Giddh DSC Bridge extension to inject `window.GiddhBridge`.
-     * This is needed because on a hard page reload the Angular app can boot before the
-     * browser extension has finished injecting its content-script global.
+     * Waits for the Giddh DSC Bridge extension to inject `window.GiddhBridge`.
+     *
+     * This is needed because on a hard page reload the Angular application can boot
+     * before the browser extension has finished injecting its content-script global.
+     *
+     * The bridge is checked immediately and then polled at the specified interval.
+     * If the bridge becomes available at any point, polling stops immediately and
+     * the observable emits `true`.
+     *
+     * If the bridge is not available within the maximum wait time, polling stops
+     * and the observable emits `false`.
      *
      * @private
-     * @param {number} [maxWaitMs=2000] Maximum time to wait for the bridge
+     * @param {number} [maxWaitMs=5000] Maximum time to wait for the bridge
      * @param {number} [intervalMs=100] Polling interval
-     * @returns {Observable<boolean>}
+     * @returns {Observable<boolean>} `true` if the bridge is available, otherwise `false`
      * @memberof DscService
      */
-    private waitForBridge(maxWaitMs: number = 2000, intervalMs: number = 100): Observable<boolean> {
-        if (this.isBridgeAvailable()) {
-            return of(true);
-        }
-        return of(null).pipe(
-            delay(intervalMs),
+    private waitForBridge(
+        maxWaitMs: number = 5000,
+        intervalMs: number = 100
+    ): Observable<boolean> {
+        const bridgeAvailable$ = timer(0, intervalMs).pipe(
             map(() => this.isBridgeAvailable()),
-            retryWhen((errors) =>
-                errors.pipe(
-                    scan((attemptCount) => attemptCount + 1, 0),
-                    takeWhile((attemptCount) => attemptCount * intervalMs < maxWaitMs),
-                    delay(intervalMs)
-                )
-            )
+            filter((available) => available),
+            take(1)
+        );
+
+        const timeout$ = timer(maxWaitMs).pipe(
+            map(() => false)
+        );
+
+        return merge(
+            bridgeAvailable$,
+            timeout$
+        ).pipe(
+            take(1)
         );
     }
 
@@ -193,6 +225,24 @@ export class DscService {
     }
 
     /**
+     * Removes the persisted certificate list from localStorage. The in-memory cache is
+     * intentionally left untouched so the current dialog session can still render the
+     * previously known certificates as "not connected" badges.
+     *
+     * @private
+     * @memberof DscService
+     */
+    private clearStoredCertificates(): void {
+        try {
+            localStorage.removeItem(DscService.CERTIFICATES_STORE_KEY);
+        } catch {
+            // ignore private-browsing / quota errors
+        }
+        console.info('[DSC] Stored certificate list cleared due to read error');
+    }
+
+
+    /**
      * Fetches the real certificate list from the token on parent page init and keeps
      * the cache/localStorage in sync. Runs in the background: on read error the cached
      * list is intentionally kept so the dialog can show those devices as "not connected"
@@ -208,7 +258,9 @@ export class DscService {
         return this.waitForBridge().pipe(
             switchMap((available) => {
                 if (!available) {
-                    console.info('[DSC] preloadCertificates skipped - bridge not available after wait');
+                    console.info(
+                        '[DSC] preloadCertificates skipped - bridge not available after wait'
+                    );
                     return of([]);
                 }
                 console.info('[DSC] preloadCertificates started');
@@ -217,10 +269,17 @@ export class DscService {
                 }
                 return this.syncCertificates().pipe(
                     tap((certificates) => {
-                        console.info('[DSC] preloadCertificates loaded real devices:', certificates.length);
+                        console.info(
+                            '[DSC] preloadCertificates loaded real devices:',
+                            certificates.length
+                        );
                     }),
                     catchError((error) => {
-                        console.error('[DSC] preloadCertificates failed - keeping cached list:', error?.message);
+                        console.error(
+                            '[DSC] preloadCertificates failed - keeping cached list:',
+                            error?.message
+                        );
+                        this.clearStoredCertificates();
                         return of([]);
                     })
                 );
@@ -296,9 +355,7 @@ export class DscService {
                     this.certificateSyncCompleted = true;
                     this.certificateSyncSucceeded = false;
                     this.certificateSyncError = error?.message || null;
-                    if (this.certificatesCache$.getValue() === null) {
-                        this.certificatesCache$.next([]);
-                    }
+                    this.clearStoredCertificates();
                     return throwError(() => error);
                 }),
                 finalize(() => { this.pendingCertificatesRead$ = null; }),
