@@ -13,10 +13,36 @@
         } @else {
             @if (dscCertificates.length === 0) {
                 <p class="text-muted">{{ dscPinError || localeData?.no_certificates }}</p>
-                @if (showDownloadButton) {
-                    <button class="mt-3" matButton="filled" (click)="goToDownload()">
-                        {{ localeData?.download_native_host }}
-                    </button>
+                @if (isNativeHostMissing) {
+                    <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
+                        @if (dscOs === 'Windows') {
+                            <a matButton="filled" [href]="dscDownloadUrl" download>
+                                {{ commonLocaleData?.app_dsc?.download_windows }}
+                            </a>
+                        }
+                        @if (dscOs === 'MacOS') {
+                            <a matButton="filled" [href]="dscDownloadUrl" download>
+                                {{ commonLocaleData?.app_dsc?.download_mac }}
+                            </a>
+                        }
+                        @if (dscOs === 'Linux') {
+                            <a matButton="filled" [href]="dscDownloadUrl" download>
+                                {{ commonLocaleData?.app_dsc?.download_linux }}
+                            </a>
+                        }
+                        @if (!dscOs) {
+                            <a matButton="filled" [href]="dscWindowsAppUrl" download>
+                                {{ commonLocaleData?.app_dsc?.download_windows }}
+                            </a>
+                            <a matButton="filled" [href]="dscMacAppUrl" download>
+                                {{ commonLocaleData?.app_dsc?.download_mac }}
+                            </a>
+                            <a matButton="filled" [href]="dscLinuxAppUrl" download>
+                                {{ commonLocaleData?.app_dsc?.download_linux }}
+                            </a>
+                        }
+                        <p class="text-muted font-size-12 mb-0 w-100">{{ localeData?.reload_page_hint }}</p>
+                    </div>
                 }
             }
             @if (dscCertificates.length > 0) {
@@ -97,8 +123,14 @@
     </mat-dialog-content>
     <mat-dialog-actions class="dialog-footer d-flex justify-content-end column-gap-1">
         <button (click)="closeDscPinDialog()" matButton="outlined">{{ commonLocaleData?.app_cancel }}</button>
-        <button (click)="submitDscPin()" [disabled]="!dscPin || selectedDscCertificateIndex === null || isBusy" matButton="filled">
-            {{ commonLocaleData?.app_confirm }}
-        </button>
+        @if (isExtensionMissing) {
+            <button class="ml-0 min-w-150" matButton="filled" (click)="goToDownload()">
+                {{ localeData?.go_to_download }}
+            </button>
+        } @else {
+            <button (click)="submitDscPin()" [disabled]="!dscPin || selectedDscCertificateIndex === null || isBusy" matButton="filled">
+                {{ commonLocaleData?.app_confirm }}
+            </button>
+        }
     </mat-dialog-actions>
 </div>

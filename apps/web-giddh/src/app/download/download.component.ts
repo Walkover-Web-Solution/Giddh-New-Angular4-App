@@ -5,6 +5,7 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
+import { GIDDH_DSC_WINDOWS_APP_URL, GIDDH_DSC_MAC_APP_URL, GIDDH_DSC_LINUX_APP_URL, GIDDH_DSC_EXTENSION_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 
 @Component({
 selector: 'download',
@@ -32,6 +33,10 @@ export class DownloadComponent implements OnInit, OnDestroy {
     public dscWindowsAppUrl: string = '';
     /** Giddh DSC bridge installer for macOS */
     public dscMacAppUrl: string = '';
+    /** Giddh DSC bridge installer for Linux/Ubuntu */
+    public dscLinuxAppUrl: string = '';
+    /** Detected operating system used to show the correct installer button */
+    public dscDownloadOs: SUPPORTED_OPERATING_SYSTEMS | null = null;
     /** Giddh support email address */
     public supportEmail: string = '';
     /** Giddh support phone number */
@@ -74,9 +79,11 @@ export class DownloadComponent implements OnInit, OnDestroy {
      * @memberof DownloadComponent
      */
     private setDscDownloadUrls(): void {
-        this.dscWindowsAppUrl = 'https://s3-ap-south-1.amazonaws.com/hello-electron-app/prod/windows/latest/GiddhDSCBridge-Setup.exe';
-        this.dscMacAppUrl = 'https://s3-ap-south-1.amazonaws.com/hello-electron-app/prod/macos/latest/GiddhDSCBridge.dmg';
-        this.dscExtensionUrl = 'https://chromewebstore.google.com/detail/giddh-dsc-bridge/pbnmboohmdoknhpflpmeocccojkkjgng';
+        this.dscWindowsAppUrl = GIDDH_DSC_WINDOWS_APP_URL;
+        this.dscMacAppUrl = GIDDH_DSC_MAC_APP_URL;
+        this.dscLinuxAppUrl = GIDDH_DSC_LINUX_APP_URL;
+        this.dscExtensionUrl = GIDDH_DSC_EXTENSION_URL;
+        this.dscDownloadOs = this.generalService.getOperatingSystem();
     }
 
     /**

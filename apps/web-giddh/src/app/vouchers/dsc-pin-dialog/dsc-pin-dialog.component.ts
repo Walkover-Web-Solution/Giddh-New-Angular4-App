@@ -4,10 +4,11 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EMPTY, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { switchMap, catchError, tap } from 'rxjs/operators';
-import { IOption } from '../../app.constant';
+import { IOption, SUPPORTED_OPERATING_SYSTEMS, GIDDH_DSC_WINDOWS_APP_URL, GIDDH_DSC_MAC_APP_URL, GIDDH_DSC_LINUX_APP_URL } from '../../app.constant';
 import { DscCertificate, DscService } from '../../services/dsc.service';
 import { DscPinDuration, DscPinStorageService } from '../../services/dsc-pin-storage.service';
 import { ToasterService } from '../../services/toaster.service';
+import { GeneralService } from '../../services/general.service';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
 
 /** Data required to open the DSC PIN dialog. */
@@ -67,8 +68,18 @@ export class DscPinDialogComponent implements OnDestroy {
     public durationOptions: IOption[] = [];
     /** Current signing stage (null when not signing); drives the busy overlay message */
     public signingStage: DscSigningStage = null;
-    /** True when the current error is a missing bridge/native-host setup issue, so a download action is offered. */
-    public showDownloadButton = false;
+    /** True when the current error is a missing bridge extension, so a go-to-download action is offered. */
+    public isExtensionMissing = false;
+    /** True when the current error is a missing native host, so an OS-specific download action is offered. */
+    public isNativeHostMissing = false;
+    /** Detected operating system used to pick the native-host download link. */
+    public dscOs: SUPPORTED_OPERATING_SYSTEMS | null = null;
+    /** URL of the native-host installer matching the user's OS. */
+    public dscDownloadUrl: string = '';
+    /** Fallback installer URLs shown when the OS cannot be detected. */
+    public dscWindowsAppUrl: string = GIDDH_DSC_WINDOWS_APP_URL;
+    public dscMacAppUrl: string = GIDDH_DSC_MAC_APP_URL;
+    public dscLinuxAppUrl: string = GIDDH_DSC_LINUX_APP_URL;
     /** True when the current PIN was auto-filled from storage (used to forget on failure) */
     private usedRememberedPin: boolean = false;
     /** Exact PIN value auto-filled from storage; distinguishes a real user edit from the ngModel echo fired when the value is written programmatically */
@@ -86,7 +97,8 @@ export class DscPinDialogComponent implements OnDestroy {
         private dscPinStorage: DscPinStorageService,
         private changeDetectorRef: ChangeDetectorRef,
         private toasterService: ToasterService,
-        private router: Router
+        private router: Router,
+        private generalService: GeneralService
     ) {
         this.voucher = data.voucher;
         this.voucherType = data.voucherType;
@@ -156,6 +168,13 @@ export class DscPinDialogComponent implements OnDestroy {
             this.rememberDurationControl.setValue(this.pendingRememberDuration, { emitEvent: false });
             this.pendingRememberDuration = null;
         }
+        if (this.isExtensionMissing) {
+            this.dscPinError = this.localeData?.bridge_not_found || this.dscPinError;
+        } else if (this.isNativeHostMissing) {
+            this.dscPinError = this.localeData?.native_host_missing || this.dscPinError;
+        } else if (this.dscPinError) {
+            this.dscPinError = this.getFriendlyErrorMessage(this.dscPinError, 'generic_error');
+        }
     }
 
     /**
@@ -187,7 +206,21 @@ export class DscPinDialogComponent implements OnDestroy {
      */
     private loadCertificates(force: boolean = false): void {
         this.dscPinError = '';
-        this.showDownloadButton = false;
+        this.isExtensionMissing = false;
+        this.isNativeHostMissing = false;
+        this.dscOs = null;
+        this.dscDownloadUrl = '';
+
+        if (!this.dscService.isBridgeAvailable()) {
+            console.info('[DSC Dialog] Bridge extension not available');
+            this.dscCertificates = [];
+            this.isExtensionMissing = true;
+            this.isDscCertificateLoading = false;
+            this.dscPinError = this.getFriendlyErrorMessage(null, 'bridge_not_found');
+            this.changeDetectorRef.detectChanges();
+            return;
+        }
+
         if (force) {
             this.dscService.clearCertificatesCache();
         }
@@ -244,7 +277,11 @@ export class DscPinDialogComponent implements OnDestroy {
      * @memberof DscPinDialogComponent
      */
     private applyFailedReadState(message: string | null | undefined): void {
-        this.showDownloadButton = false;
+        this.isExtensionMissing = false;
+        this.isNativeHostMissing = false;
+        this.dscOs = null;
+        this.dscDownloadUrl = '';
+
         if (this.dscCertificates.length) {
             this.dscCertificates = this.dscCertificates.map((certificate) => ({ ...certificate, connected: false }));
             this.selectedDscCertificateIndex = null;
@@ -256,25 +293,31 @@ export class DscPinDialogComponent implements OnDestroy {
             this.dscPin = '';
             this.usedRememberedPin = false;
             this.rememberedPinValue = null;
-            if (this.isBridgeOrHostError(message)) {
-                this.showDownloadButton = true;
-                this.dscPinError = (this.localeData?.bridge_not_found || message)?.replace(/<[^>]*>/g, '');
+
+            if (!this.dscService.isBridgeAvailable() || this.isBridgeNotAvailableError(message)) {
+                this.isExtensionMissing = true;
+                this.dscPinError = this.getFriendlyErrorMessage(message, 'bridge_not_found');
+            } else if (this.isNativeHostError(message)) {
+                this.isNativeHostMissing = true;
+                this.dscPinError = this.getFriendlyErrorMessage(message, 'native_host_missing');
+                this.setDscDownloadUrl();
+            } else if (this.isDriverMissingError(message)) {
+                this.dscPinError = this.getFriendlyErrorMessage(message, 'driver_missing');
             } else {
-                this.dscPinError = message || this.localeData?.device_not_connected;
+                this.dscPinError = this.getFriendlyErrorMessage(message, 'device_not_connected');
             }
         }
     }
 
     /**
-     * Determines whether an error message indicates a missing bridge extension or
-     * native host installation issue rather than a disconnected token.
+     * Determines whether an error message indicates the Giddh DSC bridge extension is not present.
      *
      * @private
      * @param {(string | null | undefined)} message Error message to inspect
      * @returns {boolean}
      * @memberof DscPinDialogComponent
      */
-    private isBridgeOrHostError(message: string | null | undefined): boolean {
+    private isBridgeNotAvailableError(message: string | null | undefined): boolean {
         if (!message) {
             return false;
         }
@@ -282,12 +325,120 @@ export class DscPinDialogComponent implements OnDestroy {
         return (
             normalized.includes('bridge not available') ||
             normalized.includes('bridge not found') ||
+            normalized.includes('giddh dsc bridge not detected')
+        );
+    }
+
+    /**
+     * Determines whether an error message indicates the native host application is missing
+     * while the bridge extension itself is installed. This deliberately excludes token/driver
+     * "not installed" messages so those are shown as driver issues instead.
+     *
+     * @private
+     * @param {(string | null | undefined)} message Error message to inspect
+     * @returns {boolean}
+     * @memberof DscPinDialogComponent
+     */
+    private isNativeHostError(message: string | null | undefined): boolean {
+        if (!message) {
+            return false;
+        }
+        const normalized = message.toLowerCase();
+        return (
             normalized.includes('native host') ||
             normalized.includes('native messaging host') ||
-            normalized.includes('forbidden') ||
-            normalized.includes('could not establish') ||
-            normalized.includes('not installed')
+            normalized.includes('native application not found')
         );
+    }
+
+    /**
+     * Determines whether an error message indicates a missing or broken token driver/CSP.
+     *
+     * @private
+     * @param {(string | null | undefined)} message Error message to inspect
+     * @returns {boolean}
+     * @memberof DscPinDialogComponent
+     */
+    private isDriverMissingError(message: string | null | undefined): boolean {
+        if (!message) {
+            return false;
+        }
+        const normalized = message.toLowerCase();
+        return (
+            normalized.includes('driver') ||
+            normalized.includes('dll') ||
+            normalized.includes('.dll') ||
+            normalized.includes('csp') ||
+            normalized.includes('pkcs') ||
+            normalized.includes('cryptoki') ||
+            normalized.includes('no_token') ||
+            normalized.includes('no token') ||
+            /\bckr_/.test(normalized) ||
+            /\bscard_/.test(normalized) ||
+            /\b0x[0-9a-f]{6,}\b/.test(normalized)
+        );
+    }
+
+    /**
+     * Maps a raw extension/native-host error to a short, non-technical, translated message.
+     * The raw message is always logged to the console; only the friendly text is returned.
+     *
+     * @private
+     * @param {(string | null | undefined)} rawMessage Raw error from the bridge/extension/API
+     * @param {string} fallbackKey Locale key to use when the error type cannot be determined
+     * @returns {string}
+     * @memberof DscPinDialogComponent
+     */
+    private getFriendlyErrorMessage(rawMessage: string | null | undefined, fallbackKey: string): string {
+        if (rawMessage) {
+            console.info('[DSC Dialog] Raw extension error (console only):', rawMessage);
+        }
+
+        if (!rawMessage) {
+            return this.localeData?.[fallbackKey] || this.localeData?.generic_error || 'Something went wrong. Please try again.';
+        }
+
+        const normalized = rawMessage.toLowerCase();
+        let key = fallbackKey;
+
+        if (this.isBridgeNotAvailableError(rawMessage) || normalized.includes('giddh dsc bridge not detected')) {
+            key = 'bridge_not_found';
+        } else if (this.isNativeHostError(rawMessage)) {
+            key = 'native_host_missing';
+        } else if (normalized.includes('incorrect pin') || normalized.includes('wrong pin') || normalized.includes('invalid pin') || normalized.includes('pin incorrect')) {
+            key = 'incorrect_pin';
+        } else if (this.isDriverMissingError(rawMessage)) {
+            key = 'driver_missing';
+        } else if (normalized.includes('certificate') || normalized.includes('certificates')) {
+            key = 'certificate_error';
+        } else if (normalized.includes('sign') || normalized.includes('signature')) {
+            key = 'signing_error';
+        }
+
+        return this.localeData?.[key] || this.localeData?.[fallbackKey] || this.localeData?.generic_error || 'Something went wrong. Please try again.';
+    }
+
+    /**
+     * Sets the OS-specific native-host download URL based on the current operating system.
+     *
+     * @private
+     * @memberof DscPinDialogComponent
+     */
+    private setDscDownloadUrl(): void {
+        this.dscOs = this.generalService.getOperatingSystem();
+        switch (this.dscOs) {
+            case SUPPORTED_OPERATING_SYSTEMS.Windows:
+                this.dscDownloadUrl = GIDDH_DSC_WINDOWS_APP_URL;
+                break;
+            case SUPPORTED_OPERATING_SYSTEMS.MacOS:
+                this.dscDownloadUrl = GIDDH_DSC_MAC_APP_URL;
+                break;
+            case SUPPORTED_OPERATING_SYSTEMS.Linux:
+                this.dscDownloadUrl = GIDDH_DSC_LINUX_APP_URL;
+                break;
+            default:
+                this.dscDownloadUrl = '';
+        }
     }
 
     /**
@@ -462,25 +613,31 @@ export class DscPinDialogComponent implements OnDestroy {
     /**
      * Starts the DSC signing flow.
      *
-     * When the current PIN is the unmodified one auto-filled from encrypted storage, it was
-     * already verified when saved, so the token certificate re-read and the dummy-hash PIN
-     * verification are skipped entirely - signing proceeds with the cached certificate data
-     * and the device is only used to sign the real hash.
-     *
-     * For a new or edited PIN the certificate is first re-read from the token to make sure
-     * the device is still plugged in (no server API is called when it is not), followed by
-     * the dummy-hash PIN verification.
+     * - Remembered PIN unchanged: sign directly (already verified when saved).
+     * - New/edited PIN with Remember ON: re-read the token, dummy-hash verify the PIN,
+     *   save it, then sign.
+     * - New/edited PIN with Remember OFF: re-read the token, then sign directly
+     *   without dummy-hash verification.
      *
      * @memberof DscPinDialogComponent
      */
     public submitDscPin(): void {
         const certificate = this.getSelectedCertificate();
         console.info('[DSC Dialog] Confirm clicked. Selected certificate:', { subjectCn: certificate?.subjectCn, serial: certificate?.serial, certId: certificate?.certId });
-        if (!this.dscPin || !certificate || !certificate.connected || !this.voucher || this.isBusy) {
+
+        if (!this.dscPin || !this.voucher || this.isBusy) {
             return;
         }
+        if (!certificate) {
+            this.dscPinError = this.getFriendlyErrorMessage(null, 'certificate_error');
+            return;
+        }
+        if (!certificate.connected) {
+            this.dscPinError = this.getFriendlyErrorMessage(null, 'device_not_connected');
+            return;
+        }
+
         this.dscPinError = '';
-        this.showDownloadButton = false;
 
         if (!this.rememberPin) {
             // Confirmed with the remember toggle off -> forget the saved PIN for this certificate.
@@ -509,40 +666,63 @@ export class DscPinDialogComponent implements OnDestroy {
                     this.dscCertificates = certificates.map((cert) => ({ ...cert, connected: true }));
                     this.selectedDscCertificateIndex = certificates.length ? 0 : null;
                     this.applyRememberedPin();
-                    this.dscPinError = this.localeData?.device_not_connected;
+                    this.dscPinError = this.getFriendlyErrorMessage(null, 'device_not_connected');
                     this.changeDetectorRef.detectChanges();
                     return EMPTY;
                 }
 
-                console.info('[DSC Dialog] Selected device is connected. Proceeding to PIN verification.');
+                if (!this.rememberPin) {
+                    console.info('[DSC Dialog] Remember toggle off - skipping dummy PIN verification.');
+                    this.signingStage = 'preparing';
+                    return this.runSigning(freshCertificate);
+                }
+
+                console.info('[DSC Dialog] New PIN with remember ON - verifying with dummy hash before saving.');
                 this.signingStage = 'verifying_pin';
                 this.changeDetectorRef.detectChanges();
                 return this.dscService.verifyPin(freshCertificate, this.dscPin).pipe(
                     switchMap(() => {
-                        if (this.rememberPin) {
-                            this.dscPinStorage.savePin(freshCertificate, this.dscPin, this.rememberDurationControl.value as DscPinDuration);
-                        } else {
-                            this.dscPinStorage.forgetPin(freshCertificate);
-                        }
+                        this.dscPinStorage.savePin(freshCertificate, this.dscPin, this.rememberDurationControl.value as DscPinDuration);
                         return this.runSigning(freshCertificate);
                     }),
                     catchError((error) => {
                         this.signingStage = null;
                         this.dscPin = '';
-                        this.dscPinError = error?.message || this.localeData?.incorrect_pin;
+                        this.dscPinError = this.getFriendlyErrorMessage(error?.message, 'incorrect_pin');
                         this.changeDetectorRef.detectChanges();
                         return EMPTY;
                     })
                 );
-            })
-        ).subscribe({
-            error: (error) => {
+            }),
+            catchError((error) => {
                 this.signingStage = null;
-                this.dscPinError = error?.message || this.localeData?.device_not_connected;
-                this.showDownloadButton = this.dscCertificates.length === 0 && this.isBridgeOrHostError(this.dscPinError);
-                this.changeDetectorRef.detectChanges();
+                this.handleSetupError(error?.message);
+                return EMPTY;
+            })
+        ).subscribe();
+    }
+
+    /**
+     * Handles bridge/native-host/device errors that occur while reading the token before
+     * signing starts. The raw extension message is logged and a friendly message is shown.
+     *
+     * @private
+     * @param {(string | null | undefined)} rawMessage Raw error from the bridge
+     * @memberof DscPinDialogComponent
+     */
+    private handleSetupError(rawMessage: string | null | undefined): void {
+        this.dscPinError = this.getFriendlyErrorMessage(rawMessage, 'device_not_connected');
+        if (this.dscCertificates.length === 0) {
+            this.isExtensionMissing = false;
+            this.isNativeHostMissing = false;
+            if (!this.dscService.isBridgeAvailable() || this.isBridgeNotAvailableError(rawMessage)) {
+                this.isExtensionMissing = true;
+            } else if (this.isNativeHostError(rawMessage)) {
+                this.isNativeHostMissing = true;
+                this.setDscDownloadUrl();
             }
-        });
+        }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -578,16 +758,25 @@ export class DscPinDialogComponent implements OnDestroy {
                         return this.dscService.finishDscSigning(prepareResponse.body.nonce, signature);
                     }),
                     catchError((error) => {
-                        // Token sign failed -> wrong PIN, locked token or device unplugged. Keep dialog open
-                        // and show the bridge error verbatim (e.g. "Device not connected").
+                        // Token sign failed -> wrong PIN, locked token, missing driver, or bridge disappeared.
+                        // Keep the dialog open and show only a friendly message; log the raw error.
                         this.signingStage = null;
-                        if (this.usedRememberedPin) {
-                            this.dscPinStorage.forgetPin(certificate);
-                            this.usedRememberedPin = false;
-                            this.rememberedPinValue = null;
+                        const rawMessage = error?.message || '';
+                        console.error('[DSC Dialog] Token sign failed:', rawMessage);
+
+                        if (!this.dscService.isBridgeAvailable() || this.isBridgeNotAvailableError(rawMessage)) {
+                            this.dscCertificates = [];
+                            this.isExtensionMissing = true;
+                            this.dscPinError = this.getFriendlyErrorMessage(rawMessage, 'bridge_not_found');
+                        } else {
+                            if (this.usedRememberedPin) {
+                                this.dscPinStorage.forgetPin(certificate);
+                                this.usedRememberedPin = false;
+                                this.rememberedPinValue = null;
+                            }
+                            this.dscPin = '';
+                            this.dscPinError = this.getFriendlyErrorMessage(rawMessage, 'incorrect_pin');
                         }
-                        this.dscPin = '';
-                        this.dscPinError = error?.message || this.localeData?.incorrect_pin;
                         this.changeDetectorRef.detectChanges();
                         return EMPTY;
                     })
@@ -606,9 +795,9 @@ export class DscPinDialogComponent implements OnDestroy {
             }),
             catchError((error) => {
                 this.signingStage = null;
-                const message = error?.message || '';
+                console.error('[DSC Dialog] Prepare/finish signing failed:', error?.message);
                 this.closeDscPinDialog();
-                this.toasterService.showSnackBar('error', message || this.localeData?.download_error);
+                this.toasterService.showSnackBar('error', this.localeData?.download_error || 'An error occurred while downloading signed invoice.');
                 return EMPTY;
             })
         );

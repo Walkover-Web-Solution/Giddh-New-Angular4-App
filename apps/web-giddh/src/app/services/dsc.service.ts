@@ -6,7 +6,7 @@ import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { DSC_API } from './apiurls/dsc.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { BehaviorSubject, from, merge, Observable, of, throwError } from 'rxjs';
-import { catchError, filter, finalize, map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, delay, filter, finalize, map, retryWhen, scan, shareReplay, switchMap, take, takeWhile, tap } from 'rxjs/operators';
 
 /** Single DSC certificate returned by the Giddh bridge extension. */
 export interface DscCertificate {
@@ -100,6 +100,34 @@ export class DscService {
     }
 
     /**
+     * Waits briefly for the Giddh DSC Bridge extension to inject `window.GiddhBridge`.
+     * This is needed because on a hard page reload the Angular app can boot before the
+     * browser extension has finished injecting its content-script global.
+     *
+     * @private
+     * @param {number} [maxWaitMs=2000] Maximum time to wait for the bridge
+     * @param {number} [intervalMs=100] Polling interval
+     * @returns {Observable<boolean>}
+     * @memberof DscService
+     */
+    private waitForBridge(maxWaitMs: number = 2000, intervalMs: number = 100): Observable<boolean> {
+        if (this.isBridgeAvailable()) {
+            return of(true);
+        }
+        return of(null).pipe(
+            delay(intervalMs),
+            map(() => this.isBridgeAvailable()),
+            retryWhen((errors) =>
+                errors.pipe(
+                    scan((attemptCount) => attemptCount + 1, 0),
+                    takeWhile((attemptCount) => attemptCount * intervalMs < maxWaitMs),
+                    delay(intervalMs)
+                )
+            )
+        );
+    }
+
+    /**
      * Loads the last-read certificate list from localStorage so the dialog can render
      * immediately without waiting for the token. Returns an empty array when nothing
      * is stored or the data is unreadable.
@@ -177,21 +205,25 @@ export class DscService {
      * @memberof DscService
      */
     public preloadCertificates(force: boolean = false): Observable<DscCertificate[]> {
-        if (!this.isBridgeAvailable()) {
-            console.info('[DSC] preloadCertificates skipped - bridge not available');
-            return of([]);
-        }
-        console.info('[DSC] preloadCertificates started');
-        if (force) {
-            this.clearCertificatesCache();
-        }
-        return this.syncCertificates().pipe(
-            tap((certificates) => {
-                console.info('[DSC] preloadCertificates loaded real devices:', certificates.length);
-            }),
-            catchError((error) => {
-                console.error('[DSC] preloadCertificates failed - keeping cached list:', error?.message);
-                return of([]);
+        return this.waitForBridge().pipe(
+            switchMap((available) => {
+                if (!available) {
+                    console.info('[DSC] preloadCertificates skipped - bridge not available after wait');
+                    return of([]);
+                }
+                console.info('[DSC] preloadCertificates started');
+                if (force) {
+                    this.clearCertificatesCache();
+                }
+                return this.syncCertificates().pipe(
+                    tap((certificates) => {
+                        console.info('[DSC] preloadCertificates loaded real devices:', certificates.length);
+                    }),
+                    catchError((error) => {
+                        console.error('[DSC] preloadCertificates failed - keeping cached list:', error?.message);
+                        return of([]);
+                    })
+                );
             })
         );
     }
