@@ -530,7 +530,6 @@ export class DscPinDialogComponent implements OnDestroy {
                 this.changeDetectorRef.detectChanges();
             } else {
                 console.info('[DSC Dialog] No remembered PIN found for certificate:', certificate.certId);
-                this.rememberPin = false;
                 this.applyRememberDuration('15m');
                 this.changeDetectorRef.detectChanges();
             }
@@ -769,12 +768,6 @@ export class DscPinDialogComponent implements OnDestroy {
                             this.isExtensionMissing = true;
                             this.dscPinError = this.getFriendlyErrorMessage(rawMessage, 'bridge_not_found');
                         } else {
-                            if (this.usedRememberedPin) {
-                                this.dscPinStorage.forgetPin(certificate);
-                                this.usedRememberedPin = false;
-                                this.rememberedPinValue = null;
-                            }
-                            this.dscPin = '';
                             this.dscPinError = this.getFriendlyErrorMessage(rawMessage, 'incorrect_pin');
                         }
                         this.changeDetectorRef.detectChanges();

@@ -20,7 +20,6 @@
     "go_to_download": "Go to Download",
     "download_native_app": "Download native app",
     "reload_page": "Reload page",
-    "reload_page_hint": "After installing the native app, reload the page. If it is already installed, reload the page.",
     "driver_missing": "Your token driver is missing or not responding. Please install the driver and try again.",
     "certificate_error": "Could not read DSC certificates. Please make sure the token is connected.",
     "signing_error": "Signing failed. Please try again.",
