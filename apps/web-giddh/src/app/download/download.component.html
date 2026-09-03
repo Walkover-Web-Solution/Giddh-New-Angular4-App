@@ -356,28 +356,45 @@
                     </div>
 
                     <div class="dsc-download-buttons d-flex flex-wrap justify-content-center column-gap-1 row-gap-1">
-                        <a
-                            matButton="filled"
-                            class="dsc-step-button d-inline-flex align-items-center justify-content-center"
-                            [href]="dscWindowsAppUrl"
-                            download
-                        >
-                            <span class="d-inline-flex align-items-center column-gap-1">
-                                <i class="icon-windows"></i>
-                                <span>{{ commonLocaleData?.app_dsc?.download_windows }}</span>
-                            </span>
-                        </a>
-                        <a
-                            matButton="filled"
-                            class="dsc-step-button d-inline-flex align-items-center justify-content-center"
-                            [href]="dscMacAppUrl"
-                            download
-                        >
-                            <span class="d-inline-flex align-items-center column-gap-1">
-                                <i class="icon-mac"></i>
-                                <span>{{ commonLocaleData?.app_dsc?.download_mac }}</span>
-                            </span>
-                        </a>
+                        @if (dscDownloadOs === 'Windows' || !dscDownloadOs) {
+                            <a
+                                matButton="filled"
+                                class="dsc-step-button d-inline-flex align-items-center justify-content-center"
+                                [href]="dscWindowsAppUrl"
+                                download
+                            >
+                                <span class="d-inline-flex align-items-center column-gap-1">
+                                    <i class="icon-windows"></i>
+                                    <span>{{ commonLocaleData?.app_dsc?.download_windows }}</span>
+                                </span>
+                            </a>
+                        }
+                        @if (dscDownloadOs === 'MacOS' || !dscDownloadOs) {
+                            <a
+                                matButton="filled"
+                                class="dsc-step-button d-inline-flex align-items-center justify-content-center"
+                                [href]="dscMacAppUrl"
+                                download
+                            >
+                                <span class="d-inline-flex align-items-center column-gap-1">
+                                    <i class="icon-mac"></i>
+                                    <span>{{ commonLocaleData?.app_dsc?.download_mac }}</span>
+                                </span>
+                            </a>
+                        }
+                        @if (dscDownloadOs === 'Linux' || !dscDownloadOs) {
+                            <a
+                                matButton="filled"
+                                class="dsc-step-button d-inline-flex align-items-center justify-content-center"
+                                [href]="dscLinuxAppUrl"
+                                download
+                            >
+                                <span class="d-inline-flex align-items-center column-gap-1">
+                                    <i class="icon-download"></i>
+                                    <span>{{ commonLocaleData?.app_dsc?.download_linux }}</span>
+                                </span>
+                            </a>
+                        }
                     </div>
                 </div>
             </div>

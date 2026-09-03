@@ -723,6 +723,7 @@
         "bridge_note": "This application acts as a bridge between your system and Giddh to enable digital signing.",
         "download_windows": "Download for Windows",
         "download_mac": "Download for Mac",
+        "download_linux": "Download for Ubuntu/Linux",
         "why_need_title": "Why do I need these?",
         "why_need_desc": "The extension and application work together to help you securely sign documents and comply with digital signature standards.",
         "contact_support": "Contact our support team for assistance."
