@@ -63,9 +63,6 @@
 
                 <div class="mt-2">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <!-- <mat-checkbox [(ngModel)]="rememberPin" [name]="'rememberPin'">
-                            {{ localeData?.remember_pin }}
-                        </mat-checkbox> -->
                         <p>{{ localeData?.remember_pin }}</p>
                         <mat-slide-toggle
                             aria-label="remember dsc password"
@@ -91,7 +88,9 @@
         }
     </mat-dialog-content>
     <mat-dialog-actions class="dialog-footer d-flex justify-content-end column-gap-1">
-        <button (click)="closeDscPinDialog()" matButton="outlined">{{ commonLocaleData?.app_cancel }}</button>
+        @if (!isBusy) {
+            <button (click)="closeDscPinDialog()" matButton="outlined">{{ commonLocaleData?.app_close }}</button>
+        }
         @if (isExtensionMissing) {
             <button class="ml-0 min-w-150" matButton="filled" (click)="goToDownload()">
                 {{ localeData?.go_to_download }}
@@ -125,8 +124,8 @@
                     </a>
                 }
             </div>
-        } @else {
-            <button (click)="submitDscPin()" [disabled]="!dscPin || selectedDscCertificateIndex === null || isBusy" matButton="filled">
+        } @else if (!isBusy && dscCertificates.length > 0) {
+            <button (click)="submitDscPin()" [disabled]="!dscPin || selectedDscCertificateIndex === null" matButton="filled">
                 {{ commonLocaleData?.app_confirm }}
             </button>
         }
