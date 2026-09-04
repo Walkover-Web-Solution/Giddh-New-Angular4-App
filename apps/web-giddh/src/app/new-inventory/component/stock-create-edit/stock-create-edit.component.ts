@@ -32,6 +32,11 @@ import { ServiceConfig } from "../../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 import { DataOperationEnum } from "../../../shared/Enums/common.enum";
+import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
+import * as dayjs from "dayjs";
+import * as customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(customParseFormat);
 
 @Component({
     selector: "stock-create-edit",
@@ -163,7 +168,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                             uniqueName: ""
                         },
                         openingQuantity: 0,
-                        openingAmount: 0
+                        openingAmount: 0,
+                        batches: []
                     }
                 ]
             }
@@ -177,6 +183,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public defaultStockGroupUniqueName: string = "";
     /** True if variant is available */
     public isVariantAvailable: boolean = false;
+    /** True when company has batch tracking enabled. */
+    public batchTrackingEnabled: boolean = false;
     /** Holds index of currently editing custom field */
     public inlineEditCustomField: number = 0;
     /** List of warehouses */
@@ -388,6 +396,13 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             if (profile) {
                 this.companyCurrencySymbol = profile.baseCurrencySymbol;
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            }
+        });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.batchTrackingEnabled = !!activeCompany.batchTrackingEnabled;
+                this.ensureDefaultStockBatch();
+                this.changeDetection.detectChanges();
             }
         });
 
@@ -832,7 +847,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                             uniqueName: this.stockForm.stockUnitUniqueName
                         },
                         openingQuantity: 0,
-                        openingAmount: 0
+                        openingAmount: 0,
+                        batches: []
                     }
                 ]
             };
@@ -889,7 +905,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                             uniqueName: ""
                         },
                         openingQuantity: 0,
-                        openingAmount: 0
+                        openingAmount: 0,
+                        batches: []
                     }
                 ]
             });
@@ -1277,6 +1294,17 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             } else {
                 variant['unitRates'] = salesUnitRate?.concat(purchaseUnitRate);
             }
+            const batches = this.getWarehouseBatches(variant)
+                .filter(batch => this.isCompleteBatch(batch))
+                .map(batch => ({
+                    uniqueName: batch.uniqueName,
+                    batchNumber: String(batch.batchNumber).trim(),
+                    name: String(batch.name).trim(),
+                    manufacturingDate: this.formatBatchDate(batch.manufacturingDate),
+                    expiryDate: this.formatBatchDate(batch.expiryDate),
+                    openingQuantity: Number(batch.openingQuantity) || 0,
+                    openingAmount: Number(String(batch.openingAmount ?? "").toString().replace(/,/g, "")) || 0
+                }));
             variant.warehouseBalance = [
                 {
                     warehouse: {
@@ -1287,10 +1315,16 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                         name: variant.warehouseBalance[0].stockUnit?.name,
                         uniqueName: variant.warehouseBalance[0].stockUnit?.uniqueName
                     },
-                    openingQuantity: variant.warehouseBalance[0]?.openingQuantity,
-                    openingAmount: variant.warehouseBalance[0]?.openingAmount
+                    openingQuantity: batches.length
+                        ? batches.reduce((total, batch) => total + (Number(batch.openingQuantity) || 0), 0)
+                        : variant.warehouseBalance[0]?.openingQuantity,
+                    openingAmount: batches.length
+                        ? batches.reduce((total, batch) => total + (Number(batch.openingAmount) || 0), 0)
+                        : variant.warehouseBalance[0]?.openingAmount,
+                    batches
                 }
-            ]
+            ];
+            delete variant.showBatches;
 
             delete variant.salesInformation;
             delete variant.purchaseInformation;
@@ -1413,6 +1447,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                         ? `data:image/${variant?.image?.fileType};base64,${variant?.image?.uploadedFile}`
                         : null;
                     variant['isUploading'] = false;
+                    this.normalizeVariantBatches(variant);
                     return variant;
                 });
 
@@ -1763,6 +1798,232 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @param {NgForm} stockCreateEditForm
      * @memberof StockCreateEditComponent
      */
+    /**
+     * Empty batch row used on the variant table.
+     *
+     * @return {*}  {*}
+     * @memberof StockCreateEditComponent
+     */
+    /**
+     * Batches stored on the first warehouse balance row.
+     *
+     * @param {*} variant Variant row
+     * @return {*}  {any[]}
+     * @memberof StockCreateEditComponent
+     */
+    public getWarehouseBatches(variant: any): any[] {
+        if (!variant) {
+            return [];
+        }
+        if (!variant.warehouseBalance?.[0]) {
+            variant.warehouseBalance = [{ batches: [] }];
+        }
+        if (!Array.isArray(variant.warehouseBalance[0].batches)) {
+            variant.warehouseBalance[0].batches = variant.batches ?? [];
+        }
+        delete variant.batches;
+        return variant.warehouseBalance[0].batches;
+    }
+
+    public createEmptyVariantBatch(): any {
+        return {
+            uniqueName: undefined,
+            batchNumber: "",
+            name: "",
+            manufacturingDate: null,
+            expiryDate: null,
+            openingQuantity: null,
+            openingAmount: null
+        };
+    }
+
+    /**
+     * Number of batches that have a number or unique name.
+     *
+     * @param {*} variant Variant row
+     * @return {*}  {number}
+     * @memberof StockCreateEditComponent
+     */
+    public getVariantBatchCount(variant: any): number {
+        return this.getWarehouseBatches(variant).filter(batch => this.isCompleteBatch(batch)).length;
+    }
+
+    /**
+     * True when both batch number and batch name are filled.
+     *
+     * @param {*} batch Batch row
+     * @return {*}  {boolean}
+     * @memberof StockCreateEditComponent
+     */
+    public isCompleteBatch(batch: any): boolean {
+        return !!(String(batch?.batchNumber ?? "").trim() && String(batch?.name ?? "").trim());
+    }
+
+    /**
+     * Batch number and name are required when opening qty is more than zero.
+     *
+     * @param {*} batch Batch row
+     * @return {*}  {boolean}
+     * @memberof StockCreateEditComponent
+     */
+    public isBatchNameRequired(batch: any): boolean {
+        return Number(batch?.openingQuantity) > 0;
+    }
+
+    /**
+     * Open or close the inline batch rows for a variant.
+     *
+     * @param {*} variant Variant row
+     * @memberof StockCreateEditComponent
+     */
+    public toggleVariantBatches(variant: any): void {
+        if (!variant) {
+            return;
+        }
+        const batches = this.getWarehouseBatches(variant);
+        if (!variant.showBatches) {
+            if (!batches.length) {
+                batches.push(this.createEmptyVariantBatch());
+            }
+            variant.showBatches = true;
+        } else {
+            variant.showBatches = false;
+        }
+    }
+
+    /**
+     * Add another batch row under the variant.
+     *
+     * @param {*} variant Variant row
+     * @memberof StockCreateEditComponent
+     */
+    /**
+     * Keep one empty batch row on a stock that has no variants.
+     *
+     * @private
+     * @memberof StockCreateEditComponent
+     */
+    private ensureDefaultStockBatch(): void {
+        if (!this.batchTrackingEnabled || this.isVariantAvailable) {
+            return;
+        }
+        const variant = this.stockForm?.variants?.[0];
+        if (!variant) {
+            return;
+        }
+        const batches = this.getWarehouseBatches(variant);
+        if (!batches.length) {
+            batches.push(this.createEmptyVariantBatch());
+        }
+    }
+
+    public addVariantBatchRow(variant: any): void {
+        if (!variant) {
+            return;
+        }
+        this.getWarehouseBatches(variant).push(this.createEmptyVariantBatch());
+        variant.showBatches = true;
+    }
+
+    /**
+     * Remove a batch row and refresh opening quantity.
+     *
+     * @param {*} variant Variant row
+     * @param {number} index Batch row index
+     * @memberof StockCreateEditComponent
+     */
+    public removeVariantBatchRow(variant: any, index: number): void {
+        const batches = this.getWarehouseBatches(variant);
+        batches.splice(index, 1);
+        if (!batches.length) {
+            variant.showBatches = false;
+        }
+        this.syncVariantOpeningFromBatches(variant);
+    }
+
+    /**
+     * Set variant opening quantity from the sum of batch opening quantities.
+     *
+     * @param {*} variant Variant row
+     * @memberof StockCreateEditComponent
+     */
+    public syncVariantOpeningFromBatches(variant: any): void {
+        if (!variant?.warehouseBalance?.[0]) {
+            return;
+        }
+        const batches = this.getWarehouseBatches(variant);
+        batches.forEach(batch => {
+            if (Number(batch?.openingQuantity) < 0) {
+                batch.openingQuantity = 0;
+            }
+        });
+        const completeBatches = batches.filter(batch => this.isCompleteBatch(batch));
+        variant.warehouseBalance[0].openingQuantity = completeBatches.reduce((total, batch) => {
+            return total + (Number(batch?.openingQuantity) || 0);
+        }, 0);
+        variant.warehouseBalance[0].openingAmount = completeBatches.reduce((total, batch) => {
+            return total + (Number(String(batch?.openingAmount ?? "").toString().replace(/,/g, "")) || 0);
+        }, 0);
+    }
+
+    /**
+     * Format a datepicker value as `DD-MM-YYYY`.
+     *
+     * @param {*} value Datepicker value
+     * @return {*}  {string}
+     * @memberof StockCreateEditComponent
+     */
+    public formatBatchDate(value: any): string {
+        if (!value) {
+            return "";
+        }
+        if (typeof value === "object") {
+            return dayjs(value).format(GIDDH_DATE_FORMAT);
+        }
+        return value;
+    }
+
+    /**
+     * Parse an API date string into a Date for the datepicker.
+     *
+     * @private
+     * @param {string} value Date string
+     * @return {*}  {(Date | null)}
+     * @memberof StockCreateEditComponent
+     */
+    private parseBatchDate(value: string): Date | null {
+        if (!value) {
+            return null;
+        }
+        const parsed = dayjs(value, GIDDH_DATE_FORMAT, true);
+        return parsed.isValid() ? parsed.toDate() : null;
+    }
+
+    /**
+     * Normalize `batches` already present on a variant from get-stock.
+     *
+     * @private
+     * @param {*} variant Variant row
+     * @memberof StockCreateEditComponent
+     */
+    private normalizeVariantBatches(variant: any): void {
+        const sourceBatches = variant.warehouseBalance?.[0]?.batches?.length
+            ? variant.warehouseBalance[0].batches
+            : (variant.batches ?? []);
+        const mapped = sourceBatches.map(batch => ({
+            uniqueName: batch.uniqueName,
+            batchNumber: batch.batchNumber ?? "",
+            name: batch.name ?? "",
+            manufacturingDate: this.parseBatchDate(batch.manufacturingDate),
+            expiryDate: this.parseBatchDate(batch.expiryDate),
+            openingQuantity: batch.openingQuantity ?? null,
+            openingAmount: batch.openingAmount ?? null
+        }));
+        const batches = this.getWarehouseBatches(variant);
+        batches.splice(0, batches.length, ...mapped);
+        variant.showBatches = false;
+    }
+
     public resetForm(stockCreateEditForm: NgForm): void {
         stockCreateEditForm?.form?.controls?.hsn_sac?.setValue('HSN');
         this.stockForm = {
@@ -1873,7 +2134,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                                 uniqueName: ""
                             },
                             openingQuantity: 0,
-                            openingAmount: 0
+                            openingAmount: 0,
+                            batches: []
                         }
                     ]
                 }
@@ -1882,6 +2144,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             customFields: []
         };
         this.isFormSubmitted = false;
+        this.ensureDefaultStockBatch();
         this.stockGroupUniqueName = this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : this.stockGroups?.length ? this.stockGroups[0]?.value : '';
         this.stockForm.stockUnitGroup.uniqueName = this.groupList?.length ? this.groupList[0]?.value : '';
         this.stockForm.stockUnitGroup.name = this.groupList?.length ? this.groupList[0]?.label : '';

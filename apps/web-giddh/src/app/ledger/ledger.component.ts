@@ -3778,6 +3778,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                 }
                 if (stockName && stockUniqueName) {
+                    const existingBatches = txn.duplicateEntry && Array.isArray(txn.inventory?.batches) ? txn.inventory.batches : [];
                     txn.inventory = {
                         stock: {
                             name: stockName,
@@ -3793,7 +3794,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             code: unitCode,
                             rate: rate,
                             stockUnitUniqueName: stockUnitUniqueName
-                        }
+                        },
+                        batches: existingBatches
                     };
                 } else {
                     delete txn.inventory;

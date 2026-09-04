@@ -32,6 +32,8 @@ import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 import { CommonDiscountComponent } from '../../../shared/common-discount/common-discount.component';
 import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
+import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
+import { BatchChipListComponent } from '../../../shared/batch-chip-list/batch-chip-list.component';
 
 @NgModule({
     declarations: [
@@ -73,7 +75,9 @@ import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
         OverlayModule,
         CommonTaxComponent,
         CommonDiscountComponent,
-        GiddhDatePipe
+        GiddhDatePipe,
+        BatchSelectDialogComponent,
+        BatchChipListComponent
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })

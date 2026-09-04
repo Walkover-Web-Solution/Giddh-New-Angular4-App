@@ -1,0 +1,24 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.batch-report {
+    .filter-dropdown {
+        min-width: 200px;
+        max-width: 260px;
+        flex: 0 0 auto;
+    }
+
+    .batch-empty-state {
+        min-height: 360px;
+    }
+
+    .applied-filter-chip {
+        background: var(--color-border-light);
+    }
+
+    .batch-total-row .mat-mdc-footer-cell {
+        background-color: var(--theme-primary-light);
+    }
+}

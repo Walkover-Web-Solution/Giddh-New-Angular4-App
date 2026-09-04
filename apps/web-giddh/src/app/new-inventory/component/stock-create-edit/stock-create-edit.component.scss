@@ -214,6 +214,10 @@
 
         .other-width {
             max-width: 1095px;
+
+            &:has(.stock-batch-box) {
+                max-width: 1280px;
+            }
         }
     }
 
@@ -275,8 +279,8 @@ table.stock-table {
             }
 
             &.opening-qty {
-                max-width: 150px;
-                min-width: 150px;
+                max-width: 190px;
+                min-width: 190px;
             }
 
             &.opening-amount {
@@ -288,7 +292,37 @@ table.stock-table {
                 max-width: 130px;
                 min-width: 130px;
             }
+
+            &.variant-batch-cell {
+                max-width: none;
+                border-top: 0;
+            }
         }
+    }
+
+    .variant-opening-qty,
+    .variant-opening-balance {
+        min-height: 22px;
+        line-height: 22px;
+    }
+
+    .variant-batch-fields {
+        grid-template-columns: minmax(130px, 1fr) minmax(130px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) minmax(120px, 1fr) minmax(130px, 1fr) 40px;
+        align-items: end;
+        column-gap: 12px;
+        row-gap: 8px;
+    }
+
+    .variant-batch-datepicker {
+        giddh-datepicker {
+            display: block;
+            width: 100%;
+        }
+    }
+
+    .variant-batch-remove {
+        min-width: 40px;
+        width: 40px;
     }
 
     table {
@@ -734,6 +768,32 @@ table.stock-table {
     border: 1px solid var(--border-color);
     background-color: var(--color-transparent);
     margin-left: 15px;
+}
+
+.stock-batch-box {
+    padding: 12px 16px 8px;
+}
+
+.stock-batch-row {
+    padding: 4px 0 8px;
+}
+
+.stock-batch-fields {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) 36px;
+    align-items: end;
+    column-gap: 12px;
+
+    giddh-datepicker {
+        display: block;
+        width: 100%;
+    }
+}
+
+.stock-batch-remove {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    margin-bottom: 6px;
 }
 
 .add-new-text-container {

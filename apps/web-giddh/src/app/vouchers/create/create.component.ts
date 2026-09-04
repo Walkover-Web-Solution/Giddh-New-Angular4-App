@@ -138,6 +138,8 @@ import { RecurrenceFormService } from "../../services/aside-recurring-voucher.se
 import { RecurringEndType, RecurringRepeatOption, RecurringFrequencyUnit, RecurringRepeatType, RecurringMonthlyMode } from "../../models/enums/recurring-voucher.enum";
 import { AccountCategoryEnum } from "../../shared/Enums/common.enum";
 import { CopyParticularDialogComponent } from "../copy-particular-dialog/copy-particular-dialog.component";
+import { BatchSelectDialogComponent } from "../batch-select-dialog/batch-select-dialog.component";
+import { BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -1999,6 +2001,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     } else {
                         this.stockVariants[entryIndex] = observableOf([]);
                         this.stockUnits[entryIndex] = observableOf([]);
+                        this.resetEntryBatch(entryIndex, transactionFormGroup);
                     }
                     this.checkIfEntriesHasStock();
                 });
@@ -2939,6 +2942,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             if (isClear) {
                 transactionFormGroup.reset();
+                this.resetEntryBatch(entryIndex);
                 return;
             }
 
@@ -2947,6 +2951,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (event?.additional?.stock?.uniqueName) {
                 transactionFormGroup.get("stock.name")?.patchValue(event?.additional?.stock?.name);
                 transactionFormGroup.get("stock.uniqueName")?.patchValue(event?.additional?.stock?.uniqueName);
+                transactionFormGroup.get("stock.hasVariants")?.patchValue(!!event?.additional?.hasVariants);
+                this.resetEntryBatch(entryIndex, transactionFormGroup);
 
                 if (event.additional.stock.customField1?.value) {
                     transactionFormGroup.get("stock.customField1")?.patchValue({
@@ -2974,6 +2980,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 const stockFormGroup = transactionFormGroup.get("stock") as FormGroup;
                 const newStockFormGroup = this.getStockFormGroup();
                 stockFormGroup.patchValue(newStockFormGroup.value);
+                this.resetEntryBatch(entryIndex, transactionFormGroup);
             }
 
             if (event?.additional?.hasVariants) {
@@ -3161,13 +3168,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public selectVariant(event: any, entryIndex: number, isClear: boolean = false): void {
-        if (event && !isClear) {
-            const entryFormGroup = this.getEntryFormGroup(entryIndex);
-            const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        const entryFormGroup = this.getEntryFormGroup(entryIndex);
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+        if (isClear) {
+            this.resetEntryBatch(entryIndex, transactionFormGroup);
+            return;
+        }
+
+        if (event) {
             const transactionStockVariantFormGroup = transactionFormGroup.get("stock").get("variant");
 
             transactionStockVariantFormGroup.get("name")?.patchValue(event?.label);
             transactionStockVariantFormGroup.get("uniqueName")?.patchValue(event?.value);
+            this.resetEntryBatch(entryIndex, transactionFormGroup);
 
             if (transactionFormGroup.get("stock.variant.getParticular")?.value) {
                 this.componentStore.getParticularDetails({
@@ -3182,6 +3196,112 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get("stock.variant.getParticular")?.patchValue(true);
             }
         }
+    }
+
+    /**
+     * Opens the Select Batches aside dialog for a line.
+     *
+     * @param {number} entryIndex
+     * @param {Event} [event]
+     * @memberof VoucherCreateComponent
+     */
+    public openBatchSelectDialog(entryIndex: number, event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+
+        if (!this.activeCompany?.batchTrackingEnabled) {
+            return;
+        }
+
+        const entryFormGroup = this.getEntryFormGroup(entryIndex);
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        const stockUniqueName = transactionFormGroup.get("stock.uniqueName")?.value;
+        if (!stockUniqueName) {
+            return;
+        }
+
+        const hasVariants = !!transactionFormGroup.get("stock.hasVariants")?.value;
+        const variantUniqueName = transactionFormGroup.get("stock.variant.uniqueName")?.value;
+        if (hasVariants && !variantUniqueName) {
+            this.toasterService.showSnackBar("warning", this.localeData?.select_variant_first);
+            return;
+        }
+
+        this.activeEntryIndex = entryIndex;
+        const warehouseName = this.invoiceForm.get("warehouse.name")?.value || this.warehouses?.[0]?.name;
+        const warehouseUniqueName = this.invoiceForm.get("warehouse.uniqueName")?.value || this.warehouses?.[0]?.uniqueName;
+
+        const dialogRef = this.dialog.open(BatchSelectDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                stockName: transactionFormGroup.get("stock.name")?.value,
+                stockUniqueName,
+                variantUniqueName,
+                variantName: transactionFormGroup.get("stock.variant.name")?.value,
+                hasVariants,
+                inventoryType: "PRODUCT",
+                warehouseName,
+                warehouseUniqueName,
+                unitCode: transactionFormGroup.get("stock.stockUnit.code")?.value,
+                lineQuantity: Number(transactionFormGroup.get("stock.quantity")?.value) || 0,
+                selectedBatches: cloneDeep(transactionFormGroup.get("stock.batches")?.value) || [],
+                currencySymbol: this.account?.baseCurrencySymbol || this.company?.baseCurrencySymbol,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
+            if (!result) {
+                return;
+            }
+            transactionFormGroup.get("stock.batches")?.patchValue(result.batches ?? []);
+            if (result.overrideLineQuantity) {
+                transactionFormGroup.get("stock.quantity")?.patchValue(result.allocatedQuantity);
+                this.handleQuantityBlur(transactionFormGroup);
+            }
+            this.changeDetection.detectChanges();
+        });
+    }
+
+    /**
+     * Selected batches on a transaction.
+     *
+     * @param {AbstractControl} transaction
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof VoucherCreateComponent
+     */
+    public getEntryBatches(transaction: AbstractControl): VoucherSelectedBatch[] {
+        const batches = transaction?.get("stock.batches")?.value;
+        return Array.isArray(batches) ? batches : [];
+    }
+
+    /**
+     * Clears selected batches when stock or variant changes.
+     *
+     * @private
+     * @param {number} entryIndex
+     * @param {FormGroup} [transactionFormGroup]
+     * @memberof VoucherCreateComponent
+     */
+    private resetEntryBatch(entryIndex: number, transactionFormGroup?: FormGroup): void {
+        transactionFormGroup?.get("stock.batches")?.patchValue([]);
+    }
+
+    /**
+     * Prefill batches from voucher stock payload.
+     *
+     * @private
+     * @param {*} [entryData]
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof VoucherCreateComponent
+     */
+    private getInitialStockBatches(entryData?: any): VoucherSelectedBatch[] {
+        const stock = entryData?.transactions?.[0]?.stock;
+        if (Array.isArray(stock?.batches) && stock.batches.length) {
+            return cloneDeep(stock.batches);
+        }
+        return [];
     }
 
     /**
@@ -3782,6 +3902,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             skuCodeHeading: [entryData ? entryData?.transactions[0]?.stock?.skuCodeHeading : ""],
             skuCode: [entryData ? entryData?.transactions[0]?.stock?.sku : ""],
             uniqueName: [entryData ? entryData?.transactions[0]?.stock?.uniqueName : ""],
+            batches: [this.getInitialStockBatches(entryData)],
             customField1: this.formBuilder.group({
                 key: [
                     entryData?.transactions[0]?.stock?.customField1?.value
@@ -8033,6 +8154,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 this.stockVariants[entryIndex] = observableOf([]);
                 this.stockUnits[entryIndex] = observableOf([]);
+                this.resetEntryBatch(entryIndex, transactionFormGroup);
             }
 
             this.checkIfEntriesHasStock();
@@ -8351,6 +8473,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.stockVariants[entryIndex] = observableOf([]);
             this.stockUnits[entryIndex] = observableOf([]);
+            this.resetEntryBatch(entryIndex, transactionFormGroup);
 
             entryFormGroup.get("hsnNumber")?.patchValue(response.hsnNumber);
             entryFormGroup.get("sacNumber")?.patchValue(response.sacNumber);

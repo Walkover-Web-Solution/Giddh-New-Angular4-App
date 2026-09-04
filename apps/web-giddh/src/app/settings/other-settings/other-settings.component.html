@@ -44,6 +44,12 @@
                         {{ profileData?.autoGenerateNote ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
                     </span>
                 </div>
+                <div class="mb-3">
+                    <label>{{ localeData?.batch_tracking }}</label>
+                    <span>
+                        {{ profileData?.batchTrackingEnabled ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                    </span>
+                </div>
             </div>
             <!-- branch profile element end -->
         </div>
@@ -197,6 +203,21 @@
                             : currencyDisplayFormatEnum.Symbol;
                         profileUpdated('currencyDisplayFormat')
                     "
+                ></mat-slide-toggle>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-xl-3 pr-1">
+            <div class="form-group d-flex align-items-center justify-content-between">
+                <label class="mb-0 d-flex align-items-center column-gap-05">
+                    {{ localeData?.batch_tracking }}
+                    <i class="icon-info cursor-pointer mt-1" [matTooltip]="localeData?.batch_tracking_tooltip" matTooltipPosition="above"></i>
+                </label>
+                <mat-slide-toggle
+                    color="primary"
+                    [checked]="profileData?.batchTrackingEnabled"
+                    (change)="profileData.batchTrackingEnabled = $event.checked; profileUpdated('batchTrackingEnabled')"
                 ></mat-slide-toggle>
             </div>
         </div>

@@ -1303,6 +1303,19 @@
                             </ng-container>
                         </div>
                     </div>
+                    <batch-chip-list
+                        *ngIf="
+                            activeCompany?.batchTrackingEnabled &&
+                            isStockPresent &&
+                            vm.stockTrxEntry?.inventory?.batches?.length
+                        "
+                        class="d-block mb-2"
+                        [batches]="vm.stockTrxEntry?.inventory?.batches"
+                        [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
+                        [showEdit]="!isEinvoiceGenerated"
+                        (edit)="openBatchSelectDialog($event)"
+                    ></batch-chip-list>
                     <!-- region amount and discount container -->
                     <div class="clear-both">
                         <ng-container
@@ -1331,6 +1344,24 @@
                                             (onPaste)="vm.inventoryQuantityChanged($event)"
                                             (change)="handleQuantityChange($event?.target?.value)"
                                         ></input-field>
+                                        <div
+                                            *ngIf="
+                                                activeCompany?.batchTrackingEnabled &&
+                                                isStockPresent &&
+                                                !getEntryBatches()?.length &&
+                                                !isEinvoiceGenerated
+                                            "
+                                            class="mt-1 text-left"
+                                            (click)="$event.stopPropagation()"
+                                        >
+                                            <a
+                                                href="javascript:void(0)"
+                                                class="font-size-12 font-weight-semibold text-primary"
+                                                (click)="openBatchSelectDialog($event)"
+                                            >
+                                                {{ localeData?.select_batch }}
+                                            </a>
+                                        </div>
                                     </div>
 
                                     <div class="w100">

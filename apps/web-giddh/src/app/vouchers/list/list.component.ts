@@ -548,9 +548,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         ];
                         this.selectedTemplate = this.purchaseTemplatesList[0];
                         this.templateFor = this.purchaseTemplatesList[0]?.value || null;
-                    } else {
-                        this.selectedTemplate = null;
-                        this.templateFor = null;
+                    } else if (this.urlVoucherType === VoucherTypeEnum.sales) {
+                        this.purchaseTemplatesList = [
+                            { label: this.commonLocaleData?.app_invoice, value: this.voucherTypeEnum.invoice },
+                            { label: this.commonLocaleData?.app_voucher_types?.proforma, value: this.voucherTypeEnum.proforma },
+                            { label: this.commonLocaleData?.app_voucher_types?.estimate, value: this.voucherTypeEnum.estimate }
+                        ];
+                        this.selectedTemplate = this.purchaseTemplatesList[0];
+                        this.templateFor = this.purchaseTemplatesList[0]?.value || null;
                     }
                     this.changeDetectorRef.detectChanges();
                 }, 100);
