@@ -1360,6 +1360,16 @@
                                             <button mat-menu-item (click)="generateRecurringVoucher(element)">
                                                 {{ localeData?.generate_recurring }}
                                             </button>
+                                            <button mat-menu-item (click)="downloadSignedInvoicePdf(element)" [disabled]="isDscPreloading">
+                                                @if (isDscPreloading) {
+                                                    <span class="d-flex align-items-center">
+                                                        <mat-spinner [diameter]="14" class="mr-2"></mat-spinner>
+                                                        {{ commonLocaleData?.app_download_signed_invoice }}
+                                                    </span>
+                                                } @else {
+                                                    {{ commonLocaleData?.app_download_signed_invoice }}
+                                                }
+                                            </button>
                                         }
                                     </mat-menu>
                                 </td>
@@ -1801,6 +1811,16 @@
                                         <button mat-menu-item (click)="generateRecurringVoucher(element)">
                                             {{ localeData?.generate_recurring }}
                                         </button>
+                                        <button mat-menu-item (click)="downloadSignedInvoicePdf(element)" [disabled]="isDscPreloading">
+                                            @if (isDscPreloading) {
+                                                <span class="d-flex align-items-center">
+                                                    <mat-spinner [diameter]="14" class="mr-2"></mat-spinner>
+                                                    {{ commonLocaleData?.app_download_signed_invoice }}
+                                                </span>
+                                            } @else {
+                                                {{ commonLocaleData?.app_download_signed_invoice }}
+                                            }
+                                        </button>
                                     </mat-menu>
                                 </td>
                             </ng-container>
@@ -2238,6 +2258,16 @@
                                         </button>
                                         <button mat-menu-item (click)="generateRecurringVoucher(element)">
                                             {{ localeData?.generate_recurring }}
+                                        </button>
+                                        <button mat-menu-item (click)="downloadSignedInvoicePdf(element)" [disabled]="isDscPreloading">
+                                            @if (isDscPreloading) {
+                                                <span class="d-flex align-items-center">
+                                                    <mat-spinner [diameter]="14" class="mr-2"></mat-spinner>
+                                                    {{ commonLocaleData?.app_download_signed_invoice }}
+                                                </span>
+                                            } @else {
+                                                {{ commonLocaleData?.app_download_signed_invoice }}
+                                            }
                                         </button>
                                     </mat-menu>
                                 </td>
@@ -3272,6 +3302,16 @@
                                             </button>
                                             <button mat-menu-item (click)="generateRecurringVoucher(element)">
                                                 {{ localeData?.generate_recurring }}
+                                            </button>
+                                            <button mat-menu-item (click)="downloadSignedInvoicePdf(element)" [disabled]="isDscPreloading">
+                                                @if (isDscPreloading) {
+                                                    <span class="d-flex align-items-center">
+                                                        <mat-spinner [diameter]="14" class="mr-2"></mat-spinner>
+                                                        {{ commonLocaleData?.app_download_signed_invoice }}
+                                                    </span>
+                                                } @else {
+                                                    {{ commonLocaleData?.app_download_signed_invoice }}
+                                                }
                                             </button>
                                         }
                                     </mat-menu>
