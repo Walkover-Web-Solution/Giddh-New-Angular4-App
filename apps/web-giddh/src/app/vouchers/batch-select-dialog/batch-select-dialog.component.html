@@ -1,4 +1,4 @@
-<div class="aside-dialog-wrapper batch-select-dialog">
+<div class="aside-dialog-wrapper d-flex flex-column h-100 bg-white">
     <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.select_batches }}</span>
         <button mat-icon-button mat-dialog-close [attr.aria-label]="commonLocaleData?.app_close">
@@ -6,13 +6,14 @@
         </button>
     </div>
 
-    <mat-dialog-content class="dialog-body batch-select-body">
-        <p class="batch-subtitle">{{ subtitle }}</p>
+    <mat-dialog-content class="dialog-body overflow-auto">
+        <p class="font-size-12 mb-2">{{ subtitle }}</p>
 
         <div
-            class="allocation-status"
-            [class.full]="overflowQuantity === 0 && allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0"
-            [class.over]="overflowQuantity > 0"
+            class="soft-panel"
+            [class.soft-panel-default]="overflowQuantity === 0 && !(allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0)"
+            [class.soft-panel-success]="overflowQuantity === 0 && allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0"
+            [class.soft-panel-warning]="overflowQuantity > 0"
         >
             <div class="d-flex justify-content-between align-items-center">
                 <span
@@ -24,7 +25,7 @@
                         })
                     "
                 ></span>
-                <span *ngIf="overflowQuantity > 0" class="allocation-over">
+                <span *ngIf="overflowQuantity > 0" class="text-orange font-size-12 font-weight-semibold">
                     {{
                         interpolate(localeData?.over_line_quantity, {
                             QTY: overflowQuantity,
@@ -34,18 +35,23 @@
                 </span>
                 <span
                     *ngIf="overflowQuantity === 0 && allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0"
-                    class="allocation-full"
+                    class="text-green font-size-12 font-weight-semibold"
                 >
                     <i class="icon-tick mr-1"></i>{{ localeData?.fully_allocated }}
                 </span>
             </div>
-            <div class="allocation-bar">
-                <span class="allocation-bar-fill" [style.width.%]="allocationPercent"></span>
-                <span *ngIf="overflowQuantity > 0" class="allocation-bar-over"></span>
+            <div class="progress-track">
+                <span
+                    class="progress-track-fill"
+                    [class.progress-track-fill-success]="overflowQuantity === 0 && allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0"
+                    [class.progress-track-fill-warning]="overflowQuantity > 0"
+                    [style.width.%]="allocationPercent"
+                ></span>
+                <span *ngIf="overflowQuantity > 0" class="progress-track-over"></span>
             </div>
         </div>
 
-        <div *ngIf="overflowQuantity > 0" class="batch-alert batch-alert-over">
+        <div *ngIf="overflowQuantity > 0" class="soft-panel soft-panel-warning font-size-14">
             <p class="mb-2">{{ localeData?.over_line_warning }}</p>
             <button mat-stroked-button color="warn" type="button" (click)="apply(true)">
                 {{
@@ -56,7 +62,7 @@
             </button>
         </div>
 
-        <div *ngIf="negativeStockRow as negativeRow" class="batch-alert batch-alert-negative">
+        <div *ngIf="negativeStockRow as negativeRow" class="soft-panel soft-panel-warning font-size-14">
             {{
                 interpolate(localeData?.negative_stock_warning, {
                     BATCH: negativeRow.batchNumber || negativeRow.name,
@@ -66,7 +72,7 @@
             }}
         </div>
 
-        <div class="search-wrap">
+        <div class="mb-1">
             <input-field
                 [name]="'searchBatchNumber'"
                 [type]="'text'"
@@ -78,33 +84,39 @@
                 (keydown.enter)="$event.preventDefault(); addByCode()"
                 [autocomplete]="'off'"
             ></input-field>
-            
         </div>
-        <div class="search-actions">
-            <a href="javascript:void(0)" class="add-batch-link" (click)="openCreateBatch()">
+        <div class="d-flex justify-content-between align-items-center column-gap-1 mb-2">
+            <a href="javascript:void(0)" class="text-primary font-size-12 font-weight-semibold nowrap cursor-pointer" (click)="openCreateBatch()">
                 {{ localeData?.add_batch }}
             </a>
-            <p class="search-hint">{{ localeData?.quick_add_hint }} · {{ localeData?.sorted_by_expiry }}</p>
+            <p class="font-size-12 m-0 text-right flex-grow-1">
+                {{ localeData?.quick_add_hint }} · {{ localeData?.sorted_by_expiry }}
+            </p>
         </div>
 
         <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
 
-        <div *ngIf="!isLoading" class="batch-list">
-            <div *ngFor="let row of filteredRows" class="batch-row" [class.selected]="row.selected">
+        <div *ngIf="!isLoading" class="d-flex flex-column row-gap-1">
+            <div
+                *ngFor="let row of filteredRows"
+                class="d-flex align-items-center column-gap-1 border border-radius-8 p-2 bg-white"
+                [class.theme-primary-light]="row.selected"
+                [class.border-color-primary]="row.selected"
+            >
                 <mat-checkbox
                     [checked]="row.selected"
                     (change)="toggleRow(row, $event.checked)"
                     [aria-label]="row.batchNumber || row.name"
                 ></mat-checkbox>
-                <div class="batch-info">
-                    <div class="batch-number">{{ row.batchNumber || row.name }}</div>
-                    <div class="batch-meta">
+                <div class="flex-grow-1 min-width-0">
+                    <div class="font-weight-semibold">{{ row.batchNumber || row.name }}</div>
+                    <div class="font-size-12 mt-1">
                         <span
                             *ngIf="row.expiryDate"
                             [ngClass]="{
-                                'expiry-expired': getExpiryStatus(row.expiryDate) === 'expired',
-                                'expiry-warning': getExpiryStatus(row.expiryDate) === 'warning',
-                                'expiry-ok': getExpiryStatus(row.expiryDate) === 'ok'
+                                'text-red font-weight-semibold': getExpiryStatus(row.expiryDate) === 'expired',
+                                'text-orange font-weight-semibold': getExpiryStatus(row.expiryDate) === 'warning',
+                                'text-green font-weight-semibold': getExpiryStatus(row.expiryDate) === 'ok'
                             }"
                         >
                             {{ localeData?.batch_expiry }} {{ formatExpiry(row.expiryDate) }}
@@ -113,7 +125,7 @@
                         <span>{{ localeData?.batch_available }} {{ row.availableQuantity }}</span>
                         <span *ngIf="row.rate != null"> · {{ dialogData?.currencySymbol }}{{ row.rate }}</span>
                     </div>
-                    <div *ngIf="getNegativeQuantity(row) > 0" class="batch-negative">
+                    <div *ngIf="getNegativeQuantity(row) > 0" class="text-orange font-size-12 mt-1">
                         {{
                             interpolate(localeData?.batch_will_go_negative, {
                                 QTY: getNegativeQuantity(row),
@@ -122,7 +134,7 @@
                         }}
                     </div>
                 </div>
-                <div class="batch-qty">
+                <div class="d-flex align-items-center column-gap-05 flex-shrink-0 batch-qty-field">
                     <input
                         type="number"
                         class="form-control text-right"
@@ -130,17 +142,17 @@
                         [(ngModel)]="row.quantity"
                         (ngModelChange)="onQuantityChange(row)"
                     />
-                    <span class="batch-unit">{{ dialogData?.unitCode }}</span>
+                    <span class="font-size-12">{{ dialogData?.unitCode }}</span>
                 </div>
             </div>
-            <div *ngIf="!filteredRows?.length" class="empty-state">
+            <div *ngIf="!filteredRows?.length" class="p-4 text-center">
                 {{ commonLocaleData?.app_no_result_found }}
             </div>
         </div>
     </mat-dialog-content>
 
-    <div class="dialog-footer">
-        <div class="footer-summary">
+    <div class="d-flex justify-content-between align-items-center column-gap-1 border-top p-3 bg-light-gray">
+        <div class="font-size-12">
             {{
                 interpolate(localeData?.batches_summary, {
                     COUNT: selectedCount,
@@ -150,7 +162,7 @@
                 })
             }}
         </div>
-        <div class="footer-actions">
+        <div class="d-flex align-items-center column-gap-1 flex-shrink-0">
             <button mat-button type="button" color="primary" (click)="clearSelection()">
                 {{ commonLocaleData?.app_clear }}
             </button>

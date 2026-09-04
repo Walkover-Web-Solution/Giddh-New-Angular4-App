@@ -138,7 +138,8 @@ import { RecurrenceFormService } from "../../services/aside-recurring-voucher.se
 import { RecurringEndType, RecurringRepeatOption, RecurringFrequencyUnit, RecurringRepeatType, RecurringMonthlyMode } from "../../models/enums/recurring-voucher.enum";
 import { AccountCategoryEnum } from "../../shared/Enums/common.enum";
 import { CopyParticularDialogComponent } from "../copy-particular-dialog/copy-particular-dialog.component";
-import { BatchSelectDialogComponent, BatchSelectDialogResult, VoucherSelectedBatch } from "../batch-select-dialog/batch-select-dialog.component";
+import { BatchSelectDialogComponent } from "../batch-select-dialog/batch-select-dialog.component";
+import { BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch.interface";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -3299,17 +3300,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const stock = entryData?.transactions?.[0]?.stock;
         if (Array.isArray(stock?.batches) && stock.batches.length) {
             return cloneDeep(stock.batches);
-        }
-        if (stock?.batch?.uniqueName) {
-            return [{
-                uniqueName: stock.batch.uniqueName,
-                name: stock.batch.name,
-                batchNumber: stock.batch.batchNumber,
-                quantity: Number(stock.quantity) || 0,
-                rate: Number(stock.batch.rate) || 0,
-                availableQuantity: Number(stock.batch.availableQuantity) || 0,
-                expiryDate: stock.batch.expiryDate
-            }];
         }
         return [];
     }

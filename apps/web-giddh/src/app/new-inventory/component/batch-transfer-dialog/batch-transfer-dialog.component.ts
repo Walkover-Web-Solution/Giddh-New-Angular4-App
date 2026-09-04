@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { IOption } from "../../../app.constant";
+import { take, takeUntil } from "rxjs/operators";
+import { ASIDE_PANE_CONFIG, IOption } from "../../../app.constant";
 import { BatchReportItem } from "../../../models/interfaces/batch-report.interface";
 import { OrganizationType } from "../../../models/user-login-state";
 import { GeneralService } from "../../../services/general.service";
 import { InventoryService } from "../../../services/inventory.service";
+import { BatchCreateEditComponent } from "../batch-create-edit/batch-create-edit.component";
 import { mapAvailabilityBatches } from "../batch-report/batch-report.helper";
 
 @Component({
@@ -65,9 +66,21 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
         return this.transferForm.get("quantity")?.hasError("max") || (!isNaN(quantity) && quantity > this.maxQuantity);
     }
 
+    /**
+     * True when availability loaded and no other batch exists for this stock/variant.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchTransferDialogComponent
+     */
+    public get hasNoTargetBatches(): boolean {
+        return this.hasLoadedBatches && !this.batchOptions?.length;
+    }
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public dialogData: { batch: BatchReportItem; localeData?: any; commonLocaleData?: any },
         private dialogRef: MatDialogRef<BatchTransferDialogComponent>,
+        private dialog: MatDialog,
         private formBuilder: FormBuilder,
         private inventoryService: InventoryService,
         private generalService: GeneralService,
@@ -116,6 +129,30 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Open create-batch aside so a target batch can be created for this stock/variant.
+     *
+     * @memberof BatchTransferDialogComponent
+     */
+    public openCreateBatch(): void {
+        const batch = this.dialogData?.batch;
+        const dialogRef = this.dialog.open(BatchCreateEditComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                batch: {
+                    stock: batch?.stock,
+                    variant: batch?.variant,
+                    warehouse: batch?.warehouse
+                }
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1), takeUntil(this.destroyed$)).subscribe(saved => {
+            if (saved) {
+                this.loadAvailableBatches();
+            }
+        });
+    }
+
+    /**
      * Close without transferring.
      *
      * @memberof BatchTransferDialogComponent
@@ -131,7 +168,7 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
      */
     public submit(): void {
         this.isFormSubmitted = true;
-        if (this.transferForm.invalid) {
+        if (this.hasNoTargetBatches || this.transferForm.invalid) {
             return;
         }
         const formValue = this.transferForm.value;
@@ -156,22 +193,30 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
             ? (batch?.variant?.uniqueName ?? batch?.stock?.uniqueName ?? "")
             : (batch?.stock?.uniqueName ?? "");
         if (!uniqueName) {
+            this.hasLoadedBatches = true;
+            this.cdr.detectChanges();
             return;
         }
         this.isLoading = true;
         this.inventoryService.getBatchAvailability({ uniqueName, isVariant, page: 1, count: 50, excludeBatchUniqueName: batch?.uniqueName })
             .pipe(takeUntil(this.destroyed$))
-            .subscribe(response => {
-                this.isLoading = false;
-                this.batchOptions = response?.status === "success"
-                    ? mapAvailabilityBatches(response, batch?.uniqueName)
-                    : [];
-                this.hasLoadedBatches = true;
-                this.cdr.detectChanges();
-            }, () => {
-                this.isLoading = false;
-                this.hasLoadedBatches = true;
-                this.cdr.detectChanges();
+            .subscribe({
+                next: (response) => {
+                    this.isLoading = false;
+                    this.batchOptions = response?.status === "success"
+                        ? mapAvailabilityBatches(response)
+                        : [];
+                    this.hasLoadedBatches = true;
+                    if (this.batchOptions.length === 1 && !this.transferForm.get("toBatchUniqueName")?.value) {
+                        this.selectBatch(this.batchOptions[0]);
+                    }
+                    this.cdr.detectChanges();
+                },
+                error: () => {
+                    this.isLoading = false;
+                    this.hasLoadedBatches = true;
+                    this.cdr.detectChanges();
+                }
             });
     }
 

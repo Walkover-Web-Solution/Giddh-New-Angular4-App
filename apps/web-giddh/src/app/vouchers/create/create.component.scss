@@ -172,30 +172,6 @@
                                 padding-right: 6px;
                             }
 
-                            .batch-select-trigger {
-                                display: flex;
-                                flex-direction: column;
-                                align-items: flex-start;
-                                gap: 6px;
-                                text-align: left;
-                            }
-
-                            .batch-select-link {
-                                display: inline-flex;
-                                align-items: center;
-                                gap: 4px;
-                                color: var(--color-blue-primary, #1a73e8) !important;
-                                font-size: var(--font-size-12);
-                                font-weight: 500;
-                                line-height: 1;
-                                cursor: pointer;
-                                text-decoration: none;
-
-                                &:hover {
-                                    text-decoration: underline;
-                                }
-                            }
-
                             &.active {
                                 box-shadow: 0 0 0 2px var(--color-silver) inset;
                             }

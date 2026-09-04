@@ -1450,7 +1450,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     this.normalizeVariantBatches(variant);
                     return variant;
                 });
-                this.loadVariantBatches();
 
                 this.updateCustomFieldObjectInVariant();
 
@@ -2023,54 +2022,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         const batches = this.getWarehouseBatches(variant);
         batches.splice(0, batches.length, ...mapped);
         variant.showBatches = false;
-    }
-
-    /**
-     * Load batches for variants when get-stock does not include them.
-     *
-     * @private
-     * @memberof StockCreateEditComponent
-     */
-    private loadVariantBatches(): void {
-        const variants = this.stockForm.variants ?? [];
-        if (variants.some(variant => this.getWarehouseBatches(variant).length)) {
-            return;
-        }
-        const variantUniqueNames = variants.map(variant => variant?.uniqueName).filter(uniqueName => !!uniqueName);
-        const stockUniqueName = this.queryParams?.stockUniqueName || this.stockForm.uniqueName;
-        if (!stockUniqueName && !variantUniqueNames.length) {
-            return;
-        }
-        this.inventoryService.getAllBatches(
-            { q: "", page: 1, count: 200 },
-            {
-                stockUniqueNames: stockUniqueName ? [stockUniqueName] : [],
-                variantUniqueNames,
-                categoryUniqueNames: this.stockForm.type ? [this.stockForm.type] : []
-            }
-        ).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
-                const results = response.body?.results ?? [];
-                this.stockForm.variants?.forEach(variant => {
-                    const mapped = results
-                        .filter(item => item?.variant?.uniqueName === variant?.uniqueName)
-                        .map(item => ({
-                            uniqueName: item.uniqueName,
-                            batchNumber: item.batchNumber ?? "",
-                            name: item.name ?? "",
-                            manufacturingDate: this.parseBatchDate(item.manufacturingDate),
-                            expiryDate: this.parseBatchDate(item.expiryDate),
-                            openingQuantity: item.openingQuantity ?? item.availableQuantity ?? null,
-                            openingAmount: item.openingAmount ?? null
-                        }));
-                    const batches = this.getWarehouseBatches(variant);
-                    batches.splice(0, batches.length, ...mapped);
-                    variant.showBatches = false;
-                });
-                this.ensureDefaultStockBatch();
-                this.changeDetection.detectChanges();
-            }
-        });
     }
 
     public resetForm(stockCreateEditForm: NgForm): void {

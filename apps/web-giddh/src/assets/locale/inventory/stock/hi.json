@@ -106,7 +106,7 @@
     "add_batch": "बैच जोड़ें",
     "manage_batches": "बैच प्रबंधित करें",
     "add_batch_row": "+ बैच पंक्ति जोड़ें",
-    "batch_no": "बैच नं",
+    "batch_number": "बैच संख्या",
     "batch_name": "बैच नाम",
     "manufacturing_date": "निर्माण तिथि",
     "expiry_date": "समाप्ति तिथि",

@@ -2012,14 +2012,7 @@ export class InventoryService {
      * @memberof InventoryService
      */
     public getAllBatches(queryParams: any, model: any): Observable<BaseResponse<any, any>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        const url = this.config.apiUrl + INVENTORY_API.BATCH.GET_ALL
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':q', encodeURIComponent(queryParams?.q ?? ''))
-            ?.replace(':page', encodeURIComponent(String(queryParams?.page ?? 1)))
-            ?.replace(':count', encodeURIComponent(String(queryParams?.count ?? PAGINATION_LIMIT)))
-            ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
-            ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''));
+        const url = this.generalService.replaceUrlPlaceholders(INVENTORY_API.BATCH.GET_ALL, queryParams);
         return this.http.post(url, model).pipe(
             map((res) => {
                 const data: BaseResponse<any, any> = res;
@@ -2105,18 +2098,7 @@ export class InventoryService {
      * @memberof InventoryService
      */
     public getBatchAvailability(queryParams: { uniqueName: string; isVariant: boolean; page?: number; count?: number; excludeBatchUniqueName?: string; sort?: string; sortBy?: string; q?: string }): Observable<BaseResponse<any, any>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        const url = this.config.apiUrl + INVENTORY_API.BATCH.AVAILABILITY
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':uniqueName', encodeURIComponent(queryParams?.uniqueName ?? ''))
-            ?.replace(':isVariant', encodeURIComponent(String(!!queryParams?.isVariant)))
-            ?.replace(':page', encodeURIComponent(String(queryParams?.page ?? 1)))
-            ?.replace(':count', encodeURIComponent(String(queryParams?.count ?? 50)))
-            ?.replace(':excludeBatchUniqueName', encodeURIComponent(queryParams?.excludeBatchUniqueName ?? ''))
-            ?.replace(':sort', encodeURIComponent(queryParams?.sort ?? ''))
-            ?.replace(':sortBy', encodeURIComponent(queryParams?.sortBy ?? ''))
-            ?.replace(':q', encodeURIComponent(queryParams?.q ?? ''));
-            
+        const url = this.generalService.replaceUrlPlaceholders(INVENTORY_API.BATCH.AVAILABILITY, queryParams);
         return this.http.get(url).pipe(
             map((res) => {
                 const data: BaseResponse<any, any> = res;

@@ -49,7 +49,8 @@ import { ActionTypeEnum } from '../../../shared/sales-person/utility/sales-perso
 import { LedgerDropdownTypeEnum } from '../../../models/api-models/Ledger';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
-import { BatchSelectDialogComponent, BatchSelectDialogResult, VoucherSelectedBatch } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
+import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
+import { BatchSelectDialogResult, VoucherSelectedBatch } from '../../../models/interfaces/batch.interface';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [

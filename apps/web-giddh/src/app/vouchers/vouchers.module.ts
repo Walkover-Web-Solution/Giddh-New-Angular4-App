@@ -102,7 +102,7 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
 import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-particular-dialog.component";
 import { DscPinDialogComponent } from "./dsc-pin-dialog/dsc-pin-dialog.component";
 import { BatchSelectDialogComponent } from "./batch-select-dialog/batch-select-dialog.component";
-import { BatchChipListModule } from "../shared/batch-chip-list/batch-chip-list.module";
+import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-list.component";
 
 @NgModule({
     declarations: [
@@ -137,7 +137,7 @@ import { BatchChipListModule } from "../shared/batch-chip-list/batch-chip-list.m
         FormsModule,
         FormFieldsModule,
         BatchSelectDialogComponent,
-        BatchChipListModule,
+        BatchChipListComponent,
         VouchersRoutingModule,
         MatTabsModule,
         MatTableModule,

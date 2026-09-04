@@ -29,91 +29,45 @@
 
             @if (stocks?.length) {
                 <div class="filter-dropdown">
-                    <mat-form-field appearance="outline">
-                        <mat-select
-                            name="batchSelectedStock"
-                            [multiple]="true"
-                            [(ngModel)]="selectedStock"
-                            class="stock-mat-salect"
-                            [placeholder]="localeData?.select_stock"
-                            (ngModelChange)="onStockChange()"
-                        >
-                            <mat-option class="balance-options">
-                                <ngx-mat-select-search
-                                    [formControl]="stocksDropdown"
-                                    [placeholderLabel]="localeData?.select_stock"
-                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                    class="mat-select-search-inventory"
-                                    [clearSearchInput]="false"
-                                >
-                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                </ngx-mat-select-search>
-                            </mat-option>
-                            <mat-option class="balance-options" *ngFor="let stock of filteredStocks" [value]="stock?.value">
-                                {{ stock?.label ?? "-" }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <multi-select-dropdown
+                        [name]="'batchSelectedStock'"
+                        [label]="localeData?.select_stock"
+                        [placeholder]="localeData?.select_stock"
+                        [options]="stocks"
+                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                        [(ngModel)]="selectedStock"
+                        (selectionChange)="onStockChange()"
+                    ></multi-select-dropdown>
                 </div>
             }
 
             @if (variants?.length) {
                 <div class="filter-dropdown">
-                    <mat-form-field appearance="outline">
-                        <mat-select
-                            name="batchSelectedVariant"
-                            [multiple]="true"
-                            [(ngModel)]="selectedVariant"
-                            class="stock-mat-salect"
-                            [placeholder]="localeData?.select_variant"
-                            (ngModelChange)="onVariantChange()"
-                        >
-                            <mat-option class="balance-options">
-                                <ngx-mat-select-search
-                                    [formControl]="variantsDropdown"
-                                    [placeholderLabel]="localeData?.select_variant"
-                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                    class="mat-select-search-inventory"
-                                    [clearSearchInput]="false"
-                                >
-                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                </ngx-mat-select-search>
-                            </mat-option>
-                            <mat-option class="balance-options" *ngFor="let variant of filteredVariants" [value]="variant?.value">
-                                {{ variant?.label ?? "-" }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <multi-select-dropdown
+                        [name]="'batchSelectedVariant'"
+                        [label]="localeData?.select_variant"
+                        [placeholder]="localeData?.select_variant"
+                        [options]="variants"
+                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                        [(ngModel)]="selectedVariant"
+                        (selectionChange)="onVariantChange()"
+                    ></multi-select-dropdown>
                 </div>
             }
 
-            @if (currentWarehouses?.length > 1) {
+            @if (warehouses?.length > 1) {
                 <div class="filter-dropdown">
-                    <mat-form-field appearance="outline">
-                        <mat-select
-                            name="batchSelectedWarehouse"
-                            [multiple]="true"
-                            [(ngModel)]="selectedWarehouse"
-                            class="stock-mat-salect"
-                            [placeholder]="commonLocaleData?.app_select_warehouse"
-                            (ngModelChange)="onWarehouseChange()"
-                        >
-                            <mat-option class="balance-options">
-                                <ngx-mat-select-search
-                                    [formControl]="warehousesDropdown"
-                                    [placeholderLabel]="commonLocaleData?.app_select_warehouse"
-                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                    class="mat-select-search-inventory"
-                                    [clearSearchInput]="false"
-                                >
-                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                </ngx-mat-select-search>
-                            </mat-option>
-                            <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
-                                {{ warehouse?.name ?? "-" }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <multi-select-dropdown
+                        [name]="'batchSelectedWarehouse'"
+                        [label]="commonLocaleData?.app_select_warehouse"
+                        [placeholder]="commonLocaleData?.app_select_warehouse"
+                        [options]="warehouses"
+                        [optionValue]="'uniqueName'"
+                        [optionLabel]="'name'"
+                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                        [(ngModel)]="selectedWarehouse"
+                        (selectionChange)="onWarehouseChange()"
+                    ></multi-select-dropdown>
                 </div>
             }
 
@@ -129,16 +83,14 @@
             <button
                 matButton="outlined"
                 class="ml-auto advance-filter-button"
+                matBadgeColor="primary"
+                [matBadge]="advanceFilterCount"
+                [matBadgeHidden]="!advanceFilterCount"
                 (click)="openAdvanceFilterDialog()"
             >
                 <span class="d-inline-flex align-items-center column-gap-05">
                     <i class="icon-advance-filter"></i>
-                    <span class="advance-filter-label">
-                        {{ localeData?.filters }}
-                        @if (advanceFilterCount) {
-                            <span class="advance-filter-badge">{{ advanceFilterCount }}</span>
-                        }
-                    </span>
+                    <span>{{ localeData?.filters }}</span>
                 </span>
             </button>
             
@@ -150,12 +102,12 @@
         @if (hasAdvanceFilters) {
             <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-1 mb-3">
                 @if (expiredOnly !== null) {
-                    <div class="applied-filter-chip">
+                    <div class="font-size-12 border-radius-12 px-2 py-1 d-flex align-items-center applied-filter-chip column-gap-05">
                         <span>{{ localeData?.expiry_status }}:</span>
                         <span class="text-primary">{{ expiryStatusLabel }}</span>
                         <button
                             type="button"
-                            class="applied-filter-remove"
+                            class="bg-transparent border-none cursor-pointer"
                             (click)="removeAdvanceFilter('expiredOnly')"
                             [attr.aria-label]="commonLocaleData?.app_clear"
                         >
@@ -164,12 +116,12 @@
                     </div>
                 }
                 @if (withinDaysValue > 0) {
-                    <div class="applied-filter-chip">
+                    <div class="font-size-12 border-radius-12 px-2 py-1 d-flex align-items-center applied-filter-chip column-gap-05">
                         <span>{{ localeData?.expiry_within }}:</span>
                         <span class="text-primary">{{ withinDaysValue }} {{ localeData?.days }}</span>
                         <button
                             type="button"
-                            class="applied-filter-remove"
+                            class="bg-transparent border-none cursor-pointer"
                             (click)="removeAdvanceFilter('withinDays')"
                             [attr.aria-label]="commonLocaleData?.app_clear"
                         >
@@ -177,7 +129,7 @@
                         </button>
                     </div>
                 }
-                <button type="button" class="applied-filter-clear-all text-primary" (click)="clearAdvanceFilters()">
+                <button type="button" class=" bg-transparent border-none cursor-pointer text-primary" (click)="clearAdvanceFilters()">
                     {{ localeData?.clear_all }}
                 </button>
             </div>
@@ -348,7 +300,7 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     @if (dataSource?.data?.length) {
-                        <tr mat-footer-row *matFooterRowDef="displayedColumns" class="batch-total-row"></tr>
+                        <tr mat-footer-row *matFooterRowDef="displayedColumns" class="batch-total-row font-weight-semibold border-top"></tr>
                     }
                 </table>
             </div>

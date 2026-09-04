@@ -5,7 +5,6 @@ import { BatchReportItem } from "../../../models/interfaces/batch-report.interfa
  * Map availability `body.results` to dropdown options.
  *
  * @param {*} response `{ status, body: { results: BatchReportItem[] } }`
- * @param {string} [excludeUniqueName] Origin batch to omit from transfer targets
  * @return {*}  {IOption[]}
  */
 export function mapAvailabilityBatches(response: any, excludeUniqueName?: string): IOption[] {
@@ -16,9 +15,6 @@ export function mapAvailabilityBatches(response: any, excludeUniqueName?: string
     const results = Array.isArray(body) ? body : (body?.results ?? []);
     return (Array.isArray(results) ? results : []).reduce((list: IOption[], item: BatchReportItem) => {
         const value = item?.uniqueName;
-        // if (!value || value === excludeUniqueName || list.some(option => option.value === value)) {
-        //     return list;
-        // }
         const label = item.batchNumber
             ? `${item.batchNumber}${item.name ? " - " + item.name : ""}`
             : (item.name ?? value);

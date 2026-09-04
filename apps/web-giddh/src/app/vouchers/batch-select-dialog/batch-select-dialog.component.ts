@@ -11,6 +11,7 @@ import * as customParseFormat from "dayjs/plugin/customParseFormat";
 import { ASIDE_PANE_CONFIG } from "../../app.constant";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_WITH_SPACE } from "../../shared/helpers/defaultDateFormat";
 import { BatchReportItem } from "../../models/interfaces/batch-report.interface";
+import { BatchSelectDialogData, BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch.interface";
 import { InventoryService } from "../../services/inventory.service";
 import { ToasterService } from "../../services/toaster.service";
 import { BatchCreateEditComponent } from "../../new-inventory/component/batch-create-edit/batch-create-edit.component";
@@ -18,39 +19,6 @@ import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
 import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
 
 dayjs.extend(customParseFormat);
-
-export interface VoucherSelectedBatch {
-    uniqueName: string;
-    name?: string;
-    batchNumber?: string;
-    quantity: number;
-    rate?: number;
-    availableQuantity?: number;
-    expiryDate?: string;
-}
-
-export interface BatchSelectDialogData {
-    stockName: string;
-    stockUniqueName: string;
-    variantUniqueName?: string;
-    variantName?: string;
-    hasVariants?: boolean;
-    inventoryType?: string;
-    warehouseName?: string;
-    warehouseUniqueName?: string;
-    unitCode?: string;
-    lineQuantity: number;
-    selectedBatches: VoucherSelectedBatch[];
-    currencySymbol?: string;
-    localeData?: any;
-    commonLocaleData?: any;
-}
-
-export interface BatchSelectDialogResult {
-    batches: VoucherSelectedBatch[];
-    allocatedQuantity: number;
-    overrideLineQuantity?: boolean;
-}
 
 interface BatchSelectRow extends VoucherSelectedBatch {
     selected: boolean;

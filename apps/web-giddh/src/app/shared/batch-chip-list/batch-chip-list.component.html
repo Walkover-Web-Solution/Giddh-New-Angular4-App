@@ -1,26 +1,26 @@
 <div
     *ngIf="selectedBatches.length"
-    class="batch-select-trigger text-left"
+    class="d-flex flex-column align-items-start row-gap-05 text-left"
     (click)="$event.stopPropagation()"
 >
-    <div class="batch-chip-list">
-        <span *ngIf="selectedBatches.length > 1" class="batch-count-chip batch-total-chip">
-            <i class="icon-tick"></i>
+    <div class="d-flex flex-wrap align-items-center column-gap-05 row-gap-05">
+        <span *ngIf="selectedBatches.length > 1" class="status-chip status-chip-primary column-gap-05">
+            <i class="icon-tick font-size-12"></i>
             {{ countLabel }}
         </span>
-        <span *ngIf="negativeCount > 0" class="batch-over-chip">
+        <span *ngIf="negativeCount > 0" class="status-chip status-chip-warning">
             {{ negativeLabel }}
         </span>
-        <span *ngFor="let batch of selectedBatches" class="batch-count-chip">
+        <span *ngFor="let batch of selectedBatches" class="status-chip status-chip-primary">
             {{ (batch?.batchNumber || batch?.name) + " · " + batch?.quantity }}
         </span>
         <a
             *ngIf="showEdit"
             href="javascript:void(0)"
-            class="batch-select-link text-primary"
+            class="d-inline-flex align-items-center column-gap-05 text-primary font-size-12 cursor-pointer"
             (click)="edit.emit($event)"
         >
-            <i class="icon-edit"></i>
+            <i class="icon-edit font-size-12"></i>
             {{ commonLocaleData?.app_edit }}
         </a>
     </div>

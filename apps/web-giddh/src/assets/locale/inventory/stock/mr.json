@@ -106,7 +106,7 @@
     "add_batch": "बॅच जोडा",
     "manage_batches": "बॅच व्यवस्थापित करा",
     "add_batch_row": "+ बॅच ओळ जोडा",
-    "batch_no": "बॅच क्र",
+    "batch_number": "बॅच क्रमांक",
     "batch_name": "बॅच नाव",
     "manufacturing_date": "निर्मिती दिनांक",
     "expiry_date": "कालबाह्यता दिनांक",

@@ -72,7 +72,7 @@ import { CommonTaxComponent } from '../shared/common-tax/common-tax.component';
 import { CommonDiscountComponent } from '../shared/common-discount/common-discount.component';
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 import { BatchSelectDialogComponent } from '../vouchers/batch-select-dialog/batch-select-dialog.component';
-import { BatchChipListModule } from '../shared/batch-chip-list/batch-chip-list.module';
+import { BatchChipListComponent } from '../shared/batch-chip-list/batch-chip-list.component';
 
 @NgModule({
     declarations: [
@@ -163,7 +163,7 @@ import { BatchChipListModule } from '../shared/batch-chip-list/batch-chip-list.m
         GiddhDatePipe,
         GoToBranchComponent,
         BatchSelectDialogComponent,
-        BatchChipListModule
+        BatchChipListComponent
     ]
 })
 export class LedgerModule {

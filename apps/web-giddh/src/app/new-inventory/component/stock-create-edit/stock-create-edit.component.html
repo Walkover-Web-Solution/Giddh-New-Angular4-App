@@ -1025,7 +1025,7 @@
                                                                                 · {{ companyCurrencySymbol }}{{ variant.warehouseBalance[0].openingAmount || 0 }}
                                                                             </div>
                                                                             <a
-                                                                                class="variant-batch-link text-primary cursor-pointer"
+                                                                                class="d-inline-block mt-1 font-size-12 text-primary cursor-pointer"
                                                                                 (click)="toggleVariantBatches(variant)"
                                                                             >
                                                                                 <ng-container *ngIf="getVariantBatchCount(variant); else addBatchLink">
@@ -1279,18 +1279,18 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr
-                                                                    class="variant-batch-row"
+                                                                    class="variant-batch-row d-block w-100"
                                                                     *ngIf="batchTrackingEnabled && variant.showBatches && variant.name"
                                                                 >
-                                                                    <td class="variant-batch-cell">
+                                                                    <td class="variant-batch-cell d-block w-100 min-width-0">
                                                                         <div
-                                                                            class="variant-batch-fields w-75"
+                                                                            class="variant-batch-fields d-grid mb-2 w-75"
                                                                             *ngFor="let batch of getWarehouseBatches(variant); let batchIndex = index"
                                                                         >
-                                                                            <div class="variant-batch-field">
+                                                                            <div class="min-width-0 w-100">
                                                                                 <input-field
-                                                                                    [label]="localeData?.batch_no"
-                                                                                    [placeholder]="localeData?.batch_no"
+                                                                                    [label]="localeData?.batch_number"
+                                                                                    [placeholder]="localeData?.batch_number"
                                                                                     [name]="'variantBatchNumber' + i + '_' + batchIndex"
                                                                                     [(ngModel)]="batch.batchNumber"
                                                                                     (ngModelChange)="syncVariantOpeningFromBatches(variant)"
@@ -1298,7 +1298,7 @@
                                                                                     [required]="isBatchNameRequired(batch)"
                                                                                 ></input-field>
                                                                             </div>
-                                                                            <div class="variant-batch-field">
+                                                                            <div class="min-width-0 w-100">
                                                                                 <input-field
                                                                                     [label]="localeData?.batch_name"
                                                                                     [placeholder]="localeData?.batch_name"
@@ -1309,7 +1309,7 @@
                                                                                     [required]="isBatchNameRequired(batch)"
                                                                                 ></input-field>
                                                                             </div>
-                                                                            <div class="variant-batch-field variant-batch-datepicker">
+                                                                            <div class="min-width-0 w-100 variant-batch-datepicker">
                                                                                 <giddh-datepicker
                                                                                     [label]="localeData?.manufacturing_date"
                                                                                     [placeholder]="localeData?.manufacturing_date"
@@ -1319,7 +1319,7 @@
                                                                                     [(ngModel)]="batch.manufacturingDate"
                                                                                 ></giddh-datepicker>
                                                                             </div>
-                                                                            <div class="variant-batch-field variant-batch-datepicker">
+                                                                            <div class="min-width-0 w-100 variant-batch-datepicker">
                                                                                 <giddh-datepicker
                                                                                     [label]="localeData?.expiry_date"
                                                                                     [placeholder]="localeData?.expiry_date"
@@ -1329,7 +1329,7 @@
                                                                                     [(ngModel)]="batch.expiryDate"
                                                                                 ></giddh-datepicker>
                                                                             </div>
-                                                                            <div class="variant-batch-field">
+                                                                            <div class="min-width-0 w-100">
                                                                                 <input-field
                                                                                     [label]="localeData?.opening_qty"
                                                                                     [placeholder]="'0.00'"
@@ -1341,7 +1341,7 @@
                                                                                     [allowDecimalDigitsOnly]="true"
                                                                                 ></input-field>
                                                                             </div>
-                                                                            <div class="variant-batch-field">
+                                                                            <div class="min-width-0 w-100">
                                                                                 <input-field
                                                                                     [label]="localeData?.opening_amount"
                                                                                     [placeholder]="'0.00'"
@@ -1354,7 +1354,7 @@
                                                                                     [useMask]="true"
                                                                                 ></input-field>
                                                                             </div>
-                                                                            <div class="variant-batch-field variant-batch-remove" *ngIf="getWarehouseBatches(variant)?.length > 1">
+                                                                            <div class="variant-batch-remove" *ngIf="getWarehouseBatches(variant)?.length > 1">
                                                                                 <button
                                                                                     aria-label="delete icon"
                                                                                     matIconButton
@@ -1366,7 +1366,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <a
-                                                                            class="text-primary cursor-pointer another-option-btn mt-2"
+                                                                            class="d-inline-block text-primary cursor-pointer another-option-btn mt-2"
                                                                             (click)="addVariantBatchRow(variant)"
                                                                         >
                                                                             {{ localeData?.add_batch_row }}
@@ -1496,20 +1496,20 @@
                                             </div>
                                             <div class="row mt-4" *ngIf="!isVariantAvailable && batchTrackingEnabled">
                                                 <div class="col-12">
-                                                    <div class="stock-batch-wise">
-                                                        <p class="stock-batch-wise-title">{{ localeData?.opening_balance_batch_wise }}</p>
-                                                        <div class="stock-batch-box">
+                                                    <div class="mb-2">
+                                                        <p class="font-weight-semibold mb-2">{{ localeData?.opening_balance_batch_wise }}</p>
+                                                        <div class="stock-batch-box border border-radius-8">
                                                         <div
                                                             class="stock-batch-row"
                                                             *ngFor="let batch of getWarehouseBatches(stockForm.variants[0]); let batchIndex = index"
                                                         >
-                                                            <div class="stock-batch-fields">
+                                                            <div class="stock-batch-fields d-grid">
                                                                 <input-field
                                                                     appEnterNext
                                                                     [name]="'stockBatchNumber' + batchIndex"
                                                                     [type]="'text'"
-                                                                    [label]="localeData?.batch_no"
-                                                                    [placeholder]="localeData?.batch_no"
+                                                                    [label]="localeData?.batch_number"
+                                                                    [placeholder]="localeData?.batch_number"
                                                                     [(ngModel)]="batch.batchNumber"
                                                                     (ngModelChange)="syncVariantOpeningFromBatches(stockForm.variants[0])"
                                                                     [required]="isBatchNameRequired(batch)"
@@ -1567,15 +1567,15 @@
                                                                     type="button"
                                                                     aria-label="remove batch"
                                                                     matIconButton
-                                                                    class="stock-batch-remove"
+                                                                    class="stock-batch-remove light-gray"
                                                                     (click)="removeVariantBatchRow(stockForm.variants[0], batchIndex)"
                                                                 >
-                                                                    <i class="icon-cross"></i>
+                                                                    <i class="icon-trash"></i>
                                                                 </button>
                                                             </div>
                                                         </div>
                                                         <a
-                                                            class="text-primary cursor-pointer another-option-btn"
+                                                            class="d-inline-block mt-1 mb-2 text-primary cursor-pointer another-option-btn"
                                                             (click)="addVariantBatchRow(stockForm.variants[0])"
                                                         >
                                                             + {{ localeData?.add_batch }}

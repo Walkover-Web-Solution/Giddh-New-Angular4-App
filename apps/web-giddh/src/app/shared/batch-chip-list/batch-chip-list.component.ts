@@ -1,12 +1,14 @@
+import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
-import { VoucherSelectedBatch } from "../../vouchers/batch-select-dialog/batch-select-dialog.component";
+import { VoucherSelectedBatch } from "../../models/interfaces/batch.interface";
 
 @Component({
     selector: "batch-chip-list",
     templateUrl: "./batch-chip-list.component.html",
     styleUrls: ["./batch-chip-list.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    standalone: true,
+    imports: [CommonModule]
 })
 export class BatchChipListComponent {
     /** Selected batches to render. */

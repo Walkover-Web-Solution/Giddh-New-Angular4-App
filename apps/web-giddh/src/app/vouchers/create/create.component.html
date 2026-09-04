@@ -2100,12 +2100,12 @@
                                                                             transaction.get('stock.uniqueName')?.value &&
                                                                             !getEntryBatches(transaction)?.length
                                                                         "
-                                                                        class="batch-select-trigger text-left mt-1"
+                                                                        class="text-left mt-1"
                                                                         (click)="$event.stopPropagation()"
                                                                     >
                                                                         <a
                                                                             href="javascript:void(0)"
-                                                                            class="batch-select-link"
+                                                                            class="font-size-12 font-weight-semibold text-primary"
                                                                             (click)="openBatchSelectDialog(entryIndex, $event)"
                                                                         >
                                                                             {{ localeData?.select_batch }}

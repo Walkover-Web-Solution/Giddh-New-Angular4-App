@@ -15,7 +15,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/hel
 import { InventoryReportRequest } from "../../../models/api-models/Inventory";
 import { BatchReportFilter, BatchReportItem, BatchReportTotals } from "../../../models/interfaces/batch-report.interface";
 import { OrganizationType } from "../../../models/user-login-state";
-import { cloneDeep } from "../../../lodash-optimized";
 import { GeneralService } from "../../../services/general.service";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
@@ -75,26 +74,14 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public selectedWarehouse: string[] = [];
     /** Stock options for the filter dropdown. */
     public stocks: Array<{ label: string; value: string }> = [];
-    /** Stock options after local search. */
-    public filteredStocks: Array<{ label: string; value: string }> = [];
     /** Variant options for the filter dropdown. */
     public variants: Array<{ label: string; value: string }> = [];
-    /** Variant options after local search. */
-    public filteredVariants: Array<{ label: string; value: string }> = [];
-    /** Warehouses currently shown in the dropdown (after search). */
+    /** Warehouse options for the filter dropdown. */
     public warehouses: any[] = [];
-    /** Warehouses source list (before dropdown search). */
-    public currentWarehouses: any[] = [];
     /** Full branches list from API. */
     public allBranches: any[] = [];
     /** True when the current org is a company. */
     public isCompany: boolean = false;
-    /** Search form control for the stock dropdown. */
-    public stocksDropdown: FormControl = new FormControl();
-    /** Search form control for the variant dropdown. */
-    public variantsDropdown: FormControl = new FormControl();
-    /** Search form control for the warehouse dropdown. */
-    public warehousesDropdown: FormControl = new FormControl();
     /** Inline search for batch number column. */
     public searchBatchNumber: FormControl = new FormControl("");
     /** Inline search for name column. */
@@ -200,27 +187,6 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.loadVariants();
             this.getBatches();
             this.cdr.detectChanges();
-        });
-
-        this.stocksDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            const options = cloneDeep(this.stocks);
-            this.filteredStocks = search
-                ? options?.filter(stock => stock?.label?.toLowerCase()?.includes(search?.toLowerCase()))
-                : options;
-        });
-
-        this.variantsDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            const options = cloneDeep(this.variants);
-            this.filteredVariants = search
-                ? options?.filter(variant => variant?.label?.toLowerCase()?.includes(search?.toLowerCase()))
-                : options;
-        });
-
-        this.warehousesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            const options = cloneDeep(this.currentWarehouses);
-            this.warehouses = search
-                ? options?.filter((warehouse: any) => warehouse?.name?.toLowerCase()?.includes(search?.toLowerCase()))
-                : options;
         });
 
         this.searchBatchNumber.valueChanges.pipe(
@@ -824,7 +790,6 @@ export class BatchReportComponent implements OnInit, OnDestroy {
                         }
                     });
                     this.stocks = Array.from(unique.values());
-                    this.filteredStocks = cloneDeep(this.stocks);
                     this.cdr.detectChanges();
                 }
             });
@@ -856,7 +821,6 @@ export class BatchReportComponent implements OnInit, OnDestroy {
                         }
                     });
                     this.variants = Array.from(unique.values());
-                    this.filteredVariants = cloneDeep(this.variants);
                     this.cdr.detectChanges();
                 }
             });
@@ -893,7 +857,6 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             const currentBranch = branches.find((branch: any) => branch?.uniqueName === this.generalService.currentBranchUniqueName);
             this.warehouses = currentBranch?.warehouses ?? [];
         }
-        this.currentWarehouses = this.warehouses;
     }
 
     /**

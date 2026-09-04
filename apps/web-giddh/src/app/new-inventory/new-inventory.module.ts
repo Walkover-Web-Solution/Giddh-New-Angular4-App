@@ -13,6 +13,7 @@ import { TranslateDirectiveModule } from "../theme/translate/translate.directive
 import { CommonModule } from "@angular/common";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { MatButtonModule } from "@angular/material/button";
+import { MatBadgeModule } from "@angular/material/badge";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -109,6 +110,7 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         TranslateDirectiveModule,
         DecimalDigitsModule,
         MatButtonModule,
+        MatBadgeModule,
         MatIconModule,
         MatMenuModule,
         MatCheckboxModule,

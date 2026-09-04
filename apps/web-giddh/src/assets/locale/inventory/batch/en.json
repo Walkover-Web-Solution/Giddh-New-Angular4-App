@@ -43,6 +43,7 @@
     "enter_quantity": "Enter Quantity",
     "quantity_exceeds_available": "Quantity cannot be more than the available quantity ([QTY]).",
     "batch_transferred": "Batch transferred successfully",
+    "no_target_batch_message": "No other batch found for this stock and variant, create a batch to transfer into.",
     "unarchive_batch": "Are you sure you want to unarchive this batch?",
     "batch_archived": "Batch archived successfully",
     "batch_unarchived": "Batch unarchived successfully",

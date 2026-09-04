@@ -124,7 +124,7 @@ export class BatchArchiveDialogComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 this.isLoading = false;
                 const mapped = response?.status === "success"
-                    ? mapAvailabilityBatches(response, batch?.uniqueName)
+                    ? mapAvailabilityBatches(response)
                     : [];
                 this.batchOptions = [this.getUnassignedOption(), ...mapped];
                 this.hasLoadedBatches = true;

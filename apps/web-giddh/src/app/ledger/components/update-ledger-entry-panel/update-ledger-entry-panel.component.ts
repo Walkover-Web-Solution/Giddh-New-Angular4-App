@@ -72,7 +72,8 @@ import { SettingsDiscountService } from '../../../services/settings.discount.ser
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
-import { BatchSelectDialogComponent, BatchSelectDialogResult, VoucherSelectedBatch } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
+import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
+import { BatchSelectDialogResult, VoucherSelectedBatch } from '../../../models/interfaces/batch.interface';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';

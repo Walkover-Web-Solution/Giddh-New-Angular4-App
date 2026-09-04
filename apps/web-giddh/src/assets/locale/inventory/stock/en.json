@@ -106,7 +106,7 @@
     "add_batch": "Add batch",
     "manage_batches": "Manage batches",
     "add_batch_row": "+ Add batch row",
-    "batch_no": "Batch no",
+    "batch_number": "Batch Number",
     "batch_name": "Batch name",
     "manufacturing_date": "Mfg date",
     "expiry_date": "Expiry date",

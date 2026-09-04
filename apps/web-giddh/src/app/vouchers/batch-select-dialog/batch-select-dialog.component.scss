@@ -1,78 +1,50 @@
-.batch-select-dialog {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background-color: var(--color-white, #fff);
-}
-
-.batch-select-body {
-    flex: 1;
-    overflow: auto;
-    padding: 16px 20px 12px;
-}
-
-.batch-subtitle {
-    color: var(--text-light);
-    font-size: var(--font-size-12);
-    margin-bottom: 12px;
-}
-
-.allocation-status {
+.soft-panel {
     padding: 12px 14px;
     margin-bottom: 14px;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background-color: #f7f9fc;
-
-    &.full {
-        border-color: #a8d5be;
-        background-color: #f1f9f4;
-    }
-
-    &.over {
-        border-color: #e8b86d;
-        background-color: #fff8ee;
-    }
+    border-radius: var(--mat-border-radius-8, 8px);
 }
 
-.allocation-full {
-    color: var(--color-green);
-    font-size: var(--font-size-12);
-    font-weight: 500;
+.soft-panel-default {
+    background-color: var(--color-light-gray);
 }
 
-.allocation-over {
-    color: var(--color-orange);
-    font-size: var(--font-size-12);
-    font-weight: 500;
+.soft-panel-success {
+    border-color: var(--color-green);
+    background-color: var(--color-green-light);
 }
 
-.allocation-bar {
+.soft-panel-warning {
+    border-color: var(--color-orange);
+    background-color: var(--color-warm-orange-light);
+}
+
+.progress-track {
     position: relative;
     height: 6px;
     margin-top: 10px;
     border-radius: 999px;
     background-color: var(--border-color);
     overflow: hidden;
-
-    .allocation-bar-fill {
-        display: block;
-        height: 100%;
-        background-color: var(--color-blue-primary, #1a73e8);
-        border-radius: 999px;
-    }
 }
 
-.allocation-status.full .allocation-bar-fill {
+.progress-track-fill {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background-color: var(--bg-primary-color);
+}
+
+.progress-track-fill-success {
     background-color: var(--color-green);
 }
 
-.allocation-status.over .allocation-bar-fill {
+.progress-track-fill-warning {
     background-color: var(--color-orange);
     width: 80% !important;
 }
 
-.allocation-bar-over {
+.progress-track-over {
     position: absolute;
     top: 0;
     right: 0;
@@ -82,146 +54,11 @@
     opacity: 0.45;
 }
 
-.batch-alert {
-    padding: 12px 14px;
-    border: 1px solid #e8b86d;
-    border-radius: 8px;
-    margin-bottom: 14px;
-    font-size: var(--font-size-14);
-    background-color: #fff8ee;
-}
-
-.search-wrap {
-    margin-bottom: 6px;
-}
-
-.search-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
-}
-
-.add-batch-link {
-    font-size: var(--font-size-12);
-    font-weight: 500;
-    white-space: nowrap;
-    cursor: pointer;
-    text-decoration: none;
-
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.search-hint {
-    color: var(--text-light);
-    font-size: var(--font-size-12);
-    margin: 0;
-    text-align: right;
-    flex: 1;
-}
-
-.batch-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.batch-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background-color: var(--color-white, #fff);
-
-    &.selected {
-        border-color: #90caf9;
-        background-color: #f4f8fd;
-    }
-}
-
-.batch-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.batch-number {
-    font-weight: 600;
-}
-
-.batch-meta {
-    color: var(--text-light);
-    font-size: var(--font-size-12);
-    margin-top: 3px;
-}
-
-.expiry-expired {
-    color: var(--color-red);
-    font-weight: 500;
-}
-
-.expiry-warning {
-    color: var(--color-orange);
-    font-weight: 500;
-}
-
-.expiry-ok {
-    color: var(--color-green);
-    font-weight: 500;
-}
-
-.batch-negative {
-    color: var(--color-orange);
-    font-size: var(--font-size-12);
-    margin-top: 4px;
-}
-
-.batch-qty {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.batch-qty-field {
     width: 110px;
-    flex-shrink: 0;
 
     input {
         width: 72px;
-        border-radius: 6px;
+        border-radius: var(--mat-border-radius-4, 4px);
     }
-}
-
-.batch-unit {
-    color: var(--text-light);
-    font-size: var(--font-size-12);
-}
-
-.empty-state {
-    padding: 28px 12px;
-    text-align: center;
-    color: var(--text-light);
-}
-
-.dialog-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 20px 16px;
-    border-top: 1px solid var(--border-color);
-    background-color: #f7f9fc;
-}
-
-.footer-summary {
-    color: var(--text-light);
-    font-size: var(--font-size-12);
-}
-
-.footer-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
 }
