@@ -42,15 +42,7 @@ import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription
 // Debug: Log all environment variables to verify they're loaded correctly
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
-let whiteLabelConfig = null;
-if (whiteLabelString) {
-    try {
-        whiteLabelConfig = JSON.parse(whiteLabelString);
-    } catch (e) {
-        console.warn('Invalid whiteLabel in localStorage, clearing it', e);
-        localStorage.removeItem('whiteLabel');
-    }
-}
+let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
 whiteLabelConfig = whiteLabelConfig?.status === 'error' ? null : whiteLabelConfig;
 // FetchWhiteLabel returns an async function that fetches white-label data from an API, stores it in localStorage, and caches it in whiteLabelConfig.
 export function fetchWhiteLabel(): () => Promise<void> {

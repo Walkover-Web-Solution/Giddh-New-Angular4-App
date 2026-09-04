@@ -140,13 +140,7 @@ window.HW_config = window.HW_config || {
 // Enhanced logo and preconnect initialization with retry mechanism
 function initializeLogo() {
     try {
-        let whiteLabelConfig = null;
-        try {
-            whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel") || "null");
-        } catch (parseError) {
-            console.warn("Invalid whiteLabel in localStorage, clearing it", parseError);
-            localStorage.removeItem("whiteLabel");
-        }
+        let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel") || "null");
         const logoUrl = "./assets/images/giddh-big-logo.svg";
         const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
         if (whiteLabelConfig) {
