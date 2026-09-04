@@ -67,6 +67,7 @@
     "and_update_acc": "& खाता अपडेट करें",
     "create_send": "बनाएँ और भेजें",
     "create_print": "बनाएँ और प्रिंट करें",
+    "create_download_signed_pdf": "साइन किया हुआ PDF बनाएं और डाउनलोड करें",
     "generate_recurring": "उत्पन्न और आवर्ती",
     "select_customer": "ग्राहक का चयन करें",
     "select_vendor": "विक्रेता का चयन करें",

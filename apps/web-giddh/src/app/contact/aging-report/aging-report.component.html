@@ -222,7 +222,7 @@
                                     $implicit: showNameSearch,
                                     fieldName: 'name',
                                     formControl: searchedName,
-                                    title: commonLocaleData?.app_customer_name,
+                                    title: vendorCustomerType === ContactsModule.vendor ? commonLocaleData?.app_vendor_name : commonLocaleData?.app_customer_name,
                                 }
                             "
                         ></ng-container>

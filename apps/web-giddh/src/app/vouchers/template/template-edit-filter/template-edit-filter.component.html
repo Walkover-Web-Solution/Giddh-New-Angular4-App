@@ -1979,6 +1979,50 @@
                                                 ></ng-container>
                                             }
 
+                                            @if (isTcsTdsApplicable && isTallyTemplate && isVoucherTypeSales) {
+                                                <!-- tcs -->
+                                                @if (sectionSettings?.footer?.tcs) {
+                                                    <ng-container
+                                                        *ngTemplateOutlet="
+                                                            labelRow;
+                                                            context: {
+                                                                rowId: 'tcsRow',
+                                                                showInputField: true,
+                                                                showCheckbox: true,
+                                                                section: 'footer',
+                                                                field: 'tcs',
+                                                                callbacks: [onChangeFieldVisibility],
+                                                                name: 'tcs',
+                                                                label: localeData?.tcs,
+                                                                maxLength: 10,
+                                                                showSecondaryLabel: showSecondaryLabel,
+                                                            }
+                                                        "
+                                                    ></ng-container>
+                                                }
+    
+                                                <!-- tds -->
+                                                @if (sectionSettings?.footer?.tds) {
+                                                    <ng-container
+                                                        *ngTemplateOutlet="
+                                                            labelRow;
+                                                            context: {
+                                                                rowId: 'tdsRow',
+                                                                showInputField: true,
+                                                                showCheckbox: true,
+                                                                section: 'footer',
+                                                                field: 'tds',
+                                                                callbacks: [onChangeFieldVisibility],
+                                                                name: 'tds',
+                                                                label: localeData?.tds,
+                                                                maxLength: 10,
+                                                                showSecondaryLabel: showSecondaryLabel,
+                                                            }
+                                                        "
+                                                    ></ng-container>
+                                                }
+                                            }
+
                                             <!-- Round Off inside entry table - Only for Tally -->
                                             @if (sectionSettings?.table.RoundOff && isTallyTemplate) {
                                                 <ng-container

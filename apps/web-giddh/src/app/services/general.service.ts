@@ -1855,13 +1855,16 @@ export class GeneralService {
     public getOperatingSystem(): SUPPORTED_OPERATING_SYSTEMS {
         const platform = window.navigator.userAgent.toLowerCase(),
             macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i,
-            windowsPlatforms = /(win32|win64|windows|wince)/i;
+            windowsPlatforms = /(win32|win64|windows|wince)/i,
+            linuxPlatforms = /(linux|ubuntu|debian|fedora|redhat)/i;
         let operatingSystem = null;
 
         if (macosPlatforms.test(platform)) {
             operatingSystem = SUPPORTED_OPERATING_SYSTEMS.MacOS;
         } else if (windowsPlatforms.test(platform)) {
             operatingSystem = SUPPORTED_OPERATING_SYSTEMS.Windows;
+        } else if (linuxPlatforms.test(platform)) {
+            operatingSystem = SUPPORTED_OPERATING_SYSTEMS.Linux;
         }
 
         return operatingSystem;
