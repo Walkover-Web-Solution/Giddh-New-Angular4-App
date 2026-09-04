@@ -139,7 +139,7 @@ import { RecurringEndType, RecurringRepeatOption, RecurringFrequencyUnit, Recurr
 import { AccountCategoryEnum } from "../../shared/Enums/common.enum";
 import { CopyParticularDialogComponent } from "../copy-particular-dialog/copy-particular-dialog.component";
 import { BatchSelectDialogComponent } from "../batch-select-dialog/batch-select-dialog.component";
-import { BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch.interface";
+import { BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",

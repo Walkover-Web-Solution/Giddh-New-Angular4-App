@@ -11,7 +11,7 @@ import * as customParseFormat from "dayjs/plugin/customParseFormat";
 import { ASIDE_PANE_CONFIG } from "../../app.constant";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_WITH_SPACE } from "../../shared/helpers/defaultDateFormat";
 import { BatchReportItem } from "../../models/interfaces/batch-report.interface";
-import { BatchSelectDialogData, BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch.interface";
+import { BatchSelectDialogData, BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
 import { InventoryService } from "../../services/inventory.service";
 import { ToasterService } from "../../services/toaster.service";
 import { BatchCreateEditComponent } from "../../new-inventory/component/batch-create-edit/batch-create-edit.component";

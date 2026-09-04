@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
-import { VoucherSelectedBatch } from "../../models/interfaces/batch.interface";
+import { VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
 
 @Component({
     selector: "batch-chip-list",

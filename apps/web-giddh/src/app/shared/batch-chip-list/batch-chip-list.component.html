@@ -4,14 +4,23 @@
     (click)="$event.stopPropagation()"
 >
     <div class="d-flex flex-wrap align-items-center column-gap-05 row-gap-05">
-        <span *ngIf="selectedBatches.length > 1" class="status-chip status-chip-primary column-gap-05">
+        <span
+            *ngIf="selectedBatches.length > 1"
+            class="status-chip status-chip-primary d-inline-flex align-items-center column-gap-05 border-radius-8 font-size-12 font-weight-medium white-space-nowrap theme-primary-light text-primary"
+        >
             <i class="icon-tick font-size-12"></i>
             {{ countLabel }}
         </span>
-        <span *ngIf="negativeCount > 0" class="status-chip status-chip-warning">
+        <span
+            *ngIf="negativeCount > 0"
+            class="status-chip status-chip-warning d-inline-flex align-items-center border-radius-8 font-size-12 font-weight-medium white-space-nowrap bg-warning text-orange"
+        >
             {{ negativeLabel }}
         </span>
-        <span *ngFor="let batch of selectedBatches" class="status-chip status-chip-primary">
+        <span
+            *ngFor="let batch of selectedBatches"
+            class="status-chip status-chip-primary d-inline-flex align-items-center border-radius-8 font-size-12 font-weight-medium white-space-nowrap theme-primary-light text-primary"
+        >
             {{ (batch?.batchNumber || batch?.name) + " · " + batch?.quantity }}
         </span>
         <a
