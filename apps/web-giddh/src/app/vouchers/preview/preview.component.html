@@ -177,6 +177,22 @@
                             >
                                 <i class="icon-download-circle"></i>
                             </button>
+                            @if (shouldShowDownloadSignedPdf()) {
+                                <button
+                                    matButton="outlined"
+                                    class="btn-stroked-icon"
+                                    [matTooltip]="commonLocaleData?.app_download_signed_invoice"
+                                    [matTooltipPosition]="'above'"
+                                    (click)="downloadSignedInvoicePdf()"
+                                    [disabled]="isDscPreloading"
+                                >
+                                    @if (isDscPreloading) {
+                                        <mat-spinner [diameter]="14"></mat-spinner>
+                                    } @else {
+                                        <i class="icon-download-circle"></i>
+                                    }
+                                </button>
+                            }
                             <button
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                                 matButton="outlined"
