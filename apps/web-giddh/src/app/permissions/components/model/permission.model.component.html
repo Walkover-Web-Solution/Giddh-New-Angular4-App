@@ -26,25 +26,15 @@
                     ></reactive-dropdown-field>
                 </div>
                 <div class="form-group" *ngIf="newRoleObj.isFresh">
-                    <mat-form-field class="w-100" appearance="outline">
-                        <mat-label>{{ dropdownHeading }}</mat-label>
-                        <mat-select class="px-0" [(ngModel)]="selectedValues" name="page-list" multiple>
-                            <div class="custom-select-all-option">
-                                <mat-checkbox color="primary" (change)="selectAllPages($event)" [checked]="newRoleObj.isSelectedAllPages">
-                                    {{ commonLocaleData?.app_select_all }}
-                                </mat-checkbox>
-                            </div>
-                            <ng-container *ngFor="let item of newRoleObj.pageList; let i = index">
-                                <mat-option
-                                    (click)="item.isSelected = !item.isSelected; enableDisableSelectAll()"
-                                    [name]="'item' + i"
-                                    [value]="item"
-                                >
-                                    {{ item.name | capitalize }}
-                                </mat-option>
-                            </ng-container>
-                        </mat-select>
-                    </mat-form-field>
+                    <multi-select-dropdown
+                        [name]="'page-list'"
+                        [label]="localeData?.select_pages"
+                        [options]="pageOptions"
+                        [showAllOption]="true"
+                        [required]="true"
+                        [(ngModel)]="selectedValues"
+                        (selectionChange)="onPagesSelected($event)"
+                    ></multi-select-dropdown>
                 </div>
                 <div *ngIf="!newRoleObj.isFresh">
                     <reactive-dropdown-field

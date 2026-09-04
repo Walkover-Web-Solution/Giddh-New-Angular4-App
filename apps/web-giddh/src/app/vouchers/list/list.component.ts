@@ -8,6 +8,7 @@ import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
 import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, filter, merge, of as observableOf, skip, take, takeUntil } from "rxjs";
+import { finalize } from "rxjs/operators";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -19,6 +20,8 @@ import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES,
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
+import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
+import { DscService } from "../../services/dsc.service";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
 import { InvoiceService } from "../../services/invoice.service";
 import { InvoiceTemplatesService } from "../../services/invoice.templates.service";
@@ -120,6 +123,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public purchaseOrderUniqueNameInput: FormControl = new FormControl(null);
     /** True if searching is in progress */
     public isSearching: boolean = false;
+    /** True while DSC certificates are being preloaded; disables signed-PDF download buttons. */
+    public isDscPreloading: boolean = true;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -410,7 +415,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private commonActions: CommonActions,
         private changeDetectorRef: ChangeDetectorRef,
         private recurrenceService: RecurrenceFormService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private dscSignDialogService: DscSignDialogService,
+        private dscService: DscService
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
@@ -1041,6 +1048,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             });
         }
+
+        this.isDscPreloading = !this.dscService.hasCachedCertificates();
+        this.dscService.preloadCertificates().pipe(
+            takeUntil(this.destroyed$),
+            finalize(() => {
+                this.isDscPreloading = false;
+                this.changeDetectorRef.detectChanges();
+            })
+        ).subscribe();
     }
 
     /**
@@ -1520,7 +1536,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public getVoucherBalances(): void {
         if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote || this.voucherType === VoucherTypeEnum.purchase || this.voucherType === VoucherTypeEnum.payment || this.voucherType === VoucherTypeEnum.receipt) {
-            this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: cloneDeep(this.advanceFilters) });
+            this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true) });
         }
     }
 
@@ -1533,11 +1549,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private getAllVouchers(): void {
         if (this.voucherTypes?.length) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+                this.componentStore.getPreviousProformaEstimates({ model: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true), type: this.voucherType });
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                this.componentStore.getPurchaseOrders({ request: cloneDeep(this.advanceFilters) });
+                this.componentStore.getPurchaseOrders({ request: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true) });
             } else {
-                this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+                this.componentStore.getPreviousVouchers({ model: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true), type: this.voucherType });
             }
         }
     }
@@ -4000,5 +4016,18 @@ public generateRecurringVoucher(voucher: any): void {
             this.advanceFilters['from'] = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
             this.advanceFilters['to'] = dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
         }
+    }
+
+    /**
+     * Initiates digitally signed invoice PDF download by opening the reusable DSC PIN dialog.
+     *
+     * @param {*} voucher The voucher for which the signed PDF is requested
+     * @memberof VoucherListComponent
+     */
+    public downloadSignedInvoicePdf(voucher: any): void {
+        this.dscSignDialogService.openDownloadSignedInvoiceDialog({
+            voucher,
+            voucherType: this.voucherType
+        });
     }
 }

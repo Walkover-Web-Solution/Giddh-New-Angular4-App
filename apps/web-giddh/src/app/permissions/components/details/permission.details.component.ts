@@ -9,7 +9,7 @@ import { PermissionActions } from '../../../actions/permission/permission.action
 import { IRoleCommonResponseAndRequest, Permission, Scope } from '../../../models/api-models/Permission';
 import { IPage, NewPermissionObj, NewRoleClass } from '../../permission.utility';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { cloneDeep, concat, filter, find, findIndex, forEach, indexOf, isEmpty, map, remove } from '../../../lodash-optimized';
+import { cloneDeep, concat, find, findIndex, forEach, indexOf, isEmpty, map, remove } from '../../../lodash-optimized';
 
 @Component({
     standalone: false,
@@ -100,8 +100,12 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         this.checkExistsDataInPageResponse();
 
         if (this.roleObj?.scopes) {
-            this.roleObj.scopes = this.roleObj?.scopes.map(item => {
-                item.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
+            this.roleObj.scopes = this.roleObj.scopes.map(item => {
+                const hasSelectAll = item.permissions?.some(permission => permission.code === 'SELECT-ALL');
+                if (!hasSelectAll) {
+                    item.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
+                }
+                this.syncSelectAllCheckbox(item);
                 return item;
             });
         }
@@ -162,11 +166,23 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public getScopeDataReadyForAPI(data): Scope[] {
-        let arr: Scope[];
-        arr = forEach(data?.scopes, (page: Scope) => {
-            remove(page.permissions, (permission: Permission) => !permission.isSelected || permission.code === 'SELECT-ALL');
+        const scopes: Scope[] = [];
+        (data?.scopes ?? []).forEach((page: Scope) => {
+            const isSelectAll = page.permissions?.some(
+                permission => permission.code === 'SELECT-ALL' && permission.isSelected
+            );
+            if (isSelectAll) {
+                scopes.push({ name: page.name, permissions: [], selectAll: true });
+                return;
+            }
+            const selectedPermissions = (page.permissions ?? []).filter(
+                permission => permission.isSelected && permission.code !== 'SELECT-ALL'
+            );
+            if (selectedPermissions.length) {
+                scopes.push({ name: page.name, permissions: selectedPermissions });
+            }
         });
-        return filter(arr, (scope: Scope) => scope.permissions?.length > 0);
+        return scopes;
     }
 
     public addNewRole(): any {
@@ -225,20 +241,16 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         });
         if (res) {
             forEach(res.scopes, (obj: Scope) => {
-                obj.permissions = obj.permissions.map((o: Permission) => {
-                    return o = new NewPermissionObj(o.code, true);
-                });
-                if (obj.permissions?.length < 6 && obj.name !== 'SHARE') {
-                    obj.permissions = this.pushNonExistRoles(obj.permissions, this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles)));
-                }
-                let count = 0;
-                forEach(obj.permissions, (o: Permission) => {
-                    if (o.isSelected) {
-                        count += 1;
+                if (obj.selectAll) {
+                    obj.permissions = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
+                    obj.permissions.forEach((permission: Permission) => permission.isSelected = true);
+                } else {
+                    obj.permissions = obj.permissions.map((o: Permission) => {
+                        return o = new NewPermissionObj(o.code, true);
+                    });
+                    if (obj.permissions?.length < 6 && obj.name !== 'SHARE') {
+                        obj.permissions = this.pushNonExistRoles(obj.permissions, this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles)));
                     }
-                });
-                if (count === obj.permissions?.length) {
-                    obj.permissions[0].isSelected = true;
                 }
             });
             return res.scopes;
@@ -360,7 +372,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Checks if the page list already contains the current page. If not, adds it to the page list.//+
+     * Checks if the page list already contains the current page. If not, adds it to the page list.
      *
      * @memberof PermissionDetailsComponent
      */
@@ -373,4 +385,23 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         });
     }
 
+    /**
+     * Checks the Select all box when every real permission on the page is selected, or the API sent selectAll.
+     *
+     * @private
+     * @param {Scope} page
+     * @memberof PermissionDetailsComponent
+     */
+    private syncSelectAllCheckbox(page: Scope): void {
+        const selectAllPermission = page.permissions?.find(permission => permission.code === 'SELECT-ALL');
+        if (!selectAllPermission) {
+            return;
+        }
+        const realPermissions = page.permissions.filter(permission => permission.code !== 'SELECT-ALL');
+        const allRealSelected = realPermissions.length > 0 && realPermissions.every(permission => permission.isSelected);
+        selectAllPermission.isSelected = !!page.selectAll || allRealSelected;
+        if (selectAllPermission.isSelected) {
+            realPermissions.forEach(permission => permission.isSelected = true);
+        }
+    }
 }

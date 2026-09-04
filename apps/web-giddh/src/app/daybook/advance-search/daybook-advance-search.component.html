@@ -82,6 +82,8 @@
                                             [placeholder]="commonLocaleData?.app_select"
                                             [commonLocaleData]="commonLocaleData"
                                             [showMatLabel]="true"
+                                            [showAllOption]="true"
+                                            [allOptionLabel]="commonLocaleData?.app_all"
                                             [options]="accounts$ | async"
                                             [chipListUniqueName]="advanceSearchForm?.controls['particulars']?.value"
                                             (selectedOptionUniqueName)="advanceSearchForm?.controls['particulars']?.patchValue($event)"
@@ -126,6 +128,8 @@
                                             [label]="commonLocaleData?.app_voucher_type"
                                             [placeholder]="commonLocaleData?.app_select"
                                             [commonLocaleData]="commonLocaleData"
+                                            [showAllOption]="true"
+                                            [allOptionLabel]="commonLocaleData?.app_all"
                                             [showMatLabel]="true"
                                             [options]="voucherTypeList | async"
                                             [chipListUniqueName]="advanceSearchForm?.controls['vouchers']?.value"
@@ -164,6 +168,8 @@
                                             [appearance]="'outline'"
                                             [commonLocaleData]="commonLocaleData"
                                             [showMatLabel]="true"
+                                            [showAllOption]="true"
+                                            [allOptionLabel]="commonLocaleData?.app_all"
                                             [label]="localeData?.tags"
                                             [placeholder]="localeData?.select_tags"
                                             [options]="tags$ | async"
@@ -204,31 +210,16 @@
                                 </div>
                                 <div class="col-sm-9 col-8 col-12">
                                     <div class="mt-3">
-                                        <mat-form-field appearance="outline" class="initial-height">
-                                            <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
-                                            <mat-select
-                                                panelClass="py-0"
-                                                name="salesPerson"
-                                                [multiple]="true"
-                                                [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
-                                            >
-                                                <mat-option class="mt-0">
-                                                    <ngx-mat-select-search
-                                                        [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                                        [formControl]="salesPersonDropdown"
-                                                    >
-                                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                                    </ngx-mat-select-search>
-                                                </mat-option>
-                                                <mat-option
-                                                    *ngFor="let salesPerson of filteredSalesPersonList"
-                                                    [value]="salesPerson?.value"
-                                                >
-                                                    {{ salesPerson?.label }}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
+                                        <multi-select-dropdown
+                                            [label]="commonLocaleData?.app_sales_person"
+                                            [placeholder]="commonLocaleData?.app_sales_person_placeholder"
+                                            [options]="salesPersonList$ | async"
+                                            [showAllOption]="true"
+                                            [optionValue]="'value'"
+                                            [optionLabel]="'label'"
+                                            name="salesPerson"
+                                            formControlName="salesPersonUniqueNames"
+                                        ></multi-select-dropdown>
                                     </div>
                                 </div>
                             </div>
@@ -307,6 +298,8 @@
                                                         [appearance]="'outline'"
                                                         [label]="commonLocaleData?.app_select_accounts"
                                                         [placeholder]="commonLocaleData?.app_select"
+                                                        [showAllOption]="true"
+                                                        [allOptionLabel]="commonLocaleData?.app_all"
                                                         [commonLocaleData]="commonLocaleData"
                                                         [showMatLabel]="true"
                                                         [options]="stockListDropDown$ | async"

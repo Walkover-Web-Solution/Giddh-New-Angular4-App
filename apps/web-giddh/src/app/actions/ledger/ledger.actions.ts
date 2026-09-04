@@ -572,7 +572,17 @@ export class LedgerActions {
     public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, page?: number, count?: number, q?: string, branchUniqueName?: string, paginationToken?: string): CustomActions {
         return {
             type: LEDGER.ADVANCE_SEARCH,
-            payload: { model, accountUniqueName, from, to, page, count, q, branchUniqueName, paginationToken }
+            payload: {
+                model: this.generalService.replaceSelectedAllOptions(model, true),
+                accountUniqueName,
+                from,
+                to,
+                page,
+                count,
+                q,
+                branchUniqueName,
+                paginationToken
+            }
         };
     }
 

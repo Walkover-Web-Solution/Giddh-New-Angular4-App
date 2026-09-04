@@ -67,6 +67,7 @@
     "and_update_acc": "& Update A/c",
     "create_send": "Create & Send",
     "create_print": "Create & Print",
+    "create_download_signed_pdf": "Create & Download Signed PDF",
     "generate_recurring": "Generate & Recurring",
     "select_customer": "Select Customer",
     "select_vendor": "Select Vendor",

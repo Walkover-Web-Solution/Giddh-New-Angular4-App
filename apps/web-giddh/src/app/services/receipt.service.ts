@@ -235,7 +235,7 @@ export class ReceiptService {
             ...(request.countryCode ? { country: { code: request.countryCode } } : {})
         }
 
-        return this.http.post(url, { accountUniqueNames: request.accountUniqueNames, salesPersonUniqueName: request.salesPersonUniqueName, ...countryState }).pipe(map((res) => {
+        return this.http.post(url, { accountUniqueNames: request.accountUniqueNames, selectAll: request.selectAll, salesPersonUniqueName: request.salesPersonUniqueName, ...countryState }).pipe(map((res) => {
             let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
@@ -261,7 +261,7 @@ export class ReceiptService {
             ...(request.countryCode ? { country: { code: request.countryCode } } : {})
         }
 
-        return this.http.post(url, { accountUniqueNames: request.accountUniqueNames, salesPersonUniqueName: request.salesPersonUniqueName, ...countryState }).pipe(map((res) => {
+        return this.http.post(url, { accountUniqueNames: request.accountUniqueNames, selectAll: request.selectAll, salesPersonUniqueName: request.salesPersonUniqueName, ...countryState }).pipe(map((res) => {
             let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));

@@ -267,8 +267,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public getDaybook(withFilters: DayBookRequestModel = null): void {
         this.showLoader = true;
-        let daybookRequest = cloneDeep(withFilters);
-        if (withFilters) {
+        const daybookRequest = this.generalService.replaceSelectedAllOptions(withFilters, true);
+        if (daybookRequest) {
             delete daybookRequest.defaultVouchersLabel;
             delete daybookRequest.defaultTagsLabel;
             delete daybookRequest.defaultParticularsLabel;
@@ -372,6 +372,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
     public hideExportDaybookModal(response: any) {
         this.modalDialogRef.close();
+        const advanceFilter = this.generalService.replaceSelectedAllOptions(this.searchFilterData, true);
         if (response !== 'close') {
             if ((response.type === 'admin-detailed' || response.type === 'view-detailed') || (response.type === 'admin-condensed' || response.type === 'view-condensed')) {
                 this.daybookQueryRequest.type = response.type;
@@ -388,9 +389,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         exportBodyRequest.showEntryVoucher = response.showEntryVoucher;
                         exportBodyRequest.sort = response.order?.toUpperCase();
                         exportBodyRequest.fileType = "CSV";
-                        exportBodyRequest.ledgerAdvanceFilter = this.searchFilterData;
-                        exportBodyRequest.tagNames = this.searchFilterData?.tags;
-                        exportBodyRequest.includeTag = this.searchFilterData?.includeTag;
+                        exportBodyRequest.ledgerAdvanceFilter = advanceFilter;
+                        exportBodyRequest.tagNames = advanceFilter?.tags;
+                        exportBodyRequest.includeTag = advanceFilter?.includeTag;
+                        exportBodyRequest.selectAll = advanceFilter?.selectAll;
                         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                             if (response?.status === 'success') {
                                 if (typeof response?.body === "string") {
@@ -405,7 +407,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                             }
                         });
                     } else {
-                        this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        this.daybookService.ExportDaybookPost(advanceFilter, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                             if (response?.status === 'success') {
                                 if (response?.body?.type === "message") {
                                     this.toasterService.showSnackBar("success", response?.body?.file);

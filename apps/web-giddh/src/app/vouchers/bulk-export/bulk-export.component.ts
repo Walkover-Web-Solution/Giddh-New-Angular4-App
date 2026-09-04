@@ -91,7 +91,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.exportForm = this.formBuilder.group({
-            copyTypes: [''],
+            copyTypes: [[]],
             recipients: [''],
             exportType: new FormControl<ExportType>(ExportTypeEnum.multiplePdf),
             mergePdf: new FormControl<boolean>(false, { nonNullable: true }),
@@ -234,6 +234,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         delete postRequest.count;
         delete postRequest.page;
         delete postRequest.q;
+
+        this.generalService.replaceSelectedAllOptions(postRequest);
 
         let validRecipients: boolean = true;
 

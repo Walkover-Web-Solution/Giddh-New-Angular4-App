@@ -11,7 +11,8 @@
         </div>
         <mat-dialog-content class="dialog-body max-height-65vh" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
-                <p class="mb-2">{{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}</p>
+                <p class="mb-1">{{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}</p>
+                <p class="mb-2">{{ commonLocaleData?.app_note }}: {{ localeData?.csv_semicolon_separator_note }}</p>
                 <div class="clear-both">
                     <div class="form-inline">
                         <div class="form-group">
@@ -59,13 +60,13 @@
                             name="emailTypeSelected"
                             [(ngModel)]="emailTypeSelected"
                         >
-                            <mat-radio-button id="detailed" (change)="handleReportTypeChange($event)" [value]="emailTypeDetail">
+                            <mat-radio-button id="detailed" (change)="handleReportTypeChange($event); fileType = 'CSV'" [value]="emailTypeDetail">
                                 {{ localeData?.ledger }}
                             </mat-radio-button>
                             <mat-radio-button
                                 *ngIf="!exportRequest.ledgerView"
                                 id="columnar"
-                                (change)="handleReportTypeChange($event)"
+                                (change)="handleReportTypeChange($event); fileType = 'XLSX'"
                                 [value]="emailTypeColumnar"
                             >
                                 {{ localeData?.columnar }}
@@ -73,7 +74,7 @@
                             <mat-radio-button
                                 id="bill"
                                 *ngIf="voucherApiVersion === 2 && enableBillToBill && !exportRequest.ledgerView"
-                                (change)="handleReportTypeChange($event)"
+                                (change)="handleReportTypeChange($event); fileType = 'XLSX'"
                                 [value]="emailTypeBillToBill"
                             >
                                 {{ localeData?.bill_to_bill }}
@@ -143,25 +144,16 @@
                                 </mat-radio-button>
                             </mat-radio-group>
                         </div>
-                        <div
-                            [ngClass]="{
-                                'mat-form-field-invalid': !exportRequest.copyTypes?.length && !isValidForm,
-                            }"
-                        >
-                            <mat-form-field appearance="outline" class="w-100 mb-3">
-                                <mat-label>{{ localeData?.select_copy }}</mat-label>
-                                <mat-select
-                                    name="copyTypesSelection"
-                                    multiple
-                                    [placeholder]="localeData?.select_copy"
-                                    [(ngModel)]="exportRequest.copyTypes"
-                                >
-                                    <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">
-                                        {{ copyType.label }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
+                        <multi-select-dropdown
+                            class="mb-3"
+                            [name]="'copyTypesSelection'"
+                            [appearance]="'outline'"
+                            [label]="localeData?.select_copy"
+                            [showAllOption]="true"
+                            [options]="copyTypes"
+                            [showError]="!exportRequest.copyTypes?.length && !isValidForm"
+                            [(ngModel)]="exportRequest.copyTypes"
+                        ></multi-select-dropdown>
                     </ng-container>
                 </ng-container>
                 <div class="pb-4 export-type" [hidden]="['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)">

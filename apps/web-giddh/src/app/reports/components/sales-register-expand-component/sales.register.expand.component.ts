@@ -8,7 +8,7 @@ import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
 import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -150,7 +150,8 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
                 this.getDetailedsalesRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
                 this.getDetailedsalesRequestFilter.stateCode = params.stateCode;
                 this.getDetailedsalesRequestFilter.countryCode = params.countryCode;
-                this.getDetailedsalesRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
+                this.getDetailedsalesRequestFilter.accountUniqueNames = isSelectedAllOption(registerReportFilters?.accountUniqueNames) ? [] : registerReportFilters?.accountUniqueNames;
+                this.getDetailedsalesRequestFilter.selectAll = isSelectedAllOption(registerReportFilters?.accountUniqueNames);
                 this.currentGroupBy.set(params.groupBy);
                 this.params = params;
                 this.setDataPickerDateRange();
@@ -498,6 +499,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             activeCompanyCountryCode: this.activeCompanyCountryCode,
             groupBy: groupBy && groupBy !== GroupBy.Duration ? groupBy : undefined,
             accountUniqueNames: accountUniqueNames,
+            selectAll: this.getDetailedsalesRequestFilter?.selectAll,
             salesPersonUniqueNames: groupBy === GroupBy.SalesPerson && salesPersonUniqueName ? [salesPersonUniqueName] : [],
             countryCodes: (groupBy === GroupBy.Country || groupBy === GroupBy.State) && countryCode ? [countryCode] : [],
             stateCodes: groupBy === GroupBy.State && stateCode ? [stateCode] : []

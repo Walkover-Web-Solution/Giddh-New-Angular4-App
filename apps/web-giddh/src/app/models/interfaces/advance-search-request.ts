@@ -62,6 +62,7 @@ export class AdvanceSearchModel {
     public inventory: AdvanceSearchRequestInventory = new AdvanceSearchRequestInventory();
     public includeSalesPersons: boolean = true;
     public salesPersonUniqueNames: string[];
+    public selectAll?: boolean;
 
     constructor() {
         this.inventory = new AdvanceSearchRequestInventory();
@@ -72,6 +73,7 @@ export class AdvanceSearchModel {
 export class AdvanceSearchRequestInventory {
     public includeInventory: false;
     public inventories: string[];
+    public selectAll?: boolean;
     public quantity: null;
     public includeQuantity: false;
     public quantityLessThan: false;

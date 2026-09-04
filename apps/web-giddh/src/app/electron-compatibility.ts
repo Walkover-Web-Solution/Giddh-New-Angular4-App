@@ -12,6 +12,7 @@ declare global {
       isElectron: boolean;
       platform: string;
     };
+    GiddhBridge?: any;
     require?: (module: string) => any;
   }
 }
