@@ -400,9 +400,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
         this.reportYear = this.selectedYear;
 
-        const realPersonSelections = isSelectedAllOption(this.selectedSalesPersonUniqueNames) ? this.fullSalesPersonList.map((list: IOption) => list.value) : this.selectedSalesPersonUniqueNames;
-        const hasSalesPersonFilter = realPersonSelections?.length > 0 && this.fullSalesPersonList?.length > 0;
-        this.NewVsOldInvoicesQueryRequest.salesPersonUniqueNames = hasSalesPersonFilter ? realPersonSelections : undefined;
+        const hasSalesPersonFilter = this.selectedSalesPersonUniqueNames?.length > 0 && this.fullSalesPersonList?.length > 0;
+        this.NewVsOldInvoicesQueryRequest = hasSalesPersonFilter ? (this.NewVsOldInvoicesQueryRequest.salesPersonUniqueNames = this.selectedSalesPersonUniqueNames, this.generalService.replaceSelectedAllOptions(this.NewVsOldInvoicesQueryRequest, true)) : this.NewVsOldInvoicesQueryRequest;
 
         const apiCall$ = hasSalesPersonFilter
             ? this.newVsOldInvoicesService.GetNewVsOldInvoicesBySalesPerson(this.NewVsOldInvoicesQueryRequest)

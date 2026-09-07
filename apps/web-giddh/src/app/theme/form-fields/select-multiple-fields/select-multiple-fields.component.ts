@@ -166,6 +166,12 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
+            if (this.isAllSelected && !this.hasRealOptions()) {
+                this.clearAllSelectionState();
+                this.writeValue([]);
+                this.emitList();
+                return;
+            }
             if (!this.enableDynamicSearch) {
                 this.filterOptions(this.lastSearchString || "");
             } else {
@@ -183,7 +189,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             const nextSelected = typeof changes.selectedValues.currentValue === "string"
                 ? changes.selectedValues.currentValue.split(",")
                 : cloneDeep(changes.selectedValues.currentValue);
-            if (this.showAllOption && (this.isAllSentinel(nextSelected) || this.isAllLabelList(nextSelected))) {
+            if (this.showAllOption && this.hasRealOptions() && (this.isAllSentinel(nextSelected) || this.isAllLabelList(nextSelected))) {
                 this.applyAllChipState();
             } else {
                 this.isAllSelected = false;
@@ -446,7 +452,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     private syncAllSelectionFromValue(wasAllSelected: boolean): void {
-        this.isAllSelected = this.showAllOption && this.isAllSentinel(this.value);
+        this.isAllSelected = this.showAllOption && this.hasRealOptions() && this.isAllSentinel(this.value);
         if (this.isAllSelected) {
             this.applyAllChipState();
         } else if (wasAllSelected) {
@@ -538,10 +544,21 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     private prependAllOption(options: IOption[]): IOption[] {
-        if (!this.showAllOption || this.hasSearchTerm()) {
+        if (!this.showAllOption || this.hasSearchTerm() || !this.hasRealOptions()) {
             return options ?? [];
         }
         return [{ label: this.getAllLabel(), value: this.allOptionValue }, ...(options ?? [])];
+    }
+
+    /**
+     * True when the source list has at least one real option (not the All sentinel).
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private hasRealOptions(): boolean {
+        return (this.options ?? []).some(option => option?.value !== undefined && option?.value !== null && option?.value !== this.allOptionValue);
     }
 
     /**

@@ -2,6 +2,7 @@ export class NewVsOldInvoicesRequest {
     public type: string;
     public value: string;
     public salesPersonUniqueNames?: string[];
+    public selectAll?: boolean;
 }
 
 export interface TotalSales {
