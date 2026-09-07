@@ -20,7 +20,7 @@ import { GeneralService } from "../../../services/general.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { OrganizationType } from "../../../models/user-login-state";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
-import { ASIDE_PANE_CONFIG, IOption, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
+import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
 import {
     BucketColumn,
     BucketSortState,
@@ -86,13 +86,13 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
         { colId: 'totalValue',  label: '', isLeaf: true, align: 'right' }
     ];
 
-    /** Selected branch unique names, or `[SELECTED_ALL_OPTION]` when All is chosen. */
+    /** Selected branch unique names. */
     public selectedBranch: string[] = [];
-    /** Selected warehouse unique names, or `[SELECTED_ALL_OPTION]` when All is chosen. */
+    /** Selected warehouse unique names. */
     public selectedWarehouse: string[] = [];
     /** Currently active stock category (from route param). */
     public selectedStockCategory: string = '';
-    /** Selected stock group unique names, or `[SELECTED_ALL_OPTION]` when All is chosen. */
+    /** Selected stock group unique names. */
     public selectedStockGroup: string[] = [];
     /** Full branches list from API. */
     public allBranches: any[] = [];
@@ -265,14 +265,13 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
 
     /**
      * True when any filter (branch, warehouse, stock-group, search or sort) is active.
-     * All (`[SELECTED_ALL_OPTION]`) is treated as no filter.
      * @returns boolean
      * @memberof StockAgingReportComponent
      */
     public get hasActiveFilters(): boolean {
-        return this.hasSpecificSelection(this.selectedBranch)
-            || this.hasSpecificSelection(this.selectedWarehouse)
-            || this.hasSpecificSelection(this.selectedStockGroup)
+        return !!this.selectedBranch?.length
+            || !!this.selectedWarehouse?.length
+            || !!this.selectedStockGroup?.length
             || !!this.searchText
             || !!this.bucketSort;
     }
@@ -489,7 +488,7 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
      */
     private recomputeWarehouses(): void {
         const branches = this.allBranches ?? [];
-        if (this.hasSpecificSelection(this.selectedBranch)) {
+        if (this.selectedBranch?.length) {
             this.currentWarehouses = branches
                 .filter((branch: any) => this.selectedBranch.includes(branch?.uniqueName))
                 .flatMap((branch: any) => branch?.warehouses ?? []);
@@ -571,23 +570,13 @@ export class StockAgingReportComponent implements OnInit, AfterViewChecked, OnDe
     }
 
     /**
-     * True when the multi-select has real values (not empty and not All).
+     * Unique names to send to the API.
      * @param selected Current control value.
-     * @returns boolean
-     * @memberof StockAgingReportComponent
-     */
-    private hasSpecificSelection(selected: string[]): boolean {
-        return !!selected?.length && !isSelectedAllOption(selected);
-    }
-
-    /**
-     * Unique names to send to the API. All is sent as an empty array (same as no filter).
-     * @param selected Current control value.
-     * @returns The unique names, or `[]` when All / nothing is selected.
+     * @returns The unique names, or `[]` when nothing is selected.
      * @memberof StockAgingReportComponent
      */
     private getSelectedUniqueNames(selected: string[]): string[] {
-        return this.hasSpecificSelection(selected) ? selected.filter(Boolean) : [];
+        return selected?.length ? selected.filter(Boolean) : [];
     }
 
     /**
