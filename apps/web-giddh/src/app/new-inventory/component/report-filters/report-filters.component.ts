@@ -543,7 +543,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             mappedDynamicValues = this.displayedColumns;
         }
-        this.filters.emit(this.generalService.replaceSelectedAllOptions({
+        this.filters.emit({
             stockReportRequest: this.stockReportRequest,
             balanceStockReportRequest: this.balanceStockReportRequest,
             displayedColumns: mappedDynamicValues,
@@ -551,7 +551,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             showClearFilter: this.showClearFilter,
             advanceSearchModalResponse: this.advanceSearchModalResponse,
             stockReportRequestExport: this.stockReportRequestExport
-        }, true));
+        });
     }
 
     /**

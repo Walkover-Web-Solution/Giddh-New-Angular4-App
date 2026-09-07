@@ -26,7 +26,6 @@
     <div class="pl-1 filter-dropdown-branch" *ngIf="(isCompany || isConsolidatedBranch) && allBranches?.length > 1">
         <multi-select-dropdown
             [name]="'selectedBranch'"
-            [showAllOption]="true"
             [label]="localeData?.header?.select_branch"
             [noEntriesFoundLabel]="localeData?.header?.no_result_found"
             [options]="allBranches"
@@ -39,7 +38,6 @@
     <div class="pl-1 filter-dropdown-warehouse" *ngIf="currentWarehouses?.length > 1">
         <multi-select-dropdown
             [name]="'selectedWarehouse'"
-            [showAllOption]="true"
             [label]="localeData?.header?.select_warehouse"
             [noEntriesFoundLabel]="localeData?.header?.no_result_found"
             [options]="currentWarehouses"

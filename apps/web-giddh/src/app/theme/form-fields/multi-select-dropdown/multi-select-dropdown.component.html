@@ -13,18 +13,20 @@
             (openedChange)="onOpenedChange($event)"
             (closed)="onClosed()"
         >
-            <ngx-mat-select-search
-                [placeholderLabel]="placeholder || commonLocaleData?.app_search"
-                [noEntriesFoundLabel]="noEntriesFoundLabel || commonLocaleData?.app_no_result_found"
-                [formControl]="searchControl"
-                [clearSearchInput]="false"
-            >
-                <i class="icon-cross" ngxMatSelectSearchClear></i>
-            </ngx-mat-select-search>
+            @if (filteredOptions()?.length || isSearching()) {
+                <ngx-mat-select-search
+                    [placeholderLabel]="placeholder || commonLocaleData?.app_search"
+                    [noEntriesFoundLabel]="noEntriesFoundLabel || commonLocaleData?.app_no_result_found"
+                    [formControl]="searchControl"
+                    [clearSearchInput]="false"
+                >
+                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                </ngx-mat-select-search>
+            }
             <mat-select-trigger *ngIf="showAllOption && isAllSelected()">
                 <span>{{ allOptionLabel || commonLocaleData?.app_all }}</span>
             </mat-select-trigger>
-            @if (showAllOption && !isSearching()) {
+            @if (showAllOption && !isSearching() && filteredOptions()?.length) {
                 <mat-option [value]="allOptionValue">
                     {{ allOptionLabel || commonLocaleData?.app_all }}
                 </mat-option>
@@ -32,6 +34,11 @@
             @for (option of filteredOptions(); track option?.value) {
                 <mat-option [value]="option?.value" [disabled]="option?.disabled">
                     {{ option?.label }}
+                </mat-option>
+            }
+            @if (!filteredOptions()?.length && !isSearching()) {
+                <mat-option disabled class="multi-select-empty-option">
+                    {{ noEntriesFoundLabel || commonLocaleData?.app_no_result_found }}
                 </mat-option>
             }
         </mat-select>
