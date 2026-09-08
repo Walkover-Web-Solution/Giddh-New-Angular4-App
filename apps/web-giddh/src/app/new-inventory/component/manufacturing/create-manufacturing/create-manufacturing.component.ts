@@ -20,8 +20,8 @@ import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunct
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import * as dayjs from 'dayjs';
-import { ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { ReplaySubject, of } from 'rxjs';
+import { catchError, take, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'create-manufacturing',
@@ -362,38 +362,44 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
 
         object.variants = [];
+        this.changeDetectionRef.detectChanges();
         if (!this.manufacturingObject.manufacturingDetails[0].otherExpenses.length) {
             this.manufacturingObject.manufacturingDetails[0].otherExpenses = [];
             this.initializeOtherExpenseObj();
         }
-        this.ledgerService.loadStockVariants(object.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(variants => {
-            if (variants?.length) {
-                variants?.forEach(variant => {
-                    object.variants.push({ label: variant?.name, value: variant?.uniqueName });
-                });
+        this.ledgerService.loadStockVariants(object.stockUniqueName).pipe(
+            catchError(() => of([])),
+            takeUntil(this.destroyed$)
+        ).subscribe((variants) => {
+            object.variants = Array.isArray(variants)
+                ? variants.map((variant) => ({ label: variant?.name, value: variant?.uniqueName }))
+                : [];
 
-                if (object.variants?.length === 1) {
-                    if (!isEdit) {
-                        object.variant = {
-                            name: object.variants[0].label,
-                            uniqueName: object.variants[0].value
-                        };
-
-                        if (loadRecipe) {
-                            this.getVariantRecipe();
-                        } else if (isRawStock) {
-                            this.getRateForStock(object, index);
-                        }
-                    }
+            if (object.variants.length && !isEdit) {
+                if (object.variants.length === 1) {
+                    object.variant = {
+                        name: object.variants[0].label,
+                        uniqueName: object.variants[0].value
+                    };
                 } else {
-                    if (!isEdit) {
-                        object.variant = {
-                            name: "",
-                            uniqueName: ""
-                        };
-                    }
+                    object.variant = {
+                        name: "",
+                        uniqueName: ""
+                    };
                 }
+
+                if (loadRecipe) {
+                    this.getVariantRecipe();
+                } else if (isRawStock) {
+                    this.getRateForStock(object, index);
+                }
+            } else if (!object.variants.length && !isEdit) {
+                object.variant = {
+                    name: "",
+                    uniqueName: ""
+                };
             }
+
             this.changeDetectionRef.detectChanges();
         });
     }
@@ -1490,13 +1496,21 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @memberof CreateManufacturingComponent
      */
     public loadStockVariantsByStockUniqueName(stockUniqueName: string): void {
-        this.ledgerService.loadStockVariants(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(variants => {
-            this.stockVariants = [];
-            if (variants?.length) {
-                variants?.forEach(variant => {
-                    this.stockVariants.push({ label: variant?.name, value: variant?.uniqueName });
-                });
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            catchError(() => of([])),
+            takeUntil(this.destroyed$)
+        ).subscribe((variants) => {
+            this.stockVariants = Array.isArray(variants)
+                ? variants.map((variant) => ({ label: variant?.name, value: variant?.uniqueName }))
+                : [];
+
+            if (!this.stockVariants.length) {
+                this.manufacturingObject.manufacturingDetails[0].variant = {
+                    name: "",
+                    uniqueName: ""
+                };
             }
+
             this.changeDetectionRef.detectChanges();
         });
     }
