@@ -289,7 +289,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
                 return;
             }
-            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, ledgerRequest, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, this.generalService.replaceSelectedAllOptions(ledgerRequest, true), exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === 'success') {
