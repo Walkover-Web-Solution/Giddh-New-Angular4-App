@@ -26,8 +26,8 @@
                 (resetFilters)="resetFilter()"
                 [searchPage]="reportType"
                 (isLoading)="isLoading = $event"
-                (selectedColumns)="getCustomiseHeaderColumns($event)"
-                (selectedDynamicColumns)="dynamicColumnsSubject$.next($event)"
+                (selectedColumns)="onSelectedColumns($event)"
+                (selectedDynamicColumns)="onSelectedDynamicColumns($event)"
             ></report-filters>
         </div>
         <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">

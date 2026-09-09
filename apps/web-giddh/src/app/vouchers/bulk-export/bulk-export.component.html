@@ -20,8 +20,13 @@
         <div mat-dialog-content>
             <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
             <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async" class="px-2">
-                <p class="mb-1">{{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}</p>
-                <p class="mb-2">{{ commonLocaleData?.app_note }}: {{ localeData?.csv_semicolon_separator_note }}</p>
+                <div class="mb-3">
+                    <p class="mb-1 text-primary font-weight-semibold font-size-14"><i class="icon-info text-primary font-size-12"></i> {{ commonLocaleData?.app_note }}</p>
+                    <ul class="mb-0 pl-3 ml-1 light-gray font-size-12 line-height-20 list-style-disc">
+                        <li class="mb-1">{{ commonLocaleData?.app_export_file_name_change_note }}</li>
+                        <li>{{ localeData?.csv_semicolon_separator_note }}</li>
+                    </ul>
+                </div>
                 <!-- Export attachment -->
                 <ng-container *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
                     <div class="pb-2 clear-both export-type d-flex column-gap-15">

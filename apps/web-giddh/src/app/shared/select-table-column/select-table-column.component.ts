@@ -157,8 +157,11 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         this.displayedColumns = this.customiseColumns
             .filter(col => col?.checked)
             .map(col => col.value);
-        this.selectedColumns.emit(this.displayedColumns);
-        this.selectedDynamicColumns.emit(this.dynamicCustomColumns);
+        if (!this.isDynamicMode) {
+            this.selectedColumns.emit(this.displayedColumns);
+        } else {
+            this.selectedDynamicColumns.emit(this.dynamicCustomColumns);
+        }
         this.changeDetection.detectChanges();
     }
 
