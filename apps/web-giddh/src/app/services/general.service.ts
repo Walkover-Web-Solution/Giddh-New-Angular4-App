@@ -152,8 +152,8 @@ export class GeneralService {
     }
 
     /**
-     * Replaces a selected-all sentinel array with an empty array and marks its
-     * containing request object with `selectAll: true`.
+     * Replaces selected-all sentinel arrays with empty arrays and collects
+     * their field names in a root-level `selectAllFields` array.
      *
      * @param node Request object or nested request object
      * @param createCopy When true, transforms and returns a deep clone without changing the original object
@@ -165,16 +165,44 @@ export class GeneralService {
         if (!requestNode || typeof requestNode !== 'object') {
             return requestNode;
         }
-        Object.keys(requestNode).forEach(key => {
-            const value = requestNode[key];
+
+        const selectAllFields: string[] = [];
+        this.replaceSelectedAllOptionsRecursive(requestNode, selectAllFields);
+        requestNode.selectAllFields = selectAllFields;
+
+        return requestNode;
+    }
+
+    /**
+     * Traverses request object and replaces selected-all values.
+     *
+     * @private
+     * @param node Request object or nested request object
+     * @param selectAllFields Root-level list of fields marked as select-all
+     * @memberof GeneralService
+     */
+    private replaceSelectedAllOptionsRecursive(node: any, selectAllFields: string[]): void {
+        if (!node || typeof node !== 'object' || Array.isArray(node)) {
+            return;
+        }
+
+        if ('selectAll' in node) {
+            delete node.selectAll;
+        }
+
+        Object.keys(node).forEach(key => {
+            if (key === 'selectAllFields') {
+                return;
+            }
+
+            const value = node[key];
             if (isSelectedAllOption(value)) {
-                requestNode[key] = [];
-                requestNode['selectAll'] = true;
+                node[key] = [];
+                selectAllFields.push(key);
             } else if (value && typeof value === 'object' && !Array.isArray(value)) {
-                this.replaceSelectedAllOptions(value);
+                this.replaceSelectedAllOptionsRecursive(value, selectAllFields);
             }
         });
-        return requestNode;
     }
 
     public setIsMobileView(isMobileView: boolean) {
