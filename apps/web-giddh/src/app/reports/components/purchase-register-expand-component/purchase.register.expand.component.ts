@@ -162,7 +162,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.getDetailedPurchaseRequestFilter.stateCode = params.stateCode;
                 this.getDetailedPurchaseRequestFilter.countryCode = params.countryCode;
                 this.getDetailedPurchaseRequestFilter.accountUniqueNames = isSelectedAllOption(registerReportFilters?.accountUniqueNames) ? [] : registerReportFilters?.accountUniqueNames;
-                this.getDetailedPurchaseRequestFilter.selectAll = isSelectedAllOption(registerReportFilters?.accountUniqueNames);
+                this.getDetailedPurchaseRequestFilter = this.generalService.replaceSelectedAllOptions(this.getDetailedPurchaseRequestFilter, true);
                 this.currentGroupBy.set(params.groupBy);
                 this.params = params;
                 this.setDataPickerDateRange();
@@ -536,7 +536,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             activeCompanyCountryCode: this.activeCompanyCountryCode,
             groupBy: groupBy,
             accountUniqueNames: accountUniqueNames,
-            selectAll: this.getDetailedPurchaseRequestFilter?.selectAll,
+            selectAllFields: this.getDetailedPurchaseRequestFilter?.selectAllFields,
             salesPersonUniqueNames: groupBy === GroupBy.SalesPerson && salesPersonUniqueName ? [salesPersonUniqueName] : [],
             countryCodes: (groupBy === GroupBy.Country || groupBy === GroupBy.State) && countryCode ? [countryCode] : [],
             stateCodes: groupBy === GroupBy.State && stateCode ? [stateCode] : []

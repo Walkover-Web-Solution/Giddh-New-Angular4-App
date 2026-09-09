@@ -185,16 +185,7 @@ export class GeneralService {
         if (!node || typeof node !== 'object' || Array.isArray(node)) {
             return;
         }
-
-        if ('selectAll' in node) {
-            delete node.selectAll;
-        }
-
         Object.keys(node).forEach(key => {
-            if (key === 'selectAllFields') {
-                return;
-            }
-
             const value = node[key];
             if (isSelectedAllOption(value)) {
                 node[key] = [];

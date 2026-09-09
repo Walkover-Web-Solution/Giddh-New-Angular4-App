@@ -172,7 +172,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
                 permission => permission.code === 'SELECT-ALL' && permission.isSelected
             );
             if (isSelectAll) {
-                scopes.push({ name: page.name, permissions: [], selectAll: true });
+                scopes.push({ name: page.name, permissions: [], selectAllFields: ["permissions"] });
                 return;
             }
             const selectedPermissions = (page.permissions ?? []).filter(
@@ -241,7 +241,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         });
         if (res) {
             forEach(res.scopes, (obj: Scope) => {
-                if (obj.selectAll) {
+                if (obj.selectAllFields?.includes('permissions')) {
                     obj.permissions = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
                     obj.permissions.forEach((permission: Permission) => permission.isSelected = true);
                 } else {
@@ -399,7 +399,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         }
         const realPermissions = page.permissions.filter(permission => permission.code !== 'SELECT-ALL');
         const allRealSelected = realPermissions.length > 0 && realPermissions.every(permission => permission.isSelected);
-        selectAllPermission.isSelected = !!page.selectAll || allRealSelected;
+        selectAllPermission.isSelected = page.selectAllFields?.includes('permissions') || allRealSelected;
         if (selectAllPermission.isSelected) {
             realPermissions.forEach(permission => permission.isSelected = true);
         }

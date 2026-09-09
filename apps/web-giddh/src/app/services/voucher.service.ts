@@ -367,9 +367,9 @@ export class VoucherService {
         url = url?.replace(':sort', model.sort ?? '');
         url = url?.replace(':sortBy', model.sortBy ?? 'purchaseDate');
 
-        const { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo, salesPersonUniqueNames, selectAll = false, balanceEqual, balanceLessThan , balanceMoreThan } = model;
+        const { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo, salesPersonUniqueNames, selectAllFields = [], balanceEqual, balanceLessThan , balanceMoreThan } = model;
 
-        return this.http.post(url, { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo, salesPersonUniqueNames, selectAll, balanceEqual, balanceLessThan, balanceMoreThan }).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        return this.http.post(url, { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo, salesPersonUniqueNames, selectAllFields, balanceEqual, balanceLessThan, balanceMoreThan }).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
     /**
