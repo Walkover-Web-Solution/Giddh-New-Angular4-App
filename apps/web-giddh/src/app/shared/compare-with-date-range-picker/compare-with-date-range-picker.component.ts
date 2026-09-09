@@ -14,7 +14,7 @@ import { TextFieldComponent } from '../../theme/form-fields/text-field/text-fiel
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 
 type compareType = 'month' | 'quarter' | 'year' | 'period' | null;
-enum CompareTypeEnum {
+export enum CompareTypeEnum {
   month = 'month',
   quarter = 'quarter',
   year = 'year',
@@ -122,7 +122,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       } else if (compareValue == 0) {
         this.onChange.emit({
           compareValue: null,
-          compareType: null
+          compareType: value.compareType[0]
         });
       }
     });
