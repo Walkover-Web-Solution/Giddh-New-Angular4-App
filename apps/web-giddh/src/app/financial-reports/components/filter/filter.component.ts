@@ -24,6 +24,7 @@ import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { cloneDeep, find, findIndex, get, map, orderBy } from '../../../lodash-optimized';
+import { CompareTypeEnum } from '../../../shared/compare-with-date-range-picker/compare-with-date-range-picker.component';
 
 @Component({
 selector: 'financial-filter',
@@ -137,7 +138,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             refresh: [false],
             tagName: [''],
             compareValue: [null],
-            compareType: [null]
+            compareType: [CompareTypeEnum.month]
         });
 
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), distinctUntilChanged(), takeUntil(this.destroyed$));
