@@ -18,5 +18,5 @@
     "clearance_date": "Clearance Date",
     "tags": "Tags",
     "select_tags": "Select Tags",
-    "csv_semicolon_separator_note": "CSV exports use a semicolon (;) as the field separator."
+    "csv_semicolon_separator_note": "CSV exports use a semicolon (;) as the field separator"
 }
