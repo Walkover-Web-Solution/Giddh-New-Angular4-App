@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatSelect } from "@angular/material/select";
 import { fromEvent, merge, ReplaySubject, Subject, Subscription, timer } from "rxjs";
-import { auditTime, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from "rxjs/operators";
+import { auditTime, debounceTime, distinctUntilChanged, filter, map, switchMap, take, takeUntil } from "rxjs/operators";
 import { IOption, SELECTED_ALL_OPTION } from "../../../app.constant";
 
 @Component({
@@ -90,6 +90,8 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
     private onChange: (value: Array<string | number>) => void = () => { };
     /** Function to be called when the control is touched */
     private onTouched: () => void = () => { };
+    /** Skips the first empty search emit for dynamic/API search */
+    private skipInitialDynamicSearch: boolean = true;
 
     constructor(private changeDetectorRef: ChangeDetectorRef) { }
 
@@ -99,7 +101,11 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
      * @memberof MultiSelectDropdownComponent
      */
     public ngOnInit(): void {
-        this.setVisibleOptions(this.searchControl.value, true);
+        if (this.enableDynamicSearch) {
+            this.filteredOptions.set(this.getOptionList());
+        } else {
+            this.setVisibleOptions(this.searchControl.value);
+        }
         this.parentValueChange$.pipe(
             switchMap(() => merge(timer(500), this.flushParentValue$).pipe(
                 take(1),
@@ -109,13 +115,31 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
         ).subscribe((value: Array<string | number>) => {
             this.notifyParent(value);
         });
-        this.searchControl.valueChanges.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$)
-        ).subscribe((search: string) => {
-            this.setVisibleOptions(search);
-        });
+        if (this.enableDynamicSearch) {
+            this.searchControl.valueChanges.pipe(
+                debounceTime(700),
+                filter((search: string | null) => {
+                    const term = (search ?? "").trim();
+                    if (this.skipInitialDynamicSearch && !term) {
+                        this.skipInitialDynamicSearch = false;
+                        return false;
+                    }
+                    this.skipInitialDynamicSearch = false;
+                    return true;
+                }),
+                takeUntil(this.destroyed$)
+            ).subscribe((search: string | null) => {
+                this.handleDynamicSearch(search ?? "");
+            });
+        } else {
+            this.searchControl.valueChanges.pipe(
+                debounceTime(300),
+                distinctUntilChanged(),
+                takeUntil(this.destroyed$)
+            ).subscribe((search: string | null) => {
+                this.setVisibleOptions(search ?? "");
+            });
+        }
     }
 
     /**
@@ -126,8 +150,15 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.options || changes.optionValue || changes.optionLabel) {
-            this.setVisibleOptions(this.searchControl.value, true);
-            this.syncUiFromControl();
+            if (this.enableDynamicSearch) {
+                this.filteredOptions.set(this.getOptionList());
+                if (!this.isSearching()) {
+                    this.syncUiFromControl();
+                }
+            } else {
+                this.setVisibleOptions(this.searchControl.value);
+                this.syncUiFromControl();
+            }
         }
         if (changes.showAllOption && !changes.showAllOption.firstChange) {
             this.syncUiFromControl();
@@ -188,6 +219,9 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
      */
     public onSelectionChange(selected: Array<string | number>): void {
         const next = selected ?? [];
+        if (this.areSelectionsEqual(next, this.uiSelectedValues)) {
+            return;
+        }
         if (!this.showAllOption) {
             this.uiSelectedValues = next;
             this.commitValue(next);
@@ -207,7 +241,11 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
         this.panelScrollSubscription = undefined;
         this.flushParentValueChange();
         if (!this.filteredOptions()?.length) {
-            this.searchControl.reset();
+            this.searchControl.reset("", { emitEvent: false });
+            this.isSearching.set(false);
+        }
+        if (this.enableDynamicSearch) {
+            this.syncUiFromControl();
         }
         this.onTouched();
     }
@@ -269,21 +307,33 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
      *
      * @private
      * @param {string} search
-     * @param {boolean} [skipEmit] True when options changed from the parent, so search is not re-emitted
      * @memberof MultiSelectDropdownComponent
      */
-    private setVisibleOptions(search: string, skipEmit: boolean = false): void {
+    private setVisibleOptions(search: string): void {
         const options = this.getOptionList();
         const term = (search ?? "").trim();
         this.isSearching.set(!!term);
-        if (this.enableDynamicSearch) {
-            if (!skipEmit) {
-                this.dynamicSearchedQuery.emit(search ?? "");
-            }
-            this.filteredOptions.set(options);
-        } else {
-            const query = term.toLowerCase();
-            this.filteredOptions.set(query ? options.filter(option => option?.label?.toLowerCase()?.includes(query)) : options);
+        const query = term.toLowerCase();
+        this.filteredOptions.set(query ? options.filter(option => option?.label?.toLowerCase()?.includes(query)) : options);
+        this.changeDetectorRef.markForCheck();
+    }
+
+    /**
+     * Emits API search to the parent and updates search state without re-filtering locally.
+     * Parent-supplied options are applied in ngOnChanges when the options input changes.
+     *
+     * @private
+     * @param {string} search
+     * @memberof MultiSelectDropdownComponent
+     */
+    private handleDynamicSearch(search: string): void {
+        const wasSearching = this.isSearching();
+        const term = search.trim();
+        const nowSearching = !!term;
+        this.isSearching.set(nowSearching);
+        this.dynamicSearchedQuery.emit(search);
+        if (nowSearching !== wasSearching) {
+            this.syncUiFromControl();
         }
         this.changeDetectorRef.markForCheck();
     }
@@ -320,7 +370,9 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
             return;
         }
 
-        const allSelected = allValues.length > 0 && allValues.every(value => realSelections.includes(value));
+        const allSelected = !(this.enableDynamicSearch && this.isSearching())
+            && allValues.length > 0
+            && allValues.every(value => realSelections.includes(value));
         this.isAllSelected.set(allSelected);
         if (allSelected) {
             this.uiSelectedValues = [this.allOptionValue, ...allValues];
@@ -338,12 +390,38 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
      * @memberof MultiSelectDropdownComponent
      */
     private syncUiFromControl(): void {
+        let next: Array<string | number>;
         if (this.isAllSelected()) {
-            this.uiSelectedValues = [this.allOptionValue, ...this.getAllOptionValues()];
+            next = (this.enableDynamicSearch && this.isSearching())
+                ? [this.allOptionValue]
+                : [this.allOptionValue, ...this.getAllOptionValues()];
         } else {
-            this.uiSelectedValues = [...this.controlValue];
+            next = [...this.controlValue];
         }
+        if (this.areSelectionsEqual(next, this.uiSelectedValues)) {
+            return;
+        }
+        this.uiSelectedValues = next;
         this.changeDetectorRef.markForCheck();
+    }
+
+    /**
+     * Compares two mat-select value arrays without triggering redundant ngModel updates
+     *
+     * @private
+     * @param {Array<string | number>} left
+     * @param {Array<string | number>} right
+     * @returns {boolean}
+     * @memberof MultiSelectDropdownComponent
+     */
+    private areSelectionsEqual(left: Array<string | number>, right: Array<string | number>): boolean {
+        if (left === right) {
+            return true;
+        }
+        if (!left || !right || left.length !== right.length) {
+            return false;
+        }
+        return left.every((value, index) => value === right[index]);
     }
 
     /**

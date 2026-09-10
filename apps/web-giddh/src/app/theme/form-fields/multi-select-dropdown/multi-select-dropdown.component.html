@@ -13,12 +13,13 @@
             (openedChange)="onOpenedChange($event)"
             (closed)="onClosed()"
         >
-            @if (filteredOptions()?.length || isSearching()) {
+            @if (enableDynamicSearch || filteredOptions()?.length || isSearching()) {
                 <ngx-mat-select-search
                     [placeholderLabel]="placeholder || commonLocaleData?.app_search"
-                    [noEntriesFoundLabel]="noEntriesFoundLabel || commonLocaleData?.app_no_result_found"
+                    [noEntriesFoundLabel]="enableDynamicSearch ? null : (noEntriesFoundLabel || commonLocaleData?.app_no_result_found)"
                     [formControl]="searchControl"
                     [clearSearchInput]="false"
+                    [disableScrollToActiveOnOptionsChanged]="enableDynamicSearch"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
@@ -36,7 +37,7 @@
                     {{ option?.label }}
                 </mat-option>
             }
-            @if (!filteredOptions()?.length && !isSearching()) {
+            @if (!filteredOptions()?.length) {
                 <mat-option disabled class="multi-select-empty-option">
                     {{ noEntriesFoundLabel || commonLocaleData?.app_no_result_found }}
                 </mat-option>
