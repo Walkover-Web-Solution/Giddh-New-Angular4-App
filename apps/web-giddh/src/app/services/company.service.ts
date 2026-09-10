@@ -242,9 +242,9 @@ export class CompanyService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
     }
 
-    public downloadCSV(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
+    public downloadXlsx(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + COMPANY_API.DOWNLOAD_CSV
+        let url = this.config.apiUrl + COMPANY_API.DOWNLOAD_XLSX
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':groupUniqueName', encodeURIComponent(request.params?.groupUniqueName))
             ?.replace(':from', encodeURIComponent(request.params.from))

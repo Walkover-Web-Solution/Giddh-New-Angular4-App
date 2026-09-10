@@ -285,10 +285,11 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     from: this.fromDate,
                     to: this.toDate
                 };
+                this.generalService.replaceSelectedAllOptions(postRequest);
                 this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
                 return;
             }
-            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, ledgerRequest, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, this.generalService.replaceSelectedAllOptions(ledgerRequest, true), exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === 'success') {
@@ -446,6 +447,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public onLedgerView(type: string): void {
-        this.fileType = type ? 'XLSX' : 'CSV';
+        this.fileType = type;
     }
 }

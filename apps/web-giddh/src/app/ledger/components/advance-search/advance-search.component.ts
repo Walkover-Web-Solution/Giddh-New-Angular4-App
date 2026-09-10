@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatMenuTrigger } from '@angular/material/menu';
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, filter, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ILedgerAdvanceSearchRequest } from '../../../models/api-models/Ledger';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/advance-search-request';
 import { GeneralService } from '../../../services/general.service';
@@ -132,10 +132,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public advanceSearchRequestClone: AdvanceSearchRequest;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    /** This will use for instance of sales person Dropdown */
-    public salesPersonDropdown: FormControl = new FormControl();
-    /** Filtered Sales Person List */
-    public filteredSalesPersonList: IOption[] = [];
 
     constructor(
         private groupService: GroupService,
@@ -156,24 +152,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.loadDefaultStocksSuggestions();
         this.loadDefaultGroupsSuggestions();
         this.getSalesPersonList();
-
-        this.salesPersonList$.pipe(filter(Boolean), take(1)).subscribe(res => {
-            this.filteredSalesPersonList = res as IOption[];
-        });
-
-        this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
-            takeUntil(this.destroyed$)).subscribe((search: string) => {
-                if (!search) {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res as IOption[];
-                    });
-                } else {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res?.filter((salesPerson: IOption) => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
-                    });
-                }
-                this.changeDetectionRef.detectChanges();
-            });
     }
 
     /**
