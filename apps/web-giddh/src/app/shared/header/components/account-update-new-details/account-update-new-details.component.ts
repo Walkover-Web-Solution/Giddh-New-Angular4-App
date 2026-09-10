@@ -239,6 +239,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public portalIndex: number;
     /** Stores the voucher API version of company */
     public voucherApiVersion: number;
+    /** This will hold is portal default */
+    public isPortalDefault: boolean;
     /** True if current currency is not company currency */
     public isForeignCurrency: boolean = false;
     /** Hold all temporary save bulk balance data */
@@ -511,7 +513,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 const users = this.addAccountForm.get('portalDomain') as FormArray;
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
-                    if (!user) {
+                    if (user) {
+                        if (!this.isPortalDefault) {
+                            user?.get('name').setValue(response?.attentionTo);
+                            user?.get('email').setValue(response?.email);
+                            user?.get('contactNo').setValue(response?.mobileNo);
+                            user?.get('default').setValue(true);
+                        }
+                    } else {
                         let setValue = false;
                         let matchedEmail = users.value.filter(user => user.email === response.email);
                         if (matchedEmail?.length) {
@@ -2325,9 +2334,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         .pipe(takeUntil(this.destroyed$))
                         .subscribe((response) => {
                             if (response?.body?.length && response?.status === 'success') {
+                                this.isPortalDefault = false;
                                 let mappings = this.addAccountForm.get('portalDomain') as FormArray;
                                 mappings.clear();
                                 response.body?.forEach((item) => {
+                                    if (item && (item.name || item.email) && item.default) {
+                                        this.isPortalDefault = true;
+                                    }
                                     this.addNewPortalUser(item);
                                 });
                             } else {
