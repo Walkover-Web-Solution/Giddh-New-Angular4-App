@@ -783,7 +783,7 @@ export class VoucherService {
      */
     public bulkExport(getRequest: any, postRequest: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + (!getRequest.accountUniqueName?.trim()?.length || this.generalService.voucherApiVersion === 1 ? BULK_VOUCHER_EXPORT_API.BULK_EXPORT : LEDGER_API.BULK_EXPORT_LEDGER);
+        let url = this.config.apiUrl + ((!getRequest.accountUniqueName?.trim()?.length || this.generalService.voucherApiVersion === 1) ? BULK_VOUCHER_EXPORT_API.BULK_EXPORT : LEDGER_API.BULK_EXPORT_LEDGER);
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', getRequest.from);
         url = url?.replace(':to', getRequest.to);
