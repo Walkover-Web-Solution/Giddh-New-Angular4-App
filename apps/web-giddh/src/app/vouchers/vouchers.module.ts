@@ -101,6 +101,8 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-particular-dialog.component";
 import { DscPinDialogComponent } from "./dsc-pin-dialog/dsc-pin-dialog.component";
+import { BatchSelectDialogComponent } from "./batch-select-dialog/batch-select-dialog.component";
+import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-list.component";
 
 @NgModule({
     declarations: [
@@ -134,6 +136,8 @@ import { DscPinDialogComponent } from "./dsc-pin-dialog/dsc-pin-dialog.component
         RouterModule,
         FormsModule,
         FormFieldsModule,
+        BatchSelectDialogComponent,
+        BatchChipListComponent,
         VouchersRoutingModule,
         MatTabsModule,
         MatTableModule,

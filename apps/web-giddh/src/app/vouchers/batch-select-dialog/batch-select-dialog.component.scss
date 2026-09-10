@@ -1,0 +1,64 @@
+.soft-panel {
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-8, 8px);
+}
+
+.soft-panel-default {
+    background-color: var(--color-light-gray);
+}
+
+.soft-panel-success {
+    border-color: var(--color-green);
+    background-color: var(--color-green-light);
+}
+
+.soft-panel-warning {
+    border-color: var(--color-orange);
+    background-color: var(--color-warm-orange-light);
+}
+
+.progress-track {
+    position: relative;
+    height: 6px;
+    margin-top: 10px;
+    border-radius: 999px;
+    background-color: var(--border-color);
+    overflow: hidden;
+}
+
+.progress-track-fill {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background-color: var(--bg-primary-color);
+}
+
+.progress-track-fill-success {
+    background-color: var(--color-green);
+}
+
+.progress-track-fill-warning {
+    background-color: var(--color-orange);
+    width: 80% !important;
+}
+
+.progress-track-over {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20%;
+    height: 100%;
+    background-color: var(--color-red);
+    opacity: 0.45;
+}
+
+.batch-qty-field {
+    width: 110px;
+
+    input {
+        width: 72px;
+        border-radius: var(--mat-border-radius-4, 4px);
+    }
+}

@@ -11,6 +11,7 @@ import { InventoryMasterComponent } from "./component/inventory-master/inventory
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
 import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { AdjustInventoryComponent } from "./component/adjust-inventory/adjust-inventory.component";
+import { BatchReportComponent } from "./component/batch-report/batch-report.component";
 
 const routes: Routes = [
     {
@@ -64,6 +65,10 @@ const routes: Routes = [
             {
                 path: ":type/adjust/:refNo",
                 component: AdjustInventoryComponent
+            },
+            {
+                path: ":type/batch",
+                component: BatchReportComponent,
             },
             {
                 path: "stock-balance",

@@ -1,0 +1,399 @@
+<div
+    class="batch-report p-3"
+    appTranslate
+    [file]="'inventory/batch'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    @if (dataSource?.data?.length || hasActiveFilters) {
+        <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-2 mb-3">
+            <div class="custom-datepicker-wrapper">
+                <div
+                    class="custom-datepicker"
+                    [matMenuTriggerFor]="universalDatepicker"
+                    #universalDatepickerTrigger="matMenuTrigger"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-controls="universalDatepicker"
+                >
+                    <input
+                        matInput
+                        type="text"
+                        name="selectedDateRange"
+                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker date-range-picker"
+                        readonly
+                    />
+                </div>
+            </div>
+
+            @if (stocks?.length) {
+                <div class="filter-dropdown">
+                    <multi-select-dropdown
+                        [name]="'batchSelectedStock'"
+                        [label]="localeData?.select_stock"
+                        [placeholder]="localeData?.select_stock"
+                        [options]="stocks"
+                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                        [(ngModel)]="selectedStock"
+                        (selectionChange)="onStockChange()"
+                    ></multi-select-dropdown>
+                </div>
+            }
+
+            @if (variants?.length) {
+                <div class="filter-dropdown">
+                    <multi-select-dropdown
+                        [name]="'batchSelectedVariant'"
+                        [label]="localeData?.select_variant"
+                        [placeholder]="localeData?.select_variant"
+                        [options]="variants"
+                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                        [(ngModel)]="selectedVariant"
+                        (selectionChange)="onVariantChange()"
+                    ></multi-select-dropdown>
+                </div>
+            }
+
+            @if (warehouses?.length > 1) {
+                <div class="filter-dropdown">
+                    <multi-select-dropdown
+                        [name]="'batchSelectedWarehouse'"
+                        [label]="commonLocaleData?.app_select_warehouse"
+                        [placeholder]="commonLocaleData?.app_select_warehouse"
+                        [options]="warehouses"
+                        [optionValue]="'uniqueName'"
+                        [optionLabel]="'name'"
+                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                        [(ngModel)]="selectedWarehouse"
+                        (selectionChange)="onWarehouseChange()"
+                    ></multi-select-dropdown>
+                </div>
+            }
+
+            @if (hasActiveFilters) {
+                <button matButton="outlined" (click)="resetFilters()">
+                    <span class="d-inline-flex align-items-center column-gap-05">
+                        <i class="icon-cross font-size-14"></i>
+                        {{ commonLocaleData?.app_clear }}
+                    </span>
+                </button>
+            }
+
+            <button
+                matButton="outlined"
+                class="ml-auto advance-filter-button"
+                matBadgeColor="primary"
+                [matBadge]="advanceFilterCount"
+                [matBadgeHidden]="!advanceFilterCount"
+                (click)="openAdvanceFilterDialog()"
+            >
+                <span class="d-inline-flex align-items-center column-gap-05">
+                    <i class="icon-advance-filter"></i>
+                    <span>{{ localeData?.filters }}</span>
+                </span>
+            </button>
+            
+            <button matButton="filled" (click)="openBatchDialog()">
+                {{ localeData?.add_batch }}
+            </button>
+
+        </div>
+        @if (hasAdvanceFilters) {
+            <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-1 mb-3">
+                @if (expiredOnly !== null) {
+                    <div class="font-size-12 border-radius-12 px-2 py-1 d-flex align-items-center applied-filter-chip column-gap-05">
+                        <span>{{ localeData?.expiry_status }}:</span>
+                        <span class="text-primary">{{ expiryStatusLabel }}</span>
+                        <button
+                            type="button"
+                            class="bg-transparent border-none cursor-pointer"
+                            (click)="removeAdvanceFilter('expiredOnly')"
+                            [attr.aria-label]="commonLocaleData?.app_clear"
+                        >
+                            <i class="icon-cross font-size-12"></i>
+                        </button>
+                    </div>
+                }
+                @if (withinDaysValue > 0) {
+                    <div class="font-size-12 border-radius-12 px-2 py-1 d-flex align-items-center applied-filter-chip column-gap-05">
+                        <span>{{ localeData?.expiry_within }}:</span>
+                        <span class="text-primary">{{ withinDaysValue }} {{ localeData?.days }}</span>
+                        <button
+                            type="button"
+                            class="bg-transparent border-none cursor-pointer"
+                            (click)="removeAdvanceFilter('withinDays')"
+                            [attr.aria-label]="commonLocaleData?.app_clear"
+                        >
+                            <i class="icon-cross font-size-12"></i>
+                        </button>
+                    </div>
+                }
+                <button type="button" class=" bg-transparent border-none cursor-pointer text-primary" (click)="clearAdvanceFilters()">
+                    {{ localeData?.clear_all }}
+                </button>
+            </div>
+        }
+    }
+
+    @if (isLoading && !dataSource?.data?.length && !hasActiveFilters) {
+        <giddh-page-loader></giddh-page-loader>
+    }
+
+    @if (!isLoading || dataSource?.data?.length || hasActiveFilters) {
+        @if (dataSource?.data?.length || hasActiveFilters) {
+            <div class="table-responsive">
+                <table mat-table [dataSource]="dataSource" class="w-100">
+                    <ng-container matColumnDef="batchNumber">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <div
+                                class="w-100"
+                                #searchBatchNumberContainer
+                                (clickOutside)="handleClickOutside($event, searchBatchNumberContainer, 'batchNumber')"
+                            >
+                                @if (!showBatchNumberSearchInput) {
+                                    <div class="align-items-center d-flex">
+                                        <span>{{ localeData?.batch_number }}</span>
+                                        <button
+                                            matIconButton
+                                            (click)="toggleSearch('batchNumber')"
+                                            [attr.aria-label]="localeData?.search_batch"
+                                            class="h-auto"
+                                        >
+                                            <span class="icon-search font-size-14"></span>
+                                        </button>
+                                    </div>
+                                }
+                                @if (showBatchNumberSearchInput) {
+                                    <div>
+                                        <text-field
+                                            [type]="'text'"
+                                            [placeholder]="localeData?.batch_number"
+                                            [cssClass]="'form-control border'"
+                                            [formControl]="searchBatchNumber"
+                                            [autoFocus]="showBatchNumberSearchInput"
+                                        ></text-field>
+                                    </div>
+                                }
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.batchNumber ?? "-" }}</td>
+                        <td mat-footer-cell *matFooterCellDef class="font-weight-semibold">{{ commonLocaleData?.app_total }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <div
+                                class="w-100"
+                                #searchNameContainer
+                                (clickOutside)="handleClickOutside($event, searchNameContainer, 'name')"
+                            >
+                                @if (!showNameSearchInput) {
+                                    <div class="align-items-center d-flex">
+                                        <span>{{ commonLocaleData?.app_name }}</span>
+                                        <button
+                                            matIconButton
+                                            (click)="toggleSearch('name')"
+                                            [attr.aria-label]="commonLocaleData?.app_name"
+                                            class="h-auto"
+                                        >
+                                            <span class="icon-search font-size-14"></span>
+                                        </button>
+                                    </div>
+                                }
+                                @if (showNameSearchInput) {
+                                    <div>
+                                        <text-field
+                                            [type]="'text'"
+                                            [placeholder]="commonLocaleData?.app_name"
+                                            [cssClass]="'form-control border'"
+                                            [formControl]="searchName"
+                                            [autoFocus]="showNameSearchInput"
+                                        ></text-field>
+                                    </div>
+                                }
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.name ?? "-" }}</td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+                    <ng-container matColumnDef="stock">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.stock }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="font-weight-semibold">{{ element?.stock?.name ?? "-" }}</div>
+                            @if (element?.variant?.name) {
+                                <div class="font-size-12 light-gray">{{ localeData?.variant }}: {{ element.variant.name }}</div>
+                            }
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+                    <ng-container matColumnDef="warehouse">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_warehouse }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element?.warehouse?.name ?? "-" }}</td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+                    <ng-container matColumnDef="manufacturingDate">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.manufacturing_date }}</th>
+                        <td mat-cell *matCellDef="let element">{{ (element?.manufacturingDate | giddhDate) || "-" }}</td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+                    <ng-container matColumnDef="expiryDate">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.expiry_date }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div>{{ (element?.expiryDate | giddhDate) || "-" }}</div>
+                            @if (element?.daysRemaining !== null && element?.daysRemaining !== undefined) {
+                                <div class="font-size-12" [ngClass]="getDaysRemainingClass(element.daysRemaining)">
+                                    {{ element.daysRemaining }} {{ localeData?.days }}
+                                </div>
+                            }
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+                    <ng-container matColumnDef="openingQuantity">
+                        <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.opening_quantity }}</th>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.openingQuantity ?? "-" }}</td>
+                        <td mat-footer-cell *matFooterCellDef class="text-right font-weight-semibold">{{ totals?.openingQuantity ?? "-" }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="inwardQuantity">
+                        <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.inward_quantity }}</th>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.inwardQuantity ?? "-" }}</td>
+                        <td mat-footer-cell *matFooterCellDef class="text-right font-weight-semibold">{{ totals?.inwardQuantity ?? "-" }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="outwardQuantity">
+                        <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.outward_quantity }}</th>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.outwardQuantity ?? "-" }}</td>
+                        <td mat-footer-cell *matFooterCellDef class="text-right font-weight-semibold">{{ totals?.outwardQuantity ?? "-" }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="availableQuantity">
+                        <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.available_quantity }}</th>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.availableQuantity ?? "-" }}</td>
+                        <td mat-footer-cell *matFooterCellDef class="text-right font-weight-semibold">{{ totals?.availableQuantity ?? "-" }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <button matIconButton [matMenuTriggerFor]="batchMenu">
+                                <i class="icon-dots-three-vertical font-size-16"></i>
+                            </button>
+                            <mat-menu #batchMenu="matMenu" xPosition="before">
+                                @if (isBatchUnarchived(element)) {
+                                    <button class="no-box-shadow" mat-menu-item (click)="editBatch(element)">
+                                        {{ commonLocaleData?.app_edit }}
+                                    </button>
+                                    <button class="no-box-shadow" mat-menu-item (click)="deleteBatch(element)">
+                                        {{ commonLocaleData?.app_delete }}
+                                    </button>
+                                    <button class="no-box-shadow" mat-menu-item (click)="archiveBatch(element)">
+                                        {{ commonLocaleData?.app_archive }}
+                                    </button>
+                                    <button class="no-box-shadow" mat-menu-item (click)="transferBatch(element)">
+                                        {{ localeData?.transfer }}
+                                    </button>
+                                } @else {
+                                    <button class="no-box-shadow" mat-menu-item (click)="unarchiveBatch(element)">
+                                        {{ commonLocaleData?.app_unarchive }}
+                                    </button>
+                                }
+                            </mat-menu>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    @if (dataSource?.data?.length) {
+                        <tr mat-footer-row *matFooterRowDef="displayedColumns" class="batch-total-row font-weight-semibold border-top"></tr>
+                    }
+                </table>
+            </div>
+            @if (totalItems > pageSizeOptions[0]) {
+                <mat-paginator
+                    (page)="handlePageChange($event)"
+                    [length]="totalItems"
+                    [pageSize]="count"
+                    [showFirstLastButtons]="true"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [hidePageSize]="false"
+                    [pageIndex]="pageIndex"
+                ></mat-paginator>
+            }
+            @if (!dataSource?.data?.length) {
+                <no-data
+                    [primaryMessage]="commonLocaleData?.app_no_data_found"
+                    [primaryMessageClass]="'no-data'"
+                    [secondaryMessage]="' '"
+                ></no-data>
+            }
+        } @else {
+            <div class="batch-empty-state d-flex justify-content-center align-items-center">
+                <button matButton="filled" (click)="openBatchDialog()">
+                    {{ localeData?.add_batch }}
+                </button>
+            </div>
+        }
+    }
+</div>
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            [locale]="{ applyLabel: commonLocaleData?.app_done }"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>
+<ng-template #advanceFilterDialog>
+    <div class="advance-search-dialog">
+        <div cdkFocusInitial class="dialog-header">
+            <span>{{ commonLocaleData?.app_advanced_filter }}</span>
+            <button matIconButton mat-dialog-close aria-label="cross icon">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+        <mat-dialog-content class="dialog-body">
+            <div class="row">
+                <div class="col-12 mt-3">
+                    <input-field
+                        [name]="'withinDays'"
+                        [type]="'number'"
+                        [label]="localeData?.within_days"
+                        [placeholder]="localeData?.within_days_placeholder"
+                        [formControl]="filterWithinDays"
+                    ></input-field>
+                </div>
+                <div class="col-12 mt-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{ localeData?.expiry_status }}</mat-label>
+                        <mat-select
+                            name="filterExpiredOnly"
+                            [(ngModel)]="filterExpiredOnly"
+                            [placeholder]="localeData?.expiry_status"
+                        >
+                            <mat-option [value]="false">{{ localeData?.will_expire }}</mat-option>
+                            <mat-option [value]="true">{{ localeData?.already_expired }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="d-flex column-gap-1 mt-4">
+                <button type="button" matButton="filled" mat-dialog-close (click)="applyAdvanceFilters()">
+                    {{ commonLocaleData?.app_apply }}
+                </button>
+                <button type="button" matButton="outlined" mat-dialog-close>
+                    {{ commonLocaleData?.app_cancel }}
+                </button>
+            </div>
+        </mat-dialog-content>
+    </div>
+</ng-template>

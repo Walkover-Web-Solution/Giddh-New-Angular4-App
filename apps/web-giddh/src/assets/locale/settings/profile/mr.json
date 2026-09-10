@@ -101,5 +101,7 @@
     "pdf_currency_format": "पीडीएफ चलन स्वरूप",
     "pdf_currency_format_code": "कोड",
     "pdf_currency_format_symbol": "चिन्ह",
-    "pdf_currency_format_tooltip": "तयार केलेल्या पीडीएफमध्ये चलन रक्कम कशी दर्शविली जावी ते निवडा: चिन्ह ([SYMBOL] 1,000) किंवा कोड ([CODE] 1,000)."
+    "pdf_currency_format_tooltip": "तयार केलेल्या पीडीएफमध्ये चलन रक्कम कशी दर्शविली जावी ते निवडा: चिन्ह ([SYMBOL] 1,000) किंवा कोड ([CODE] 1,000).",
+    "batch_tracking": "बॅच ट्रॅकिंग",
+    "batch_tracking_tooltip": "उत्पादन आणि समाप्ती तारीख असलेल्या इन्व्हेंटरी आयटमसाठी बॅच ट्रॅकिंग सक्षम करा."
 }

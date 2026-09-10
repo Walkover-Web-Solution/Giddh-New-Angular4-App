@@ -22,7 +22,8 @@
         "customer_wise":"Customer Wise",
         "vendor_wise":"Vendor Wise",
         "inventory_adjustment":"Inventory Adjustment",
-        "stock_aging_report":"Aging Report"
+        "stock_aging_report":"Aging Report",
+        "batch_report":"Batch Report"
     },
     "reports":{
         "transaction_count":"Transaction Count",
@@ -53,6 +54,7 @@
         "closing_amount":"Closing Value",
         "stock_name":"Stock Name",
         "variant_name":"Variant Name",
+        "batch":"Batch",
         "no_entries_found_1":"No entries found within given criteria.",
         "no_entries_found_2":"Do search with some other dates",
         "voucher_type":"Voucher Type",

@@ -101,5 +101,7 @@
     "pdf_currency_format": "पीडीएफ मुद्रा प्रारूप",
     "pdf_currency_format_code": "कोड",
     "pdf_currency_format_symbol": "प्रतीक",
-    "pdf_currency_format_tooltip": "चुनें कि जनरेट किए गए पीडीएफ में मुद्रा राशि कैसे प्रदर्शित हो: प्रतीक ([SYMBOL] 1,000) या कोड ([CODE] 1,000)।"
+    "pdf_currency_format_tooltip": "चुनें कि जनरेट किए गए पीडीएफ में मुद्रा राशि कैसे प्रदर्शित हो: प्रतीक ([SYMBOL] 1,000) या कोड ([CODE] 1,000)।",
+    "batch_tracking": "बैच ट्रैकिंग",
+    "batch_tracking_tooltip": "निर्माण और समाप्ति तिथि वाले इन्वेंट्री आइटम के लिए बैच ट्रैकिंग सक्षम करें।"
 }

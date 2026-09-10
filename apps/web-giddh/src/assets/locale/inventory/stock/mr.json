@@ -39,6 +39,7 @@
     "custom_field": "सानुकूल फील्ड",
     "opening_balance": "प्रारंभिक शिल्लक",
     "opening_qty": "उघडण्याचे प्रमाण",
+    "qty": "प्रमाण",
     "enter_amount": "रक्कम प्रविष्ट करा",
     "enter_qty": "प्रमाण प्रविष्ट करा",
     "enter_rate": "दर प्रविष्ट करा",
@@ -101,5 +102,13 @@
     "attachment_deleted": "कोई फाइल चयनित नहीं",
     "add_image": "प्रतिमा जोडा",
     "preview_image": "प्रतिमेचे पूर्वावलोकन",
-    "no_file_chosen": "कोणतीही फाइल निवडलेली नाही"
+    "no_file_chosen": "कोणतीही फाइल निवडलेली नाही",
+    "add_batch": "बॅच जोडा",
+    "manage_batches": "बॅच व्यवस्थापित करा",
+    "add_batch_row": "+ बॅच ओळ जोडा",
+    "batch_number": "बॅच क्रमांक",
+    "batch_name": "बॅच नाव",
+    "manufacturing_date": "निर्मिती दिनांक",
+    "expiry_date": "कालबाह्यता दिनांक",
+    "opening_balance_batch_wise": "प्रारंभिक शिल्लक — बॅचनुसार"
 }
