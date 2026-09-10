@@ -392,7 +392,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         exportBodyRequest.ledgerAdvanceFilter = advanceFilter;
                         exportBodyRequest.tagNames = advanceFilter?.tags;
                         exportBodyRequest.includeTag = advanceFilter?.includeTag;
-                        exportBodyRequest.selectAll = advanceFilter?.selectAll;
+                        exportBodyRequest.selectAllFields = advanceFilter?.selectAllFields;
                         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                             if (response?.status === 'success') {
                                 if (typeof response?.body === "string") {

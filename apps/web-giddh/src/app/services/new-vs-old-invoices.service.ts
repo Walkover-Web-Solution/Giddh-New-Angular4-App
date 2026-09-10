@@ -56,7 +56,7 @@ export class NewVsOldInvoicesService {
         const body = {
             duration: 'salesPerson',
             salesPersonUniqueNames: queryRequest.salesPersonUniqueNames || [],
-            selectAll: queryRequest.selectAll
+            selectAllFields: queryRequest.selectAllFields || []
         };
         return this.http.post(this.generalService.replaceUrlPlaceholders(NEWVSOLDINVOICE_API.GET, queryRequest), body)
             .pipe(map((res) => {

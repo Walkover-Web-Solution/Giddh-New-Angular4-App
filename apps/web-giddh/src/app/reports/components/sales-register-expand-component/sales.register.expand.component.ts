@@ -151,7 +151,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
                 this.getDetailedsalesRequestFilter.stateCode = params.stateCode;
                 this.getDetailedsalesRequestFilter.countryCode = params.countryCode;
                 this.getDetailedsalesRequestFilter.accountUniqueNames = isSelectedAllOption(registerReportFilters?.accountUniqueNames) ? [] : registerReportFilters?.accountUniqueNames;
-                this.getDetailedsalesRequestFilter.selectAll = isSelectedAllOption(registerReportFilters?.accountUniqueNames);
+                this.getDetailedsalesRequestFilter = this.generalService.replaceSelectedAllOptions(this.getDetailedsalesRequestFilter, true);
                 this.currentGroupBy.set(params.groupBy);
                 this.params = params;
                 this.setDataPickerDateRange();
@@ -499,7 +499,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             activeCompanyCountryCode: this.activeCompanyCountryCode,
             groupBy: groupBy && groupBy !== GroupBy.Duration ? groupBy : undefined,
             accountUniqueNames: accountUniqueNames,
-            selectAll: this.getDetailedsalesRequestFilter?.selectAll,
+            selectAllFields: this.getDetailedsalesRequestFilter?.selectAllFields,
             salesPersonUniqueNames: groupBy === GroupBy.SalesPerson && salesPersonUniqueName ? [salesPersonUniqueName] : [],
             countryCodes: (groupBy === GroupBy.Country || groupBy === GroupBy.State) && countryCode ? [countryCode] : [],
             stateCodes: groupBy === GroupBy.State && stateCode ? [stateCode] : []

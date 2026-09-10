@@ -46,7 +46,7 @@ export class ExportBodyRequest {
     ledgerAdvanceFilter?: any;
     type?: string;
     groupBy?: string;
-    selectAll?: boolean;
+    selectAllFields?: string[];
     accountUniqueNames?: string[];
     salesPersonUniqueNames?: string[];
     countryCodes?: string[];
@@ -72,14 +72,14 @@ export interface DayBookRequestModel {
     defaultParticularsLabel?: string;
     includeTag?: boolean;
     salesPersonUniqueNames?: string[];
-    selectAll?: boolean;
+    selectAllFields?: string[];
 }
 
 export interface Inventory {
     includeInventory: boolean;
     inventories: any[];
     defaultInventoriesLabel?: any[];
-    selectAll?: boolean;
+    selectAllFields?: string[];
     quantity?: any;
     includeQuantity: boolean;
     quantityLessThan: boolean;
