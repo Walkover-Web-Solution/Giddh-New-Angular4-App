@@ -161,7 +161,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.getDetailedPurchaseRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
                 this.getDetailedPurchaseRequestFilter.stateCode = params.stateCode;
                 this.getDetailedPurchaseRequestFilter.countryCode = params.countryCode;
-                this.getDetailedPurchaseRequestFilter.accountUniqueNames = isSelectedAllOption(registerReportFilters?.accountUniqueNames) ? [] : registerReportFilters?.accountUniqueNames;
+                this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
                 this.getDetailedPurchaseRequestFilter = this.generalService.replaceSelectedAllOptions(this.getDetailedPurchaseRequestFilter, true);
                 this.currentGroupBy.set(params.groupBy);
                 this.params = params;

@@ -150,7 +150,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
                 this.getDetailedsalesRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
                 this.getDetailedsalesRequestFilter.stateCode = params.stateCode;
                 this.getDetailedsalesRequestFilter.countryCode = params.countryCode;
-                this.getDetailedsalesRequestFilter.accountUniqueNames = isSelectedAllOption(registerReportFilters?.accountUniqueNames) ? [] : registerReportFilters?.accountUniqueNames;
+                this.getDetailedsalesRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
                 this.getDetailedsalesRequestFilter = this.generalService.replaceSelectedAllOptions(this.getDetailedsalesRequestFilter, true);
                 this.currentGroupBy.set(params.groupBy);
                 this.params = params;
