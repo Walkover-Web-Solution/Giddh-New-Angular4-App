@@ -29,7 +29,7 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
-import { Configuration, INTERNAL_EMAILS_DOMAINS } from '../app.constant';
+import { Configuration, INTERNAL_EMAILS_DOMAINS, isSelectedAllOption } from '../app.constant';
 import { cloneDeep, find,orderBy } from '../lodash-optimized';
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
@@ -149,6 +149,51 @@ export class GeneralService {
             }
         });
         return url;
+    }
+
+    /**
+     * Replaces selected-all sentinel arrays with empty arrays and collects
+     * their field names in a root-level `selectAllFields` array.
+     *
+     * @param node Request object or nested request object
+     * @param createCopy When true, transforms and returns a deep clone without changing the original object
+     * @returns The transformed request object
+     * @memberof GeneralService
+     */
+    public replaceSelectedAllOptions<T>(node: T, createCopy: boolean = false): T {
+        const requestNode: any = createCopy ? cloneDeep(node) : node;
+        if (!requestNode || typeof requestNode !== 'object') {
+            return requestNode;
+        }
+
+        const selectAllFields: string[] = [];
+        this.replaceSelectedAllOptionsRecursive(requestNode, selectAllFields);
+        requestNode.selectAllFields = selectAllFields;
+
+        return requestNode;
+    }
+
+    /**
+     * Traverses request object and replaces selected-all values.
+     *
+     * @private
+     * @param node Request object or nested request object
+     * @param selectAllFields Root-level list of fields marked as select-all
+     * @memberof GeneralService
+     */
+    private replaceSelectedAllOptionsRecursive(node: any, selectAllFields: string[]): void {
+        if (!node || typeof node !== 'object' || Array.isArray(node)) {
+            return;
+        }
+        Object.keys(node).forEach(key => {
+            const value = node[key];
+            if (isSelectedAllOption(value)) {
+                node[key] = [];
+                selectAllFields.push(key);
+            } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+                this.replaceSelectedAllOptionsRecursive(value, selectAllFields);
+            }
+        });
     }
 
     public setIsMobileView(isMobileView: boolean) {

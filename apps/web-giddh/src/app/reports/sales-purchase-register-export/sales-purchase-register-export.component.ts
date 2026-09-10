@@ -98,8 +98,9 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         if (this.inputData?.groupBy) {
             exportBodyRequest.groupBy = this.inputData.groupBy;
         }
-        if (this.inputData?.accountUniqueNames?.length) {
-            exportBodyRequest.accountUniqueNames = this.inputData.accountUniqueNames;
+        if (this.inputData?.accountUniqueNames?.length || this.inputData?.selectAllFields?.length) {
+            exportBodyRequest.accountUniqueNames = this.inputData.selectAllFields?.length ? [] : this.inputData.accountUniqueNames;
+            exportBodyRequest.selectAllFields = this.inputData.selectAllFields;
         }
         if (this.inputData?.salesPersonUniqueNames?.length) {
             exportBodyRequest.salesPersonUniqueNames = this.inputData.salesPersonUniqueNames;

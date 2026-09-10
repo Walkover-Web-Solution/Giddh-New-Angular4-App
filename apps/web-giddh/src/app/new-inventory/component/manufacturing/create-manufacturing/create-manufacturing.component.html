@@ -239,6 +239,7 @@
                                                                 ></select-field>
                                                             </div>
                                                         </td>
+
                                                         <td class="table-variant">
                                                             <div class="field-m-width">
                                                                 <select-field
@@ -247,7 +248,7 @@
                                                                         linkedStock.cssClass +
                                                                         (linkedStock.variantNameError ? ' required-field-error' : '')
                                                                     "
-                                                                    [name]="'variantUniqueName' + i"
+                                                                    [name]="'variantUniqueName' + i"   
                                                                     [scrollableElementId]="'variant' + i"
                                                                     [placeholder]="commonLocaleData?.app_select_variant"
                                                                     [options]="linkedStock.variants"

@@ -347,9 +347,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
             if (dynamicColumnsData) {
                 this.handleDynamicColumnsChange(dynamicColumnsData);
             }
-            setTimeout(() => {
-                this.getReport(true);
-            }, 100);
+            
+            this.getReport(true);
         });
     }
 
@@ -672,6 +671,31 @@ export class ReportsComponent implements OnInit, OnDestroy {
      */
     public getCustomiseHeaderColumns(event: any): void {
         this.displayedColumns = event;
+    }
+
+    /**
+     * Handles selected columns for group reports
+     *
+     * @param {*} event
+     * @memberof ReportsComponent
+     */
+    public onSelectedColumns(event: any): void {
+        if (this.moduleName === InventoryModuleName.group) {
+            this.getCustomiseHeaderColumns(event);
+            this.dynamicColumnsSubject$.next(event);
+        }
+    }
+
+    /**
+     * Handles selected dynamic columns for stock/variant reports
+     *
+     * @param {*} event
+     * @memberof ReportsComponent
+     */
+    public onSelectedDynamicColumns(event: any): void {
+        if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
+            this.dynamicColumnsSubject$.next(event);
+        }
     }
 
     /**
