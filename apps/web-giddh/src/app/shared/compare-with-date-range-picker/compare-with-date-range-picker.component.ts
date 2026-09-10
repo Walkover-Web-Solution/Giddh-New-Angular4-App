@@ -122,7 +122,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       } else if (compareValue == 0) {
         this.onChange.emit({
           compareValue: null,
-          compareType: value.compareType[0]
+          compareType: null
         });
       }
     });
