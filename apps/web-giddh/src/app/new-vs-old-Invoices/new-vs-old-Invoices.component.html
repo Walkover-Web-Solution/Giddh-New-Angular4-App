@@ -69,37 +69,14 @@
                         </div>
                         @if (fullSalesPersonList?.length) {
                             <div class="max-width-500">
-                                <mat-form-field appearance="outline" class="w-100">
-                                    <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
-                                    <mat-select
-                                        panelClass="py-0"
-                                        name="sbpSalesPerson"
-                                        [multiple]="true"
-                                        [(ngModel)]="selectedSalesPersonUniqueNames"
-                                        (ngModelChange)="onSalesPersonSelectionChange($event)"
-                                        (closed)="!filteredSalesPersonList()?.length ? salesPersonSearch.reset() : null"
-                                    >
-                                        <ngx-mat-select-search
-                                            [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                            [formControl]="salesPersonSearch"
-                                            [clearSearchInput]="false"
-                                        >
-                                            <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                        </ngx-mat-select-search>
-                                        <mat-select-trigger *ngIf="isAllSalesPersonSelected()">
-                                            <span>{{ commonLocaleData?.app_all }}</span>
-                                        </mat-select-trigger>
-                                        <mat-option [value]="ALL_SALES_PERSONS" [selected]="isAllSalesPersonSelected()">
-                                            {{ commonLocaleData?.app_all }}
-                                        </mat-option>
-                                        @for (person of filteredSalesPersonList(); track person?.value) {
-                                            <mat-option [value]="person?.value">
-                                                {{ person?.label }}
-                                            </mat-option>
-                                        }
-                                    </mat-select>
-                                </mat-form-field>
+                                <multi-select-dropdown
+                                    [label]="commonLocaleData?.app_sales_person"
+                                    [placeholder]="commonLocaleData?.app_sales_person_placeholder"
+                                    [options]="fullSalesPersonList"
+                                    [showAllOption]="true"
+                                    name="sbpSalesPerson"
+                                    [(ngModel)]="selectedSalesPersonUniqueNames"
+                                ></multi-select-dropdown>
                             </div>
                         }
                         <div class="btn-group">
