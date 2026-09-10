@@ -442,6 +442,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         this.isAllSelected = true;
         this.chipList = [this.getAllLabel()];
         this.chipListUniqueName = [this.allOptionValue];
+        this.changeDetection.detectChanges();
     }
 
     /**

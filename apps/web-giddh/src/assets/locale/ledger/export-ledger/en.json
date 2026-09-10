@@ -30,5 +30,5 @@
     "multiple_pdf": "Multiple PDF",
     "select_copy": "Select Copy",
     "select_order": "Select Order",
-    "csv_semicolon_separator_note": "CSV exports use a semicolon (;) as the field separator."
+    "csv_semicolon_separator_note": "CSV exports use a semicolon (;) as the field separator"
 }
