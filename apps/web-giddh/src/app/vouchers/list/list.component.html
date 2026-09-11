@@ -5539,7 +5539,7 @@
                             <mat-card
                                 class="outline-card add-template-wrapper text-center"
                                 *ngIf="
-                                    [voucherTypeEnum.invoice, voucherTypeEnum.purchase_bill, voucherTypeEnum.purchase_order].includes(
+                                    [voucherTypeEnum.invoice, voucherTypeEnum.purchase_bill, voucherTypeEnum.purchase_order, voucherTypeEnum.estimate, voucherTypeEnum.proforma].includes(
                                         template.type
                                     ) && [voucherTypeEnum.sales, voucherTypeEnum.purchase].includes(voucherType)
                                 "
@@ -5563,9 +5563,13 @@
                                                 template.uniqueName,
                                                 template.type === voucherTypeEnum.invoice
                                                     ? voucherTypeEnum.invoice
-                                                    : template.type === voucherTypeEnum.purchase_bill
-                                                      ? voucherTypeEnum.purchase_bill
-                                                      : voucherTypeEnum.purchase_order
+                                                    : template.type === voucherTypeEnum.estimate
+                                                      ? voucherTypeEnum.estimate
+                                                      : template.type === voucherTypeEnum.proforma
+                                                        ? voucherTypeEnum.proforma
+                                                          : template.type === voucherTypeEnum.purchase_bill
+                                                            ? voucherTypeEnum.purchase_bill
+                                                              : voucherTypeEnum.purchase_order
                                             )
                                         "
                                     >
