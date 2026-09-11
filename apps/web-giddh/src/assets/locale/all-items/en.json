@@ -875,6 +875,17 @@
                     }
                 },
                 {
+                    "label": "Inventory Settings",
+                    "link": "/pages/inventory/v2/setting",
+                    "icon": "icon-settings-cog",
+                    "description": "Configure inventory automation, batches and document statuses",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
                     "label": "Manufacturing",
                     "link": "/pages/inventory/manufacturing",
                     "icon": "icon-manufacturing1",

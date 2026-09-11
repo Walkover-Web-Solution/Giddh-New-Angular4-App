@@ -691,6 +691,17 @@
             }
         },
         {
+            "label": "इन्व्हेंटरी सेटिंग्ज",
+            "link": "/pages/inventory/v2/setting",
+            "icon": "icon-settings-cog",
+            "description": "इन्व्हेंटरी ऑटोमेशन, बॅच आणि दस्तऐवज स्थिती कॉन्फिगर करा",
+            "additional": {
+                "queryParams": {
+                    "voucherVersion": 2
+                }
+            }
+        },
+        {
             "label": "यादी",
             "icon": "icon-inventory",
             "additional": {

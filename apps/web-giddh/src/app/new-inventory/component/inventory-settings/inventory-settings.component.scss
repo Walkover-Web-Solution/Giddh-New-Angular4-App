@@ -1,0 +1,8 @@
+.inventory-settings {
+    .left-arrow::after {
+        position: absolute;
+        content: '->';
+        right: -5px;
+        top: 14px;
+    }
+}

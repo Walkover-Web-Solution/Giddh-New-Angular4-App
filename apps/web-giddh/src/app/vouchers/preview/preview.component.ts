@@ -29,6 +29,7 @@ import { DownloadVoucherComponent } from "../download-voucher/download-voucher.c
 import { ServiceConfig } from "../../services/service.config";
 import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
 import { DscService } from "../../services/dsc.service";
+import { VoucherService } from "../../services/voucher.service";
 
 @Component({
     selector: "preview",
@@ -220,7 +221,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private dscSignDialogService: DscSignDialogService,
-        private dscService: DscService
+        private dscService: DscService,
+        private voucherService: VoucherService
     ) { }
 
 
@@ -318,7 +320,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             !this.invoiceType.isEstimateInvoice &&
             !this.invoiceType.isProformaInvoice &&
             !this.invoiceType.isReceiptInvoice &&
-            !this.invoiceType.isPaymentInvoice;
+            !this.invoiceType.isPaymentInvoice &&
+            !this.invoiceType.isDeliveryChallan &&
+            !this.invoiceType.isReceiptNote;
     }
 
     /**
@@ -390,6 +394,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             case VoucherTypeEnum.payment:
                 this.createNewVoucher.text = this.localeData?.new_payment;
                 this.createNewVoucher.link = "/pages/vouchers/payment/create";
+                break;
+            case VoucherTypeEnum.deliveryChallan:
+                this.createNewVoucher.text = this.localeData?.new_delivery_challan;
+                this.createNewVoucher.link = "/pages/vouchers/delivery-challan/create";
+                break;
+            case VoucherTypeEnum.receiptNote:
+                this.createNewVoucher.text = this.localeData?.new_receipt_note;
+                this.createNewVoucher.link = "/pages/vouchers/receipt-note/create";
                 break;
         }
     }
@@ -703,6 +715,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         }
 
+        const inventoryVoucherType = this.getInventoryVoucherType();
+        if (inventoryVoucherType) {
+            this.componentStore.getInventoryVouchers({
+                model: cloneDeep(this.advanceFilters),
+                type: inventoryVoucherType
+            });
+            return;
+        }
+
         if (this.voucherType?.length) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                 this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
@@ -712,6 +733,23 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             }
         }
+    }
+
+    /**
+     * Returns delivery challan/receipt note type from the current route
+     *
+     * @private
+     * @return {string}
+     * @memberof VouchersPreviewComponent
+     */
+    private getInventoryVoucherType(): string {
+        const routeVoucherType = this.activatedRoute.snapshot.params?.voucherType
+            || this.urlVoucherType
+            || this.voucherType;
+        const parsedVoucherType = this.vouchersUtilityService.parseVoucherType(routeVoucherType);
+        return [VoucherTypeEnum.deliveryChallan, VoucherTypeEnum.receiptNote].includes(parsedVoucherType as VoucherTypeEnum)
+            ? parsedVoucherType
+            : '';
     }
 
     /**
@@ -931,12 +969,16 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     private handleGetAllVoucherResponse(response: any): void {
         if (response && response.voucherType === this.voucherType) {
             const currentInvoiceList = [];
+            const isInventoryDocument = [VoucherTypeEnum.deliveryChallan, VoucherTypeEnum.receiptNote].includes(this.voucherType);
             if (this.pageNumberHistory[0] < response.page) {
                 this.pageNumberHistory.push(response.page);
             } else if (!this.pageNumberHistory.includes(response.page)) {
                 this.pageNumberHistory.unshift(response.page);
             }
-            this.totalPages = response?.totalPages;
+            this.totalPages = response?.totalPages
+                ?? (response?.totalItems && this.advanceFilters.count
+                    ? Math.ceil(response.totalItems / this.advanceFilters.count)
+                    : response?.items?.length ? 1 : 0);
 
             if (this.totalPages === 0) {
                 this.invoiceList = [];
@@ -951,6 +993,17 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
+
+                if (isInventoryDocument) {
+                    item.uniqueName = item.uniqueName ?? item.documentUniqueName;
+                    item.voucherNumber = item.voucherNumber ?? item.documentNo ?? item.number;
+                    item.voucherDate = item.voucherDate ?? item.documentDate ?? item.date;
+                    item.account = item.account ?? item.party;
+                    item.account = {
+                        ...item.account,
+                        customerName: item.account?.customerName ?? item.account?.name
+                    };
+                }
 
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     item.isSelected = false;
@@ -998,6 +1051,11 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public deleteVoucherDialog(): void {
+        if (this.getInventoryVoucherType()) {
+            this.deleteInventoryDocument();
+            return;
+        }
+
         let confirmationMessages = [];
         this.localeData?.confirmation_messages?.map(message => {
             confirmationMessages[message.module] = message;
@@ -1045,6 +1103,43 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     };
                     this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
                 }
+            }
+        });
+    }
+
+    /**
+     * Deletes delivery challan/receipt note
+     *
+     * @private
+     * @memberof VouchersPreviewComponent
+     */
+    private deleteInventoryDocument(): void {
+        if (!this.selectedInvoice?.uniqueName) {
+            return;
+        }
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(
+                    this.localeData?.delete_voucher,
+                    this.commonLocaleData
+                )
+            }
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.voucherService.deleteInventoryDocument(this.selectedInvoice.uniqueName)
+                    .pipe(takeUntil(this.destroyed$))
+                    .subscribe((apiResponse) => {
+                        if (apiResponse?.status === "success") {
+                            this.toaster.showSnackBar("success", apiResponse?.message || "Voucher deleted successfully");
+                            this.redirectToGetAllPage();
+                        } else {
+                            this.toaster.showSnackBar("error", apiResponse?.message || "Failed to delete voucher");
+                        }
+                    });
             }
         });
     }
@@ -1331,13 +1426,16 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public redirectToGetAllPage(): void {
         if (!this.queryParams.isRecurringVoucher) {
+            const isInventoryDocument = !!this.getInventoryVoucherType();
             this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {
-                queryParams: {
-                    page: this.queryParams.page ?? 1,
-                    count: this.queryParams.count ?? PAGINATION_LIMIT,
-                    from: this.advanceFilters.from,
-                    to: this.advanceFilters.to
-                }
+                queryParams: isInventoryDocument
+                    ? { required: 'module', module: 'list' }
+                    : {
+                        page: this.queryParams.page ?? 1,
+                        count: this.queryParams.count ?? PAGINATION_LIMIT,
+                        from: this.advanceFilters.from,
+                        to: this.advanceFilters.to
+                    }
             });
         } else {
             this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/recurring/${this.queryParams.recurringVoucherUniqueName}`], {

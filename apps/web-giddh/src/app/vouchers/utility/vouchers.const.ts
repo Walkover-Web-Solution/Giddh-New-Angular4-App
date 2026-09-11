@@ -38,7 +38,9 @@ export enum VoucherTypeEnum {
     estimates = 'estimates',
     proformas = 'proformas',
     bill = 'bill',
-    recurring = 'recurring'
+    recurring = 'recurring',
+    deliveryChallan = 'delivery-challan',
+    receiptNote = 'receipt-note'
 };
 
 export const SearchType = {

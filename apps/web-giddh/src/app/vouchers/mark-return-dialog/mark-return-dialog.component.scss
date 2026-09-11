@@ -1,0 +1,26 @@
+.mark-return-table-wrap {
+    max-height: 50vh;
+    overflow: auto;
+    border: 1px solid var(--color-border-secondary, #e5e5e5);
+    border-radius: 4px;
+}
+
+.mark-return-table {
+    th.mat-mdc-header-cell {
+        background: transparent !important;
+        color: inherit;
+        font-weight: 600;
+        white-space: nowrap;
+        border-bottom: 1px solid var(--color-border-secondary, #e5e5e5);
+    }
+
+    td.mat-mdc-cell {
+        vertical-align: middle;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .row-disabled {
+        opacity: 0.55;
+    }
+}

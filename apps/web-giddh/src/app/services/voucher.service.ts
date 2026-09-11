@@ -13,7 +13,7 @@ import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest
 import { RECEIPT_API } from "./apiurls/receipt.api";
 import { CustomTemplateResponse } from "../models/api-models/Invoice";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
-import { SALES_API_V2, SALES_API_V4 } from "./apiurls/sales.api";
+import { INVENTORY_VOUCHER_API, SALES_API_V2, SALES_API_V4 } from "./apiurls/sales.api";
 import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 import { PAGINATION_LIMIT } from "../app.constant";
 import { ADVANCE_RECEIPTS_API } from "./apiurls/advance-receipt-adjustment.api";
@@ -225,6 +225,240 @@ export class VoucherService {
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * Generates delivery challan/receipt note
+     *
+     * @param {string} voucherType Voucher type (delivery-challan/receipt-note)
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public generateInventoryVoucher(voucherType: string, model: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_VOUCHER_API.GENERATE
+            ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            ?.replace(':voucherType', voucherType);
+
+        delete model.isRecurringVoucher;
+
+        return this.http.post(url, model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * Gets delivery challan/receipt note details
+     *
+     * @param {string} voucherType Voucher type (delivery-challan/receipt-note)
+     * @param {string} voucherUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getInventoryVoucherDetails(voucherType: string, voucherUniqueName: string): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_VOUCHER_API.GET_SINGLE
+            ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            ?.replace(':voucherType', voucherType)
+            ?.replace(':voucherUniqueName', encodeURIComponent(voucherUniqueName));
+
+        return this.http.get(url)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.queryString = { voucherType, voucherUniqueName };
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, voucherUniqueName)));
+    }
+
+    /**
+     * Updates delivery challan/receipt note
+     *
+     * @param {string} voucherType Voucher type (delivery-challan/receipt-note)
+     * @param {string} voucherUniqueName
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public updateInventoryVoucher(voucherType: string, voucherUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_VOUCHER_API.UPDATE
+            ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            ?.replace(':voucherType', voucherType)
+            ?.replace(':voucherUniqueName', encodeURIComponent(voucherUniqueName));
+
+        delete model.isRecurringVoucher;
+
+        return this.http.put(url, model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * Gets delivery challan/receipt note list
+     */
+    public getAllInventoryVouchers(voucherType: string, model: any): Observable<BaseResponse<any, any>> {
+        const request = { ...model };
+        const queryParams = {
+            page: request.page,
+            count: request.count,
+            from: request.from,
+            to: request.to,
+            q: request.q,
+            sort: request.sort,
+            sortBy: request.sortBy
+        };
+        ['page', 'count', 'from', 'to', 'q', 'sort', 'sortBy'].forEach(key => delete request[key]);
+
+        const contextPath = INVENTORY_VOUCHER_API.GET_ALL
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':voucherType', voucherType);
+        const url = this.vouchersUtilityService.createQueryString(this.config.apiUrl + contextPath, queryParams);
+
+        return this.http.post(url, request).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Converts delivery challan/receipt note to invoice/bill
+     *
+     * @param {string[]} uniqueNames
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public convertInventoryDocuments(uniqueNames: string[]): Observable<BaseResponse<any, any>> {
+        const url = this.config.apiUrl + INVENTORY_VOUCHER_API.CONVERT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        const model = { uniqueNames };
+
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Cancels delivery challan/receipt note
+     *
+     * @param {string} voucherType
+     * @param {string} voucherUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public cancelInventoryVoucher(voucherType: string, voucherUniqueName: string): Observable<BaseResponse<any, any>> {
+        const url = this.config.apiUrl + INVENTORY_VOUCHER_API.CANCEL
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':voucherUniqueName', encodeURIComponent(voucherUniqueName));
+        const model = {
+            action: 'cancel',
+            businessDocumentType: voucherType === VoucherTypeEnum.receiptNote ? 'RC' : 'DC'
+        };
+
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                data.queryString = { voucherType, voucherUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Deletes delivery challan/receipt note
+     *
+     * @param {string} voucherUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public deleteInventoryDocument(voucherUniqueName: string): Observable<BaseResponse<any, any>> {
+        const url = this.config.apiUrl + INVENTORY_VOUCHER_API.DELETE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':voucherUniqueName', encodeURIComponent(voucherUniqueName));
+
+        return this.http.delete(url).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.queryString = { voucherUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, voucherUniqueName))
+        );
+    }
+
+    /**
+     * Gets available event resolutions for delivery challan/receipt note
+     *
+     * @param {string} voucherType
+     * @param {string} voucherUniqueName
+     * @param {string} event
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getInventoryEventResolutions(voucherType: string, voucherUniqueName: string, event: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + INVENTORY_VOUCHER_API.EVENT_RESOLUTIONS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':voucherType', voucherType)
+            ?.replace(':voucherUniqueName', encodeURIComponent(voucherUniqueName));
+        url = this.generalService.appendQueryParam(url, 'event', event);
+
+        return this.http.get(url, null, { loader: 'hide' }).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.queryString = { voucherType, voucherUniqueName, event };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, { voucherType, voucherUniqueName, event }))
+        );
+    }
+
+    /**
+     * Executes an inventory document event (return, replacement, etc.)
+     *
+     * @param {string} voucherType
+     * @param {string} voucherUniqueName
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public executeInventoryDocumentEvent(voucherType: string, voucherUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+        const url = this.config.apiUrl + INVENTORY_VOUCHER_API.EVENTS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':voucherType', voucherType)
+            ?.replace(':voucherUniqueName', encodeURIComponent(voucherUniqueName));
+
+        return this.http.post(url, model, { loader: 'hide' }).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                data.queryString = { voucherType, voucherUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
     }
 
     /**

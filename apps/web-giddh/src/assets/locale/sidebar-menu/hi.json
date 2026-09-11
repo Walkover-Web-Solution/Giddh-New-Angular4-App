@@ -691,6 +691,17 @@
             }
         },
         {
+            "label": "इन्वेंटरी सेटिंग्स",
+            "link": "/pages/inventory/v2/setting",
+            "icon": "icon-settings-cog",
+            "description": "इन्वेंटरी ऑटोमेशन, बैच और दस्तावेज़ स्थितियां कॉन्फ़िगर करें",
+            "additional": {
+                "queryParams": {
+                    "voucherVersion": 2
+                }
+            }
+        },
+        {
             "label": "इन्वेंटरी",
             "icon": "icon-inventory",
             "additional": {
