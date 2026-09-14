@@ -110,5 +110,12 @@
     "batch_name": "Batch name",
     "manufacturing_date": "Mfg date",
     "expiry_date": "Expiry date",
-    "opening_balance_batch_wise": "Opening balance — batch wise"
+    "opening_balance_batch_wise": "Opening balance — batch wise",
+    "batch_qty_exceeds_opening": "Batch total exceeds opening quantity",
+    "batch_amount_exceeds_opening": "Batch total exceeds opening amount",
+    "batch_opening_mismatch_hint": "Batch totals exceed opening quantity or amount. Expand to review.",
+    "update_opening_qty": "Update opening quantity",
+    "update_opening_amount": "Update opening amount",
+    "batch_already_added": "This batch is already added",
+    "create_custom_batch": "Type to create custom batch number"
 }

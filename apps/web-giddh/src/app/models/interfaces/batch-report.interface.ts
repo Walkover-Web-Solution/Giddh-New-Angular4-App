@@ -36,6 +36,7 @@ export interface BatchReportItem {
     archiveOnly?: boolean;
     belongsToVariant?: boolean;
     linkedEntities?: string[];
+    openingAmount?: number;
 }
 
 /** Totals returned with the batch list. */
@@ -66,7 +67,7 @@ export interface BatchReportFilter {
     batchNumbers?: string[];
     withinDays?: number;
     expiredOnly?: boolean;
-    categoryUniqueNames?: string[];
+    inventoryType?: string;
 }
 
 /** Create / update batch payload. */
@@ -76,8 +77,9 @@ export interface BatchSaveRequest {
     stock: BatchEntityRef;
     warehouse: BatchEntityRef;
     variant: BatchEntityRef;
-    openingQuantity: number;
-    rate: number;
+    openingQuantity?: number;
+    openingAmount?: number;
+    rate?: number;
     manufacturingDate?: string;
     expiryDate?: string;
     categoryUniqueNames?: string[];

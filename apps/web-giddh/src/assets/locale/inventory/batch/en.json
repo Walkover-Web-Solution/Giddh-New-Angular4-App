@@ -1,5 +1,6 @@
 {
     "batch_report": "Batch Report",
+    "batch_count": "Batch Count",
     "add_batch": "+ Add Batch",
     "create_batch": "Create Batch",
     "edit_batch": "Edit Batch",
@@ -28,6 +29,8 @@
     "inward_quantity": "Inward Qty",
     "outward_quantity": "Outward Qty",
     "enter_opening_quantity": "Enter Opening Quantity",
+    "opening_amount": "Opening Amount",
+    "enter_opening_amount": "Enter Opening Amount",
     "enter_rate": "Enter Rate",
     "batch_created": "Batch created successfully",
     "batch_updated": "Batch updated successfully",

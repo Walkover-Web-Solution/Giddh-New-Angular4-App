@@ -142,6 +142,74 @@
 
     @if (!isLoading || dataSource?.data?.length || hasActiveFilters) {
         @if (dataSource?.data?.length || hasActiveFilters) {
+            @if (dataSource?.data?.length) {
+                <div class="batch-summary-grid d-grid mb-3 column-gap-2">
+                    <mat-card class="batch-summary-card bg-table-background-color border border-radius-8 box-shadow-none">
+                        <mat-card-content class="d-flex align-items-center column-gap-2 p-3">
+                            <div class="flex-grow-1">
+                                <p class="font-size-14 mb-1">{{ localeData?.batch_count }}</p>
+                                <p class="font-size-16 font-weight-semibold mb-0">{{ totalItems ?? "-" }}</p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                    <mat-card class="batch-summary-card bg-table-background-color border border-radius-8 box-shadow-none">
+                        <mat-card-content class="d-flex align-items-center column-gap-2 p-3 opening-box">
+                            <div class="flex-grow-1">
+                                <p class="font-size-14 mb-1">{{ localeData?.opening_quantity }}</p>
+                                <p class="font-size-16 font-weight-semibold mb-0">
+                                    <amount-field
+                                        [amount]="totals?.openingQuantity ?? 0"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    ></amount-field>
+                                </p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                    <mat-card class="batch-summary-card bg-table-background-color border border-radius-8 box-shadow-none">
+                        <mat-card-content class="d-flex align-items-center column-gap-2 p-3 sales-purchase">
+                            <div class="flex-grow-1">
+                                <p class="font-size-14 mb-1">{{ localeData?.inward_quantity }}</p>
+                                <p class="font-size-16 font-weight-semibold mb-0">
+                                    <amount-field
+                                        [amount]="totals?.inwardQuantity ?? 0"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    ></amount-field>
+                                </p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                    <mat-card class="batch-summary-card bg-table-background-color border border-radius-8 box-shadow-none">
+                        <mat-card-content class="d-flex align-items-center column-gap-2 p-3 payment-receipt">
+                            <div class="flex-grow-1">
+                                <p class="font-size-14 mb-1">{{ localeData?.outward_quantity }}</p>
+                                <p class="font-size-16 font-weight-semibold mb-0">
+                                    <amount-field
+                                        [amount]="totals?.outwardQuantity ?? 0"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    ></amount-field>
+                                </p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                    <mat-card class="batch-summary-card bg-table-background-color border border-radius-8 box-shadow-none">
+                        <mat-card-content class="d-flex align-items-center column-gap-2 p-3 due-box">
+                            <div class="flex-grow-1">
+                                <p class="font-size-14 mb-1">{{ localeData?.available_quantity }}</p>
+                                <p class="font-size-16 font-weight-semibold mb-0">
+                                    <amount-field
+                                        [amount]="totals?.availableQuantity ?? 0"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    ></amount-field>
+                                </p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            }
             <div class="table-responsive">
                 <table mat-table [dataSource]="dataSource" class="w-100">
                     <ng-container matColumnDef="batchNumber">
@@ -178,7 +246,6 @@
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element?.batchNumber ?? "-" }}</td>
-                        <td mat-footer-cell *matFooterCellDef class="font-weight-semibold">{{ commonLocaleData?.app_total }}</td>
                     </ng-container>
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>
@@ -214,7 +281,6 @@
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element?.name ?? "-" }}</td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
                     <ng-container matColumnDef="stock">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.stock }}</th>
@@ -224,17 +290,14 @@
                                 <div class="font-size-12 light-gray">{{ localeData?.variant }}: {{ element.variant.name }}</div>
                             }
                         </td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
                     <ng-container matColumnDef="warehouse">
                         <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_warehouse }}</th>
                         <td mat-cell *matCellDef="let element">{{ element?.warehouse?.name ?? "-" }}</td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
                     <ng-container matColumnDef="manufacturingDate">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.manufacturing_date }}</th>
                         <td mat-cell *matCellDef="let element">{{ (element?.manufacturingDate | giddhDate) || "-" }}</td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
                     <ng-container matColumnDef="expiryDate">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.expiry_date }}</th>
@@ -246,27 +309,36 @@
                                 </div>
                             }
                         </td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
                     <ng-container matColumnDef="openingQuantity">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.opening_quantity }}</th>
                         <td mat-cell *matCellDef="let element" class="text-right">{{ element?.openingQuantity ?? "-" }}</td>
-                        <td mat-footer-cell *matFooterCellDef class="text-right font-weight-semibold">{{ totals?.openingQuantity ?? "-" }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="openingAmount">
+                        <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.opening_amount }}</th>
+                        <td mat-cell *matCellDef="let element" class="text-right">
+                            @if (element?.openingAmount !== null && element?.openingAmount !== undefined) {
+                                <amount-field
+                                    [amount]="element.openingAmount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                ></amount-field>
+                            } @else {
+                                -
+                            }
+                        </td>
                     </ng-container>
                     <ng-container matColumnDef="inwardQuantity">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.inward_quantity }}</th>
                         <td mat-cell *matCellDef="let element" class="text-right">{{ element?.inwardQuantity ?? "-" }}</td>
-                        <td mat-footer-cell *matFooterCellDef class="text-right font-weight-semibold">{{ totals?.inwardQuantity ?? "-" }}</td>
                     </ng-container>
                     <ng-container matColumnDef="outwardQuantity">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.outward_quantity }}</th>
                         <td mat-cell *matCellDef="let element" class="text-right">{{ element?.outwardQuantity ?? "-" }}</td>
-                        <td mat-footer-cell *matFooterCellDef class="text-right font-weight-semibold">{{ totals?.outwardQuantity ?? "-" }}</td>
                     </ng-container>
                     <ng-container matColumnDef="availableQuantity">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.available_quantity }}</th>
                         <td mat-cell *matCellDef="let element" class="text-right">{{ element?.availableQuantity ?? "-" }}</td>
-                        <td mat-footer-cell *matFooterCellDef class="text-right font-weight-semibold">{{ totals?.availableQuantity ?? "-" }}</td>
                     </ng-container>
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
@@ -295,13 +367,9 @@
                                 }
                             </mat-menu>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef></td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                    @if (dataSource?.data?.length) {
-                        <tr mat-footer-row *matFooterRowDef="displayedColumns" class="batch-total-row font-weight-semibold border-top"></tr>
-                    }
                 </table>
             </div>
             @if (totalItems > pageSizeOptions[0]) {
@@ -386,7 +454,7 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div class="d-flex column-gap-1 mt-4">
+            <div class="d-flex justify-content-end column-gap-1 mt-4">
                 <button type="button" matButton="filled" mat-dialog-close (click)="applyAdvanceFilters()">
                     {{ commonLocaleData?.app_apply }}
                 </button>

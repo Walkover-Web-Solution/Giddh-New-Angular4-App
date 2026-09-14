@@ -1,5 +1,6 @@
 {
     "batch_report": "बैच रिपोर्ट",
+    "batch_count": "बैच संख्या",
     "add_batch": "+ बैच जोड़ें",
     "create_batch": "बैच बनाएं",
     "edit_batch": "बैच संपादित करें",
@@ -28,6 +29,8 @@
     "inward_quantity": "आवक मात्रा",
     "outward_quantity": "जावक मात्रा",
     "enter_opening_quantity": "प्रारंभिक मात्रा दर्ज करें",
+    "opening_amount": "उद्घाटन राशि",
+    "enter_opening_amount": "उद्घाटन राशि दर्ज करें",
     "enter_rate": "दर दर्ज करें",
     "batch_created": "बैच सफलतापूर्वक बनाया गया",
     "batch_updated": "बैच सफलतापूर्वक अपडेट किया गया",
