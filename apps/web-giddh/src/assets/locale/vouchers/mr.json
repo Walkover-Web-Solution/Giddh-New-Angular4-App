@@ -13,7 +13,9 @@
         "cash_debit_note": "कॅश डेबिट नोट",
         "purchase_order": "खरेदी ऑर्डर",
         "receipt": "पावती",
-        "payment": "पेमेंट"
+        "payment": "पेमेंट",
+        "delivery_challan": "डिलीवरी चालान",
+        "receipt_note": "रसीद नोट"
     },
     "customer_name": "ग्राहकाचे नाव",
     "enter_customer_name": "Enter Customer Name",
@@ -63,6 +65,8 @@
     "product_service_description": "उत्पादन / सेवा वर्णन",
     "qty": "प्रमाण",
     "generate_invoice": "चलन उत्पन्न करा",
+    "generate_delivery_challan": "डिलीवरी चालान उत्पन्न करा",
+    "generate_receipt_note": "रसीद नोट उत्पन्न करा",
     "update_invoice": "अद्यतनित करा [INVOICE_TYPE]",
     "and_update_acc": "खाते अद्यतनित करा",
     "create_send": "तयार करा आणि पाठवा",
@@ -181,5 +185,15 @@
     "destination_of_supply": "पुरवठ्याचे गंतव्य",
     "all_invoices": "सर्व इनव्हॉइस",
     "account_invoices": "खाते इनव्हॉइस",
-    "view_past_invoices_using_this_item": "हा आयटम वापरून मागील बीजके पहा"
+    "view_past_invoices_using_this_item": "हा आयटम वापरून मागील बीजके पहा",
+    "delivery_challan_date": "डिलीवरी चालान तिथि",
+    "receipt_note_date": "रसीद नोट तिथि",
+    "transporter_details": "ट्रान्सपोर्टर तपशील",
+    "select_transporter": "ट्रान्सपोर्टर निवडा",
+    "transport_doc_no": "ट्रान्सपोर्ट डॉक नं.",
+    "transport_doc_no_placeholder": "LR / GR क्रमांक",
+    "transport_doc_date": "ट्रान्सपोर्ट डॉक तारीख",
+    "distance_km": "अंतर (किमी)",
+    "driver_name": "ड्रायव्हरचे नाव",
+    "driver_phone": "ड्रायव्हर फोन"
 }

@@ -70,6 +70,11 @@ const routes: Routes = [
                 component: StockBalanceComponent,
             },
             {
+                path: "setting",
+                loadComponent: () => import("./component/inventory-settings/inventory-settings.component")
+                    .then(module => module.InventorySettingsComponent)
+            },
+            {
                 path: ":category/stock-aging-report",
                 component: StockAgingReportComponent,
             },

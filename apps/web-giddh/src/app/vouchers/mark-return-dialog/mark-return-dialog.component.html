@@ -1,0 +1,105 @@
+<div class="dialog-header d-flex align-items-center justify-content-between">
+    <span>
+        {{ localeData?.convert_process_stock_items }}
+        <ng-container *ngIf="!isLoading">({{ commonLocaleData?.app_total }} {{ selectedCount }})</ng-container>
+    </span>
+    <button mat-icon-button type="button" (click)="cancel()" [attr.aria-label]="commonLocaleData?.app_close">
+        <i class="icon-cross"></i>
+    </button>
+</div>
+
+<mat-dialog-content class="dialog-body">
+    @if (isLoading || isSubmitting) {
+        <giddh-page-loader></giddh-page-loader>
+    } @else {
+        <p class="mb-3 text-muted">
+            {{ localeData?.return_dialog_hint }}
+        </p>
+
+        <div class="table-responsive mark-return-table-wrap">
+            <table mat-table [dataSource]="rows" class="w-100 mark-return-table">
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox
+                            color="primary"
+                            [checked]="isAllSelected"
+                            [indeterminate]="isSomeSelected"
+                            (change)="toggleSelectAll($event.checked)"
+                        ></mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                        <mat-checkbox
+                            color="primary"
+                            [(ngModel)]="row.selected"
+                            [disabled]="!isRowSelectable(row)"
+                            (ngModelChange)="onRowSelectionChange(row)"
+                        ></mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="item">
+                    <th mat-header-cell *matHeaderCellDef class="min-w-250">{{ localeData?.item_stock_variant }}</th>
+                    <td mat-cell *matCellDef="let row" class="min-w-250">
+                        <div class="font-medium">{{ row.stock?.name }}</div>
+                        <div class="text-muted font-size-12" *ngIf="row.variant?.name">{{ row.variant?.name }}</div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalQty">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.total_qty }}</th>
+                    <td mat-cell *matCellDef="let row">{{ formatQty(row.quantity, row) }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="invoicedQty">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.invoiced_qty }}</th>
+                    <td mat-cell *matCellDef="let row">{{ formatQty(row.invoicedQuantity, row) }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="returnQty">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.return_qty }}</th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="d-block w150 my-2">
+                            <input-field
+                                [type]="'number'"
+                                [allowDecimalDigitsOnly]="true"
+                                name="returnQty"
+                                [label]="localeData?.return_qty"
+                                [placeholder]="'0'"
+                                [matSuffix]="row.stockUnit?.code || row.stockUnit?.name"
+                                [(ngModel)]="row.returnQty"
+                                (ngModelChange)="onReturnQtyChange(row)"
+                                [disabled]="!row.selected || !isRowSelectable(row)"
+                            ></input-field>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.create_cn }}</th>
+                    <td mat-cell *matCellDef="let row" class="text-right">
+                        @if (row.selected && row.showCreateCn) {
+                            <mat-slide-toggle color="primary" [(ngModel)]="row.createCn" [name]="'createCn-' + row.variant?.uniqueName">
+                                {{ row.createCn ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                            </mat-slide-toggle>
+                        } @else {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns" [class.row-disabled]="!row.selected"></tr>
+            </table>
+        </div>
+    }
+</mat-dialog-content>
+@if (!isLoading && !isSubmitting) {
+    <div mat-dialog-actions class="d-flex justify-content-end column-gap-1 px-3 pb-3">
+        <button matButton="filled" type="button" [disabled]="!canProceed || isSubmitting" (click)="proceed()">
+            {{ localeData?.proceed }}
+        </button>
+        <button matButton="outlined" type="button" [disabled]="isSubmitting" (click)="cancel()">
+            {{ commonLocaleData?.app_cancel }}
+        </button>
+    </div>
+}

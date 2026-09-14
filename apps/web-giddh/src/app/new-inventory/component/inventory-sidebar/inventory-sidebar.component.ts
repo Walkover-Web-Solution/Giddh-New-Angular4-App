@@ -311,6 +311,11 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
                     name: this.localeData?.sidebar?.warehouse_balance,
                     link: '/pages/inventory/v2/stock-balance',
                     icons: 'warehouse-opening-balance.svg'
+                },
+                {
+                    name: this.localeData?.sidebar?.inventory_settings,
+                    link: '/pages/inventory/v2/setting',
+                    icons: 'setting-icon.svg'
                 }
             ];
             this.dataSource.data = this.dataList;

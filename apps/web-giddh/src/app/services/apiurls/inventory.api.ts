@@ -120,5 +120,7 @@ export const INVENTORY_API = {
     STOCK_AGING_REPORT: 'v2/company/:companyUniqueName/stock-aging-report?page=:page&count=:count',
     STOCK_AGING_REPORT_TOTALS: 'v2/company/:companyUniqueName/stock-aging-report/totals',
     STOCK_AGING_REPORT_DETAILS: 'v2/company/:companyUniqueName/stock-aging-report/:stockUniqueName/details?page=:page&count=:count',
-    STOCK_AGING_REPORT_VARIANTS: 'v2/company/:companyUniqueName/stock-aging-report/:stockUniqueName/variants?page=:page&count=:count'
+    STOCK_AGING_REPORT_VARIANTS: 'v2/company/:companyUniqueName/stock-aging-report/:stockUniqueName/variants?page=:page&count=:count',
+    INVENTORY_SETTINGS: 'dev/company/:companyUniqueName/inventory-settings',
+    BUSINESS_DOCUMENT_STATUSES: 'dev/company/:companyUniqueName/business-documents/statuses?documentType=:documentType'
 };

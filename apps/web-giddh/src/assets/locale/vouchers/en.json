@@ -13,7 +13,9 @@
         "cash_debit_note": "Cash Debit Note",
         "purchase_order": "Purchase Order",
         "receipt": "Receipt",
-        "payment": "Payment"
+        "payment": "Payment",
+        "delivery_challan": "Delivery Challan",
+        "receipt_note": "Receipt Note"
     },
     "customer_name": "Customer Name",
     "enter_customer_name": "Enter Customer Name",
@@ -63,6 +65,8 @@
     "product_service_description": "Product/Service Description",
     "qty": "Qty",
     "generate_invoice": "Generate Invoice",
+    "generate_delivery_challan": "Generate Delivery Challan",
+    "generate_receipt_note": "Generate Receipt Note",
     "update_invoice": "Update [INVOICE_TYPE]",
     "and_update_acc": "& Update A/c",
     "create_send": "Create & Send",
@@ -181,5 +185,15 @@
     "destination_of_supply": "Destination of Supply",
     "all_invoices": "All Invoices",
     "account_invoices": "Account Invoices",
-    "view_past_invoices_using_this_item": "View past invoices using this item"
+    "view_past_invoices_using_this_item": "View past invoices using this item",
+    "delivery_challan_date": "Delivery Challan Date",
+    "receipt_note_date": "Receipt Note Date",
+    "transporter_details": "Transporter Details",
+    "select_transporter": "Select transporter",
+    "transport_doc_no": "Transport Doc No.",
+    "transport_doc_no_placeholder": "LR / GR number",
+    "transport_doc_date": "Transport Doc Date",
+    "distance_km": "Distance (KM)",
+    "driver_name": "Driver Name",
+    "driver_phone": "Driver Phone"
 }

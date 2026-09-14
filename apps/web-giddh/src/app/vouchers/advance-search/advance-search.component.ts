@@ -23,7 +23,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** Holds Voucher Type */
-    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order' | 'payment';
+    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order' | 'payment' | 'inventory-document';
     /** Holds Advance Filter Values */
     @Input() public advanceFilters: any;
     /** Holds true if  EInvoice is enabled */
@@ -58,6 +58,14 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public paymentStatusOptions: IOption[] = [];
     /** Purchase order status options */
     public purchaseOrderStatusOptions: IOption[] = [];
+    /** Delivery challan/receipt note document statuses */
+    public inventoryDocumentStatusOptions: IOption[] = [];
+    /** Delivery challan/receipt note invoice statuses */
+    public inventoryInvoiceStatusOptions: IOption[] = [];
+    /** Operators supported by inventory document filters */
+    public inventoryDateOperators: IOption[] = [];
+    public inventoryAmountOperators: IOption[] = [];
+    public linkedInvoiceOptions: any[] = [];
     /** Holds field label values */
     public fieldLabelValues: any = {
         invoiceDateRange: '',
@@ -125,6 +133,33 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_payment_status?.expired, value: 'expired' }
         ];
 
+        this.inventoryDocumentStatusOptions = [
+            { label: 'Open', value: 'OPEN' },
+            { label: 'Closed', value: 'CLOSED' },
+            { label: 'Expired', value: 'EXPIRED' },
+            { label: 'Cancelled', value: 'CANCELLED' }
+        ];
+        this.inventoryInvoiceStatusOptions = [
+            { label: 'Invoiced', value: 'FULLY_INVOICED' },
+            { label: 'Partially Invoiced', value: 'PARTIALLY_INVOICED' },
+            { label: 'Not Invoiced', value: 'NOT_INVOICED' }
+        ];
+        this.inventoryDateOperators = [
+            { label: this.commonLocaleData?.app_date_options?.on ?? 'On', value: 'ON' },
+            { label: this.commonLocaleData?.app_date_options?.after ?? 'After', value: 'AFTER' },
+            { label: this.commonLocaleData?.app_date_options?.before ?? 'Before', value: 'BEFORE' }
+        ];
+        this.inventoryAmountOperators = [
+            { label: this.commonLocaleData?.app_comparision_filters?.equals ?? 'Equals', value: 'EQUALS' },
+            { label: this.commonLocaleData?.app_comparision_filters?.greater_than ?? 'Greater than', value: 'GREATER_THAN' },
+            { label: this.commonLocaleData?.app_comparision_filters?.less_than ?? 'Less than', value: 'LESS_THAN' }
+        ];
+        this.linkedInvoiceOptions = [
+            { label: 'All', value: null },
+            { label: 'Linked', value: true },
+            { label: 'Not linked', value: false }
+        ];
+
         this.eInvoiceStatusDropdownOptions = [
             { label: this.localeData?.e_invoice_statuses_label?.yet_to_be_pushed, value: this.localeData?.e_invoice_statuses_label?.yet_to_be_pushed },
             { label: this.localeData?.e_invoice_statuses_label?.pushed, value: this.localeData?.e_invoice_statuses_label?.pushed },
@@ -181,7 +216,17 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             dueTo: [(this.advanceFilters?.dueTo && dayjs(this.advanceFilters?.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
             receiptType: [''],
             salesPersonName: [this.advanceFilters?.salesPersonName ?? ''],
-            salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? []]
+            salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? []],
+            date: [this.advanceFilters?.date ?? ''],
+            dateOperator: [this.advanceFilters?.dateOperator ?? 'ON'],
+            invoiceStatuses: [this.advanceFilters?.invoiceStatuses ?? []],
+            amountOperator: [this.advanceFilters?.amountOperator ?? 'EQUALS'],
+            warehouseUniqueName: [this.advanceFilters?.warehouseUniqueName ?? ''],
+            branchUniqueName: [this.advanceFilters?.branchUniqueName ?? ''],
+            partyUniqueName: [this.advanceFilters?.partyUniqueName ?? ''],
+            hasLinkedInvoice: [this.advanceFilters?.hasLinkedInvoice ?? null],
+            linkedVoucherNumber: [this.advanceFilters?.linkedVoucherNumber ?? ''],
+            overdueOnly: [this.advanceFilters?.overdueOnly ?? false]
         });
 
         const invoiceDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.invoiceDateRange);
@@ -400,6 +445,12 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                 this.searchForm.get(controlName)?.patchValue(null);
             });
         };
+
+        if (this.type === 'inventory-document') {
+            formatDateField('date');
+            clearDateFields(allDateControlNames);
+            return;
+        }
 
         // Process each date control based on the type
         allDateControlNames.forEach(controlName => {

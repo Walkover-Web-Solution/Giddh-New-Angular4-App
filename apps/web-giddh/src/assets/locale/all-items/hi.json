@@ -305,6 +305,17 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "डिलिवरी चालान",
+                    "link": "/pages/vouchers/preview/delivery-challan/list",
+                    "icon": "icon-E-way-bill",
+                    "description": "डिलिवरी चालान बनाएं",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -568,6 +579,17 @@
                     "icon": "icon-invoice-new",
                     "description": "बिल आवर्ती बनाएं",
                     "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "रिसीप्ट नोट",
+                    "link": "/pages/vouchers/preview/receipt-note/list",
+                    "icon": "icon-reciept-new",
+                    "description": "रिसीप्ट नोट बनाएं",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
