@@ -110,5 +110,12 @@
     "batch_name": "बैच नाम",
     "manufacturing_date": "निर्माण तिथि",
     "expiry_date": "समाप्ति तिथि",
-    "opening_balance_batch_wise": "प्रारंभिक शेष — बैच अनुसार"
+    "opening_balance_batch_wise": "प्रारंभिक शेष — बैच अनुसार",
+    "batch_qty_exceeds_opening": "बैच मात्रा, उद्घाटन मात्रा से अधिक है",
+    "batch_amount_exceeds_opening": "बैच राशि, उद्घाटन राशि से अधिक है",
+    "batch_opening_mismatch_hint": "बैच कुल, उद्घाटन मात्रा या राशि से अधिक है। समीक्षा के लिए विस्तृत करें।",
+    "update_opening_qty": "उद्घाटन मात्रा अपडेट करें",
+    "update_opening_amount": "उद्घाटन राशि अपडेट करें",
+    "batch_already_added": "यह बैच पहले से जोड़ा गया है",
+    "create_custom_batch": "कस्टम बैच नंबर बनाने के लिए टाइप करें"
 }

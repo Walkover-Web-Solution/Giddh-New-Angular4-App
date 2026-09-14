@@ -18,7 +18,20 @@
         background: var(--color-border-light);
     }
 
-    .batch-total-row .mat-mdc-footer-cell {
-        background-color: var(--theme-primary-light);
+    .batch-summary-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    @media (max-width: 1200px) {
+        .batch-summary-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            row-gap: 8px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .batch-summary-grid {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
     }
 }

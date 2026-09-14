@@ -49,7 +49,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     /** Table data source. */
     public dataSource: MatTableDataSource<BatchReportItem> = new MatTableDataSource<BatchReportItem>([]);
     /** Table column ids. */
-    public displayedColumns: string[] = ["batchNumber", "name", "stock", "warehouse", "manufacturingDate", "expiryDate", "openingQuantity", "inwardQuantity", "outwardQuantity", "availableQuantity", "action"];
+    public displayedColumns: string[] = ["batchNumber", "name", "stock", "warehouse", "manufacturingDate", "expiryDate", "openingQuantity", "openingAmount", "inwardQuantity", "outwardQuantity", "availableQuantity", "action"];
     /** Current page (1-based). */
     public page: number = 1;
     /** Page size. */
@@ -62,10 +62,8 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public pageIndex: number = 0;
     /** Page-size options. */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    /** Route inventory type (`product` / `service` / `fixedassets`). */
+    /** Inventory type sent to APIs (`PRODUCT` / `SERVICE` / `FIXED_ASSETS`). */
     public inventoryType: string = "";
-    /** Category unique name sent as `categoryUniqueNames`. */
-    public categoryUniqueName: string = "";
     /** Selected stock unique names. */
     public selectedStock: string[] = [];
     /** Selected variant unique names. */
@@ -148,7 +146,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
-                if (this.categoryUniqueName) {
+                if (this.inventoryType) {
                     this.loadStocks();
                     this.loadVariants();
                     this.getBatches();
@@ -158,13 +156,12 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            const type = params?.type || "";
-            const category = type?.toLowerCase() === "fixedassets" ? "FIXED_ASSETS" : type?.toUpperCase();
-            if (this.inventoryType === type && this.categoryUniqueName === category) {
+            const routeType = params?.type || "";
+            const inventoryType = routeType?.toLowerCase() === "fixedassets" ? "FIXED_ASSETS" : routeType?.toUpperCase();
+            if (this.inventoryType === inventoryType) {
                 return;
             }
-            this.inventoryType = type;
-            this.categoryUniqueName = category;
+            this.inventoryType = inventoryType;
             this.resetFilters(false);
             const query = this.route.snapshot.queryParams;
             this.applyQueryFilters(query);
@@ -712,7 +709,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      * @memberof BatchReportComponent
      */
     private getBatches(): void {
-        if (!this.categoryUniqueName) {
+        if (!this.inventoryType) {
             return;
         }
         this.cancelApi$.next(true);
@@ -728,7 +725,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             warehouseUniqueNames: this.selectedWarehouse ?? [],
             batchUniqueNames: name ? [name] : [],
             batchNumbers: batchNumber ? [batchNumber] : [],
-            categoryUniqueNames: [this.categoryUniqueName]
+            inventoryType: this.inventoryType
         };
         if (withinDays > 0) {
             payload.withinDays = withinDays;
@@ -772,11 +769,11 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      * @memberof BatchReportComponent
      */
     private loadStocks(): void {
-        if (!this.categoryUniqueName) {
+        if (!this.inventoryType) {
             return;
         }
         const stockReportRequest = new InventoryReportRequest();
-        stockReportRequest["inventoryType"] = this.categoryUniqueName;
+        stockReportRequest["inventoryType"] = this.inventoryType;
         const queryParams = { from: this.fromDate, to: this.toDate, count: PAGINATION_LIMIT, page: 1, sort: "", sortBy: "" };
         this.inventoryService.getItemWiseReport(queryParams, stockReportRequest)
             .pipe(takeUntil(this.destroyed$))
@@ -802,11 +799,11 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      * @memberof BatchReportComponent
      */
     private loadVariants(): void {
-        if (!this.categoryUniqueName) {
+        if (!this.inventoryType) {
             return;
         }
         const stockReportRequest = new InventoryReportRequest();
-        stockReportRequest["inventoryType"] = this.categoryUniqueName;
+        stockReportRequest["inventoryType"] = this.inventoryType;
         stockReportRequest.stockUniqueNames = this.selectedStock ?? [];
         const queryParams = { from: this.fromDate, to: this.toDate, count: PAGINATION_LIMIT, page: 1, sort: "", sortBy: "" };
         this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest)

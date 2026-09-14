@@ -113,11 +113,11 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
         this.batchForm = this.formBuilder.group({
             batchNumber: ["", Validators.required],
             name: ["", Validators.required],
-            stockUniqueName: ["", Validators.required],
-            variantUniqueName: ["", Validators.required],
-            warehouseUniqueName: ["", Validators.required],
-            openingQuantity: ["", Validators.required],
-            rate: ["", Validators.required],
+            stockUniqueName: [""],
+            variantUniqueName: [""],
+            warehouseUniqueName: [""],
+            openingQuantity: [""],
+            openingAmount: [""],
             manufacturingDate: [null],
             expiryDate: [null]
         }, { validators: this.manufacturingExpiryRangeValidator });
@@ -284,11 +284,11 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
         const payload: BatchSaveRequest = {
             batchNumber: formValue.batchNumber,
             name: formValue.name,
-            stock: { uniqueName: formValue.stockUniqueName },
+            stock: formValue.stockUniqueName ? { uniqueName: formValue.stockUniqueName } : { uniqueName: "" },
             variant: { uniqueName: formValue.variantUniqueName },
             warehouse: { uniqueName: formValue.warehouseUniqueName },
-            openingQuantity: Number(formValue.openingQuantity),
-            rate: Number(formValue.rate),
+            openingQuantity: Number(formValue.openingQuantity) || 0,
+            openingAmount: this.parseOpeningAmount(formValue.openingAmount),
             manufacturingDate: this.formatDate(formValue.manufacturingDate),
             expiryDate: this.formatDate(formValue.expiryDate)
         };
@@ -404,8 +404,6 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
         const warehouseRef = warehouseEntry?.warehouse ?? (details as BatchDetails)?.warehouse ?? (details as BatchReportItem)?.warehouse;
         const openingQuantity = details?.openingQuantity ?? warehouseEntry?.openingQuantity;
         const openingAmount = (details as BatchDetails)?.openingAmount ?? warehouseEntry?.openingAmount;
-        const rate = details?.rate ?? warehouseEntry?.rate
-            ?? (openingQuantity ? (openingAmount ?? 0) / openingQuantity : null);
         this.stockLabel.set(details?.stock?.name ?? this.stockLabel());
         this.variantLabel.set(details?.variant?.name ?? this.variantLabel());
         this.warehouseLabel.set(warehouseRef?.name ?? this.warehouseLabel());
@@ -418,7 +416,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
             variantUniqueName: details?.variant?.uniqueName ?? "",
             warehouseUniqueName: warehouseRef?.uniqueName ?? this.batchForm.get("warehouseUniqueName")?.value ?? "",
             openingQuantity: openingQuantity ?? "",
-            rate: rate ?? "",
+            openingAmount: openingAmount ?? "",
             manufacturingDate,
             expiryDate
         }, { emitEvent: false });
@@ -459,6 +457,18 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @return {*}  {string}
      * @memberof BatchCreateEditComponent
      */
+    /**
+     * Parse opening amount input into a number.
+     *
+     * @private
+     * @param {*} value Opening amount value
+     * @return {*}  {number}
+     * @memberof BatchCreateEditComponent
+     */
+    private parseOpeningAmount(value: any): number {
+        return Number(String(value ?? "").replace(/,/g, "")) || 0;
+    }
+
     private formatDate(value: any): string {
         if (!value) {
             return "";

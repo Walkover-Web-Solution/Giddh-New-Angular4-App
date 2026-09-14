@@ -56,8 +56,6 @@
                         (dynamicSearchedQuery)="loadStocks($event)"
                         (selectedOption)="selectStock($event)"
                         (onClear)="selectStock(null)"
-                        [required]="true"
-                        [showError]="isFormSubmitted() && !batchForm.get('stockUniqueName')?.value"
                     ></reactive-dropdown-field>
                 </div>
                 <div class="col-12 mt-3">
@@ -71,8 +69,8 @@
                         (dynamicSearchedQuery)="loadVariants($event)"
                         (selectedOption)="selectVariant($event)"
                         (onClear)="selectVariant(null)"
-                        [required]="true"
-                        [showError]="isFormSubmitted() && !batchForm.get('variantUniqueName')?.value"
+                        [required]="!!batchForm.get('stockUniqueName')?.value"
+                        [showError]="isFormSubmitted() && !batchForm.get('variantUniqueName')?.value && !!batchForm.get('stockUniqueName')?.value"
                     ></reactive-dropdown-field>
                 </div>
                 <div class="col-12 mt-3">
@@ -84,8 +82,6 @@
                         formControlName="warehouseUniqueName"
                         (selectedOption)="selectWarehouse($event)"
                         (onClear)="selectWarehouse(null)"
-                        [required]="true"
-                        [showError]="isFormSubmitted() && !batchForm.get('warehouseUniqueName')?.value"
                     ></reactive-dropdown-field>
                 </div>
                 <div class="col-12 mt-3">
@@ -96,20 +92,16 @@
                         [type]="'number'"
                         [allowDecimalDigitsOnly]="true"
                         formControlName="openingQuantity"
-                        [required]="true"
-                        [showError]="isFormSubmitted() && batchForm.get('openingQuantity')?.invalid"
                     ></input-field>
                 </div>
                 <div class="col-12 mt-3">
                     <input-field
-                        [name]="'rate'"
-                        [label]="commonLocaleData()?.app_rate"
-                        [placeholder]="localeData()?.enter_rate"
+                        [name]="'openingAmount'"
+                        [label]="localeData()?.opening_amount"
+                        [placeholder]="localeData()?.enter_opening_amount"
                         [type]="'number'"
                         [allowDecimalDigitsOnly]="true"
-                        formControlName="rate"
-                        [required]="true"
-                        [showError]="isFormSubmitted() && batchForm.get('rate')?.invalid"
+                        formControlName="openingAmount"
                     ></input-field>
                 </div>
                 <div class="col-12 mt-3">

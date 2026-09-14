@@ -110,5 +110,12 @@
     "batch_name": "बॅच नाव",
     "manufacturing_date": "निर्मिती दिनांक",
     "expiry_date": "कालबाह्यता दिनांक",
-    "opening_balance_batch_wise": "प्रारंभिक शिल्लक — बॅचनुसार"
+    "opening_balance_batch_wise": "प्रारंभिक शिल्लक — बॅचनुसार",
+    "batch_qty_exceeds_opening": "बॅच प्रमाण, उघडण्याच्या प्रमाणापेक्षा जास्त आहे",
+    "batch_amount_exceeds_opening": "बॅच रक्कम, उघडण्याच्या रकमेपेक्षा जास्त आहे",
+    "batch_opening_mismatch_hint": "बॅच एकूण, उघडण्याच्या प्रमाण किंवा रकमेपेक्षा जास्त आहे. तपासण्यासाठी विस्तृत करा.",
+    "update_opening_qty": "उघडण्याचे प्रमाण अद्यतनित करा",
+    "update_opening_amount": "उघडण्याची रक्कम अद्यतनित करा",
+    "batch_already_added": "हा बॅच आधीच जोडला आहे",
+    "create_custom_batch": "कस्टम बॅच नंबर तयार करण्यासाठी टाइप करा"
 }

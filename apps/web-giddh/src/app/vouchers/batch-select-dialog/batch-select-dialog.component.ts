@@ -37,8 +37,7 @@ interface BatchSelectRow extends VoucherSelectedBatch {
         MatCheckboxModule,
         MatDialogModule,
         FormFieldsModule,
-        GiddhPageLoaderModule,
-        BatchCreateEditComponent
+        GiddhPageLoaderModule
     ]
 })
 export class BatchSelectDialogComponent implements OnInit, OnDestroy {

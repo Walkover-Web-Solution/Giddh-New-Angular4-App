@@ -2097,7 +2097,7 @@ export class InventoryService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InventoryService
      */
-    public getBatchAvailability(queryParams: { uniqueName: string; isVariant: boolean; page?: number; count?: number; excludeBatchUniqueName?: string; sort?: string; sortBy?: string; q?: string }): Observable<BaseResponse<any, any>> {
+    public getBatchAvailability(queryParams: { uniqueName?: string; isVariant?: boolean; page?: number; count?: number; excludeBatchUniqueName?: string; sort?: string; sortBy?: string; q?: string; noStock?: boolean }): Observable<BaseResponse<any, any>> {
         const url = this.generalService.replaceUrlPlaceholders(INVENTORY_API.BATCH.AVAILABILITY, queryParams);
         return this.http.get(url).pipe(
             map((res) => {
