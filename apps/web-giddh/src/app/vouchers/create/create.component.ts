@@ -2544,6 +2544,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 templateType = VoucherTypeEnum.purchase_order;
             } else if (this.voucherType === VoucherTypeEnum.debitNote || this.voucherType === VoucherTypeEnum.creditNote) {
                 templateType = VoucherTypeEnum.voucher;
+            } else if (this.voucherType === VoucherTypeEnum.estimates) {
+                templateType = VoucherTypeEnum.estimate;
+            } else if (this.voucherType === VoucherTypeEnum.proformas) {
+                templateType = VoucherTypeEnum.proforma;
             }
 
             if (!response) {
