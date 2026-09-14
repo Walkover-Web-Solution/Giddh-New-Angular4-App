@@ -2093,12 +2093,32 @@ export class InventoryService {
     /**
      * List batches available to transfer when archiving.
      *
-     * @param {{ uniqueName: string; isVariant: boolean; page?: number; count?: number; excludeBatchUniqueName?: string; sort?: string; sortBy?: string; q?: string }} queryParams Availability query
+     * @param {{ uniqueName?: string; isVariant?: boolean; page?: number; count?: number; excludeBatchUniqueName?: string; sort?: string; sortBy?: string; q?: string; noStock?: boolean }} queryParams Availability query
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InventoryService
      */
-    public getBatchAvailability(queryParams: { uniqueName?: string; isVariant?: boolean; page?: number; count?: number; excludeBatchUniqueName?: string; sort?: string; sortBy?: string; q?: string; noStock?: boolean }): Observable<BaseResponse<any, any>> {
-        const url = this.generalService.replaceUrlPlaceholders(INVENTORY_API.BATCH.AVAILABILITY, queryParams);
+    public getBatchAvailability(queryParams: {
+        uniqueName?: string;
+        isVariant?: boolean;
+        page?: number;
+        count?: number;
+        excludeBatchUniqueName?: string;
+        sort?: string;
+        sortBy?: string;
+        q?: string;
+        noStock?: boolean;
+    }): Observable<BaseResponse<any, any>> {
+        const url = this.generalService.replaceUrlPlaceholders(INVENTORY_API.BATCH.AVAILABILITY, {
+            uniqueName: queryParams.uniqueName ?? "",
+            isVariant: queryParams.isVariant ?? false,
+            page: queryParams.page ?? 1,
+            count: queryParams.count ?? 50,
+            excludeBatchUniqueName: queryParams.excludeBatchUniqueName ?? "",
+            sort: queryParams.sort ?? "asc",
+            sortBy: queryParams.sortBy ?? "expiry",
+            q: queryParams.q ?? "",
+            noStock: queryParams.noStock ?? false
+        });
         return this.http.get(url).pipe(
             map((res) => {
                 const data: BaseResponse<any, any> = res;
