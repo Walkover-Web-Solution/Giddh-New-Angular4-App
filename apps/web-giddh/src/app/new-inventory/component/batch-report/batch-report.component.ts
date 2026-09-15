@@ -23,6 +23,7 @@ import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-
 import { BatchCreateEditComponent } from "../batch-create-edit/batch-create-edit.component";
 import { BatchArchiveDialogComponent } from "../batch-archive-dialog/batch-archive-dialog.component";
 import { BatchTransferDialogComponent } from "../batch-transfer-dialog/batch-transfer-dialog.component";
+import { InventoryModuleName } from "../../inventory.enum";
 
 export { mapAvailabilityBatches } from "./batch-report.helper";
 
@@ -48,8 +49,12 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** Table data source. */
     public dataSource: MatTableDataSource<BatchReportItem> = new MatTableDataSource<BatchReportItem>([]);
-    /** Table column ids. */
-    public displayedColumns: string[] = ["batchNumber", "name", "stock", "warehouse", "manufacturingDate", "expiryDate", "openingQuantity", "openingAmount", "inwardQuantity", "outwardQuantity", "availableQuantity", "action"];
+    /** Saved module key for column preferences. */
+    public moduleType: string = InventoryModuleName.batchReport;
+    /** Customisable batch report columns. */
+    public customiseColumns: Array<{ value: string; label: string; checked: boolean }> = [];
+    /** Visible table column ids. */
+    public displayedColumns: string[] = [];
     /** Current page (1-based). */
     public page: number = 1;
     /** Page size. */
@@ -208,6 +213,48 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.getBatches();
         });
 
+    }
+
+    /**
+     * Build customisable column list after translations are loaded.
+     *
+     * @memberof BatchReportComponent
+     */
+    public initCustomiseColumns(): void {
+        if (!this.localeData?.batch_number || !this.commonLocaleData?.app_name) {
+            return;
+        }
+        const checkedByValue = new Map(
+            (this.customiseColumns ?? []).map(column => [column.value, column.checked])
+        );
+        this.customiseColumns = [
+            { value: "batchNumber", label: this.localeData.batch_number, checked: checkedByValue.get("batchNumber") ?? true },
+            { value: "name", label: this.commonLocaleData.app_name, checked: checkedByValue.get("name") ?? true },
+            { value: "stock", label: this.localeData.stock, checked: checkedByValue.get("stock") ?? true },
+            { value: "warehouse", label: this.commonLocaleData.app_warehouse, checked: checkedByValue.get("warehouse") ?? true },
+            { value: "manufacturingDate", label: this.localeData.manufacturing_date, checked: checkedByValue.get("manufacturingDate") ?? true },
+            { value: "expiryDate", label: this.localeData.expiry_date, checked: checkedByValue.get("expiryDate") ?? true },
+            { value: "openingQuantity", label: this.localeData.opening_quantity, checked: checkedByValue.get("openingQuantity") ?? true },
+            { value: "openingAmount", label: this.localeData.opening_amount, checked: checkedByValue.get("openingAmount") ?? true },
+            { value: "inwardQuantity", label: this.localeData.inward_quantity, checked: checkedByValue.get("inwardQuantity") ?? true },
+            { value: "outwardQuantity", label: this.localeData.outward_quantity, checked: checkedByValue.get("outwardQuantity") ?? true },
+            { value: "availableQuantity", label: this.localeData.available_quantity, checked: checkedByValue.get("availableQuantity") ?? true },
+            { value: "action", label: this.commonLocaleData.app_action, checked: checkedByValue.get("action") ?? true }
+        ];
+        this.cdr.markForCheck();
+    }
+
+    /**
+     * Apply saved/selected table columns from {@link SelectTableColumnComponent}.
+     *
+     * @param {string[]} columns Selected column ids
+     * @memberof BatchReportComponent
+     */
+    public showSelectedTableColumns(columns: string[]): void {
+        if (columns?.length) {
+            this.displayedColumns = columns;
+            this.cdr.markForCheck();
+        }
     }
 
     /**
