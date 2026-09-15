@@ -2161,6 +2161,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         }
         if (!variant.warehouseBalance?.[0]) {
             variant.warehouseBalance = [{ batches: [] }];
+        } else if (!Array.isArray(variant.warehouseBalance[0].batches)) {
+            variant.warehouseBalance[0].batches = [];
         }
         return variant.warehouseBalance[0].batches;
     }
@@ -2458,9 +2460,10 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     private normalizeVariantBatches(variant: any): void {
-        const sourceBatches = variant.warehouseBalance?.[0]?.batches?.length
-            ? variant.warehouseBalance[0].batches
-            : (variant.batches ?? []);
+        const warehouseBatches = variant.warehouseBalance?.[0]?.batches;
+        const sourceBatches = Array.isArray(warehouseBatches) && warehouseBatches.length
+            ? warehouseBatches
+            : (Array.isArray(variant.batches) ? variant.batches : []);
         const mapped = sourceBatches.map(batch => ({
             uniqueName: batch.uniqueName,
             batchNumber: batch.batchNumber ?? "",
