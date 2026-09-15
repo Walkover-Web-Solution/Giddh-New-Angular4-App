@@ -2,8 +2,9 @@
     class="batch-report p-3"
     appTranslate
     [file]="'inventory/batch'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event; initCustomiseColumns()"
+    (localeData)="localeData = $event; initCustomiseColumns()"
+    (translationComplete)="initCustomiseColumns()"
 >
     @if (dataSource?.data?.length || hasActiveFilters) {
         <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-2 mb-3">
@@ -93,7 +94,18 @@
                     <span>{{ localeData?.filters }}</span>
                 </span>
             </button>
-            
+
+            @if (customiseColumns?.length) {
+                <select-table-column
+                    [moduleType]="moduleType"
+                    [customiseColumns]="customiseColumns"
+                    (selectedColumns)="showSelectedTableColumns($event)"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    [iconClass]="'icon-options select-multiple-icon-options'"
+                ></select-table-column>
+            }
+
             <button matButton="filled" (click)="openBatchDialog()">
                 {{ localeData?.add_batch }}
             </button>
@@ -211,76 +223,72 @@
                 </div>
             }
             <div class="table-responsive">
-                <table mat-table [dataSource]="dataSource" class="w-100">
+                <table mat-table [dataSource]="dataSource" class="w-100 batch-report-table" *ngIf="displayedColumns?.length">
                     <ng-container matColumnDef="batchNumber">
-                        <th mat-header-cell *matHeaderCellDef>
+                        <th mat-header-cell *matHeaderCellDef class="report-th-column">
                             <div
-                                class="w-100"
+                                class="search-table w-100 min-width-0"
                                 #searchBatchNumberContainer
                                 (clickOutside)="handleClickOutside($event, searchBatchNumberContainer, 'batchNumber')"
                             >
-                                @if (!showBatchNumberSearchInput) {
-                                    <div class="align-items-center d-flex">
-                                        <span>{{ localeData?.batch_number }}</span>
-                                        <button
-                                            matIconButton
-                                            (click)="toggleSearch('batchNumber')"
-                                            [attr.aria-label]="localeData?.search_batch"
-                                            class="h-auto"
-                                        >
-                                            <span class="icon-search font-size-14"></span>
-                                        </button>
-                                    </div>
-                                }
-                                @if (showBatchNumberSearchInput) {
-                                    <div>
-                                        <text-field
-                                            [type]="'text'"
-                                            [placeholder]="localeData?.batch_number"
-                                            [cssClass]="'form-control border'"
-                                            [formControl]="searchBatchNumber"
-                                            [autoFocus]="showBatchNumberSearchInput"
-                                        ></text-field>
-                                    </div>
-                                }
+                                <div class="align-items-center d-flex" [hidden]="showBatchNumberSearchInput">
+                                    <span class="text-ellipsis">{{ localeData?.batch_number }}</span>
+                                    <button
+                                        matIconButton
+                                        (click)="toggleSearch('batchNumber')"
+                                        [attr.aria-label]="localeData?.search_batch"
+                                        class="h-auto flex-shrink-0"
+                                    >
+                                        <span class="icon-search font-size-14"></span>
+                                    </button>
+                                </div>
+                                <div [hidden]="!showBatchNumberSearchInput">
+                                    <text-field
+                                        [type]="'text'"
+                                        [placeholder]="localeData?.batch_number"
+                                        [cssClass]="'form-control border w-100 min-width-unset'"
+                                        [formControl]="searchBatchNumber"
+                                        [autoFocus]="showBatchNumberSearchInput"
+                                    ></text-field>
+                                </div>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let element">{{ element?.batchNumber ?? "-" }}</td>
+                        <td mat-cell *matCellDef="let element" class="report-td-column">
+                            <span class="text-ellipsis">{{ element?.batchNumber ?? "-" }}</span>
+                        </td>
                     </ng-container>
                     <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef>
+                        <th mat-header-cell *matHeaderCellDef class="report-th-column">
                             <div
-                                class="w-100"
+                                class="search-table w-100 min-width-0"
                                 #searchNameContainer
                                 (clickOutside)="handleClickOutside($event, searchNameContainer, 'name')"
                             >
-                                @if (!showNameSearchInput) {
-                                    <div class="align-items-center d-flex">
-                                        <span>{{ commonLocaleData?.app_name }}</span>
-                                        <button
-                                            matIconButton
-                                            (click)="toggleSearch('name')"
-                                            [attr.aria-label]="commonLocaleData?.app_name"
-                                            class="h-auto"
-                                        >
-                                            <span class="icon-search font-size-14"></span>
-                                        </button>
-                                    </div>
-                                }
-                                @if (showNameSearchInput) {
-                                    <div>
-                                        <text-field
-                                            [type]="'text'"
-                                            [placeholder]="commonLocaleData?.app_name"
-                                            [cssClass]="'form-control border'"
-                                            [formControl]="searchName"
-                                            [autoFocus]="showNameSearchInput"
-                                        ></text-field>
-                                    </div>
-                                }
+                                <div class="align-items-center d-flex" [hidden]="showNameSearchInput">
+                                    <span class="text-ellipsis">{{ commonLocaleData?.app_name }}</span>
+                                    <button
+                                        matIconButton
+                                        (click)="toggleSearch('name')"
+                                        [attr.aria-label]="commonLocaleData?.app_name"
+                                        class="h-auto flex-shrink-0"
+                                    >
+                                        <span class="icon-search font-size-14"></span>
+                                    </button>
+                                </div>
+                                <div [hidden]="!showNameSearchInput">
+                                    <text-field
+                                        [type]="'text'"
+                                        [placeholder]="commonLocaleData?.app_name"
+                                        [cssClass]="'form-control border w-100 min-width-unset'"
+                                        [formControl]="searchName"
+                                        [autoFocus]="showNameSearchInput"
+                                    ></text-field>
+                                </div>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let element">{{ element?.name ?? "-" }}</td>
+                        <td mat-cell *matCellDef="let element" class="report-td-column">
+                            <span class="text-ellipsis">{{ element?.name ?? "-" }}</span>
+                        </td>
                     </ng-container>
                     <ng-container matColumnDef="stock">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.stock }}</th>

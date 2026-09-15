@@ -35,3 +35,14 @@
         }
     }
 }
+
+:host ::ng-deep .batch-report-table .search-table {
+    min-width: 0;
+    max-width: 100%;
+
+    input.form-control {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+}

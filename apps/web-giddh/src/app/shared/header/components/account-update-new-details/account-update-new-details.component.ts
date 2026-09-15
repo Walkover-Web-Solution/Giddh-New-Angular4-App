@@ -61,7 +61,7 @@ import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/b
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
-import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
+import { AccountingGroupEnum, CountryNames, FIXED_TOP_LEVEL_ACCOUNTING_GROUPS } from '../../../Enums/common.enum';
 import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
 import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.constant';
@@ -1973,6 +1973,27 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
+     * Map searchable groups to dropdown options, excluding fixed groups.
+     *
+     * @private
+     * @param {*} results Group search API results
+     * @return {*}  {IOption[]}
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private filterMovableGroups(results: any[]): any[] {
+        return (Array.isArray(results) ? results : [])
+            .filter(result => !FIXED_TOP_LEVEL_ACCOUNTING_GROUPS.includes(result?.uniqueName));
+    }
+
+    private toMovableGroupOptions(results: any[]): IOption[] {
+        return this.filterMovableGroups(results).map(result => ({
+            value: result?.uniqueName,
+            label: `${result?.name}`,
+            additional: result?.parentGroups
+        }));
+    }
+
+    /**
      * Search query change handler for group
      *
      * @param {string} query Search query
@@ -1993,13 +2014,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             this.groupService.searchGroups(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
-                    const searchResults = data.body.results.map(result => {
-                        return {
-                            value: result?.uniqueName,
-                            label: `${result?.name}`,
-                            additional: result?.parentGroups
-                        }
-                    }) || [];
+                    const searchResults = this.toMovableGroupOptions(data.body.results);
+                    const movableResults = this.filterMovableGroups(data.body.results);
                     if (page === 1) {
                         this.flatGroupsOptions = searchResults;
                     } else {
@@ -2010,8 +2026,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    this.changeDetectorRef.detectChanges();
                     if (successCallback) {
-                        successCallback(data.body.results);
+                        successCallback(movableResults);
                     }
                 }
             });
@@ -2061,13 +2078,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.groupsSearchResultsPaginationData.page + 1,
                 (response) => {
                     if (!this.groupsSearchResultsPaginationData.query) {
-                        const results = response.map(result => {
-                            return {
-                                value: result?.uniqueName,
-                                label: `${result?.name}`,
-                                additional: result?.parentGroups
-                            }
-                        }) || [];
+                        const results = this.toMovableGroupOptions(response);
                         this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
@@ -2084,13 +2095,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     private loadDefaultGroupsSuggestions(): void {
         this.onGroupSearchQueryChanged('', 1, (response) => {
-            this.defaultGroupSuggestions = response.map(result => {
-                return {
-                    value: result?.uniqueName,
-                    label: `${result?.name}`,
-                    additional: result?.parentGroups
-                }
-            }) || [];
+            this.defaultGroupSuggestions = this.toMovableGroupOptions(response);
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
             this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
             this.flatGroupsOptions = [...this.defaultGroupSuggestions];
