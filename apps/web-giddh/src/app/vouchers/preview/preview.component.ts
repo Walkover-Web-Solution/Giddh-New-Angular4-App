@@ -348,7 +348,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     private getCreatedTemplates(): void {
-        this.componentStore.getCreatedTemplates((this.invoiceType.isDebitNote || this.invoiceType.isCreditNote) ? 'voucher' : 'invoice');
+        this.componentStore.getCreatedTemplates((this.invoiceType.isDebitNote || this.invoiceType.isCreditNote) ? 'voucher' : this.invoiceType.isEstimateInvoice ? this.voucherTypeEnum.estimate : this.invoiceType.isProformaInvoice ? this.voucherTypeEnum.proforma : 'invoice');
     }
 
     /**
