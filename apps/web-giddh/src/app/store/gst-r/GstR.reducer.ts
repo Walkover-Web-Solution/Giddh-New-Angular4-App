@@ -62,7 +62,7 @@ const initialState: GstRReducerState = {
     viewTransactionInProgress: true,
     currentPeriod: {},
     gstAuthenticated: false,
-    gstSessionResponse: { taxpro: false, vayana: false },
+    gstSessionResponse: { taxpro: false, vayana: false, excellon: false },
     getGspSessionInProgress: false,
     gstReturnFileInProgress: false,
     gstReturnFileSuccess: false,
@@ -270,7 +270,8 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
                 gspSessionOtpAuthorized: false,
                 gstSessionResponse: {
                     taxpro: false,
-                    vayana: false
+                    vayana: false,
+                    excellon: false
                 }
             };
         }
@@ -285,7 +286,8 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
                     gspSessionOtpAuthorized: true,
                     gstSessionResponse: {
                         taxpro: response.queryString.gsp === 'TAXPRO',
-                        vayana: response.queryString.gsp === 'VAYANA'
+                        vayana: response.queryString.gsp === 'VAYANA',
+                        excellon: response.queryString.gsp === 'EXCELLON'
                     }
                 };
             }
@@ -296,7 +298,8 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
                 gspSessionOtpAuthorized: false,
                 gstSessionResponse: {
                     taxpro: false,
-                    vayana: false
+                    vayana: false,
+                    excellon: false
                 }
             };
         }
@@ -307,7 +310,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             return {
                 ...state, gstAuthenticated: false,
                 getGspSessionInProgress: true,
-                gstSessionResponse: { ...state.gstSessionResponse, taxpro: false, vayana: false }
+                gstSessionResponse: { ...state.gstSessionResponse, taxpro: false, vayana: false, excellon: false }
             };
         }
 
@@ -316,11 +319,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             if (response?.status === 'success') {
                 let newState = cloneDeep(state);
                 let session = response.body;
-                if (session.taxpro) {
-                    newState.gstAuthenticated = session.taxpro;
-                } else {
-                    newState.gstAuthenticated = session.vayana;
-                }
+                newState.gstAuthenticated = !!(session?.taxpro || session?.vayana || session?.excellon);
                 newState.gstSessionResponse = session;
                 newState.getGspSessionInProgress = false;
                 return Object.assign({}, state, newState);
@@ -329,7 +328,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
                 ...state,
                 gstAuthenticated: false,
                 getGspSessionInProgress: false,
-                gstSessionResponse: { ...state.gstSessionResponse, taxpro: false, vayana: false }
+                gstSessionResponse: { ...state.gstSessionResponse, taxpro: false, vayana: false, excellon: false }
             };
         }
         // endregion

@@ -100,13 +100,13 @@ export class GstrSheetDownloadRequest extends GstOverViewRequest {
 }
 
 export class FileGstr1Request extends GstOverViewRequest {
-    public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
+    public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA' | 'EXCELLON';
 }
 
 export class GstSaveGspSessionRequest {
     public gstin: string;
     public userName: string;
-    public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
+    public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA' | 'EXCELLON';
     public otp?: string;
 }
 
@@ -313,6 +313,7 @@ export class DocIssueSummary {
 export class GetGspSessionResponse {
     public vayana: boolean;
     public taxpro: boolean;
+    public excellon: boolean;
 }
 
 /**
@@ -405,7 +406,7 @@ export class GstrJsonDownloadRequest extends GstOverViewRequest {
  * @extends {GstOverViewRequest}
  */
 export class FilingStatusListRequest extends GstOverViewRequest {
-    public gsp: 'TAXPRO';
+    public gsp: 'TAXPRO' | 'VAYANA' | 'EXCELLON';
     public page: number;
     public count: number;
 }
