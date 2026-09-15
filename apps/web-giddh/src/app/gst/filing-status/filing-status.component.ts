@@ -9,6 +9,7 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from 'dayjs';
 import { FormControl } from "@angular/forms";
 import { PageEvent } from "@angular/material/paginator";
+import { TaxServiceEnum } from "../constants/gst.constant";
 
 @Component({
     selector: 'filing-status',
@@ -89,7 +90,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
                     "page": this.pagination.page,
                     "count": this.pagination.count,
                     "gstin": this.activeCompanyGstNumber,
-                    "gsp": 'TAXPRO'
+                    "gsp": TaxServiceEnum.EXCELLON
                 }).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                     if (res?.status === "success") {
                         if (res?.body?.results?.length) {
