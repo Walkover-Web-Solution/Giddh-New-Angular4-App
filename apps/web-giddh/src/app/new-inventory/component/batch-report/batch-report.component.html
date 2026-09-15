@@ -95,6 +95,11 @@
                 </span>
             </button>
 
+            
+            <button matButton="filled" (click)="openBatchDialog()">
+                {{ localeData?.add_batch }}
+            </button>
+            
             @if (customiseColumns?.length) {
                 <select-table-column
                     [moduleType]="moduleType"
@@ -105,11 +110,6 @@
                     [iconClass]="'icon-options select-multiple-icon-options'"
                 ></select-table-column>
             }
-
-            <button matButton="filled" (click)="openBatchDialog()">
-                {{ localeData?.add_batch }}
-            </button>
-
         </div>
         @if (hasAdvanceFilters) {
             <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-1 mb-3">
