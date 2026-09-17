@@ -1,6 +1,6 @@
 # Author Name: Divyanshu Shrivastava
 # Date: 16th January 2026
-name: macOS DMG (build → unsigned → S3 upload)
+name: macOS DMG (build → signed → notarize → S3 upload)
 
 on:
   push:
@@ -28,13 +28,15 @@ jobs:
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
       UPLOAD_LATEST: "true"
+      # Angular electron build OOMs on default Node heap (~2GB)
+      NODE_OPTIONS: "--max-old-space-size=8192"
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -61,13 +63,94 @@ jobs:
             echo "✅ Test build"
           fi
 
+      # APPLE_CERTIFICATE_BASE64 is a single .p12 containing both
+      # Developer ID Application + Developer ID Installer certificates.
+      - name: Import Apple Developer ID certificate
+        env:
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${APPLE_CERTIFICATE_BASE64:-}" ]; then
+            echo "::error::APPLE_CERTIFICATE_BASE64 secret is missing."
+            exit 1
+          fi
+
+          CERTIFICATE_PATH="$RUNNER_TEMP/developer-id.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/giddh-signing.keychain-db"
+          KEYCHAIN_PASSWORD="$(openssl rand -hex 24)"
+
+          echo "Decoding combined Apple certificate (.p12)..."
+          echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH"
+
+          if [ ! -s "$CERTIFICATE_PATH" ]; then
+            echo "::error::Decoded certificate file is empty."
+            exit 1
+          fi
+
+          echo "Creating temporary signing keychain..."
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          echo "Importing Application + Installer certificates from single .p12..."
+          security import "$CERTIFICATE_PATH" \
+            -P "$APPLE_CERTIFICATE_PASSWORD" \
+            -A \
+            -t cert \
+            -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+
+          security set-key-partition-list \
+            -S apple-tool:,apple:,codesign:,productsign: \
+            -s \
+            -k "$KEYCHAIN_PASSWORD" \
+            "$KEYCHAIN_PATH"
+
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+          security default-keychain -s "$KEYCHAIN_PATH"
+
+          echo "APPLE_SIGNING_KEYCHAIN=$KEYCHAIN_PATH" >> "$GITHUB_ENV"
+
+          echo "Identities in signing keychain:"
+          security find-identity -v "$KEYCHAIN_PATH"
+
+          # Electron .app / .dmg signing uses Developer ID Application
+          SIGNING_IDENTITY=$(
+            security find-identity -v -p codesigning "$KEYCHAIN_PATH" |
+            awk -F'"' '/Developer ID Application/ {print $2; exit}'
+          )
+
+          INSTALLER_IDENTITY=$(
+            security find-identity -v "$KEYCHAIN_PATH" |
+            awk -F'"' '/Developer ID Installer/ {print $2; exit}'
+          )
+
+          if [ -z "$SIGNING_IDENTITY" ]; then
+            echo "::error::Developer ID Application certificate not found in APPLE_CERTIFICATE_BASE64."
+            exit 1
+          fi
+
+          echo "APPLE_SIGNING_IDENTITY=$SIGNING_IDENTITY" >> "$GITHUB_ENV"
+          echo "CSC_NAME=$SIGNING_IDENTITY" >> "$GITHUB_ENV"
+          echo "Application Identity: $SIGNING_IDENTITY"
+          echo "Installer Identity: ${INSTALLER_IDENTITY:-'(not required for Electron .app/.dmg)'}"
+
       - name: Install deps
         run: npm install
 
-      - name: Build macOS Universal App
+      - name: Build macOS Universal App (signed + notarized)
         env:
           ELECTRON_ENV: true
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          CSC_IDENTITY_AUTO_DISCOVERY: "true"
         run: |
+          set -euo pipefail
+
           node scripts/clean-old-builds.js
           npm run prepare.electron.giddh
           node scripts/build-env.js ${{ env.BUILD_ENV }}
@@ -131,16 +214,18 @@ jobs:
           CONFIG_PATH="./../../../electron-sign/electron-builder.json"
           
           if [ "${{ env.BUILD_ENV }}" = "prod" ]; then
-            # Use jq to update the config for production
-            jq '.mac.artifactName = "giddh-setup-${version}.${ext}"' "$CONFIG_PATH" > temp.json && mv temp.json "$CONFIG_PATH"
+            jq --arg identity "${{ env.APPLE_SIGNING_IDENTITY }}" \
+              '.mac.artifactName = "giddh-setup-${version}.${ext}" | .mac.identity = $identity' \
+              "$CONFIG_PATH" > temp.json && mv temp.json "$CONFIG_PATH"
             echo "  ✅ Set artifact name: giddh-setup-VERSION.ext"
           else
-            # Use jq to update the config for test
-            jq '.mac.artifactName = "giddh-test-setup-${version}.${ext}"' "$CONFIG_PATH" > temp.json && mv temp.json "$CONFIG_PATH"
+            jq --arg identity "${{ env.APPLE_SIGNING_IDENTITY }}" \
+              '.mac.artifactName = "giddh-test-setup-${version}.${ext}" | .mac.identity = $identity' \
+              "$CONFIG_PATH" > temp.json && mv temp.json "$CONFIG_PATH"
             echo "  ✅ Set artifact name: giddh-test-setup-VERSION.ext"
           fi
           
-          echo "🔨 Building macOS Universal app..."
+          echo "🔨 Building signed macOS Universal app..."
           npx electron-builder build --config ./../../../electron-sign/electron-builder.json --mac --universal
           cd ../../../
           node scripts/build-success-message.js prod
@@ -208,26 +293,26 @@ jobs:
           aws s3 cp "$ZIP_FILE" "s3://$BUCKET/$PREFIX/mac/$VERSION/${{ env.VERSIONED_ZIP_NAME }}" \
             --content-type "application/zip" \
             --cache-control "no-cache, no-store, must-revalidate" \
-            --metadata "version=$VERSION,platform=macos,arch=universal"
+            --metadata "version=$VERSION,platform=macos,arch=universal,signed=true"
           echo "✅ Uploaded: $PREFIX/mac/$VERSION/${{ env.VERSIONED_ZIP_NAME }}"
           
           aws s3 cp "$DMG_FILE" "s3://$BUCKET/$PREFIX/mac/$VERSION/${{ env.VERSIONED_DMG_NAME }}" \
             --content-type "application/x-apple-diskimage" \
             --cache-control "no-cache, no-store, must-revalidate" \
-            --metadata "version=$VERSION,platform=macos,arch=universal"
+            --metadata "version=$VERSION,platform=macos,arch=universal,signed=true"
           echo "✅ Uploaded: $PREFIX/mac/$VERSION/${{ env.VERSIONED_DMG_NAME }}"
           
           if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
             aws s3 cp "$ZIP_FILE" "s3://$BUCKET/$PREFIX/mac/latest/${{ env.LATEST_ZIP_NAME }}" \
               --content-type "application/zip" \
               --cache-control "no-cache, no-store, must-revalidate" \
-              --metadata "version=$VERSION,platform=macos,arch=universal"
+              --metadata "version=$VERSION,platform=macos,arch=universal,signed=true"
             echo "✅ Uploaded: $PREFIX/mac/latest/${{ env.LATEST_ZIP_NAME }}"
             
             aws s3 cp "$DMG_FILE" "s3://$BUCKET/$PREFIX/mac/latest/${{ env.LATEST_DMG_NAME }}" \
               --content-type "application/x-apple-diskimage" \
               --cache-control "no-cache, no-store, must-revalidate" \
-              --metadata "version=$VERSION,platform=macos,arch=universal"
+              --metadata "version=$VERSION,platform=macos,arch=universal,signed=true"
             echo "✅ Uploaded: $PREFIX/mac/latest/${{ env.LATEST_DMG_NAME }}"
           fi
 
@@ -289,6 +374,7 @@ jobs:
           echo "Environment: ${{ env.BUILD_ENV }}"
           echo "S3 Path: ${{ env.S3_PATH_PREFIX }}/mac/"
           echo "Architecture: Universal (Intel + Apple Silicon)"
+          echo "Signing: Developer ID + Notarization"
           echo "========================================="
           echo "Versioned:"
           echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_ZIP_NAME }}"
