@@ -147,6 +147,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_BUNDLE_ID: com.giddh.prod
           CSC_IDENTITY_AUTO_DISCOVERY: "true"
         run: |
           set -euo pipefail
@@ -209,7 +210,16 @@ jobs:
           fi
           
           cd dist/apps/web-giddh
-          
+
+          echo "📦 Copying Electron signing files..."
+          cp "$GITHUB_WORKSPACE/electron-sign/notarize.js" .
+          cp "$GITHUB_WORKSPACE/electron-sign/entitlements.mac.plist" .
+          cp "$GITHUB_WORKSPACE/electron-sign/default.entitlements.mas.plist" .
+          cp "$GITHUB_WORKSPACE/electron-sign/default.entitlements.mas.inherit.plist" .
+          test -f notarize.js
+          test -f entitlements.mac.plist
+          echo "  ✅ Electron signing files copied"
+
           echo "📝 Setting artifact name for ${{ env.BUILD_ENV }} build..."
           CONFIG_PATH="./../../../electron-sign/electron-builder.json"
           
@@ -226,7 +236,11 @@ jobs:
           fi
           
           echo "🔨 Building signed macOS Universal app..."
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --mac --universal
+          npx electron-builder build \
+            --config ./../../../electron-sign/electron-builder.json \
+            --mac \
+            --universal \
+            --publish never
           cd ../../../
           node scripts/build-success-message.js prod
           

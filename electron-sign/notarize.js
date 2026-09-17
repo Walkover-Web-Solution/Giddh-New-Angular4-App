@@ -16,14 +16,17 @@ module.exports = async function (params) {
         return;
     }
 
-    const appId = 'com.giddh.prod';
+    const appId =
+        process.env.APPLE_APP_BUNDLE_ID ||
+        params.packager?.appInfo?.id ||
+        'com.giddh.prod';
     const appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`);
 
     if (!fs.existsSync(appPath)) {
         throw new Error(`Cannot find application at: ${appPath}`);
     }
 
-    console.log(`🍎 Notarizing ${appPath}...`);
+    console.log(`🍎 Notarizing ${appPath} (${appId})...`);
     await notarize({
         appBundleId: appId,
         appPath,
