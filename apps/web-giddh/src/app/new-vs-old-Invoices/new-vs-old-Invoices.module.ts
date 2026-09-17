@@ -28,7 +28,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { SalesPersonComponentStore } from '../shared/sales-person/utility/sales-person.store';
 import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
@@ -70,7 +69,6 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         MatInputModule,
         GiddhDatePipe,
         MatSelectModule,
-        NgxMatSelectSearchModule,
         MatTooltipModule,
         MatCardModule,
         MatChipsModule,

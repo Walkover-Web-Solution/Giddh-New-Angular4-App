@@ -71,7 +71,7 @@
                         </span>
                     </ng-container>
                 </mat-option>
-                <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length" [class]="optionClass">
+                <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length && !isAllSelected" [class]="optionClass">
                     {{ commonLocaleData?.app_no_result_found }}
                 </mat-option>
             </span>

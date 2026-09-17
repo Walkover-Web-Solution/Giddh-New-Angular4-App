@@ -95,6 +95,22 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         exportBodyRequest.isExpanded = this.inputData?.expand;
         exportBodyRequest.q = this.inputData?.q;
         exportBodyRequest.branchUniqueName = this.inputData?.branchUniqueName;
+        if (this.inputData?.groupBy) {
+            exportBodyRequest.groupBy = this.inputData.groupBy;
+        }
+        if (this.inputData?.accountUniqueNames?.length || this.inputData?.selectAllFields?.length) {
+            exportBodyRequest.accountUniqueNames = this.inputData.selectAllFields?.length ? [] : this.inputData.accountUniqueNames;
+            exportBodyRequest.selectAllFields = this.inputData.selectAllFields;
+        }
+        if (this.inputData?.salesPersonUniqueNames?.length) {
+            exportBodyRequest.salesPersonUniqueNames = this.inputData.salesPersonUniqueNames;
+        }
+        if (this.inputData?.countryCodes?.length) {
+            exportBodyRequest.countryCodes = this.inputData.countryCodes;
+        }
+        if (this.inputData?.stateCodes?.length) {
+            exportBodyRequest.stateCodes = this.inputData.stateCodes;
+        }
         exportBodyRequest.columnsToExport = ["Account UniqueName"];
         if (this.exportForm.value.showVoucherType) {
             exportBodyRequest.columnsToExport.push("Voucher Type");

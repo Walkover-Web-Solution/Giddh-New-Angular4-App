@@ -55,7 +55,8 @@ export class NewVsOldInvoicesService {
     public GetNewVsOldInvoicesBySalesPerson(queryRequest: NewVsOldInvoicesRequest): Observable<BaseResponse<NewVsOldInvoicesResponse, string>> {
         const body = {
             duration: 'salesPerson',
-            salesPersonUniqueNames: queryRequest.salesPersonUniqueNames || []
+            salesPersonUniqueNames: queryRequest.salesPersonUniqueNames || [],
+            selectAllFields: queryRequest.selectAllFields || []
         };
         return this.http.post(this.generalService.replaceUrlPlaceholders(NEWVSOLDINVOICE_API.GET, queryRequest), body)
             .pipe(map((res) => {

@@ -29,6 +29,9 @@ export class FilingComponent implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: boolean = true;
     public currentPeriod: GstDatePeriod = null;
     public selectedGst: string = null;
+    /** Holds the GST report type that should be auto-navigated to (when URL lacks from/to).
+     *  Passed to <tax-sidebar> which uses its own currentPeriod to build the full URL. */
+    public pendingNavigateType: string = null;
     public gstNumber: string = null;
     public activeCompanyGstNumber: string = '';
     public selectedTab: string = '';
@@ -105,13 +108,22 @@ export class FilingComponent implements OnInit, OnDestroy {
                 from: params['from'],
                 to: params['to']
             };
+            if (params['return_type'] && (!params['from'] || !params['to'])) {
+                this.pendingNavigateType = params['return_type'];
+                return;
+            } else {
+                this.pendingNavigateType = null;
+            }
             if (params['selectedGst']) {
                 this.activeCompanyGstNumber = params['selectedGst'];
                 this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
-            if (this.selectedGst !== params['return_type']) {
+            const returnTypeChanged = this.selectedGst !== params['return_type'];
+            if (returnTypeChanged) {
                 this.selectedGst = params['return_type'];
+            }
+            if (params['return_type'] && params['from'] && params['to']) {
                 this.loadGstReport(this.activeCompanyGstNumber);
             }
             let tab = Number(params['tab']);
@@ -239,6 +251,10 @@ export class FilingComponent implements OnInit, OnDestroy {
     private loadGstReport(gstNumber: string): void {
         if (gstNumber) {
             this.activeCompanyGstNumber = gstNumber;
+        }
+        
+        if (!this.currentPeriod.from || !this.currentPeriod.to) {
+            return;
         }
 
         let request: GstOverViewRequest = new GstOverViewRequest();

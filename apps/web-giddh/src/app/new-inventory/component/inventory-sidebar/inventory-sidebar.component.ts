@@ -245,7 +245,9 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/product/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/product/master' },
                         { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/bulk-stock-edit' },
-                        { name: this.localeData?.sidebar?.inventory_adjustment, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/adjust', hiddenLink: ['/pages/inventory/v2/product/adjust/create'] }
+                        { name: this.localeData?.sidebar?.stock_aging_report, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/stock-aging-report' },
+                        { name: this.localeData?.sidebar?.inventory_adjustment, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/adjust', hiddenLink: ['/pages/inventory/v2/product/adjust/create'] },
+                        { name: this.localeData?.sidebar?.batch_report, icons: 'group-wise.svg', link: '/pages/inventory/v2/product/batch' }
                     ],
                 },
                 {
@@ -259,7 +261,9 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/service/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/service/master' },
                         { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/bulk-stock-edit' },
-                        { name: this.localeData?.sidebar?.inventory_adjustment, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/adjust', hiddenLink: ['/pages/inventory/v2/service/adjust/create'] }
+                        { name: this.localeData?.sidebar?.stock_aging_report, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/stock-aging-report' },
+                        { name: this.localeData?.sidebar?.inventory_adjustment, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/adjust', hiddenLink: ['/pages/inventory/v2/service/adjust/create'] },
+                        { name: this.localeData?.sidebar?.batch_report, icons: 'group-wise.svg', link: '/pages/inventory/v2/service/batch' }
                     ],
                 },
                 {
@@ -272,7 +276,9 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/variant' },
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/fixedassets/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/fixedassets/master' },
-                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/fixedassets/bulk-stock-edit' }
+                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/fixedassets/bulk-stock-edit' },
+                        { name: this.localeData?.sidebar?.stock_aging_report, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/fixedassets/stock-aging-report' },
+                        { name: this.localeData?.sidebar?.batch_report, icons: 'group-wise.svg', link: '/pages/inventory/v2/fixedassets/batch' }
                     ],
                 },
                 {
@@ -308,6 +314,11 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
                     name: this.localeData?.sidebar?.warehouse_balance,
                     link: '/pages/inventory/v2/stock-balance',
                     icons: 'warehouse-opening-balance.svg'
+                },
+                {
+                    name: this.localeData?.sidebar?.inventory_settings,
+                    link: '/pages/inventory/v2/setting',
+                    icons: 'setting-icon.svg'
                 }
             ];
             this.dataSource.data = this.dataList;

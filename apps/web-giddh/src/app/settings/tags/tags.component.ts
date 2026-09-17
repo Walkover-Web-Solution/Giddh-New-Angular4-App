@@ -128,13 +128,14 @@ export class SettingsTagsComponent implements OnInit {
         if (this.isApiCallInProgress) {
             return;
         }
-        tag.name = event.value.trim();
-        this.setTagValue(tag);
         if (tag) {
             this.isApiCallInProgress = true;
-            this.settingsTagService.UpdateTag(tag).pipe(take(1)).subscribe(response => {
-                if (response) {
+            this.settingsTagService.UpdateTag({ ...tag, name: event.value.trim() }).pipe(take(1)).subscribe(response => {
+                if (response.status === "error") {
                     this.showToaster(this.commonLocaleData?.app_messages?.tag_updated, response);
+                } else if (response.status === "success") {
+                    tag.name = event.value.trim();
+                    this.setTagValue(tag);
                 }
                 this.isApiCallInProgress = false;
             });

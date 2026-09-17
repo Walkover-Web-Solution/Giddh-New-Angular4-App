@@ -18,7 +18,11 @@
                     >
                         <div class="d-flex flex-column flex-grow-1 row-gap-1">
                             <div class="d-flex align-items-center column-gap-1">
-                                <img [src]="imgPath + provider.logo" [alt]="provider.name" class="provider-logo flex-shrink-0" />
+                                <img
+                                    [src]="imgPath + provider.logo"
+                                    [alt]="provider.name"
+                                    class="provider-logo flex-shrink-0 w-fit-content"
+                                />
                                 @if (provider.description) {
                                     <span class="provider-description font-size-14 text-light">{{ provider.description }}</span>
                                 }
@@ -31,7 +35,11 @@
                                             <span
                                                 class="method-badge font-size-12 px-3 py-1 border-radius-12 d-flex align-items-center column-gap-05"
                                             >
-                                                <img [src]="imgPath + method.icon" [alt]="method.name" class="method-icon mr-1" />
+                                                <img
+                                                    [src]="imgPath + method.icon"
+                                                    [alt]="method.name"
+                                                    class="method-icon mr-1 w-fit-content"
+                                                />
                                                 <span class="text-black">{{ method.name }}</span>
                                                 @if (methodSelected) {
                                                     <i class="fa fa-check method-checkmark flex-shrink-0 font-size-14 ml-1"></i>
@@ -63,7 +71,7 @@
                                     <span
                                         class="method-icon-wrap d-flex align-items-center border-radius-8 justify-content-center flex-shrink-0"
                                     >
-                                        <img [src]="imgPath + method.icon" [alt]="method.name" class="method-icon" />
+                                        <img [src]="imgPath + method.icon" [alt]="method.name" class="method-icon w-fit-content" />
                                     </span>
                                     <span class="d-flex flex-column flex-grow-1">
                                         <span class="font-size-14 font-weight-semibold">{{ method.name }}</span>
@@ -103,7 +111,7 @@
                     </div>
 
                     <div class="d-flex flex-column flex-grow-1 row-gap-1">
-                        <img [src]="imgPath + provider.logo" [alt]="provider.name" class="provider-logo" />
+                        <img [src]="imgPath + provider.logo" [alt]="provider.name" class="provider-logo w-fit-content" />
 
                         <div class="d-flex flex-column row-gap-1">
                             <div class="d-flex flex-wrap column-gap-1 row-gap-1">
@@ -111,7 +119,7 @@
                                     <span
                                         class="method-badge font-size-12 px-3 py-1 border-radius-12 d-flex align-items-center column-gap-05"
                                     >
-                                        <img [src]="imgPath + method.icon" [alt]="method.name" class="method-icon mr-1" />
+                                        <img [src]="imgPath + method.icon" [alt]="method.name" class="method-icon mr-1 w-fit-content" />
                                         <span class="text-black">{{ method.name }}</span>
                                     </span>
                                 }

@@ -407,7 +407,7 @@ export class UpdateLedgerVm {
         this.selectedLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
         this.selectedLedger.otherTaxesSum = giddhRoundOff((this.selectedLedger.tdsTcsTaxesSum), this.giddhBalanceDecimalPlaces);
 
-        if ((this.showNewEntryPanel || this.isAdvanceReceipt) && this.selectedLedger.voucher.shortCode !== 'jr') {
+        if (this.shouldShowTaxDiscountPanel()) {
             // Refresh the per-row amount of the other-tax (TDS / TCS) transaction
             this.rebuildOtherTaxTransactions();
         }
@@ -615,8 +615,20 @@ export class UpdateLedgerVm {
         this.generateCompoundTotal();
     }
 
+    /**
+     * True when the amount / discount / tax panel is shown
+     * (same condition as the update-ledger template).
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof UpdateLedgerVm
+     */
+    private shouldShowTaxDiscountPanel(): boolean {
+        return (this.showNewEntryPanel || this.isAdvanceReceipt) && this.selectedLedger?.voucher?.shortCode !== 'jr';
+    }
+
     private rebuildOtherTaxTransactions(): void {
-        if (!this.selectedLedger?.transactions?.length) {
+        if (!this.shouldShowTaxDiscountPanel() || !this.selectedLedger?.transactions?.length) {
             return;
         }
 
@@ -692,7 +704,7 @@ export class UpdateLedgerVm {
         // Source of truth: CommonTaxComponent; fall back to this.selectedTaxes before view init.
         const selectedTaxes: any[] = this.taxComponent?.selectedTaxes?.() || this.selectedTaxes;
 
-        if (!this.selectedLedger?.transactions?.length) {
+        if (!this.shouldShowTaxDiscountPanel() || !this.selectedLedger?.transactions?.length) {
             return;
         }
 

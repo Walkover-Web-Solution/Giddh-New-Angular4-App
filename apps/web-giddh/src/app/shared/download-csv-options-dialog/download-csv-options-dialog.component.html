@@ -1,0 +1,35 @@
+<section class="mat-dialog-sm">
+    <div class="dialog-header d-flex justify-content-between align-items-center">
+        <span class="font-size-16 px-0">{{ localeData?.download_csv_options?.title }}</span>
+    </div>
+    <div mat-dialog-content class="p-3">
+        <p class="font-size-14 text-muted mb-3">
+            <strong>{{ commonLocaleData?.app_note }}:</strong>
+            {{ localeData?.download_csv_options?.note_message }}
+        </p>
+        <div class="d-flex justify-content-between align-items-center pb-2">
+            <label class="mb-0 font-size-15">{{ localeData?.download_csv_options?.parent_group_name }}</label>
+            <mat-slide-toggle color="primary" [(ngModel)]="options.includeParentGroup"></mat-slide-toggle>
+        </div>
+        <div class="d-flex justify-content-between align-items-center pb-2">
+            <label class="mb-0 font-size-15">{{ commonLocaleData?.app_mobile_number }}</label>
+            <mat-slide-toggle color="primary" [(ngModel)]="options.includeMobileNumber"></mat-slide-toggle>
+        </div>
+        <div class="d-flex justify-content-between align-items-center pb-2">
+            <label class="mb-0 font-size-15">{{ commonLocaleData?.app_email_id }}</label>
+            <mat-slide-toggle color="primary" [(ngModel)]="options.includeEmailId"></mat-slide-toggle>
+        </div>
+        <div class="d-flex justify-content-between align-items-center pb-2">
+            <label class="mb-0 font-size-15">{{ commonLocaleData?.app_state }}</label>
+            <mat-slide-toggle color="primary" [(ngModel)]="options.includeState"></mat-slide-toggle>
+        </div>
+        <div class="d-flex justify-content-between align-items-center pb-2">
+            <label class="mb-0 font-size-15">{{ commonLocaleData?.app_tax_number }}</label>
+            <mat-slide-toggle color="primary" [(ngModel)]="options.includeTaxNumber"></mat-slide-toggle>
+        </div>
+    </div>
+    <div mat-dialog-actions class="d-flex justify-content-end px-3 pb-3 column-gap-10">
+        <button matButton="outlined" type="button" (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+        <button matButton="filled" color="primary" type="button" (click)="onDownload()">{{ commonLocaleData?.app_download }}</button>
+    </div>
+</section>

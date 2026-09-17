@@ -142,7 +142,12 @@
                                 [style.padding-left.px]="node.level * 20"
                             >
                                 <div class="main-item-wrapper">
-                                    <span aria-label="menu" (click)="toggleNode(node)" class="main-item">
+                                    <span
+                                        aria-label="menu"
+                                        (click)="!node?.route ? toggleNode(node) : null"
+                                        [routerLink]="node?.route ? [node.route] : null"
+                                        class="main-item"
+                                    >
                                         <span class="item-label">
                                             <i [ngClass]="node?.icon"></i>
                                             <span class="item-name">{{ node.label }}</span>

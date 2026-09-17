@@ -39,6 +39,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     @Input() public isGstModule: boolean = false;
     /** True if month filter is selected */
     @Input() public isMonthSelected: boolean;
+    /** If set, once currentPeriod is available the sidebar will auto-navigate to the given GST report type
+     *  using its own currentPeriod (used when URL lacks from/to). */
+    @Input() public autoNavigateType: string;
 
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -162,7 +165,36 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 };
                 this.isMonthSelected = true;
             }
+            this.triggerAutoNavigate();
         });
+    }
+
+    /**
+     * Triggers auto-navigation to the requested GST report using sidebar's currentPeriod.
+     * Used when the URL is opened without from/to (e.g. /pages/gstfiling/filing-return?return_type=gstr1).
+     *
+     * @private
+     * @memberof TaxSidebarComponent
+     */
+    private triggerAutoNavigate(): void {
+        if (!this.autoNavigateType || !this.currentPeriod?.from || !this.currentPeriod?.to || !this.activeCompanyGstNumber) {
+            return;
+        }
+        const type = this.autoNavigateType;
+        this.autoNavigateType = null;
+        this.selectedGstModule = type;
+        const queryParams: any = {
+            return_type: type,
+            from: this.currentPeriod.from,
+            to: this.currentPeriod.to,
+            selectedGst: this.activeCompanyGstNumber
+        };
+        if (type === GstReport.Gstr3b) {
+            queryParams.isCompany = (this.isCompany || this.isConsolidatedBranch);
+        } else {
+            queryParams.tab = 0;
+        }
+        this.generalService.updateActivatedRouteQueryParams(queryParams);
     }
 
     /**
@@ -208,7 +240,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                     this.selectTax();
                 }
             }
-
+            this.triggerAutoNavigate();
             this.changeDetectionRef.detectChanges();
         });
     }

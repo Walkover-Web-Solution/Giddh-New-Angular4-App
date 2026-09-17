@@ -4,6 +4,11 @@ import { TBPlBsActions } from 'apps/web-giddh/src/app/actions/tl-pl.actions';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
 
+export enum ProfitLossExportView {
+    Collapsed = 'collapsed',
+    Expanded = 'expanded'
+}
+
 @Component({
 selector: 'profit-loss-export-xls',
     templateUrl: './export-xls.component.html',
@@ -25,8 +30,8 @@ export class ProfitLossExportXlsComponent implements OnInit {
 
     }
 
-    public downloadPlXls() {
-        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.profit_loss.download_filename };
+    public downloadPlXls(value: boolean): void {
+        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.profit_loss.download_filename, view: (value === true) ? ProfitLossExportView.Expanded : ProfitLossExportView.Collapsed };
         this.store.dispatch(this.tbPlActions.DownloadProfitLossExcel(request));
     }
 

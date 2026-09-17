@@ -540,7 +540,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.trxRequest.q = '';
         }
         this.ledgerComponentStore.getLedgerBalance({
-            payload: this.advanceSearchRequest.dataToSend, trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
+            payload: this.generalService.replaceSelectedAllOptions(this.advanceSearchRequest.dataToSend, true),
+            trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
         });
     }
 
@@ -1364,7 +1365,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isHideBankLedgerPopup = true;
         this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                let mappedTransactions = response?.body?.filter(transaction => transaction?.account !== null);
+                let mappedTransactions = response?.body?.filter(transaction => transaction?.account !== undefined && transaction?.account !== null);
                 if (mappedTransactions?.length > 0) {
                     mappedTransactions?.forEach(transaction => {
                         let matchedTransaction = bankTransactions?.filter(bankTransaction => bankTransaction.transactionId === transaction?.uniqueName);
@@ -1927,10 +1928,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(ExportLedgerComponent, {
             data: {
                 accountUniqueName: this.lc.accountUnq,
-                advanceSearchRequest: this.advanceSearchRequest,
+                advanceSearchRequest: { ...this.advanceSearchRequest, isAdvanceSearchImplemented: this.isAdvanceSearchImplemented },
                 selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName })),
                 currencyTogglerModel: this.currencyTogglerModel,
-                isLedgerAccountAllowsMultiCurrency: this.isLedgerAccountAllowsMultiCurrency
+                isLedgerAccountAllowsMultiCurrency: this.isLedgerAccountAllowsMultiCurrency,
+                searchText: this.searchText
             },
             role: 'alertdialog',
             panelClass: ['mat-dialog-md'],
@@ -3073,7 +3075,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             data: {
                 accountUniqueName: this.lc.accountUnq,
                 localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
+                commonLocaleData: this.commonLocaleData,
+                returnUrl: this.router.url
             },
             role: 'alertdialog',
             ariaLabel: 'import',
@@ -3546,6 +3549,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const prioritizedApplicableTaxes = applicableTaxesExcludingOtherTaxes.length ? applicableTaxesExcludingOtherTaxes : accountOtherApplicableTaxes;
 
                 if (!isSundryDebtorCreditorGroup) {
+                    const stockGroupTax: string[] = [];
+                    if (data.body?.stock?.groupTaxes) {
+                        stockGroupTax.push(...this.companyTaxesList.filter(otherTax =>
+                            data.body.stock?.groupTaxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
+                        ).map(tax => tax.uniqueName));
+                        data.body.stock.groupTaxes = data.body.stock?.groupTaxes.filter(tax => !stockGroupTax.includes(tax));
+                    }
+                    const stockTax: string[] = [];
+                    if (data.body?.stock?.taxes) {
+                        stockTax.push(...this.companyTaxesList.filter(otherTax =>
+                            data.body.stock?.taxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
+                        ).map(tax => tax.uniqueName));
+                        data.body.stock.taxes = data.body.stock?.taxes.filter(tax => !stockTax.includes(tax));
+                    }
+                    
                     // Take taxes of parent group and stock's own taxes
                     taxes = this.generalService.fetchTaxesOnPriority(
                         data.body.stock?.taxes ?? [],
@@ -3553,10 +3571,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         data.body.taxes ?? [],
                         data.body.groupTaxes ?? []);
                         const isSundryDebtorCreditorAccount = data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryCreditors) || data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryDebtors);
-                        if (data.body.oppositeAccount && isSundryDebtorCreditorAccount) {
+                        if (data.body.oppositeAccount && (isSundryDebtorCreditorAccount || stockGroupTax.length || stockTax.length)) {
                             const stockAccountOtherTax = this.generalService.fetchTaxesOnPriority(
-                                                    [],
-                                                    [],
+                                                    stockGroupTax,
+                                                    stockTax,
                                                     data.body.oppositeAccount.taxes ?? [],
                                                     data.body.oppositeAccount.groupTaxes ?? []);
                             otherTax.appliedOtherTax = {
@@ -3564,10 +3582,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                 uniqueName: stockAccountOtherTax.length ? stockAccountOtherTax[0] : ''
                             };
                         }
-                        if (prioritizedApplicableTaxes.length && !otherTax['uniqueName']) {
+                        const matchedTcsTdsTax = this.companyTaxesList.find(companyTax =>
+                            prioritizedApplicableTaxes.some(tax => tax?.uniqueName === companyTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(companyTax.taxType));
+                        if (prioritizedApplicableTaxes.length && !otherTax.appliedOtherTax?.uniqueName && matchedTcsTdsTax) {
                             otherTax.appliedOtherTax = {
-                                name: prioritizedApplicableTaxes[0]?.name,
-                                uniqueName: prioritizedApplicableTaxes[0]?.uniqueName
+                                name: matchedTcsTdsTax.name,
+                                uniqueName: matchedTcsTdsTax.uniqueName
                             };
                         }
                 } else {
@@ -3587,6 +3607,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         };
                     }
                 }
+
+                this.companyTaxesList.forEach(tax => {
+                    if (tax.uniqueName === otherTax.appliedOtherTax?.uniqueName && TCS_TDS_TAXES_TYPES.includes(tax.taxType)) {
+                        otherTax.appliedOtherTax.name = tax.name;
+                    }
+                })
 
                 if (this.profileObj?.baseCurrency === this.lc.activeAccount?.currency) {
                     if (this.lc.activeAccount?.currency !== data.body?.currency.code) {
@@ -3660,7 +3686,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     value: event?.value,
                     isHilighted: true,
                     applicableTaxes: txn.duplicateEntry ? [] : taxes,
-                    otherTax: otherTax,
+                    otherTax: txn?.duplicateEntry ? txn.selectedAccount?.otherTax : otherTax,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
                     email: data.body.emails,
@@ -3673,14 +3699,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
-                this.lc.blankLedger.otherTaxModal = {
-                    ...this.lc.blankLedger.otherTaxModal,
-                    appliedOtherTax: {
-                        name: otherTax?.appliedOtherTax?.name,
-                        uniqueName: otherTax?.appliedOtherTax?.uniqueName
-                    }
-                };
-                this.lc.blankLedger.isOtherTaxesApplicable = !!otherTax?.appliedOtherTax?.uniqueName;
+                if (!txn?.duplicateEntry) {
+                    this.lc.blankLedger.otherTaxModal = {
+                        ...this.lc.blankLedger.otherTaxModal,
+                        appliedOtherTax: {
+                            name: otherTax?.appliedOtherTax?.name,
+                            uniqueName: otherTax?.appliedOtherTax?.uniqueName
+                        }
+                    };
+                    this.lc.blankLedger.isOtherTaxesApplicable = !!otherTax?.appliedOtherTax?.uniqueName;
+                }
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
@@ -3702,7 +3730,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (txn?.selectedAccount?.stock) {
                     const stock = txn?.inventory?.stock;
                     if (txn?.duplicateEntry) {
-                        const unitRate = stock.unitRates.find(unitRate => unitRate.stockUnitUniqueName === txn?.inventory?.unit?.uniqueName) || stock.unitRates[0];
+                        const unitRate = stock.unitRates?.find(unitRate => unitRate.stockUnitUniqueName === txn?.inventory?.unit?.uniqueName) || stock.unitRates?.[0];
                         const defaultUnit = {
                             stockUnitCode: unitRate.stockUnitCode,
                             code: unitRate.stockUnitCode,
@@ -3748,6 +3776,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                 }
                 if (stockName && stockUniqueName) {
+                    const existingBatches = txn.duplicateEntry && Array.isArray(txn.inventory?.batches) ? txn.inventory.batches : [];
                     txn.inventory = {
                         stock: {
                             name: stockName,
@@ -3763,7 +3792,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             code: unitCode,
                             rate: rate,
                             stockUnitUniqueName: stockUnitUniqueName
-                        }
+                        },
+                        batches: existingBatches
                     };
                 } else {
                     delete txn.inventory;
@@ -3780,7 +3810,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse.salesPerson?.name || this.lc.blankLedger.salesPersonName || '';
                     }
                 }
-                this.preparePreAppliedDiscounts(txn);
+                if (!txn?.duplicateEntry) { 
+                    this.preparePreAppliedDiscounts(txn);
+                }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
                 txn.showOtherTax = this.showOtherTax(txn);
@@ -4100,7 +4132,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let sumOfTax = 0;
         if (res.transactions?.length) {
             (Array.isArray(res.transactions) ? res.transactions : []).forEach(item => {
-                if (Object.hasOwn(item.particular, 'category') && (['income', 'expenses', 'assets'].includes(item.particular.category) || isJournalVoucher) && item.particular.uniqueName !== "roundoff") {
+                if (Object.hasOwn(item.particular, 'category') && (['income', 'expenses', 'assets'].includes(item.particular.category) || isJournalVoucher) && item.particular.uniqueName !== "roundoff" && !item.isTax) {
                     transactionsParticular = item.particular;
                     if (item.inventory) {
                         transactionsParticular['uniqueName'] = transactionsParticular?.uniqueName?.split('#')[0];
@@ -4287,6 +4319,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             otherTaxesModal.tcsCalculationMethod = res.tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
             this.lc.blankLedger.otherTaxModal = otherTaxesModal;
             this.lc.blankLedger.isOtherTaxesApplicable = true;
+            this.lc.blankLedger.transactions[txnIndex].selectedAccount.otherTax = otherTaxesModal;
         }
 
         this.selectAccount(

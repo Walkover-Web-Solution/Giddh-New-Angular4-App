@@ -316,6 +316,17 @@
                                             {{ localeData?.reactivate_subscription }}
                                         </button>
                                     }
+                                    @if (generalService.isAdvancePaymentEligible(element)) {
+                                        <button
+                                            aria-label="advance-payment"
+                                            mat-menu-item
+                                            (click)="goToAdvancePayment(element?.subscriptionId)"
+                                            [matTooltip]="localeData?.advance_payment_tooltip"
+                                            matTooltipPosition="right"
+                                        >
+                                            {{ localeData?.advance_payment }}
+                                        </button>
+                                    }
                                 </div>
                             </mat-menu>
                         </td>

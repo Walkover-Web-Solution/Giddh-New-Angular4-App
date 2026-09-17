@@ -103,7 +103,7 @@ export class WhiteLabelService {
         }
 
         return this.environmentService.getApiUrlByRegion(region);
-    }
+    } 
 
     /**
      * Get App URL with white label override

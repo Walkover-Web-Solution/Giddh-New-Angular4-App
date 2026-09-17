@@ -8,7 +8,7 @@ import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
 import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -93,7 +93,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Supported groupBy values for export functionality */
-    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration]);
+    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration, GroupBy.SalesPerson, GroupBy.Country, GroupBy.State]);
     /** Current groupBy value selected in the report form */
     public currentGroupBy = signal<GroupBy | null>(null);
     /** Computed signal that determines if export button should be visible based on current groupBy */
@@ -162,6 +162,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.getDetailedPurchaseRequestFilter.stateCode = params.stateCode;
                 this.getDetailedPurchaseRequestFilter.countryCode = params.countryCode;
                 this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
+                this.getDetailedPurchaseRequestFilter = this.generalService.replaceSelectedAllOptions(this.getDetailedPurchaseRequestFilter, true);
                 this.currentGroupBy.set(params.groupBy);
                 this.params = params;
                 this.setDataPickerDateRange();
@@ -516,17 +517,29 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public export(): void {
-        let exportData = {
+        const groupBy = this.currentGroupBy();
+        const salesPersonUniqueName = this.getDetailedPurchaseRequestFilter?.salesPersonUniqueName;
+        const countryCode = this.getDetailedPurchaseRequestFilter?.countryCode;
+        const stateCode = this.getDetailedPurchaseRequestFilter?.stateCode;
+        const accountUniqueNames = this.getDetailedPurchaseRequestFilter?.accountUniqueNames ?? [];
+
+        let exportData: any = {
             from: this.from,
             to: this.to,
             exportType: "PURCHASE_REGISTER_DETAILED_EXPORT",
-            fileType: "CSV",
+            fileType: "XLSX",
             isExpanded: this.expand,
             q: this.voucherNumberInput?.value,
             branchUniqueName: this.getDetailedPurchaseRequestFilter?.branchUniqueName,
             commonLocaleData: this.commonLocaleData,
             localeData: this.localeData,
-            activeCompanyCountryCode: this.activeCompanyCountryCode
+            activeCompanyCountryCode: this.activeCompanyCountryCode,
+            groupBy: groupBy,
+            accountUniqueNames: accountUniqueNames,
+            selectAllFields: this.getDetailedPurchaseRequestFilter?.selectAllFields,
+            salesPersonUniqueNames: groupBy === GroupBy.SalesPerson && salesPersonUniqueName ? [salesPersonUniqueName] : [],
+            countryCodes: (groupBy === GroupBy.Country || groupBy === GroupBy.State) && countryCode ? [countryCode] : [],
+            stateCodes: groupBy === GroupBy.State && stateCode ? [stateCode] : []
         };
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
                     width: "630px",

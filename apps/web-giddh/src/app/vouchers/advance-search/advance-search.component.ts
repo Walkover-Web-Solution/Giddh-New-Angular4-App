@@ -1,13 +1,23 @@
-import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { debounceTime, filter, Observable, ReplaySubject, skip, take, takeUntil, tap } from 'rxjs';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../../shared/helpers/defaultDateFormat';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, DATE_REGEX, IOption } from '../../app.constant';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { select, Store } from '@ngrx/store';
+import { filter, Observable, of as observableOf, ReplaySubject, take, takeUntil, tap } from 'rxjs';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, DATE_REGEX, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../shared/sales-person/sales-person.component';
+import { GeneralService } from '../../services/general.service';
+import { SearchService } from '../../services/search.service';
+import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { AppState } from '../../store';
+import { VouchersUtilityService } from '../utility/vouchers.utility.service';
+import { SearchType } from '../utility/vouchers.const';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'app-advance-search',
@@ -22,7 +32,9 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** Holds Voucher Type */
-    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order' | 'payment';
+    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order' | 'payment' | 'inventory-document';
+    /** Actual voucher type (e.g. delivery-challan / receipt-note) for inventory-document labels */
+    @Input() public voucherType: string;
     /** Holds Advance Filter Values */
     @Input() public advanceFilters: any;
     /** Holds true if  EInvoice is enabled */
@@ -45,14 +57,50 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public dayjs: any = dayjs;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** Directive to get reference of element */
-    @ViewChild('filterDatepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Universal datepicker trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
+    /** Selected date range object */
+    public selectedDateRange: any;
+    /** Selected date range UI label */
+    public selectedDateRangeUi: string = '';
+    /** Datepicker ranges */
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** Selected range label */
+    public selectedRangeLabel: any = '';
     /** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
+    /** Payment status options for invoice advance search */
+    public paymentStatusOptions: IOption[] = [];
+    /** Purchase order status options */
+    public purchaseOrderStatusOptions: IOption[] = [];
+    /** Delivery challan/receipt note document statuses */
+    public inventoryDocumentStatusOptions: IOption[] = [];
+    /** Delivery challan/receipt note invoice statuses */
+    public inventoryInvoiceStatusOptions: IOption[] = [];
+    /** Operators supported by inventory document filters */
+    public inventoryDateOperators: IOption[] = [];
+    public inventoryAmountOperators: IOption[] = [];
+    public linkedInvoiceOptions: any[] = [];
+    /** Warehouse dropdown options */
+    public warehouses: IOption[] = [];
+    /** Branch dropdown options */
+    public branches: IOption[] = [];
+    /** Selected warehouse label for dropdown display */
+    public selectedWarehouseName: string = '';
+    /** Selected branch label for dropdown display */
+    public selectedBranchName: string = '';
+    /** Current organization type */
+    public currentOrganizationType: string;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** Account search request state */
+    public accountSearchRequest: any;
+    /** Account dropdown options */
+    public accounts$: Observable<IOption[]>;
     /** Holds field label values */
     public fieldLabelValues: any = {
         invoiceDateRange: '',
@@ -69,16 +117,19 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public adjustmentVoucherOptions: IOption[] = [];
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    /** This will use for instance of sales person Dropdown */
-    public salesPersonDropdown: FormControl = new FormControl();
-    /** Filtered Sales Person List */
-    public filteredSalesPersonList: IOption[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
         private dialog: MatDialog,
-        private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore,
+        private generalService: GeneralService,
+        private store: Store<AppState>,
+        private warehouseActions: WarehouseActions,
+        private settingsBranchAction: SettingsBranchActions,
+        private searchService: SearchService,
+        private changeDetectorRef: ChangeDetectorRef,
+        private vouchersUtilityService: VouchersUtilityService
     ) { }
 
     /**
@@ -87,6 +138,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchComponent
      */
     public ngOnInit(): void {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
+        this.store.pipe(select(state => state.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         this.filtersForEntryTotal = [
             { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
             { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
@@ -106,6 +164,74 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_date_options?.on, value: 'on' },
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
+        ];
+
+        this.paymentStatusOptions = [
+            { label: this.commonLocaleData?.app_payment_status?.paid, value: 'paid' },
+            { label: this.commonLocaleData?.app_payment_status?.partially_paid, value: 'partial-paid' },
+            { label: this.commonLocaleData?.app_payment_status?.unpaid, value: 'unpaid' },
+            { label: this.commonLocaleData?.app_payment_status?.hold, value: 'hold' },
+            { label: this.commonLocaleData?.app_payment_status?.cancel, value: 'cancel' }
+        ];
+
+        this.purchaseOrderStatusOptions = [
+            { label: this.commonLocaleData?.app_payment_status?.open, value: 'open' },
+            { label: this.commonLocaleData?.app_payment_status?.converted, value: 'converted' },
+            { label: this.commonLocaleData?.app_payment_status?.partially_converted, value: 'partially-converted' },
+            { label: this.commonLocaleData?.app_payment_status?.expired, value: 'expired' }
+        ];
+
+        this.inventoryDocumentStatusOptions = [
+            { label: this.localeData?.inventory_document_status?.open, value: 'OPEN' },
+            { label: this.localeData?.inventory_document_status?.closed, value: 'CLOSED' },
+            { label: this.localeData?.inventory_document_status?.expired, value: 'EXPIRED' },
+            { label: this.localeData?.inventory_document_status?.cancelled, value: 'CANCELLED' }
+        ];
+        const isReceiptNote = this.voucherType === 'receipt-note';
+        this.inventoryInvoiceStatusOptions = [
+            {
+                label: isReceiptNote
+                    ? this.localeData?.inventory_invoice_status?.billed
+                    : this.localeData?.inventory_invoice_status?.invoiced,
+                value: 'FULLY_INVOICED'
+            },
+            {
+                label: isReceiptNote
+                    ? this.localeData?.inventory_invoice_status?.partially_billed
+                    : this.localeData?.inventory_invoice_status?.partially_invoiced,
+                value: 'PARTIALLY_INVOICED'
+            },
+            {
+                label: isReceiptNote
+                    ? this.localeData?.inventory_invoice_status?.not_billed
+                    : this.localeData?.inventory_invoice_status?.not_invoiced,
+                value: 'NOT_INVOICED'
+            }
+        ];
+        this.inventoryDateOperators = [
+            { label: this.commonLocaleData?.app_date_options?.on, value: 'ON' },
+            { label: this.commonLocaleData?.app_date_options?.after, value: 'AFTER' },
+            { label: this.commonLocaleData?.app_date_options?.before, value: 'BEFORE' }
+        ];
+        this.inventoryAmountOperators = [
+            { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'EQUALS' },
+            { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'GREATER_THAN' },
+            { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'LESS_THAN' }
+        ];
+        this.linkedInvoiceOptions = [
+            { label: this.commonLocaleData?.app_all, value: null },
+            { label: this.localeData?.linked_invoice_filter?.linked, value: true },
+            { label: this.localeData?.linked_invoice_filter?.not_linked, value: false }
+        ];
+
+        this.eInvoiceStatusDropdownOptions = [
+            { label: this.localeData?.e_invoice_statuses_label?.yet_to_be_pushed, value: this.localeData?.e_invoice_statuses_label?.yet_to_be_pushed },
+            { label: this.localeData?.e_invoice_statuses_label?.pushed, value: this.localeData?.e_invoice_statuses_label?.pushed },
+            { label: this.localeData?.e_invoice_statuses_label?.push_initiated, value: this.localeData?.e_invoice_statuses_label?.push_initiated },
+            { label: this.localeData?.e_invoice_statuses_label?.cancelled, value: this.localeData?.e_invoice_statuses_label?.cancelled },
+            { label: this.localeData?.e_invoice_statuses_label?.mark_as_cancelled, value: this.localeData?.e_invoice_statuses_label?.mark_as_cancelled },
+            { label: this.localeData?.e_invoice_statuses_label?.failed, value: this.localeData?.e_invoice_statuses_label?.failed },
+            { label: this.localeData?.e_invoice_statuses_label?.na, value: this.localeData?.e_invoice_statuses_label?.na }
         ];
 
         this.adjustmentVoucherOptions = [
@@ -139,8 +265,8 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             dueDate: [this.advanceFilters?.dueDate ?? ''],
             amountFieldSelector: [this.advanceFilters?.amountFieldSelector ?? ''],
             balanceDue: [this.advanceFilters?.balanceDue ?? ''],
-            balanceStatus: [this.advanceFilters?.balanceStatus ?? ''],
-            eInvoiceStatus: [this.advanceFilters?.eInvoiceStatus ?? ''],
+            balanceStatus: [this.advanceFilters?.balanceStatus ?? []],
+            eInvoiceStatus: [this.advanceFilters?.eInvoiceStatus ?? []],
             description: [this.advanceFilters?.description ?? ''],
             amount: [this.advanceFilters?.amount ?? ''],
             invoiceTotalAmount: [this.advanceFilters?.invoiceTotalAmount ?? ''],
@@ -154,7 +280,14 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             dueTo: [(this.advanceFilters?.dueTo && dayjs(this.advanceFilters?.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
             receiptType: [''],
             salesPersonName: [this.advanceFilters?.salesPersonName ?? ''],
-            salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? '']
+            salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? []],
+            date: [this.advanceFilters?.date ?? ''],
+            dateOperator: [this.advanceFilters?.dateOperator ?? 'ON'],
+            invoiceStatuses: [this.advanceFilters?.invoiceStatuses ?? []],
+            amountOperator: [this.advanceFilters?.amountOperator ?? 'EQUALS'],
+            warehouseUniqueName: [this.advanceFilters?.warehouseUniqueName ?? ''],
+            branchUniqueName: [this.advanceFilters?.branchUniqueName ?? ''],
+            partyUniqueName: [this.normalizePartyUniqueNameValue(this.advanceFilters?.partyUniqueName)]
         });
 
         const invoiceDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.invoiceDateRange);
@@ -186,23 +319,12 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             this.fieldLabelValues.adjustmentVoucherOptions = adjustmentVoucherOptions[0]?.label;
         }
         this.getSalesPersonList();
-        this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
-            this.filteredSalesPersonList = res as IOption[];
-        });
-
-        /** Search for action dropdown */
-        this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
-        takeUntil(this.destroyed$)).subscribe((search: string) => {
-            if (!search) {
-                this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                    this.filteredSalesPersonList = res as IOption[];
-                });
-            } else {
-                this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                    this.filteredSalesPersonList = res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
-                });
-            }
-        });
+        if (this.type === 'inventory-document') {
+            this.initInventoryDateRange();
+            this.getWarehouses();
+            this.getBranches();
+            this.searchAccount();
+        }
     }
 
     /**
@@ -391,6 +513,12 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             });
         };
 
+        if (this.type === 'inventory-document') {
+            formatDateField('date');
+            clearDateFields(allDateControlNames);
+            return;
+        }
+
         // Process each date control based on the type
         allDateControlNames.forEach(controlName => {
             switch (this.type) {
@@ -440,8 +568,82 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      */
     public search(): void {
         this.parseAllDateField();
-        this.applyFilterEvent.emit(this.searchForm?.value);
+        const formValue = { ...this.searchForm?.value };
+        if (this.type === 'inventory-document') {
+            formValue.partyUniqueName = this.normalizePartyUniqueNameValue(formValue.partyUniqueName);
+            const showBranchDropdown = this.branches?.length > 1 &&
+                (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch);
+            if (!showBranchDropdown) {
+                formValue.branchUniqueName = '';
+            }
+        }
+        this.applyFilterEvent.emit(formValue);
         this.closeDialogEvent.emit();
+    }
+
+    /**
+     * Initializes inventory document date range from existing filters
+     *
+     * @private
+     * @memberof AdvanceSearchComponent
+     */
+    private initInventoryDateRange(): void {
+        const filterDate = this.advanceFilters?.date;
+        const from = this.advanceFilters?.from;
+        const to = this.advanceFilters?.to;
+        if (filterDate) {
+            const parsedDate = dayjs(filterDate, GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: parsedDate, endDate: parsedDate };
+            this.selectedDateRangeUi = parsedDate.format(GIDDH_NEW_DATE_FORMAT_UI);
+        } else if (from && to) {
+            this.selectedDateRange = {
+                startDate: dayjs(from, GIDDH_DATE_FORMAT),
+                endDate: dayjs(to, GIDDH_DATE_FORMAT)
+            };
+            this.selectedDateRangeUi = dayjs(from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI)
+                + ' - '
+                + dayjs(to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.searchForm?.get('date')?.patchValue(from);
+        }
+    }
+
+    /**
+     * Toggles the universal datepicker menu
+     *
+     * @param {boolean} [isOpen=true]
+     * @memberof AdvanceSearchComponent
+     */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
+        }
+    }
+
+    /**
+     * Callback for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof AdvanceSearchComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === 'cancel') {
+            this.toggleGiddhDatepicker(false);
+            return;
+        }
+        this.selectedRangeLabel = '';
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.toggleGiddhDatepicker(false);
+        if (value && value.startDate && value.endDate) {
+            // Operators are ON/AFTER/BEFORE — use a single date matching the selected start
+            const selectedDate = dayjs(value.startDate);
+            this.selectedDateRange = { startDate: selectedDate, endDate: selectedDate };
+            this.selectedDateRangeUi = selectedDate.format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.searchForm?.get('date')?.patchValue(selectedDate.format(GIDDH_DATE_FORMAT));
+        }
     }
 
     /**
@@ -480,5 +682,131 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT, archive: '' } });
+    }
+
+    /**
+     * Loads warehouses for inventory document filters
+     *
+     * @private
+     * @memberof AdvanceSearchComponent
+     */
+    private getWarehouses(): void {
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses?.results?.length) {
+                this.warehouses = warehouses.results
+                    .filter(warehouse => !warehouse.isArchived)
+                    .map(warehouse => ({ label: warehouse?.name, value: warehouse?.uniqueName }));
+                const selectedWarehouse = this.warehouses.find(warehouse => warehouse.value === this.searchForm?.get('warehouseUniqueName')?.value);
+                this.selectedWarehouseName = selectedWarehouse?.label ?? '';
+                this.changeDetectorRef.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Loads branches for inventory document filters
+     *
+     * @private
+     * @memberof AdvanceSearchComponent
+     */
+    private getBranches(): void {
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
+        this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.length) {
+                this.branches = response.map(branch => ({
+                    label: branch?.name,
+                    value: branch?.uniqueName
+                }));
+                const selectedBranch = this.branches.find(branch => branch.value === this.searchForm?.get('branchUniqueName')?.value);
+                this.selectedBranchName = selectedBranch?.label ?? '';
+                this.changeDetectorRef.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Normalizes party unique name filter into multi-select array value
+     *
+     * @private
+     * @param {*} value
+     * @return {string[]}
+     * @memberof AdvanceSearchComponent
+     */
+    private normalizePartyUniqueNameValue(value: any): string[] {
+        if (Array.isArray(value)) {
+            return value.filter(Boolean);
+        }
+        return value ? [value] : [];
+    }
+
+    /**
+     * Gets list of accounts with searching (DC: sundrydebtors, RN: sundrycreditors)
+     *
+     * @param {string} [query='']
+     * @param {number} [page=1]
+     * @memberof AdvanceSearchComponent
+     */
+    public searchAccount(query: string = '', page: number = 1): void {
+        if (this.accountSearchRequest?.isLoading) {
+            return;
+        }
+
+        const accountSearchRequest = this.vouchersUtilityService.getSearchRequestObject(
+            this.voucherType,
+            query,
+            page,
+            SearchType.CUSTOMER
+        );
+        this.accountSearchRequest = cloneDeep(accountSearchRequest);
+        this.accountSearchRequest.isLoading = true;
+
+        this.searchService
+            .searchAccountV3(accountSearchRequest)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((response) => {
+                if (response?.body?.results?.length) {
+                    this.accountSearchRequest.loadMore = true;
+                    let existingAccounts = [];
+                    if (page > 1) {
+                        this.accounts$?.subscribe((res) => (existingAccounts = res || []));
+                    }
+                    const newResults = response.body.results.map((res) => ({
+                        label: res.name,
+                        value: res.uniqueName,
+                        additional: res
+                    }));
+                    this.accounts$ = observableOf(existingAccounts.concat(...newResults));
+                } else {
+                    this.accountSearchRequest.loadMore = false;
+                    if (page === 1) {
+                        this.accounts$ = observableOf([]);
+                    }
+                }
+                this.accountSearchRequest.isLoading = false;
+                this.changeDetectorRef.detectChanges();
+            });
+    }
+
+    /**
+     * Search accounts for party dropdown
+     *
+     * @param {string} query
+     * @memberof AdvanceSearchComponent
+     */
+    public onAccountSearchQueryChanged(query: string): void {
+        this.searchAccount(query, 1);
+    }
+
+    /**
+     * Handles account dropdown scroll end
+     *
+     * @memberof AdvanceSearchComponent
+     */
+    public handleAccountScrollEnd(): void {
+        if (this.accountSearchRequest?.loadMore) {
+            const page = (this.accountSearchRequest.page || 1) + 1;
+            this.searchAccount(decodeURIComponent(this.accountSearchRequest.q || ''), page);
+        }
     }
 }

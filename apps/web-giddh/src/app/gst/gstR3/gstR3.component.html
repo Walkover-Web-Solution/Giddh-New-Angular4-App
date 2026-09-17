@@ -9,6 +9,7 @@
         <tax-sidebar
             (navigateEvent)="handleNavigation($event)"
             [selectedGstModule]="selectedGstr"
+            [autoNavigateType]="pendingNavigateType"
             [exclude]="'#primary-new-header'"
             class="gst-sidebar"
             [isMonthSelected]="isMonthSelected"
@@ -704,7 +705,7 @@
                         <div class="gst-return-date">
                             <img [src]="imgPath + 'return-date.svg'" />
                             <p>{{ localeData?.gstr3b?.click_proceed }}</p>
-                            <button matButton="filled" (click)="returnGstr3B = { via: 'TAXPRO' }">
+                            <button matButton="filled" (click)="returnGstr3B = { via: taxServiceEnum.EXCELLON }">
                                 {{ localeData?.gstr3b?.push_to_portal }}
                             </button>
                         </div>

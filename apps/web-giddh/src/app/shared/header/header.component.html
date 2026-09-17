@@ -292,6 +292,40 @@
                                                 </li>
                                             </ul>
                                         </div>
+                                        <div
+                                            *ngIf="
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
+                                                (currentCompanyBranches?.length <= 1 &&
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
+                                            "
+                                        >
+                                            <div class="mt-4 mb-1 d-flex align-items-center">
+                                                <span class="d-flex">
+                                                    <i class="icon-inventory theme-foreground-color mr-2"></i>
+                                                </span>
+                                                <span>{{ localeData?.inventory }}</span>
+                                            </div>
+                                            <ul class="d-flex column-gap-2">
+                                                <li>
+                                                    <span class="dot d-block"></span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/delivery-challan/create')"
+                                                    >
+                                                        {{ localeData?.delivery_challan }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <span class="dot d-block"></span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/receipt-note/create')"
+                                                    >
+                                                        {{ localeData?.receipt_note }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                         @if (
                                             currentCompanyBranches?.length > 1 &&
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
@@ -578,6 +612,17 @@
         </div>
     </div>
 
+    @if (showAlertMessage.isPrepaidRenewalAvailable && generalService.isAdvancePaymentEligible(activeCompany?.subscription)) {
+        <div class="plan-wrapper" [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }">
+            <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
+                <p>
+                    <i class="icon-traingle-info font-size-15 mr-2"></i>
+                    <span [innerHTML]="getPrepaidRenewalNote()"></span>
+                </p>
+                <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isPrepaidRenewalAvailable = false"></i>
+            </div>
+        </div>
+    }
     <div
         class="plan-wrapper"
         *ngIf="showAlertMessage.isTransactionLimitExceeded && subscribedPlan !== undefined && subscribedPlan.additionalCharges"

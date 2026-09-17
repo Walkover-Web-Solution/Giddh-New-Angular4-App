@@ -13,6 +13,7 @@ import { TranslateDirectiveModule } from "../theme/translate/translate.directive
 import { CommonModule } from "@angular/common";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { MatButtonModule } from "@angular/material/button";
+import { MatBadgeModule } from "@angular/material/badge";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -63,6 +64,13 @@ import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/a
 import { PreviewVariantImageComponent } from "./component/preview-variant-image/preview-variant-image.component";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
+import { StockAgingReportComponent } from "./component/stock-aging-report/stock-aging-report.component";
+import { BatchReportComponent } from "./component/batch-report/batch-report.component";
+import { BatchCreateEditComponent } from "./component/batch-create-edit/batch-create-edit.component";
+import { BatchArchiveDialogComponent } from "./component/batch-archive-dialog/batch-archive-dialog.component";
+import { BatchTransferDialogComponent } from "./component/batch-transfer-dialog/batch-transfer-dialog.component";
+import { MatCardModule } from "@angular/material/card";
+import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-editor.component";
 
 @NgModule({
     declarations: [
@@ -87,16 +95,22 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
         ExportInventoryMasterComponent,
         AdjustInventoryComponent,
         AsideCreateNewReasonComponent,
-        PreviewVariantImageComponent
+        PreviewVariantImageComponent,
+        StockAgingReportComponent,
+        BatchReportComponent,
+        BatchArchiveDialogComponent,
+        BatchTransferDialogComponent
     ],
     imports: [
         NewInventoryRoutingModule,
         SharedModule,
         CommonModule,
+        BatchCreateEditComponent,
         FormFieldsModule,
         TranslateDirectiveModule,
         DecimalDigitsModule,
         MatButtonModule,
+        MatBadgeModule,
         MatIconModule,
         MatMenuModule,
         MatCheckboxModule,
@@ -132,7 +146,9 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
         ReactiveFormsModule,
         AmountFieldComponentModule,
         GiddhDatePipe,
-        GoToBranchComponent
+        GoToBranchComponent,
+        MatCardModule,
+        AgeRangeEditorComponent
     ],
     exports: [
         NewInventoryComponent,

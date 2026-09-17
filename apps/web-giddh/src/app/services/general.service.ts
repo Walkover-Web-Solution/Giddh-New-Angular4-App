@@ -16,7 +16,7 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, GIDDH_ONLY_ROUTES, GiddhUiDomain, IOption, MOBILE_NUMBER_SELF_URL, GiddhRegion, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, GIDDH_ONLY_ROUTES, GiddhUiDomain, IOption, MOBILE_NUMBER_SELF_URL, GiddhRegion, RTL_COUNTRY_CODES, RTL_CURRENCY_CODES, RTL_LANGUAGE_CODES, RTL_SCRIPT_SUBTAGS, SUPPORTED_OPERATING_SYSTEMS, TextDirection, WeekdaysEnum } from '../app.constant';
 import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -29,7 +29,7 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
-import { Configuration, INTERNAL_EMAILS_DOMAINS } from '../app.constant';
+import { Configuration, INTERNAL_EMAILS_DOMAINS, isSelectedAllOption } from '../app.constant';
 import { cloneDeep, find,orderBy } from '../lodash-optimized';
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
@@ -151,6 +151,51 @@ export class GeneralService {
         return url;
     }
 
+    /**
+     * Replaces selected-all sentinel arrays with empty arrays and collects
+     * their field names in a root-level `selectAllFields` array.
+     *
+     * @param node Request object or nested request object
+     * @param createCopy When true, transforms and returns a deep clone without changing the original object
+     * @returns The transformed request object
+     * @memberof GeneralService
+     */
+    public replaceSelectedAllOptions<T>(node: T, createCopy: boolean = false): T {
+        const requestNode: any = createCopy ? cloneDeep(node) : node;
+        if (!requestNode || typeof requestNode !== 'object') {
+            return requestNode;
+        }
+
+        const selectAllFields: string[] = [];
+        this.replaceSelectedAllOptionsRecursive(requestNode, selectAllFields);
+        requestNode.selectAllFields = selectAllFields;
+
+        return requestNode;
+    }
+
+    /**
+     * Traverses request object and replaces selected-all values.
+     *
+     * @private
+     * @param node Request object or nested request object
+     * @param selectAllFields Root-level list of fields marked as select-all
+     * @memberof GeneralService
+     */
+    private replaceSelectedAllOptionsRecursive(node: any, selectAllFields: string[]): void {
+        if (!node || typeof node !== 'object' || Array.isArray(node)) {
+            return;
+        }
+        Object.keys(node).forEach(key => {
+            const value = node[key];
+            if (isSelectedAllOption(value)) {
+                node[key] = [];
+                selectAllFields.push(key);
+            } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+                this.replaceSelectedAllOptionsRecursive(value, selectAllFields);
+            }
+        });
+    }
+
     public setIsMobileView(isMobileView: boolean) {
         this.isMobileSite.next(isMobileView);
     }
@@ -208,6 +253,9 @@ export class GeneralService {
         if (routerParams['region']) {
             localStorage.setItem('region', routerParams['region']);
         }
+        if (routerParams['ref']) {
+            localStorage.setItem('ref', routerParams['ref']);
+        }
     }
 
     getUtmParameter(param: string): string {
@@ -225,6 +273,7 @@ export class GeneralService {
         localStorage.removeItem("utm_term");
         localStorage.removeItem("utm_content");
         localStorage.removeItem("region");
+        localStorage.removeItem("ref");
     }
 
     getLastElement(array) {
@@ -856,13 +905,60 @@ export class GeneralService {
      *  @memberof GeneralService
      */
     public isRtlCurrency(currencyCode: string): boolean {
-        const rtlCurrencyCodes = ['AED'];
-
-        if (rtlCurrencyCodes?.indexOf(currencyCode) > -1) {
+        if (RTL_CURRENCY_CODES?.indexOf(currencyCode) > -1) {
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * This will return true if the given language/locale code is written right-to-left
+     *
+     * @param {string} languageCode Language code, e.g. 'ar', 'ur', 'pa-Arab'
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isRtlLanguage(languageCode: string): boolean {
+        const code = languageCode?.toLowerCase()?.trim();
+        if (!code) {
+            return false;
+        }
+        const parts = code.split(/[-_]/);
+        if (RTL_LANGUAGE_CODES?.indexOf(parts[0]) > -1) {
+            return true;
+        }
+        return parts.slice(1).some(part => RTL_SCRIPT_SUBTAGS?.indexOf(part) > -1);
+    }
+
+    /**
+     * This will return true if the given alpha-2 country code uses a right-to-left script
+     *
+     * @param {string} countryCode Alpha-2 country code, e.g. 'AE'
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isRtlCountry(countryCode: string): boolean {
+        return RTL_COUNTRY_CODES?.indexOf(countryCode?.toUpperCase()) > -1;
+    }
+
+    /**
+     * This will return the text direction of the given language code, falls back
+     * to the country code when no language code is provided
+     *
+     * @param {string} languageCode Language code, e.g. 'ar'
+     * @param {string} [countryCode] Alpha-2 country code, e.g. 'AE'
+     * @returns {TextDirection} 'rtl' when right-to-left else 'ltr'
+     * @memberof GeneralService
+     */
+    public getTextDirection(languageCode: string, countryCode?: string): TextDirection {
+        if (this.isRtlLanguage(languageCode)) {
+            return TextDirection.RTL;
+        }
+        if (!languageCode && this.isRtlCountry(countryCode)) {
+            return TextDirection.RTL;
+        }
+        return TextDirection.LTR;
     }
 
     /**
@@ -1804,13 +1900,16 @@ export class GeneralService {
     public getOperatingSystem(): SUPPORTED_OPERATING_SYSTEMS {
         const platform = window.navigator.userAgent.toLowerCase(),
             macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i,
-            windowsPlatforms = /(win32|win64|windows|wince)/i;
+            windowsPlatforms = /(win32|win64|windows|wince)/i,
+            linuxPlatforms = /(linux|ubuntu|debian|fedora|redhat)/i;
         let operatingSystem = null;
 
         if (macosPlatforms.test(platform)) {
             operatingSystem = SUPPORTED_OPERATING_SYSTEMS.MacOS;
         } else if (windowsPlatforms.test(platform)) {
             operatingSystem = SUPPORTED_OPERATING_SYSTEMS.Windows;
+        } else if (linuxPlatforms.test(platform)) {
+            operatingSystem = SUPPORTED_OPERATING_SYSTEMS.Linux;
         }
 
         return operatingSystem;
@@ -3412,5 +3511,40 @@ export class GeneralService {
      */
     public getPostalCodePlaceholder(countryCode: string): string {
         return `Enter ${this.getPostalCodeLabel(countryCode)}`;
+    }
+
+    /**
+     * Returns true when the given subscription is eligible for advance (prepaid) payment.
+     * Rules: auto-pay OFF, status not trial/cancelled/expired, and within
+     * 7 days of expiry (monthly) or 30 days of expiry (yearly).
+     *
+     * @param {*} subscription Subscription object (must contain expiry, status, isAutoPay, period/duration)
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isAdvancePaymentEligible(subscription: any): boolean {
+        if (!subscription || !subscription.expiry) {
+            return false;
+        }
+        if (subscription.autoPay || subscription.isPrepaidExist) {
+            return false;
+        }
+        const status = (subscription.status || '').toLowerCase();
+        if (status !== 'active') {
+            return false;
+        }
+        const period = (subscription.period || subscription.duration || '').toLowerCase();
+        const expiryStr = String(subscription.expiry).split('-').reverse().join('-');
+        const remainingDays = ((new Date(expiryStr).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) + 1;
+        if (isNaN(remainingDays) || remainingDays < 0) {
+            return false;
+        }
+        if ((period === 'monthly' || period === 'daily') && remainingDays <= 7) {
+            return true;
+        }
+        if (period === 'yearly' && remainingDays <= 30) {
+            return true;
+        }
+        return false;
     }
 }

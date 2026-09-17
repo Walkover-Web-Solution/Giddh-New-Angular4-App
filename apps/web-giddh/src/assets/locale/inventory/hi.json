@@ -21,7 +21,10 @@
         "custom_price": "कस्टम कीमत",
         "customer_wise":"ग्राहक समझदार",
         "vendor_wise":"विक्रेता समझदार",
-        "inventory_adjustment":"माल - सूची का समायोजन"
+        "inventory_adjustment":"माल - सूची का समायोजन",
+        "stock_aging_report":"एजिंग रिपोर्ट",
+        "batch_report":"बैच रिपोर्ट",
+        "inventory_settings":"इन्वेंटरी सेटिंग्स"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",
@@ -52,6 +55,7 @@
         "closing_amount":"समापन मूल्य",
         "stock_name":"स्टॉक का नाम",
         "variant_name":"वेरिएंट का नाम",
+        "batch":"बैच",
         "no_entries_found_1":"दिए गए मानदंडों के भीतर कोई प्रविष्टि नहीं मिली।",
         "no_entries_found_2":"कुछ अन्य तिथियों के साथ खोजें",
         "voucher_type":"वाउचर प्रकार",
@@ -77,7 +81,10 @@
         "customise":"अनुकूलित करें",
         "no_result_found":"कोई परिणाम नहीं मिला",
         "select_all":"सबका चयन करें",
-        "select_account_group":"खाता समूह चुनें"
+        "select_account_group":"खाता समूह चुनें",
+        "report_as_per":"रिपोर्ट के अनुसार",
+        "books":"पुस्तकें",
+        "inventory":"इन्वेंटरी"
     },
     "advance_search_filter":{
         "advance_search":"उन्नत खोज",

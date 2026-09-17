@@ -53,6 +53,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { CreateDiscountModule } from "../theme/create-discount/create-discount.module";
 import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-menu-create-tax.module";
 import { ConvertBillDialogComponent } from "./convert-bill-dialog/convert-bill-dialog.component";
+import { MarkReturnDialogComponent } from "./mark-return-dialog/mark-return-dialog.component";
 import { MatDividerModule } from "@angular/material/divider";
 import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-service/aside-menu-product-service.module";
 import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-invoice.module";
@@ -100,6 +101,9 @@ import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-particular-dialog.component";
+import { DscPinDialogComponent } from "./dsc-pin-dialog/dsc-pin-dialog.component";
+import { BatchSelectDialogComponent } from "./batch-select-dialog/batch-select-dialog.component";
+import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-list.component";
 
 @NgModule({
     declarations: [
@@ -121,10 +125,12 @@ import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-par
         PrintVoucherComponent,
         TemplateEditFilterComponent,
         ConvertBillDialogComponent,
+        MarkReturnDialogComponent,
         FullAddressComponent,
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
         AllTemplatesComponent,
+        DscPinDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -132,6 +138,8 @@ import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-par
         RouterModule,
         FormsModule,
         FormFieldsModule,
+        BatchSelectDialogComponent,
+        BatchChipListComponent,
         VouchersRoutingModule,
         MatTabsModule,
         MatTableModule,

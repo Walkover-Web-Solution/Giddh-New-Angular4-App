@@ -16,17 +16,17 @@
         </span>
     </div>
     <div class="container-fluid clear-both">
-        <div class="top-bar" *ngIf="step <= 3">
-            <p class="section-title" *ngIf="step === 1"></p>
-            <p class="section-title" *ngIf="step === 2">{{ localeData?.map_fields }}</p>
-            <p class="section-title" *ngIf="step === 3">{{ localeData?.import_data }}</p>
+        <div class="top-bar" *ngIf="step() <= 3">
+            <p class="section-title" *ngIf="step() === 1"></p>
+            <p class="section-title" *ngIf="step() === 2">{{ localeData?.map_fields }}</p>
+            <p class="section-title" *ngIf="step() === 3">{{ localeData?.import_data }}</p>
         </div>
     </div>
 
     <div class="clear-both col-xs-12 col-sm-12" *ngIf="localeData?.page_heading">
         <div class="col-xs-12 col-sm-12 p-0">
             <div class="clear-both">
-                <div [ngSwitch]="step">
+                <div [ngSwitch]="step()">
                     <div *ngSwitchCase="1">
                         <upload-file
                             [isLoading]="isUploadInProgress"

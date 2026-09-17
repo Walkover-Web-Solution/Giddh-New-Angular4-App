@@ -387,18 +387,14 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public loadDetails(item: SalesAddBulkStockItems, requestObject: any, index: number): void {
         this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
-                // Take taxes of parent group and stock's own taxes
-                const taxes = data.body.taxes || [];
-                if (data.body.stock) {
-                    taxes.push(...data.body.stock.taxes);
-                }
-
-                // directly assign additional property
+                // Keep account and stock taxes separate (same shape as particular selection)
+                // so fetchTaxesOnPriority can apply stock → stock-group → account → account-group order.
                 item.additional = {
                     ...item.additional,
                     label: item.additional?.name,
                     value: item?.uniqueName,
-                    taxes: taxes,
+                    taxes: data.body.taxes || [],
+                    groupTaxes: data.body.groupTaxes || [],
                     category: data.body.category,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,

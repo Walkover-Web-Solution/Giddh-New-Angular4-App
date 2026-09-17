@@ -116,5 +116,21 @@ export const INVENTORY_API = {
         CREATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment?voucherVersion=2&branchUniqueName=:branchUniqueName', // POST call
         UPDATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment/:refNo?voucherVersion=2&branchUniqueName=:branchUniqueName'
     },
-    INVENTORY_VARIANT_UPDATE: 'v2/company/:companyUniqueName/stock/:stockUniqueName/variant/:variantUniqueName'
+    INVENTORY_VARIANT_UPDATE: 'v2/company/:companyUniqueName/stock/:stockUniqueName/variant/:variantUniqueName',
+    BATCH: {
+        GET_ALL: 'company/:companyUniqueName/batch/all?q=:q&page=:page&count=:count&from=:from&to=:to',
+        CREATE: 'company/:companyUniqueName/batch',
+        GET: 'company/:companyUniqueName/batch/:batchUniqueName',
+        UPDATE: 'company/:companyUniqueName/batch/:batchUniqueName',
+        DELETE: 'company/:companyUniqueName/batch/:batchUniqueName',
+        AVAILABILITY: 'company/:companyUniqueName/batch/availability?uniqueName=:uniqueName&isVariant=:isVariant&page=:page&count=:count&excludeBatchUniqueName=:excludeBatchUniqueName&sort=:sort&sortBy=:sortBy&q=:q&noStock=:noStock',
+        ARCHIVE: 'company/:companyUniqueName/batch/:batchUniqueName/archive',
+        TRANSFER: 'company/:companyUniqueName/batch/transfer'
+    },
+    STOCK_AGING_REPORT: 'v2/company/:companyUniqueName/stock-aging-report?page=:page&count=:count',
+    STOCK_AGING_REPORT_TOTALS: 'v2/company/:companyUniqueName/stock-aging-report/totals',
+    STOCK_AGING_REPORT_DETAILS: 'v2/company/:companyUniqueName/stock-aging-report/:stockUniqueName/details?page=:page&count=:count',
+    STOCK_AGING_REPORT_VARIANTS: 'v2/company/:companyUniqueName/stock-aging-report/:stockUniqueName/variants?page=:page&count=:count',
+    INVENTORY_SETTINGS: 'company/:companyUniqueName/inventory-settings',
+    BUSINESS_DOCUMENT_STATUSES: 'company/:companyUniqueName/business-documents/statuses?documentType=:documentType'
 };

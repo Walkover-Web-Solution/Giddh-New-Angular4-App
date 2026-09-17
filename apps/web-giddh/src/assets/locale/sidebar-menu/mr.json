@@ -7,12 +7,12 @@
             "items": [
                 {
                     "label": "एजिंग रिपोर्ट",
-                    "link": "/pages/contact/aging-report",
+                    "link": "/pages/contact/sales",
                     "icon": "icon-aging-report-new",
                     "description": "मागील दिवस आणि आगामी काळात देय रक्कम",
                     "additional": {
                         "queryParams": {
-                            "tab": "aging-report",
+                            "tab": "sales-aging-report",
                             "tabIndex": 1
                         }
                     }
@@ -239,6 +239,18 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "डिलिवरी चालान",
+                    "link": "/pages/vouchers/preview/delivery-challan/list",
+                    "icon": "icon-E-way-bill",
+                    "description": "डिलिवरी चालान बनाएं",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/delivery-challan/create"
+                        }
+                    }
                 }
             ]
         },
@@ -246,6 +258,18 @@
             "label": "विक्रेता",
             "icon": "icon-vendor",
             "items": [
+                {
+                    "label": "एजिंग रिपोर्ट",
+                    "link": "/pages/contact/purchase",
+                    "icon": "icon-aging-report-new",
+                    "description": "मागील दिवस आणि आगामी काळात देय रक्कम",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "purchase-aging-report",
+                            "tabIndex": 1
+                        }
+                    }
+                },
                 {
                     "label": "बिल",
                     "link": "/pages/purchase-management/purchase/bill",
@@ -484,6 +508,21 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "रिसीप्ट नोट",
+                    "link": "/pages/vouchers/preview/receipt-note/list",
+                    "icon": "icon-reciept-new",
+                    "description": "रिसीप्ट नोट बनाएं",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/receipt-note/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -606,6 +645,7 @@
         {
             "label": "अहवाल",
             "icon": "icon-reports",
+            "route": "/pages/all-reports",
             "items": [
                 {
                     "label": "ताळेबंद",

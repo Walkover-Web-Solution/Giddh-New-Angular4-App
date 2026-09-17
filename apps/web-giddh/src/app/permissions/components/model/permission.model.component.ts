@@ -8,8 +8,9 @@ import { INewRoleFormObj, IPage, IPageStr, NewRoleFormClass } from '../../permis
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { PermissionState } from 'apps/web-giddh/src/app/store/permission/permission.reducer';
 import { IRoleCommonResponseAndRequest } from 'apps/web-giddh/src/app/models/api-models/Permission';
-import { IOption } from '../../../app.constant';
-import { filter, find, forEach, omit } from '../../../lodash-optimized';
+import { IOption, isSelectedAllOption } from '../../../app.constant';
+import { cloneDeep, filter, find, forEach, omit } from '../../../lodash-optimized';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'permission-model',
@@ -31,12 +32,18 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds Fresh options list */
     public isFreshOptions = [];
-    /** Holds Selected permissions */
-    public selectedValues: any;
+    /** Selected page names, or [SELECTED_ALL_OPTION] when All is chosen */
+    public selectedValues: Array<string | number> = [];
     /** Role options for reactive-dropdown-field */
     public roleOptions: IOption[] = [];
+    /** Page dropdown options with capitalized labels */
+    public pageOptions: IOption[] = [];
 
-    constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
+    constructor(
+        private store: Store<AppState>,
+        private permissionActions: PermissionActions,
+        private generalService: GeneralService
+    ) {
     }
 
     get isFormValid() {
@@ -77,9 +84,15 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
             }
             this.newRoleObj.isSelectedAllPages = false;
             this.newRoleObj.pageList = [];
+            this.pageOptions = [];
+            this.selectedValues = [];
             if (p.pages && p.pages.length) {
                 (Array.isArray(p.pages) ? p.pages : []).forEach((page: IPageStr) => {
                     this.newRoleObj.pageList.push({ name: page, isSelected: false });
+                    this.pageOptions.push({
+                        value: page as string,
+                        label: this.capitalizePageName(page as string)
+                    });
                 });
             }
         });
@@ -110,36 +123,33 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
      */
     public addNewRole() {
         if (this.isFormValid) {
+            this.onPagesSelected(this.selectedValues);
             let data;
             if (this.newRoleObj.isFresh) {
-                data = omit(this.newRoleObj, 'uniqueName');
+                data = omit(cloneDeep(this.newRoleObj), 'uniqueName');
+                data.selectedValues = this.selectedValues;
             } else {
-                data = omit(this.newRoleObj, 'pageList');
+                data = omit(cloneDeep(this.newRoleObj), 'pageList');
             }
+            this.generalService.replaceSelectedAllOptions(data);
             this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
             this.closeEvent.emit('save');
         }
     }
 
     /**
-     * Select all pages
+     * Syncs pageList.isSelected from the dropdown value, including All.
      *
-     * @param {*} event
+     * @param {Array<string | number>} selected
      * @memberof PermissionModelComponent
      */
-    public selectAllPages(event): void {
-        if (event.checked) {
-            this.selectedValues = [];
-            (Array.isArray(this.newRoleObj.pageList) ? this.newRoleObj.pageList : []).forEach((item: IPage) => {
-                item.isSelected = true;
-                this.selectedValues.push(item);
-            });
-            this.newRoleObj.isSelectedAllPages = true;
-        } else {
-            this.selectedValues = [];
-            (Array.isArray(this.newRoleObj.pageList) ? this.newRoleObj.pageList : []).forEach((item: IPage) => item.isSelected = false);
-            this.newRoleObj.isSelectedAllPages = false;
-        }
+    public onPagesSelected(selected: Array<string | number>): void {
+        this.selectedValues = selected ?? [];
+        const selectAll = isSelectedAllOption(this.selectedValues);
+        (Array.isArray(this.newRoleObj.pageList) ? this.newRoleObj.pageList : []).forEach((item: IPage) => {
+            item.isSelected = selectAll || this.selectedValues.includes(item.name);
+        });
+        this.newRoleObj.isSelectedAllPages = selectAll || this.getSelectedPagesCount() === this.newRoleObj.pageList?.length;
     }
 
     /**
@@ -149,6 +159,9 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
      * @memberof PermissionModelComponent
      */
     public getSelectedPagesCount(): number {
+        if (isSelectedAllOption(this.selectedValues)) {
+            return this.newRoleObj.pageList?.length || 0;
+        }
         const selectedPages = this.newRoleObj.pageList.filter((item: IPage) => item.isSelected);
         return selectedPages?.length || 0;
     }
@@ -192,5 +205,20 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     public get selectedRoleName(): string {
         const selectedRole = this.roleOptions.find(role => role.value === this.newRoleObj.uniqueName);
         return selectedRole ? selectedRole.label : '';
+    }
+
+    /**
+     * Capitalizes a page name the same way as the capitalize pipe.
+     *
+     * @private
+     * @param {string} name
+     * @returns {string}
+     * @memberof PermissionModelComponent
+     */
+    private capitalizePageName(name: string): string {
+        if (!name) {
+            return '';
+        }
+        return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
     }
 }

@@ -25,6 +25,10 @@ import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/gen
 import { TagsModule } from "../../settings/tags/tags.module";
 import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
 import { GoToBranchComponent } from '../go-to-branch/go-to-branch.component';
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
     declarations: [
@@ -60,7 +64,11 @@ import { GoToBranchComponent } from '../go-to-branch/go-to-branch.component';
         MatTooltipModule,
         TagsModule,
         GiddhDatePipe,
-        GoToBranchComponent
+        GoToBranchComponent,
+        MatSlideToggleModule,
+        MatRadioModule,
+        MatFormFieldModule,
+        MatSelectModule
     ],
     providers: [
         GiddhDatePipe

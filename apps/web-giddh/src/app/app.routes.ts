@@ -107,6 +107,7 @@ export const ROUTES: Routes = [
             { path: 'email-forwarding', loadChildren: () => import('./email-forwarding/email-forwarding.module').then(m => m.BankStatementModule), canActivate: [NeedsAuthorization] },
             { path: 'budget-forecasting', loadComponent: () => import('./budget-forecasting/budget-forecasting.component').then(m => m.BudgetForecastingComponent), canActivate: [NeedsAuthorization] },
             { path: 'bank-reconciliation', loadComponent: () => import('./bank-reconciliation/bank-reconciliation.component').then(m => m.BankReconciliationComponent), canActivate: [NeedsAuthorization] },
+            { path: 'all-reports', loadComponent: () => import('./all-reports/all-reports.component').then(m => m.AllReportsComponent), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

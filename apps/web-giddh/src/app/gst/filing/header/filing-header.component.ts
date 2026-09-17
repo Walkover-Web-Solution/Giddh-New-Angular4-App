@@ -60,6 +60,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public gstSessionResponse$: Observable<any> = of({});
     public isTaxproAuthenticated: boolean = false;
     public isVayanaAuthenticated: boolean = false;
+    public isExcellonAuthenticated: boolean = false;
     /** Returns the enum to be used in template */
     public get GstReport() {
         return GstReport;
@@ -137,6 +138,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             if (a) {
                 this.isTaxproAuthenticated = a.taxpro;
                 this.isVayanaAuthenticated = a.vayana;
+                this.isExcellonAuthenticated = a.excellon;
             }
         });
 
@@ -153,10 +155,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                     this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
                 }
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
-            }
-            this.selectedGst = params['return_type'];
-            if (!this.router.url.includes('transaction') && !this.router.url.includes('hsn-summary')) {
-                this.getOverView();
+                this.selectedGst = params['return_type'];
+                if (!this.router.url.includes('transaction') && !this.router.url.includes('hsn-summary')) {
+                    this.getOverView();
+                }
             }
         });
     }
@@ -200,25 +202,14 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             if (this.gstAuthenticated) {
                 this.fileGstReturnV2();
             } else {
-                this.openSettingAsidePane(null, this.taxServiceEnum.TAXPRO);
+                this.openSettingAsidePane(null, this.taxServiceEnum.EXCELLON);
             }
         }
 
         if (s && s.fileGstr3b && s.fileGstr3b.currentValue?.via) {
-            let gsp = s.fileGstr3b.currentValue.via;
-            if (this.gstAuthenticated) {
-                if (gsp === this.taxServiceEnum.VAYANA && this.isVayanaAuthenticated) {
-                    this.fileGstr3B(gsp);
-                } else if (gsp === this.taxServiceEnum.VAYANA && !this.isVayanaAuthenticated) {
-                    this.openSettingAsidePane(null, gsp);
-                }
-
-                if (gsp === this.taxServiceEnum.TAXPRO && this.isTaxproAuthenticated) {
-                    this.fileGstr3B(gsp);
-                } else if (gsp === this.taxServiceEnum.TAXPRO && !this.isTaxproAuthenticated) {
-                    this.openSettingAsidePane(null, gsp);
-                }
-
+            const gsp = s.fileGstr3b.currentValue.via;
+            if (this.gstAuthenticated && this.isGspAuthenticated(gsp)) {
+                this.fileGstr3B(gsp);
             } else {
                 this.openSettingAsidePane(null, gsp);
             }
@@ -274,7 +265,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public fileGstReturn(Via: 'JIO_GST' | 'TAXPRO' | 'VAYANA') {
+    public fileGstReturn(Via: 'JIO_GST' | 'TAXPRO' | 'VAYANA' | 'EXCELLON') {
         if (this.activeCompanyGstNumber) {
             this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
         } else {
@@ -283,20 +274,61 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public fileGstReturnV2() {
+        const gsp = this.getActiveGsp();
         if (this.selectedGst === GstReport.Gstr1) {
             this.store.dispatch(this.gstReconcileActions.FileGstr1({
                 gstin: this.activeCompanyGstNumber,
                 from: this.currentPeriod.from,
                 to: this.currentPeriod.to,
-                gsp: this.isVayanaAuthenticated ? this.taxServiceEnum.VAYANA : this.taxServiceEnum.TAXPRO,
+                gsp,
                 currentDateTime: this.generalService.getCurrentDateTime()
             }));
         }
         if (this.selectedGst === GstReport.Gstr3b) {
-            let gsp;
-            gsp = this.isVayanaAuthenticated ? this.taxServiceEnum.VAYANA : this.taxServiceEnum.TAXPRO;
             this.fileGstr3B(gsp);
         }
+    }
+
+    /**
+     * Checks whether the given GSP provider has an active authenticated session.
+     * Session flags are populated from `gstR.gstSessionResponse` (GET session on load or OTP verify).
+     *
+     * @param {TaxServiceType} gsp - GSP provider to validate (TAXPRO, VAYANA, or EXCELLON)
+     * @returns {boolean} True when the matching provider flag is set in the store
+     * @memberof FilingHeaderComponent
+     */
+    private isGspAuthenticated(gsp: TaxServiceType): boolean {
+        if (gsp === this.taxServiceEnum.EXCELLON) {
+            return this.isExcellonAuthenticated;
+        }
+        if (gsp === this.taxServiceEnum.VAYANA) {
+            return this.isVayanaAuthenticated;
+        }
+        if (gsp === this.taxServiceEnum.TAXPRO) {
+            return this.isTaxproAuthenticated;
+        }
+        return false;
+    }
+
+    /**
+     * Resolves which GSP provider to use when filing a return.
+     * Picks the first authenticated provider in priority order: EXCELLON → VAYANA → TAXPRO.
+     * Falls back to EXCELLON when none are authenticated (e.g. before OTP flow completes).
+     *
+     * @returns {TaxServiceType} GSP value sent to file-gstr1 / save-gstr3b APIs
+     * @memberof FilingHeaderComponent
+     */
+    private getActiveGsp(): TaxServiceType {
+        if (this.isExcellonAuthenticated) {
+            return this.taxServiceEnum.EXCELLON;
+        }
+        if (this.isVayanaAuthenticated) {
+            return this.taxServiceEnum.VAYANA;
+        }
+        if (this.isTaxproAuthenticated) {
+            return this.taxServiceEnum.TAXPRO;
+        }
+        return this.taxServiceEnum.EXCELLON;
     }
 
     public fileGstr3B(via) {

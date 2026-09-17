@@ -21,7 +21,10 @@
         "custom_price":"Custom Price",
         "customer_wise":"Customer Wise",
         "vendor_wise":"Vendor Wise",
-        "inventory_adjustment":"Inventory Adjustment"
+        "inventory_adjustment":"Inventory Adjustment",
+        "stock_aging_report":"Aging Report",
+        "batch_report":"Batch Report",
+        "inventory_settings":"Inventory Settings"
     },
     "reports":{
         "transaction_count":"Transaction Count",
@@ -52,6 +55,7 @@
         "closing_amount":"Closing Value",
         "stock_name":"Stock Name",
         "variant_name":"Variant Name",
+        "batch":"Batch",
         "no_entries_found_1":"No entries found within given criteria.",
         "no_entries_found_2":"Do search with some other dates",
         "voucher_type":"Voucher Type",
@@ -78,7 +82,10 @@
         "customise":"Customise",
         "no_result_found":"No result found",
         "select_all":"Select All",
-        "select_account_group":"Select Account Group"
+        "select_account_group":"Select Account Group",
+        "report_as_per":"Report as per",
+        "books":"Books",
+        "inventory":"Inventory"
     },
     "advance_search_filter":{
         "advance_search":"Advance Search",

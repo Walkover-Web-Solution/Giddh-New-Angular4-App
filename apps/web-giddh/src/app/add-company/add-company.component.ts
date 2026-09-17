@@ -1112,6 +1112,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.socketCompanyRequest.utm_campaign = this.generalService.getUtmParameter('utm_campaign');
         this.socketCompanyRequest.utm_term = this.generalService.getUtmParameter('utm_term');
         this.socketCompanyRequest.utm_content = this.generalService.getUtmParameter('utm_content');
+        this.socketCompanyRequest.ref = this.generalService.getUtmParameter('ref');
         this.socketCompanyRequest.BusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
         this.companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => { });
         this.generalService.removeUtmParameters();
@@ -1132,6 +1133,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             campaign: this.generalService.getUtmParameter('utm_campaign'),
             term: this.generalService.getUtmParameter('utm_term'),
             content: this.generalService.getUtmParameter('utm_content'),
+            ref: this.generalService.getUtmParameter('ref'),
             country: this.company.country
         };
         this.companyService.sendNewUserInfo(newUserInfo).pipe(take(1)).subscribe(response => { });

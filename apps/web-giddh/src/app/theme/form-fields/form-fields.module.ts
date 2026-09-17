@@ -25,8 +25,10 @@ import { MatButtonModule } from "@angular/material/button";
 import { InputFieldComponent } from "./input-field/input-field.component";
 import { ReactiveDropdownFieldComponent } from "./reactive-dropdown-field/reactive-dropdown-field.component";
 import { OptionsScrollDirective } from "./reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
+import { MultiSelectDropdownComponent } from "./multi-select-dropdown/multi-select-dropdown.component";
 import { MatDividerModule } from "@angular/material/divider";
 import { A11yModule } from "@angular/cdk/a11y";
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 
 @NgModule({
     declarations: [
@@ -35,7 +37,8 @@ import { A11yModule } from "@angular/cdk/a11y";
         SelectMultipleFieldsComponent,
         InputFieldComponent,
         ReactiveDropdownFieldComponent,
-        OptionsScrollDirective
+        OptionsScrollDirective,
+        MultiSelectDropdownComponent
     ],
     imports: [
         CommonModule,
@@ -60,7 +63,8 @@ import { A11yModule } from "@angular/cdk/a11y";
         MatMenuModule,
         MatButtonModule,
         MatDividerModule,
-        A11yModule
+        A11yModule,
+        NgxMatSelectSearchModule
     ],
     exports: [
         TextFieldComponent,
@@ -68,7 +72,8 @@ import { A11yModule } from "@angular/cdk/a11y";
         SelectMultipleFieldsComponent,
         MatFormFieldModule,
         InputFieldComponent,
-        ReactiveDropdownFieldComponent
+        ReactiveDropdownFieldComponent,
+        MultiSelectDropdownComponent
     ]
 })
 

@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Inject, ChangeDetectorRef } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     GstOverViewRequest,
@@ -41,6 +41,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public gstr3BData: Gstr3bOverviewResult2;
     public currentPeriod: GstDatePeriod = null;
     public selectedGstr: string = null;
+    /** Holds the GST report type that should be auto-navigated to (when URL lacks from/to).
+     *  Passed to <tax-sidebar> which uses its own currentPeriod to build the full URL. */
+    public pendingNavigateType: string = null;
     public gstNumber: string = null;
     public activeCompanyGstNumber: string = '';
     public selectedMonth: any = null;
@@ -100,6 +103,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public isTabScreen: boolean = false;
     /** Holds selected service */
     public selectedService: TaxServiceType;
+    /** Holds Tax Service Enum */
+    public taxServiceEnum = TaxServiceEnum;
     /** Holds aside authentication dialog ref */
     public asideAuthenticationDialogRef: MatDialogRef<any>;
     /** Holds cancel confirmation dialog ref */
@@ -122,6 +127,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private dialog: MatDialog,
         private componentStore: GstComponentStore,
+        private cdr: ChangeDetectorRef,
         @Inject(ServiceConfig) private serviceConfig
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(state => state.gstR.gstAuthenticated), takeUntil(this.destroyed$));
@@ -142,11 +148,17 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.showGstFiling = true;
         }
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
                 to: params['to']
             };
+            if (params['return_type'] && (!params['from'] || !params['to'])) {
+                this.pendingNavigateType = params['return_type'];
+                return;
+            } else {
+                this.pendingNavigateType = null;
+            }
             if (params['selectedGst']) {
                 this.activeCompanyGstNumber = params['selectedGst'];
                 this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
@@ -159,6 +171,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             }
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
+            this.cdr.detectChanges();
         });
 
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
@@ -175,7 +188,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             request.gstin = this.activeCompanyGstNumber;
 
             this.gstr3BOverviewDataFetchedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(bool => {
-                if (!bool && !this.dateSelected) {
+                if (!bool && !this.dateSelected && this.currentPeriod.from && this.currentPeriod.to) {
                     this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr3b, request));
                 }
             });
@@ -795,7 +808,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof FilingHeaderComponent
      */
     public openSettingAsidePane(): void {
-        this.selectedService = TaxServiceEnum.TAXPRO;
+        this.selectedService = TaxServiceEnum.EXCELLON;
         this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {...ASIDE_PANE_CONFIG, autoFocus: false});
     }
 
@@ -822,7 +835,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.componentStore.fileGstr3B({
             period: this.currentPeriod,
             gstNumber: this.activeCompanyGstNumber,
-            via: TaxServiceEnum.TAXPRO,
+            via: TaxServiceEnum.EXCELLON,
             monthYear,
             currentDateTime
         });

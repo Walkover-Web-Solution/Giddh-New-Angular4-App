@@ -11,6 +11,7 @@ export const COMPANY_API = {
     GET_ACCOUNT_COUNTRIES: 'country/company/:companyUniqueName/account-countries',
     UNIVERSAL_DATE: 'company/:companyUniqueName/entry-settings',
     DOWNLOAD_CSV: 'v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance?from=:from&to=:to&sortBy=:sortBy&sort=:sort',
+    DOWNLOAD_XLSX: 'v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance?from=:from&to=:to&sortBy=:sortBy&sort=:sort',
     REGISTER_ACCOUNT: 'company/:companyUniqueName/bank/',
 
     BUSINESS_NATURE_LIST: 'business-nature',
@@ -47,5 +48,7 @@ export const COMPANY_API = {
     GET_SIDE_BAR_ITEM: 'company/:companyUniqueName/ui_side_bar_items',
     GET_COMPANY_USER: 'users/:userUniqueName/company-uer?companyUniqueName=:companyUniqueName',
     SEND_NEW_USER_INFO: 'users/send-new-user-info',
-    GET_COUNTRY_LIST_BY_SUBSCRIPTION_ID:'v2/subscription/:subscriptionId/country-list'
+    GET_COUNTRY_LIST_BY_SUBSCRIPTION_ID:'v2/subscription/:subscriptionId/country-list',
+    SEND_DATA: 'send-data'
+
 };

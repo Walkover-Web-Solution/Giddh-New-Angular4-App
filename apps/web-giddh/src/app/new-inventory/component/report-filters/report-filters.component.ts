@@ -5,12 +5,13 @@ import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable, ReplaySubject, of as observableOf, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../../app.constant";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, isSelectedAllOption } from "../../../app.constant";
 import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest, StockTransactionReportRequestExport } from "../../../models/api-models/Inventory";
 import { NewInventoryAdvanceSearch } from "../new-inventory-advance-search/new-inventory-advance-search.component";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { InventoryService } from "../../../services/inventory.service";
+import { CommonService } from "../../../services/common.service";
 import { GeneralService } from "../../../services/general.service";
 import { OrganizationType } from "../../../models/user-login-state";
 import { ToasterService } from "../../../services/toaster.service";
@@ -18,9 +19,9 @@ import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
 import { Router } from "@angular/router";
-import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
+import { InventoryModuleName, InventoryReportType, ReportNature } from "../../inventory.enum";
 import { InventoryComponentStore } from "../inventory.store";
-import { cloneDeep, concat, filter, find, forEach, includes, indexOf, map, some } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: "report-filters",
@@ -70,12 +71,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
     /** Emits the selected custom fields filters */
     @Output() public selectedDynamicColumns: EventEmitter<any> = new EventEmitter();
+    /** Emits when report nature (Books/Inventory) is changed */
+    @Output() public reportNatureChange: EventEmitter<string> = new EventEmitter();
     /** True if show advance search model*/
     public showAdvanceSearchModal: boolean = false;
-    /** This will use for instance of warehouses Dropdown */
-    public warehousesDropdown: UntypedFormControl = new UntypedFormControl();
-    /** This will use for instance of branches Dropdown */
-    public branchesDropdown: UntypedFormControl = new UntypedFormControl();
     /** Search field form control */
     public searchFilters: UntypedFormControl = new UntypedFormControl();
 /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -100,8 +99,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public warehouses: any[] = [];
     /** Hold branches checked  */
     public selectedBranch: any[] = [];
-    /**Hold branches */
-    public branches: any[] = [];
     /** Hold all warehouses */
     public allWarehouses: any[] = [];
     /** Hold all warehouses */
@@ -150,12 +147,17 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public dynamicCustomColumns: any[] = [];
     /** Hide selected options from dropdown list */
     public hideSelectedOptions: boolean = true;
+    /** True if report nature is Inventory, false if Books */
+    public reportAsPerInventory: boolean = false;
+    /** Inventory module name */
+    public inventoryModuleName: typeof InventoryModuleName = InventoryModuleName;
 
     constructor(
         public dialog: MatDialog,
         private location: Location,
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
+        private commonService: CommonService,
         private generalService: GeneralService,
         private toaster: ToasterService,
         private store: Store<AppState>,
@@ -226,22 +228,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
         this.getBranchWiseWarehouse();
 
-        this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            let branchesClone = cloneDeep(this.allBranches);
-            if (search) {
-                branchesClone = this.allBranches?.filter(branch => (branch.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
-            }
-            this.branches = branchesClone;
-        });
-
-        this.warehousesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            let warehousesClone = cloneDeep(this.currentWarehouses);
-            if (search) {
-                warehousesClone = this.currentWarehouses?.filter(warehouse => (warehouse.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
-            }
-            this.warehouses = warehousesClone;
-        });
-
         this.searchFilters?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -262,6 +248,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.moduleName?.currentValue && changes?.moduleName?.currentValue !== changes?.moduleName?.previousValue) {
+            this.getReportNature();
+        }
         if (changes?.fromToDate?.currentValue?.from) {
             this.selectedDateRange = { startDate: dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT), endDate: dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT) };
             this.selectedDateRangeUi = dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -565,7 +554,61 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             mappedDynamicValues = this.displayedColumns;
         }
-        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: mappedDynamicValues, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse, stockReportRequestExport: this.stockReportRequestExport });
+        this.filters.emit({
+            stockReportRequest: this.stockReportRequest,
+            balanceStockReportRequest: this.balanceStockReportRequest,
+            displayedColumns: mappedDynamicValues,
+            todaySelected: this.todaySelected,
+            showClearFilter: this.showClearFilter,
+            advanceSearchModalResponse: this.advanceSearchModalResponse,
+            stockReportRequestExport: this.stockReportRequestExport
+        });
+    }
+
+    /**
+     * Fetches saved report nature (Books/Inventory) from report-filters API
+     *
+     * @memberof ReportFiltersComponent
+     */
+    public getReportNature(): void {
+        if (!this.moduleName || this.moduleName === InventoryModuleName.transaction) {
+            return;
+        }
+        // Prefer current module; fall back to item-wise so Settings and all report tabs stay aligned
+        this.commonService.getSelectedTableColumns(this.moduleName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success' && response?.body?.reportNature) {
+                this.reportAsPerInventory = response.body.reportNature === ReportNature.Inventory;
+                this.changeDetection.detectChanges();
+                return;
+            }
+        });
+    }
+
+    /**
+     * Saves report nature for the current module and refreshes report data
+     *
+     * @param {*} event
+     * @memberof ReportFiltersComponent
+     */
+    public onReportNatureChange(event: any): void {
+        if (!this.moduleName || this.moduleName === InventoryModuleName.transaction) {
+            return;
+        }
+        this.reportAsPerInventory = event?.checked;
+        const reportNature = this.reportAsPerInventory ? ReportNature.Inventory : ReportNature.Books;
+        this.isLoading.emit(true);
+        this.commonService.saveSelectedTableColumns({ module: this.moduleName, reportNature }).pipe(take(1)).subscribe(response => {
+            this.isLoading.emit(false);
+            if (response?.status === 'success') {
+                this.reportNatureChange.emit(reportNature);
+            } else {
+                this.reportAsPerInventory = !this.reportAsPerInventory;
+                if (response?.message) {
+                    this.toaster.errorToast(response.message);
+                }
+                this.changeDetection.detectChanges();
+            }
+        });
     }
 
     /**
@@ -657,7 +700,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if (response && response.body) {
                 this.allBranchWarehouses = response.body;
                 this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
-                this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
                 if (!this.isCompany && !this.isConsolidatedBranch) {
@@ -687,11 +729,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses);
             });
         }
-        if (this.selectedBranch?.length === 0) {
+        if (this.selectedBranch?.length === 0 || isSelectedAllOption(this.selectedBranch)) {
             this.warehouses = this.allWarehouses;
         } else {
             let warehouses = [];
-            this.branches?.filter(value => this.selectedBranch?.includes(value?.uniqueName))?.forEach((branches) => {
+            this.allBranches?.filter(value => this.selectedBranch?.includes(value?.uniqueName))?.forEach((branches) => {
                 warehouses = warehouses?.concat(branches?.warehouses);
             });
             this.warehouses = warehouses;

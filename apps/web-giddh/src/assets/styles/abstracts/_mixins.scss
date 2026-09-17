@@ -1029,6 +1029,46 @@
     }
 }
 
+/**
+ * List style mixin
+ *
+ * @param {String} $value - The list-style value
+ * @param {Boolean} $important - Whether to add !important flag (default: true)
+ */
+@mixin list-style($value, $important: true) {
+    $importance: if($important, ' !important', '');
+    list-style: #{$value}#{$importance};
+}
+
+/**
+ * List style utility mixin
+ * Generates utility classes for list-style property
+ *
+ * @param {Map} $styles - Map of class suffixes and their corresponding list-style values
+ */
+@mixin list-style-utilities(
+    $styles: (
+        'none': none,
+        'disc': disc,
+        'circle': circle,
+        'square': square,
+        'decimal': decimal,
+        'decimal-leading-zero': decimal-leading-zero,
+        'lower-roman': lower-roman,
+        'upper-roman': upper-roman,
+        'lower-alpha': lower-alpha,
+        'upper-alpha': upper-alpha,
+        'unset': unset,
+        'inherit': inherit,
+    )
+) {
+    @each $name, $value in $styles {
+        .list-style-#{$name} {
+            @include list-style($value);
+        }
+    }
+}
+
 @mixin word-wrap($value) {
     @if $value ==unset {
         word-wrap: unset !important;

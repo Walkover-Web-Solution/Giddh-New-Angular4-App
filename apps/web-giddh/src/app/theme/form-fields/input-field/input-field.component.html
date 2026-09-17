@@ -33,7 +33,7 @@
             #textField
             (keydown.enter)="handleEnterKey($event)"
             [autocomplete]="autocomplete"
-            (blur)="emitBlurEvent()"
+            (blur)="emitBlurEvent($event)"
             [ngClass]="{ 'error-box': showError }"
         />
         <input
@@ -61,7 +61,7 @@
             #textField
             (keydown.enter)="handleEnterKey($event)"
             [autocomplete]="autocomplete"
-            (blur)="emitBlurEvent()"
+            (blur)="emitBlurEvent($event)"
             [ngClass]="{ 'error-box': showError }"
         />
         <input
@@ -91,7 +91,7 @@
             #textField
             (keydown.enter)="handleEnterKey($event)"
             [autocomplete]="autocomplete"
-            (blur)="emitBlurEvent()"
+            (blur)="emitBlurEvent($event)"
             [ngClass]="{ 'error-box': showError }"
         />
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
