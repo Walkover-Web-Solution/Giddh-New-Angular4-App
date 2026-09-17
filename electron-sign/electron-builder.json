@@ -32,7 +32,7 @@
         "!**/{appveyor.yml,.travis.yml,circle.yml}",
         "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "afterSign": "../../../electron-sign/notarize.js",
+    "afterSign": "./notarize.js",
     "mac": {
         "category": "public.app-category.finance",
         "target": [
@@ -42,8 +42,8 @@
         "identity": null,
         "hardenedRuntime": true,
         "gatekeeperAssess": false,
-        "entitlements": "../../../electron-sign/entitlements.mac.plist",
-        "entitlementsInherit": "../../../electron-sign/entitlements.mac.plist",
+        "entitlements": "./entitlements.mac.plist",
+        "entitlementsInherit": "./entitlements.mac.plist",
         "icon": "icon.icns"
     },
     "dmg": {
