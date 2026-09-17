@@ -23,7 +23,8 @@
         "vendor_wise":"विक्रेता समझदार",
         "inventory_adjustment":"माल - सूची का समायोजन",
         "stock_aging_report":"एजिंग रिपोर्ट",
-        "batch_report":"बैच रिपोर्ट"
+        "batch_report":"बैच रिपोर्ट",
+        "inventory_settings":"इन्वेंटरी सेटिंग्स"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",
@@ -80,7 +81,10 @@
         "customise":"अनुकूलित करें",
         "no_result_found":"कोई परिणाम नहीं मिला",
         "select_all":"सबका चयन करें",
-        "select_account_group":"खाता समूह चुनें"
+        "select_account_group":"खाता समूह चुनें",
+        "report_as_per":"रिपोर्ट के अनुसार",
+        "books":"पुस्तकें",
+        "inventory":"इन्वेंटरी"
     },
     "advance_search_filter":{
         "advance_search":"उन्नत खोज",

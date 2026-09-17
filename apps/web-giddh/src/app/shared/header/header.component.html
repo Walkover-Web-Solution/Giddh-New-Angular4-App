@@ -292,6 +292,40 @@
                                                 </li>
                                             </ul>
                                         </div>
+                                        <div
+                                            *ngIf="
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
+                                                (currentCompanyBranches?.length <= 1 &&
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
+                                            "
+                                        >
+                                            <div class="mt-4 mb-1 d-flex align-items-center">
+                                                <span class="d-flex">
+                                                    <i class="icon-inventory theme-foreground-color mr-2"></i>
+                                                </span>
+                                                <span>{{ localeData?.inventory }}</span>
+                                            </div>
+                                            <ul class="d-flex column-gap-2">
+                                                <li>
+                                                    <span class="dot d-block"></span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/delivery-challan/create')"
+                                                    >
+                                                        {{ localeData?.delivery_challan }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <span class="dot d-block"></span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/receipt-note/create')"
+                                                    >
+                                                        {{ localeData?.receipt_note }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                         @if (
                                             currentCompanyBranches?.length > 1 &&
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)

@@ -39,6 +39,12 @@ import {
 } from '../models/api-models/BranchTransfer';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { cloneDeep, concat, get } from '../lodash-optimized';
+import {
+    BusinessDocumentStatus,
+    BusinessDocumentType,
+    InventorySettingsResponse,
+    InventorySettingsUpdateRequest
+} from '../models/api-models/InventorySettings';
 
 declare var _: any;
 
@@ -2004,6 +2010,44 @@ export class InventoryService {
     }
 
     /**
+     * Fetches inventory settings for the active company.
+     *
+     * @returns {Observable<BaseResponse<InventorySettingsResponse, string>>}
+     * @memberof InventoryService
+     */
+    public getInventorySettings(): Observable<BaseResponse<InventorySettingsResponse, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.INVENTORY_SETTINGS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.get(url).pipe(
+            map((response) => response as BaseResponse<InventorySettingsResponse, string>),
+            catchError((error) => this.errorHandler.HandleCatch<InventorySettingsResponse, string>(error, ''))
+        );
+    }
+
+    /**
+     * Updates inventory settings for the active company.
+     *
+     * @param {InventorySettingsUpdateRequest} model Inventory settings payload
+     * @returns {Observable<BaseResponse<string, InventorySettingsUpdateRequest>>}
+     * @memberof InventoryService
+     */
+    public updateInventorySettings(model: InventorySettingsUpdateRequest): Observable<BaseResponse<string, InventorySettingsUpdateRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.INVENTORY_SETTINGS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.put(url, model).pipe(
+            map((response) => {
+                const data = response as BaseResponse<string, InventorySettingsUpdateRequest>;
+                data.request = model;
+                return data;
+            }),
+            catchError((error) => this.errorHandler.HandleCatch<string, InventorySettingsUpdateRequest>(error, model))
+        );
+    }
+
+     
+    /**
      * Get all batches with filters and pagination
      *
      * @param {*} queryParams Query params (`q`, `page`, `count`, `from`, `to`)
@@ -2023,6 +2067,24 @@ export class InventoryService {
         );
     }
 
+    /**
+     * Fetches available statuses for a business document.
+     *
+     * @param {BusinessDocumentType} documentType Business document type
+     * @returns {Observable<BaseResponse<BusinessDocumentStatus[], string>>}
+     * @memberof InventoryService
+     */
+    public getBusinessDocumentStatuses(documentType: BusinessDocumentType): Observable<BaseResponse<BusinessDocumentStatus[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BUSINESS_DOCUMENT_STATUSES
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':documentType', encodeURIComponent(documentType));
+        return this.http.get(url).pipe(
+            map((response) => response as BaseResponse<BusinessDocumentStatus[], string>),
+            catchError((error) => this.errorHandler.HandleCatch<BusinessDocumentStatus[], string>(error, ''))
+        );
+    }
+     
     /**
      * Create a batch
      *

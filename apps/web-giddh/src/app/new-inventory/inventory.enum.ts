@@ -13,6 +13,10 @@ export enum InventoryModuleName {
     fixedAssetInventory = 'FIXED_ASSET_INVENTORY_TABLE_REPORT',
     batchReport = 'INVENTORY_BATCH_REPORT'
 }
+export enum ReportNature {
+    Inventory = 'INVENTORY',
+    Books = 'BOOKS'
+}
 export const INVENTORY_COMMON_COLUMNS = [
     {
         "value": "opening_quantity",

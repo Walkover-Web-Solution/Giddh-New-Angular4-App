@@ -28,6 +28,7 @@
                 (isLoading)="isLoading = $event"
                 (selectedColumns)="onSelectedColumns($event)"
                 (selectedDynamicColumns)="onSelectedDynamicColumns($event)"
+                (reportNatureChange)="getReport(true)"
             ></report-filters>
         </div>
         <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">

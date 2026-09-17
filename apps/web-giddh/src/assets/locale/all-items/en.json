@@ -305,6 +305,17 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "Delivery Challan",
+                    "link": "/pages/vouchers/preview/delivery-challan/list",
+                    "icon": "icon-E-way-bill",
+                    "description": "Create delivery challan",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -568,6 +579,17 @@
                     "icon": "icon-invoice-new",
                     "description": "Make bill recurring",
                     "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Receipt Note",
+                    "link": "/pages/vouchers/preview/receipt-note/list",
+                    "icon": "icon-reciept-new",
+                    "description": "Create receipt note",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
