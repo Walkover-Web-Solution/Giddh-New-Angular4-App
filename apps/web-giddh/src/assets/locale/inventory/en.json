@@ -23,7 +23,8 @@
         "vendor_wise":"Vendor Wise",
         "inventory_adjustment":"Inventory Adjustment",
         "stock_aging_report":"Aging Report",
-        "batch_report":"Batch Report"
+        "batch_report":"Batch Report",
+        "inventory_settings":"Inventory Settings"
     },
     "reports":{
         "transaction_count":"Transaction Count",
@@ -81,7 +82,10 @@
         "customise":"Customise",
         "no_result_found":"No result found",
         "select_all":"Select All",
-        "select_account_group":"Select Account Group"
+        "select_account_group":"Select Account Group",
+        "report_as_per":"Report as per",
+        "books":"Books",
+        "inventory":"Inventory"
     },
     "advance_search_filter":{
         "advance_search":"Advance Search",

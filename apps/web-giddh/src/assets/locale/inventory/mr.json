@@ -23,7 +23,8 @@
         "vendor_wise":"विक्रेता शहाणे",
         "inventory_adjustment":"इन्व्हेंटरी समायोजन",
         "stock_aging_report":"एजिंग अहवाल",
-        "batch_report":"बॅच अहवाल"
+        "batch_report":"बॅच अहवाल",
+        "inventory_settings":"इन्व्हेंटरी सेटिंग्ज"
     },
     "reports":{
         "transaction_count":"व्यवहाराची संख्या",
@@ -80,7 +81,10 @@
         "customise":"सानुकूलित करा",
         "no_result_found":"कोणताही परिणाम आढळला नाही",
         "select_all":"सर्व निवडा",
-        "select_account_group":"खाते गट निवडा"
+        "select_account_group":"खाते गट निवडा",
+        "report_as_per":"अहवालानुसार",
+        "books":"पुस्तके",
+        "inventory":"इन्व्हेंटरी"
     },
     "advance_search_filter":{
         "advance_search":"प्रगत शोध",
