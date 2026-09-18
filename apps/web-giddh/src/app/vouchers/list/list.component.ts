@@ -34,6 +34,7 @@ import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
 import { BulkExportComponent } from "../bulk-export/bulk-export.component";
 import { MarkReturnDialogComponent } from "../mark-return-dialog/mark-return-dialog.component";
+import { AdjustInventoryComponent } from "../../new-inventory/component/adjust-inventory/adjust-inventory.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { ServiceConfig } from "../../services/service.config";
@@ -1299,6 +1300,37 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             ? { rnUniqueName: voucher.uniqueName, redirect: listRedirect }
             : { dcUniqueName: voucher.uniqueName, redirect: listRedirect };
         this.router.navigate([`/pages/vouchers/${createVoucherType}/create`], { queryParams });
+    }
+
+    /**
+     * Opens inventory adjustment dialog for delivery challan / receipt note
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
+    public openMakeAdjustmentDialog(voucher: any): void {
+        if (!voucher?.uniqueName) {
+            return;
+        }
+
+        const isReceiptNote = this.voucherType === VoucherTypeEnum.receiptNote;
+        const dialogRef = this.dialog.open(AdjustInventoryComponent, {
+            panelClass: ["mat-dialog-lg"],
+            autoFocus: false,
+            maxHeight: "90vh",
+            data: {
+                ...(isReceiptNote
+                    ? { rnUniqueName: voucher.uniqueName }
+                    : { dcUniqueName: voucher.uniqueName }),
+                inventoryType: "product"
+            }
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe((success) => {
+            if (success) {
+                this.getVouchers(false);
+            }
+        });
     }
 
     /**

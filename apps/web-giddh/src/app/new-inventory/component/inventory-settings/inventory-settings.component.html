@@ -7,13 +7,7 @@
                 [formGroup]="settingsForm"
                 (ngSubmit)="saveSettings()"
                 class="container-lg mx-auto"
-                aria-labelledby="inventory-settings-title"
-                [attr.aria-describedby]="'inventory-settings-subtitle'"
             >
-                <header class="border-radius-4 bg-white p-3 mb-3">
-                    <h1 id="inventory-settings-title" class="font-size-20">{{ localeData().title }}</h1>
-                    <p id="inventory-settings-subtitle" class="text-light mb-0">{{ localeData().subtitle }}</p>
-                </header>
 
                 <section
                     class="border-radius-4 bg-white p-3 mb-3"
@@ -88,23 +82,70 @@
                         {{ localeData().reports }}
                     </h2>
 
-                    <div class="d-flex justify-content-between align-items-center py-4">
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-4">
                         <div class="pr-3">
-                            <p class="mb-1" id="report-as-per-title">{{ localeData().report_as_per }}</p>
-                            <small id="report-as-per-desc" class="text-light">{{ localeData().report_as_per_description }}</small>
+                            <p class="mb-1" id="item-wise-report-title">{{ localeData().item_wise_report }}</p>
+                            <small id="item-wise-report-desc" class="text-light">{{ localeData().item_wise_report_description }}</small>
                         </div>
                         <div
                             class="d-flex align-items-center column-gap-2 flex-shrink-0"
                             role="group"
-                            [attr.aria-labelledby]="'report-as-per-title'"
-                            [attr.aria-describedby]="'report-as-per-desc'"
+                            [attr.aria-labelledby]="'item-wise-report-title'"
+                            [attr.aria-describedby]="'item-wise-report-desc'"
                         >
                             <span class="font-size-14">{{ localeData().books }}</span>
                             <mat-slide-toggle
                                 color="primary"
-                                formControlName="reportAsPerInventory"
-                                [attr.aria-label]="localeData().report_as_per + ': ' + localeData().books + ' / ' + localeData().inventory"
-                                [attr.aria-describedby]="'report-as-per-desc'"
+                                formControlName="itemWiseReport"
+                                (change)="onReportNatureChange('itemWiseReport', $event)"
+                                [attr.aria-label]="localeData().item_wise_report + ': ' + localeData().books + ' / ' + localeData().inventory"
+                                [attr.aria-describedby]="'item-wise-report-desc'"
+                            ></mat-slide-toggle>
+                            <span class="font-size-14">{{ localeData().inventory }}</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-4">
+                        <div class="pr-3">
+                            <p class="mb-1" id="group-wise-report-title">{{ localeData().group_wise_report }}</p>
+                            <small id="group-wise-report-desc" class="text-light">{{ localeData().group_wise_report_description }}</small>
+                        </div>
+                        <div
+                            class="d-flex align-items-center column-gap-2 flex-shrink-0"
+                            role="group"
+                            [attr.aria-labelledby]="'group-wise-report-title'"
+                            [attr.aria-describedby]="'group-wise-report-desc'"
+                        >
+                            <span class="font-size-14">{{ localeData().books }}</span>
+                            <mat-slide-toggle
+                                color="primary"
+                                formControlName="groupWiseReport"
+                                (change)="onReportNatureChange('groupWiseReport', $event)"
+                                [attr.aria-label]="localeData().group_wise_report + ': ' + localeData().books + ' / ' + localeData().inventory"
+                                [attr.aria-describedby]="'group-wise-report-desc'"
+                            ></mat-slide-toggle>
+                            <span class="font-size-14">{{ localeData().inventory }}</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center py-4">
+                        <div class="pr-3">
+                            <p class="mb-1" id="variant-wise-report-title">{{ localeData().variant_wise_report }}</p>
+                            <small id="variant-wise-report-desc" class="text-light">{{ localeData().variant_wise_report_description }}</small>
+                        </div>
+                        <div
+                            class="d-flex align-items-center column-gap-2 flex-shrink-0"
+                            role="group"
+                            [attr.aria-labelledby]="'variant-wise-report-title'"
+                            [attr.aria-describedby]="'variant-wise-report-desc'"
+                        >
+                            <span class="font-size-14">{{ localeData().books }}</span>
+                            <mat-slide-toggle
+                                color="primary"
+                                formControlName="variantWiseReport"
+                                (change)="onReportNatureChange('variantWiseReport', $event)"
+                                [attr.aria-label]="localeData().variant_wise_report + ': ' + localeData().books + ' / ' + localeData().inventory"
+                                [attr.aria-describedby]="'variant-wise-report-desc'"
                             ></mat-slide-toggle>
                             <span class="font-size-14">{{ localeData().inventory }}</span>
                         </div>

@@ -1,6 +1,4 @@
 {
-    "title": "Inventory Settings",
-    "subtitle": "Configure how stock vouchers, batches and document statuses behave across your organisation.",
     "voucher_automation": "Voucher Automation",
     "auto_create_opposite": "Auto-create opposite voucher on Delivery Challan / Receipt Note generation",
     "auto_create_opposite_description": "A Delivery Challan creates a matching Receipt Note at the destination, and a Receipt Note creates a Delivery Challan at the source.",
@@ -15,8 +13,12 @@
     "settings_updated": "Inventory settings updated successfully.",
     "load_error": "Unable to load inventory settings.",
     "reports": "Reports",
-    "report_as_per": "Report as per",
-    "report_as_per_description": "Choose whether inventory reports calculate balances from books or from inventory.",
+    "item_wise_report": "Item Wise Report",
+    "item_wise_report_description": "Choose whether item-wise reports calculate balances from books or from inventory.",
+    "group_wise_report": "Group Wise Report",
+    "group_wise_report_description": "Choose whether group-wise reports calculate balances from books or from inventory.",
+    "variant_wise_report": "Variant Wise Report",
+    "variant_wise_report_description": "Choose whether variant-wise reports calculate balances from books or from inventory.",
     "books": "Books",
     "inventory": "Inventory"
 }

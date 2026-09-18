@@ -56,11 +56,10 @@ import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { ExportInventoryMasterComponent } from "./component/export-inventory-master/export-inventory-master.component";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { AdjustInventoryComponent } from "./component/adjust-inventory/adjust-inventory.component";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/aside-create-reason.component";
+import { AdjustInventoryModule } from "./component/adjust-inventory/adjust-inventory.module";
 import { PreviewVariantImageComponent } from "./component/preview-variant-image/preview-variant-image.component";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
@@ -79,7 +78,6 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         StockGroupListComponent,
         ProductServiceListComponent,
         InventoryTransactionListComponent,
-        AdjustInventoryComponent,
         AdjustInventoryListComponent,
         NewInventoryAdvanceSearch,
         StockBalanceComponent,
@@ -93,8 +91,6 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         BulkStockEditComponent,
         BulkStockAdvanceFilterComponent,
         ExportInventoryMasterComponent,
-        AdjustInventoryComponent,
-        AsideCreateNewReasonComponent,
         PreviewVariantImageComponent,
         StockAgingReportComponent,
         BatchReportComponent,
@@ -148,7 +144,8 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         GiddhDatePipe,
         GoToBranchComponent,
         MatCardModule,
-        AgeRangeEditorComponent
+        AgeRangeEditorComponent,
+        AdjustInventoryModule
     ],
     exports: [
         NewInventoryComponent,
@@ -156,13 +153,12 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         StockGroupListComponent,
         ProductServiceListComponent,
         InventoryTransactionListComponent,
-        AdjustInventoryComponent,
         AdjustInventoryListComponent,
         NewInventoryAdvanceSearch,
         ReportFiltersComponent,
         MatDivider,
         BulkStockAdvanceFilterComponent,
-        AdjustInventoryComponent,
+        AdjustInventoryModule,
         PreviewVariantImageComponent
     ]
 })
