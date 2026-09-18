@@ -20,6 +20,7 @@ import { AccountService } from "../../services/account.service";
 import { SearchService } from "../../services/search.service";
 import { InvoiceReceiptFilter } from '../../models/api-models/recipt';
 import { ProformaFilter } from '../../models/api-models/proforma';
+import { VouchersUtilityService } from './vouchers.utility.service';
 
 export interface VoucherState {
     isLoading: boolean;
@@ -166,7 +167,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private accountService: AccountService,
         private searchService: SearchService,
         private authenticationService: AuthenticationService,
-        private purchaseOrderService: PurchaseOrderService
+        private purchaseOrderService: PurchaseOrderService,
+        private vouchersUtilityService: VouchersUtilityService
     ) {
         super(DEFAULT_STATE);
     }
@@ -329,6 +331,41 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         }
                     ),
                     catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getInventoryVouchers = this.effect((data: Observable<{ model: any, type: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ getLastVouchersInProgress: true });
+                return this.voucherService.getAllInventoryVouchers(req.type, req.model).pipe(
+                    tap(
+                        (res: BaseResponse<any, any>) => {
+                            const response = res?.body ?? {};
+                            const items = Array.isArray(response)
+                                ? response
+                                : response.items ?? response.results ?? response.content ?? [];
+                            return this.patchState({
+                                getLastVouchersInProgress: false,
+                                lastVouchers: {
+                                    ...(Array.isArray(response) ? {} : response),
+                                    items,
+                                    totalItems: response.totalItems ?? response.totalElements ?? items.length,
+                                    voucherType: req.type
+                                }
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                getLastVouchersInProgress: false,
+                                lastVouchers: null
+                            });
+                        }
+                    ),
+                    catchError(() => EMPTY)
                 );
             })
         );
@@ -754,6 +791,40 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
                             voucherDetails.isCopyVoucher = req.isCopyVoucher;
+                            return this.patchState({
+                                voucherDetails: voucherDetails
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                voucherDetails: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getInventoryVoucherDetails = this.effect((data: Observable<{ voucherType: string, voucherUniqueName: string, isCopyVoucher?: boolean, clearVoucherIdentity?: boolean }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getInventoryVoucherDetails(req.voucherType, req.voucherUniqueName).pipe(
+                    tap(
+                        (res: BaseResponse<any, any>) => {
+                            let voucherDetails = this.vouchersUtilityService.formatInventoryVoucherDetails(res?.body);
+                            // Strip voucher/entry identity when creating invoice/bill from DC/RN
+                            if (req.clearVoucherIdentity) {
+                                delete voucherDetails.uniqueName;
+                                delete voucherDetails.number;
+                                voucherDetails.entries = voucherDetails.entries?.map((entry) => {
+                                    const { uniqueName, ...entryWithoutUniqueName } = entry || {};
+                                    return entryWithoutUniqueName;
+                                });
+                            }
+                            voucherDetails.isCopyVoucher = !!req.isCopyVoucher;
                             return this.patchState({
                                 voucherDetails: voucherDetails
                             });
