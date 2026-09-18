@@ -1,11 +1,10 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import { filter, Observable, of as observableOf, ReplaySubject, take, takeUntil, tap } from 'rxjs';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, DATE_REGEX, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../app.constant';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../../shared/helpers/defaultDateFormat';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, DATE_REGEX, IOption } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
@@ -57,20 +56,10 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public dayjs: any = dayjs;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** Universal datepicker trigger */
-    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
-    /** Selected date range object */
-    public selectedDateRange: any;
-    /** Selected date range UI label */
-    public selectedDateRangeUi: string = '';
-    /** Datepicker ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** Selected range label */
-    public selectedRangeLabel: any = '';
     /** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
     /** Payment status options for invoice advance search */
@@ -82,7 +71,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /** Delivery challan/receipt note invoice statuses */
     public inventoryInvoiceStatusOptions: IOption[] = [];
     /** Operators supported by inventory document filters */
-    public inventoryDateOperators: IOption[] = [];
     public inventoryAmountOperators: IOption[] = [];
     public linkedInvoiceOptions: any[] = [];
     /** Warehouse dropdown options */
@@ -208,16 +196,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                 value: 'NOT_INVOICED'
             }
         ];
-        this.inventoryDateOperators = [
-            { label: this.commonLocaleData?.app_date_options?.on, value: 'ON' },
-            { label: this.commonLocaleData?.app_date_options?.after, value: 'AFTER' },
-            { label: this.commonLocaleData?.app_date_options?.before, value: 'BEFORE' }
-        ];
-        this.inventoryAmountOperators = [
-            { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'EQUALS' },
-            { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'GREATER_THAN' },
-            { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'LESS_THAN' }
-        ];
+        this.inventoryAmountOperators = this.filtersForEntryTotal;
         this.linkedInvoiceOptions = [
             { label: this.commonLocaleData?.app_all, value: null },
             { label: this.localeData?.linked_invoice_filter?.linked, value: true },
@@ -281,13 +260,11 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             receiptType: [''],
             salesPersonName: [this.advanceFilters?.salesPersonName ?? ''],
             salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? []],
-            date: [this.advanceFilters?.date ?? ''],
-            dateOperator: [this.advanceFilters?.dateOperator ?? 'ON'],
             invoiceStatuses: [this.advanceFilters?.invoiceStatuses ?? []],
             amountOperator: [this.advanceFilters?.amountOperator ?? 'EQUALS'],
             warehouseUniqueName: [this.advanceFilters?.warehouseUniqueName ?? ''],
             branchUniqueName: [this.advanceFilters?.branchUniqueName ?? ''],
-            partyUniqueName: [this.normalizePartyUniqueNameValue(this.advanceFilters?.partyUniqueName)]
+            accountUniqueNames: [this.normalizePartyUniqueNameValue(this.advanceFilters?.accountUniqueNames)]
         });
 
         const invoiceDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.invoiceDateRange);
@@ -320,7 +297,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         }
         this.getSalesPersonList();
         if (this.type === 'inventory-document') {
-            this.initInventoryDateRange();
             this.getWarehouses();
             this.getBranches();
             this.searchAccount();
@@ -570,7 +546,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         this.parseAllDateField();
         const formValue = { ...this.searchForm?.value };
         if (this.type === 'inventory-document') {
-            formValue.partyUniqueName = this.normalizePartyUniqueNameValue(formValue.partyUniqueName);
+            formValue.accountUniqueNames = this.normalizePartyUniqueNameValue(formValue.accountUniqueNames);
             const showBranchDropdown = this.branches?.length > 1 &&
                 (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch);
             if (!showBranchDropdown) {
@@ -579,71 +555,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         }
         this.applyFilterEvent.emit(formValue);
         this.closeDialogEvent.emit();
-    }
-
-    /**
-     * Initializes inventory document date range from existing filters
-     *
-     * @private
-     * @memberof AdvanceSearchComponent
-     */
-    private initInventoryDateRange(): void {
-        const filterDate = this.advanceFilters?.date;
-        const from = this.advanceFilters?.from;
-        const to = this.advanceFilters?.to;
-        if (filterDate) {
-            const parsedDate = dayjs(filterDate, GIDDH_DATE_FORMAT);
-            this.selectedDateRange = { startDate: parsedDate, endDate: parsedDate };
-            this.selectedDateRangeUi = parsedDate.format(GIDDH_NEW_DATE_FORMAT_UI);
-        } else if (from && to) {
-            this.selectedDateRange = {
-                startDate: dayjs(from, GIDDH_DATE_FORMAT),
-                endDate: dayjs(to, GIDDH_DATE_FORMAT)
-            };
-            this.selectedDateRangeUi = dayjs(from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI)
-                + ' - '
-                + dayjs(to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.searchForm?.get('date')?.patchValue(from);
-        }
-    }
-
-    /**
-     * Toggles the universal datepicker menu
-     *
-     * @param {boolean} [isOpen=true]
-     * @memberof AdvanceSearchComponent
-     */
-    public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
-        }
-    }
-
-    /**
-     * Callback for date/range selection in datepicker
-     *
-     * @param {*} value
-     * @memberof AdvanceSearchComponent
-     */
-    public dateSelectedCallback(value?: any): void {
-        if (value && value.event === 'cancel') {
-            this.toggleGiddhDatepicker(false);
-            return;
-        }
-        this.selectedRangeLabel = '';
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.toggleGiddhDatepicker(false);
-        if (value && value.startDate && value.endDate) {
-            // Operators are ON/AFTER/BEFORE — use a single date matching the selected start
-            const selectedDate = dayjs(value.startDate);
-            this.selectedDateRange = { startDate: selectedDate, endDate: selectedDate };
-            this.selectedDateRangeUi = selectedDate.format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.searchForm?.get('date')?.patchValue(selectedDate.format(GIDDH_DATE_FORMAT));
-        }
     }
 
     /**

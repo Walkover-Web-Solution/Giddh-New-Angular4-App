@@ -7,7 +7,8 @@ export enum InventoryStatusCategory {
 
 /** Supported business document types for inventory. */
 export enum BusinessDocumentType {
-    DeliveryChallan = "DC"
+    DeliveryChallan = "DC",
+    ReceiptNote = "RN"
 }
 
 /** Dropdown/lookup option with value and display label. */

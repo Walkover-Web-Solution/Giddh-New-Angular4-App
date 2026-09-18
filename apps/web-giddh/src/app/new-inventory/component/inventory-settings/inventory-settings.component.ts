@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal 
 import { CommonModule } from "@angular/common";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatSlideToggleChange, MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { forkJoin, of } from "rxjs";
 import { catchError, finalize, take } from "rxjs/operators";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -35,18 +35,23 @@ interface InventorySettingsLocale {
     settings_updated: string;
     load_error: string;
     reports: string;
-    report_as_per: string;
-    report_as_per_description: string;
+    item_wise_report: string;
+    item_wise_report_description: string;
+    group_wise_report: string;
+    group_wise_report_description: string;
+    variant_wise_report: string;
+    variant_wise_report_description: string;
     books: string;
     inventory: string;
 }
 
-/** Modules that share the Books/Inventory reportNature preference */
-const REPORT_NATURE_MODULES: string[] = [
-    InventoryModuleName.group,
-    InventoryModuleName.stock,
-    InventoryModuleName.variant
-];
+type ReportNatureControl = "itemWiseReport" | "groupWiseReport" | "variantWiseReport";
+
+const REPORT_NATURE_CONTROL_MODULES: Record<ReportNatureControl, string> = {
+    itemWiseReport: InventoryModuleName.stock,
+    groupWiseReport: InventoryModuleName.group,
+    variantWiseReport: InventoryModuleName.variant
+};
 
 @Component({
     selector: "inventory-settings",
@@ -80,8 +85,12 @@ export class InventorySettingsComponent implements OnInit {
     public readonly isSaving = signal<boolean>(false);
     /** Last settings response used by the cancel action. */
     private readonly originalSettings = signal<InventorySettingsResponse | null>(null);
-    /** Last saved report nature used by the cancel action. */
-    private readonly originalReportAsPerInventory = signal<boolean>(false);
+    /** Last saved report nature toggles used by the cancel action. */
+    private readonly originalReportNature = signal<Record<ReportNatureControl, boolean>>({
+        itemWiseReport: false,
+        groupWiseReport: false,
+        variantWiseReport: false
+    });
     /** Strongly typed inventory settings form. */
     public readonly settingsForm = new FormGroup({
         voucherAutomation: new FormGroup({
@@ -91,7 +100,9 @@ export class InventorySettingsComponent implements OnInit {
             autoGenerateRcOnBill: new FormControl(false, { nonNullable: true })
         }),
         reports: new FormGroup({
-            reportAsPerInventory: new FormControl(false, { nonNullable: true })
+            itemWiseReport: new FormControl(false, { nonNullable: true }),
+            groupWiseReport: new FormControl(false, { nonNullable: true }),
+            variantWiseReport: new FormControl(false, { nonNullable: true })
         })
     });
 
@@ -123,11 +134,41 @@ export class InventorySettingsComponent implements OnInit {
         const settings = this.originalSettings();
         if (settings) {
             this.patchForm(settings);
-            this.settingsForm.controls.reports.patchValue({
-                reportAsPerInventory: this.originalReportAsPerInventory()
-            });
+            this.settingsForm.controls.reports.patchValue(this.originalReportNature());
             this.settingsForm.markAsPristine();
         }
+    }
+
+    /**
+     * Saves report nature for a single report module on toggle change.
+     *
+     * @param {ReportNatureControl} control Report toggle control name
+     * @param {MatSlideToggleChange} event Slide toggle change event
+     * @memberof InventorySettingsComponent
+     */
+    public onReportNatureChange(control: ReportNatureControl, event: MatSlideToggleChange): void {
+        const reportAsPerInventory = !!event?.checked;
+        const reportNature = reportAsPerInventory ? ReportNature.Inventory : ReportNature.Books;
+        const module = REPORT_NATURE_CONTROL_MODULES[control];
+        this.settingsForm.controls.reports.controls[control].setValue(reportAsPerInventory, { emitEvent: false });
+
+        this.commonService.saveSelectedTableColumns({ module, reportNature }).pipe(
+            take(1),
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe((response) => {
+            if (response?.status === "success") {
+                this.originalReportNature.update((current) => ({
+                    ...current,
+                    [control]: reportAsPerInventory
+                }));
+                this.settingsForm.controls.reports.controls[control].markAsPristine();
+                return;
+            }
+            this.settingsForm.controls.reports.controls[control].setValue(!reportAsPerInventory, { emitEvent: false });
+            if (response?.message) {
+                this.toaster.showSnackBar("error", response.message);
+            }
+        });
     }
 
     /**
@@ -140,57 +181,22 @@ export class InventorySettingsComponent implements OnInit {
             return;
         }
         const payload = this.buildUpdatePayload();
-        const reportNature = this.settingsForm.controls.reports.controls.reportAsPerInventory.value ? ReportNature.Inventory : ReportNature.Books;
         this.isSaving.set(true);
-        forkJoin({
-            // take(1): HandleCatch emits without complete, which would hang forkJoin
-            settingsResponse: this.inventoryService.updateInventorySettings(payload).pipe(
-                take(1),
-                catchError((error) => of(error))
-            ),
-            reportResponse: forkJoin(
-                REPORT_NATURE_MODULES.map((module) =>
-                    this.commonService.saveSelectedTableColumns({ module, reportNature }).pipe(
-                        take(1),
-                        catchError(() => of(null))
-                    )
-                )
-            ).pipe(
-                catchError(() => of([]))
-            )
-        }).pipe(
+        this.inventoryService.updateInventorySettings(payload).pipe(
+            take(1),
             takeUntilDestroyed(this.destroyRef),
             finalize(() => this.isSaving.set(false))
         ).subscribe({
-            next: ({ settingsResponse, reportResponse }) => {
+            next: (settingsResponse) => {
                 this.isSaving.set(false);
-                const settingsSuccess = settingsResponse?.status === "success";
-                const reportSuccess = Array.isArray(reportResponse)
-                    && reportResponse.some((response) => response?.status === "success");
-
-                if (settingsSuccess) {
+                if (settingsResponse?.status === "success") {
                     this.captureCurrentSettings();
-                }
-                if (reportSuccess) {
-                    this.originalReportAsPerInventory.set(this.settingsForm.controls.reports.controls.reportAsPerInventory.value);
-                }
-                if (settingsSuccess || reportSuccess) {
-                    this.settingsForm.markAsPristine();
-                }
-
-                if (settingsSuccess && reportSuccess) {
+                    this.settingsForm.controls.voucherAutomation.markAsPristine();
                     this.toaster.showSnackBar("success", this.localeData().settings_updated);
-                } else if (!settingsSuccess && settingsResponse?.message) {
+                    return;
+                }
+                if (settingsResponse?.message) {
                     this.toaster.showSnackBar("error", settingsResponse.message);
-                } else if (!reportSuccess) {
-                    const reportError = Array.isArray(reportResponse)
-                        ? reportResponse.find((response) => response?.message)?.message
-                        : null;
-                    if (reportError) {
-                        this.toaster.showSnackBar("error", reportError);
-                    }
-                } else if (reportSuccess) {
-                    this.toaster.showSnackBar("success", this.localeData().settings_updated);
                 }
             },
             error: (error) => {
@@ -212,23 +218,35 @@ export class InventorySettingsComponent implements OnInit {
                 take(1),
                 catchError((error) => of(error))
             ),
-            reportNature: this.commonService.getSelectedTableColumns(InventoryModuleName.stock).pipe(
+            itemWiseReport: this.commonService.getSelectedTableColumns(InventoryModuleName.stock).pipe(
+                take(1),
+                catchError(() => of(null))
+            ),
+            groupWiseReport: this.commonService.getSelectedTableColumns(InventoryModuleName.group).pipe(
+                take(1),
+                catchError(() => of(null))
+            ),
+            variantWiseReport: this.commonService.getSelectedTableColumns(InventoryModuleName.variant).pipe(
                 take(1),
                 catchError(() => of(null))
             )
         }).pipe(
             takeUntilDestroyed(this.destroyRef),
             finalize(() => this.isLoading.set(false))
-        ).subscribe(({ settings, reportNature }) => {
+        ).subscribe(({ settings, itemWiseReport, groupWiseReport, variantWiseReport }) => {
             if (settings?.status !== "success" || !settings.body) {
                 this.toaster.showSnackBar("error", settings?.message || this.localeData().load_error);
                 return;
             }
             this.originalSettings.set(settings.body);
             this.patchForm(settings.body);
-            const reportAsPerInventory = reportNature?.status === "success" && reportNature?.body?.reportNature === ReportNature.Inventory;
-            this.originalReportAsPerInventory.set(reportAsPerInventory);
-            this.settingsForm.controls.reports.patchValue({ reportAsPerInventory });
+            const reportNatureValues = {
+                itemWiseReport: this.isInventoryReportNature(itemWiseReport),
+                groupWiseReport: this.isInventoryReportNature(groupWiseReport),
+                variantWiseReport: this.isInventoryReportNature(variantWiseReport)
+            };
+            this.originalReportNature.set(reportNatureValues);
+            this.settingsForm.controls.reports.patchValue(reportNatureValues);
         });
     }
 
@@ -273,5 +291,16 @@ export class InventorySettingsComponent implements OnInit {
             ...current,
             voucherAutomation: value.voucherAutomation
         });
+    }
+
+    /**
+     * Returns true when the saved report nature is Inventory.
+     *
+     * @param {*} response Selected columns API response
+     * @returns {boolean} True when report nature is Inventory
+     * @memberof InventorySettingsComponent
+     */
+    private isInventoryReportNature(response: any): boolean {
+        return response?.status === "success" && response?.body?.reportNature === ReportNature.Inventory;
     }
 }

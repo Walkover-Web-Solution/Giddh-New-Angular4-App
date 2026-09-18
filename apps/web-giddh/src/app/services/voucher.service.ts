@@ -1128,6 +1128,23 @@ export class VoucherService {
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
+        } else if (voucherType === VoucherTypeEnum.deliveryChallan || voucherType === VoucherTypeEnum.receiptNote) {
+            let url = this.config.apiUrl + INVENTORY_VOUCHER_API.HISTORY;
+            url = url
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+                ?.replace(':voucherUniqueName', encodeURIComponent(getRequestObject?.voucherUniqueName));
+            url = this.generalService.createQueryString(url, {
+                page: getRequestObject.page,
+                count: getRequestObject.count
+            });
+
+            return this.http.get(url).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, string> = res;
+                    data.queryString = { voucherType, voucherUniqueName: getRequestObject?.voucherUniqueName };
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
         } else {
             let url = this.config.apiUrl + INVOICE_API.GET_ALL_VERSIONS;
             url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);

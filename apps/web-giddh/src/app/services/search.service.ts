@@ -118,7 +118,7 @@ export class SearchService {
                 if (key === 'branchUniqueName') {
                     params[key] = params[key] === companyUniqueName ? '' : params[key];
                 }
-                contextPath += `${delimiter}${key}=${params[key]}`
+                contextPath += `${delimiter}${key}=${encodeURIComponent(params[key])}`
             });
         }
 
