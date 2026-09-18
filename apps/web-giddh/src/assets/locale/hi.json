@@ -659,6 +659,8 @@
         "entry_created_with_voucher": "वाउचर नंबर: [VOUCHER_NO] के साथ सफलतापूर्वक प्रविष्टि बनाई गई।",
         "voucher_updated": "वाउचर सफलतापूर्वक अपडेट किया गया।",
         "voucher_deleted": "वाउचर सफलतापूर्वक हटाया गया.",
+        "voucher_cancelled": "वाउचर सफलतापूर्वक रद्द किया गया।",
+        "voucher_cancelled_failed": "वाउचर रद्द करने में विफल रहा।",
         "status_updated": "प्रोफार्मा सफलतापूर्वक तैयार किया गया।",
         "purchase_invoice_updated": "खरीद चालान सफलतापूर्वक अपडेट किया गया।",
         "discount_created": "छूट सफलतापूर्वक बनाई गई।",

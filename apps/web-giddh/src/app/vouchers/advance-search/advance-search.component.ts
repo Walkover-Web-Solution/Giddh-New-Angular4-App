@@ -66,10 +66,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public paymentStatusOptions: IOption[] = [];
     /** Purchase order status options */
     public purchaseOrderStatusOptions: IOption[] = [];
-    /** Delivery challan/receipt note document statuses */
-    public inventoryDocumentStatusOptions: IOption[] = [];
-    /** Delivery challan/receipt note invoice statuses */
-    public inventoryInvoiceStatusOptions: IOption[] = [];
     /** Operators supported by inventory document filters */
     public inventoryAmountOperators: IOption[] = [];
     public linkedInvoiceOptions: any[] = [];
@@ -169,33 +165,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_payment_status?.expired, value: 'expired' }
         ];
 
-        this.inventoryDocumentStatusOptions = [
-            { label: this.localeData?.inventory_document_status?.open, value: 'OPEN' },
-            { label: this.localeData?.inventory_document_status?.closed, value: 'CLOSED' },
-            { label: this.localeData?.inventory_document_status?.expired, value: 'EXPIRED' },
-            { label: this.localeData?.inventory_document_status?.cancelled, value: 'CANCELLED' }
-        ];
-        const isReceiptNote = this.voucherType === 'receipt-note';
-        this.inventoryInvoiceStatusOptions = [
-            {
-                label: isReceiptNote
-                    ? this.localeData?.inventory_invoice_status?.billed
-                    : this.localeData?.inventory_invoice_status?.invoiced,
-                value: 'FULLY_INVOICED'
-            },
-            {
-                label: isReceiptNote
-                    ? this.localeData?.inventory_invoice_status?.partially_billed
-                    : this.localeData?.inventory_invoice_status?.partially_invoiced,
-                value: 'PARTIALLY_INVOICED'
-            },
-            {
-                label: isReceiptNote
-                    ? this.localeData?.inventory_invoice_status?.not_billed
-                    : this.localeData?.inventory_invoice_status?.not_invoiced,
-                value: 'NOT_INVOICED'
-            }
-        ];
         this.inventoryAmountOperators = this.filtersForEntryTotal;
         this.linkedInvoiceOptions = [
             { label: this.commonLocaleData?.app_all, value: null },
@@ -260,7 +229,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             receiptType: [''],
             salesPersonName: [this.advanceFilters?.salesPersonName ?? ''],
             salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? []],
-            invoiceStatuses: [this.advanceFilters?.invoiceStatuses ?? []],
             amountOperator: [this.advanceFilters?.amountOperator ?? 'EQUALS'],
             warehouseUniqueName: [this.advanceFilters?.warehouseUniqueName ?? ''],
             branchUniqueName: [this.advanceFilters?.branchUniqueName ?? ''],

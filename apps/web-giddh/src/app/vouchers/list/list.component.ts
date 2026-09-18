@@ -16,7 +16,7 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, SubVoucher } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, SELECTED_ALL_OPTION, SubVoucher } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
@@ -174,10 +174,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Columns displayed for delivery challan and receipt note lists */
     public inventoryDocumentColumns: string[] = ['date', 'number', 'documentType', 'party', 'invoiceStatus', 'amount', 'status', 'linkedInvoice', 'more_options'];
     /** Combined document and invoice status filter */
-    public inventoryStatusFilter: FormControl = new FormControl('ALL');
+    public inventoryStatusFilter: FormControl = new FormControl([SELECTED_ALL_OPTION]);
+    /** Document status values used by inventory list filter */
+    private readonly inventoryDocumentStatusValues: string[] = ['OPEN', 'CLOSED', 'EXPIRED', 'CANCELLED'];
+    /** Invoice status values used by inventory list filter */
+    private readonly inventoryInvoiceStatusValues: string[] = ['FULLY_INVOICED', 'PARTIALLY_INVOICED', 'NOT_INVOICED'];
     /** Status options for delivery challan and receipt note */
     public inventoryStatusOptions: any[] = [
-        { label: 'All', value: 'ALL' },
         { label: 'Open', value: 'OPEN' },
         { label: 'Closed', value: 'CLOSED' },
         { label: 'Expired', value: 'EXPIRED' },
@@ -1274,7 +1277,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe((response) => {
                 if (response?.status === "success") {
-                    this.toasterService.showSnackBar("success", response?.body || response?.message);
+                    this.toasterService.showSnackBar("success", "Document converted successfully");
                     this.getVouchers(false);
                 } else {
                     this.toasterService.showSnackBar("error", response?.message);
@@ -1389,11 +1392,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherService.cancelInventoryVoucher(this.voucherType, voucher.uniqueName)
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((apiResponse) => {
-                        if (apiResponse?.status === "success" && apiResponse?.message) {
-                            this.toasterService.showSnackBar("success", apiResponse.message);
+                        if (apiResponse?.status === "success") {
+                            this.toasterService.showSnackBar("success", this.commonLocaleData?.messages?.voucher_cancelled);
                             this.getVouchers(false);
                         } else {
-                            this.toasterService.showSnackBar("error", apiResponse?.message);
+                            this.toasterService.showSnackBar("error", this.commonLocaleData?.messages?.voucher_cancelled_failed);
                         }
                     });
             }
@@ -1433,10 +1436,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((apiResponse) => {
                         if (apiResponse?.status === "success") {
-                            this.toasterService.showSnackBar("success", apiResponse?.message || this.commonLocaleData?.messages?.voucher_deleted);
+                            this.toasterService.showSnackBar("success", this.commonLocaleData?.messages?.voucher_deleted);
                             this.getVouchers(false);
                         } else {
-                            this.toasterService.showSnackBar("error", apiResponse?.message || this.commonLocaleData?.app_something_went_wrong);
+                            this.toasterService.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
                         }
                     });
             }
@@ -1865,21 +1868,26 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             : '';
     }
 
-    /** Applies the combined status dropdown on inventory documents */
-    public applyInventoryStatusFilter(option: any): void {
-        const value = option?.value ?? option ?? 'ALL';
-        this.inventoryStatusFilter.patchValue(value, { emitEvent: false });
+    /** Applies the combined status multi-select on inventory documents */
+    public applyInventoryStatusFilter(selected?: Array<string | number>): void {
+        const values = ((selected ?? this.inventoryStatusFilter.value) || []) as string[];
         delete this.advanceFilters.statuses;
         delete this.advanceFilters.invoiceStatuses;
 
-        if (['OPEN', 'CLOSED', 'EXPIRED', 'CANCELLED'].includes(value)) {
-            this.advanceFilters.statuses = [value];
-        } else if (['NOT_INVOICED', 'PARTIALLY_INVOICED', 'FULLY_INVOICED'].includes(value)) {
-            this.advanceFilters.invoiceStatuses = [value];
+        const hasStatusFilter = values.length > 0 && !isSelectedAllOption(values);
+        if (hasStatusFilter) {
+            const statuses = values.filter(value => this.inventoryDocumentStatusValues.includes(value));
+            const invoiceStatuses = values.filter(value => this.inventoryInvoiceStatusValues.includes(value));
+            if (statuses.length) {
+                this.advanceFilters.statuses = statuses;
+            }
+            if (invoiceStatuses.length) {
+                this.advanceFilters.invoiceStatuses = invoiceStatuses;
+            }
         }
 
         this.advanceFilters.page = 1;
-        this.advanceFiltersApplied = value !== 'ALL';
+        this.advanceFiltersApplied = hasStatusFilter;
         this.getVouchers(false);
         this.saveInventoryListFilters();
     }
@@ -2899,7 +2907,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
         this.accountNameInput.patchValue(null, { emitEvent: false });
         this.purchaseOrderUniqueNameInput.patchValue(null, { emitEvent: false });
-        this.inventoryStatusFilter.patchValue('ALL', { emitEvent: false });
+        this.inventoryStatusFilter.patchValue([SELECTED_ALL_OPTION], { emitEvent: false });
         this.showCustomerSearch = false;
         this.showInvoiceNoSearch = false;
         this.showPurchaseOrderNumberSearch = false;
@@ -3060,14 +3068,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.advanceFiltersApplied = true;
         }
 
+        const restoredStatuses: string[] = [];
         if (params.statuses) {
             const statuses = typeof params.statuses === 'string'
                 ? params.statuses.split(',').filter(Boolean)
                 : params.statuses;
             this.advanceFilters.statuses = statuses;
-            if (statuses?.[0]) {
-                this.inventoryStatusFilter.patchValue(statuses[0], { emitEvent: false });
-                this.advanceFiltersApplied = true;
+            if (statuses?.length) {
+                restoredStatuses.push(...statuses);
             }
         }
 
@@ -3076,10 +3084,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 ? params.invoiceStatuses.split(',').filter(Boolean)
                 : params.invoiceStatuses;
             this.advanceFilters.invoiceStatuses = invoiceStatuses;
-            if (invoiceStatuses?.[0]) {
-                this.inventoryStatusFilter.patchValue(invoiceStatuses[0], { emitEvent: false });
-                this.advanceFiltersApplied = true;
+            if (invoiceStatuses?.length) {
+                restoredStatuses.push(...invoiceStatuses);
             }
+        }
+
+        if (restoredStatuses.length) {
+            this.inventoryStatusFilter.patchValue(restoredStatuses, { emitEvent: false });
+            this.advanceFiltersApplied = true;
         }
 
         // Advance search (inventory-document)

@@ -5952,17 +5952,19 @@
         <div class="vouchers-wrapper p-3 overflow-visible">
             <div class="invoice-header d-flex align-items-center justify-content-between mb-3 flex-wrap row-gap-1">
                 <div class="d-flex align-items-center column-gap-1">
-                    <button
-                        matButton="filled"
-                        [routerLink]="['/pages/vouchers', urlVoucherType, 'create']"
-                        *ngIf="!isCompany && !isConsolidatedBranch"
-                    >
-                        {{
-                            voucherType === voucherTypeEnum.deliveryChallan
-                                ? localeData?.new_delivery_challan
-                                : localeData?.new_receipt_note
-                        }}
-                    </button>
+                    @if (!isCompany && !isConsolidatedBranch) {
+                        <button
+                            matButton="filled"
+                            [routerLink]="['/pages/vouchers', urlVoucherType, 'create']"
+                            class="w-100"
+                        >
+                            {{
+                                voucherType === voucherTypeEnum.deliveryChallan
+                                    ? localeData?.new_delivery_challan
+                                    : localeData?.new_receipt_note
+                            }}
+                        </button>
+                    }
                     <div class="custom-datepicker-wrapper">
                         <div
                             class="custom-datepicker"
@@ -5980,14 +5982,15 @@
                             />
                         </div>
                     </div>
-                    <reactive-dropdown-field
+                    <multi-select-dropdown
                         class="width-200"
                         [name]="'inventoryDocumentStatus'"
-                        [placeholder]="commonLocaleData?.app_status"
+                        [label]="commonLocaleData?.app_status"
                         [options]="inventoryStatusOptions"
+                        [showAllOption]="true"
                         [formControl]="inventoryStatusFilter"
-                        (selectedOption)="applyInventoryStatusFilter($event)"
-                    ></reactive-dropdown-field>
+                        (selectionChange)="applyInventoryStatusFilter($event)"
+                    ></multi-select-dropdown>
                 </div>
                 <button
                     matButton="outlined"
@@ -6142,12 +6145,12 @@
                                                 : localeData?.preview_and_convert_bill
                                         }}
                                     </button>
+                                    <button mat-menu-item (click)="openMakeAdjustmentDialog(element)">
+                                        {{ localeData?.make_adjustment }}
+                                    </button>
                                 }
                                 <button mat-menu-item (click)="openMarkReturnDialog(element)">
                                     {{ localeData?.mark_return }}
-                                </button>
-                                <button mat-menu-item (click)="openMakeAdjustmentDialog(element)">
-                                    {{ localeData?.make_adjustment }}
                                 </button>
                                 <mat-divider></mat-divider>
                                 <button mat-menu-item class="text-danger" (click)="cancelInventoryDocument(element)">
