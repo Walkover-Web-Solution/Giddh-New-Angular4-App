@@ -120,7 +120,7 @@ export class SearchService {
                 } else if (key === 'customerUniqueName') {
                     params[key] = encodeURIComponent(params[key]);
                 }
-                contextPath += `${delimiter}${key}=${encodeURIComponent(params[key])}`
+                contextPath += `${delimiter}${key}=${params[key]}`
             });
         }
 

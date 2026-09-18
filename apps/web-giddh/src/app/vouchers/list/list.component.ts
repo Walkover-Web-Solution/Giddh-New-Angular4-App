@@ -175,19 +175,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public inventoryDocumentColumns: string[] = ['date', 'number', 'documentType', 'party', 'invoiceStatus', 'amount', 'status', 'linkedInvoice', 'more_options'];
     /** Combined document and invoice status filter */
     public inventoryStatusFilter: FormControl = new FormControl([SELECTED_ALL_OPTION]);
-    /** Document status values used by inventory list filter */
-    private readonly inventoryDocumentStatusValues: string[] = ['OPEN', 'CLOSED', 'EXPIRED', 'CANCELLED'];
-    /** Invoice status values used by inventory list filter */
-    private readonly inventoryInvoiceStatusValues: string[] = ['FULLY_INVOICED', 'PARTIALLY_INVOICED', 'NOT_INVOICED'];
     /** Status options for delivery challan and receipt note */
     public inventoryStatusOptions: any[] = [
         { label: 'Open', value: 'OPEN' },
         { label: 'Closed', value: 'CLOSED' },
         { label: 'Expired', value: 'EXPIRED' },
-        { label: 'Cancelled', value: 'CANCELLED' },
-        { label: 'Invoiced', value: 'FULLY_INVOICED' },
-        { label: 'Partially Invoiced', value: 'PARTIALLY_INVOICED' },
-        { label: 'Not Invoiced', value: 'NOT_INVOICED' }
+        { label: 'Cancelled', value: 'CANCELLED' }
     ];
     /** Holds active inner selected Tab Index  */
     public selectedInnerTabIndex: number;
@@ -1874,20 +1867,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         delete this.advanceFilters.statuses;
         delete this.advanceFilters.invoiceStatuses;
 
-        const hasStatusFilter = values.length > 0 && !isSelectedAllOption(values);
-        if (hasStatusFilter) {
-            const statuses = values.filter(value => this.inventoryDocumentStatusValues.includes(value));
-            const invoiceStatuses = values.filter(value => this.inventoryInvoiceStatusValues.includes(value));
-            if (statuses.length) {
-                this.advanceFilters.statuses = statuses;
-            }
-            if (invoiceStatuses.length) {
-                this.advanceFilters.invoiceStatuses = invoiceStatuses;
-            }
-        }
+        const isAll = !values.length || isSelectedAllOption(values);
+        this.advanceFilters.status = isAll ? [SELECTED_ALL_OPTION] : values;
 
         this.advanceFilters.page = 1;
-        this.advanceFiltersApplied = hasStatusFilter;
+        this.advanceFiltersApplied = !isAll;
         this.getVouchers(false);
         this.saveInventoryListFilters();
     }
@@ -2558,6 +2542,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const tempKeysInAdvanceFiltersForm = ['dueAmount', 'dateRange', 'grandTotalOperation', 'invoiceTotalAmount', 'invoiceDateRange'];
         this.advanceSearchDialogRef?.close();
         this.advanceFiltersApplied = true;
+        const currentStatus = this.isInventoryDocument ? this.advanceFilters.status : null;
         let advanceFilters = {
             sortBy: this.advanceFilters.sortBy,
             sort: this.advanceFilters.sort,
@@ -2576,6 +2561,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.page = advanceFilters.page;
         this.advanceFilters.count = advanceFilters.count;
         this.advanceFilters.q = advanceFilters.q;
+        if (this.isInventoryDocument) {
+            this.advanceFilters.status = currentStatus?.length ? currentStatus : [SELECTED_ALL_OPTION];
+        }
         tempKeysInAdvanceFiltersForm.forEach(keys => {
             this.advanceSearchTempKeyObj = { ...this.advanceSearchTempKeyObj, [keys]: this.advanceFilters[keys] };
             delete this.advanceFilters[keys];
@@ -2903,6 +2891,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             count: this.pageSizeOptions[2], // Set default Count 50
             q: ''
         };
+        if (this.isInventoryDocument) {
+            this.advanceFilters.status = [SELECTED_ALL_OPTION];
+        }
         this.voucherNumberInput.patchValue(null, { emitEvent: false });
         this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
         this.accountNameInput.patchValue(null, { emitEvent: false });
@@ -2951,8 +2942,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             q: this.advanceFilters.q || null,
             sort: this.advanceFilters.sort || null,
             sortBy: this.advanceFilters.sortBy || null,
-            statuses: this.advanceFilters.statuses?.length ? this.advanceFilters.statuses : null,
-            invoiceStatuses: this.advanceFilters.invoiceStatuses?.length ? this.advanceFilters.invoiceStatuses : null,
+            status: (!isSelectedAllOption(this.advanceFilters.status) && this.advanceFilters.status?.length)
+                ? this.advanceFilters.status
+                : null,
             // Advance search (inventory-document)
             date: this.advanceFilters.date || null,
             dateOperator: this.advanceFilters.dateOperator || null,
@@ -3000,8 +2992,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             snapshotParams.from
             || snapshotParams.to
             || snapshotParams.q
-            || snapshotParams.statuses
-            || snapshotParams.invoiceStatuses
+            || snapshotParams.status
             || snapshotParams.amount
             || snapshotParams.dateOperator
             || snapshotParams.amountOperator
@@ -3068,30 +3059,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.advanceFiltersApplied = true;
         }
 
-        const restoredStatuses: string[] = [];
-        if (params.statuses) {
-            const statuses = typeof params.statuses === 'string'
-                ? params.statuses.split(',').filter(Boolean)
-                : params.statuses;
-            this.advanceFilters.statuses = statuses;
-            if (statuses?.length) {
-                restoredStatuses.push(...statuses);
+        if (params.status) {
+            const status = typeof params.status === 'string'
+                ? params.status.split(',').filter(Boolean)
+                : params.status;
+            if (status?.length && !isSelectedAllOption(status)) {
+                this.advanceFilters.status = status;
+                this.inventoryStatusFilter.patchValue(status, { emitEvent: false });
+                this.advanceFiltersApplied = true;
+            } else {
+                this.advanceFilters.status = [SELECTED_ALL_OPTION];
+                this.inventoryStatusFilter.patchValue([SELECTED_ALL_OPTION], { emitEvent: false });
             }
-        }
-
-        if (params.invoiceStatuses) {
-            const invoiceStatuses = typeof params.invoiceStatuses === 'string'
-                ? params.invoiceStatuses.split(',').filter(Boolean)
-                : params.invoiceStatuses;
-            this.advanceFilters.invoiceStatuses = invoiceStatuses;
-            if (invoiceStatuses?.length) {
-                restoredStatuses.push(...invoiceStatuses);
-            }
-        }
-
-        if (restoredStatuses.length) {
-            this.inventoryStatusFilter.patchValue(restoredStatuses, { emitEvent: false });
-            this.advanceFiltersApplied = true;
+        } else {
+            this.advanceFilters.status = [SELECTED_ALL_OPTION];
         }
 
         // Advance search (inventory-document)
