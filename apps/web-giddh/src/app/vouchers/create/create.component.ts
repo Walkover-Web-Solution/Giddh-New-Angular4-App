@@ -1970,9 +1970,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     transactionFormGroup.get("account.name")?.patchValue(item.account?.name);
                     transactionFormGroup.get("account.uniqueName")?.patchValue(item.account?.uniqueName);
                     transactionFormGroup.get("amount.amountForAccount").patchValue(item.amount.amountForAccount);
-                    entryFormGroup.get("hsnNumber")?.patchValue(item.hsnNumber);
-                    entryFormGroup.get("sacNumber")?.patchValue(item.sacNumber);
-                    entryFormGroup.get("showCodeType")?.patchValue(item.hsnNumber ? "hsn" : "sac");
+                    this.patchEntryHsnSac(entryFormGroup, {
+                        hsnNumber: item.hsnNumber,
+                        sacNumber: item.sacNumber,
+                        stock: item.additional?.stock || item.stock,
+                        hasStock: !!item.stock,
+                    });
 
                     if (item.stock) {
                         transactionFormGroup.get("stock.name")?.patchValue(item.stock.name);
@@ -2956,6 +2959,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get("stock.name")?.patchValue(event?.additional?.stock?.name);
                 transactionFormGroup.get("stock.uniqueName")?.patchValue(event?.additional?.stock?.uniqueName);
                 transactionFormGroup.get("stock.hasVariants")?.patchValue(!!event?.additional?.hasVariants);
+                this.patchEntryHsnSac(entryFormGroup, {
+                    hsnNumber: event?.additional?.hsnNumber,
+                    sacNumber: event?.additional?.sacNumber,
+                    stock: event?.additional?.stock,
+                    hasStock: true,
+                });
                 this.resetEntryBatch(entryIndex, transactionFormGroup);
 
                 if (event.additional.stock.customField1?.value) {
@@ -2984,6 +2993,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 const stockFormGroup = transactionFormGroup.get("stock") as FormGroup;
                 const newStockFormGroup = this.getStockFormGroup();
                 stockFormGroup.patchValue(newStockFormGroup.value);
+                this.patchEntryHsnSac(entryFormGroup, {
+                    hsnNumber: event?.additional?.hsnNumber,
+                    sacNumber: event?.additional?.sacNumber,
+                    hasStock: false,
+                });
                 this.resetEntryBatch(entryIndex, transactionFormGroup);
             }
 
@@ -3777,6 +3791,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             voucherDate = this.invoiceForm?.get("date")?.value;
         }
+        const entryTransaction = entryData?.transactions?.[0];
+        const entryHsnSac = entryData
+            ? this.resolveEntryHsnSac({
+                hsnNumber: entryData.hsnNumber,
+                sacNumber: entryData.sacNumber,
+                stock: entryTransaction?.stock,
+                hasStock: !!entryTransaction?.stock?.uniqueName || !!entryTransaction?.stock?.name,
+            })
+            : { hsnNumber: "", sacNumber: "", showCodeType: "sac" as const };
         return this.formBuilder.group({
             date: [
                 !this.invoiceType.isPurchaseOrder &&
@@ -3788,9 +3811,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             description: [entryData ? entryData?.description : ""],
             voucherType: [this.voucherType],
             uniqueName: [this.isCopyMode ? "" : entryData && copyUniqueName ? entryData?.uniqueName : ""],
-            showCodeType: [entryData && entryData?.hsnNumber ? "hsn" : "sac"], //temp
-            hsnNumber: [entryData ? entryData?.hsnNumber : ""],
-            sacNumber: [entryData ? entryData?.sacNumber : ""],
+            showCodeType: [entryHsnSac.showCodeType],
+            hsnNumber: [entryHsnSac.hsnNumber ?? ""],
+            sacNumber: [entryHsnSac.sacNumber ?? ""],
             totalDiscount: [""], // temp
             totalTax: [0], // temp
             totalTaxWithoutCess: [""], //temp
@@ -4398,10 +4421,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.giddhBalanceDecimalPlaces
                     );
 
+                    const bulkHsnSac = this.resolveEntryHsnSac({
+                        hsnNumber: item.additional?.hsnNumber,
+                        sacNumber: item.additional?.sacNumber,
+                        stock: item.additional?.stock,
+                        hasStock: !!item.additional?.stock?.uniqueName,
+                    });
                     let entry = {
-                        hsnNumber: item.additional?.stock?.hsnNumber,
-                        sacNumber: item.additional?.stock?.sacNumber,
-                        showCodeType: item.additional?.stock?.hsnNumber ? "hsn" : "sac",
+                        hsnNumber: bulkHsnSac.hsnNumber,
+                        sacNumber: bulkHsnSac.sacNumber,
+                        showCodeType: bulkHsnSac.showCodeType,
                         transactions: [
                             {
                                 account: {
@@ -8130,9 +8159,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup.get("account.name")?.patchValue(item.account?.name);
             transactionFormGroup.get("account.uniqueName")?.patchValue(item.account?.uniqueName);
             transactionFormGroup.get("amount.amountForAccount").patchValue(item.amount.amountForAccount);
-            entryFormGroup.get("hsnNumber")?.patchValue(item.hsnNumber);
-            entryFormGroup.get("sacNumber")?.patchValue(item.sacNumber);
-            entryFormGroup.get("showCodeType")?.patchValue(item.hsnNumber ? "hsn" : "sac");
+            this.patchEntryHsnSac(entryFormGroup, {
+                hsnNumber: item.hsnNumber,
+                sacNumber: item.sacNumber,
+                stock: item.additional?.stock || item.stock,
+                hasStock: !!item.stock,
+            });
 
             if (item.stock) {
                 transactionFormGroup.get("stock.name")?.patchValue(item.stock.name);
@@ -8369,6 +8401,64 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup.get("otherTax.amount").patchValue(amount);
     }
 
+    /**
+     * Resolves HSN/SAC for an entry line from stock or account source.
+     * When a stock item is selected, stock codes are used first; account codes are used as fallback
+     * only if the stock has no HSN/SAC. For non-stock lines, account codes are used directly.
+     *
+     * @private
+     * @param {{ hsnNumber?: string | null; sacNumber?: string | null; stock?: { hsnNumber?: string | null; sacNumber?: string | null; uniqueName?: string; name?: string } | null; hasStock?: boolean }} source
+     * @returns {{ hsnNumber: string | null; sacNumber: string | null; showCodeType: 'hsn' | 'sac' }}
+     * @memberof VoucherCreateComponent
+     */
+    private resolveEntryHsnSac(source: {
+        hsnNumber?: string | null;
+        sacNumber?: string | null;
+        stock?: { hsnNumber?: string | null; sacNumber?: string | null; uniqueName?: string; name?: string } | null;
+        hasStock?: boolean;
+    }): { hsnNumber: string | null; sacNumber: string | null; showCodeType: "hsn" | "sac" } {
+        const hasStock = source.hasStock ?? !!(source.stock?.uniqueName || source.stock?.name);
+        let hsnNumber = source.hsnNumber ?? "";
+        let sacNumber = source.sacNumber ?? "";
+
+        if (hasStock && source.stock) {
+            const stockHsnNumber = source.stock.hsnNumber ?? "";
+            const stockSacNumber = source.stock.sacNumber ?? "";
+            if (stockHsnNumber || stockSacNumber) {
+                hsnNumber = stockHsnNumber;
+                sacNumber = stockSacNumber;
+            }
+        }
+
+        return {
+            hsnNumber: hsnNumber || null,
+            sacNumber: sacNumber || null,
+            showCodeType: hsnNumber ? "hsn" : "sac",
+        };
+    }
+
+    /**
+     * Patches entry-level HSN/SAC controls using stock-first, account-fallback logic.
+     *
+     * @private
+     * @param {FormGroup} entryFormGroup
+     * @param {{ hsnNumber?: string | null; sacNumber?: string | null; stock?: { hsnNumber?: string | null; sacNumber?: string | null; uniqueName?: string; name?: string } | null; hasStock?: boolean }} source
+     * @memberof VoucherCreateComponent
+     */
+    private patchEntryHsnSac(
+        entryFormGroup: FormGroup,
+        source: {
+            hsnNumber?: string | null;
+            sacNumber?: string | null;
+            stock?: { hsnNumber?: string | null; sacNumber?: string | null; uniqueName?: string; name?: string } | null;
+            hasStock?: boolean;
+        }
+    ): void {
+        const resolved = this.resolveEntryHsnSac(source);
+        entryFormGroup.get("hsnNumber")?.patchValue(resolved.hsnNumber);
+        entryFormGroup.get("sacNumber")?.patchValue(resolved.sacNumber);
+        entryFormGroup.get("showCodeType")?.patchValue(resolved.showCodeType);
+    }
 
     /**
      * Prefils entry
@@ -8417,9 +8507,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get("stock.customField2.value")?.patchValue(response?.stock?.customField2Value);
             }
 
-            entryFormGroup.get("hsnNumber")?.patchValue(response.stock.hsnNumber || response.hsnNumber);
-            entryFormGroup.get("sacNumber")?.patchValue(response.stock.sacNumber || response.sacNumber);
-            entryFormGroup.get("showCodeType")?.patchValue(response.stock.hsnNumber || response.hsnNumber ? "hsn" : "sac");
+            this.patchEntryHsnSac(entryFormGroup, {
+                hsnNumber: response.hsnNumber,
+                sacNumber: response.sacNumber,
+                stock: response.stock,
+                hasStock: true,
+            });
 
             transactionFormGroup.get("stock.stockUnit.code")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
             transactionFormGroup.get("stock.stockUnit.uniqueName")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
@@ -8479,9 +8572,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.stockUnits[entryIndex] = observableOf([]);
             this.resetEntryBatch(entryIndex, transactionFormGroup);
 
-            entryFormGroup.get("hsnNumber")?.patchValue(response.hsnNumber);
-            entryFormGroup.get("sacNumber")?.patchValue(response.sacNumber);
-            entryFormGroup.get("showCodeType")?.patchValue(response.hsnNumber ? "hsn" : "sac");
+            this.patchEntryHsnSac(entryFormGroup, {
+                hsnNumber: response.hsnNumber,
+                sacNumber: response.sacNumber,
+                hasStock: false,
+            });
             if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
                 this.account.applicableDiscounts?.forEach((selectedDiscount) => {
                     this.discountsList()?.forEach((discount) => {
