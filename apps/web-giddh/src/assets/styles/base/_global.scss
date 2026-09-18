@@ -8987,8 +8987,18 @@ body.update-scroll-hidden {
     }
 }
 
-.search-table {
-    min-width: 132px;
+table {
+    tr {
+        th {
+            .search-table {
+                min-width: 132px;
+            }
+
+            &:has(.search-table) {
+                width: 220px;
+            }
+        }
+    }
 }
 
 .download-arrow {
