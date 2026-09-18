@@ -6,10 +6,13 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <giddh-page-loader *ngIf="!isSearching && !isLoadMore && (getVouchersInProgress$ | async)" [cssClass]="'no-data'"></giddh-page-loader>
+    <giddh-page-loader
+        *ngIf="!isLoadMore && isLookupVouchersInProgress"
+        [cssClass]="'no-data'"
+    ></giddh-page-loader>
     <div
         class="invoice-preview-wrapper"
-        *ngIf="isSearching || isLoadMore || !(getVouchersInProgress$ | async)"
+        *ngIf="isLoadMore || !isLookupVouchersInProgress"
         appResizable
         resizableTarget=".preview-list"
         [minWidth]="300"
@@ -107,10 +110,12 @@
                         </app-cdk-scroll>
                     </mat-list>
                 </div>
-                <giddh-page-loader
-                    *ngIf="isSearching && !isLoadMore && (getVouchersInProgress$ | async)"
-                    [cssClass]="'no-data'"
-                ></giddh-page-loader>
+                <div
+                    class="list-loader-overlay"
+                    *ngIf="!isLoadMore && !isLookupVouchersInProgress && (getVouchersInProgress$ | async)"
+                >
+                    <giddh-page-loader [cssClass]="'list-loader'"></giddh-page-loader>
+                </div>
             </div>
         </div>
         <div class="preview-content flex-grow-1">
