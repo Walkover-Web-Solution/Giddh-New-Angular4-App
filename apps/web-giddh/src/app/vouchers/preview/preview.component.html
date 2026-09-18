@@ -112,7 +112,7 @@
                 </div>
                 <div
                     class="list-loader-overlay"
-                    *ngIf="!isLoadMore && !isLookupVouchersInProgress && (getVouchersInProgress$ | async)"
+                    *ngIf="!isLoadMore && !isSearching && !isLookupVouchersInProgress && (getVouchersInProgress$ | async)"
                 >
                     <giddh-page-loader [cssClass]="'list-loader'"></giddh-page-loader>
                 </div>
