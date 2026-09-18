@@ -398,6 +398,8 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                     category: data.body.category,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
+                    hsnNumber: data.body.hsnNumber,
+                    sacNumber: data.body.sacNumber,
                     stock: data.body.stock,
                     combinedUniqueName: data.body.stock?.variant ? `${item.uniqueName}#${data.body.stock.variant?.uniqueName}` : '',
                     skuCode: data.body.stock?.skuCode,
