@@ -6,9 +6,6 @@
 >
     <div cdkFocusInitial class="dialog-header">
         <span>{{ isUpdateMode() ? localeData()?.edit_batch : localeData()?.create_batch }}</span>
-        <button matIconButton mat-dialog-close aria-label="cross icon">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         @if (isLoading()) {
@@ -51,8 +48,8 @@
                         [options]="stocks()"
                         [labelValue]="stockLabel()"
                         formControlName="stockUniqueName"
-                        [enableDynamicSearch]="!isUpdateMode()"
-                        [readonly]="isUpdateMode()"
+                        [enableDynamicSearch]="!isUpdateMode() && !isStockLocked()"
+                        [readonly]="isUpdateMode() || isStockLocked()"
                         (dynamicSearchedQuery)="loadStocks($event)"
                         (selectedOption)="selectStock($event)"
                         (onClear)="selectStock(null)"
@@ -65,8 +62,6 @@
                         [options]="variants()"
                         [labelValue]="variantLabel()"
                         formControlName="variantUniqueName"
-                        [enableDynamicSearch]="true"
-                        (dynamicSearchedQuery)="loadVariants($event)"
                         (selectedOption)="selectVariant($event)"
                         (onClear)="selectVariant(null)"
                         [required]="!!batchForm.get('stockUniqueName')?.value"
@@ -131,7 +126,7 @@
                     }
                 </div>
             </div>
-            <div class="d-flex column-gap-1 mt-4">
+            <div class="d-flex column-gap-1 mt-4 justify-content-end">
                 <button matButton="filled" type="button" [disabled]="isLoading()" (click)="save()">
                     {{ isUpdateMode() ? commonLocaleData()?.app_update : commonLocaleData()?.app_save }}
                 </button>

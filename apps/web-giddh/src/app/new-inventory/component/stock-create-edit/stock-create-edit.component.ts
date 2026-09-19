@@ -1239,12 +1239,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public formatRequest(): any {
-        (this.stockForm?.variants ?? []).forEach(variant => {
-            this.getWarehouseBatches(variant).forEach(batch => {
-                const resolvedUniqueName = this.resolveBatchUniqueName(batch);
-                batch.uniqueName = resolvedUniqueName;
-            });
-        });
         let stockForm = cloneDeep(this.stockForm);
         delete stockForm.discountLabel;
         stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
@@ -1312,7 +1306,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             const batches = this.getWarehouseBatches(variant)
                 .filter(batch => this.isCompleteBatch(batch))
                 .map(batch => ({
-                    uniqueName: this.resolveBatchUniqueName(batch),
+                    uniqueName: batch.uniqueName,
                     batchNumber: String(batch.batchNumber).trim(),
                     name: String(batch.name).trim(),
                     manufacturingDate: this.formatBatchDate(batch.manufacturingDate),
@@ -1850,88 +1844,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     /**
-     * Collect selected batch unique names from all variant rows.
-     *
-     * @private
-     * @memberof StockCreateEditComponent
-     */
-    /**
-     * Resolve batch `uniqueName` for save/filter from row state or cached availability options.
-     *
-     * @private
-     * @param {*} batch Batch row
-     * @return {*}  {(string | undefined)}
-     * @memberof StockCreateEditComponent
-     */
-    private resolveBatchUniqueName(batch: any): string | undefined {
-        const rowUniqueName = String(batch?.uniqueName ?? "").trim();
-        if (rowUniqueName) {
-            return rowUniqueName;
-        }
-        const matchedOption = this.findBatchAvailabilityOption({
-            batchNumber: String(batch?.batchNumber ?? "").trim()
-        });
-        if (!matchedOption) {
-            return undefined;
-        }
-        const item = matchedOption.additional as BatchReportItem | undefined;
-        const apiUniqueName = String(item?.uniqueName ?? "").trim();
-        const optionValue = String(matchedOption.value ?? "").trim();
-        return apiUniqueName || optionValue || undefined;
-    }
-
-    /**
-     * Resolve the selected batch key used for duplicate filtering.
-     *
-     * @private
-     * @param {*} row Batch row
-     * @return {*}  {string}
-     * @memberof StockCreateEditComponent
-     */
-    private getBatchRowSelectionKey(row: any): string {
-        return this.resolveBatchUniqueName(row) ?? "";
-    }
-
-    /**
-     * Ignore empty dropdown writes so API-selected batch `uniqueName` is not cleared.
-     *
-     * @param {*} batch Batch row
-     * @param {*} value Dropdown ngModel value
-     * @memberof StockCreateEditComponent
-     */
-    public onBatchDropdownModelChange(batch: any, value: any): void {
-        const normalized = String(value ?? "").trim();
-        if (normalized) {
-            batch.uniqueName = normalized;
-        }
-    }
-
-    /**
-     * Find a cached availability option by dropdown value, label, or batch number.
-     *
-     * @private
-     * @param {{ value?: string; batchNumber?: string; label?: string }} criteria Search criteria
-     * @return {*}  {(IOption | undefined)}
-     * @memberof StockCreateEditComponent
-     */
-    private findBatchAvailabilityOption(criteria: { value?: string; batchNumber?: string; label?: string }): IOption | undefined {
-        const value = String(criteria?.value ?? "").trim();
-        const batchNumber = String(criteria?.batchNumber ?? "").trim();
-        const label = String(criteria?.label ?? "").trim();
-
-        return this.allBatchAvailabilityOptions.find(option => {
-            const item = option?.additional as BatchReportItem | undefined;
-            if (value && String(option?.value ?? "").trim() === value) {
-                return true;
-            }
-            if (batchNumber && String(item?.batchNumber ?? "").trim() === batchNumber) {
-                return true;
-            }
-            return !!(label && option?.label === label);
-        });
-    }
-
-    /**
      * Dropdown options for one batch row.
      * Hides batches already selected on other rows but keeps the current row value visible.
      *
@@ -1940,22 +1852,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public getBatchAvailabilityOptions(batch: any): IOption[] {
-        const selectedKeys = new Set<string>();
-        (this.stockForm?.variants ?? []).forEach(variant => {
-            this.getWarehouseBatches(variant).forEach(row => {
-                if (row === batch) {
-                    return;
-                }
-                const selectionKey = this.getBatchRowSelectionKey(row);
-                if (selectionKey) {
-                    selectedKeys.add(selectionKey);
-                }
-            });
-        });
-
         return this.allBatchAvailabilityOptions.filter(option => {
             const optionValue = String(option?.value ?? "").trim();
-            return optionValue && !selectedKeys.has(optionValue);
+            return optionValue && (!this.selectedBatchUniqueNames.includes(optionValue));
         });
     }
 
@@ -1963,7 +1862,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         const uniqueNames = new Set<string>();
         (this.stockForm?.variants ?? []).forEach(variant => {
             this.getWarehouseBatches(variant).forEach(row => {
-                const selectionKey = this.getBatchRowSelectionKey(row);
+                const selectionKey = String(row.batchNumber ?? "").trim();
                 if (selectionKey) {
                     uniqueNames.add(selectionKey);
                 }
@@ -1991,37 +1890,22 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public onBatchAvailabilitySelected(batch: any, event: any): void {
-        const apiItem = this.resolveAvailabilityBatchItem(event);
-        if (apiItem) {
-            this.applyAvailabilityBatchToRow(batch, apiItem, event);
+        if (event.additional) {
+            this.applyAvailabilityBatchToRow(batch, event.additional);
             this.updateBatchAvailabilityOptions();
             this.changeDetection.detectChanges();
             return;
         }
 
-        const customBatchNumber = this.getCustomBatchNumber(event);
-        if (!customBatchNumber) {
-            if (this.getBatchRowSelectionKey(batch)) {
-                return;
-            }
-            batch.uniqueName = undefined;
-            batch.batchNumber = "";
+        const customBatchNumber = event.value;
+        if (customBatchNumber) {
+            batch.uniqueName = customBatchNumber;
+            batch.batchNumber = customBatchNumber;
+            batch.name = batch.name ? batch.name : event.label;
             this.updateBatchAvailabilityOptions();
             this.changeDetection.detectChanges();
             return;
         }
-
-        if (this.isBlurEchoAfterApiSelection(batch, event, customBatchNumber)) {
-            return;
-        }
-
-        batch.uniqueName = undefined;
-        batch.batchNumber = customBatchNumber;
-        if (!String(batch.name ?? "").trim()) {
-            batch.name = customBatchNumber;
-        }
-        this.updateBatchAvailabilityOptions();
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -2037,122 +1921,20 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     /**
-     * Fill batch row from availability API item.
+     * Apply availability batch to row
      *
-     * @private
      * @param {*} batch Batch row
-     * @param {BatchReportItem} item Availability item
+     * @param {*} item Batch report item
      * @memberof StockCreateEditComponent
      */
-    /**
-     * Resolve an availability API batch from a dropdown selection event.
-     *
-     * @private
-     * @param {*} event Dropdown selection event
-     * @return {*}  {(BatchReportItem | null)}
-     * @memberof StockCreateEditComponent
-     */
-    private resolveAvailabilityBatchItem(event: any): BatchReportItem | null {
-        if (!event) {
-            return null;
-        }
-
-        const matchedOption = event?.additional
-            ? { label: event?.label, value: event?.value, additional: event.additional }
-            : this.findBatchAvailabilityOption({
-                value: String(event?.value ?? "").trim(),
-                label: String(event?.label ?? "").trim(),
-                batchNumber: this.getCustomBatchNumber(event)
-            });
-
-        const source = matchedOption?.additional as BatchReportItem | undefined;
-        const optionValue = String(matchedOption?.value ?? event?.value ?? "").trim();
-
-        if (!source && !optionValue) {
-            return null;
-        }
-
-        const normalizedSource = source ?? {
-            uniqueName: "",
-            batchNumber: this.getCustomBatchNumber(event),
-            name: this.getCustomBatchNumber(event)
-        } as BatchReportItem;
-
-        const uniqueName = String(normalizedSource.uniqueName ?? "").trim() || optionValue;
-
-        return {
-            ...normalizedSource,
-            uniqueName,
-            batchNumber: normalizedSource.batchNumber || this.getCustomBatchNumber(event)
-        };
-    }
-
-    /**
-     * Parse a custom batch number from a free-text dropdown event.
-     *
-     * @private
-     * @param {*} event Dropdown selection event
-     * @return {*}  {string}
-     * @memberof StockCreateEditComponent
-     */
-    private getCustomBatchNumber(event: any): string {
-        const raw = String(event?.label ?? event?.value ?? "").trim();
-        return raw ? raw.split(" - ")[0].trim() : "";
-    }
-
-    /**
-     * Ignore blur events that re-emit the already selected API batch as custom text.
-     *
-     * @private
-     * @param {*} batch Batch row
-     * @param {*} event Dropdown selection event
-     * @param {string} customBatchNumber Parsed custom batch number
-     * @return {*}  {boolean}
-     * @memberof StockCreateEditComponent
-     */
-    private isBlurEchoAfterApiSelection(batch: any, event: any, customBatchNumber: string): boolean {
-        if (event?.additional) {
-            return false;
-        }
-        const batchNumber = String(batch?.batchNumber ?? "").trim();
-        return !!batchNumber && customBatchNumber === batchNumber;
-    }
-
-    private applyAvailabilityBatchToRow(batch: any, item: BatchReportItem, event?: any): void {
-        const openingQuantity = item.openingQuantity ?? item.availableQuantity ?? null;
+    private applyAvailabilityBatchToRow(batch: any, item: BatchReportItem): void {
         batch.batchNumber = item.batchNumber ?? "";
-        batch.name = item.name ?? "";
-        batch.manufacturingDate = this.parseBatchDate(item.manufacturingDate);
-        batch.expiryDate = this.parseBatchDate(item.expiryDate);
-        batch.openingQuantity = openingQuantity;
-        batch.openingAmount = this.getAvailabilityOpeningAmount(item, openingQuantity);
-        batch.uniqueName = this.resolveBatchUniqueName({
-            uniqueName: String(item?.uniqueName ?? "").trim() || String(event?.value ?? "").trim() || getBatchAvailabilityOptionValue(item),
-            batchNumber: batch.batchNumber
-        });
-    }
-
-    /**
-     * Derive opening amount from availability batch data.
-     *
-     * @private
-     * @param {BatchReportItem} item Availability item
-     * @param {*} openingQuantity Opening quantity
-     * @return {*}  {(number | null)}
-     * @memberof StockCreateEditComponent
-     */
-    private getAvailabilityOpeningAmount(item: BatchReportItem, openingQuantity: any): number | null {
-        const rawOpeningAmount = (item as any)?.openingAmount;
-        if (rawOpeningAmount !== undefined && rawOpeningAmount !== null && rawOpeningAmount !== "") {
-            const openingAmount = Number(rawOpeningAmount);
-            return Number.isNaN(openingAmount) ? null : openingAmount;
-        }
-        const qty = Number(openingQuantity);
-        const rate = Number(item.rate);
-        if (qty && rate) {
-            return qty * rate;
-        }
-        return null;
+        batch.name = !batch.name && item.name ? item.name : batch.name;
+        batch.manufacturingDate = !batch.manufacturingDate && this.parseBatchDate(item.manufacturingDate) ? this.parseBatchDate(item.manufacturingDate) : batch.manufacturingDate;
+        batch.expiryDate = !batch.expiryDate && this.parseBatchDate(item.expiryDate) ? this.parseBatchDate(item.expiryDate) : batch.expiryDate;
+        batch.openingQuantity = !batch.openingQuantity && item.openingQuantity ? item.openingQuantity : batch.openingQuantity;
+        batch.openingAmount = !batch.openingAmount && item.openingAmount ? item.openingAmount : batch.openingAmount;
+        batch.uniqueName = !batch.uniqueName && item.uniqueName ? item.uniqueName : batch.uniqueName;
     }
 
     public getWarehouseBatches(variant: any): any[] {
@@ -2301,7 +2083,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public isCompleteBatch(batch: any): boolean {
-        return !!(String(batch?.batchNumber ?? "").trim() && String(batch?.name ?? "").trim());
+        return !!(String(batch?.batchNumber ?? "").trim() && String(batch?.name ?? "").trim() && batch.openingQuantity > 0 && batch.openingAmount > 0);
     }
 
     /**
@@ -2382,10 +2164,31 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public removeVariantBatchRow(variant: any, index: number): void {
         const batches = this.getWarehouseBatches(variant);
+        if (batches.length <= 1) {
+            this.resetVariantBatchRow(variant, index);
+            return;
+        }
         batches.splice(index, 1);
         if (!batches.length) {
             variant.showBatches = false;
         }
+        this.syncVariantOpeningFromBatches(variant);
+        this.updateBatchAvailabilityOptions();
+    }
+
+    /**
+     * Clear the only remaining batch row instead of removing it.
+     *
+     * @param {*} variant Variant row
+     * @param {number} index Batch row index
+     * @memberof StockCreateEditComponent
+     */
+    public resetVariantBatchRow(variant: any, index: number): void {
+        const batches = this.getWarehouseBatches(variant);
+        if (!batches[index]) {
+            return;
+        }
+        batches.splice(index, 1, this.createEmptyVariantBatch());
         this.syncVariantOpeningFromBatches(variant);
         this.updateBatchAvailabilityOptions();
     }

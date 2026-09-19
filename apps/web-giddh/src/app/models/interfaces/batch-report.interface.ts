@@ -74,11 +74,11 @@ export interface BatchReportFilter {
 export interface BatchSaveRequest {
     batchNumber: string;
     name: string;
-    stock: BatchEntityRef;
-    warehouse: BatchEntityRef;
-    variant: BatchEntityRef;
-    openingQuantity?: number;
-    openingAmount?: number;
+    stock?: BatchEntityRef;
+    warehouse?: BatchEntityRef;
+    variant?: BatchEntityRef;
+    openingQuantity?: number | null;
+    openingAmount?: number | null;
     rate?: number;
     manufacturingDate?: string;
     expiryDate?: string;
@@ -110,9 +110,10 @@ export interface VoucherSelectedBatch {
     name?: string;
     batchNumber?: string;
     quantity: number;
-    rate?: number;
     availableQuantity?: number;
     expiryDate?: string;
+    manufacturingDate?: string;
+    warehouse?: BatchEntityRef;
 }
 
 /** Input data for the batch select aside dialog. */

@@ -78,7 +78,7 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
     }
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public dialogData: { batch: BatchReportItem; localeData?: any; commonLocaleData?: any },
+        @Inject(MAT_DIALOG_DATA) public dialogData: { batch: BatchReportItem; inventoryType?: string; localeData?: any; commonLocaleData?: any },
         private dialogRef: MatDialogRef<BatchTransferDialogComponent>,
         private dialog: MatDialog,
         private formBuilder: FormBuilder,
@@ -138,6 +138,7 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(BatchCreateEditComponent, {
             ...ASIDE_PANE_CONFIG,
             data: {
+                inventoryType: this.dialogData?.inventoryType || "PRODUCT",
                 batch: {
                     stock: batch?.stock,
                     variant: batch?.variant,

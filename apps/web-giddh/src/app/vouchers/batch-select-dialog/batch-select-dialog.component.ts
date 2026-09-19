@@ -1,3 +1,4 @@
+import { A11yModule, FocusMonitor } from "@angular/cdk/a11y";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -31,6 +32,7 @@ interface BatchSelectRow extends VoucherSelectedBatch {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
+        A11yModule,
         CommonModule,
         FormsModule,
         MatButtonModule,
@@ -70,7 +72,8 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private inventoryService: InventoryService,
         private toasterService: ToasterService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private focusMonitor: FocusMonitor
     ) {
         this.localeData = dialogData?.localeData ?? {};
         this.commonLocaleData = dialogData?.commonLocaleData ?? {};
@@ -111,22 +114,6 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      */
     public get selectedCount(): number {
         return this.rows.filter(row => row.selected && Number(row.quantity) > 0).length;
-    }
-
-    /**
-     * Amount of selected batches (qty * rate).
-     *
-     * @readonly
-     * @type {number}
-     * @memberof BatchSelectDialogComponent
-     */
-    public get selectedAmount(): number {
-        return this.rows.reduce((total, row) => {
-            if (!row.selected) {
-                return total;
-            }
-            return total + (Number(row.quantity) || 0) * (Number(row.rate) || 0);
-        }, 0);
     }
 
     /**
@@ -258,7 +245,7 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(BatchCreateEditComponent, {
             ...ASIDE_PANE_CONFIG,
             data: {
-                inventoryType: this.dialogData?.inventoryType || "PRODUCT",
+                lockStock: true,
                 batch: {
                     stock: {
                         uniqueName: this.dialogData?.stockUniqueName,
@@ -277,6 +264,13 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
             if (saved) {
                 this.loadBatches(this.searchTerm?.trim() ?? "");
             }
+            this.cdr.markForCheck();
+            setTimeout(() => {
+                const addBatch = document.getElementById("add-batch");
+                if (addBatch) {
+                    this.focusMonitor.focusVia(addBatch, "keyboard");
+                }
+            }, 100);
         });
     }
 
@@ -316,9 +310,10 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
                 name: row.name,
                 batchNumber: row.batchNumber,
                 quantity: Number(row.quantity) || 0,
-                rate: Number(row.rate) || 0,
                 availableQuantity: Number(row.availableQuantity) || 0,
-                expiryDate: row.expiryDate
+                expiryDate: row.expiryDate,
+                manufacturingDate: row.manufacturingDate,
+                warehouse: row.warehouse
             }));
 
         this.dialogRef.close({
@@ -467,9 +462,10 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
                 name: row.name,
                 batchNumber: row.batchNumber,
                 quantity: Number(row.quantity) || 0,
-                rate: Number(row.rate) || 0,
                 availableQuantity: Number(row.availableQuantity) || 0,
-                expiryDate: row.expiryDate
+                expiryDate: row.expiryDate,
+                manufacturingDate: row.manufacturingDate,
+                warehouse: row.warehouse
             }));
         return current.length ? current : (this.dialogData?.selectedBatches ?? []);
     }
@@ -528,8 +524,9 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
                 name: item.name,
                 batchNumber: item.batchNumber,
                 expiryDate: item.expiryDate,
+                manufacturingDate: item.manufacturingDate,
+                warehouse: item.warehouse,
                 availableQuantity: Number(item.availableQuantity) || 0,
-                rate: Number(item.rate) || 0,
                 selected: !!existing,
                 quantity: existing ? Number(existing.quantity) || 0 : 0
             });
@@ -555,8 +552,9 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
                     name: item.name,
                     batchNumber: item.batchNumber,
                     expiryDate: item.expiryDate,
+                    manufacturingDate: item.manufacturingDate,
+                    warehouse: item.warehouse,
                     availableQuantity: Number(item.availableQuantity) || 0,
-                    rate: Number(item.rate) || 0,
                     selected: true,
                     quantity: Number(item.quantity) || 0
                 });

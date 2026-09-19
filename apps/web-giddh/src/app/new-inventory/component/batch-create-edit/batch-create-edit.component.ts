@@ -2,17 +2,15 @@ import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, Optional
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
-import { select, Store } from "@ngrx/store";
-import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { of, ReplaySubject } from "rxjs";
+import { catchError, takeUntil } from "rxjs/operators";
 import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption } from "../../../app.constant";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
-import { InventoryReportRequest } from "../../../models/api-models/Inventory";
 import { BatchDetails, BatchReportItem, BatchSaveRequest } from "../../../models/interfaces/batch-report.interface";
 import { GeneralService } from "../../../services/general.service";
 import { InventoryService } from "../../../services/inventory.service";
+import { LedgerService } from "../../../services/ledger.service";
 import { ToasterService } from "../../../services/toaster.service";
-import { AppState } from "../../../store";
 import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
 import { GiddhDatepickerModule } from "../../../theme/giddh-datepicker/giddh-datepicker.module";
 import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
@@ -53,6 +51,8 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
     public readonly isFormSubmitted = signal(false);
     /** True when editing an existing batch. */
     public readonly isUpdateMode = signal(false);
+    /** True when stock is fixed by the parent (voucher Select Batches). */
+    public readonly isStockLocked = signal(false);
     /** Batch unique name in edit mode. */
     public batchUniqueName: string = "";
     /** Stock dropdown options. */
@@ -71,10 +71,6 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
     private readonly manufacturingDateValue = signal<any>(null);
     /** Expiry date value mirrored from the form (for computed date-range checks). */
     private readonly expiryDateValue = signal<any>(null);
-    /** Universal from date used by stock/variant report APIs. */
-    private fromDate: string = "";
-    /** Universal to date used by stock/variant report APIs. */
-    private toDate: string = "";
 
     /**
      * Minimum selectable expiry date (manufacturing date).
@@ -104,11 +100,11 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
     constructor(
         private formBuilder: FormBuilder,
         private inventoryService: InventoryService,
+        private ledgerService: LedgerService,
         private toaster: ToasterService,
         private generalService: GeneralService,
-        private store: Store<AppState>,
         @Optional() private dialogRef: MatDialogRef<BatchCreateEditComponent>,
-        @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: { batchUniqueName?: string; batch?: BatchReportItem | BatchDetails }
+        @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: { batchUniqueName?: string; batch?: BatchReportItem | BatchDetails; inventoryType?: string; lockStock?: boolean }
     ) {
         this.batchForm = this.formBuilder.group({
             batchNumber: ["", Validators.required],
@@ -131,18 +127,14 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.batchUniqueName = this.dialogData?.batchUniqueName || "";
         this.isUpdateMode.set(!!this.batchUniqueName);
+        this.isStockLocked.set(!!this.dialogData?.lockStock);
 
-        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(dateObj => {
-            if (dateObj) {
-                this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                this.loadStocks();
-                if (this.batchForm.get("stockUniqueName")?.value) {
-                    this.loadVariants();
-                }
+        if (!this.isStockLocked()) {
+            this.loadStocks();
+            if (this.batchForm.get("stockUniqueName")?.value) {
+                this.loadVariants();
             }
-        });
-
+        }
         this.loadWarehouses();
         if (this.dialogData?.batch) {
             this.applyFormFromDetails(this.dialogData.batch);
@@ -160,67 +152,57 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Load stock options from the item-wise report API.
+     * Load stock options from the stocks V2 API.
      *
-     * @param {string} [query] Optional client-side filter text
+     * @param {string} [query] Optional search text
      * @memberof BatchCreateEditComponent
      */
     public loadStocks(query: string = ""): void {
-        const stockReportRequest = new InventoryReportRequest();
-        const queryParams = { from: this.fromDate, to: this.toDate, count: DROPDOWN_ITEMS_COUNT_LIMIT, page: 1, sort: "", sortBy: "" };
-        this.inventoryService.getItemWiseReport(queryParams, stockReportRequest)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(response => {
-                if (response?.status === "success") {
-                    const unique = new Map<string, IOption>();
-                    (response.body?.results ?? []).forEach((row: any) => {
-                        const uniqueName = row?.stock?.uniqueName;
-                        if (uniqueName && !unique.has(uniqueName)) {
-                            unique.set(uniqueName, { label: row?.stock?.name ?? uniqueName, value: uniqueName });
-                        }
-                    });
-                    let options = Array.from(unique.values());
-                    if (query) {
-                        options = options.filter(option => option.label?.toLowerCase()?.includes(query.toLowerCase()));
-                    }
-                    this.stocks.set(this.ensureSelectedOption(options, this.batchForm.get("stockUniqueName")?.value, this.stockLabel()));
-                }
-            });
+        if (this.isStockLocked()) {
+            return;
+        }
+        this.inventoryService.getStocksV2({
+            inventoryType: this.dialogData?.inventoryType || "PRODUCT",
+            page: 1,
+            q: query ?? "",
+            count: DROPDOWN_ITEMS_COUNT_LIMIT
+        }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                const options = (response.body?.results ?? [])
+                    .map((stock: any) => ({
+                        label: stock?.name ?? stock?.uniqueName,
+                        value: stock?.uniqueName
+                    }))
+                    .filter(option => option.value);
+                this.stocks.set(this.ensureSelectedOption(options, this.batchForm.get("stockUniqueName")?.value, this.stockLabel()));
+            }
+        });
     }
 
     /**
-     * Load variants for the selected stock from the variant-wise report API.
+     * Load variants for the selected stock.
      *
-     * @param {string} [query] Optional client-side filter text
      * @memberof BatchCreateEditComponent
      */
-    public loadVariants(query: string = ""): void {
+    public loadVariants(): void {
         const stockUniqueName = this.batchForm.get("stockUniqueName")?.value;
         if (!stockUniqueName) {
             this.variants.set([]);
             return;
         }
-        const stockReportRequest = new InventoryReportRequest();
-        stockReportRequest.stockUniqueNames = [stockUniqueName];
-        const queryParams = { from: this.fromDate, to: this.toDate, count: DROPDOWN_ITEMS_COUNT_LIMIT, page: 1, sort: "", sortBy: "" };
-        this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(response => {
-                if (response?.status === "success") {
-                    const unique = new Map<string, IOption>();
-                    (response.body?.results ?? []).forEach((row: any) => {
-                        const uniqueName = row?.variant?.uniqueName;
-                        if (uniqueName && !unique.has(uniqueName)) {
-                            unique.set(uniqueName, { label: row?.variant?.name ?? uniqueName, value: uniqueName });
-                        }
-                    });
-                    let options = Array.from(unique.values());
-                    if (query) {
-                        options = options.filter(option => option.label?.toLowerCase()?.includes(query.toLowerCase()));
-                    }
-                    this.variants.set(this.ensureSelectedOption(options, this.batchForm.get("variantUniqueName")?.value, this.variantLabel()));
-                }
-            });
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            catchError(() => of([])),
+            takeUntil(this.destroyed$)
+        ).subscribe((variants) => {
+            let options = (Array.isArray(variants) ? variants : [])
+                .map((variant: any) => ({
+                    label: variant?.name ?? variant?.uniqueName,
+                    value: variant?.uniqueName
+                }))
+                .filter(option => option.value);
+            this.variants.set(this.ensureSelectedOption(options, this.batchForm.get("variantUniqueName")?.value, this.variantLabel()));
+            this.selectSingleOptionIfEmpty(this.variants(), "variantUniqueName", option => this.selectVariant(option));
+        });
     }
 
     /**
@@ -230,17 +212,13 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     public selectStock(option?: IOption): void {
-        if (this.isUpdateMode()) {
+        if (this.isUpdateMode() || this.isStockLocked()) {
             return;
         }
-        const nextValue = option?.value ?? null;
-        const previousValue = this.batchForm.get("stockUniqueName")?.value;
         this.stockLabel.set(option?.label ?? "");
-        this.batchForm.get("stockUniqueName")?.patchValue(nextValue);
-        if (previousValue !== nextValue) {
-            this.batchForm.get("variantUniqueName")?.patchValue(null);
-            this.variantLabel.set("");
-        }
+        this.batchForm.get("stockUniqueName")?.patchValue(option?.value ?? null);
+        this.batchForm.get("variantUniqueName")?.patchValue(null);
+        this.variantLabel.set("");
         this.loadVariants();
     }
 
@@ -284,14 +262,20 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
         const payload: BatchSaveRequest = {
             batchNumber: formValue.batchNumber,
             name: formValue.name,
-            stock: formValue.stockUniqueName ? { uniqueName: formValue.stockUniqueName } : { uniqueName: "" },
-            variant: { uniqueName: formValue.variantUniqueName },
-            warehouse: { uniqueName: formValue.warehouseUniqueName },
-            openingQuantity: Number(formValue.openingQuantity) || 0,
-            openingAmount: this.parseOpeningAmount(formValue.openingAmount),
+            openingQuantity: this.parseOptionalNumber(formValue.openingQuantity),
+            openingAmount: this.parseOptionalNumber(String(formValue.openingAmount ?? "").replace(/,/g, "")),
             manufacturingDate: this.formatDate(formValue.manufacturingDate),
             expiryDate: this.formatDate(formValue.expiryDate)
         };
+        if (formValue.stockUniqueName) {
+            payload.stock = { uniqueName: formValue.stockUniqueName };
+        }
+        if (formValue.variantUniqueName) {
+            payload.variant = { uniqueName: formValue.variantUniqueName };
+        }
+        if (formValue.warehouseUniqueName) {
+            payload.warehouse = { uniqueName: formValue.warehouseUniqueName };
+        }
         this.isLoading.set(true);
         const request$ = this.isUpdateMode()
             ? this.inventoryService.updateBatch(this.batchUniqueName, payload)
@@ -340,9 +324,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
                     this.warehouseLabel()
                 );
                 this.warehouses.set(warehouses);
-                if (!this.isUpdateMode() && warehouses?.length === 1 && !this.batchForm.get("warehouseUniqueName")?.value) {
-                    this.selectWarehouse(warehouses[0]);
-                }
+                this.selectSingleOptionIfEmpty(warehouses, "warehouseUniqueName", option => this.selectWarehouse(option));
             }
         });
     }
@@ -450,6 +432,21 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Select the only dropdown option when none is chosen yet.
+     *
+     * @private
+     * @param {IOption[]} options Dropdown options
+     * @param {string} controlName Form control name
+     * @param {(option: IOption) => void} selectFn Selection handler
+     * @memberof BatchCreateEditComponent
+     */
+    private selectSingleOptionIfEmpty(options: IOption[], controlName: string, selectFn: (option: IOption) => void): void {
+        if (options?.length === 1 && !this.batchForm.get(controlName)?.value) {
+            selectFn(options[0]);
+        }
+    }
+
+    /**
      * Format a datepicker value as `DD-MM-YYYY`.
      *
      * @private
@@ -465,8 +462,20 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @return {*}  {number}
      * @memberof BatchCreateEditComponent
      */
-    private parseOpeningAmount(value: any): number {
-        return Number(String(value ?? "").replace(/,/g, "")) || 0;
+    /**
+     * Convert a numeric input to a number, or null when empty or zero.
+     *
+     * @private
+     * @param {*} value Quantity or amount
+     * @return {*}  {(number | null)}
+     * @memberof BatchCreateEditComponent
+     */
+    private parseOptionalNumber(value: any): number | null {
+        if (value === null || value === undefined || value === "") {
+            return null;
+        }
+        const parsed = Number(value);
+        return Number.isFinite(parsed) && parsed !== 0 ? parsed : null;
     }
 
     private formatDate(value: any): string {

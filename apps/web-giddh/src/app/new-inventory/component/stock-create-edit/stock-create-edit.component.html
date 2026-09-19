@@ -1334,14 +1334,13 @@
                                                                                     [placeholder]="localeData?.batch_number"
                                                                                     [name]="'variantBatchNumber' + i + '_' + batchIndex"
                                                                                     [options]="getBatchAvailabilityOptions(batch)"
-                                                                                    [ngModel]="batch.uniqueName"
-                                                                                    (ngModelChange)="onBatchDropdownModelChange(batch, $event)"
+                                                                                    [ngModel]="batch.batchNumber"
                                                                                     [labelValue]="batch.batchNumber"
                                                                                     [useCustomLabelValue]="true"
                                                                                     [enableDynamicSearch]="true"
                                                                                     [allowCustomDropdownValue]="true"
                                                                                     [noResultsFoundMessage]="localeData?.create_custom_batch"
-                                                                                    [required]="isBatchNameRequired(batch)"
+                                                                                    [required]="isBatchNameRequired(batch) && !batch.batchNumber"
                                                                                     (dynamicSearchedQuery)="searchBatchAvailability($event)"
                                                                                     (selectedOption)="onBatchAvailabilitySelected(batch, $event)"
                                                                                 ></reactive-dropdown-field>
@@ -1353,7 +1352,7 @@
                                                                                     [name]="'variantBatchName' + i + '_' + batchIndex"
                                                                                     [(ngModel)]="batch.name"
                                                                                     [type]="'text'"
-                                                                                    [required]="isBatchNameRequired(batch)"
+                                                                                    [required]="isBatchNameRequired(batch) && !batch.name"
                                                                                 ></input-field>
                                                                             </div>
                                                                             <div class="min-width-0 w-100 variant-batch-datepicker">
@@ -1399,14 +1398,26 @@
                                                                                     [useMask]="true"
                                                                                 ></input-field>
                                                                             </div>
-                                                                            <div class="variant-batch-remove" *ngIf="getWarehouseBatches(variant)?.length > 1">
+                                                                            <div class="variant-batch-remove">
                                                                                 <button
+                                                                                    *ngIf="getWarehouseBatches(variant)?.length > 1"
                                                                                     aria-label="delete icon"
                                                                                     matIconButton
                                                                                     class="chip-close-btn"
                                                                                     (click)="removeVariantBatchRow(variant, batchIndex)"
                                                                                 >
                                                                                     <i class="icon-trash"></i>
+                                                                                </button>
+                                                                                <button
+                                                                                    *ngIf="getWarehouseBatches(variant)?.length === 1"
+                                                                                    type="button"
+                                                                                    matIconButton
+                                                                                    class="chip-close-btn"
+                                                                                    [matTooltip]="commonLocaleData?.app_reset"
+                                                                                    [attr.aria-label]="commonLocaleData?.app_reset"
+                                                                                    (click)="resetVariantBatchRow(variant, batchIndex)"
+                                                                                >
+                                                                                    <i class="icon-refresh font-size-20"></i>
                                                                                 </button>
                                                                             </div>
                                                                         </div>
@@ -1624,14 +1635,13 @@
                                                                         [label]="localeData?.batch_number"
                                                                         [placeholder]="localeData?.batch_number"
                                                                         [options]="getBatchAvailabilityOptions(batch)"
-                                                                        [ngModel]="batch.uniqueName"
-                                                                        (ngModelChange)="onBatchDropdownModelChange(batch, $event)"
+                                                                        [ngModel]="batch.batchNumber"
                                                                         [labelValue]="batch.batchNumber"
                                                                         [useCustomLabelValue]="true"
                                                                         [enableDynamicSearch]="true"
                                                                         [allowCustomDropdownValue]="true"
                                                                         [noResultsFoundMessage]="localeData?.create_custom_batch"
-                                                                        [required]="isBatchNameRequired(batch)"
+                                                                        [required]="isBatchNameRequired(batch) && !batch.batchNumber"
                                                                         (dynamicSearchedQuery)="searchBatchAvailability($event)"
                                                                         (selectedOption)="onBatchAvailabilitySelected(batch, $event)"
                                                                     ></reactive-dropdown-field>
@@ -1642,7 +1652,7 @@
                                                                         [label]="localeData?.batch_name"
                                                                         [placeholder]="localeData?.batch_name"
                                                                         [(ngModel)]="batch.name"
-                                                                        [required]="isBatchNameRequired(batch)"
+                                                                        [required]="isBatchNameRequired(batch) && !batch.name"
                                                                     ></input-field>
                                                                     <giddh-datepicker
                                                                         [label]="localeData?.manufacturing_date"
@@ -1682,6 +1692,7 @@
                                                                         [useMask]="true"
                                                                     ></input-field>
                                                                     <button
+                                                                        *ngIf="getWarehouseBatches(stockVariant)?.length > 1"
                                                                         type="button"
                                                                         aria-label="remove batch"
                                                                         matIconButton
@@ -1689,6 +1700,17 @@
                                                                         (click)="removeVariantBatchRow(stockVariant, batchIndex)"
                                                                     >
                                                                         <i class="icon-trash"></i>
+                                                                    </button>
+                                                                    <button
+                                                                        *ngIf="getWarehouseBatches(stockVariant)?.length === 1"
+                                                                        type="button"
+                                                                        matIconButton
+                                                                        class="stock-batch-remove light-gray"
+                                                                        [matTooltip]="commonLocaleData?.app_reset"
+                                                                        [attr.aria-label]="commonLocaleData?.app_reset"
+                                                                        (click)="resetVariantBatchRow(stockVariant, batchIndex)"
+                                                                    >
+                                                                        <i class="icon-refresh font-size-20"></i>
                                                                     </button>
                                                                 </div>
                                                             </div>
