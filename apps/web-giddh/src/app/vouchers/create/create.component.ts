@@ -718,7 +718,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
         if (
-            (this.allowsSalesOptions ||
+            ((this.invoiceType.isSalesInvoice || 
+                this.invoiceType.isDeliveryChallan) ||
                 this.invoiceType?.isCreditNote ||
                 this.invoiceType?.isProformaInvoice ||
                 this.invoiceType?.isEstimateInvoice) &&
@@ -764,28 +765,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get isIndianCompanyAndAccount(): boolean {
         return this.company.countryCode === 'IN' && this.account.countryCode === 'IN';
     }
-
-    /**
-     * True for vouchers that allow the same options as a sales invoice, i.e. sales and delivery challan
-     *
-     * @readonly
-     * @type {boolean}
-     * @memberof VoucherCreateComponent
-     */
-    public get allowsSalesOptions(): boolean {
-        return this.invoiceType.isSalesInvoice || this.invoiceType.isDeliveryChallan;
-    }
-
-    /**
-     * True for vouchers that allow the same options as a purchase bill, i.e. purchase and receipt note
-     *
-     * @readonly
-     * @type {boolean}
-     * @memberof VoucherCreateComponent
-     */
-    public get allowsPurchaseOptions(): boolean {
-        return this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote;
-    } 
 
     /**
      * True when transporter details section should be shown (delivery challan / receipt note)
@@ -835,7 +814,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public get showSourceDestinationOfSupply(): boolean {
         return (
-            this.allowsPurchaseOptions ||
+            (this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) ||
             this.invoiceType.isDebitNote ||
             this.invoiceType.isPurchaseOrder
         );
@@ -852,8 +831,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get showDueDate(): boolean {
         return (
             this.currentVoucherFormDetails?.dueDate ||
-            this.allowsSalesOptions ||
-            this.allowsPurchaseOptions ||
+            (this.invoiceType.isSalesInvoice || this.invoiceType.isDeliveryChallan) ||
+            (this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) ||
             this.invoiceType.isPurchaseOrder ||
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isEstimateInvoice
@@ -1551,7 +1530,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                             if (
                                 this.invoiceType.isPurchaseOrder ||
-                                (this.allowsPurchaseOptions && !this.invoiceType.isCashInvoice)
+                                ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
                             ) {
                                 this.fillBillingShippingAddress(
                                     "company",
@@ -3724,7 +3703,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             if (
                 this.invoiceType.isPurchaseOrder ||
-                (this.allowsPurchaseOptions && !this.invoiceType.isCashInvoice)
+                ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
             ) {
                 let companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
                 let defaultAddress = companyDefaultAddress.defaultAddress;
@@ -3776,7 +3755,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 if (
                     this.invoiceType.isPurchaseOrder ||
-                    (this.allowsPurchaseOptions && !this.invoiceType.isCashInvoice)
+                    ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
                 ) {
                     const companyBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
                         this.company?.addresses,
@@ -10358,7 +10337,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     protected shouldShowMoreOptions(): boolean {
         return !this.queryParams.isRecurringVoucher && (
-            this.allowsSalesOptions ||
+            (this.invoiceType.isSalesInvoice || this.invoiceType.isDeliveryChallan) ||
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isReceiptInvoice ||
