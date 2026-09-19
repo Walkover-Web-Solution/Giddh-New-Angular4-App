@@ -5953,11 +5953,7 @@
             <div class="invoice-header d-flex align-items-center justify-content-between mb-3 flex-wrap row-gap-1">
                 <div class="d-flex align-items-center column-gap-1">
                     @if (!isCompany && !isConsolidatedBranch) {
-                        <button
-                            matButton="filled"
-                            [routerLink]="['/pages/vouchers', urlVoucherType, 'create']"
-                            class="w-100"
-                        >
+                        <button matButton="filled" [routerLink]="['/pages/vouchers', urlVoucherType, 'create']" class="w-100">
                             {{
                                 voucherType === voucherTypeEnum.deliveryChallan
                                     ? localeData?.new_delivery_challan
@@ -6153,15 +6149,13 @@
                                     {{ localeData?.mark_return }}
                                 </button>
                                 <mat-divider></mat-divider>
-                                @if (element?.statusCode !== 'CLOSED') {
-                                    <button mat-menu-item class="text-danger" (click)="cancelInventoryDocument(element)">
-                                        {{
-                                            voucherType === voucherTypeEnum.deliveryChallan
-                                                ? localeData?.cancel_challan
-                                                : localeData?.cancel_receipt_note
-                                        }}
-                                    </button>
-                                }
+                                <button mat-menu-item class="text-danger" (click)="cancelInventoryDocument(element)">
+                                    {{
+                                        voucherType === voucherTypeEnum.deliveryChallan
+                                            ? localeData?.cancel_challan
+                                            : localeData?.cancel_receipt_note
+                                    }}
+                                </button>
                                 <button mat-menu-item class="text-danger" (click)="deleteInventoryDocument(element)">
                                     {{
                                         voucherType === voucherTypeEnum.deliveryChallan
