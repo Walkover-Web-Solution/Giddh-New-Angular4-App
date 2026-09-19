@@ -376,7 +376,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         this.filterWithinDays.setValue(this.withinDaysControl.value ?? "", { emitEvent: false });
         this.filterExpiredOnly = this.expiredOnly;
         this.dialog.open(this.advanceFilterDialog, {
-            width: "500px",
+            panelClass: "mat-dialog-sm",
             autoFocus: false,
             role: "alertdialog",
             ariaLabel: "Advance filter Dialog"
@@ -558,7 +558,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         if (this.isBatchUsed(row)) {
             const entities = (row.linkedEntities ?? []).filter(item => !!item).join(", ") || "entry/voucher";
             const dialogRef = this.dialog.open(ConfirmModalComponent, {
-                width: "40%",
+                panelClass: "mat-dialog-md",
                 role: "alertdialog",
                 ariaLabel: "Confirm Archive Dialog",
                 data: {
@@ -576,7 +576,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return;
         }
         const dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: "40%",
+            panelClass: "mat-dialog-md",
             role: "alertdialog",
             ariaLabel: "Confirm Delete Dialog",
             data: {
@@ -646,7 +646,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return;
         }
         const dialogRef = this.dialog.open(BatchTransferDialogComponent, {
-            width: "500px",
+            panelClass: "mat-dialog-sm",
             autoFocus: false,
             role: "alertdialog",
             ariaLabel: "Transfer Batch Dialog",
@@ -684,7 +684,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return;
         }
         const dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: "40%",
+            panelClass: "mat-dialog-sm",
             role: "alertdialog",
             ariaLabel: "Confirm Unarchive Dialog",
             data: {
@@ -713,7 +713,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return;
         }
         const dialogRef = this.dialog.open(BatchArchiveDialogComponent, {
-            width: "500px",
+            panelClass: "mat-dialog-sm",
             autoFocus: false,
             role: "alertdialog",
             ariaLabel: "Archive Batch Dialog",
