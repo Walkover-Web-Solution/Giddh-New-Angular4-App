@@ -153,7 +153,8 @@
                                                 "
                                                 [label]="
                                                     invoiceType.isPurchaseOrder ||
-                                                    allowsPurchaseOptions ||
+                                                    (invoiceType.isPurchaseInvoice || 
+                                                    invoiceType.isReceiptNote) ||
                                                     invoiceType.isDebitNote ||
                                                     invoiceType.isPaymentInvoice
                                                         ? localeData?.vendor_name
@@ -161,7 +162,8 @@
                                                 "
                                                 [placeholder]="
                                                     invoiceType.isPurchaseOrder ||
-                                                    allowsPurchaseOptions ||
+                                                    (invoiceType.isPurchaseInvoice || 
+                                                    invoiceType.isReceiptNote) ||
                                                     invoiceType.isDebitNote ||
                                                     invoiceType.isPaymentInvoice
                                                         ? localeData?.select_vendor
@@ -176,7 +178,8 @@
                                                 [openDropdown]="openAccountDropdown"
                                                 [createNewText]="
                                                     !invoiceType.isPurchaseOrder &&
-                                                    !allowsPurchaseOptions &&
+                                                    !(invoiceType.isPurchaseInvoice || 
+                                                    invoiceType.isReceiptNote) &&
                                                     !invoiceType.isDebitNote &&
                                                     !invoiceType.isPaymentInvoice
                                                         ? localeData?.add_customer
@@ -276,7 +279,7 @@
                                         {{
                                             !invoiceType.isPurchaseOrder &&
                                             !invoiceType.isDebitNote &&
-                                            !allowsPurchaseOptions &&
+                                            !(invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) &&
                                             !invoiceType.isPaymentInvoice
                                                 ? localeData?.edit_customer
                                                 : localeData?.edit_vendor
@@ -285,7 +288,7 @@
                                     <ng-container
                                         *ngIf="
                                             !invoiceType.isCashInvoice &&
-                                            (allowsSalesOptions || invoiceType.isCreditNote || invoiceType.isReceiptInvoice)
+                                            ((invoiceType.isSalesInvoice || invoiceType.isDeliveryChallan) || invoiceType.isCreditNote || invoiceType.isReceiptInvoice)
                                         "
                                     >
                                         <img
@@ -298,7 +301,7 @@
                                     <ng-container
                                         *ngIf="
                                             !invoiceType.isCashInvoice &&
-                                            (allowsPurchaseOptions ||
+                                            ((invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) ||
                                                 invoiceType.isDebitNote ||
                                                 invoiceType.isPurchaseOrder ||
                                                 invoiceType.isPaymentInvoice)
@@ -835,7 +838,7 @@
                                 <!-- Row 2 for Deliver To Only show in Cash Invoice -->
                                 <div
                                     class="row pb-2"
-                                    *ngIf="invoiceType.isPurchaseOrder || (allowsPurchaseOptions && !invoiceType.isCashInvoice)"
+                                    *ngIf="invoiceType.isPurchaseOrder || ((invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) && !invoiceType.isCashInvoice)"
                                     formGroupName="company"
                                 >
                                     <div class="col-12 mt-3 mb-3">
@@ -1209,8 +1212,8 @@
                                             "
                                             [type]="'text'"
                                             formControlName="number"
-                                            [readonly]="(isUpdateMode && !allowsPurchaseOptions) || !useCustomVoucherNumber"
-                                            [disabled]="(isUpdateMode && !allowsPurchaseOptions) || !useCustomVoucherNumber"
+                                            [readonly]="(isUpdateMode && !(invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote)) || !useCustomVoucherNumber"
+                                            [disabled]="(isUpdateMode && !(invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote)) || !useCustomVoucherNumber"
                                         ></input-field>
                                     </div>
 
@@ -2812,8 +2815,8 @@
                                                                 !invoiceType.isDeliveryChallan &&
                                                                 !invoiceType.isReceiptNote &&
                                                                 (currentVoucherFormDetails?.depositAllowed ||
-                                                                    ((allowsSalesOptions ||
-                                                                        allowsPurchaseOptions ||
+                                                                    (((invoiceType.isSalesInvoice || invoiceType.isDeliveryChallan) ||
+                                                                        (invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) ||
                                                                         invoiceType.isCreditNote ||
                                                                         invoiceType.isDebitNote ||
                                                                         invoiceType.isReceiptInvoice ||
@@ -2910,8 +2913,8 @@
                                                                                     (currentVoucherFormDetails?.depositAllowed &&
                                                                                         !isUpdateMode &&
                                                                                         !invoiceType.isCashInvoice) ||
-                                                                                    ((allowsSalesOptions ||
-                                                                                        allowsPurchaseOptions ||
+                                                                                    (((invoiceType.isSalesInvoice || invoiceType.isDeliveryChallan) ||
+                                                                                        (invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) ||
                                                                                         invoiceType.isCreditNote ||
                                                                                         invoiceType.isDebitNote ||
                                                                                         invoiceType.isReceiptInvoice ||
@@ -2923,8 +2926,8 @@
                                                                                     <div
                                                                                         class="d-flex align-items-center column-gap-1"
                                                                                         *ngIf="
-                                                                                            (allowsSalesOptions ||
-                                                                                                allowsPurchaseOptions ||
+                                                                                            ((invoiceType.isSalesInvoice || invoiceType.isDeliveryChallan) ||
+                                                                                                (invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) ||
                                                                                                 invoiceType.isCreditNote ||
                                                                                                 invoiceType.isDebitNote ||
                                                                                                 invoiceType.isReceiptInvoice ||
