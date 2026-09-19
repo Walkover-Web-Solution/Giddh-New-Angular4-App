@@ -677,7 +677,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public get shouldApplyMaxLengthOnNotes(): boolean {
         return (
-            this.allowsSalesOptions ||
+            this.invoiceType.isSalesInvoice ||
             this.invoiceType?.isProformaInvoice ||
             this.invoiceType?.isEstimateInvoice
         );
@@ -873,8 +873,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         return (
-            this.allowsSalesOptions ||
-            this.allowsPurchaseOptions ||
+            this.invoiceType.isSalesInvoice ||
+            this.invoiceType.isPurchase ||
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isPurchaseOrder ||
@@ -5649,8 +5649,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.isVoucherDateChanged = true;
         if (
             !this.invoiceType.isCashInvoice &&
-            (this.allowsSalesOptions ||
-                this.allowsPurchaseOptions ||
+            (this.invoiceType.isSalesInvoice ||
+                this.invoiceType.isPurchase ||
                 this.invoiceType.isCreditNote ||
                 this.invoiceType.isDebitNote)
         ) {
@@ -7193,8 +7193,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         if (
-            (this.allowsSalesOptions ||
-                this.allowsPurchaseOptions ||
+            (this.invoiceType.isSalesInvoice ||
+                this.invoiceType.isPurchase ||
                 this.invoiceType.isCreditNote ||
                 this.invoiceType.isDebitNote ||
                 this.invoiceType.isReceiptInvoice ||

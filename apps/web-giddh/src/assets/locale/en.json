@@ -659,6 +659,8 @@
         "entry_created_with_voucher": "Entry created successfully with Voucher No: [VOUCHER_NO].",
         "voucher_updated": "Voucher updated successfully.",
         "voucher_deleted": "Voucher deleted successfully.",
+        "voucher_cancelled": "Voucher cancelled successfully.",
+        "voucher_cancelled_failed": "Failed to cancel voucher.",
         "status_updated": "Status updated successfully.",
         "proforma_generated": "Proforma generated successfully.",
         "purchase_invoice_updated": "Purchase invoice updated successfully.",

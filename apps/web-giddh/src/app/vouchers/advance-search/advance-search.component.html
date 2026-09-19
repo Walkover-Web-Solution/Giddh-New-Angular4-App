@@ -415,24 +415,6 @@
 
     <ng-container *ngIf="type === 'inventory-document'">
         <div class="d-flex column-gap-1 mb-3 w-100">
-            <multi-select-dropdown
-                class="w-50"
-                [name]="'inventoryStatuses'"
-                [label]="commonLocaleData?.app_status"
-                [options]="inventoryDocumentStatusOptions"
-                [showAllOption]="true"
-                formControlName="statuses"
-            ></multi-select-dropdown>
-            <multi-select-dropdown
-                class="w-50"
-                [name]="'inventoryInvoiceStatuses'"
-                [label]="voucherType === 'receipt-note' ? localeData?.bill_status : localeData?.invoice_status"
-                [options]="inventoryInvoiceStatusOptions"
-                [showAllOption]="true"
-                formControlName="invoiceStatuses"
-            ></multi-select-dropdown>
-        </div>
-        <div class="d-flex column-gap-1 mb-3 w-100">
             <reactive-dropdown-field
                 class="w-50"
                 [name]="'amountOperator'"
