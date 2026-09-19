@@ -236,25 +236,28 @@ export class GeneralService {
 
     storeUtmParameters(routerParams: any): void {
         if (routerParams['utm_source']) {
-            localStorage.setItem('utm_source', routerParams['utm_source']);
+            localStorage.setItem('utm_source', decodeURIComponent(routerParams['utm_source']));
         }
         if (routerParams['utm_medium']) {
-            localStorage.setItem('utm_medium', routerParams['utm_medium']);
+            localStorage.setItem('utm_medium', decodeURIComponent(routerParams['utm_medium']));
         }
         if (routerParams['utm_campaign']) {
-            localStorage.setItem('utm_campaign', routerParams['utm_campaign']);
+            localStorage.setItem('utm_campaign', decodeURIComponent(routerParams['utm_campaign']));
         }
         if (routerParams['utm_term']) {
-            localStorage.setItem('utm_term', routerParams['utm_term']);
+            localStorage.setItem('utm_term', decodeURIComponent(routerParams['utm_term']));
         }
         if (routerParams['utm_content']) {
-            localStorage.setItem('utm_content', routerParams['utm_content']);
+            localStorage.setItem('utm_content', decodeURIComponent(routerParams['utm_content']));
         }
         if (routerParams['region']) {
-            localStorage.setItem('region', routerParams['region']);
+            localStorage.setItem('region', decodeURIComponent(routerParams['region']));
         }
         if (routerParams['ref']) {
-            localStorage.setItem('ref', routerParams['ref']);
+            localStorage.setItem('ref', decodeURIComponent(routerParams['ref']));
+        }
+        if (routerParams['source']) {
+            localStorage.setItem('source', decodeURIComponent(routerParams['source']));
         }
     }
 
@@ -262,7 +265,8 @@ export class GeneralService {
         if (localStorage.getItem(param)) {
             return localStorage.getItem(param);
         } else {
-            return "";
+            const giddhQuery = this.getCookieValue('giddh_query');
+            return giddhQuery[param] || "";
         }
     }
 
@@ -274,6 +278,10 @@ export class GeneralService {
         localStorage.removeItem("utm_content");
         localStorage.removeItem("region");
         localStorage.removeItem("ref");
+        localStorage.removeItem("source");
+
+        // Remove giddh_query cookie
+        this.setCookie('giddh_query', null, 0);
     }
 
     getLastElement(array) {
