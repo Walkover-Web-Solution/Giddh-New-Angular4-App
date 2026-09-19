@@ -5,8 +5,6 @@ import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { ASIDE_PANE_CONFIG, IOption } from "../../../app.constant";
 import { BatchReportItem } from "../../../models/interfaces/batch-report.interface";
-import { OrganizationType } from "../../../models/user-login-state";
-import { GeneralService } from "../../../services/general.service";
 import { InventoryService } from "../../../services/inventory.service";
 import { BatchCreateEditComponent } from "../batch-create-edit/batch-create-edit.component";
 import { mapAvailabilityBatches } from "../batch-report/batch-report.helper";
@@ -28,15 +26,13 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
     public transferForm: FormGroup;
     /** True after a submit attempt with an invalid form. */
     public isFormSubmitted: boolean = false;
-    /** True while availability or warehouses are loading. */
+    /** True while availability is loading. */
     public isLoading: boolean = false;
     /** Target batch options from availability. */
     public batchOptions: IOption[] = [];
-    /** Warehouse options. */
-    public warehouseOptions: IOption[] = [];
     /** Display label for the selected target batch. */
     public batchLabel: string = "";
-    /** Display label for the selected warehouse. */
+    /** Display label for the warehouse of the selected target batch. */
     public warehouseLabel: string = "";
     /** True after availability has returned so the batch dropdown mounts with options. */
     public hasLoadedBatches: boolean = false;
@@ -78,12 +74,11 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
     }
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public dialogData: { batch: BatchReportItem; localeData?: any; commonLocaleData?: any },
+        @Inject(MAT_DIALOG_DATA) public dialogData: { batch: BatchReportItem; inventoryType?: string; localeData?: any; commonLocaleData?: any },
         private dialogRef: MatDialogRef<BatchTransferDialogComponent>,
         private dialog: MatDialog,
         private formBuilder: FormBuilder,
         private inventoryService: InventoryService,
-        private generalService: GeneralService,
         private cdr: ChangeDetectorRef
     ) {
         this.localeData = dialogData?.localeData ?? {};
@@ -97,13 +92,12 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Loads target batches and warehouses.
+     * Loads target batches.
      *
      * @memberof BatchTransferDialogComponent
      */
     public ngOnInit(): void {
         this.loadAvailableBatches();
-        this.loadWarehouses();
     }
 
     /**
@@ -115,17 +109,7 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
     public selectBatch(option?: IOption): void {
         this.batchLabel = option?.label ?? "";
         this.transferForm.get("toBatchUniqueName")?.patchValue(option?.value ?? "");
-    }
-
-    /**
-     * Warehouse selected.
-     *
-     * @param {IOption} option Selected warehouse
-     * @memberof BatchTransferDialogComponent
-     */
-    public selectWarehouse(option?: IOption): void {
-        this.warehouseLabel = option?.label ?? "";
-        this.transferForm.get("warehouseUniqueName")?.patchValue(option?.value ?? "");
+        this.applyWarehouseFromBatch(option?.additional);
     }
 
     /**
@@ -138,6 +122,7 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(BatchCreateEditComponent, {
             ...ASIDE_PANE_CONFIG,
             data: {
+                inventoryType: this.dialogData?.inventoryType,
                 batch: {
                     stock: batch?.stock,
                     variant: batch?.variant,
@@ -221,34 +206,16 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Load warehouses from linked stocks.
+     * Use the selected target batch warehouse. Do not default a warehouse.
      *
      * @private
+     * @param {BatchReportItem} [batch] Selected target batch
      * @memberof BatchTransferDialogComponent
      */
-    private loadWarehouses(): void {
-        this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (!response?.body) {
-                return;
-            }
-            const branches = response.body?.results?.filter((branch: any) => branch?.isCompany !== true) ?? [];
-            const isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-            const warehouses = (isCompany
-                ? branches.flatMap((branch: any) => branch?.warehouses ?? [])
-                : (branches.find((branch: any) => branch?.uniqueName === this.generalService.currentBranchUniqueName)?.warehouses ?? [])
-            ).map((warehouse: any) => ({ label: warehouse?.name, value: warehouse?.uniqueName }));
-            this.warehouseOptions = warehouses;
-            const originWarehouse = this.dialogData?.batch?.warehouse?.uniqueName;
-            if (originWarehouse) {
-                const selected = warehouses.find(warehouse => warehouse.value === originWarehouse);
-                if (selected) {
-                    this.selectWarehouse(selected);
-                }
-            } else if (warehouses.length === 1) {
-                this.selectWarehouse(warehouses[0]);
-            }
-            this.cdr.detectChanges();
-        });
+    private applyWarehouseFromBatch(batch?: BatchReportItem): void {
+        const warehouse = batch?.warehouse;
+        this.warehouseLabel = warehouse?.name ?? "";
+        this.transferForm.get("warehouseUniqueName")?.patchValue(warehouse?.uniqueName ?? "");
     }
 
     /**

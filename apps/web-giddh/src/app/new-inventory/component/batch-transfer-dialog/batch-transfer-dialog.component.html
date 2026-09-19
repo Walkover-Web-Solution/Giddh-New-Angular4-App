@@ -38,17 +38,17 @@
                         }
                     </div>
                     <div class="col-12 mt-3">
-                        <reactive-dropdown-field
+                        <input-field
+                            [name]="'warehouse'"
+                            [type]="'text'"
                             [label]="commonLocaleData?.app_warehouse"
                             [placeholder]="commonLocaleData?.app_select_warehouse"
-                            [options]="warehouseOptions"
-                            [labelValue]="warehouseLabel"
-                            formControlName="warehouseUniqueName"
-                            (selectedOption)="selectWarehouse($event)"
-                            (onClear)="selectWarehouse(null)"
+                            [ngModel]="warehouseLabel"
+                            [ngModelOptions]="{standalone: true}"
+                            [readonly]="true"
                             [required]="true"
                             [showError]="isFormSubmitted && !transferForm.get('warehouseUniqueName')?.value"
-                        ></reactive-dropdown-field>
+                        ></input-field>
                     </div>
                     <div class="col-12 mt-3">
                         <input-field

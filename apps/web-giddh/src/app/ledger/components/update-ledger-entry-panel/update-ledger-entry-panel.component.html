@@ -1354,13 +1354,17 @@
                                             class="mt-1 text-left"
                                             (click)="$event.stopPropagation()"
                                         >
-                                            <a
-                                                href="javascript:void(0)"
-                                                class="font-size-12 font-weight-semibold text-primary"
+                                            <div
+                                                tabindex="0"
+                                                role="button"
+                                                cdkMonitorElementFocus
+                                                class="font-size-12 font-weight-semibold text-primary cursor-pointer"
                                                 (click)="openBatchSelectDialog($event)"
+                                                (keydown.enter)="$event.preventDefault(); openBatchSelectDialog($event)"
+                                                (keydown.space)="$event.preventDefault(); openBatchSelectDialog($event)"
                                             >
                                                 {{ localeData?.select_batch }}
-                                            </a>
+                                            </div>
                                         </div>
                                     </div>
 

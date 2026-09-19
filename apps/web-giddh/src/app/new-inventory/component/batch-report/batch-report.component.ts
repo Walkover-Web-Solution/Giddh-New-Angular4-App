@@ -6,17 +6,17 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { forkJoin, of, ReplaySubject } from "rxjs";
+import { catchError, debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import * as customParseFormat from "dayjs/plugin/customParseFormat";
 import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
-import { InventoryReportRequest } from "../../../models/api-models/Inventory";
 import { BatchReportFilter, BatchReportItem, BatchReportTotals } from "../../../models/interfaces/batch-report.interface";
 import { OrganizationType } from "../../../models/user-login-state";
 import { GeneralService } from "../../../services/general.service";
 import { InventoryService } from "../../../services/inventory.service";
+import { LedgerService } from "../../../services/ledger.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { AppState } from "../../../store";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
@@ -129,6 +129,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         private router: Router,
         private cdr: ChangeDetectorRef,
         private inventoryService: InventoryService,
+        private ledgerService: LedgerService,
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
@@ -651,6 +652,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             ariaLabel: "Transfer Batch Dialog",
             data: {
                 batch: row,
+                inventoryType: this.inventoryType,
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData
             }
@@ -767,20 +769,30 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         const name = this.nameSearchText;
         const withinDays = Number(this.withinDaysControl.value);
         const payload: BatchReportFilter = {
-            stockUniqueNames: this.selectedStock ?? [],
-            variantUniqueNames: this.selectedVariant ?? [],
-            warehouseUniqueNames: this.selectedWarehouse ?? [],
-            batchUniqueNames: name ? [name] : [],
-            batchNumbers: batchNumber ? [batchNumber] : [],
             inventoryType: this.inventoryType
         };
+        if (this.selectedStock?.length) {
+            payload.stockUniqueNames = this.selectedStock;
+        }
+        if (this.selectedVariant?.length) {
+            payload.variantUniqueNames = this.selectedVariant;
+        }
+        if (this.selectedWarehouse?.length) {
+            payload.warehouseUniqueNames = this.selectedWarehouse;
+        }
+        if (name) {
+            payload.batchUniqueNames = [name];
+        }
+        if (batchNumber) {
+            payload.batchNumbers = [batchNumber];
+        }
         if (withinDays > 0) {
             payload.withinDays = withinDays;
         }
         if (this.expiredOnly !== null) {
             payload.expiredOnly = this.expiredOnly;
         }
-        this.inventoryService.getAllBatches({ q: name, page: this.page, count: this.count, from: this.fromDate, to: this.toDate }, payload)
+        this.inventoryService.getAllBatches({ page: this.page, count: this.count, from: this.fromDate, to: this.toDate }, payload)
             .pipe(takeUntil(this.cancelApi$), takeUntil(this.destroyed$))
             .subscribe(response => {
                 this.isLoading = false;
@@ -810,7 +822,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Load stock options from the item-wise report API.
+     * Load stock options from the stocks V2 API.
      *
      * @private
      * @memberof BatchReportComponent
@@ -819,55 +831,54 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         if (!this.inventoryType) {
             return;
         }
-        const stockReportRequest = new InventoryReportRequest();
-        stockReportRequest["inventoryType"] = this.inventoryType;
-        const queryParams = { from: this.fromDate, to: this.toDate, count: PAGINATION_LIMIT, page: 1, sort: "", sortBy: "" };
-        this.inventoryService.getItemWiseReport(queryParams, stockReportRequest)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(response => {
-                if (response?.status === "success") {
-                    const unique = new Map<string, { label: string; value: string }>();
-                    (response.body?.results ?? []).forEach((row: any) => {
-                        const uniqueName = row?.stock?.uniqueName;
-                        if (uniqueName && !unique.has(uniqueName)) {
-                            unique.set(uniqueName, { label: row?.stock?.name ?? uniqueName, value: uniqueName });
-                        }
-                    });
-                    this.stocks = Array.from(unique.values());
-                    this.cdr.detectChanges();
-                }
-            });
+        this.inventoryService.getStocksV2({
+            inventoryType: this.inventoryType,
+            page: 1,
+            q: "",
+            count: PAGINATION_LIMIT
+        }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.stocks = (response.body?.results ?? [])
+                    .map((stock: any) => ({
+                        label: stock?.name ?? stock?.uniqueName,
+                        value: stock?.uniqueName
+                    }))
+                    .filter(option => option.value);
+                this.cdr.detectChanges();
+            }
+        });
     }
 
     /**
-     * Load variant options from the variant-wise report API.
+     * Load variants for the selected stocks.
      *
      * @private
      * @memberof BatchReportComponent
      */
     private loadVariants(): void {
-        if (!this.inventoryType) {
+        const stockUniqueNames = this.selectedStock ?? [];
+        if (!stockUniqueNames.length) {
+            this.variants = [];
+            this.cdr.detectChanges();
             return;
         }
-        const stockReportRequest = new InventoryReportRequest();
-        stockReportRequest["inventoryType"] = this.inventoryType;
-        stockReportRequest.stockUniqueNames = this.selectedStock ?? [];
-        const queryParams = { from: this.fromDate, to: this.toDate, count: PAGINATION_LIMIT, page: 1, sort: "", sortBy: "" };
-        this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(response => {
-                if (response?.status === "success") {
-                    const unique = new Map<string, { label: string; value: string }>();
-                    (response.body?.results ?? []).forEach((row: any) => {
-                        const uniqueName = row?.variant?.uniqueName;
-                        if (uniqueName && !unique.has(uniqueName)) {
-                            unique.set(uniqueName, { label: row?.variant?.name ?? uniqueName, value: uniqueName });
-                        }
-                    });
-                    this.variants = Array.from(unique.values());
-                    this.cdr.detectChanges();
-                }
+        forkJoin(stockUniqueNames.map(uniqueName =>
+            this.ledgerService.loadStockVariants(uniqueName).pipe(catchError(() => of([])))
+        )).pipe(takeUntil(this.destroyed$)).subscribe(results => {
+            const unique = new Map<string, { label: string; value: string }>();
+            (results ?? []).forEach(variants => {
+                (Array.isArray(variants) ? variants : []).forEach((variant: any) => {
+                    if (variant?.uniqueName && !unique.has(variant.uniqueName)) {
+                        unique.set(variant.uniqueName, {
+                            label: variant?.name ?? variant.uniqueName,
+                            value: variant.uniqueName
+                        });
+                    }
+                });
             });
+            this.variants = Array.from(unique.values());
+            this.cdr.detectChanges();
+        });
     }
 
     /**

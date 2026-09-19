@@ -45,13 +45,11 @@ export function mapAvailabilityBatches(response: any, excludeUniqueName?: string
     const results = Array.isArray(body) ? body : (body?.results ?? []);
     return (Array.isArray(results) ? results : []).reduce((list: IOption[], rawItem: BatchReportItem) => {
         const item = normalizeAvailabilityBatchItem(rawItem);
-        const value = getBatchAvailabilityOptionValue(item);
+        const value = item.batchNumber;
         if (!value) {
             return list;
         }
-        const label = item.batchNumber
-            ? `${item.batchNumber}${item.name ? " - " + item.name : ""}`
-            : (item.name ?? value);
+        const label = `${item.batchNumber} - ${item.name}`;
         list.push({ label, value, additional: item });
         return list;
     }, []);

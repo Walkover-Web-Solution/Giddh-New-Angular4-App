@@ -1,9 +1,6 @@
 <div class="aside-dialog-wrapper d-flex flex-column h-100 bg-white">
     <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.select_batches }}</span>
-        <button mat-icon-button mat-dialog-close [attr.aria-label]="commonLocaleData?.app_close">
-            <i class="icon-cross"></i>
-        </button>
     </div>
 
     <mat-dialog-content class="dialog-body overflow-auto">
@@ -86,9 +83,18 @@
             ></input-field>
         </div>
         <div class="d-flex justify-content-between align-items-center column-gap-1 mb-2">
-            <a href="javascript:void(0)" class="text-primary font-size-12 font-weight-semibold nowrap cursor-pointer" (click)="openCreateBatch()">
+            <div
+                id="add-batch"
+                tabindex="0"
+                role="button"
+                cdkMonitorElementFocus
+                class="text-primary font-size-12 font-weight-semibold nowrap cursor-pointer"
+                (click)="openCreateBatch()"
+                (keydown.enter)="$event.preventDefault(); openCreateBatch()"
+                (keydown.space)="$event.preventDefault(); openCreateBatch()"
+            >
                 {{ localeData?.add_batch }}
-            </a>
+            </div>
             <p class="font-size-12 m-0 text-right flex-grow-1">
                 {{ localeData?.quick_add_hint }} · {{ localeData?.sorted_by_expiry }}
             </p>
@@ -122,8 +128,9 @@
                             {{ localeData?.batch_expiry }} {{ formatExpiry(row.expiryDate) }}
                         </span>
                         <span *ngIf="row.expiryDate"> · </span>
-                        <span>{{ localeData?.batch_available }} {{ row.availableQuantity }}</span>
-                        <span *ngIf="row.rate != null"> · {{ dialogData?.currencySymbol }}{{ row.rate }}</span>
+                        <span>{{ localeData?.batch_available }} {{ row.availableQuantity }} {{ dialogData?.unitCode }}</span>
+                        <span *ngIf="row.manufacturingDate"> · {{ localeData?.batch_manufacturing }} {{ formatExpiry(row.manufacturingDate) }}</span>
+                        <span *ngIf="row.warehouse?.name"> · {{ row.warehouse.name }}</span>
                     </div>
                     <div *ngIf="getNegativeQuantity(row) > 0" class="text-orange font-size-12 mt-1">
                         {{
@@ -157,8 +164,7 @@
                 interpolate(localeData?.batches_summary, {
                     COUNT: selectedCount,
                     QTY: allocatedQuantity,
-                    UNIT: dialogData?.unitCode || '',
-                    AMOUNT: (dialogData?.currencySymbol || '') + selectedAmount
+                    UNIT: dialogData?.unitCode || ''
                 })
             }}
         </div>

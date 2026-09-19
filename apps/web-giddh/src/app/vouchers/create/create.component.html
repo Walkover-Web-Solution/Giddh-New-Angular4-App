@@ -1984,6 +1984,7 @@
                                                                         getEntryBatches(transaction)?.length
                                                                     "
                                                                     class="d-block mt-2"
+                                                                    [attr.id]="'edit-batch-' + entryIndex"
                                                                     [batches]="getEntryBatches(transaction)"
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
@@ -2110,13 +2111,18 @@
                                                                         class="text-left mt-1"
                                                                         (click)="$event.stopPropagation()"
                                                                     >
-                                                                        <a
-                                                                            href="javascript:void(0)"
-                                                                            class="font-size-12 font-weight-semibold text-primary"
+                                                                        <div
+                                                                            tabindex="0"
+                                                                            role="button"
+                                                                            cdkMonitorElementFocus
+                                                                            [attr.id]="'select-batch-' + entryIndex"
+                                                                            class="font-size-12 font-weight-semibold text-primary cursor-pointer"
                                                                             (click)="openBatchSelectDialog(entryIndex, $event)"
+                                                                            (keydown.enter)="$event.preventDefault(); openBatchSelectDialog(entryIndex, $event)"
+                                                                            (keydown.space)="$event.preventDefault(); openBatchSelectDialog(entryIndex, $event)"
                                                                         >
                                                                             {{ localeData?.select_batch }}
-                                                                        </a>
+                                                                        </div>
                                                                     </div>
                                                                 </td>
 

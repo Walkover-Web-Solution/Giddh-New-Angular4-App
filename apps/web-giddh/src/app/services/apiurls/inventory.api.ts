@@ -118,7 +118,7 @@ export const INVENTORY_API = {
     },
     INVENTORY_VARIANT_UPDATE: 'v2/company/:companyUniqueName/stock/:stockUniqueName/variant/:variantUniqueName',
     BATCH: {
-        GET_ALL: 'company/:companyUniqueName/batch/all?q=:q&page=:page&count=:count&from=:from&to=:to',
+        GET_ALL: 'company/:companyUniqueName/batch/all?page=:page&count=:count&from=:from&to=:to',
         CREATE: 'company/:companyUniqueName/batch',
         GET: 'company/:companyUniqueName/batch/:batchUniqueName',
         UPDATE: 'company/:companyUniqueName/batch/:batchUniqueName',

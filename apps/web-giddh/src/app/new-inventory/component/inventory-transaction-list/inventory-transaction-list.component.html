@@ -23,7 +23,7 @@
             (filters)="getSelectedFilters($event)"
             (resetFilters)="resetFilter()"
             (isLoading)="isLoading = $event"
-            (selectedColumns)="displayedColumns = $event"
+            (selectedColumns)="getCustomiseHeaderColumns($event)"
         ></report-filters>
         <div class="inventory-transaction-list" *ngIf="!isLoading">
             <div
@@ -412,6 +412,27 @@
                                     [matTooltip]="element?.variant?.name ? element?.variant?.name : ''"
                                 >
                                     {{ element?.variant?.name ?? '-' }}
+                                </td>
+                            </div>
+                            <div matColumnDef="batch">
+                                <th class="text-center report-column" mat-header-cell *matHeaderCellDef>
+                                    {{ localeData?.reports?.batch }}
+                                </th>
+                                <td
+                                    [data-title]="localeData?.reports?.batch"
+                                    class="text-center word-wrap report-td-column"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                >
+                                    <a
+                                        *ngIf="getBatchCount(element) > 0"
+                                        href="javascript:void(0)"
+                                        class="text-primary cursor-pointer"
+                                        (click)="openBatchReport(element, $event)"
+                                    >
+                                        {{ getBatchDisplay(element) }}
+                                    </a>
+                                    <span *ngIf="getBatchCount(element) <= 0">-</span>
                                 </td>
                             </div>
                             <div matColumnDef="inward_quantity">

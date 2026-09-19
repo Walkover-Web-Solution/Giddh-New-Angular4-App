@@ -390,6 +390,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public bulkStockAsideMenuRef: MatDialogRef<any>;
     /** Discount dialog ref */
     public discountDialogRef: MatDialogRef<any>;
+    /** Batch select dialog ref */
+    public batchSelectDialogRef: MatDialogRef<any>;
+    /** True while the batch select dialog is open or focus is being restored. */
+    private isBatchSelectDialogOpen: boolean = false;
     /** Stores the current voucher form detail */
     public currentVoucherFormDetails: VoucherForm;
     /** RCM modal configuration */
@@ -3473,10 +3477,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.activeEntryIndex = entryIndex;
+        this.isBatchSelectDialogOpen = true;
         const warehouseName = this.invoiceForm.get("warehouse.name")?.value || this.warehouses?.[0]?.name;
         const warehouseUniqueName = this.invoiceForm.get("warehouse.uniqueName")?.value || this.warehouses?.[0]?.uniqueName;
+        const focusTarget = (event?.currentTarget ?? event?.target ?? document.activeElement) as HTMLElement;
 
-        const dialogRef = this.dialog.open(BatchSelectDialogComponent, {
+        this.batchSelectDialogRef = this.dialog.open(BatchSelectDialogComponent, {
             ...ASIDE_PANE_CONFIG,
             data: {
                 stockName: transactionFormGroup.get("stock.name")?.value,
@@ -3496,17 +3502,47 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
-            if (!result) {
-                return;
-            }
-            transactionFormGroup.get("stock.batches")?.patchValue(result.batches ?? []);
-            if (result.overrideLineQuantity) {
-                transactionFormGroup.get("stock.quantity")?.patchValue(result.allocatedQuantity);
-                this.handleQuantityBlur(transactionFormGroup);
+        this.batchSelectDialogRef.afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
+            this.activeEntryIndex = entryIndex;
+            if (result) {
+                transactionFormGroup.get("stock.batches")?.patchValue(result.batches ?? []);
+                if (result.overrideLineQuantity) {
+                    transactionFormGroup.get("stock.quantity")?.patchValue(result.allocatedQuantity);
+                    this.handleQuantityBlur(transactionFormGroup);
+                }
             }
             this.changeDetection.detectChanges();
+            this.restoreBatchSelectFocus(entryIndex, focusTarget);
+            setTimeout(() => {
+                this.isBatchSelectDialogOpen = false;
+            }, 200);
         });
+    }
+
+    /**
+     * Keep the line active and return keyboard focus to Select batch / Edit.
+     *
+     * @private
+     * @param {number} entryIndex
+     * @param {HTMLElement} [focusTarget]
+     * @memberof VoucherCreateComponent
+     */
+    private restoreBatchSelectFocus(entryIndex: number, focusTarget?: HTMLElement): void {
+        setTimeout(() => {
+            const selectBatch = document.getElementById(`select-batch-${entryIndex}`);
+            if (selectBatch) {
+                this.focusMonitor.focusVia(selectBatch, "keyboard");
+                return;
+            }
+            const editBatch = document.querySelector(`#edit-batch-${entryIndex} button`) as HTMLElement;
+            if (editBatch) {
+                this.focusMonitor.focusVia(editBatch, "keyboard");
+                return;
+            }
+            if (focusTarget?.isConnected) {
+                this.focusMonitor.focusVia(focusTarget, "keyboard");
+            }
+        }, 100);
     }
 
     /**
@@ -6139,6 +6175,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleOutsideClick(event: any): void {
+        if (this.isBatchSelectDialogOpen || event?.target?.closest?.(".cdk-overlay-pane, .mat-mdc-dialog-container, .aside-dialog-wrapper")) {
+            return;
+        }
         const activeTaxComponent = this.activeEntryIndex !== null && this.commonTaxControll 
             ? this.commonTaxControll.toArray()[this.activeEntryIndex] 
             : null;
@@ -6153,7 +6192,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             !this.dialog.getDialogById(this.accountAsideMenuRef?.id) &&
             !activeTaxComponent?.isTaxDialogOpen &&
             !this.dialog.getDialogById(this.productServiceAsideMenuRef?.id) &&
-            !this.dialog.getDialogById(this.discountDialogRef?.id)
+            !this.dialog.getDialogById(this.discountDialogRef?.id) &&
+            !this.dialog.getDialogById(this.batchSelectDialogRef?.id)
         ) {
             this.activeEntryIndex = null;
         }
