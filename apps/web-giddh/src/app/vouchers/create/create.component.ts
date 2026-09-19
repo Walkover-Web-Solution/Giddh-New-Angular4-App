@@ -818,7 +818,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public get showPlaceOfSupply(): boolean {
         return (
-            this.allowsSalesOptions ||
+            this.invoiceType.isSalesInvoice ||
             this.isCashSalesInvoice ||
             this.invoiceType.isCreditNote ||
             this.invoiceType.isEstimateInvoice ||

@@ -1386,10 +1386,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((apiResponse) => {
                         if (apiResponse?.status === "success") {
-                            this.toasterService.showSnackBar("success", this.commonLocaleData?.messages?.voucher_cancelled);
+                            this.toasterService.showSnackBar("success", this.commonLocaleData?.app_messages?.voucher_cancelled);
                             this.getVouchers(false);
                         } else {
-                            this.toasterService.showSnackBar("error", this.commonLocaleData?.messages?.voucher_cancelled_failed);
+                            this.toasterService.showSnackBar("error", apiResponse?.message || this.commonLocaleData?.app_messages?.voucher_cancelled_failed);
                         }
                     });
             }
@@ -1429,10 +1429,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((apiResponse) => {
                         if (apiResponse?.status === "success") {
-                            this.toasterService.showSnackBar("success", this.commonLocaleData?.messages?.voucher_deleted);
+                            this.toasterService.showSnackBar("success", this.commonLocaleData?.app_messages?.voucher_deleted);
                             this.getVouchers(false);
                         } else {
-                            this.toasterService.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
+                            this.toasterService.showSnackBar("error", apiResponse?.message || this.commonLocaleData?.app_something_went_wrong);
                         }
                     });
             }
