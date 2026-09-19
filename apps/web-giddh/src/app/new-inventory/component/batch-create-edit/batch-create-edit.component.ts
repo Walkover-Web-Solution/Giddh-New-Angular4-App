@@ -162,7 +162,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
             return;
         }
         this.inventoryService.getStocksV2({
-            inventoryType: this.dialogData?.inventoryType || "PRODUCT",
+            inventoryType: this.dialogData?.inventoryType,
             page: 1,
             q: query ?? "",
             count: DROPDOWN_ITEMS_COUNT_LIMIT

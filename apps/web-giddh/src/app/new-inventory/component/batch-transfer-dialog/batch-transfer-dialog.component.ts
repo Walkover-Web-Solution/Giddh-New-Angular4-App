@@ -138,7 +138,7 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(BatchCreateEditComponent, {
             ...ASIDE_PANE_CONFIG,
             data: {
-                inventoryType: this.dialogData?.inventoryType || "PRODUCT",
+                inventoryType: this.dialogData?.inventoryType,
                 batch: {
                     stock: batch?.stock,
                     variant: batch?.variant,

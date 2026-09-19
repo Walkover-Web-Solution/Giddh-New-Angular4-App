@@ -253,7 +253,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      */
     public showSelectedTableColumns(columns: string[]): void {
         if (columns?.length) {
-            this.displayedColumns = columns.filter(column => column !== "status");
+            this.displayedColumns = columns;
             this.cdr.markForCheck();
         }
     }
