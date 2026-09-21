@@ -1285,6 +1285,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
 
         let lookupRequest$: Observable<any[]>;
+        const inventoryVoucherType = this.getInventoryVoucherType();
         if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
             const model = this.buildProformaEstimateRequestModel({
                 page: 1,
@@ -1299,6 +1300,19 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
             lookupRequest$ = this.voucherService.getPurchaseOrder(uniqueName).pipe(
                 map((res) => res?.body ? [res.body] : [])
+            );
+        } else if (inventoryVoucherType) {
+            const model = cloneDeep(this.advanceFilters);
+            model.page = 1;
+            model.count = 1;
+            model.q = uniqueName;
+            lookupRequest$ = this.voucherService.getAllInventoryVouchers(inventoryVoucherType, model).pipe(
+                map((res) => {
+                    const response = res?.body ?? {};
+                    return Array.isArray(response)
+                        ? response
+                        : response.items ?? response.results ?? response.content ?? [];
+                })
             );
         } else {
             const model = cloneDeep(this.advanceFilters);
