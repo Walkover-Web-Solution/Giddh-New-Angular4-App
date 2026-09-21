@@ -189,7 +189,7 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
                 next: (response) => {
                     this.isLoading = false;
                     this.batchOptions = response?.status === "success"
-                        ? mapAvailabilityBatches(response)
+                        ? mapAvailabilityBatches(response, "uniqueName")
                         : [];
                     this.hasLoadedBatches = true;
                     if (this.batchOptions.length === 1 && !this.transferForm.get("toBatchUniqueName")?.value) {
