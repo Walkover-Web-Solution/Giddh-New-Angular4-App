@@ -33,11 +33,13 @@ export function getBatchAvailabilityOptionValue(item: BatchReportItem): string {
 
 /**
  * Map availability `body.results` to dropdown options.
+ * Option `value` defaults to `batchNumber`. Pass `"uniqueName"` for transfer/archive.
  *
  * @param {*} response `{ status, body: { results: BatchReportItem[] } }`
+ * @param {("batchNumber" | "uniqueName")} [valueKey="batchNumber"] Field used as option value
  * @return {*}  {IOption[]}
  */
-export function mapAvailabilityBatches(response: any, excludeUniqueName?: string): IOption[] {
+export function mapAvailabilityBatches(response: any, valueKey: "batchNumber" | "uniqueName" = "batchNumber"): IOption[] {
     if (response?.status && response.status !== "success") {
         return [];
     }
@@ -45,7 +47,7 @@ export function mapAvailabilityBatches(response: any, excludeUniqueName?: string
     const results = Array.isArray(body) ? body : (body?.results ?? []);
     return (Array.isArray(results) ? results : []).reduce((list: IOption[], rawItem: BatchReportItem) => {
         const item = normalizeAvailabilityBatchItem(rawItem);
-        const value = item.batchNumber;
+        const value = valueKey === "uniqueName" ? item.uniqueName : item.batchNumber;
         if (!value) {
             return list;
         }
