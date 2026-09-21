@@ -220,5 +220,9 @@
     "transport_doc_date": "ट्रान्सपोर्ट डॉक तारीख",
     "distance_km": "अंतर (किमी)",
     "driver_name": "ड्रायव्हरचे नाव",
-    "driver_phone": "ड्रायव्हर फोन"
+    "driver_phone": "ड्रायव्हर फोन",
+    "challan_type": "चालान प्रकार",
+    "receipt_note_type": "पावती नोट प्रकार",
+    "stock_transfer": "स्टॉक ट्रान्सफर",
+    "jobwork": "जॉबवर्क"
 }

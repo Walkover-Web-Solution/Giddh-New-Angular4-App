@@ -69,6 +69,7 @@ import {
     TaxCollectionDeductionType,
     TaxType,
     VoucherTypeEnum,
+    ChallanTypeEnum,
 } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -334,6 +335,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public currentTransporterId: string;
     /** Transport mode options */
     public transporterModeOptions: IOption[] = transporterModes.map((mode) => ({ label: mode.label, value: mode.value }));
+    /** Challan type options for delivery challan and receipt note */
+    public challanTypeOptions: IOption[] = [];
     /** Holds template data */
     public templateData: any = {
         customField1Label: "",
@@ -805,7 +808,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isCashSalesInvoice ||
             this.invoiceType.isCreditNote ||
             this.invoiceType.isEstimateInvoice ||
-            this.invoiceType.isProformaInvoice
+            this.invoiceType.isProformaInvoice ||
+            this.invoiceType.isDeliveryChallan ||
+            this.invoiceType.isReceiptNote
         );
     }
 
@@ -1697,6 +1702,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             driverName: voucherDetails?.transporterDetails?.driverName ?? "",
                             driverPhone: voucherDetails?.transporterDetails?.driverPhone ?? ""
                         });
+                        this.invoiceForm.get("challanType")?.patchValue(
+                            voucherDetails?.challanType === ChallanTypeEnum.JOBWORK
+                                ? ChallanTypeEnum.JOBWORK
+                                : ChallanTypeEnum.STOCK_TRANSFER
+                        );
 
                         if (this.isRecurringVoucher[1]?.isRecurringVoucher || voucherDetails?.recurrencePreviewRequest) {
                             const recurrencePreviewRequest = voucherDetails.recurrencePreviewRequest;
@@ -3965,7 +3975,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPersonName: [''],
             salesPersonUniqueName: [''],
             annexureCharges: this.formBuilder.array([this.getAnnexureChargeFormGroup()]),
-            transporterDetails: this.getTransporterDetailsFormGroup()
+            transporterDetails: this.getTransporterDetailsFormGroup(),
+            challanType: [ChallanTypeEnum.STOCK_TRANSFER]
         });
     }
 
@@ -7171,6 +7182,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!this.showsTransporterDetails) {
             delete invoiceForm.transporterDetails;
+            delete invoiceForm.challanType;
         }
 
         if (!this.isIndianCompanyAndAccount) {
@@ -7824,6 +7836,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             driverName: "",
             driverPhone: ""
         });
+        this.invoiceForm.get("challanType")?.patchValue(ChallanTypeEnum.STOCK_TRANSFER);
 
         // Restore custom fields with preserved uniqueName but cleared values
         if (customFieldsData.length > 0) {
@@ -9634,6 +9647,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.isUpdateMode) {
                 this.getUpdateVoucherText();
             }
+            this.challanTypeOptions = [
+                { label: this.localeData?.stock_transfer, value: ChallanTypeEnum.STOCK_TRANSFER },
+                { label: this.localeData?.jobwork, value: ChallanTypeEnum.JOBWORK }
+            ];
         }, 100);
     }
 
