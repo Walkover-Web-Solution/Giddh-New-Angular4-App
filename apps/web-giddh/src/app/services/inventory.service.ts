@@ -2169,6 +2169,7 @@ export class InventoryService {
         sortBy?: string;
         q?: string;
         noStock?: boolean;
+        warehouseUniqueName?: string;
     }): Observable<BaseResponse<any, any>> {
         const url = this.generalService.replaceUrlPlaceholders(INVENTORY_API.BATCH.AVAILABILITY, {
             uniqueName: queryParams.uniqueName ?? "",
@@ -2179,7 +2180,8 @@ export class InventoryService {
             sort: queryParams.sort ?? "asc",
             sortBy: queryParams.sortBy ?? "expiry",
             q: queryParams.q ?? "",
-            noStock: queryParams.noStock ?? false
+            noStock: queryParams.noStock ?? false,
+            warehouseUniqueName: queryParams.warehouseUniqueName ?? ""
         });
         return this.http.get(url).pipe(
             map((res) => {

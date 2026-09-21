@@ -53,6 +53,8 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
     public readonly isUpdateMode = signal(false);
     /** True when stock is fixed by the parent (voucher Select Batches). */
     public readonly isStockLocked = signal(false);
+    /** True when the batch is already used on an entry or voucher. */
+    public readonly isLinked = signal(false);
     /** Batch unique name in edit mode. */
     public batchUniqueName: string = "";
     /** Stock dropdown options. */
@@ -229,6 +231,9 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     public selectVariant(option?: IOption): void {
+        if (this.isLinked()) {
+            return;
+        }
         this.variantLabel.set(option?.label ?? "");
         this.batchForm.get("variantUniqueName")?.patchValue(option?.value ?? null);
     }
@@ -240,6 +245,9 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     public selectWarehouse(option?: IOption): void {
+        if (this.isLinked()) {
+            return;
+        }
         this.warehouseLabel.set(option?.label ?? "");
         this.batchForm.get("warehouseUniqueName")?.patchValue(option?.value ?? null);
     }
@@ -382,6 +390,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     private applyFormFromDetails(details: BatchReportItem | BatchDetails): void {
+        this.isLinked.set(!!(this.isUpdateMode() && details?.linkedEntities?.length));
         const warehouseEntry = (details as BatchDetails)?.warehouses?.[0];
         const warehouseRef = warehouseEntry?.warehouse ?? (details as BatchDetails)?.warehouse ?? (details as BatchReportItem)?.warehouse;
         const openingQuantity = details?.openingQuantity ?? warehouseEntry?.openingQuantity;

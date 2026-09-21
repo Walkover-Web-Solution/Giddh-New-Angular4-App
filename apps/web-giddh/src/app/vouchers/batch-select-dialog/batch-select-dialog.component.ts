@@ -161,7 +161,7 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @memberof BatchSelectDialogComponent
      */
     public get subtitle(): string {
-        return [this.dialogData?.stockName, this.dialogData?.warehouseName, this.dialogData?.unitCode ? `unit: ${this.dialogData.unitCode}` : ""]
+        return [this.dialogData?.stockName, this.dialogData?.unitCode ? `unit: ${this.dialogData.unitCode}` : ""]
             .filter(Boolean)
             .join(" · ");
     }
@@ -420,7 +420,8 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
             count: 50,
             sort: "asc",
             sortBy: "expiry",
-            q: query
+            q: query,
+            warehouseUniqueName: this.dialogData?.warehouseUniqueName
         }).pipe(
             catchError(() => of({ status: "error" })),
             switchMap(response => of({ query, response }))
