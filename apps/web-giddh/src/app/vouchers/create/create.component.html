@@ -835,7 +835,34 @@
                                     </ng-container>
                                 </div>
 
-                                <!-- Row 2 for Deliver To Only show in Cash Invoice -->
+                                <!-- Row 2 DC/RN Chalan Type -->
+                                 @if (invoiceType.isDeliveryChallan || invoiceType.isReceiptNote) {
+                                <div
+                                    class="row pb-2"
+                                >
+                                    <div class="col-6 mt-3">
+                                        <reactive-dropdown-field
+                                            appEnterNext
+                                            formControlName="challanType"
+                                            [name]="'challanType'"
+                                            [label]="
+                                                invoiceType.isDeliveryChallan
+                                                    ? localeData?.challan_type
+                                                    : localeData?.receipt_note_type
+                                            "
+                                            [placeholder]="
+                                                invoiceType.isDeliveryChallan
+                                                    ? localeData?.challan_type
+                                                    : localeData?.receipt_note_type
+                                            "
+                                            [options]="challanTypeOptions"
+                                            [required]="true"
+                                        ></reactive-dropdown-field>
+                                    </div>
+                                </div>
+                                }
+
+                                <!-- Row 3 for Deliver To Only show in Cash Invoice -->
                                 <div
                                     class="row pb-2"
                                     *ngIf="invoiceType.isPurchaseOrder || ((invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) && !invoiceType.isCashInvoice)"
@@ -1117,7 +1144,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Row 3 -->
+                                <!-- Row 4 -->
                                 <div class="row row-gap-15 mt-3 mb-3">
                                     @if (isIndianCompanyAndAccount && showSourceDestinationOfSupply) {
                                         <ng-container formGroupName="account">
@@ -1195,7 +1222,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Row 4 -->
+                                <!-- Row 5 -->
                                 <div class="row row-gap-15 mt-3">
                                     <!-- Voucher Number -->
                                     <div class="col-6">
@@ -1294,7 +1321,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Row 5 -->
+                                <!-- Row 6 -->
                                 <div
                                     class="row mb-3"
                                     [ngClass]="{
