@@ -9649,7 +9649,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
             this.challanTypeOptions = [
                 { label: this.localeData?.stock_transfer, value: ChallanTypeEnum.STOCK_TRANSFER },
-                { label: this.localeData?.jobwork, value: ChallanTypeEnum.JOBWORK }
+                // { label: this.localeData?.jobwork, value: ChallanTypeEnum.JOBWORK } // Hide for now becuase jobwork is not supported yet
             ];
         }, 100);
     }
