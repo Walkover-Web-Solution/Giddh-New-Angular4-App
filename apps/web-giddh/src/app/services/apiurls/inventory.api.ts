@@ -123,7 +123,7 @@ export const INVENTORY_API = {
         GET: 'company/:companyUniqueName/batch/:batchUniqueName',
         UPDATE: 'company/:companyUniqueName/batch/:batchUniqueName',
         DELETE: 'company/:companyUniqueName/batch/:batchUniqueName',
-        AVAILABILITY: 'company/:companyUniqueName/batch/availability?uniqueName=:uniqueName&isVariant=:isVariant&page=:page&count=:count&excludeBatchUniqueName=:excludeBatchUniqueName&sort=:sort&sortBy=:sortBy&q=:q&noStock=:noStock',
+        AVAILABILITY: 'company/:companyUniqueName/batch/availability?uniqueName=:uniqueName&isVariant=:isVariant&page=:page&count=:count&excludeBatchUniqueName=:excludeBatchUniqueName&sort=:sort&sortBy=:sortBy&q=:q&noStock=:noStock&warehouseUniqueName=:warehouseUniqueName',
         ARCHIVE: 'company/:companyUniqueName/batch/:batchUniqueName/archive',
         TRANSFER: 'company/:companyUniqueName/batch/transfer'
     },

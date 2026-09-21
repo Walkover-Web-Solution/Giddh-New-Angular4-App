@@ -3478,8 +3478,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.activeEntryIndex = entryIndex;
         this.isBatchSelectDialogOpen = true;
-        const warehouseName = this.invoiceForm.get("warehouse.name")?.value || this.warehouses?.[0]?.name;
-        const warehouseUniqueName = this.invoiceForm.get("warehouse.uniqueName")?.value || this.warehouses?.[0]?.uniqueName;
+        const warehouseName = this.invoiceForm.get("warehouse.name")?.value || this.warehouses?.find(warehouse => warehouse?.isDefault)?.name;
+        const warehouseUniqueName = this.invoiceForm.get("warehouse.uniqueName")?.value || this.warehouses?.find(warehouse => warehouse?.isDefault)?.uniqueName;
         const focusTarget = (event?.currentTarget ?? event?.target ?? document.activeElement) as HTMLElement;
 
         this.batchSelectDialogRef = this.dialog.open(BatchSelectDialogComponent, {

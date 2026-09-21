@@ -117,5 +117,6 @@
     "update_opening_qty": "Update opening quantity",
     "update_opening_amount": "Update opening amount",
     "batch_already_added": "This batch is already added",
-    "create_custom_batch": "Type to create custom batch number"
+    "create_custom_batch": "Type to create custom batch number",
+    "batch_required_fields": "Please fill all the required fields for the batches"
 }
