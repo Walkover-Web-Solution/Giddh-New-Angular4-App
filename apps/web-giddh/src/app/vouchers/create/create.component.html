@@ -836,9 +836,9 @@
                                 </div>
 
                                 <!-- Row 2 DC/RN Chalan Type -->
+                                 @if (invoiceType.isDeliveryChallan || invoiceType.isReceiptNote) {
                                 <div
                                     class="row pb-2"
-                                    *ngIf="invoiceType.isDeliveryChallan || invoiceType.isReceiptNote"
                                 >
                                     <div class="col-6 mt-3">
                                         <reactive-dropdown-field
@@ -860,6 +860,7 @@
                                         ></reactive-dropdown-field>
                                     </div>
                                 </div>
+                                }
 
                                 <!-- Row 3 for Deliver To Only show in Cash Invoice -->
                                 <div
