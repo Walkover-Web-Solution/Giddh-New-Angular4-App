@@ -102,6 +102,8 @@ export interface BatchDetails {
     openingQuantity?: number;
     openingAmount?: number;
     rate?: number;
+    isUsed?: boolean;
+    linkedEntities?: string[];
 }
 
 /** Selected batch line used on vouchers / ledger entries. */

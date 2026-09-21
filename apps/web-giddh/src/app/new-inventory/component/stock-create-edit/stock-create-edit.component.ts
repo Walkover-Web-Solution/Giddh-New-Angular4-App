@@ -1103,6 +1103,18 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.isFormSubmitted = true;
             return;
         }
+        if (this.stockForm.variants?.length) {
+            this.stockForm.variants?.forEach(variant => {
+                if (variant?.warehouseBalance?.length && variant?.warehouseBalance?.some(warehouse => warehouse?.batches?.some(batch => !this.isCompleteBatch(batch) && this.isBatchNameRequired(batch)))) {
+                    this.isFormSubmitted = true;
+                    this.toaster.showSnackBar("error", this.localeData?.batch_required_fields);
+                    return;
+                }
+            });
+        }
+        if (this.isFormSubmitted) {
+            return;
+        }
         let updatedCustomFieldArray = [];
         let stockObjClone = cloneDeep(this.stockForm.variants);
         stockObjClone?.forEach((variant) => {
@@ -2083,7 +2095,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public isCompleteBatch(batch: any): boolean {
-        return !!(String(batch?.batchNumber ?? "").trim() && String(batch?.name ?? "").trim() && batch.openingQuantity > 0 && batch.openingAmount > 0);
+        return !!(String(batch?.batchNumber ?? "").trim() && String(batch?.name ?? "").trim());
     }
 
     /**
@@ -2094,7 +2106,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public isBatchNameRequired(batch: any): boolean {
-        return Number(batch?.openingQuantity) > 0;
+        return Number(batch?.openingQuantity) > 0 || Number(batch?.openingAmount) > 0;
     }
 
     /**
