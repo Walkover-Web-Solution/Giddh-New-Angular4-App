@@ -265,6 +265,22 @@
                                             <i [ngClass]="node?.icon" *ngIf="node?.icon"></i>
                                             {{ node?.label }}
                                         </span>
+                                        <ng-container
+                                            *ngIf="
+                                                !isConsolidatedBranch() &&
+                                                (currentOrganizationType() === 'BRANCH' || isCompanyWithoutBranch())
+                                            "
+                                        >
+                                            <span
+                                                class="ml-auto create-new"
+                                                *ngIf="node?.additional?.createNew"
+                                                (click)="
+                                                    $event.stopPropagation(); navigateToCreateNew(node?.additional?.createNew?.link)
+                                                "
+                                            >
+                                                {{ node?.additional?.createNew?.label }}
+                                            </span>
+                                        </ng-container>
                                     </a>
                                 </div>
                             </cdk-tree-node>

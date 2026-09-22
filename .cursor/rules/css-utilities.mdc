@@ -1,10 +1,47 @@
 ---
-description: Prefer existing Giddh CSS utilities/theme classes; full class list is in CSS_UTILITIES.md
-globs: apps/web-giddh/**/*.{html,scss,css}
+description: Follow modern Angular practices and reuse existing Giddh CSS utilities/theme classes; full CSS class list is in CSS_UTILITIES.md
+globs: apps/web-giddh/**/*.{html,scss,css,ts}
 alwaysApply: false
 ---
 
-# CSS utilities first
+# Angular & CSS coding rules
+
+## Angular
+
+Use the latest Angular coding practices supported by the project's current Angular version.
+
+### Do
+
+- Prefer **signals** for component state and reactive values:
+  - `signal()`
+  - `computed()`
+  - `effect()` only when side effects are actually required
+- Prefer `input()` / `output()` over decorator-based `@Input()` / `@Output()` for new code.
+- Prefer `inject()` over constructor injection for new code where it improves clarity.
+- Prefer Angular's modern control flow:
+  - `@if`
+  - `@else`
+  - `@for`
+  - `@switch`
+  - `@case`
+- Use `@for (...; track ...)` with an appropriate stable tracking expression.
+- Prefer `@defer` for genuinely deferrable/heavy UI where it provides a meaningful performance benefit.
+- Prefer standalone components and modern Angular APIs.
+- Prefer `readonly` and strong TypeScript types where appropriate.
+- Keep components focused and avoid unnecessary state.
+- Reuse existing services, utilities, pipes, directives, and components before creating new ones.
+
+### Don't
+
+- Do not use `*ngIf`, `*ngFor`, or `*ngSwitch` in new templates.
+- Do not use `@Input()` / `@Output()` for new code unless there is a specific compatibility reason.
+- Do not introduce unnecessary RxJS when a signal is sufficient.
+- Do not convert existing RxJS flows to signals unnecessarily; preserve working patterns unless the task requires the change.
+- Do not use `effect()` as a replacement for normal derived state; use `computed()` when the value can be derived.
+- Do not create signals for values that do not need to be reactive.
+- Do not make unrelated Angular modernization changes while fixing a specific task.
+
+## CSS utilities first
 
 Before writing new SCSS or inventing class names, check the **full catalog**:
 
@@ -18,17 +55,75 @@ That file lists every utility from:
 - `pages/_dialog.scss`
 - Bootstrap (`vendors/_boostrap.css`)
 
-## Do
+### Do
 
-- Reuse layout: `d-flex`, `flex-column`, `align-items-*`, `justify-content-*`, `column-gap-*`, `row-gap-*`, Bootstrap `m-*` / `p-*`
-- Reuse color: `text-primary`, `text-light`, `text-orange`, `theme-primary-light`, vars like `--border-color`, `--color-green`
-- Reuse type: `font-size-12`, `font-weight-semibold`, `line-height-*`
-- Reuse dialogs: `aside-dialog-wrapper`, `dialog-header`, `dialog-body`
-- Keep feature-only styles in the **component `.scss`**
+- Reuse existing layout utilities:
+  - `d-flex`
+  - `flex-column`
+  - `align-items-*`
+  - `justify-content-*`
+  - `column-gap-*`
+  - `row-gap-*`
+  - Bootstrap `m-*` / `p-*`
+- Reuse existing color/theme utilities:
+  - `text-primary`
+  - `text-light`
+  - `text-orange`
+  - `theme-primary-light`
+  - CSS variables such as `--border-color`, `--color-green`
+- Reuse existing typography utilities:
+  - `font-size-12`
+  - `font-weight-semibold`
+  - `line-height-*`
+- Reuse existing dialog classes:
+  - `aside-dialog-wrapper`
+  - `dialog-header`
+  - `dialog-body`
+- Keep feature-specific styles inside the component `.scss`.
+- Prefer CSS variables/theme tokens over hardcoded values.
+- Prefer existing utility combinations over creating a new utility for a single component.
 
-## Don't
+### Don't
 
-- Do not add one-off/feature styles to `_other.scss`
-- Do not hardcode hex when a theme variable exists
-- Do not confuse `.w-100` (100%) with `.width-100` / `.w100` (100px)
-- Prefer `.pointer-events-none` over misspelled `.pointer-event-none`
+- Do not add one-off/feature styles to `_other.scss`.
+- Do not hardcode hex/rgb colors when an existing theme variable or utility exists.
+- Do not create a new CSS class when an existing utility already provides the same styling.
+- Do not duplicate an existing utility in component SCSS.
+- Do not confuse:
+  - `.w-100` = 100%
+  - `.width-100` / `.w100` = 100px
+- Prefer `.pointer-events-none` over the misspelled `.pointer-event-none`.
+
+## Template practices
+
+- Keep templates simple and readable.
+- Prefer Angular control flow (`@if`, `@for`, `@switch`) over legacy structural directives.
+- Always provide `track` for `@for` using the most stable available identifier.
+- Avoid complex expressions and business logic in templates.
+- Move reusable/complex logic into the component or a computed value.
+- Use `class` / `class.*` / `[class.*]` bindings appropriately instead of unnecessary `ngClass`.
+- Prefer `[style.*]` or CSS variables for dynamic single-property styles instead of unnecessary `ngStyle`.
+- Do not add unnecessary wrapper elements only for styling; use existing layout utilities where possible.
+
+## TypeScript practices
+
+- Use strict, explicit types; avoid `any`.
+- Prefer `const` and immutable patterns where possible.
+- Keep functions small and focused.
+- Reuse existing types/interfaces instead of creating duplicates.
+- Avoid unnecessary subscriptions; prefer `async` pipe or signals where appropriate.
+- When subscriptions are required, ensure their lifecycle is properly managed.
+- Do not introduce a new state-management pattern when the existing feature already has an established pattern.
+
+## General rule
+
+Before adding code, first check whether the project already has an established pattern or utility for the same problem.
+
+**Prefer:**
+1. Existing component/service/util
+2. Existing CSS utility/theme class
+3. Existing Angular/TypeScript pattern
+4. Small feature-specific implementation
+5. New shared utility only when genuinely reusable
+
+Avoid unrelated refactoring, modernization, or formatting changes.
