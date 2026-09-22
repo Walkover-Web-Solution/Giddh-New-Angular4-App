@@ -809,8 +809,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceType.isCreditNote ||
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice ||
-            this.invoiceType.isDeliveryChallan ||
-            this.invoiceType.isReceiptNote
+            this.invoiceType.isDeliveryChallan
         );
     }
 
@@ -2625,10 +2624,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.company.branch = response.find((branch) => !branch.parentBranch);
                 }
                 this.branchCurrentAddressInfo = this.company.branch.addresses.find((address)=>address.isDefault);
-                this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
-                    name: this.branchCurrentAddressInfo.stateName || '',
-                    code: this.branchCurrentAddressInfo.stateCode || '',
-                });
+                this.setDefaultDestinationOfSupply();
             }
         });
     }
@@ -3645,6 +3641,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Prefills destinationOfSupply from the current branch default address.
+     * Independent of account selection so it survives voucher-type route changes
+     * after resetVoucherForm clears the form (branchList$ does not re-emit).
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setDefaultDestinationOfSupply(): void {
+        if (!this.invoiceForm || !this.branchCurrentAddressInfo) {
+            return;
+        }
+        this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
+            name: this.branchCurrentAddressInfo.stateName || '',
+            code: this.branchCurrentAddressInfo.stateCode || '',
+        });
+    }
+
+    /**
      * Sets default values for placeOfSupply, sourceOfSupply, destinationOfSupply
      * based on account gstNumber (B2B vs B2C) and billing/shipping address states.
      * Only applies when company country is India.
@@ -3653,7 +3667,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private setDefaultSupplyFields(): void {
-        if (!this.isIndianCompanyAndAccount || !this.invoiceForm) {
+        if (!this.invoiceForm) {
+            return;
+        }
+
+        // Destination is company-branch based; restore after route/form reset even before account is selected
+        if (this.company.countryCode === 'IN' && this.showSourceDestinationOfSupply) {
+            this.setDefaultDestinationOfSupply();
+        }
+
+        if (!this.isIndianCompanyAndAccount) {
             return;
         }
 
@@ -3676,10 +3699,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.get('account.sourceOfSupply')?.patchValue({
                 name: sourceState?.get('name')?.value || '',
                 code: sourceState?.get('code')?.value || '',
-            });
-            this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
-                name: this.branchCurrentAddressInfo.stateName || '',
-                code: this.branchCurrentAddressInfo.stateCode || '',
             });
         }
     }

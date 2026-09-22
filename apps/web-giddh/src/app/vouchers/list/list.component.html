@@ -5954,7 +5954,7 @@
                 <div class="d-flex align-items-center column-gap-1">
                     @if (!isCompany && !isConsolidatedBranch) {
                         <button matButton="filled" [routerLink]="['/pages/vouchers', urlVoucherType, 'create']" class="w-100">
-                            {{
+                            + {{
                                 voucherType === voucherTypeEnum.deliveryChallan
                                     ? localeData?.new_delivery_challan
                                     : localeData?.new_receipt_note
