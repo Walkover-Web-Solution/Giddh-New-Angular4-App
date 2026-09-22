@@ -1871,9 +1871,41 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.status = isAll ? [SELECTED_ALL_OPTION] : values;
 
         this.advanceFilters.page = 1;
-        this.advanceFiltersApplied = !isAll;
+        // Keep clear-filter visible when status is reset but other filters (e.g. date) remain
+        this.advanceFiltersApplied = !isAll || this.hasNonStatusInventoryFiltersApplied();
         this.getVouchers(false);
         this.saveInventoryListFilters();
+    }
+
+    /**
+     * True when any inventory list filter other than status is active
+     * (custom date, search, sort, or advance search fields).
+     *
+     * @private
+     * @return {boolean}
+     * @memberof VoucherListComponent
+     */
+    private hasNonStatusInventoryFiltersApplied(): boolean {
+        if (!this.isUniversalDateApplicable) {
+            return true;
+        }
+        if (this.advanceFilters?.q || this.advanceFilters?.sortBy) {
+            return true;
+        }
+        if (this.advanceFilters?.date || this.advanceFilters?.dateOperator) {
+            return true;
+        }
+        if ((this.advanceFilters?.amount != null && this.advanceFilters?.amount !== '')
+            || this.advanceFilters?.amountOperator) {
+            return true;
+        }
+        if (this.advanceFilters?.warehouseUniqueName || this.advanceFilters?.branchUniqueName) {
+            return true;
+        }
+        if (this.advanceFilters?.partyUniqueName?.length) {
+            return true;
+        }
+        return false;
     }
 
     /** Returns a readable inventory document status */

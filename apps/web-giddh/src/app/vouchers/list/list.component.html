@@ -6116,7 +6116,7 @@
                                 voucherType === voucherTypeEnum.deliveryChallan ? localeData?.linked_invoice_no : localeData?.linked_bill_no
                             }}
                         </th>
-                        <td mat-cell *matCellDef="let element">{{ element?.linkedInvoiceNumbers?.join(', ') || '-' }}</td>
+                        <td mat-cell *matCellDef="let element">{{ element?.linkedInvoiceNumber || element?.linkedInvoiceNumbers?.join(', ') || '-' }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="more_options">
