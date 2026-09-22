@@ -249,7 +249,7 @@
                 {
                     "label": "Report",
                     "link": "/pages/vouchers/preview/delivery-challan/list",
-                    "icon": "icon-E-way-bill",
+                    "icon": "icon-accounts-new",
                     "description": "Create delivery challan",
                     "additional": {
                         "queryParams": {
@@ -262,7 +262,7 @@
                     }
                 },
                 {
-                    "label": "DC - Invoice Reconciliation",
+                    "label": "DC ⇄ Invoice Reconciliation",
                     "link": "/pages/vouchers/reconciliation/delivery-challan",
                     "icon": "icon-register-new",
                     "description": "Reconcile delivery challan with invoice",
@@ -539,7 +539,7 @@
                 {
                     "label": "Report",
                     "link": "/pages/vouchers/preview/receipt-note/list",
-                    "icon": "icon-reciept-new",
+                    "icon": "icon-accounts-new",
                     "description": "Create receipt note",
                     "additional": {
                         "createNew": {
@@ -552,7 +552,7 @@
                     }
                 },
                 {
-                    "label": "RN - Bill Reconciliation",
+                    "label": "RN ⇄ Bill Reconciliation",
                     "link": "/pages/vouchers/reconciliation/receipt-note",
                     "icon": "icon-register-new",
                     "description": "Reconcile receipt note with bill",
