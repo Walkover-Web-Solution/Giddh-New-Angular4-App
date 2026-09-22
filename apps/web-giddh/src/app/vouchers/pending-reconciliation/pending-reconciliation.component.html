@@ -1,0 +1,312 @@
+<div
+    appTranslate
+    [file]="'vouchers/preview'"
+    (localeData)="onLocaleData($event)"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+    <div class="vouchers-wrapper p-3 overflow-visible">
+        <div class="invoice-header d-flex align-items-center mb-3 flex-wrap row-gap-1">
+            <div class="d-flex align-items-center column-gap-1">
+                <div class="custom-datepicker-wrapper">
+                    <div
+                        class="custom-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
+                    >
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi || ''"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
+                        />
+                    </div>
+                </div>
+                <mat-button-toggle-group
+                    [value]="filters.reportType"
+                    (change)="onReportTypeChange($event.value)"
+                    aria-label="Report type"
+                >
+                    <mat-button-toggle *ngFor="let option of reportTypeOptions" [value]="option.value">
+                        {{ option.label }}
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+            <button matButton="outlined" class="ml-3" *ngIf="filtersApplied && !loading" (click)="clearFilters()">
+                <span class="d-inline-flex align-items-center column-gap-05">
+                    <span class="icon-cross font-size-12"></span>
+                    <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                </span>
+            </button>
+        </div>
+
+        <div class="pending-balance-cards d-flex w-100 column-gap-1 row-gap-1 mb-3" *ngIf="!loading && balances">
+            <div class="total-details-box border-none opening-box flex-fill">
+                <h5>
+                    {{ localeData?.pending_balances?.total }} ({{ balances.totalCount || 0 }})
+                    <div>
+                        <span class="d-inline-flex number-total">
+                            <amount-field
+                                [amount]="balances.totalAmount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            ></amount-field>
+                            /-
+                        </span>
+                    </div>
+                </h5>
+            </div>
+            <div class="total-details-box border-none due-box flex-fill" *ngIf="!isWithoutChallanReport">
+                <h5>
+                    {{
+                        voucherType === voucherTypeEnum.deliveryChallan
+                            ? localeData?.pending_balances?.not_invoiced
+                            : localeData?.pending_balances?.not_billed
+                    }}
+                    ({{ balances.notInvoicedCount || 0 }})
+                    <div>
+                        <span class="d-inline-flex number-total">
+                            <amount-field
+                                [amount]="balances.notInvoicedAmount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            ></amount-field>
+                            /-
+                        </span>
+                    </div>
+                </h5>
+            </div>
+        </div>
+
+        <div class="table-responsive overflow-visible">
+            <giddh-page-loader *ngIf="loading"></giddh-page-loader>
+            <table
+                mat-table
+                *ngIf="!loading && (dataSource?.length || isSearching)"
+                [dataSource]="dataSource"
+                matSort
+                (matSortChange)="sortChange($event)"
+                [matSortActive]="filters.sortBy"
+                [matSortDirection]="filters.sort"
+                class="w-100"
+            >
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header="date">
+                        {{
+                            isWithoutChallanReport
+                                ? commonLocaleData?.app_date
+                                : voucherType === voucherTypeEnum.deliveryChallan
+                                  ? localeData?.challan_date
+                                  : localeData?.receipt_note_date
+                        }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element?.voucherDate | giddhDate }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="number">
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        #documentNumber
+                        (clickOutside)="handleClickOutside($event, documentNumber, 'number')"
+                    >
+                        <ng-container
+                            *ngTemplateOutlet="
+                                searchTemplate;
+                                context: {
+                                    $implicit: showNumberSearch,
+                                    fieldName: 'number',
+                                    formControl: numberInput,
+                                    title: isWithoutChallanReport
+                                        ? (voucherType === voucherTypeEnum.deliveryChallan
+                                              ? commonLocaleData?.app_invoice_no
+                                              : commonLocaleData?.app_voucher_no)
+                                        : voucherType === voucherTypeEnum.deliveryChallan
+                                          ? localeData?.challan_no
+                                          : localeData?.receipt_note_no,
+                                }
+                            "
+                        ></ng-container>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <a href="javascript:;" class="btn-link-2" (click)="openDocument(element)">
+                            {{ element?.voucherNumber || commonLocaleData?.app_not_available }}
+                        </a>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="voucherType">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_voucher_type }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element?.voucherType | titlecase }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="documentType">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{ voucherType === voucherTypeEnum.deliveryChallan ? localeData?.challan_type : localeData?.receipt_note_type }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element?.documentSubType | titlecase }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="party">
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        #partyName
+                        (clickOutside)="handleClickOutside($event, partyName, 'party')"
+                    >
+                        <ng-container
+                            *ngTemplateOutlet="
+                                searchTemplate;
+                                context: {
+                                    $implicit: showPartySearch,
+                                    fieldName: 'party',
+                                    formControl: partyInput,
+                                    title:
+                                        voucherType === voucherTypeEnum.deliveryChallan
+                                            ? commonLocaleData?.app_customer_name
+                                            : commonLocaleData?.app_vendor_name,
+                                }
+                            "
+                        ></ng-container>
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element?.partyName | titlecase }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ commonLocaleData?.app_amount }}</th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        <amount-field
+                            [amount]="element?.grandTotal?.amountForAccount"
+                            [currencySymbol]="element?.currencySymbol"
+                            [currencyCode]="element?.currencyCode"
+                        ></amount-field>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="invoiceStatus">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{ voucherType === voucherTypeEnum.deliveryChallan ? localeData?.invoice_status : localeData?.bill_status }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element?.invoiceStatusLabel || "-" }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.document_status }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element?.documentStatus || "-" }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="linkedInvoice">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{
+                            voucherType === voucherTypeEnum.deliveryChallan
+                                ? localeData?.linked_invoice_count
+                                : localeData?.linked_bill_count
+                        }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element?.linkedInvoiceCount ?? 0 }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span [matMenuTriggerFor]="pendingActionsMenu" class="cursor-pointer">
+                            <i class="icon-dots-three-vertical"></i>
+                        </span>
+                        <mat-menu #pendingActionsMenu="matMenu">
+                            <button mat-menu-item (click)="convertDocument(element)">
+                                {{
+                                    isWithoutChallanReport
+                                        ? voucherType === voucherTypeEnum.deliveryChallan
+                                            ? localeData?.convert_to_dc
+                                            : localeData?.convert_to_rn
+                                        : voucherType === voucherTypeEnum.deliveryChallan
+                                          ? localeData?.convert_invoice
+                                          : localeData?.convert_to_bill
+                                }}
+                            </button>
+                            <button mat-menu-item (click)="previewAndConvertDocument(element)">
+                                {{
+                                    isWithoutChallanReport
+                                        ? voucherType === voucherTypeEnum.deliveryChallan
+                                            ? localeData?.preview_and_convert_to_dc
+                                            : localeData?.preview_and_convert_to_rn
+                                        : voucherType === voucherTypeEnum.deliveryChallan
+                                          ? localeData?.preview_and_convert_invoice
+                                          : localeData?.preview_and_convert_bill
+                                }}
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <mat-paginator
+                *ngIf="!loading && dataSource?.length && totalResults > pageSizeOptions[0]"
+                (page)="handlePageChange($event)"
+                [length]="totalResults"
+                [pageSize]="filters.count"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="filters.page - 1"
+            ></mat-paginator>
+            <no-data
+                *ngIf="!loading && !dataSource?.length"
+                [primaryMessage]="commonLocaleData?.app_no_data_found"
+                [primaryMessageClass]="'font-size-24 text-center no-data'"
+                [secondaryMessage]="' '"
+            ></no-data>
+        </div>
+    </div>
+</div>
+
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div class="search-table">
+        <div class="d-flex align-items-center column-gap-1" [hidden]="show">
+            <span class="cursor-pointer" (click)="toggleSearch($event, fieldName)">
+                <i class="icon-search icon-font-size-16"></i>
+            </span>
+            <span>{{ title }}</span>
+        </div>
+        <div [hidden]="!show">
+            <text-field
+                (click)="$event.stopPropagation()"
+                [id]="'search' + fieldName"
+                [type]="'text'"
+                [placeholder]="commonLocaleData?.app_search"
+                [cssClass]="'form-control border'"
+                [autoFocus]="show"
+                [formControl]="formControl"
+            ></text-field>
+        </div>
+    </div>
+</ng-template>
+
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

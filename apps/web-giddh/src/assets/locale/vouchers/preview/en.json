@@ -609,6 +609,11 @@
     },
     "preview_and_convert_invoice": "Preview & Convert to Invoice",
     "preview_and_convert_bill": "Preview & Convert to Bill",
+    "convert_to_dc": "Convert to DC",
+    "convert_to_rn": "Convert to RN",
+    "preview_and_convert_to_dc": "Preview & Convert to DC",
+    "preview_and_convert_to_rn": "Preview & Convert to RN",
+    "document_converted_successfully": "Document converted successfully",
     "mark_return": "Mark Return",
     "make_adjustment": "Make Adjustment",
     "convert_process_stock_items": "Convert and Process Stock Items",
@@ -621,5 +626,27 @@
     "proceed": "Proceed",
     "select_return_items": "Select at least one item to return",
     "return_success": "Return processed successfully",
-    "download_signed_bill": "Download Digitally Signed Bill"
+    "download_signed_bill": "Download Digitally Signed Bill",
+    "dc_invoice_reconciliation": "DC - Invoice Reconciliation",
+    "rn_bill_reconciliation": "RN - Bill Reconciliation",
+    "report_type": "Report Type",
+    "pending_report_types": {
+        "WITHOUT_CHALLAN": "Pending DC",
+        "NOT_INVOICED": "Pending Invoice"
+    },
+    "pending_report_types_rn": {
+        "WITHOUT_CHALLAN": "Pending RN",
+        "NOT_INVOICED": "Pending Bill"
+    },
+    "linked_invoice_count": "Linked Invoice Count",
+    "linked_bill_count": "Linked Bill Count",
+    "pending_balances": {
+        "total": "Total",
+        "not_invoiced": "Not Invoiced",
+        "partially_invoiced": "Partially Invoiced",
+        "fully_invoiced": "Fully Invoiced",
+        "not_billed": "Not Billed",
+        "partially_billed": "Partially Billed",
+        "fully_billed": "Fully Billed"
+    }
 }

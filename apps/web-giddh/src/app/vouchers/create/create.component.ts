@@ -1063,9 +1063,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.redirectUrl = this.queryParams.redirect;
                         }
 
-                        if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName) {
+                        if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
+                            || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
                             this.inventoryDocumentListRedirectUrl = this.queryParams.redirect
-                                || `/pages/vouchers/preview/${this.queryParams.rnUniqueName ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
+                                || `/pages/vouchers/preview/${(this.queryParams.rnUniqueName || this.queryParams.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
                             this.redirectUrl = this.inventoryDocumentListRedirectUrl;
                         } else {
                             this.inventoryDocumentListRedirectUrl = "";
@@ -1081,7 +1082,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
 
                         this.resetVoucherForm(
-                            !params?.uniqueName && !this.queryParams?.dcUniqueName && !this.queryParams?.rnUniqueName,
+                            !params?.uniqueName
+                                && !this.queryParams?.dcUniqueName
+                                && !this.queryParams?.rnUniqueName
+                                && !this.queryParams?.invoiceUniqueName
+                                && !this.queryParams?.billUniqueName,
                             true
                         );
                         this.invoiceForm.get('isRecurringVoucher')?.patchValue(this.queryParams.isRecurringVoucher ? true : false);
@@ -1142,6 +1147,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.isCopyMode = true;
                             this.useDefaultAccountDetails = false;
                             this.prefillFromInventoryDocument();
+                        } else if (this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
+                            // Prefill create DC/RN from invoice/bill (pending reconciliation Pending DC)
+                            this.isCopyMode = true;
+                            this.useDefaultAccountDetails = false;
+                            this.prefillFromInvoiceVoucher();
                         } else {
                             this.depositAccountName = "";
                         }
@@ -1780,8 +1790,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (voucherDetails.isCopyVoucher) {
                             this.recentVouchersAsideRef?.close();
                             this.focusOnCopyPreviousBtn();
-                        } else if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName) {
-                            // Prefill from DC/RN — keep customer/vendor dropdown closed
+                        } else if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
+                            || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
+                            // Prefill from DC/RN or invoice/bill — keep customer/vendor dropdown closed
                             this.openAccountDropdown = false;
                         } else if (this.isUpdateMode) {
                             setTimeout(() => {
@@ -7635,6 +7646,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     invoiceForm.businessDocumentUniqueNames = [businessDocumentUniqueName];
                 }
 
+                // Link invoice/bill when creating DC/RN from pending reconciliation (Pending DC)
+                const linkedVoucherUniqueName = this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName;
+                if (linkedVoucherUniqueName && (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)) {
+                    invoiceForm.businessDocumentUniqueNames = [linkedVoucherUniqueName];
+                }
+
                 const generateRequest = (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)
                     ? this.voucherService.generateInventoryVoucher(this.voucherType, invoiceForm)
                     : this.voucherService.generateVoucher(invoiceForm.account?.uniqueName, invoiceForm);
@@ -7650,11 +7667,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 ocrType: this.ocrType
                             });
 
-                            if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName || this.inventoryDocumentListRedirectUrl) {
+                            if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
+                                || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName
+                                || this.inventoryDocumentListRedirectUrl) {
                                 const listRedirectUrl = this.inventoryDocumentListRedirectUrl
-                                    || `/pages/vouchers/preview/${this.queryParams?.rnUniqueName ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
+                                    || `/pages/vouchers/preview/${(this.queryParams?.rnUniqueName || this.queryParams?.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
                                 delete this.queryParams.dcUniqueName;
                                 delete this.queryParams.rnUniqueName;
+                                delete this.queryParams.invoiceUniqueName;
+                                delete this.queryParams.billUniqueName;
                                 this.inventoryDocumentListRedirectUrl = "";
                                 this.redirectUrl = "";
                                 this.toasterService.showSnackBar(
@@ -9371,6 +9392,44 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             // false so voucherDetails$ fills account/entries/dates; uniqueName cleared via isCopyMode + store strip
             isCopyVoucher: false,
             clearVoucherIdentity: true
+        });
+    }
+
+    /**
+     * Prefills DC/RN create form from invoice/bill query params (pending reconciliation).
+     * Does not set voucher uniqueName so a new DC/RN is created.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private prefillFromInvoiceVoucher(): void {
+        const isFromBill = !!this.queryParams?.billUniqueName;
+        const voucherUniqueName = isFromBill
+            ? this.queryParams.billUniqueName
+            : this.queryParams.invoiceUniqueName;
+        const accountUniqueName = this.queryParams?.accountUniqueName
+            || this.activatedRoute.snapshot.params?.accountUniqueName;
+
+        if (!voucherUniqueName || !accountUniqueName) {
+            return;
+        }
+
+        if (isFromBill && !this.invoiceType.isReceiptNote) {
+            return;
+        }
+        if (!isFromBill && !this.invoiceType.isDeliveryChallan) {
+            return;
+        }
+
+        this.startLoader(true);
+        this.componentStore.getVoucherDetails({
+            isCopyVoucher: false,
+            accountUniqueName,
+            clearVoucherIdentity: true,
+            payload: {
+                uniqueName: voucherUniqueName,
+                voucherType: isFromBill ? VoucherTypeEnum.purchase : VoucherTypeEnum.sales
+            }
         });
     }
 

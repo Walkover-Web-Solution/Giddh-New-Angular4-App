@@ -338,6 +338,32 @@ export class VoucherService {
     }
 
     /**
+     * Pending delivery challan / receipt note reconciliation report
+     *
+     * @param {*} queryParams from, to, q, page, count, sort, sortBy
+     * @param {{ reportType: string; documentType: string }} body
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getPendingBusinessDocumentReport(
+        queryParams: any,
+        body: { reportType: string; documentType: string }
+    ): Observable<BaseResponse<any, any>> {
+        const contextPath = INVENTORY_VOUCHER_API.PENDING_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        const url = this.vouchersUtilityService.createQueryString(this.config.apiUrl + contextPath, queryParams);
+
+        return this.http.post(url, body).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = { ...queryParams, ...body };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, { ...queryParams, ...body }))
+        );
+    }
+
+    /**
      * Converts delivery challan/receipt note to invoice/bill
      *
      * @param {string[]} uniqueNames
