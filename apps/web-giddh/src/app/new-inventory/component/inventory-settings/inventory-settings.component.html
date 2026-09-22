@@ -87,22 +87,16 @@
                             <p class="mb-1" id="item-wise-report-title">{{ localeData().item_wise_report }}</p>
                             <small id="item-wise-report-desc" class="text-light">{{ localeData().item_wise_report_description }}</small>
                         </div>
-                        <div
-                            class="d-flex align-items-center column-gap-2 flex-shrink-0"
-                            role="group"
+                        <mat-button-toggle-group
+                            class="flex-shrink-0"
+                            formControlName="itemWiseReport"
+                            (change)="onReportNatureChange('itemWiseReport', $event.value)"
                             [attr.aria-labelledby]="'item-wise-report-title'"
                             [attr.aria-describedby]="'item-wise-report-desc'"
                         >
-                            <span class="font-size-14">{{ localeData().books }}</span>
-                            <mat-slide-toggle
-                                color="primary"
-                                formControlName="itemWiseReport"
-                                (change)="onReportNatureChange('itemWiseReport', $event)"
-                                [attr.aria-label]="localeData().item_wise_report + ': ' + localeData().books + ' / ' + localeData().inventory"
-                                [attr.aria-describedby]="'item-wise-report-desc'"
-                            ></mat-slide-toggle>
-                            <span class="font-size-14">{{ localeData().inventory }}</span>
-                        </div>
+                            <mat-button-toggle [value]="reportNature.Books">{{ localeData().books }}</mat-button-toggle>
+                            <mat-button-toggle [value]="reportNature.Inventory">{{ localeData().inventory }}</mat-button-toggle>
+                        </mat-button-toggle-group>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center border-bottom py-4">
@@ -110,22 +104,16 @@
                             <p class="mb-1" id="group-wise-report-title">{{ localeData().group_wise_report }}</p>
                             <small id="group-wise-report-desc" class="text-light">{{ localeData().group_wise_report_description }}</small>
                         </div>
-                        <div
-                            class="d-flex align-items-center column-gap-2 flex-shrink-0"
-                            role="group"
+                        <mat-button-toggle-group
+                            class="flex-shrink-0"
+                            formControlName="groupWiseReport"
+                            (change)="onReportNatureChange('groupWiseReport', $event.value)"
                             [attr.aria-labelledby]="'group-wise-report-title'"
                             [attr.aria-describedby]="'group-wise-report-desc'"
                         >
-                            <span class="font-size-14">{{ localeData().books }}</span>
-                            <mat-slide-toggle
-                                color="primary"
-                                formControlName="groupWiseReport"
-                                (change)="onReportNatureChange('groupWiseReport', $event)"
-                                [attr.aria-label]="localeData().group_wise_report + ': ' + localeData().books + ' / ' + localeData().inventory"
-                                [attr.aria-describedby]="'group-wise-report-desc'"
-                            ></mat-slide-toggle>
-                            <span class="font-size-14">{{ localeData().inventory }}</span>
-                        </div>
+                            <mat-button-toggle [value]="reportNature.Books">{{ localeData().books }}</mat-button-toggle>
+                            <mat-button-toggle [value]="reportNature.Inventory">{{ localeData().inventory }}</mat-button-toggle>
+                        </mat-button-toggle-group>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center py-4">
@@ -133,22 +121,16 @@
                             <p class="mb-1" id="variant-wise-report-title">{{ localeData().variant_wise_report }}</p>
                             <small id="variant-wise-report-desc" class="text-light">{{ localeData().variant_wise_report_description }}</small>
                         </div>
-                        <div
-                            class="d-flex align-items-center column-gap-2 flex-shrink-0"
-                            role="group"
+                        <mat-button-toggle-group
+                            class="flex-shrink-0"
+                            formControlName="variantWiseReport"
+                            (change)="onReportNatureChange('variantWiseReport', $event.value)"
                             [attr.aria-labelledby]="'variant-wise-report-title'"
                             [attr.aria-describedby]="'variant-wise-report-desc'"
                         >
-                            <span class="font-size-14">{{ localeData().books }}</span>
-                            <mat-slide-toggle
-                                color="primary"
-                                formControlName="variantWiseReport"
-                                (change)="onReportNatureChange('variantWiseReport', $event)"
-                                [attr.aria-label]="localeData().variant_wise_report + ': ' + localeData().books + ' / ' + localeData().inventory"
-                                [attr.aria-describedby]="'variant-wise-report-desc'"
-                            ></mat-slide-toggle>
-                            <span class="font-size-14">{{ localeData().inventory }}</span>
-                        </div>
+                            <mat-button-toggle [value]="reportNature.Books">{{ localeData().books }}</mat-button-toggle>
+                            <mat-button-toggle [value]="reportNature.Inventory">{{ localeData().inventory }}</mat-button-toggle>
+                        </mat-button-toggle-group>
                     </div>
                 </section>
 
