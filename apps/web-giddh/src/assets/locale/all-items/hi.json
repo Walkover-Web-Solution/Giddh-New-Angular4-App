@@ -311,6 +311,20 @@
                     "link": "/pages/vouchers/preview/delivery-challan/list",
                     "icon": "icon-E-way-bill",
                     "description": "डिलिवरी चालान बनाएं",
+                    "submenu": [
+                        {
+                            "label": "रिपोर्ट",
+                            "link": "/pages/vouchers/preview/delivery-challan/list",
+                            "icon": "icon-accounts-new",
+                            "description": "डिलिवरी चालान बनाएं"
+                        },
+                        {
+                            "label": "DC ⇄ इनवॉइस समाधान",
+                            "link": "/pages/vouchers/reconciliation/delivery-challan",
+                            "icon": "icon-register-new",
+                            "description": "डिलिवरी चालान और इनवॉइस का समाधान"
+                        }
+                    ],
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
@@ -590,6 +604,20 @@
                     "link": "/pages/vouchers/preview/receipt-note/list",
                     "icon": "icon-reciept-new",
                     "description": "रिसीप्ट नोट बनाएं",
+                    "submenu": [
+                        {
+                            "label": "रिपोर्ट",
+                            "link": "/pages/vouchers/preview/receipt-note/list",
+                            "icon": "icon-accounts-new",
+                            "description": "रिसीप्ट नोट बनाएं"
+                        },
+                        {
+                            "label": "RN ⇄ बिल समाधान",
+                            "link": "/pages/vouchers/reconciliation/receipt-note",
+                            "icon": "icon-register-new",
+                            "description": "रिसीप्ट नोट और बिल का समाधान"
+                        }
+                    ],
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2

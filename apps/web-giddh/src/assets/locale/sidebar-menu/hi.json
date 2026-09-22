@@ -239,31 +239,35 @@
                             "voucherVersion": 2
                         }
                     }
-                }
-            ]
-        },
-        {
-            "label": "डिलिवरी चालान",
-            "icon": "icon-E-way-bill",
-            "items": [
-                {
-                    "label": "रिपोर्ट",
-                    "link": "/pages/vouchers/preview/delivery-challan/list",
-                    "icon": "icon-E-way-bill",
-                    "description": "डिलिवरी चालान बनाएं",
-                    "additional": {
-                        "createNew": {
-                            "label": "+",
-                            "link": "/pages/vouchers/delivery-challan/create"
-                        }
-                    }
                 },
                 {
-                    "label": "DC - इनवॉइस समाधान",
-                    "link": "/pages/vouchers/reconciliation/delivery-challan",
-                    "icon": "icon-register-new",
-                    "description": "डिलिवरी चालान और इनवॉइस का समाधान",
-                    "alwaysPresent": true
+                    "label": "डिलिवरी चालान",
+                    "icon": "icon-E-way-bill",
+                    "description": "डिलिवरी चालान बनाएं",
+                    "link": "/pages/vouchers/preview/delivery-challan/list",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    },
+                    "options": [
+                        {
+                            "label": "रिपोर्ट",
+                            "link": "/pages/vouchers/preview/delivery-challan/list",
+                            "icon": "icon-accounts-new",
+                            "additional": {
+                                "createNew": {
+                                    "label": "+",
+                                    "link": "/pages/vouchers/delivery-challan/create"
+                                }
+                            }
+                        },
+                        {
+                            "label": "DC ⇄ इनवॉइस समाधान",
+                            "link": "/pages/vouchers/reconciliation/delivery-challan",
+                            "icon": "icon-register-new"
+                        }
+                    ]
                 }
             ]
         },
@@ -521,34 +525,38 @@
                             "voucherVersion": 2
                         }
                     }
-                }
-            ]
-        },
-        {
-            "label": "रिसीप्ट नोट",
-            "icon": "icon-reciept-new",
-            "items": [
+                },
                 {
-                    "label": "रिपोर्ट",
-                    "link": "/pages/vouchers/preview/receipt-note/list",
+                    "label": "रिसीप्ट नोट",
                     "icon": "icon-reciept-new",
                     "description": "रिसीप्ट नोट बनाएं",
+                    "link": "/pages/vouchers/preview/receipt-note/list",
                     "additional": {
-                        "createNew": {
-                            "label": "+",
-                            "link": "/pages/vouchers/receipt-note/create"
-                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
-                    }
-                },
-                {
-                    "label": "RN - बिल समाधान",
-                    "link": "/pages/vouchers/reconciliation/receipt-note",
-                    "icon": "icon-register-new",
-                    "description": "रिसीप्ट नोट और बिल का समाधान",
-                    "alwaysPresent": true
+                    },
+                    "options": [
+                        {
+                            "label": "रिपोर्ट",
+                            "link": "/pages/vouchers/preview/receipt-note/list",
+                            "icon": "icon-accounts-new",
+                            "additional": {
+                                "createNew": {
+                                    "label": "+",
+                                    "link": "/pages/vouchers/receipt-note/create"
+                                },
+                                "queryParams": {
+                                    "voucherVersion": 2
+                                }
+                            }
+                        },
+                        {
+                            "label": "RN ⇄ बिल समाधान",
+                            "link": "/pages/vouchers/reconciliation/receipt-note",
+                            "icon": "icon-register-new"
+                        }
+                    ]
                 }
             ]
         },

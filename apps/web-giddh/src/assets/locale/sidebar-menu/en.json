@@ -239,39 +239,43 @@
                             "voucherVersion": 2
                         }
                     }
-                }
-            ]
-        },
-        {
-            "label": "Delivery Challan",
-            "icon": "icon-E-way-bill",
-            "items": [
-                {
-                    "label": "Report",
-                    "link": "/pages/vouchers/preview/delivery-challan/list",
-                    "icon": "icon-E-way-bill",
-                    "description": "Create delivery challan",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2
-                        },
-                        "createNew": {
-                            "label": "+",
-                            "link": "/pages/vouchers/delivery-challan/create"
-                        }
-                    }
                 },
                 {
-                    "label": "DC - Invoice Reconciliation",
-                    "link": "/pages/vouchers/reconciliation/delivery-challan",
-                    "icon": "icon-register-new",
-                    "description": "Reconcile delivery challan with invoice",
-                    "alwaysPresent": true,
+                    "label": "Delivery Challan",
+                    "icon": "icon-E-way-bill",
+                    "description": "Create delivery challan",
+                    "link": "/pages/vouchers/preview/delivery-challan/list",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
                         }
-                    }
+                    },
+                    "options": [
+                        {
+                            "label": "Report",
+                            "link": "/pages/vouchers/preview/delivery-challan/list",
+                            "icon": "icon-accounts-new",
+                            "additional": {
+                                "queryParams": {
+                                    "voucherVersion": 2
+                                },
+                                "createNew": {
+                                    "label": "+",
+                                    "link": "/pages/vouchers/delivery-challan/create"
+                                }
+                            }
+                        },
+                        {
+                            "label": "DC ⇄ Invoice Reconciliation",
+                            "link": "/pages/vouchers/reconciliation/delivery-challan",
+                            "icon": "icon-register-new",
+                            "additional": {
+                                "queryParams": {
+                                    "voucherVersion": 2
+                                }
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -529,39 +533,43 @@
                             "voucherVersion": 2
                         }
                     }
-                }
-            ]
-        },
-        {
-            "label": "Receipt Note",
-            "icon": "icon-reciept-new",
-            "items": [
-                {
-                    "label": "Report",
-                    "link": "/pages/vouchers/preview/receipt-note/list",
-                    "icon": "icon-reciept-new",
-                    "description": "Create receipt note",
-                    "additional": {
-                        "createNew": {
-                            "label": "+",
-                            "link": "/pages/vouchers/receipt-note/create"
-                        },
-                        "queryParams": {
-                            "voucherVersion": 2
-                        }
-                    }
                 },
                 {
-                    "label": "RN - Bill Reconciliation",
-                    "link": "/pages/vouchers/reconciliation/receipt-note",
-                    "icon": "icon-register-new",
-                    "description": "Reconcile receipt note with bill",
-                    "alwaysPresent": true,
+                    "label": "Receipt Note",
+                    "icon": "icon-reciept-new",
+                    "description": "Create receipt note",
+                    "link": "/pages/vouchers/preview/receipt-note/list",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
                         }
-                    }
+                    },
+                    "options": [
+                        {
+                            "label": "Report",
+                            "link": "/pages/vouchers/preview/receipt-note/list",
+                            "icon": "icon-accounts-new",
+                            "additional": {
+                                "createNew": {
+                                    "label": "+",
+                                    "link": "/pages/vouchers/receipt-note/create"
+                                },
+                                "queryParams": {
+                                    "voucherVersion": 2
+                                }
+                            }
+                        },
+                        {
+                            "label": "RN ⇄ Bill Reconciliation",
+                            "link": "/pages/vouchers/reconciliation/receipt-note",
+                            "icon": "icon-register-new",
+                            "additional": {
+                                "queryParams": {
+                                    "voucherVersion": 2
+                                }
+                            }
+                        }
+                    ]
                 }
             ]
         },

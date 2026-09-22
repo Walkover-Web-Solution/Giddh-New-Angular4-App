@@ -1157,6 +1157,9 @@
                                                     [placeholder]="commonLocaleData?.app_state"
                                                     formControlName="code"
                                                     [options]="companyStateList$ | async"
+                                                    [labelValue]="
+                                                        invoiceForm.controls['account'].get('destinationOfSupply.name')?.value
+                                                    "
                                                     [forceClear]="forceClear"
                                                     [required]="!!branchCurrentAddressInfo.taxNumber"
                                                     [showError]="
