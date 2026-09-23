@@ -3,7 +3,7 @@ import { FormControl } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { IOption } from "../../../app.constant";
+import { API_BULK_FETCH_LIMIT, IOption } from "../../../app.constant";
 import { BatchReportItem } from "../../../models/interfaces/batch-report.interface";
 import { InventoryService } from "../../../services/inventory.service";
 import { mapAvailabilityBatches } from "../batch-report/batch-report.helper";
@@ -119,7 +119,7 @@ export class BatchArchiveDialogComponent implements OnInit, OnDestroy {
             return;
         }
         this.isLoading = true;
-        this.inventoryService.getBatchAvailability({ uniqueName, isVariant, page: 1, count: 50, excludeBatchUniqueName: batch?.uniqueName })
+        this.inventoryService.getBatchAvailability({ uniqueName, isVariant, page: 1, count: API_BULK_FETCH_LIMIT, excludeBatchUniqueName: batch?.uniqueName })
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 this.isLoading = false;

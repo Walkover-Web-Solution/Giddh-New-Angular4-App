@@ -37,7 +37,7 @@ import {
     TransferProductsRequest,
     NewBranchTransferRequest, NewBranchTransferResponse, NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest
 } from '../models/api-models/BranchTransfer';
-import { PAGINATION_LIMIT } from '../app.constant';
+import { API_BULK_FETCH_LIMIT, PAGINATION_LIMIT } from '../app.constant';
 import { cloneDeep, concat, get } from '../lodash-optimized';
 import {
     BusinessDocumentStatus,
@@ -2175,7 +2175,7 @@ export class InventoryService {
             uniqueName: queryParams.uniqueName ?? "",
             isVariant: queryParams.isVariant ?? false,
             page: queryParams.page ?? 1,
-            count: queryParams.count ?? 50,
+            count: queryParams.count ?? API_BULK_FETCH_LIMIT,
             excludeBatchUniqueName: queryParams.excludeBatchUniqueName ?? "",
             sort: queryParams.sort ?? "asc",
             sortBy: queryParams.sortBy ?? "expiry",

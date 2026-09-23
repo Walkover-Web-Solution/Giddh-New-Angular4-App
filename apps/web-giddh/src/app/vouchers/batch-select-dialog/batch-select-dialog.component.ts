@@ -9,7 +9,7 @@ import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { catchError, debounceTime, distinctUntilChanged, switchMap, take, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import * as customParseFormat from "dayjs/plugin/customParseFormat";
-import { ASIDE_PANE_CONFIG } from "../../app.constant";
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG } from "../../app.constant";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_WITH_SPACE } from "../../shared/helpers/defaultDateFormat";
 import { BatchReportItem } from "../../models/interfaces/batch-report.interface";
 import { BatchSelectDialogData, BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
@@ -462,7 +462,7 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
             uniqueName,
             isVariant,
             page: 1,
-            count: 50,
+            count: API_BULK_FETCH_LIMIT,
             sort: "asc",
             sortBy: "expiry",
             q: query,

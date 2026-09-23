@@ -18,6 +18,7 @@ import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module"
 import { GiddhDatepickerModule } from "../../../theme/giddh-datepicker/giddh-datepicker.module";
 import { mapAvailabilityBatches } from "../batch-report/batch-report.helper";
 import { cloneDeep } from "../../../lodash-optimized";
+import { API_BULK_FETCH_LIMIT } from "../../../app.constant";
 
 dayjs.extend(customParseFormat);
 
@@ -143,7 +144,7 @@ export class StockOpeningBatchDialogComponent implements OnInit, OnDestroy {
             uniqueName: "",
             isVariant: false,
             page: 1,
-            count: 50,
+            count: API_BULK_FETCH_LIMIT,
             sort: "asc",
             sortBy: "expiry",
             q: query ?? "",
