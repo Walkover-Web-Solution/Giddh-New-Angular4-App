@@ -56,11 +56,10 @@
             moduleName === inventoryModuleName.variant
         "
     >
-        <span class="font-size-14 mr-2">{{ localeData?.header?.report_as_per }}</span>
         <mat-button-toggle-group
             [value]="reportAsPerInventory ? reportNature.Inventory : reportNature.Books"
             (change)="onReportNatureChange($event.value)"
-            [attr.aria-label]="localeData?.header?.report_as_per"
+            [attr.aria-label]="localeData?.header?.books"
         >
             <mat-button-toggle [value]="reportNature.Books">{{ localeData?.header?.books }}</mat-button-toggle>
             <mat-button-toggle [value]="reportNature.Inventory">{{ localeData?.header?.inventory }}</mat-button-toggle>

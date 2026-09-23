@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { select, Store } from "@ngrx/store";
 import { forkJoin, of } from "rxjs";
 import { catchError, finalize, take } from "rxjs/operators";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -18,6 +19,8 @@ import {
     InventorySettingsUpdateRequest,
     VoucherAutomationSettings
 } from "../../../models/api-models/InventorySettings";
+import { AppThemeClassEnum } from "../../../app.constant";
+import { AppState } from "../../../store";
 
 interface InventorySettingsLocale {
     title: string;
@@ -79,6 +82,8 @@ export class InventorySettingsComponent implements OnInit {
     private readonly toaster = inject(ToasterService);
     /** Component destruction reference. */
     private readonly destroyRef = inject(DestroyRef);
+    /** Application store. */
+    private readonly store = inject(Store<AppState>);
     /** Report nature enum for template bindings. */
     public readonly reportNature = ReportNature;
     /** Localized labels for this page. */
@@ -87,6 +92,8 @@ export class InventorySettingsComponent implements OnInit {
     public readonly isLoading = signal<boolean>(true);
     /** True while settings are being saved. */
     public readonly isSaving = signal<boolean>(false);
+    /** True when light (default) theme is active; used to apply bg-grey. */
+    public readonly isLightMode = signal<boolean>(true);
     /** Last settings response used by the cancel action. */
     private readonly originalSettings = signal<InventorySettingsResponse | null>(null);
     /** Last saved report nature toggles used by the cancel action. */
@@ -116,6 +123,12 @@ export class InventorySettingsComponent implements OnInit {
      * @memberof InventorySettingsComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(
+            select(state => state.session.activeTheme),
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(response => {
+            this.isLightMode.set(response?.value !== AppThemeClassEnum.Dark);
+        });
         this.loadSettings();
     }
 
@@ -308,4 +321,5 @@ export class InventorySettingsComponent implements OnInit {
             ? ReportNature.Inventory
             : ReportNature.Books;
     }
+
 }

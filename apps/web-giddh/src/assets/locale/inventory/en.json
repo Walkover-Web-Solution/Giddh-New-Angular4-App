@@ -83,9 +83,8 @@
         "no_result_found":"No result found",
         "select_all":"Select All",
         "select_account_group":"Select Account Group",
-        "report_as_per":"Report as per",
-        "books":"Books",
-        "inventory":"Inventory"
+        "books":"Accounting Stock",
+        "inventory":"Physical Stock"
     },
     "advance_search_filter":{
         "advance_search":"Advance Search",

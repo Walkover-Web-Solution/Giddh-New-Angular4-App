@@ -82,9 +82,8 @@
         "no_result_found":"कोणताही परिणाम आढळला नाही",
         "select_all":"सर्व निवडा",
         "select_account_group":"खाते गट निवडा",
-        "report_as_per":"अहवालानुसार",
-        "books":"पुस्तके",
-        "inventory":"इन्व्हेंटरी"
+        "books":"लेखांकन स्टॉक",
+        "inventory":"भौतिक स्टॉक"
     },
     "advance_search_filter":{
         "advance_search":"प्रगत शोध",
