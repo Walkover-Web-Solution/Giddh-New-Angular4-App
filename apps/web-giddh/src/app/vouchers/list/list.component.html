@@ -5629,9 +5629,13 @@
                                                           template,
                                                           template.type === voucherTypeEnum.invoice
                                                               ? voucherTypeEnum.invoice
-                                                              : template.type === voucherTypeEnum.purchase_bill
-                                                                ? voucherTypeEnum.purchase_bill
-                                                                : voucherTypeEnum.purchase_order
+                                                              : template.type === voucherTypeEnum.estimate
+                                                                ? voucherTypeEnum.estimate
+                                                                : template.type === voucherTypeEnum.proforma
+                                                                  ? voucherTypeEnum.proforma
+                                                                  : template.type === voucherTypeEnum.purchase_bill
+                                                                    ? voucherTypeEnum.purchase_bill
+                                                                    : voucherTypeEnum.purchase_order
                                                       )
                                             "
                                         >
