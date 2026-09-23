@@ -9,7 +9,7 @@ import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { catchError, debounceTime, distinctUntilChanged, switchMap, take, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import * as customParseFormat from "dayjs/plugin/customParseFormat";
-import { ASIDE_PANE_CONFIG } from "../../app.constant";
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG } from "../../app.constant";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_WITH_SPACE } from "../../shared/helpers/defaultDateFormat";
 import { BatchReportItem } from "../../models/interfaces/batch-report.interface";
 import { BatchSelectDialogData, BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
@@ -150,7 +150,21 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @memberof BatchSelectDialogComponent
      */
     public get negativeStockRow(): BatchSelectRow | null {
+        if (this.isInbound) {
+            return null;
+        }
         return this.rows.find(row => row.selected && this.getNegativeQuantity(row) > 0) ?? null;
+    }
+
+    /**
+     * True when stock is received (bill / receipt / credit note), not issued.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchSelectDialogComponent
+     */
+    public get isInbound(): boolean {
+        return !!this.dialogData?.isInbound;
     }
 
     /**
@@ -358,14 +372,45 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Quantity that will take the batch below zero.
+     * Quantity that will take the batch below zero on an invoice.
      *
      * @param {BatchSelectRow} row
      * @return {*}  {number}
      * @memberof BatchSelectDialogComponent
      */
     public getNegativeQuantity(row: BatchSelectRow): number {
+        if (this.isInbound) {
+            return 0;
+        }
         return Math.max((Number(row.quantity) || 0) - (Number(row.availableQuantity) || 0), 0);
+    }
+
+    /**
+     * True when the projected-balance line should show for this row.
+     *
+     * @param {BatchSelectRow} row
+     * @return {*}  {boolean}
+     * @memberof BatchSelectDialogComponent
+     */
+    public shouldShowProjectedBalance(row: BatchSelectRow): boolean {
+        if (!row?.selected || !(Number(row.quantity) > 0)) {
+            return false;
+        }
+        return this.isInbound || this.getNegativeQuantity(row) > 0;
+    }
+
+    /**
+     * Invoice: amount below zero. Bill: available plus received quantity.
+     *
+     * @param {BatchSelectRow} row
+     * @return {*}  {number}
+     * @memberof BatchSelectDialogComponent
+     */
+    public getProjectedQuantity(row: BatchSelectRow): number {
+        if (this.isInbound) {
+            return (Number(row.availableQuantity) || 0) + (Number(row.quantity) || 0);
+        }
+        return this.getNegativeQuantity(row);
     }
 
     /**
@@ -417,7 +462,7 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
             uniqueName,
             isVariant,
             page: 1,
-            count: 50,
+            count: API_BULK_FETCH_LIMIT,
             sort: "asc",
             sortBy: "expiry",
             q: query,
@@ -600,6 +645,9 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      */
     private getDefaultQuantity(row: BatchSelectRow): number {
         const remaining = Math.max((Number(this.dialogData?.lineQuantity) || 0) - this.allocatedQuantity, 0);
+        if (this.isInbound) {
+            return remaining > 0 ? remaining : 1;
+        }
         const available = Number(row.availableQuantity) || 0;
         if (remaining > 0) {
             return available > 0 ? Math.min(remaining, available) : remaining;

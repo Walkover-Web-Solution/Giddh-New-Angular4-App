@@ -36,6 +36,7 @@
                                             (selectedOption)="
                                                 recipe.variant.name = $event.label;
                                                 recipe.variant.uniqueName = $event.value;
+                                                recipe.batches = [];
                                                 checkIfVariantIsAlreadyUsed(recipe, $event, i)
                                             "
                                         ></reactive-dropdown-field>
@@ -48,6 +49,24 @@
                                             [placeholder]="localeData?.enter_output_quantity"
                                             [(ngModel)]="recipe.manufacturingQuantity"
                                         ></input-field>
+                                        <div *ngIf="batchTrackingEnabled && stock?.uniqueName" class="mt-1">
+                                            <batch-chip-list
+                                                *ngIf="getRecipeBatches(recipe.batches)?.length"
+                                                [batches]="recipe.batches"
+                                                [isInbound]="true"
+                                                [localeData]="localeData"
+                                                [commonLocaleData]="commonLocaleData"
+                                                (edit)="openBatchSelectDialog('finished', i, undefined, $event)"
+                                            ></batch-chip-list>
+                                            <a
+                                                *ngIf="!getRecipeBatches(recipe.batches)?.length"
+                                                href="javascript:void(0);"
+                                                class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                (click)="openBatchSelectDialog('finished', i, undefined, $event)"
+                                            >
+                                                {{ localeData?.select_batch }}
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="w-100">
                                         <reactive-dropdown-field
@@ -86,6 +105,7 @@
                                                         <th>{{ commonLocaleData?.app_name }}</th>
                                                         <th>{{ commonLocaleData?.app_variant }}</th>
                                                         <th>{{ commonLocaleData?.app_quantity }}</th>
+                                                        <th *ngIf="batchTrackingEnabled" class="table-batch text-center">{{ localeData?.batch }}</th>
                                                         <th>{{ commonLocaleData?.app_unit }}</th>
                                                         <th></th>
                                                     </tr>
@@ -136,7 +156,8 @@
                                                                     [defaultValue]="linkedStock.variant?.name"
                                                                     (selectedOption)="
                                                                         linkedStock.variant.name = $event.label;
-                                                                        linkedStock.variant.uniqueName = $event.value
+                                                                        linkedStock.variant.uniqueName = $event.value;
+                                                                        linkedStock.batches = []
                                                                     "
                                                                 ></select-field>
                                                             </div>
@@ -152,6 +173,26 @@
                                                                     [(ngModel)]="linkedStock.quantity"
                                                                 ></text-field>
                                                             </div>
+                                                        </td>
+                                                        <td *ngIf="batchTrackingEnabled" class="table-batch text-right">
+                                                            <ng-container *ngIf="linkedStock.stockUniqueName">
+                                                                <batch-chip-list
+                                                                    *ngIf="getRecipeBatches(linkedStock.batches)?.length"
+                                                                    [compact]="true"
+                                                                    [batches]="linkedStock.batches"
+                                                                    [localeData]="localeData"
+                                                                    [commonLocaleData]="commonLocaleData"
+                                                                    (edit)="openBatchSelectDialog('raw', i, j, $event)"
+                                                                ></batch-chip-list>
+                                                                <a
+                                                                    *ngIf="!getRecipeBatches(linkedStock.batches)?.length"
+                                                                    href="javascript:void(0);"
+                                                                    class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                                    (click)="openBatchSelectDialog('raw', i, j, $event)"
+                                                                >
+                                                                    {{ localeData?.select_batch }}
+                                                                </a>
+                                                            </ng-container>
                                                         </td>
                                                         <td>
                                                             <div>
@@ -207,6 +248,7 @@
                                                         <th>{{ commonLocaleData?.app_name }}</th>
                                                         <th>{{ commonLocaleData?.app_variant }}</th>
                                                         <th>{{ commonLocaleData?.app_quantity }}</th>
+                                                        <th *ngIf="batchTrackingEnabled" class="table-batch text-center">{{ localeData?.batch }}</th>
                                                         <th>{{ commonLocaleData?.app_unit }}</th>
                                                         <th></th>
                                                     </tr>
@@ -257,7 +299,8 @@
                                                                     [defaultValue]="byProductLinkedStock.variant?.name"
                                                                     (selectedOption)="
                                                                         byProductLinkedStock.variant.name = $event.label;
-                                                                        byProductLinkedStock.variant.uniqueName = $event.value
+                                                                        byProductLinkedStock.variant.uniqueName = $event.value;
+                                                                        byProductLinkedStock.batches = []
                                                                     "
                                                                 ></select-field>
                                                             </div>
@@ -273,6 +316,27 @@
                                                                     [(ngModel)]="byProductLinkedStock.quantity"
                                                                 ></text-field>
                                                             </div>
+                                                        </td>
+                                                        <td *ngIf="batchTrackingEnabled" class="table-batch text-right">
+                                                            <ng-container *ngIf="byProductLinkedStock.stockUniqueName">
+                                                                <batch-chip-list
+                                                                    *ngIf="getRecipeBatches(byProductLinkedStock.batches)?.length"
+                                                                    [compact]="true"
+                                                                    [batches]="byProductLinkedStock.batches"
+                                                                    [isInbound]="true"
+                                                                    [localeData]="localeData"
+                                                                    [commonLocaleData]="commonLocaleData"
+                                                                    (edit)="openBatchSelectDialog('byProduct', i, k, $event)"
+                                                                ></batch-chip-list>
+                                                                <a
+                                                                    *ngIf="!getRecipeBatches(byProductLinkedStock.batches)?.length"
+                                                                    href="javascript:void(0);"
+                                                                    class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                                    (click)="openBatchSelectDialog('byProduct', i, k, $event)"
+                                                                >
+                                                                    {{ localeData?.select_batch }}
+                                                                </a>
+                                                            </ng-container>
                                                         </td>
                                                         <td>
                                                             <div>
@@ -339,6 +403,16 @@
                                         <div class="d-flex">
                                             <p class="mr-3">{{ recipe?.manufacturingQuantity }} ({{ recipe?.manufacturingUnitCode }})</p>
                                         </div>
+                                        <div *ngIf="batchTrackingEnabled && getRecipeBatches(recipe.batches)?.length" class="mt-1">
+                                            <batch-chip-list
+                                                [compact]="true"
+                                                [showEdit]="false"
+                                                [batches]="recipe.batches"
+                                                [isInbound]="true"
+                                                [localeData]="localeData"
+                                                [commonLocaleData]="commonLocaleData"
+                                            ></batch-chip-list>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -366,6 +440,15 @@
                                                         <div>
                                                             <p>{{ linkedStock.quantity }} ({{ linkedStock.stockUnitCode }})</p>
                                                         </div>
+                                                    </td>
+                                                    <td *ngIf="batchTrackingEnabled && getRecipeBatches(linkedStock.batches)?.length">
+                                                        <batch-chip-list
+                                                            [compact]="true"
+                                                            [showEdit]="false"
+                                                            [batches]="linkedStock.batches"
+                                                            [localeData]="localeData"
+                                                            [commonLocaleData]="commonLocaleData"
+                                                        ></batch-chip-list>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -398,6 +481,16 @@
                                                         <div>
                                                             <p>{{ linkedStock.quantity }} ({{ linkedStock.stockUnitCode }})</p>
                                                         </div>
+                                                    </td>
+                                                    <td *ngIf="batchTrackingEnabled && getRecipeBatches(linkedStock.batches)?.length">
+                                                        <batch-chip-list
+                                                            [compact]="true"
+                                                            [showEdit]="false"
+                                                            [batches]="linkedStock.batches"
+                                                            [isInbound]="true"
+                                                            [localeData]="localeData"
+                                                            [commonLocaleData]="commonLocaleData"
+                                                        ></batch-chip-list>
                                                     </td>
                                                 </tr>
                                             </tbody>

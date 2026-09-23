@@ -1998,7 +1998,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 selectedBatches: cloneDeep(this.currentTxn?.inventory?.batches) || [],
                 currencySymbol: this.selectedPrefixForCurrency,
                 localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
+                commonLocaleData: this.commonLocaleData,
+                isInbound: this.isBatchInbound(this.blankLedger?.voucherType)
             }
         });
 
@@ -2024,6 +2025,29 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public getEntryBatches(): VoucherSelectedBatch[] {
         const batches = this.currentTxn?.inventory?.batches;
         return Array.isArray(batches) ? batches : [];
+    }
+
+    /**
+     * True when the ledger voucher receives stock (bill / credit note).
+     *
+     * @param {string} [voucherType]
+     * @return {*}  {boolean}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public isBatchInbound(voucherType?: string): boolean {
+        const type = String(voucherType ?? "").toLowerCase();
+        return [
+            "pur",
+            "purchase",
+            "cash bill",
+            "credit note",
+            "cash credit note",
+            "purchase-order",
+            "purchase_order",
+            "purchase_bill",
+            "bill",
+            "receipt note"
+        ].includes(type);
     }
 
     /**

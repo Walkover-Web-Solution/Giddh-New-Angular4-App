@@ -1,10 +1,13 @@
 import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
 import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
 import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../app.constant';
+import { VoucherSelectedBatch } from "../../../models/interfaces/batch-report.interface";
+import { StockOpeningBatchDialogComponent, StockOpeningBatchDialogResult } from "../stock-opening-batch-dialog/stock-opening-batch-dialog.component";
 import { PageEvent } from '@angular/material/paginator';
 import { AppState } from '../../../store';
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
@@ -89,6 +92,12 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public translationLoaded: boolean = false;
     /** Stores the voucher API version of company */
     public voucherApiVersion: number;
+    /** True when company has batch tracking enabled. */
+    public batchTrackingEnabled: boolean = false;
+    /** Company currency symbol for opening amount. */
+    public companyCurrencySymbol: string = "";
+    /** Amount mask format from company profile. */
+    public inputMaskFormat: string = "";
 
     constructor(
 
@@ -99,7 +108,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private dialog: MatDialog
     ) {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
     }
@@ -180,6 +190,17 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             }
         ];
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.batchTrackingEnabled = !!activeCompany.batchTrackingEnabled;
+            }
+        });
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.companyCurrencySymbol = profile.baseCurrencySymbol;
+                this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : "";
+            }
+        });
     }
 
     /**
@@ -195,11 +216,21 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     stock.stock = response?.body;
                     stock.stockOriginal = cloneDeep(response?.body);
                     (Array.isArray(stock?.stock?.variants) ? stock?.stock?.variants : []).forEach(variant => {
+                        if (!Array.isArray(variant.warehouseBalance)) {
+                            variant.warehouseBalance = [];
+                        }
+                        variant.warehouseBalance.forEach(balance => {
+                            balance.batches = this.normalizeWarehouseBatches(balance.batches);
+                        });
                         (Array.isArray(this.warehouses) ? this.warehouses : []).forEach(warehouse => {
                             const warehouseFound = variant?.warehouseBalance?.filter(balance => balance?.warehouse?.uniqueName === warehouse?.uniqueName);
                             if (!warehouseFound?.length) {
                                 variant.warehouseBalance.push({
-                                    openingAmount: 0, openingQuantity: 0, stockUnit: stock.stock.stockUnit, warehouse: { name: warehouse?.name, uniqueName: warehouse?.uniqueName }
+                                    openingAmount: 0,
+                                    openingQuantity: 0,
+                                    stockUnit: stock.stock.stockUnit,
+                                    warehouse: { name: warehouse?.name, uniqueName: warehouse?.uniqueName },
+                                    batches: []
                                 });
                             }
                         });
@@ -261,6 +292,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     this.GroupStockReportRequest.totalItems = response.body?.totalItems;
                     this.GroupStockReportRequest.totalPages = response.body?.totalPages;
                     this.GroupStockReportRequest.count = response.body?.count;
+                    this.cdr.detectChanges();
                 } else {
                     groupStockReportRequest.totalItems = 0;
                     this.toaster.showSnackBar("error", response?.message);
@@ -303,11 +335,15 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                                         const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse?.uniqueName === uniqueName);
                                         if (warehouseFound?.length > 0 && warehouseFound[0]) {
                                             warehouseFound[0].openingBalance = warehouseStock?.openingBalance;
+                                            warehouseFound[0].batchCount = warehouseStock?.batchCount;
+                                            warehouseFound[0].batch = warehouseStock?.batch;
+                                            warehouseFound[0].batchName = warehouseStock?.batchName;
                                         }
                                     }
                                 }
                             });
                         }
+                        this.cdr.detectChanges();
                     } else {
                         this.toaster.showSnackBar("error", response?.message);
                     }
@@ -351,8 +387,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         stock.stock.stockUnitCode = stock?.stock?.stockUnit?.code;
         stock.stock.stockUnitName = stock?.stock?.stockUnit?.name;
         stock.stock.stockUnitUniqueName = stock?.stock?.stockUnit?.uniqueName;
+        const payload = this.buildStockUpdatePayload(stock?.stock);
         setTimeout(() => {
-            this.inventoryService.updateStock(stock?.stock, stock?.stock?.stockGroup?.uniqueName, stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.inventoryService.updateStock(payload, stock?.stock?.stockGroup?.uniqueName, stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response?.status === "success") {
                     this.toaster.showSnackBar("success", "Stock updated successfully");
                     this.calculationWarehouse(warehouse?.warehouse?.uniqueName);
@@ -477,6 +514,194 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     *
     * @memberof StockBalanceComponent
     */
+    /**
+     * Report-row batches for the collapsed warehouse chip.
+     *
+     * @param {*} warehouse
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof StockBalanceComponent
+     */
+    public getCollapsedWarehouseBatches(warehouse: any): VoucherSelectedBatch[] {
+        const count = Number(warehouse?.batchCount) || 0;
+        if (count <= 0) {
+            return [];
+        }
+        if (count === 1) {
+            return [{
+                uniqueName: warehouse?.batch?.uniqueName || warehouse?.batchName || "",
+                name: warehouse?.batchName || warehouse?.batch?.name || "",
+                batchNumber: warehouse?.batchName || warehouse?.batch?.name || "",
+                quantity: Number(warehouse?.openingBalance?.quantity) || 0
+            }];
+        }
+        return Array.from({ length: count }, (_, index) => ({
+            uniqueName: String(index),
+            name: "",
+            batchNumber: "",
+            quantity: 0
+        }));
+    }
+
+    /**
+     * Batches on an expanded variant warehouse.
+     *
+     * @param {*} warehouseBalance
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof StockBalanceComponent
+     */
+    public getWarehouseBalanceBatches(warehouseBalance: any): VoucherSelectedBatch[] {
+        return Array.isArray(warehouseBalance?.batches) ? warehouseBalance.batches : [];
+    }
+
+    /**
+     * Open Add Batch for a variant warehouse opening balance.
+     *
+     * @param {*} stock
+     * @param {*} variant
+     * @param {*} warehouseBalance
+     * @param {Event} [event]
+     * @memberof StockBalanceComponent
+     */
+    public openAddBatchDialog(stock: any, variant: any, warehouseBalance: any, event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+        if (!this.batchTrackingEnabled || !stock?.stockUniqueName || !variant) {
+            return;
+        }
+
+        const warehouse = warehouseBalance?.warehouse;
+        this.dialog.open(StockOpeningBatchDialogComponent, {
+            width: "1200px",
+            maxWidth: "94vw",
+            disableClose: true,
+            data: {
+                stockName: stock?.stockName || stock?.stock?.name,
+                stockUniqueName: stock?.stockUniqueName,
+                variantName: variant?.name,
+                variantUniqueName: variant?.uniqueName,
+                warehouseName: warehouse?.name,
+                warehouseUniqueName: warehouse?.uniqueName,
+                openingAmount: warehouseBalance?.openingAmount,
+                openingQuantity: warehouseBalance?.openingQuantity,
+                stockUnit: warehouseBalance?.stockUnit || stock?.stock?.stockUnit,
+                stockUnits: this.stockUnits,
+                batches: cloneDeep(this.getWarehouseBalanceBatches(warehouseBalance)),
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData,
+                currencySymbol: this.companyCurrencySymbol,
+                inputMaskFormat: this.inputMaskFormat
+            }
+        }).afterClosed().pipe(take(1)).subscribe((result?: StockOpeningBatchDialogResult) => {
+            if (!result) {
+                return;
+            }
+            warehouseBalance.batches = result.batches ?? [];
+            warehouseBalance.openingAmount = result.openingAmount;
+            warehouseBalance.openingQuantity = result.openingQuantity;
+            if (result.stockUnit) {
+                warehouseBalance.stockUnit = {
+                    ...(warehouseBalance.stockUnit ?? {}),
+                    ...result.stockUnit
+                };
+            }
+            this.stockUpdate(stock, warehouseBalance);
+            this.cdr.detectChanges();
+        });
+    }
+
+    /**
+     * Clone stock and send only payload-safe opening batches.
+     *
+     * @private
+     * @param {*} stock
+     * @return {*}  {*}
+     * @memberof StockBalanceComponent
+     */
+    private buildStockUpdatePayload(stock: any): any {
+        const payload = cloneDeep(stock);
+        if (!this.batchTrackingEnabled) {
+            payload?.variants?.forEach((variant: any) => {
+                variant?.warehouseBalance?.forEach((balance: any) => {
+                    delete balance.batches;
+                    delete balance.display;
+                });
+            });
+            return payload;
+        }
+        payload?.variants?.forEach((variant: any) => {
+            variant?.warehouseBalance?.forEach((balance: any) => {
+                balance.batches = this.mapBatchesForPayload(balance.batches);
+                delete balance.display;
+            });
+        });
+        return payload;
+    }
+
+    /**
+     * Opening-balance batches for the stock update API.
+     *
+     * @private
+     * @param {any[]} [batches]
+     * @return {*}  {any[]}
+     * @memberof StockBalanceComponent
+     */
+    private mapBatchesForPayload(batches?: any[]): any[] {
+        return (Array.isArray(batches) ? batches : [])
+            .filter(batch => (batch?.uniqueName || String(batch?.batchNumber ?? "").trim()) && (Number(batch.quantity) > 0 || Number(batch.openingQuantity) > 0))
+            .map(batch => {
+                const quantity = Number(batch.openingQuantity ?? batch.quantity) || 0;
+                const mapped: any = {
+                    name: batch.name ?? "",
+                    batchNumber: batch.batchNumber ?? batch.name ?? "",
+                    quantity,
+                    openingQuantity: quantity,
+                    openingAmount: Number(batch.openingAmount) || 0
+                };
+                if (batch.uniqueName) {
+                    mapped.uniqueName = batch.uniqueName;
+                }
+                if (batch.manufacturingDate) {
+                    mapped.manufacturingDate = batch.manufacturingDate;
+                }
+                if (batch.expiryDate) {
+                    mapped.expiryDate = batch.expiryDate;
+                }
+                return mapped;
+            });
+    }
+
+    /**
+     * Normalize get-stock warehouse batches for chips and the add-batch dialog.
+     *
+     * @private
+     * @param {any[]} [batches]
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof StockBalanceComponent
+     */
+    private normalizeWarehouseBatches(batches?: any[]): VoucherSelectedBatch[] {
+        return (Array.isArray(batches) ? batches : []).reduce((list: VoucherSelectedBatch[], batch: any) => {
+            const uniqueName = String(batch?.uniqueName ?? batch?.batchUniqueName ?? "").trim();
+            const batchNumber = String(batch?.batchNumber ?? "").trim();
+            if (!uniqueName && !batchNumber) {
+                return list;
+            }
+            const quantity = Number(batch?.openingQuantity ?? batch?.quantity) || 0;
+            list.push({
+                uniqueName: uniqueName || batchNumber,
+                name: batch?.name ?? "",
+                batchNumber: batchNumber || uniqueName,
+                quantity,
+                openingQuantity: quantity,
+                availableQuantity: Number(batch?.quantity ?? batch?.availableQuantity) || 0,
+                expiryDate: batch?.expiryDate,
+                manufacturingDate: batch?.manufacturingDate,
+                warehouse: batch?.warehouse,
+                openingAmount: Number(batch?.openingAmount) || 0
+            } as VoucherSelectedBatch);
+            return list;
+        }, []);
+    }
+
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

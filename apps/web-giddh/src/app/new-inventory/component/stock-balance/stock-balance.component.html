@@ -95,7 +95,11 @@
                 <div class="wrapper-warehouse">
                     <div class="warehouse-list">
                         <div *ngFor="let warehouse of warehouses">
-                            <div class="warehouse-list-head odd-even-shade" *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1">
+                            <div
+                                class="warehouse-list-head odd-even-shade"
+                                [class.has-batch-column]="batchTrackingEnabled"
+                                *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1"
+                            >
                                 <p class="warehouse-list-head-num">{{ warehouse?.name ?? '-' }}</p>
                                 <div class="warehouse-list-head-options">
                                     <div class="d-flex">
@@ -109,6 +113,9 @@
 
                                     <div class="d-flex">
                                         <div class="flex-fill">{{ commonLocaleData?.app_unit }}</div>
+                                    </div>
+                                    <div class="d-flex text-center" *ngIf="batchTrackingEnabled">
+                                        <div class="flex-fill">{{ localeData?.warehouse_opening_balance?.batch }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -158,12 +165,16 @@
                             <div *ngFor="let stockWarehouse of stock?.warehouses">
                                 <div
                                     class="warehouse-list warehouse-even"
+                                    [class.has-batch-column]="batchTrackingEnabled"
                                     *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
                                 >
                                     <div class="stock-list-body">
                                         <div class="stock-list-box">
                                             <div class="stock-list-unexpanded">
-                                                <p class="stock-list-box-heading proper-spacing-list">
+                                                <p
+                                                    class="stock-list-box-heading proper-spacing-list"
+                                                    [class.has-batch-column]="batchTrackingEnabled"
+                                                >
                                                     <span class="opening-bal-value bg-color-hover">
                                                         {{ stockWarehouse?.openingBalance?.amount ?? '-' }}
                                                     </span>
@@ -172,6 +183,21 @@
                                                     </span>
                                                     <span class="unit-value bg-color-hover">
                                                         {{ stockWarehouse?.openingBalance?.stockUnit ?? '-' }}
+                                                    </span>
+                                                    <span
+                                                        *ngIf="batchTrackingEnabled"
+                                                        class="d-flex justify-content-center mr-4"
+                                                        (click)="$event.stopPropagation()"
+                                                    >
+                                                        <batch-chip-list
+                                                            *ngIf="getCollapsedWarehouseBatches(stockWarehouse)?.length"
+                                                            [compact]="true"
+                                                            [showEdit]="false"
+                                                            [batches]="getCollapsedWarehouseBatches(stockWarehouse)"
+                                                            [isInbound]="true"
+                                                            [localeData]="localeData"
+                                                            [commonLocaleData]="commonLocaleData"
+                                                        ></batch-chip-list>
                                                     </span>
                                                 </p>
                                             </div>
@@ -201,11 +227,16 @@
                                     <div
                                         (clickOutside)="warehouseVariant.display = false"
                                         class="grid-title-list list-grid-title warehouse-expanded-box"
+                                        [class.has-batch-column]="batchTrackingEnabled"
                                         *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
                                         [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
                                     >
-                                        <div class="stock-list-expanded-content" (click)="$event.stopPropagation()">
-                                            <p class="stock-list-box-heading proper-spacing-list" *ngIf="!warehouseVariant.display">
+                                        <div class="stock-list-expanded-content w-100" (click)="$event.stopPropagation()">
+                                            <p
+                                                class="stock-list-box-heading proper-spacing-list"
+                                                [class.has-batch-column]="batchTrackingEnabled"
+                                                *ngIf="!warehouseVariant.display"
+                                            >
                                                 <span
                                                     class="opening-bal-value bg-color-hover"
                                                     (click)="warehouseVariant.display = true; setInputFocus(1)"
@@ -225,10 +256,33 @@
                                                     {{ warehouseVariant?.stockUnit?.code ?? '-' }}
                                                     <img [src]="imgPath + 'caret-light.svg'" class="dropdown-icon" alt="stock unit" />
                                                 </span>
+                                                <span *ngIf="batchTrackingEnabled" class="d-flex justify-content-center mr-4">
+                                                    <batch-chip-list
+                                                        *ngIf="getWarehouseBalanceBatches(warehouseVariant)?.length"
+                                                        [compact]="true"
+                                                        [batches]="warehouseVariant.batches"
+                                                        [isInbound]="true"
+                                                        [localeData]="localeData"
+                                                        [commonLocaleData]="commonLocaleData"
+                                                        (edit)="openAddBatchDialog(stock, variant, warehouseVariant, $event)"
+                                                    ></batch-chip-list>
+                                                    <a
+                                                        *ngIf="!getWarehouseBalanceBatches(warehouseVariant)?.length"
+                                                        class="text-primary font-size-12"
+                                                        (click)="openAddBatchDialog(stock, variant, warehouseVariant, $event)"
+                                                    >
+                                                        {{ localeData?.add_batch }}
+                                                    </a>
+                                                </span>
                                             </p>
                                         </div>
-                                        <div *ngIf="warehouseVariant.display" (click)="$event.stopPropagation()" class="editable-input">
-                                            <span class="input-select-wrapper">
+                                        <div
+                                            *ngIf="warehouseVariant.display"
+                                            (click)="$event.stopPropagation()"
+                                            class="editable-input"
+                                            [class.has-batch-column]="batchTrackingEnabled"
+                                        >
+                                            <span class="input-select-wrapper" [class.has-batch-column]="batchTrackingEnabled">
                                                 <input
                                                     #warehouseInput1
                                                     matInput
@@ -265,6 +319,24 @@
                                                     [openDropdown]="isOpen"
                                                 ></select-field>
                                                 <img [src]="imgPath + 'caret-light.svg'" class="dropdown-icon" alt="dropdown" />
+                                                <span *ngIf="batchTrackingEnabled" class="d-flex justify-content-center mr-4">
+                                                    <batch-chip-list
+                                                        *ngIf="getWarehouseBalanceBatches(warehouseVariant)?.length"
+                                                        [compact]="true"
+                                                        [batches]="warehouseVariant.batches"
+                                                        [isInbound]="true"
+                                                        [localeData]="localeData"
+                                                        [commonLocaleData]="commonLocaleData"
+                                                        (edit)="openAddBatchDialog(stock, variant, warehouseVariant, $event)"
+                                                    ></batch-chip-list>
+                                                    <a
+                                                        *ngIf="!getWarehouseBalanceBatches(warehouseVariant)?.length"
+                                                        class="text-primary font-size-12"
+                                                        (click)="openAddBatchDialog(stock, variant, warehouseVariant, $event)"
+                                                    >
+                                                        {{ localeData?.add_batch }}
+                                                    </a>
+                                                </span>
                                             </span>
                                         </div>
                                     </div>

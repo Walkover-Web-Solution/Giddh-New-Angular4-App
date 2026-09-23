@@ -11,7 +11,7 @@ import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.a
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach, isEqual } from "../../../lodash-optimized";
 import { NgForm } from "@angular/forms";
-import { INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
+import { API_BULK_FETCH_LIMIT, INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
 import { MatDialog } from "@angular/material/dialog";
@@ -1842,7 +1842,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             uniqueName: "",
             isVariant: false,
             page: 1,
-            count: 50,
+            count: API_BULK_FETCH_LIMIT,
             sort: "asc",
             sortBy: "expiry",
             q: query ?? "",

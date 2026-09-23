@@ -1,13 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Store, select } from '@ngrx/store';
+import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
+import { BatchSelectDialogResult, VoucherSelectedBatch } from 'apps/web-giddh/src/app/models/interfaces/batch-report.interface';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/action/warehouse.action';
+import { AppState } from 'apps/web-giddh/src/app/store';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+import { BatchSelectDialogComponent } from 'apps/web-giddh/src/app/vouchers/batch-select-dialog/batch-select-dialog.component';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { map, takeUntil, tap } from 'rxjs/operators';
-import { cloneDeep, filter, forEach, isEqual } from '../../../../lodash-optimized';
+import { map, take, takeUntil, tap } from 'rxjs/operators';
+import { cloneDeep, isEqual } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'create-recipe',
@@ -17,7 +23,7 @@ import { cloneDeep, filter, forEach, isEqual } from '../../../../lodash-optimize
     styleUrls: ['./create-recipe.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateRecipeComponent implements OnChanges, OnDestroy {
+export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
     /** Stock object */
     @Input() public stock: any = {};
     /** List of variants in stock form */
@@ -46,6 +52,10 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     private isByProductExpanded: boolean;
     /** True ifi is by product link expanded*/
     private isByLinkedStockExpanded: boolean;
+    /** True when company has batch tracking enabled. */
+    public batchTrackingEnabled: boolean = false;
+    /** Company warehouses for availability. */
+    public warehouses: any[] = [];
 
     constructor(
         private inventoryService: InventoryService,
@@ -53,9 +63,32 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         private manufacturingService: ManufacturingService,
         private toasterService: ToasterService,
         private changeDetectionRef: ChangeDetectorRef,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private store: Store<AppState>,
+        private warehouseAction: WarehouseActions
     ) {
 
+    }
+
+    /**
+     * Loads company and warehouses used by batch selection.
+     *
+     * @memberof CreateRecipeComponent
+     */
+    public ngOnInit(): void {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.batchTrackingEnabled = !!activeCompany.batchTrackingEnabled;
+            }
+        });
+        this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
+        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses?.results?.length) {
+                this.warehouses = warehouses.results
+                    .filter(warehouse => !warehouse.isArchived)
+                    .map(warehouse => ({ label: warehouse?.name, value: warehouse?.uniqueName }));
+            }
+        });
     }
 
     /**
@@ -104,6 +137,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         this.recipeObject.manufacturingDetails.push({
             manufacturingQuantity: 1,
             manufacturingUnitUniqueName: '',
+            batches: [],
             variant: {
                 name: '',
                 uniqueName: ''
@@ -118,7 +152,8 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     variant: {
                         name: '',
                         uniqueName: ''
-                    }
+                    },
+                    batches: []
                 }
             ],
             byProducts: [
@@ -131,7 +166,8 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     variant: {
                         name: '',
                         uniqueName: ''
-                    }
+                    },
+                    batches: []
                 }
             ],
             isEdit: true
@@ -184,7 +220,8 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                 variant: {
                     name: '',
                     uniqueName: ''
-                }
+                },
+                batches: []
             }
         );
 
@@ -208,7 +245,8 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                 variant: {
                     name: '',
                     uniqueName: ''
-                }
+                },
+                batches: []
             }
         );
 
@@ -367,6 +405,10 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     public getStockVariants(object: any, event: any, isEdit: boolean = false): void {
         object.stockUniqueName = event?.value;
         object.stockName = event?.label;
+
+        if (!isEdit) {
+            object.batches = [];
+        }
 
         if (!object.stockUniqueName) {
             return;
@@ -535,6 +577,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         this.recipeObject.manufacturingDetails[index].manufacturingUnitUniqueName = manufacturingDetail.manufacturingUnitUniqueName;
                         this.recipeObject.manufacturingDetails[index].manufacturingQuantity = manufacturingDetail.manufacturingQuantity;
                         this.recipeObject.manufacturingDetails[index].variant = manufacturingDetail.variant;
+                        this.recipeObject.manufacturingDetails[index].batches = this.normalizeRecipeBatches(manufacturingDetail.batches);
                         this.recipeObject.manufacturingDetails[index].linkedStocks = [];
 
                         this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true).subscribe(updatedObject => {
@@ -554,6 +597,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                         name: '',
                                         uniqueName: ''
                                     },
+                                    batches: [],
                                     stocks: stocks,
                                     stocksPageNumber: data.body.page,
                                     stocksTotalPages: data.body.totalPages
@@ -571,6 +615,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                     stockUnitUniqueName: linkedStock.stockUnitUniqueName,
                                     quantity: linkedStock.quantity,
                                     variant: linkedStock.variant,
+                                    batches: this.normalizeRecipeBatches(linkedStock.batches),
                                     units: unitsList,
                                     stocks: stocks,
                                     stocksPageNumber: data.body.page,
@@ -624,6 +669,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                         name: '',
                                         uniqueName: ''
                                     },
+                                    batches: [],
                                     stocks: stocks,
                                     stocksPageNumber: data.body.page,
                                     stocksTotalPages: data.body.totalPages
@@ -643,6 +689,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                     stockUnitUniqueName: linkedStock.stockUnitUniqueName,
                                     quantity: linkedStock.quantity,
                                     variant: linkedStock.variant,
+                                    batches: this.normalizeRecipeBatches(linkedStock.batches),
                                     units: unitsList,
                                     stocks: stocks,
                                     stocksPageNumber: data.body.page,
@@ -731,7 +778,8 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                             variant: {
                                 name: '',
                                 uniqueName: ''
-                            }
+                            },
+                            batches: []
                         }
                     ];
                 } else {
@@ -785,32 +833,42 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                 let byProductLinkedStocks = [];
 
                 manufacturingDetail.linkedStocks?.forEach(linkedStock => {
-                    linkedStocks.push({
+                    const row: any = {
                         stockUniqueName: linkedStock.stockUniqueName,
                         stockUnitUniqueName: linkedStock.stockUnitUniqueName,
                         quantity: Number(linkedStock.quantity),
                         variant: {
                             uniqueName: linkedStock.variant?.uniqueName
                         }
-                    });
+                    };
+                    const batches = this.mapBatchesForPayload(linkedStock.batches);
+                    if (batches?.length) {
+                        row.batches = batches;
+                    }
+                    linkedStocks.push(row);
                 });
                 manufacturingDetail.byProducts?.forEach(byProduct => {
                     if (byProduct.stockUniqueName) {
-                        byProductLinkedStocks.push({
+                        const row: any = {
                             stockUniqueName: byProduct.stockUniqueName,
                             stockUnitUniqueName: byProduct.stockUnitUniqueName,
                             quantity: Number(byProduct.quantity),
                             variant: {
                                 uniqueName: byProduct.variant?.uniqueName
                             }
-                        });
+                        };
+                        const batches = this.mapBatchesForPayload(byProduct.batches);
+                        if (batches?.length) {
+                            row.batches = batches;
+                        }
+                        byProductLinkedStocks.push(row);
                     }
                     else {
                         byProductLinkedStocks = [];
                     }
                 });
 
-                recipeObject.manufacturingDetails.push({
+                const finished: any = {
                     manufacturingQuantity: Number(manufacturingDetail.manufacturingQuantity),
                     manufacturingUnitUniqueName: manufacturingDetail.manufacturingUnitUniqueName,
                     variant: {
@@ -818,7 +876,12 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     },
                     linkedStocks: linkedStocks,
                     byProducts: byProductLinkedStocks
-                });
+                };
+                const finishedBatches = this.mapBatchesForPayload(manufacturingDetail.batches);
+                if (finishedBatches?.length) {
+                    finished.batches = finishedBatches;
+                }
+                recipeObject.manufacturingDetails.push(finished);
             }
         });
         return recipeObject;
@@ -888,5 +951,161 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         });
 
         this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Selected batches for a raw or by-product row.
+     *
+     * @param {any[]} [batches]
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof CreateRecipeComponent
+     */
+    public getRecipeBatches(batches?: any[]): VoucherSelectedBatch[] {
+        return Array.isArray(batches) ? batches : [];
+    }
+
+    /**
+     * Open Select Batches for finished stock, raw stock, or by-product.
+     *
+     * @param {("finished" | "raw" | "byProduct")} source
+     * @param {number} recipeIndex
+     * @param {number} [rowIndex]
+     * @param {Event} [event]
+     * @memberof CreateRecipeComponent
+     */
+    public openBatchSelectDialog(source: "finished" | "raw" | "byProduct", recipeIndex: number, rowIndex?: number, event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+        if (!this.batchTrackingEnabled) {
+            return;
+        }
+
+        const recipe = this.recipeObject.manufacturingDetails?.[recipeIndex];
+        if (!recipe) {
+            return;
+        }
+
+        let stockUniqueName = "";
+        let stockName = "";
+        let variantUniqueName = "";
+        let variantName = "";
+        let hasVariants = false;
+        let unitCode = "";
+        let lineQuantity = 0;
+        let selectedBatches: VoucherSelectedBatch[] = [];
+
+        if (source === "finished") {
+            stockUniqueName = this.stock?.uniqueName;
+            stockName = this.stock?.name;
+            variantUniqueName = recipe.variant?.uniqueName;
+            variantName = recipe.variant?.name;
+            hasVariants = this.variantsList?.length > 1;
+            unitCode = recipe.manufacturingUnitCode;
+            lineQuantity = Number(recipe.manufacturingQuantity) || 0;
+            selectedBatches = this.getRecipeBatches(recipe.batches);
+        } else {
+            const row = source === "raw" ? recipe.linkedStocks?.[rowIndex] : recipe.byProducts?.[rowIndex];
+            if (!row?.stockUniqueName) {
+                return;
+            }
+            stockUniqueName = row.stockUniqueName;
+            stockName = row.stockName;
+            variantUniqueName = row.variant?.uniqueName;
+            variantName = row.variant?.name;
+            hasVariants = row.variants?.length > 1;
+            unitCode = row.stockUnitCode;
+            lineQuantity = Number(row.quantity) || 0;
+            selectedBatches = this.getRecipeBatches(row.batches);
+        }
+
+        if (!stockUniqueName) {
+            return;
+        }
+        if (hasVariants && !variantUniqueName) {
+            this.toasterService.showSnackBar("warning", this.localeData?.select_variant_first);
+            return;
+        }
+
+        const warehouse = this.warehouses?.[0];
+        this.dialog.open(BatchSelectDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                stockName,
+                stockUniqueName,
+                variantUniqueName,
+                variantName,
+                hasVariants,
+                inventoryType: this.stock?.type || "PRODUCT",
+                warehouseName: warehouse?.label,
+                warehouseUniqueName: warehouse?.value,
+                unitCode,
+                lineQuantity,
+                selectedBatches: cloneDeep(selectedBatches),
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData,
+                isInbound: source === "finished" || source === "byProduct"
+            }
+        }).afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
+            if (!result) {
+                return;
+            }
+            if (source === "finished") {
+                recipe.batches = result.batches ?? [];
+                if (result.overrideLineQuantity) {
+                    recipe.manufacturingQuantity = result.allocatedQuantity;
+                }
+            } else {
+                const row = source === "raw" ? recipe.linkedStocks?.[rowIndex] : recipe.byProducts?.[rowIndex];
+                if (row) {
+                    row.batches = result.batches ?? [];
+                    if (result.overrideLineQuantity) {
+                        row.quantity = result.allocatedQuantity;
+                    }
+                }
+            }
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * Payload batches: uniqueName + quantity only.
+     *
+     * @private
+     * @param {any[]} [batches]
+     * @return {*}  {{ uniqueName: string; quantity: number }[]}
+     * @memberof CreateRecipeComponent
+     */
+    private mapBatchesForPayload(batches?: any[]): { uniqueName: string; quantity: number }[] {
+        return (Array.isArray(batches) ? batches : [])
+            .filter(batch => batch?.uniqueName && Number(batch.quantity) > 0)
+            .map(batch => ({ uniqueName: batch.uniqueName, quantity: Number(batch.quantity) }));
+    }
+
+    /**
+     * Normalize API batches for chips / the select dialog.
+     *
+     * @private
+     * @param {any[]} [batches]
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof CreateRecipeComponent
+     */
+    private normalizeRecipeBatches(batches?: any[]): VoucherSelectedBatch[] {
+        return (Array.isArray(batches) ? batches : []).reduce((list: VoucherSelectedBatch[], batch: any) => {
+            const uniqueName = String(batch?.uniqueName ?? batch?.batchUniqueName ?? "").trim();
+            if (!uniqueName) {
+                return list;
+            }
+            list.push({
+                uniqueName,
+                name: batch?.name ?? "",
+                batchNumber: batch?.batchNumber ?? "",
+                quantity: Number(batch?.quantity) || 0,
+                availableQuantity: Number(batch?.availableQuantity) || 0,
+                expiryDate: batch?.expiryDate,
+                manufacturingDate: batch?.manufacturingDate,
+                warehouse: batch?.warehouse
+            });
+            return list;
+        }, []);
     }
 }

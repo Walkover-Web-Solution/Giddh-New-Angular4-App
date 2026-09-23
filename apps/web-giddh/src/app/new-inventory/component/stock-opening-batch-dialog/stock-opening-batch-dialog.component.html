@@ -1,0 +1,182 @@
+<div class="opening-batch-dialog">
+    <div cdkFocusInitial class="dialog-header">
+        <span>{{ commonLocaleData?.app_add }} {{ localeData?.warehouse_opening_balance?.batch }}</span>
+        <button matIconButton mat-dialog-close [attr.aria-label]="commonLocaleData?.app_close">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+
+    <mat-dialog-content class="dialog-body max-height-80vh">
+        <div class="stock-info-grid mb-3">
+            <div>
+                <span class="stock-info-label">{{ commonLocaleData?.app_stock }}</span>
+                <strong class="stock-info-value">{{ dialogData?.stockName }}</strong>
+            </div>
+            <div *ngIf="dialogData?.variantName">
+                <span class="stock-info-label">{{ localeData?.warehouse_opening_balance?.variant }}</span>
+                <strong class="stock-info-value">{{ dialogData?.variantName }}</strong>
+            </div>
+            <div *ngIf="dialogData?.warehouseName">
+                <span class="stock-info-label">{{ commonLocaleData?.app_warehouse }}</span>
+                <strong class="stock-info-value">{{ dialogData?.warehouseName }}</strong>
+            </div>
+        </div>
+
+        <div class="opening-fields d-grid mb-3">
+            <input-field
+                [label]="localeData?.warehouse_opening_balance?.opening_bal"
+                [placeholder]="'0.00'"
+                [name]="'warehouseOpeningAmount'"
+                [(ngModel)]="openingAmount"
+                [type]="'text'"
+                [prefix]="currencySymbol"
+                [mask]="inputMaskFormat"
+                [useMask]="true"
+            ></input-field>
+            <input-field
+                [label]="localeData?.opening_qty || commonLocaleData?.app_quantity"
+                [placeholder]="'0.00'"
+                [name]="'warehouseOpeningQuantity'"
+                [(ngModel)]="openingQuantity"
+                [type]="'number'"
+                [min]="0"
+                [allowDecimalDigitsOnly]="true"
+            ></input-field>
+            <reactive-dropdown-field
+                [label]="commonLocaleData?.app_unit"
+                [placeholder]="commonLocaleData?.app_unit"
+                [name]="'warehouseOpeningUnit'"
+                [options]="dialogData?.stockUnits || []"
+                [labelValue]="getSelectedUnitLabel()"
+                (selectedOption)="onUnitSelected($event)"
+            ></reactive-dropdown-field>
+        </div>
+
+        <div *ngIf="isBatchQtyExceeded() || isBatchAmountExceeded()" class="mb-3 font-size-12">
+            <p *ngIf="isBatchQtyExceeded()" class="d-flex align-items-center flex-wrap column-gap-1 mb-1">
+                <i class="icon-info text-orange font-size-14"></i>
+                <span>
+                    {{ localeData?.batch_qty_exceeds_opening }}
+                    <strong class="text-orange">({{ getBatchOpeningQtyTotal() }} / {{ openingQuantity || 0 }})</strong>
+                </span>
+                <a class="text-primary cursor-pointer" (click)="applyBatchQtyToOpening()">
+                    {{ localeData?.update_opening_qty }}
+                </a>
+            </p>
+            <p *ngIf="isBatchAmountExceeded()" class="d-flex align-items-center flex-wrap column-gap-1 mb-0">
+                <i class="icon-info text-orange font-size-14"></i>
+                <span>
+                    {{ localeData?.batch_amount_exceeds_opening }}
+                    <strong class="text-orange">
+                        ({{ currencySymbol }}{{ getBatchOpeningAmountTotal() }} / {{ currencySymbol }}{{ parseOpeningAmount(openingAmount) }})
+                    </strong>
+                </span>
+                <a class="text-primary cursor-pointer" (click)="applyBatchAmountToOpening()">
+                    {{ localeData?.update_opening_amount }}
+                </a>
+            </p>
+        </div>
+
+        <div class="batch-row mb-2" *ngFor="let batch of batches; let batchIndex = index">
+            <div class="batch-row-grid">
+                <reactive-dropdown-field
+                    [label]="localeData?.batch_number"
+                    [placeholder]="localeData?.batch_number"
+                    [name]="'openingBatchNumber' + batchIndex"
+                    [options]="getBatchAvailabilityOptions(batch)"
+                    [ngModel]="batch.batchNumber"
+                    [labelValue]="batch.batchNumber"
+                    [useCustomLabelValue]="true"
+                    [enableDynamicSearch]="true"
+                    [allowCustomDropdownValue]="true"
+                    [noResultsFoundMessage]="localeData?.create_custom_batch"
+                    [required]="isBatchNameRequired(batch) && !batch.batchNumber"
+                    (dynamicSearchedQuery)="searchBatchAvailability($event)"
+                    (selectedOption)="onBatchAvailabilitySelected(batch, $event)"
+                ></reactive-dropdown-field>
+                <input-field
+                    [label]="localeData?.batch_name"
+                    [placeholder]="localeData?.batch_name"
+                    [name]="'openingBatchName' + batchIndex"
+                    [(ngModel)]="batch.name"
+                    [type]="'text'"
+                    [required]="isBatchNameRequired(batch) && !batch.name"
+                ></input-field>
+                <div class="variant-batch-datepicker">
+                    <giddh-datepicker
+                        [label]="localeData?.manufacturing_date"
+                        [placeholder]="localeData?.manufacturing_date"
+                        [name]="'openingBatchMfg' + batchIndex"
+                        [showToggleIcon]="false"
+                        [appearance]="'outline'"
+                        [(ngModel)]="batch.manufacturingDate"
+                    ></giddh-datepicker>
+                </div>
+                <div class="variant-batch-datepicker">
+                    <giddh-datepicker
+                        [label]="localeData?.expiry_date"
+                        [placeholder]="localeData?.expiry_date"
+                        [name]="'openingBatchExpiry' + batchIndex"
+                        [showToggleIcon]="false"
+                        [appearance]="'outline'"
+                        [(ngModel)]="batch.expiryDate"
+                    ></giddh-datepicker>
+                </div>
+                <input-field
+                    [label]="localeData?.opening_qty"
+                    [placeholder]="'0.00'"
+                    [name]="'openingBatchQty' + batchIndex"
+                    [(ngModel)]="batch.openingQuantity"
+                    [type]="'number'"
+                    [min]="0"
+                    [allowDecimalDigitsOnly]="true"
+                ></input-field>
+                <input-field
+                    [label]="localeData?.opening_amount"
+                    [placeholder]="localeData?.opening_amount"
+                    [name]="'openingBatchAmount' + batchIndex"
+                    [(ngModel)]="batch.openingAmount"
+                    [type]="'text'"
+                    [prefix]="currencySymbol"
+                    [mask]="inputMaskFormat"
+                    [useMask]="true"
+                ></input-field>
+            </div>
+            <div class="batch-row-actions">
+                <button
+                    *ngIf="batches.length > 1"
+                    type="button"
+                    matIconButton
+                    class="chip-close-btn"
+                    [attr.aria-label]="commonLocaleData?.app_delete"
+                    (click)="removeBatchRow(batchIndex)"
+                >
+                    <i class="icon-trash"></i>
+                </button>
+                <button
+                    *ngIf="batches.length === 1"
+                    type="button"
+                    matIconButton
+                    class="chip-close-btn"
+                    [matTooltip]="commonLocaleData?.app_reset"
+                    [attr.aria-label]="commonLocaleData?.app_reset"
+                    (click)="resetBatchRow(batchIndex)"
+                >
+                    <i class="icon-refresh font-size-20"></i>
+                </button>
+            </div>
+        </div>
+        <a class="d-inline-block text-primary cursor-pointer mt-1" (click)="addBatchRow()">
+            {{ localeData?.add_batch_row }}
+        </a>
+
+        <div class="d-flex column-gap-1 mt-4 justify-content-end">
+            <button matButton="filled" type="button" (click)="save()">
+                {{ commonLocaleData?.app_save }}
+            </button>
+            <button matButton="outlined" type="button" (click)="closeDialog()">
+                {{ commonLocaleData?.app_cancel }}
+            </button>
+        </div>
+    </mat-dialog-content>
+</div>

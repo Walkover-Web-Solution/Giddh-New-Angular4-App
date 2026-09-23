@@ -30,6 +30,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { GiddhNumberFormatModule } from '../../../shared/helpers/pipes/number-format/number-format.module';
 import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
 import { GoToBranchComponent } from '../../../shared/go-to-branch/go-to-branch.component';
+import { BatchChipListComponent } from '../../../shared/batch-chip-list/batch-chip-list.component';
+import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -57,7 +59,9 @@ import { GoToBranchComponent } from '../../../shared/go-to-branch/go-to-branch.c
         AsideMenuProductServiceModule,
         MatPaginatorModule,
         GiddhDatePipe,
-        GoToBranchComponent
+        GoToBranchComponent,
+        BatchChipListComponent,
+        BatchSelectDialogComponent
     ],
     exports: [
         AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent

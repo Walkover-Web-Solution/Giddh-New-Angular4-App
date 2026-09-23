@@ -1,3 +1,10 @@
+.batch-chip-list-compact .status-chip {
+    padding: 2px 8px;
+    max-width: 148px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .status-chip {
     padding: 4px 10px;
     line-height: 1.3;

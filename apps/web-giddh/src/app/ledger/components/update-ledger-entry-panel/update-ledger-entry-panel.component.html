@@ -1311,6 +1311,7 @@
                         "
                         class="d-block mb-2"
                         [batches]="vm.stockTrxEntry?.inventory?.batches"
+                        [isInbound]="isBatchInbound(vm.selectedLedger?.voucher?.shortCode || vm.selectedLedger?.voucher?.name)"
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
                         [showEdit]="!isEinvoiceGenerated"

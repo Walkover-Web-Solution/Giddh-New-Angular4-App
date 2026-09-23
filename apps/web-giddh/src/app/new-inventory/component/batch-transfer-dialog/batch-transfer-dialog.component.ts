@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-import { ASIDE_PANE_CONFIG, IOption } from "../../../app.constant";
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, IOption } from "../../../app.constant";
 import { BatchReportItem } from "../../../models/interfaces/batch-report.interface";
 import { InventoryService } from "../../../services/inventory.service";
 import { BatchCreateEditComponent } from "../batch-create-edit/batch-create-edit.component";
@@ -183,7 +183,7 @@ export class BatchTransferDialogComponent implements OnInit, OnDestroy {
             return;
         }
         this.isLoading = true;
-        this.inventoryService.getBatchAvailability({ uniqueName, isVariant, page: 1, count: 50, excludeBatchUniqueName: batch?.uniqueName })
+        this.inventoryService.getBatchAvailability({ uniqueName, isVariant, page: 1, count: API_BULK_FETCH_LIMIT, excludeBatchUniqueName: batch?.uniqueName })
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (response) => {

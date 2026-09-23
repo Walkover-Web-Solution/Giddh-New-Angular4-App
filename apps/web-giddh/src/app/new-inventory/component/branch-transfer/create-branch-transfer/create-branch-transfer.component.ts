@@ -9,6 +9,8 @@ import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/invent
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { ASIDE_PANE_CONFIG, IOption, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
+import { BatchSelectDialogResult, VoucherSelectedBatch } from 'apps/web-giddh/src/app/models/interfaces/batch-report.interface';
+import { BatchSelectDialogComponent } from 'apps/web-giddh/src/app/vouchers/batch-select-dialog/batch-select-dialog.component';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
 import { IAllTransporterDetails, IEwayBillTransporter, IEwayBillfilter } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { InvoiceSetting } from 'apps/web-giddh/src/app/models/interfaces/invoice.setting.interface';
@@ -180,6 +182,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public universalTo: any;
     /** This will use for force clear */
     public forceClear: boolean = false;
+    /** True when company has batch tracking enabled. */
+    public batchTrackingEnabled: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -257,6 +261,11 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     this.showContent = true;
                     this.detectChanges();
                 }, 10);
+            }
+        });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.batchTrackingEnabled = !!activeCompany.batchTrackingEnabled;
             }
         });
         this.store.pipe(select(select => select.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
@@ -395,6 +404,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 rate: [''],
                 quantity: ['']
             }),
+            batches: [[]]
         });
     }
 
@@ -535,6 +545,16 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.branchTransferCreateEditForm.removeControl('myControlKey');
         let branchTransferObj = this.branchTransferCreateEditForm.value;
         delete branchTransferObj.myCurrentCompany
+        branchTransferObj.products = (branchTransferObj.products || []).map((product: any) => {
+            const batches = this.mapBatchesForPayload(product?.batches);
+            const mappedProduct = { ...product };
+            if (this.batchTrackingEnabled && batches.length) {
+                mappedProduct.batches = batches;
+            } else {
+                delete mappedProduct.batches;
+            }
+            return mappedProduct;
+        });
         this.isValidForm = !this.branchTransferCreateEditForm.invalid;
         this.isLoading = true;
         if (this.isValidForm) {
@@ -994,6 +1014,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         rate: product.stockDetails.rate,
                         quantity: product.stockDetails.quantity
                     });
+                    productFormGroup.get('batches')?.setValue(this.normalizeBranchTransferBatches(product.batches));
 
                     productsArray.push(productFormGroup);
                     this.stockVariants[index] = [];
@@ -1461,6 +1482,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 uniqueName: event?.value
             });
             this.getWarehouseDetails('sources', index);
+            this.clearAllProductBatches();
         }
     }
 
@@ -1922,6 +1944,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
             variantsFormGroup.get('name')?.setValue(event.additional.name);
             variantsFormGroup.get('uniqueName')?.setValue(event.additional.uniqueName);
+            if (!defaultLoad) {
+                productFormGroup.get('batches')?.setValue([]);
+            }
             this.loadStockUnits(event, index, productFormGroup, defaultLoad);
         }
     }
@@ -1977,6 +2002,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         if (event && event.additional) {
             productFormGroup?.get('name')?.setValue(event.additional.name);
             productFormGroup?.get('uniqueName')?.setValue(event.additional.uniqueName);
+            if (!defaultLoad) {
+                productFormGroup.get('batches')?.setValue([]);
+            }
             this.inventoryService.getStockV2(event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response?.status === 'success') {
                     this.stockUnitResults[index] = response.body.stockUnit;
@@ -2312,6 +2340,216 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Selected batches for a product row.
+     *
+     * @param {*} productFormGroup
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof CreateBranchTransferComponent
+     */
+    public getProductBatches(productFormGroup: any): VoucherSelectedBatch[] {
+        const batches = productFormGroup?.get?.('batches')?.value;
+        return Array.isArray(batches) ? batches : [];
+    }
+
+    /**
+     * Open Select Batches for a product.
+     *
+     * @param {number} index
+     * @param {Event} [event]
+     * @memberof CreateBranchTransferComponent
+     */
+    public openBatchSelectDialog(index: number, event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+        if (!this.batchTrackingEnabled) {
+            return;
+        }
+
+        const productsArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+        const productFormGroup = productsArray?.at(index) as UntypedFormGroup;
+        const stockUniqueName = productFormGroup?.get('uniqueName')?.value;
+        if (!stockUniqueName) {
+            return;
+        }
+
+        const variantUniqueName = productFormGroup.get('variant.uniqueName')?.value;
+        if (this.stockVariants[index]?.length > 1 && !variantUniqueName) {
+            this.toasty.showSnackBar("warning", this.localeData?.select_variant_first);
+            return;
+        }
+
+        const warehouse = this.getSourceWarehouse();
+        const selectedStock = this.stockList?.find(stock => stock.value === stockUniqueName);
+        this.dialog.open(BatchSelectDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                stockName: productFormGroup.get('name')?.value,
+                stockUniqueName,
+                variantUniqueName,
+                variantName: productFormGroup.get('variant.name')?.value,
+                hasVariants: this.stockVariants[index]?.length > 1,
+                inventoryType: selectedStock?.additional?.stockType || selectedStock?.additional?.type || "PRODUCT",
+                warehouseName: warehouse.name,
+                warehouseUniqueName: warehouse.uniqueName,
+                unitCode: this.getProductUnitCode(productFormGroup, index),
+                lineQuantity: this.getProductLineQuantity(productFormGroup, index),
+                selectedBatches: cloneDeep(this.getProductBatches(productFormGroup)),
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
+        }).afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
+            if (!result) {
+                return;
+            }
+            productFormGroup.get('batches')?.setValue(result.batches ?? []);
+            if (result.overrideLineQuantity) {
+                this.applyAllocatedQuantity(productFormGroup, index, result.allocatedQuantity);
+            }
+            this.detectChanges();
+        });
+    }
+
+    /**
+     * Source warehouse used for batch availability.
+     *
+     * @private
+     * @return {{ name: string; uniqueName: string }}
+     * @memberof CreateBranchTransferComponent
+     */
+    private getSourceWarehouse(): { name: string; uniqueName: string } {
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        const warehouse = sourcesArray?.at(0)?.get('warehouse');
+        return {
+            name: warehouse?.get('name')?.value || "",
+            uniqueName: warehouse?.get('uniqueName')?.value || ""
+        };
+    }
+
+    /**
+     * Line quantity used by the batch dialog.
+     *
+     * @private
+     * @param {UntypedFormGroup} productFormGroup
+     * @param {number} index
+     * @return {*}  {number}
+     * @memberof CreateBranchTransferComponent
+     */
+    private getProductLineQuantity(productFormGroup: UntypedFormGroup, index: number): number {
+        if (this.transferType === 'products') {
+            return Number(productFormGroup.get('stockDetails.quantity')?.value) || 0;
+        }
+        if (this.branchTransferMode === 'receipt-note') {
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+            return Number(sourcesArray?.at(index)?.get('warehouse.stockDetails.quantity')?.value) || 0;
+        }
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        return Number(destinationsArray?.at(index)?.get('warehouse.stockDetails.quantity')?.value) || 0;
+    }
+
+    /**
+     * Stock unit shown in the batch dialog.
+     *
+     * @private
+     * @param {UntypedFormGroup} productFormGroup
+     * @param {number} index
+     * @return {*}  {string}
+     * @memberof CreateBranchTransferComponent
+     */
+    private getProductUnitCode(productFormGroup: UntypedFormGroup, index: number): string {
+        if (this.transferType === 'products') {
+            return productFormGroup.get('stockDetails.stockUnit')?.value || "";
+        }
+        if (this.branchTransferMode === 'receipt-note') {
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+            return sourcesArray?.at(index)?.get('warehouse.stockDetails.stockUnit')?.value || "";
+        }
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        return destinationsArray?.at(index)?.get('warehouse.stockDetails.stockUnit')?.value || "";
+    }
+
+    /**
+     * Updates product or sender/receiver quantity after override.
+     *
+     * @private
+     * @param {UntypedFormGroup} productFormGroup
+     * @param {number} index
+     * @param {number} allocatedQuantity
+     * @memberof CreateBranchTransferComponent
+     */
+    private applyAllocatedQuantity(productFormGroup: UntypedFormGroup, index: number, allocatedQuantity: number): void {
+        if (this.transferType === 'products') {
+            productFormGroup.get('stockDetails.quantity')?.setValue(allocatedQuantity);
+            this.calculateRowTotal(productFormGroup);
+            return;
+        }
+        if (this.branchTransferMode === 'receipt-note') {
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+            const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
+            sourceFormGroup?.get('warehouse.stockDetails.quantity')?.setValue(allocatedQuantity);
+            this.calculateRowTotal(sourceFormGroup?.get('warehouse'));
+            return;
+        }
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        const destinationFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
+        destinationFormGroup?.get('warehouse.stockDetails.quantity')?.setValue(allocatedQuantity);
+        this.calculateRowTotal(destinationFormGroup?.get('warehouse'));
+    }
+
+    /**
+     * Clears batches when the source warehouse changes.
+     *
+     * @private
+     * @memberof CreateBranchTransferComponent
+     */
+    private clearAllProductBatches(): void {
+        const productsArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+        for (let i = 0; i < (productsArray?.length || 0); i++) {
+            productsArray.at(i).get('batches')?.setValue([]);
+        }
+    }
+
+    /**
+     * Payload batches: uniqueName + quantity only.
+     *
+     * @private
+     * @param {any[]} [batches]
+     * @return {*}  {{ uniqueName: string; quantity: number }[]}
+     * @memberof CreateBranchTransferComponent
+     */
+    private mapBatchesForPayload(batches?: any[]): { uniqueName: string; quantity: number }[] {
+        return (Array.isArray(batches) ? batches : [])
+            .filter(batch => batch?.uniqueName && Number(batch.quantity) > 0)
+            .map(batch => ({ uniqueName: batch.uniqueName, quantity: Number(batch.quantity) }));
+    }
+
+    /**
+     * Normalize API batches for chips / the select dialog.
+     *
+     * @private
+     * @param {any[]} [batches]
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof CreateBranchTransferComponent
+     */
+    private normalizeBranchTransferBatches(batches?: any[]): VoucherSelectedBatch[] {
+        return (Array.isArray(batches) ? batches : []).reduce((list: VoucherSelectedBatch[], batch: any) => {
+            const uniqueName = String(batch?.uniqueName ?? batch?.batchUniqueName ?? "").trim();
+            if (!uniqueName) {
+                return list;
+            }
+            list.push({
+                uniqueName,
+                name: batch?.name ?? "",
+                batchNumber: batch?.batchNumber ?? "",
+                quantity: Number(batch?.quantity) || 0,
+                availableQuantity: Number(batch?.availableQuantity) || 0,
+                expiryDate: batch?.expiryDate,
+                manufacturingDate: batch?.manufacturingDate,
+                warehouse: batch?.warehouse
+            });
+            return list;
+        }, []);
+    }
 
     /**
      * Lifecycle hook for destroy

@@ -134,6 +134,8 @@ export interface BatchSelectDialogData {
     currencySymbol?: string;
     localeData?: any;
     commonLocaleData?: any;
+    /** True for bills / other inbound stock (purchase, receipt, credit note). */
+    isInbound?: boolean;
 }
 
 /** Result returned when the batch select aside closes with a selection. */

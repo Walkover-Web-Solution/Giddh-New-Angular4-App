@@ -21,6 +21,7 @@ export class ManufacturingLinkedStock {
     stocksPageNumber?: number;
     stocksTotalPages?: number;
     stocksQ?: any;
+    batches?: any[];
 
     constructor() {
         this.variant = new ManufacturingVariant();
@@ -29,6 +30,7 @@ export class ManufacturingLinkedStock {
         this.stocksPageNumber = 1;
         this.stocksTotalPages = 1;
         this.stocksQ = "";
+        this.batches = [];
     }
 }
 
@@ -78,6 +80,7 @@ export class CreateManufacturingClass {
     stocksPageNumber: number;
     stocksTotalPages: number;
     stocksQ: any;
+    batches?: any[];
 
     constructor(preserveFields?: {
         stocks?: any[];
@@ -96,6 +99,7 @@ export class CreateManufacturingClass {
         this.stocks = preserveFields?.stocks || [];
         this.stocksPageNumber = preserveFields?.stocksPageNumber || 1;
         this.stocksTotalPages = preserveFields?.stocksTotalPages || 1;
+        this.batches = [];
     }
 }
 
