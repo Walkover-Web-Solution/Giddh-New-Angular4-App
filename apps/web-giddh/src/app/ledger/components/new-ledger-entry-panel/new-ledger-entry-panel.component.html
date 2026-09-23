@@ -60,6 +60,7 @@
             "
             class="d-block my-2"
             [batches]="currentTxn?.inventory?.batches"
+            [isInbound]="isBatchInbound(blankLedger?.voucherType)"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
             [showEdit]="!isReadOnly"

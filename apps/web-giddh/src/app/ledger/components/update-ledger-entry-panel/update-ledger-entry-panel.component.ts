@@ -2659,7 +2659,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 selectedBatches: cloneDeep(inventory?.batches) || [],
                 currencySymbol: this.vm.selectedPrefixForCurrency,
                 localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
+                commonLocaleData: this.commonLocaleData,
+                isInbound: this.isBatchInbound(this.vm.selectedLedger?.voucher?.shortCode || this.vm.selectedLedger?.voucher?.name)
             }
         });
 
@@ -3141,6 +3142,29 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      *
      * @memberof UpdateLedgerEntryPanelComponent
      */
+    /**
+     * True when the ledger voucher receives stock (bill / credit note).
+     *
+     * @param {string} [voucherType]
+     * @return {*}  {boolean}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public isBatchInbound(voucherType?: string): boolean {
+        const type = String(voucherType ?? "").toLowerCase();
+        return [
+            "pur",
+            "purchase",
+            "cash bill",
+            "credit note",
+            "cash credit note",
+            "purchase-order",
+            "purchase_order",
+            "purchase_bill",
+            "bill",
+            "receipt note"
+        ].includes(type);
+    }
+
     public clearSalesPerson(): void {
         this.vm.selectedLedger.salesPerson.name = null;
         this.vm.selectedLedger.salesPersonUniqueName = null;

@@ -1,9 +1,17 @@
 <div
     *ngIf="selectedBatches.length"
-    class="d-flex flex-column align-items-start row-gap-05 text-left"
+    class="d-flex align-items-start text-left"
+    [class.batch-chip-list-compact]="compact"
+    [class.flex-column]="!compact"
+    [class.row-gap-05]="!compact"
     (click)="$event.stopPropagation()"
 >
-    <div class="d-flex flex-wrap align-items-center column-gap-05 row-gap-05">
+    <div
+        class="d-flex align-items-center column-gap-05"
+        [class.flex-wrap]="!compact"
+        [class.row-gap-05]="!compact"
+        [class.flex-nowrap]="compact"
+    >
         <span
             *ngIf="selectedBatches.length > 1"
             class="status-chip status-chip-primary d-inline-flex align-items-center column-gap-05 border-radius-8 font-size-12 font-weight-medium white-space-nowrap theme-primary-light text-primary"
@@ -17,12 +25,14 @@
         >
             {{ negativeLabel }}
         </span>
-        <span
-            *ngFor="let batch of selectedBatches"
-            class="status-chip status-chip-primary d-inline-flex align-items-center border-radius-8 font-size-12 font-weight-medium white-space-nowrap theme-primary-light text-primary"
-        >
-            {{ (batch?.batchNumber || batch?.name) + " · " + batch?.quantity }}
-        </span>
+        <ng-container *ngIf="!compact || selectedBatches.length === 1">
+            <span
+                *ngFor="let batch of selectedBatches"
+                class="status-chip status-chip-primary d-inline-flex align-items-center border-radius-8 font-size-12 font-weight-medium white-space-nowrap theme-primary-light text-primary"
+            >
+                {{ (batch?.batchNumber || batch?.name) + " · " + batch?.quantity }}
+            </span>
+        </ng-container>
         <button
             *ngIf="showEdit"
             type="button"

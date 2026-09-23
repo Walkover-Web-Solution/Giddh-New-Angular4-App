@@ -810,6 +810,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * True when the voucher receives stock (bill, receipt note, credit note).
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get isBatchInbound(): boolean {
+        return !!(
+            this.invoiceType?.isPurchaseInvoice ||
+            this.invoiceType?.isReceiptNote ||
+            this.invoiceType?.isCreditNote
+        );
+    }
+
+    /**
      * True if Source of Supply and Destination of Supply fields should be shown (purchase bill / debit note / PO)
      *
      * @readonly
@@ -3498,7 +3513,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 selectedBatches: cloneDeep(transactionFormGroup.get("stock.batches")?.value) || [],
                 currencySymbol: this.account?.baseCurrencySymbol || this.company?.baseCurrencySymbol,
                 localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
+                commonLocaleData: this.commonLocaleData,
+                isInbound: this.isBatchInbound
             }
         });
 

@@ -19,6 +19,10 @@ export class BatchChipListComponent {
     @Input() public commonLocaleData: any = {};
     /** False hides the Edit action. */
     @Input() public showEdit: boolean = true;
+    /** True uses a single-line chip + Edit layout for tables. */
+    @Input() public compact: boolean = false;
+    /** True for bills / inbound stock; skips the negative-stock chip. */
+    @Input() public isInbound: boolean = false;
     /** Emits when Edit is clicked. */
     @Output() public edit: EventEmitter<Event> = new EventEmitter();
 
@@ -39,10 +43,14 @@ export class BatchChipListComponent {
      * @memberof BatchChipListComponent
      */
     public get negativeCount(): number {
+        if (this.isInbound) {
+            return 0;
+        }
         return this.selectedBatches.filter(batch => {
-            const quantity = Number(batch?.quantity) || 0;
-            const available = Number(batch?.availableQuantity) || 0;
-            return quantity > available;
+            if (batch?.availableQuantity === undefined || batch?.availableQuantity === null) {
+                return false;
+            }
+            return Number(batch?.quantity) > Number(batch?.availableQuantity);
         }).length;
     }
 

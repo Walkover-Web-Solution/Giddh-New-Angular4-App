@@ -214,7 +214,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
      * @memberof BatchCreateEditComponent
      */
     public selectStock(option?: IOption): void {
-        if (this.isUpdateMode() || this.isStockLocked()) {
+        if (this.isLinked() || this.isStockLocked()) {
             return;
         }
         this.stockLabel.set(option?.label ?? "");

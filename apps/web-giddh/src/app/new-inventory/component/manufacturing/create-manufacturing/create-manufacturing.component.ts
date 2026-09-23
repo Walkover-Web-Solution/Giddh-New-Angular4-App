@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
 import { isEqual } from '../../../../lodash-optimized';
 import { cloneDeep } from '../../../../lodash-optimized';
 import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
@@ -18,7 +18,9 @@ import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/acti
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { AppState } from 'apps/web-giddh/src/app/store';
+import { BatchSelectDialogResult, VoucherSelectedBatch } from 'apps/web-giddh/src/app/models/interfaces/batch-report.interface';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+import { BatchSelectDialogComponent } from 'apps/web-giddh/src/app/vouchers/batch-select-dialog/batch-select-dialog.component';
 import * as dayjs from 'dayjs';
 import { ReplaySubject, of } from 'rxjs';
 import { catchError, take, takeUntil } from 'rxjs/operators';
@@ -131,6 +133,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public stockVariants: any[] = [];
     /** True if stock is cleared */
     public forceClear: boolean = false;
+    /** True when company has batch tracking enabled. */
+    public batchTrackingEnabled: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -165,6 +169,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }, 2000);
             if (!this.manufactureUniqueName) {
                 this.increaseExpenseAmount = this.manufacturingObject.manufacturingDetails[0].increaseAssetValue;
+            }
+        });
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.batchTrackingEnabled = !!activeCompany.batchTrackingEnabled;
             }
         });
 
@@ -205,6 +215,176 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Selected batches for a finished, raw, or by-product stock.
+     *
+     * @param {any[]} [batches]
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof CreateManufacturingComponent
+     */
+    public getManufacturingBatches(batches?: any[]): VoucherSelectedBatch[] {
+        return Array.isArray(batches) ? batches : [];
+    }
+
+    /**
+     * Open Select Batches for finished stock, a raw stock, or a by-product.
+     *
+     * @param {("finished" | "raw" | "byProduct")} source
+     * @param {number} [index]
+     * @param {Event} [event]
+     * @memberof CreateManufacturingComponent
+     */
+    public openBatchSelectDialog(source: "finished" | "raw" | "byProduct", index?: number, event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+        if (!this.batchTrackingEnabled || this.isCompany || this.isConsolidatedBranch) {
+            return;
+        }
+
+        const detail = this.manufacturingObject.manufacturingDetails[0];
+        const warehouse = this.getManufacturingWarehouse();
+        let stockUniqueName = "";
+        let stockName = "";
+        let variantUniqueName = "";
+        let variantName = "";
+        let hasVariants = false;
+        let lineQuantity = 0;
+        let selectedBatches: VoucherSelectedBatch[] = [];
+        let unitCode = "";
+
+        if (source === "finished") {
+            stockUniqueName = detail.stockUniqueName;
+            stockName = detail.stockName;
+            variantUniqueName = detail.variant?.uniqueName;
+            variantName = detail.variant?.name;
+            hasVariants = this.stockVariants?.length > 1;
+            lineQuantity = Number(detail.manufacturingQuantity) || 0;
+            selectedBatches = this.getManufacturingBatches(detail.batches);
+            unitCode = detail.manufacturingUnitCode;
+        } else {
+            const row = source === "raw" ? detail.linkedStocks?.[index] : detail.byProducts?.[index];
+            if (!row) {
+                return;
+            }
+            stockUniqueName = row.stockUniqueName || row.selectedStock?.value;
+            stockName = row.selectedStock?.label || row.stockUniqueName;
+            variantUniqueName = row.variant?.uniqueName;
+            variantName = row.variant?.name;
+            hasVariants = row.variants?.length > 1;
+            lineQuantity = Number(row.quantity) || 0;
+            selectedBatches = this.getManufacturingBatches(row.batches);
+            unitCode = row.stockUnitCode;
+        }
+
+        if (!stockUniqueName) {
+            return;
+        }
+        if (hasVariants && !variantUniqueName) {
+            this.toasterService.showSnackBar("warning", this.localeData?.select_variant_first);
+            return;
+        }
+
+        this.dialog.open(BatchSelectDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                stockName,
+                stockUniqueName,
+                variantUniqueName,
+                variantName,
+                hasVariants,
+                inventoryType: this.selectedInventoryType || "PRODUCT",
+                warehouseName: warehouse.name,
+                warehouseUniqueName: warehouse.uniqueName,
+                unitCode,
+                lineQuantity,
+                selectedBatches: cloneDeep(selectedBatches),
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData,
+                isInbound: source === "finished" || source === "byProduct"
+            }
+        }).afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
+            if (!result) {
+                return;
+            }
+            if (source === "finished") {
+                detail.batches = result.batches ?? [];
+                if (result.overrideLineQuantity) {
+                    detail.manufacturingQuantity = result.allocatedQuantity;
+                    this.updateRawStocksQuantity();
+                    this.calculateTotals();
+                }
+            } else {
+                const row = source === "raw" ? detail.linkedStocks?.[index] : detail.byProducts?.[index];
+                if (row) {
+                    row.batches = result.batches ?? [];
+                    if (result.overrideLineQuantity) {
+                        row.quantity = result.allocatedQuantity;
+                        this.calculateRowTotal(row);
+                    }
+                }
+            }
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * Warehouse selected on manufacturing, or the first warehouse.
+     *
+     * @private
+     * @return {{ name: string; uniqueName: string }}
+     * @memberof CreateManufacturingComponent
+     */
+    private getManufacturingWarehouse(): { name: string; uniqueName: string } {
+        const uniqueName = this.manufacturingObject.manufacturingDetails[0].warehouseUniqueName || this.warehouses?.[0]?.value || "";
+        const selected = (this.warehouses ?? []).find(warehouse => warehouse.value === uniqueName);
+        return {
+            name: selected?.label || this.selectedWarehouseName || this.warehouses?.[0]?.label || "",
+            uniqueName
+        };
+    }
+
+    /**
+     * Payload batches: uniqueName + quantity only.
+     *
+     * @private
+     * @param {any[]} [batches]
+     * @return {*}  {{ uniqueName: string; quantity: number }[]}
+     * @memberof CreateManufacturingComponent
+     */
+    private mapBatchesForPayload(batches?: any[]): { uniqueName: string; quantity: number }[] {
+        return (Array.isArray(batches) ? batches : [])
+            .filter(batch => batch?.uniqueName && Number(batch.quantity) > 0)
+            .map(batch => ({ uniqueName: batch.uniqueName, quantity: Number(batch.quantity) }));
+    }
+
+    /**
+     * Normalize API batches for the select dialog / chips.
+     *
+     * @private
+     * @param {any[]} [batches]
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof CreateManufacturingComponent
+     */
+    private normalizeManufacturingBatches(batches?: any[]): VoucherSelectedBatch[] {
+        return (Array.isArray(batches) ? batches : []).reduce((list: VoucherSelectedBatch[], batch: any) => {
+            const uniqueName = String(batch?.uniqueName ?? batch?.batchUniqueName ?? "").trim();
+            if (!uniqueName) {
+                return list;
+            }
+            list.push({
+                uniqueName,
+                name: batch?.name ?? "",
+                batchNumber: batch?.batchNumber ?? "",
+                quantity: Number(batch?.quantity) || 0,
+                availableQuantity: Number(batch?.availableQuantity) || 0,
+                expiryDate: batch?.expiryDate,
+                manufacturingDate: batch?.manufacturingDate,
+                warehouse: batch?.warehouse
+            });
+            return list;
+        }, []);
+    }
+
+    /**
      * Lifecycle hook for destroy
      *
      * @memberof CreateManufacturingComponent
@@ -230,6 +410,9 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     this.warehouses.push({ label: warehouse?.name, value: warehouse?.uniqueName });
                 });
                 this.selectedWarehouseName = this.warehouses[0].label;
+                if (!this.manufacturingObject.manufacturingDetails[0].warehouseUniqueName) {
+                    this.manufacturingObject.manufacturingDetails[0].warehouseUniqueName = this.warehouses[0].value;
+                }
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -357,6 +540,10 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         object.stockUnitCode = event?.additional?.stockUnitCode;
         object.stockUnitUniqueName = event?.additional?.stockUnitUniqueName;
 
+        if (!isEdit) {
+            object.batches = [];
+        }
+
         if (!object.stockUniqueName) {
             return;
         }
@@ -436,7 +623,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                             stockUnitCode: linkedStock.stockUnitCode,
                             rate: linkedStock.rate,
                             amount: isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces),
-                            variant: linkedStock.variant
+                            variant: linkedStock.variant,
+                            batches: this.normalizeManufacturingBatches(linkedStock.batches)
                         }
                     );
                 });
@@ -458,7 +646,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                             stockUnitCode: "",
                             rate: 0,
                             amount: 0,
-                            variant: { name: '', uniqueName: '' }
+                            variant: { name: '', uniqueName: '' },
+                            batches: []
                         }
                     );
                 } else {
@@ -479,7 +668,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                                 stockUnitCode: linkedStock.stockUnitCode,
                                 rate: linkedStock.rate,
                                 amount: isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces),
-                                variant: linkedStock.variant
+                                variant: linkedStock.variant,
+                                batches: this.normalizeManufacturingBatches(linkedStock.batches)
                             }
                         );
                     });
@@ -502,7 +692,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         stockUnitCode: "",
                         rate: 0,
                         amount: 0,
-                        variant: { name: '', uniqueName: '' }
+                        variant: { name: '', uniqueName: '' },
+                        batches: []
                     }
                 );
                 this.manufacturingObject.manufacturingDetails[0].byProducts.push(
@@ -515,6 +706,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         rate: 0,
                         amount: 0,
                         variant: { name: '', uniqueName: '' },
+                        batches: []
                     }
                 );
 
@@ -544,7 +736,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         stockUnitCode: "",
                         rate: 0,
                         amount: 0,
-                        variant: { name: '', uniqueName: '' }
+                        variant: { name: '', uniqueName: '' },
+                        batches: []
                     }
                 );
             }
@@ -639,6 +832,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             delete linkedStock.variants;
             delete linkedStock.selectedStock;
             delete linkedStock.cssClass;
+            const batches = this.mapBatchesForPayload(linkedStock.batches);
+            if (batches?.length) {
+                linkedStock.batches = batches;
+            } else {
+                delete linkedStock.batches;
+            }
             return linkedStock;
         });
         manufacturingObject.manufacturingDetails[0].byProducts?.map(linkedStock => {
@@ -650,8 +849,20 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             delete linkedStock.variants;
             delete linkedStock.selectedStock;
             delete linkedStock.cssClass;
+            const batches = this.mapBatchesForPayload(linkedStock.batches);
+            if (batches?.length) {
+                linkedStock.batches = batches;
+            } else {
+                delete linkedStock.batches;
+            }
             return linkedStock;
         });
+        const finishedBatches = this.mapBatchesForPayload(manufacturingObject.manufacturingDetails[0].batches);
+        if (finishedBatches?.length) {
+            manufacturingObject.manufacturingDetails[0].batches = finishedBatches;
+        } else {
+            delete manufacturingObject.manufacturingDetails[0].batches;
+        }
         return manufacturingObject;
     }
 
@@ -820,7 +1031,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 stockUnitCode: "",
                 rate: 0,
                 amount: 0,
-                variant: { name: '', uniqueName: '' }
+                variant: { name: '', uniqueName: '' },
+                batches: []
             }
         );
         this.preventStocksApiCall = false;
@@ -842,7 +1054,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 stockUnitCode: "",
                 rate: 0,
                 amount: 0,
-                variant: { name: '', uniqueName: '' }
+                variant: { name: '', uniqueName: '' },
+                batches: []
             }
         );
         this.preventByProductStocksApiCall = false;
@@ -969,7 +1182,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     stockUnitCode: "",
                     rate: 0,
                     amount: 0,
-                    variant: { name: '', uniqueName: '' }
+                    variant: { name: '', uniqueName: '' },
+                    batches: []
                 }
             ]
         } else {
@@ -1068,6 +1282,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.initialLinkedStocks = [];
         this.initialByProductLinkedStocks = [];
         this.selectedWarehouseName = (this.warehouses?.length) ? this.warehouses[0].label : "";
+        this.manufacturingObject.manufacturingDetails[0].warehouseUniqueName = this.warehouses?.[0]?.value || "";
         this.selectedInventoryType = "";
         this.preventStocksApiCall = false;
         this.preventByProductStocksApiCall = false;
@@ -1308,6 +1523,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.manufacturingObject.manufacturingDetails[0].variant.uniqueName = response.body.variant.uniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = Number(response.body.manufacturingQuantity);
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = Number(response.body.manufacturingQuantity);
+                this.manufacturingObject.manufacturingDetails[0].batches = this.normalizeManufacturingBatches(response.body.batches);
                 this.increaseExpenseAmount = response.body.increaseAssetValue;
 
                 this.selectedInventoryType = response.body.inventoryType;
@@ -1332,7 +1548,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         stockUnitCode: linkedStock.manufacturingUnitCode,
                         rate: linkedStock.rate,
                         amount: isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces),
-                        variant: linkedStock.variant
+                        variant: linkedStock.variant,
+                        batches: this.normalizeManufacturingBatches(linkedStock.batches)
                     });
                 });
 
@@ -1355,7 +1572,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                             stockUnitCode: "",
                             rate: 0,
                             amount: 0,
-                            variant: { name: '', uniqueName: '' }
+                            variant: { name: '', uniqueName: '' },
+                            batches: []
                         }
                     );
 
@@ -1378,7 +1596,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                             stockUnitCode: byProduct.manufacturingUnitCode,
                             rate: byProduct.rate,
                             amount: isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces),
-                            variant: byProduct.variant
+                            variant: byProduct.variant,
+                            batches: this.normalizeManufacturingBatches(byProduct.batches)
                         });
                     });
                     this.manufacturingObject.manufacturingDetails[0].byProducts = byProductLinkedStocks;

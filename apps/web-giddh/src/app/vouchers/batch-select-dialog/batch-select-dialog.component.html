@@ -132,10 +132,15 @@
                         <span *ngIf="row.manufacturingDate"> · {{ localeData?.batch_manufacturing }} {{ formatExpiry(row.manufacturingDate) }}</span>
                         <span *ngIf="row.warehouse?.name"> · {{ row.warehouse.name }}</span>
                     </div>
-                    <div *ngIf="getNegativeQuantity(row) > 0" class="text-orange font-size-12 mt-1">
+                    <div
+                        *ngIf="shouldShowProjectedBalance(row)"
+                        class="font-size-12 mt-1"
+                        [class.text-orange]="!isInbound"
+                        [class.text-green]="isInbound"
+                    >
                         {{
-                            interpolate(localeData?.batch_will_go_negative, {
-                                QTY: getNegativeQuantity(row),
+                            interpolate(isInbound ? localeData?.batch_will_increase : localeData?.batch_will_go_negative, {
+                                QTY: getProjectedQuantity(row),
                                 UNIT: dialogData?.unitCode || ''
                             })
                         }}

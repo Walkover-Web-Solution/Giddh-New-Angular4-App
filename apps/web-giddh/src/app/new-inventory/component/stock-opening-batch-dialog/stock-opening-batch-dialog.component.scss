@@ -1,0 +1,67 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.stock-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 16px;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border-light, var(--border-color));
+    border-radius: var(--mat-border-radius-8, 8px);
+    background-color: var(--color-light-gray);
+}
+
+.stock-info-label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--color-dark-gray);
+    font-size: var(--font-size-12);
+}
+
+.stock-info-value {
+    display: block;
+    word-break: break-word;
+}
+
+.opening-fields {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 16px;
+    row-gap: 16px;
+}
+
+.batch-row {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) 36px;
+    column-gap: 12px;
+    align-items: end;
+}
+
+.batch-row-grid {
+    display: contents;
+}
+
+.batch-row-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+}
+
+.variant-batch-datepicker {
+    min-width: 0;
+
+    giddh-datepicker {
+        display: block;
+        width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    .stock-info-grid,
+    .opening-fields,
+    .batch-row {
+        grid-template-columns: 1fr;
+    }
+}

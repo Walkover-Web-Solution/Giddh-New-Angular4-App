@@ -220,6 +220,7 @@
     "override_line_quantity": "लाइन आइटम को [QTY] मात्रा से ओवरराइड करें",
     "negative_stock_warning": "[BATCH] उपलब्ध स्टॉक से अधिक जारी किया गया है और खरीद या समायोजन होने तक -[QTY] [UNIT] नकारात्मक शेष दिखाएगा।",
     "batch_will_go_negative": "बैच -[QTY] [UNIT] पर चला जाएगा",
+    "batch_will_increase": "बैच [QTY] [UNIT] पर चला जाएगा",
     "add_batch": "+ बैच जोड़ें",
     "quick_add_hint": "जोड़ने के लिए Enter · मात्रा पर जाने के लिए Tab",
     "search_batch_number_or_name": "बैच नंबर या नाम खोजें",

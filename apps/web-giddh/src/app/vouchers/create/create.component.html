@@ -1986,6 +1986,7 @@
                                                                     class="d-block mt-2"
                                                                     [attr.id]="'edit-batch-' + entryIndex"
                                                                     [batches]="getEntryBatches(transaction)"
+                                                                    [isInbound]="isBatchInbound"
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
                                                                     (edit)="openBatchSelectDialog(entryIndex, $event)"

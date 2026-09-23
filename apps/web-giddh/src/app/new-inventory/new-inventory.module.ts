@@ -70,6 +70,9 @@ import { BatchArchiveDialogComponent } from "./component/batch-archive-dialog/ba
 import { BatchTransferDialogComponent } from "./component/batch-transfer-dialog/batch-transfer-dialog.component";
 import { MatCardModule } from "@angular/material/card";
 import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-editor.component";
+import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-list.component";
+import { BatchSelectDialogComponent } from "../vouchers/batch-select-dialog/batch-select-dialog.component";
+import { StockOpeningBatchDialogComponent } from "./component/stock-opening-batch-dialog/stock-opening-batch-dialog.component";
 
 @NgModule({
     declarations: [
@@ -145,7 +148,10 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         GoToBranchComponent,
         MatCardModule,
         AgeRangeEditorComponent,
-        AdjustInventoryModule
+        AdjustInventoryModule,
+        BatchChipListComponent,
+        BatchSelectDialogComponent,
+        StockOpeningBatchDialogComponent
     ],
     exports: [
         NewInventoryComponent,
