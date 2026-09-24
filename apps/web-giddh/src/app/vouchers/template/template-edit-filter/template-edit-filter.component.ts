@@ -834,14 +834,7 @@ export class TemplateEditFilterComponent implements OnInit {
     public setFontAndFontSize(): void {
         if (!this.customTemplate) return;
         if (this.customTemplate?.font) {
-            if (this.customTemplate?.templateType === TemplateTypeEnum.TallyTemplate) {
-                this.presetFonts = [
-                    { label: 'Open Sans', value: 'Open Sans' },
-                    { label: 'Roboto', value: 'Roboto' }
-                ];
-            } else {
-                this.presetFonts = this.templateFonts;
-            }
+            this.presetFonts = this.templateFonts;
         }
         if (this.customTemplate?.fontSize) {
             this.customTemplate.fontSize = this.customTemplate?.fontSize.toString();
