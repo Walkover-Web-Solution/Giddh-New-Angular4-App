@@ -1543,45 +1543,55 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                         if (!voucherDetails.isCopyVoucher) {
                             this.getAccountDetails(voucherDetails.account?.uniqueName);
-                            this.fillBillingShippingAddress(
-                                "account",
-                                "billingDetails",
-                                voucherDetails.account?.billingDetails,
-                                0
-                            );
-                            this.fillBillingShippingAddress(
-                                "account",
-                                "shippingDetails",
-                                voucherDetails.account?.shippingDetails,
-                                0
-                            );
 
-                            this.copyAccountBillingInShippingAddress = isEqual(
-                                voucherDetails.account?.billingDetails,
-                                voucherDetails.account?.shippingDetails
-                            );
+                            // Business-document (RN/DC) APIs often omit billing/shipping; only fill when present.
+                            // Missing account addresses are filled from account defaults in updateAccountDataInForm.
+                            if (voucherDetails.account?.billingDetails) {
+                                this.fillBillingShippingAddress(
+                                    "account",
+                                    "billingDetails",
+                                    voucherDetails.account.billingDetails,
+                                    0
+                                );
+                                this.fillBillingShippingAddress(
+                                    "account",
+                                    "shippingDetails",
+                                    voucherDetails.account?.shippingDetails ?? voucherDetails.account.billingDetails,
+                                    0
+                                );
+
+                                this.copyAccountBillingInShippingAddress = isEqual(
+                                    voucherDetails.account?.billingDetails,
+                                    voucherDetails.account?.shippingDetails
+                                );
+                            }
 
                             if (
                                 this.invoiceType.isPurchaseOrder ||
                                 ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
                             ) {
-                                this.fillBillingShippingAddress(
-                                    "company",
-                                    "billingDetails",
-                                    voucherDetails.company?.billingDetails,
-                                    0
-                                );
-                                this.fillBillingShippingAddress(
-                                    "company",
-                                    "shippingDetails",
-                                    voucherDetails.company?.shippingDetails,
-                                    0
-                                );
+                                if (voucherDetails.company?.billingDetails) {
+                                    this.fillBillingShippingAddress(
+                                        "company",
+                                        "billingDetails",
+                                        voucherDetails.company.billingDetails,
+                                        0
+                                    );
+                                    this.fillBillingShippingAddress(
+                                        "company",
+                                        "shippingDetails",
+                                        voucherDetails.company?.shippingDetails ?? voucherDetails.company.billingDetails,
+                                        0
+                                    );
 
-                                this.copyCompanyBillingInShippingAddress = isEqual(
-                                    voucherDetails.company?.billingDetails,
-                                    voucherDetails.company?.shippingDetails
-                                );
+                                    this.copyCompanyBillingInShippingAddress = isEqual(
+                                        voucherDetails.company?.billingDetails,
+                                        voucherDetails.company?.shippingDetails
+                                    );
+                                } else {
+                                    // defaultCompanyAddress / no company payload → same defaults as normal create
+                                    this.fillDefaultCompanyAddresses();
+                                }
                             }
                             this.invoiceForm.get('account.placeOfSupply.name')?.setValue(voucherDetails.account?.placeOfSupply?.name || '');
                             this.invoiceForm.get('account.placeOfSupply.code')?.setValue(voucherDetails.account?.placeOfSupply?.code || '');
@@ -1726,8 +1736,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             driverName: voucherDetails?.transporterDetails?.driverName ?? "",
                             driverPhone: voucherDetails?.transporterDetails?.driverPhone ?? ""
                         });
-                        this.invoiceForm.get("challanType")?.patchValue(
-                            voucherDetails?.challanType === ChallanTypeEnum.JOBWORK
+                        this.invoiceForm.get("documentSubType")?.patchValue(
+                            voucherDetails?.documentSubType === ChallanTypeEnum.JOBWORK
                                 ? ChallanTypeEnum.JOBWORK
                                 : ChallanTypeEnum.STOCK_TRANSFER
                         );
@@ -2277,6 +2287,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherDateLabel = this.localeData?.dr_note_date;
         } else if (this.invoiceType.isPurchaseInvoice) {
             this.voucherDateLabel = this.localeData?.bill_date;
+            this.voucherDueDateLabel = this.localeData?.due_date;
         } else if (this.invoiceType.isReceiptInvoice) {
             this.voucherDateLabel = this.localeData?.receipt_date;
         } else if (this.invoiceType.isPaymentInvoice) {
@@ -3641,6 +3652,46 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Fills default billing and shipping addresses for company (Deliver To)
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private fillDefaultCompanyAddresses(): void {
+        const companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
+        const defaultAddress = companyDefaultAddress.defaultAddress;
+        const findIndex = this.company?.addresses?.findIndex(
+            (address: any) => address.uniqueName === companyDefaultAddress.defaultAddress?.uniqueName
+        );
+        const index = findIndex > -1 ? findIndex : 0;
+
+        if (defaultAddress) {
+            this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
+            this.fillBillingShippingAddress("company", "shippingDetails", defaultAddress, index);
+            if (!this.isUpdateMode) {
+                this.setDefaultSupplyFields();
+            }
+        }
+    }
+
+    /**
+     * Whether form already has address content for the given entity/address type
+     *
+     * @private
+     * @param {string} entityType
+     * @param {string} addressType
+     * @returns {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    private hasAddressDetails(entityType: string, addressType: string): boolean {
+        const addressValue = this.invoiceForm.controls[entityType]?.get(addressType)?.get("address")?.value;
+        if (Array.isArray(addressValue)) {
+            return addressValue.some((line: string) => !!line?.trim());
+        }
+        return !!addressValue;
+    }
+
+    /**
      * Returns the gstNumber of the default address (lowercased), or empty string if not found
      *
      * @private
@@ -3797,18 +3848,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceType.isPurchaseOrder ||
                 ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
             ) {
-                let companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
-                let defaultAddress = companyDefaultAddress.defaultAddress;
-                const findIndex = this.company.addresses.findIndex((address: any) => address.uniqueName === companyDefaultAddress.defaultAddress?.uniqueName);
-                let index = findIndex > -1 ? findIndex : 0;
-
-                if (defaultAddress) {
-                    this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
-                    this.fillBillingShippingAddress("company", "shippingDetails", defaultAddress, index);
-                    if (!this.isUpdateMode) {
-                        this.setDefaultSupplyFields();
-                    }
-                }
+                this.fillDefaultCompanyAddresses();
             }
 
             this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(accountData?.name);
@@ -3822,53 +3862,78 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
                 !this.invoiceType.isCashInvoice
             ) {
-                const accountBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                    accountData.addresses,
-                    this.invoiceForm.controls["account"]?.get("billingDetails")?.value
-                );
-                const accountShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                    accountData.addresses,
-                    this.invoiceForm.controls["account"]?.get("shippingDetails")?.value
-                );
+                // RN/DC may omit addresses — use account defaults (includes name) when form has none
+                if (!this.hasAddressDetails("account", "billingDetails")) {
+                    this.fillDefaultAccountAddresses(accountData);
+                } else {
+                    const accountBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                        accountData.addresses,
+                        this.invoiceForm.controls["account"]?.get("billingDetails")?.value
+                    );
+                    const accountShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                        accountData.addresses,
+                        this.invoiceForm.controls["account"]?.get("shippingDetails")?.value
+                    );
 
-                if (accountBillingAddressIndex > -1) {
-                    this.invoiceForm.controls["account"]
-                        ?.get("billingDetails")
-                        .get("index")
-                        .patchValue(accountBillingAddressIndex);
-                }
+                    if (accountBillingAddressIndex > -1) {
+                        this.invoiceForm.controls["account"]
+                            ?.get("billingDetails")
+                            .get("index")
+                            .patchValue(accountBillingAddressIndex);
+                        this.invoiceForm.controls["account"]
+                            ?.get("billingDetails")
+                            .get("name")
+                            .patchValue(accountData.addresses?.[accountBillingAddressIndex]?.name ?? "");
+                    }
 
-                if (accountShippingAddressIndex > -1) {
-                    this.invoiceForm.controls["account"]
-                        ?.get("shippingDetails")
-                        .get("index")
-                        .patchValue(accountShippingAddressIndex);
+                    if (accountShippingAddressIndex > -1) {
+                        this.invoiceForm.controls["account"]
+                            ?.get("shippingDetails")
+                            .get("index")
+                            .patchValue(accountShippingAddressIndex);
+                        this.invoiceForm.controls["account"]
+                            ?.get("shippingDetails")
+                            .get("name")
+                            .patchValue(accountData.addresses?.[accountShippingAddressIndex]?.name ?? "");
+                    }
                 }
 
                 if (
                     this.invoiceType.isPurchaseOrder ||
                     ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
                 ) {
-                    const companyBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                        this.company?.addresses,
-                        this.invoiceForm.controls["company"]?.get("billingDetails")?.value
-                    );
-                    const companyShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                        this.company?.addresses,
-                        this.invoiceForm.controls["company"]?.get("shippingDetails")?.value
-                    );
+                    if (!this.hasAddressDetails("company", "billingDetails")) {
+                        this.fillDefaultCompanyAddresses();
+                    } else {
+                        const companyBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                            this.company?.addresses,
+                            this.invoiceForm.controls["company"]?.get("billingDetails")?.value
+                        );
+                        const companyShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                            this.company?.addresses,
+                            this.invoiceForm.controls["company"]?.get("shippingDetails")?.value
+                        );
 
-                    if (companyBillingAddressIndex > -1) {
-                        this.invoiceForm.controls["company"]
-                            ?.get("billingDetails")
-                            .get("index")
-                            .patchValue(companyBillingAddressIndex);
-                    }
-                    if (companyShippingAddressIndex > -1) {
-                        this.invoiceForm.controls["company"]
-                            ?.get("shippingDetails")
-                            .get("index")
-                            .patchValue(companyShippingAddressIndex);
+                        if (companyBillingAddressIndex > -1) {
+                            this.invoiceForm.controls["company"]
+                                ?.get("billingDetails")
+                                .get("index")
+                                .patchValue(companyBillingAddressIndex);
+                            this.invoiceForm.controls["company"]
+                                ?.get("billingDetails")
+                                .get("name")
+                                .patchValue(this.company?.addresses?.[companyBillingAddressIndex]?.name ?? "");
+                        }
+                        if (companyShippingAddressIndex > -1) {
+                            this.invoiceForm.controls["company"]
+                                ?.get("shippingDetails")
+                                .get("index")
+                                .patchValue(companyShippingAddressIndex);
+                            this.invoiceForm.controls["company"]
+                                ?.get("shippingDetails")
+                                .get("name")
+                                .patchValue(this.company?.addresses?.[companyShippingAddressIndex]?.name ?? "");
+                        }
                     }
                 }
             }
@@ -4022,7 +4087,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPersonUniqueName: [''],
             annexureCharges: this.formBuilder.array([this.getAnnexureChargeFormGroup()]),
             transporterDetails: this.getTransporterDetailsFormGroup(),
-            challanType: [ChallanTypeEnum.STOCK_TRANSFER]
+            documentSubType: [ChallanTypeEnum.STOCK_TRANSFER]
         });
     }
 
@@ -5735,7 +5800,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.dateChangeType = "voucher";
-        if (!(this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder)) {
+        if (!(this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder || this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)) {
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                 panelClass: "mat-dialog-sm",
                 data: {
@@ -7228,7 +7293,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!this.showsTransporterDetails) {
             delete invoiceForm.transporterDetails;
-            delete invoiceForm.challanType;
+            delete invoiceForm.documentSubType;
         }
 
         if (!this.isIndianCompanyAndAccount) {
@@ -7713,6 +7778,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 delete this.queryParams.billUniqueName;
                                 this.inventoryDocumentListRedirectUrl = "";
                                 this.redirectUrl = "";
+                                // Clear leave confirmation before navigate; otherwise PageLeaveConfirmationGuard
+                                // blocks redirect because account/customerName is still set (showPageLeaveConfirmation).
+                                this.resetVoucherForm(false);
                                 this.toasterService.showSnackBar(
                                     "success",
                                     response?.body?.number
@@ -7892,7 +7960,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             driverName: "",
             driverPhone: ""
         });
-        this.invoiceForm.get("challanType")?.patchValue(ChallanTypeEnum.STOCK_TRANSFER);
+        this.invoiceForm.get("documentSubType")?.patchValue(ChallanTypeEnum.STOCK_TRANSFER);
 
         // Restore custom fields with preserved uniqueName but cleared values
         if (customFieldsData.length > 0) {
@@ -10324,7 +10392,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getAddressDisplayText(addressType: string, entityType: string): string {
         const addressControl = this.invoiceForm?.controls?.[entityType]?.get(`${addressType}Details`);
-
         if (!addressControl) {
             return '';
         }

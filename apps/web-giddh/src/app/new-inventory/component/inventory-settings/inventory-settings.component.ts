@@ -2,7 +2,9 @@ import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal 
 import { CommonModule } from "@angular/common";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
-import { MatSlideToggleChange, MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { select, Store } from "@ngrx/store";
 import { forkJoin, of } from "rxjs";
 import { catchError, finalize, take } from "rxjs/operators";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -17,6 +19,8 @@ import {
     InventorySettingsUpdateRequest,
     VoucherAutomationSettings
 } from "../../../models/api-models/InventorySettings";
+import { AppThemeClassEnum } from "../../../app.constant";
+import { AppState } from "../../../store";
 
 interface InventorySettingsLocale {
     title: string;
@@ -63,6 +67,7 @@ const REPORT_NATURE_CONTROL_MODULES: Record<ReportNatureControl, string> = {
         CommonModule,
         ReactiveFormsModule,
         MatButtonModule,
+        MatButtonToggleModule,
         MatSlideToggleModule,
         TranslateDirectiveModule,
         GiddhPageLoaderModule
@@ -77,19 +82,25 @@ export class InventorySettingsComponent implements OnInit {
     private readonly toaster = inject(ToasterService);
     /** Component destruction reference. */
     private readonly destroyRef = inject(DestroyRef);
+    /** Application store. */
+    private readonly store = inject(Store<AppState>);
+    /** Report nature enum for template bindings. */
+    public readonly reportNature = ReportNature;
     /** Localized labels for this page. */
     public readonly localeData = signal<InventorySettingsLocale>({} as InventorySettingsLocale);
     /** True while initial settings are loading. */
     public readonly isLoading = signal<boolean>(true);
     /** True while settings are being saved. */
     public readonly isSaving = signal<boolean>(false);
+    /** True when light (default) theme is active; used to apply bg-grey. */
+    public readonly isLightMode = signal<boolean>(true);
     /** Last settings response used by the cancel action. */
     private readonly originalSettings = signal<InventorySettingsResponse | null>(null);
     /** Last saved report nature toggles used by the cancel action. */
-    private readonly originalReportNature = signal<Record<ReportNatureControl, boolean>>({
-        itemWiseReport: false,
-        groupWiseReport: false,
-        variantWiseReport: false
+    private readonly originalReportNature = signal<Record<ReportNatureControl, ReportNature>>({
+        itemWiseReport: ReportNature.Books,
+        groupWiseReport: ReportNature.Books,
+        variantWiseReport: ReportNature.Books
     });
     /** Strongly typed inventory settings form. */
     public readonly settingsForm = new FormGroup({
@@ -100,9 +111,9 @@ export class InventorySettingsComponent implements OnInit {
             autoGenerateRcOnBill: new FormControl(false, { nonNullable: true })
         }),
         reports: new FormGroup({
-            itemWiseReport: new FormControl(false, { nonNullable: true }),
-            groupWiseReport: new FormControl(false, { nonNullable: true }),
-            variantWiseReport: new FormControl(false, { nonNullable: true })
+            itemWiseReport: new FormControl<ReportNature>(ReportNature.Books, { nonNullable: true }),
+            groupWiseReport: new FormControl<ReportNature>(ReportNature.Books, { nonNullable: true }),
+            variantWiseReport: new FormControl<ReportNature>(ReportNature.Books, { nonNullable: true })
         })
     });
 
@@ -112,6 +123,12 @@ export class InventorySettingsComponent implements OnInit {
      * @memberof InventorySettingsComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(
+            select(state => state.session.activeTheme),
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(response => {
+            this.isLightMode.set(response?.value !== AppThemeClassEnum.Dark);
+        });
         this.loadSettings();
     }
 
@@ -143,14 +160,12 @@ export class InventorySettingsComponent implements OnInit {
      * Saves report nature for a single report module on toggle change.
      *
      * @param {ReportNatureControl} control Report toggle control name
-     * @param {MatSlideToggleChange} event Slide toggle change event
+     * @param {ReportNature} reportNature Selected report nature
      * @memberof InventorySettingsComponent
      */
-    public onReportNatureChange(control: ReportNatureControl, event: MatSlideToggleChange): void {
-        const reportAsPerInventory = !!event?.checked;
-        const reportNature = reportAsPerInventory ? ReportNature.Inventory : ReportNature.Books;
+    public onReportNatureChange(control: ReportNatureControl, reportNature: ReportNature): void {
         const module = REPORT_NATURE_CONTROL_MODULES[control];
-        this.settingsForm.controls.reports.controls[control].setValue(reportAsPerInventory, { emitEvent: false });
+        this.settingsForm.controls.reports.controls[control].setValue(reportNature, { emitEvent: false });
 
         this.commonService.saveSelectedTableColumns({ module, reportNature }).pipe(
             take(1),
@@ -159,12 +174,13 @@ export class InventorySettingsComponent implements OnInit {
             if (response?.status === "success") {
                 this.originalReportNature.update((current) => ({
                     ...current,
-                    [control]: reportAsPerInventory
+                    [control]: reportNature
                 }));
                 this.settingsForm.controls.reports.controls[control].markAsPristine();
                 return;
             }
-            this.settingsForm.controls.reports.controls[control].setValue(!reportAsPerInventory, { emitEvent: false });
+            const previous = reportNature === ReportNature.Inventory ? ReportNature.Books : ReportNature.Inventory;
+            this.settingsForm.controls.reports.controls[control].setValue(previous, { emitEvent: false });
             if (response?.message) {
                 this.toaster.showSnackBar("error", response.message);
             }
@@ -241,9 +257,9 @@ export class InventorySettingsComponent implements OnInit {
             this.originalSettings.set(settings.body);
             this.patchForm(settings.body);
             const reportNatureValues = {
-                itemWiseReport: this.isInventoryReportNature(itemWiseReport),
-                groupWiseReport: this.isInventoryReportNature(groupWiseReport),
-                variantWiseReport: this.isInventoryReportNature(variantWiseReport)
+                itemWiseReport: this.getReportNatureValue(itemWiseReport),
+                groupWiseReport: this.getReportNatureValue(groupWiseReport),
+                variantWiseReport: this.getReportNatureValue(variantWiseReport)
             };
             this.originalReportNature.set(reportNatureValues);
             this.settingsForm.controls.reports.patchValue(reportNatureValues);
@@ -294,13 +310,16 @@ export class InventorySettingsComponent implements OnInit {
     }
 
     /**
-     * Returns true when the saved report nature is Inventory.
+     * Returns the saved report nature, defaulting to Books.
      *
      * @param {*} response Selected columns API response
-     * @returns {boolean} True when report nature is Inventory
+     * @returns {ReportNature} Saved report nature
      * @memberof InventorySettingsComponent
      */
-    private isInventoryReportNature(response: any): boolean {
-        return response?.status === "success" && response?.body?.reportNature === ReportNature.Inventory;
+    private getReportNatureValue(response: any): ReportNature {
+        return response?.status === "success" && response?.body?.reportNature === ReportNature.Inventory
+            ? ReportNature.Inventory
+            : ReportNature.Books;
     }
+
 }

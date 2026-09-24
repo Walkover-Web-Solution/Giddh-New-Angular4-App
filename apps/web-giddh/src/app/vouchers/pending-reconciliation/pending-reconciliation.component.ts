@@ -177,10 +177,11 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
      * @memberof PendingReconciliationComponent
      */
     public clearFilters(): void {
+        // Keep suppressSearch true so any in-flight debounceTime(700) valueChanges
+        // (from number/party search) cannot call applySearch after persistAndLoad.
         this.suppressSearch = true;
         this.numberInput.patchValue("", { emitEvent: false });
         this.partyInput.patchValue("", { emitEvent: false });
-        this.suppressSearch = false;
         this.showNumberSearch = false;
         this.showPartySearch = false;
         this.isSearching = false;
@@ -271,6 +272,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
      */
     public toggleSearch(event: Event, fieldName: string): void {
         event.stopPropagation();
+        this.suppressSearch = false;
         if (fieldName === "number") {
             this.showNumberSearch = true;
             this.showPartySearch = false;

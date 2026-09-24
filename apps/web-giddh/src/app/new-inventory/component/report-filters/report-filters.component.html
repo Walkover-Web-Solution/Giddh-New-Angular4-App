@@ -56,24 +56,14 @@
             moduleName === inventoryModuleName.variant
         "
     >
-        <span class="font-size-14 mr-2">{{ localeData?.header?.report_as_per }}</span>
-        <span
-            class="font-size-14 text-muted mr-2"
-            [class.text-primary]="!reportAsPerInventory"
-            [class.font-size-20]="!reportAsPerInventory"
-            [class.font-weight-medium]="!reportAsPerInventory"
+        <mat-button-toggle-group
+            [value]="reportAsPerInventory ? reportNature.Inventory : reportNature.Books"
+            (change)="onReportNatureChange($event.value)"
+            [attr.aria-label]="localeData?.header?.books"
         >
-            {{ localeData?.header?.books }}
-        </span>
-        <mat-slide-toggle color="primary" [checked]="reportAsPerInventory" (change)="onReportNatureChange($event)"></mat-slide-toggle>
-        <span
-            class="font-size-14 text-muted ml-2"
-            [class.text-primary]="reportAsPerInventory"
-            [class.font-size-20]="reportAsPerInventory"
-            [class.font-weight-medium]="reportAsPerInventory"
-        >
-            {{ localeData?.header?.inventory }}
-        </span>
+            <mat-button-toggle [value]="reportNature.Books">{{ localeData?.header?.books }}</mat-button-toggle>
+            <mat-button-toggle [value]="reportNature.Inventory">{{ localeData?.header?.inventory }}</mat-button-toggle>
+        </mat-button-toggle-group>
     </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
         <button matButton="outlined" class="create-btn-inventory ml-3 mr-0" (click)="resetFilter()">

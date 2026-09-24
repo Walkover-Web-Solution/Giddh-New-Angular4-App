@@ -1137,7 +1137,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     item.uniqueName = item.uniqueName ?? item.documentUniqueName;
                     item.voucherNumber = item.voucherNumber ?? item.documentNo ?? item.number;
                     item.voucherDate = item.voucherDate ?? item.documentDate ?? item.date;
-                    item.documentTypeLabel = item.documentSubType ?? item.challanType ?? item.noteType ?? 'Regular';
+                    item.documentTypeLabel = item.documentSubType ?? item.documentSubType ?? item.noteType ?? 'Regular';
                     item.account = item.account ?? item.party;
                     item.account = {
                         ...item.account,

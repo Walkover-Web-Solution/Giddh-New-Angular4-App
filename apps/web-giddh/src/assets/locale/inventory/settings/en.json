@@ -14,11 +14,11 @@
     "load_error": "Unable to load inventory settings.",
     "reports": "Reports",
     "item_wise_report": "Item Wise Report",
-    "item_wise_report_description": "Choose whether item-wise reports calculate balances from books or from inventory.",
+    "item_wise_report_description": "Choose whether item-wise reports calculate balances from accounting stock or from physical stock.",
     "group_wise_report": "Group Wise Report",
-    "group_wise_report_description": "Choose whether group-wise reports calculate balances from books or from inventory.",
+    "group_wise_report_description": "Choose whether group-wise reports calculate balances from accounting stock or from physical stock.",
     "variant_wise_report": "Variant Wise Report",
-    "variant_wise_report_description": "Choose whether variant-wise reports calculate balances from books or from inventory.",
-    "books": "Books",
-    "inventory": "Inventory"
+    "variant_wise_report_description": "Choose whether variant-wise reports calculate balances from accounting stock or from physical stock.",
+    "books": "Accounting Stock",
+    "inventory": "Physical Stock"
 }
