@@ -312,7 +312,6 @@ export class VouchersUtilityService {
     /**
      * Maps delivery challan/receipt note details response to the voucher details
      * structure expected by the voucher create/update form.
-     * Also normalizes partial consume/invoice cases using documentItems.remainingQuantity.
      *
      * @param {*} response Delivery challan/receipt note details response body
      * @return {*} Voucher details
@@ -384,21 +383,13 @@ export class VouchersUtilityService {
                     ?? documentItem?.rate
                     ?? 0
                 );
-                const originalQuantity = Number(documentItem?.quantity ?? stock.quantity ?? 0);
-                // Prefer remaining qty after partial invoice/return; fall back to transaction qty
-                const quantity = documentItem?.remainingQuantity != null
-                    ? Number(documentItem.remainingQuantity)
-                    : Number(stock.quantity ?? 0);
+                const quantity = Number(stock.quantity ?? documentItem?.quantity ?? 0);
 
                 let amount = Number(transaction.amount?.amountForAccount) || 0;
-                if (documentItem && originalQuantity > 0) {
-                    // Pro-rate full document amount for remaining qty (handles partial invoice/return)
-                    amount = giddhRoundOff(
-                        (quantity / originalQuantity) * Number(documentItem.amount ?? (originalQuantity * rate)),
-                        2
-                    );
-                } else if (quantity && rate) {
-                    // Fix inconsistent transaction amount vs qty × rate
+                if (!amount && documentItem?.amount != null) {
+                    amount = Number(documentItem.amount) || 0;
+                }
+                if (!amount && quantity && rate) {
                     amount = giddhRoundOff(quantity * rate, 2);
                 }
                 entryTotal += amount;
@@ -452,12 +443,6 @@ export class VouchersUtilityService {
                     amountForCompany: entryTotal
                 }
             };
-        }).filter((entry) => {
-            const transaction = entry?.transactions?.[0];
-            if (transaction?.stock) {
-                return Number(transaction.stock.quantity) > 0;
-            }
-            return Number(transaction?.amount?.amountForAccount) > 0;
         });
 
         voucherDetails.entries?.forEach((entry) => {

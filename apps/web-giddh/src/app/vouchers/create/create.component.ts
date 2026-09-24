@@ -113,7 +113,7 @@ import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { VoucherService } from "../../services/voucher.service";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { transporterModes } from "../../shared/helpers/transporterModes";
-import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from "../../models/api-models/Invoice";
+import { IEwayBillfilter } from "../../models/api-models/Invoice";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
@@ -128,6 +128,7 @@ import { MatSelectChange } from "@angular/material/select";
 import { ServiceConfig } from "../../services/service.config";
 import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
 import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
+import { ManageTransporterComponent } from "../../shared/manage-transporter/manage-transporter.component";
 import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
@@ -159,8 +160,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     /** Template Reference for Generic aside menu account */
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
-    /** Template for manage transporter aside */
-    @ViewChild("transporterAsideMenu") public transporterAsideMenu: TemplateRef<any>;
     /** Instance of aside Menu Product Service modal */
     @ViewChild("asideMenuProductService") asideMenuProductService: TemplateRef<any>;
     /* Selector for send email modal */
@@ -321,18 +320,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     /** Transporter dropdown options for delivery challan and receipt note */
     public transporterDropdown$: Observable<IOption[]>;
-    /** Saved transporter list for manage transporter aside */
-    public transporterList$: Observable<IEwayBillTransporter[]>;
-    /** Transporter list pagination details */
-    public transporterListDetails: IAllTransporterDetails;
     /** Transporter list filter request */
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
-    /** Form group for creating or updating a transporter */
-    public generateNewTransporterForm: FormGroup;
-    /** True when transporter aside is in edit mode */
-    public transportEditMode: boolean = false;
-    /** Current transporter id being edited */
-    public currentTransporterId: string;
     /** Transport mode options */
     public transporterModeOptions: IOption[] = transporterModes.map((mode) => ({ label: mode.label, value: mode.value }));
     /** Challan type options for delivery challan and receipt note */
@@ -880,17 +869,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return this.invoiceForm.get('recurrencePreviewRequest') as FormGroup;
     }
 
-    /** Transporter id control on manage transporter form */
-    public get transporterId(): FormControl {
-        return this.generateNewTransporterForm?.get("transporterId") as FormControl;
-    }
-
-    /** Transporter name control on manage transporter form */
-    public get transporterName(): FormControl {
-        return this.generateNewTransporterForm?.get("transporterName") as FormControl;
-    }
-
-
     /** Tax validations */
     public taxNumberValidations: any = {
         account: {
@@ -993,16 +971,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         this.getVoucherVersion();
         this.initVoucherForm();
-        this.initGenerateNewTransporterForm();
         this.transporterFilterRequest.page = 1;
         this.transporterFilterRequest.count = PAGINATION_LIMIT;
-        this.store.pipe(select(state => state.ewaybillstate.TransporterListDetails), takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                this.transporterListDetails = response;
-            }
-        });
         this.store.pipe(select(state => state.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe((response) => {
-            this.transporterList$ = observableOf(response || []);
             this.transporterDropdown$ = observableOf((response || []).map((transporter) => ({
                 label: transporter.transporterName,
                 value: transporter.transporterId
@@ -2749,109 +2720,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Initializes the form used to create or update a transporter
-     *
-     * @private
-     * @memberof VoucherCreateComponent
-     */
-    private initGenerateNewTransporterForm(): void {
-        this.generateNewTransporterForm = this.formBuilder.group({
-            transporterId: [null, Validators.required],
-            transporterName: [null, Validators.required]
-        });
-    }
-
-    /**
      * Opens manage transporter aside
      *
      * @memberof VoucherCreateComponent
      */
     public openTransporterModel(): void {
-        this.dialog.open(this.transporterAsideMenu, ASIDE_PANE_CONFIG);
-    }
-
-    /**
-     * Saves a new transporter and refreshes the dropdown list
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public generateTransporter(): void {
-        this.store.dispatch(this.invoiceActions.addEwayBillTransporter(this.generateNewTransporterForm?.value));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.clearTransportForm();
-    }
-
-    /**
-     * Updates an existing transporter and refreshes the dropdown list
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public updateTransporter(): void {
-        this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currentTransporterId, this.generateNewTransporterForm?.value));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.transportEditMode = false;
-    }
-
-    /**
-     * Clears the manage transporter form
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public clearTransportForm(): void {
-        this.generateNewTransporterForm?.reset();
-        this.transportEditMode = false;
-        this.currentTransporterId = null;
-    }
-
-    /**
-     * Enables edit mode for the selected transporter
-     *
-     * @param {*} trans
-     * @memberof VoucherCreateComponent
-     */
-    public editTransporter(trans: any): void {
-        if (trans) {
-            this.generateNewTransporterForm.get("transporterId")?.patchValue(trans.transporterId);
-            this.generateNewTransporterForm.get("transporterName")?.patchValue(trans.transporterName);
-            this.currentTransporterId = trans.transporterId;
-            this.transportEditMode = true;
-        }
-    }
-
-    /**
-     * Deletes a transporter and refreshes the dropdown list
-     *
-     * @param {IEwayBillTransporter} trans
-     * @memberof VoucherCreateComponent
-     */
-    public deleteTransporter(trans: IEwayBillTransporter): void {
-        this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-    }
-
-    /**
-     * Sorts the transporter list
-     *
-     * @param {'asc' | 'desc'} type
-     * @param {string} columnName
-     * @memberof VoucherCreateComponent
-     */
-    public sortTransporterList(type: "asc" | "desc", columnName: string): void {
-        this.transporterFilterRequest.sort = type;
-        this.transporterFilterRequest.sortBy = columnName;
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-    }
-
-    /**
-     * Handles transporter list pagination
-     *
-     * @param {PageEvent} event
-     * @memberof VoucherCreateComponent
-     */
-    public transporterPageChanged(event: PageEvent): void {
-        this.transporterFilterRequest.page = this.transporterFilterRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
-        this.transporterFilterRequest.count = event.pageSize;
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+        this.dialog.open(ManageTransporterComponent, ASIDE_PANE_CONFIG);
     }
 
     /**

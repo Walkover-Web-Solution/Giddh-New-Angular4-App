@@ -1767,6 +1767,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        const targetIsInventory = [VoucherTypeEnum.deliveryChallan, VoucherTypeEnum.receiptNote].includes(voucherType as VoucherTypeEnum);
+        // DC/RN keep filters per-path; do not carry their page/from/to into other tabs (or vice versa)
+        if (this.isInventoryDocument || targetIsInventory) {
+            this.queryParams = {};
+            this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule]);
+            return;
+        }
+
         if (this.queryParams.page) {
             this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule], {
                 queryParams: {
