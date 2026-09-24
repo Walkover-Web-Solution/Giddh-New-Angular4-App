@@ -23,6 +23,8 @@ export interface MarkReturnRow {
     returnableQuantity: number;
     creditableQuantity: number;
     returnQty: number;
+    /** Credit note quantity (sent in creditNote.items when createCn is on) */
+    cnQty: number;
     /** Checked = mark as return → Receipt Note (items payload) */
     selected: boolean;
     /** Optional Create CN for this selected return item */
@@ -44,7 +46,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     /** Rows mapped from API */
     public rows: MarkReturnRow[] = [];
     /** Displayed table columns */
-    public displayedColumns: string[] = ["select", "item", "totalQty", "invoicedQty", "returnQty", "action"];
+    public displayedColumns: string[] = ["select", "item", "totalQty", "invoicedQty", "returnQty", "action", "cnQty"];
     /** True while GET resolutions is loading */
     public isLoading: boolean = true;
     /** True while POST event is in progress */
@@ -140,6 +142,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
             returnableQuantity,
             creditableQuantity,
             returnQty: returnableQuantity,
+            cnQty: creditableQuantity,
             selected: returnableQuantity > 0,
             createCn: false,
             showCreateCn: creditableQuantity > 0
@@ -223,6 +226,17 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Whether CN qty input is editable
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public isCnQtyEditable(row: MarkReturnRow): boolean {
+        return row.selected && row.createCn && row.showCreateCn && row.creditableQuantity > 0;
+    }
+
+    /**
      * Clamp return qty within returnable limit
      *
      * @param {MarkReturnRow} row
@@ -241,6 +255,24 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         if (row.returnQty > 0) {
             row.selected = true;
         }
+    }
+
+    /**
+     * Clamp credit note qty within creditable limit
+     *
+     * @param {MarkReturnRow} row
+     * @memberof MarkReturnDialogComponent
+     */
+    public onCnQtyChange(row: MarkReturnRow): void {
+        const maxQty = Math.max(row.creditableQuantity, 0);
+        let qty = Number(row.cnQty);
+        if (isNaN(qty) || qty < 0) {
+            qty = 0;
+        }
+        if (qty > maxQty) {
+            qty = maxQty;
+        }
+        row.cnQty = giddhRoundOff(qty, 4);
     }
 
     /**
@@ -271,21 +303,29 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const mapItem = (row: MarkReturnRow) => ({
+        const mapReturnItem = (row: MarkReturnRow) => ({
             stock: { uniqueName: row.stock?.uniqueName },
             variant: { uniqueName: row.variant?.uniqueName },
             quantity: Number(row.returnQty)
         });
 
+        const mapCnItem = (row: MarkReturnRow) => ({
+            stock: { uniqueName: row.stock?.uniqueName },
+            variant: { uniqueName: row.variant?.uniqueName },
+            quantity: Number(row.cnQty)
+        });
+
         const payload: any = {
             event: this.eventName,
-            items: selectedRows.map(mapItem)
+            items: selectedRows.map(mapReturnItem)
         };
 
-        const creditNoteRows = selectedRows.filter((row) => row.createCn && row.showCreateCn);
+        const creditNoteRows = selectedRows.filter(
+            (row) => row.createCn && row.showCreateCn && Number(row.cnQty) > 0
+        );
         if (creditNoteRows.length) {
             payload.creditNote = {
-                items: creditNoteRows.map(mapItem)
+                items: creditNoteRows.map(mapCnItem)
             };
         }
 

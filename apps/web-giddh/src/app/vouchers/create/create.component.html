@@ -1785,7 +1785,9 @@
                                                                 *ngIf="
                                                                     !invoiceType.isPurchaseOrder &&
                                                                     !invoiceType.isEstimateInvoice &&
-                                                                    !invoiceType.isProformaInvoice
+                                                                    !invoiceType.isProformaInvoice &&
+                                                                    !invoiceType.isDeliveryChallan &&
+                                                                    !invoiceType.isReceiptNote
                                                                 "
                                                             >
                                                                 <div class="mt-2 font-size-12">

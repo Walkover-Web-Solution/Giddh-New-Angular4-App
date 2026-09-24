@@ -1889,6 +1889,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public redirectToGetAllPage(): void {
+        if (this.queryParams.redirect) {
+            this.router.navigateByUrl(this.queryParams.redirect);
+            return;
+        }
         if (!this.queryParams.isRecurringVoucher) {
             const isInventoryDocument = !!this.getInventoryVoucherType();
             this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {

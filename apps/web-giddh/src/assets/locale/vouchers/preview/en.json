@@ -622,6 +622,7 @@
     "total_qty": "Total Qty",
     "invoiced_qty": "Invoiced Qty",
     "return_qty": "Return Qty",
+    "cn_qty": "CN Qty",
     "create_cn": "Create Credit Note",
     "proceed": "Proceed",
     "select_return_items": "Select at least one item to return",
