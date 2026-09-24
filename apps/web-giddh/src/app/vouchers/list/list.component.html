@@ -6099,8 +6099,8 @@
                         <td mat-cell *matCellDef="let element" class="text-right">
                             <amount-field
                                 [amount]="element?.grandTotal?.amountForAccount"
-                                [currencySymbol]="element?.account?.currency?.symbol || company.baseCurrencySymbol"
-                                [currencyCode]="element?.currencyCode || element?.account?.currency?.code || company.baseCurrency"
+                                [currencySymbol]="element?.accountCurrencySymbol"
+                                [currencyCode]="element?.accountCurrencyCode"
                             ></amount-field>
                         </td>
                     </ng-container>
