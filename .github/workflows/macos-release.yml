@@ -117,8 +117,9 @@ jobs:
           echo "Identities in signing keychain:"
           security find-identity -v "$KEYCHAIN_PATH"
 
-          # Electron .app / .dmg signing uses Developer ID Application
-          SIGNING_IDENTITY=$(
+          # Electron .app / .dmg signing uses Developer ID Application.
+          # electron-builder rejects the "Developer ID Application:" prefix — pass name only.
+          SIGNING_IDENTITY_FULL=$(
             security find-identity -v -p codesigning "$KEYCHAIN_PATH" |
             awk -F'"' '/Developer ID Application/ {print $2; exit}'
           )
@@ -128,14 +129,17 @@ jobs:
             awk -F'"' '/Developer ID Installer/ {print $2; exit}'
           )
 
-          if [ -z "$SIGNING_IDENTITY" ]; then
+          if [ -z "$SIGNING_IDENTITY_FULL" ]; then
             echo "::error::Developer ID Application certificate not found in APPLE_CERTIFICATE_BASE64."
             exit 1
           fi
 
+          SIGNING_IDENTITY="${SIGNING_IDENTITY_FULL#Developer ID Application: }"
+
           echo "APPLE_SIGNING_IDENTITY=$SIGNING_IDENTITY" >> "$GITHUB_ENV"
           echo "CSC_NAME=$SIGNING_IDENTITY" >> "$GITHUB_ENV"
-          echo "Application Identity: $SIGNING_IDENTITY"
+          echo "Application Identity (full): $SIGNING_IDENTITY_FULL"
+          echo "Application Identity (CSC_NAME): $SIGNING_IDENTITY"
           echo "Installer Identity: ${INSTALLER_IDENTITY:-'(not required for Electron .app/.dmg)'}"
 
       - name: Install deps
@@ -147,6 +151,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_BUNDLE_ID: com.giddh.prod
           CSC_IDENTITY_AUTO_DISCOVERY: "true"
         run: |
           set -euo pipefail
@@ -209,24 +214,38 @@ jobs:
           fi
           
           cd dist/apps/web-giddh
+
+          # afterSign/entitlements must live inside projectDir (electron-builder 26)
+          echo "📦 Copying Electron signing files..."
+          cp "$GITHUB_WORKSPACE/electron-sign/notarize.js" .
+          cp "$GITHUB_WORKSPACE/electron-sign/entitlements.mac.plist" .
+          cp "$GITHUB_WORKSPACE/electron-sign/default.entitlements.mas.plist" .
+          cp "$GITHUB_WORKSPACE/electron-sign/default.entitlements.mas.inherit.plist" .
+          test -f notarize.js
+          test -f entitlements.mac.plist
+          echo "  ✅ Electron signing files copied"
           
           echo "📝 Setting artifact name for ${{ env.BUILD_ENV }} build..."
           CONFIG_PATH="./../../../electron-sign/electron-builder.json"
           
           if [ "${{ env.BUILD_ENV }}" = "prod" ]; then
             jq --arg identity "${{ env.APPLE_SIGNING_IDENTITY }}" \
-              '.mac.artifactName = "giddh-setup-${version}.${ext}" | .mac.identity = $identity' \
+              '.mac.artifactName = "giddh-setup-${version}.${ext}" | .mac.identity = $identity | .afterSign = "./notarize.js" | .mac.entitlements = "./entitlements.mac.plist" | .mac.entitlementsInherit = "./entitlements.mac.plist"' \
               "$CONFIG_PATH" > temp.json && mv temp.json "$CONFIG_PATH"
             echo "  ✅ Set artifact name: giddh-setup-VERSION.ext"
           else
             jq --arg identity "${{ env.APPLE_SIGNING_IDENTITY }}" \
-              '.mac.artifactName = "giddh-test-setup-${version}.${ext}" | .mac.identity = $identity' \
+              '.mac.artifactName = "giddh-test-setup-${version}.${ext}" | .mac.identity = $identity | .afterSign = "./notarize.js" | .mac.entitlements = "./entitlements.mac.plist" | .mac.entitlementsInherit = "./entitlements.mac.plist"' \
               "$CONFIG_PATH" > temp.json && mv temp.json "$CONFIG_PATH"
             echo "  ✅ Set artifact name: giddh-test-setup-VERSION.ext"
           fi
           
           echo "🔨 Building signed macOS Universal app..."
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --mac --universal
+          npx electron-builder build \
+            --config ./../../../electron-sign/electron-builder.json \
+            --mac \
+            --universal \
+            --publish never
           cd ../../../
           node scripts/build-success-message.js prod
           
