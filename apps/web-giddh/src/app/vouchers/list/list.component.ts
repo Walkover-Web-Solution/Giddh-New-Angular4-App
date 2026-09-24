@@ -116,6 +116,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showInvoiceNoSearch: boolean = false;
     /** Holds show Purchase Order Number Search input visibility status */
     public showPurchaseOrderNumberSearch: boolean = false;
+    /** Which table-header search column owns `advanceFilters.q` (number vs party) */
+    private searchColumn: "number" | "party" = "number";
     /** Holds voucher Number form control */
     public voucherNumberInput: FormControl = new FormControl(null);
     /** Holds account Unique Name form control */
@@ -863,6 +865,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.voucherNumberInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
+                this.searchColumn = "number";
+                this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
+                this.showCustomerSearch = false;
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
                         this.advanceFilters.proformaNumber = search;
@@ -884,6 +889,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.accountUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
+                this.searchColumn = "party";
+                this.voucherNumberInput.patchValue(null, { emitEvent: false });
+                this.showInvoiceNoSearch = false;
                 if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.advanceFilters.vendorName = search;
                 } else {
@@ -2943,6 +2951,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.showInvoiceNoSearch = false;
         this.showPurchaseOrderNumberSearch = false;
         this.showAccountSearch = false;
+        this.searchColumn = "number";
         this.advanceFiltersApplied = false;
         this.isSearching = false;
         this.advanceSearchTempKeyObj = {};
@@ -2980,6 +2989,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             page: this.advanceFilters.page || 1,
             count: this.advanceFilters.count || null,
             q: this.advanceFilters.q || null,
+            searchColumn: this.advanceFilters.q ? this.searchColumn : null,
             sort: this.advanceFilters.sort || null,
             sortBy: this.advanceFilters.sortBy || null,
             status: (!isSelectedAllOption(this.advanceFilters.status) && this.advanceFilters.status?.length)
@@ -3085,8 +3095,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
         if (params.q) {
             this.advanceFilters.q = params.q;
-            this.voucherNumberInput.patchValue(params.q, { emitEvent: false });
-            this.accountUniqueNameInput.patchValue(params.q, { emitEvent: false });
+            this.searchColumn = params.searchColumn === "party" ? "party" : "number";
+            if (this.searchColumn === "party") {
+                this.accountUniqueNameInput.patchValue(params.q, { emitEvent: false });
+                this.voucherNumberInput.patchValue(null, { emitEvent: false });
+                this.showCustomerSearch = true;
+                this.showInvoiceNoSearch = false;
+            } else {
+                this.voucherNumberInput.patchValue(params.q, { emitEvent: false });
+                this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
+                this.showInvoiceNoSearch = true;
+                this.showCustomerSearch = false;
+            }
             this.advanceFiltersApplied = true;
             this.isSearching = true;
         }

@@ -1777,7 +1777,9 @@
                                                                 'justify-content-between':
                                                                     !invoiceType.isPurchaseOrder &&
                                                                     !invoiceType.isEstimateInvoice &&
-                                                                    !invoiceType.isProformaInvoice,
+                                                                    !invoiceType.isProformaInvoice&&
+                                                                    !invoiceType.isDeliveryChallan &&
+                                                                    !invoiceType.isReceiptNote
                                                             }"
                                                         >
                                                             <div
@@ -1834,7 +1836,9 @@
                                                                     'w-50 text-right':
                                                                         !invoiceType.isPurchaseOrder &&
                                                                         !invoiceType.isEstimateInvoice &&
-                                                                        !invoiceType.isProformaInvoice,
+                                                                        !invoiceType.isProformaInvoice &&
+                                                                        !invoiceType.isDeliveryChallan &&
+                                                                        !invoiceType.isReceiptNote,
                                                                     'w-100':
                                                                         invoiceType.isPurchaseOrder ||
                                                                         invoiceType.isEstimateInvoice ||

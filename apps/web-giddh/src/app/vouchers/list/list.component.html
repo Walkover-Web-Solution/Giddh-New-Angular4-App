@@ -6305,16 +6305,15 @@
 
 <!-- No Date Found Message Template -->
 <ng-template #noDataFoundMessage let-show>
-    <no-data
-        *ngIf="
-            activeModule === 'pending'
-                ? !(isGetAllRequestInProcess$ | async) && !ledgersData?.length
-                : !(getVouchersInProgress$ | async) && !dataSource?.length
-        "
-        [primaryMessage]="commonLocaleData?.app_no_data_found"
-        [primaryMessageClass]="'font-size-24 text-center mt-200'"
-        [secondaryMessage]="' '"
-    ></no-data>
+    @if (activeModule === 'pending'
+    ? !(isGetAllRequestInProcess$ | async) && !ledgersData?.length
+    : !(getVouchersInProgress$ | async) && !dataSource?.length) {
+        <no-data
+            [primaryMessage]="commonLocaleData?.app_no_data_found"
+            [primaryMessageClass]="'font-size-24 no-data'"
+            [secondaryMessage]="' '"
+        ></no-data>
+    }
 </ng-template>
 
 <!-- Send Email Template -->
