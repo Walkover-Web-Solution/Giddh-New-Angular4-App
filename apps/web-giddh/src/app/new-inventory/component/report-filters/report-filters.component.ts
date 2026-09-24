@@ -593,7 +593,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public onReportNatureChange(reportNature: ReportNature): void {
-        if (!this.moduleName || this.moduleName === InventoryModuleName.transaction) {
+        if (!this.moduleName) {
             return;
         }
         this.reportAsPerInventory = reportNature === ReportNature.Inventory;

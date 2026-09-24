@@ -622,6 +622,7 @@
     "total_qty": "कुल मात्रा",
     "invoiced_qty": "चालान मात्रा",
     "return_qty": "रिटर्न मात्रा",
+    "cn_qty": "CN मात्रा",
     "create_cn": "क्रेडिट नोट बनाएं",
     "proceed": "आगे बढ़ें",
     "select_return_items": "रिटर्न के लिए कम से कम एक आइटम चुनें",

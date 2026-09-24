@@ -48,23 +48,23 @@
         ></multi-select-dropdown>
     </div>
     <!-- Report Filter Toggle -->
-    <div
-        class="white-space-nowrap d-flex align-items-center pl-1 ml-auto"
-        *ngIf="
-            moduleName === inventoryModuleName.group ||
-            moduleName === inventoryModuleName.stock ||
-            moduleName === inventoryModuleName.variant
-        "
-    >
-        <mat-button-toggle-group
-            [value]="reportAsPerInventory ? reportNature.Inventory : reportNature.Books"
-            (change)="onReportNatureChange($event.value)"
-            [attr.aria-label]="localeData?.header?.books"
-        >
-            <mat-button-toggle [value]="reportNature.Books">{{ localeData?.header?.books }}</mat-button-toggle>
-            <mat-button-toggle [value]="reportNature.Inventory">{{ localeData?.header?.inventory }}</mat-button-toggle>
-        </mat-button-toggle-group>
-    </div>
+     @if (moduleName === inventoryModuleName.group ||
+     moduleName === inventoryModuleName.stock ||
+     moduleName === inventoryModuleName.variant ||
+     moduleName === inventoryModuleName.transaction) {
+         <div
+             class="white-space-nowrap d-flex align-items-center pl-1 mx-auto"
+         >
+             <mat-button-toggle-group
+                 [value]="reportAsPerInventory ? reportNature.Inventory : reportNature.Books"
+                 (change)="onReportNatureChange($event.value)"
+                 [attr.aria-label]="localeData?.header?.books"
+             >
+                 <mat-button-toggle [value]="reportNature.Books">{{ localeData?.header?.books }}</mat-button-toggle>
+                 <mat-button-toggle [value]="reportNature.Inventory">{{ localeData?.header?.inventory }}</mat-button-toggle>
+             </mat-button-toggle-group>
+         </div>
+     }
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
         <button matButton="outlined" class="create-btn-inventory ml-3 mr-0" (click)="resetFilter()">
             <span class="icon-cross"></span>

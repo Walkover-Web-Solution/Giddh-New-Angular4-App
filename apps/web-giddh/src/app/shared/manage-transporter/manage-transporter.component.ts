@@ -179,8 +179,7 @@ export class ManageTransporterComponent implements OnInit, OnDestroy, AfterViewI
             transporterId: new FormControl(value?.transporterId || '', [
                 Validators.required,
                 Validators.minLength(4),
-                Validators.maxLength(15),
-                Validators.pattern(/^[0-9]{2}[0-9A-Z]{13}$/)
+                Validators.maxLength(15)
             ])
         });
     }

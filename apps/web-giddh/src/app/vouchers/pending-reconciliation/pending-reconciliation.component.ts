@@ -311,10 +311,15 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
         if (!row?.uniqueName) {
             return;
         }
-        const viewType = row.source === "VOUCHER"
-            ? (row.voucherType || VoucherTypeEnum.sales)
-            : this.voucherType;
-        this.router.navigate(["/pages/vouchers/view", viewType, row.uniqueName]);
+        const viewType = this.voucherType === VoucherTypeEnum.receiptNote ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan;
+        this.router.navigate(["/pages/vouchers/view", viewType, row.uniqueName], {
+            queryParams: {
+                page: this.filters.page || 1,
+                from: this.filters.from,
+                to: this.filters.to,
+                redirect: this.router.url
+            }
+        });
     }
 
     /**
