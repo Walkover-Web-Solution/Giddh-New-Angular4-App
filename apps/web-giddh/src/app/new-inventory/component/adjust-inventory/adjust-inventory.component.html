@@ -190,6 +190,10 @@
                                                                           stockGroupClosingBalance
                                                                       )
                                                             "
+                                                            [showError]="
+                                                                isFormSubmitted &&
+                                                                !adjustInventoryCreateEditForm.get('calculationMethod')?.value
+                                                            "
                                                         ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
@@ -423,6 +427,9 @@
                                                             [placeholder]="commonLocaleData?.app_select_method"
                                                             [appearance]="'outline'"
                                                             (selectedOption)="calculateInventoryForItem(itemIndex)"
+                                                            [showError]="
+                                                                isFormSubmitted && !itemCtrl.get('calculationMethod')?.value
+                                                            "
                                                         ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
