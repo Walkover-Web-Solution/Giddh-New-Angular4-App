@@ -656,7 +656,7 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         const stockNames = element?.stock?.name
             ? [element.stock.name]
             : [];
-        if (stockNames.length) {
+        if (stockNames?.length) {
             queryParams.stockNames = stockNames.join(',');
         }
         if (variantUniqueNames?.length) {
