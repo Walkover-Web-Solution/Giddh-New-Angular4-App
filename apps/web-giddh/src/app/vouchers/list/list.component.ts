@@ -13,6 +13,8 @@ import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { select, Store } from "@ngrx/store";
+import { InventoryService } from "../../services/inventory.service";
+import { InventoryAction } from "../../actions/inventory/inventory.actions";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
@@ -325,6 +327,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public get isInventoryDocument(): boolean {
         return [VoucherTypeEnum.deliveryChallan, VoucherTypeEnum.receiptNote].includes(this.voucherType);
     }
+    /** True when inventory is managed via business documents (DC/RN). */
+    public inventoryViaBusinessDocument: boolean = false;
+    /** True after inventory settings have been read from the store. */
+    public inventorySettingsResolved: boolean = false;
 
     /** Returns true if all selected pending vouchers have the same account */
     public get hasSameVoucherAccount(): boolean {
@@ -441,7 +447,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private dscSignDialogService: DscSignDialogService,
         private dscService: DscService,
-        private voucherService: VoucherService
+        private voucherService: VoucherService,
+        private inventoryService: InventoryService,
+        private inventoryAction: InventoryAction
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
@@ -485,6 +493,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.currentUrl = this.router.url;
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            const wasEnabled = this.inventoryViaBusinessDocument;
+            this.inventorySettingsResolved = settings != null;
+            this.inventoryViaBusinessDocument = !!settings?.voucherAutomation?.inventoryViaBusinessDocument;
+            if (this.isInventoryDocument && this.activeModule === 'list' && this.inventorySettingsResolved) {
+                if (this.inventoryViaBusinessDocument && !wasEnabled && this.advanceFilters?.from && this.advanceFilters?.to) {
+                    this.getVouchers(false);
+                } else if (!this.inventoryViaBusinessDocument) {
+                    this.dataSource = [];
+                    this.totalResults = 0;
+                }
+                this.changeDetectorRef.detectChanges();
+            }
+        });
+        this.ensureInventorySettingsLoaded();
         this.settingForm.get('invoiceSettings.autoPaid')?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -1145,7 +1168,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     item.uniqueName = item.uniqueName ?? item.documentUniqueName;
                     item.voucherNumber = item.voucherNumber ?? item.documentNo ?? item.number;
                     item.voucherDate = item.voucherDate ?? item.documentDate ?? item.date;
-                    item.documentTypeLabel = item.documentSubType ?? item.documentSubType ?? item.noteType ?? 'Regular';
+                    item.documentTypeLabel = item.challanType ? item.challanType.replace(/_/g, ' ') : '-';
                     item.account = item.account ?? item.party;
                     item.account = {
                         ...item.account,
@@ -1842,6 +1865,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private getAllVouchers(): void {
         const inventoryVoucherType = this.getInventoryVoucherType();
         if (inventoryVoucherType) {
+            if (!this.inventorySettingsResolved || !this.inventoryViaBusinessDocument) {
+                this.dataSource = [];
+                this.totalResults = 0;
+                return;
+            }
             this.componentStore.getInventoryVouchers({
                 model: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true),
                 type: inventoryVoucherType
@@ -1858,6 +1886,29 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.componentStore.getPreviousVouchers({ model: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true), type: this.voucherType });
             }
         }
+    }
+
+    /**
+     * Loads inventory settings into the store when missing so DC/RN pages can resolve visibility.
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private ensureInventorySettingsLoaded(): void {
+        this.store.pipe(select(state => state.inventory.inventorySettings), take(1)).subscribe(settings => {
+            if (settings != null || !this.generalService.companyUniqueName) {
+                return;
+            }
+            this.inventoryService.getInventorySettings().pipe(take(1), takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === 'success' && response.body) {
+                    this.store.dispatch(this.inventoryAction.setInventorySettings(response.body));
+                    return;
+                }
+                this.inventorySettingsResolved = true;
+                this.inventoryViaBusinessDocument = false;
+                this.changeDetectorRef.detectChanges();
+            });
+        });
     }
 
     /**
