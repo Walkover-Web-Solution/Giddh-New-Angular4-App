@@ -20,5 +20,8 @@
     "variant_wise_report": "Variant Wise Report",
     "variant_wise_report_description": "Choose whether variant-wise reports calculate balances from accounting stock or from physical stock.",
     "books": "Accounting Stock",
-    "inventory": "Physical Stock"
+    "inventory": "Physical Stock",
+    "batch_management": "Batch Management",
+    "batch_tracking": "Batch Tracking",
+    "batch_tracking_description": "Enable batch tracking for inventory items with manufacturing and expiry dates."
 }

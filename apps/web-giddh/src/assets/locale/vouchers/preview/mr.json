@@ -651,5 +651,8 @@
         "not_billed": "बिल नाही",
         "partially_billed": "अंशतः बिल",
         "fully_billed": "पूर्ण बिल"
-    }
+    },
+    "inventory_via_business_document_disabled_title": "इन्व्हेंटरी दस्तऐवज सक्षम नाहीत",
+    "inventory_via_business_document_disabled_message": "डिलिव्हरी चलन आणि पावती नोट व्यावसायिक दस्तऐवजांद्वारे स्टॉक अपडेट करतात. त्यांचा वापर करण्यासाठी, इन्व्हेंटरी सेटिंग्जमध्ये व्यावसायिक दस्तऐवजांद्वारे इन्व्हेंटरी व्यवस्थापित करा सक्षम करा.",
+    "go_to_inventory_settings": "इन्व्हेंटरी सेटिंग्जवर जा"
 }

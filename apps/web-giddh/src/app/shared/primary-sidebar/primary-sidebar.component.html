@@ -221,7 +221,7 @@
                                             >
                                                 <span
                                                     class="ml-auto create-new"
-                                                    *ngIf="node?.additional?.createNew"
+                                                    *ngIf="canShowCreateNew(node)"
                                                     (click)="
                                                         $event.stopPropagation(); navigateToCreateNew(node?.additional?.createNew?.link)
                                                     "
@@ -273,7 +273,7 @@
                                         >
                                             <span
                                                 class="ml-auto create-new"
-                                                *ngIf="node?.additional?.createNew"
+                                                *ngIf="canShowCreateNew(node)"
                                                 (click)="
                                                     $event.stopPropagation(); navigateToCreateNew(node?.additional?.createNew?.link)
                                                 "

@@ -79,6 +79,7 @@ export interface InventoryStatusFlowUpdate {
 /** Request body for updating inventory settings. */
 export interface InventorySettingsUpdateRequest {
     voucherAutomation: VoucherAutomationSettings;
+    batchManagement: Pick<BatchManagementSettings, "enabled">;
 }
 
 /** Status definition for a business document in the inventory flow. */

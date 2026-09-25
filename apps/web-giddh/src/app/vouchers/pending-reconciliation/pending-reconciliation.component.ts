@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { Sort } from "@angular/material/sort";
 import { PageEvent } from "@angular/material/paginator";
+import { select, Store } from "@ngrx/store";
 import { ReplaySubject, Subject, debounceTime, distinctUntilChanged, filter, from, skip, switchMap, take, takeUntil } from "rxjs";
 import { finalize } from "rxjs/operators";
 import * as dayjs from "dayjs";
@@ -14,6 +15,9 @@ import { ToasterService } from "../../services/toaster.service";
 import { VoucherService } from "../../services/voucher.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
 import { VoucherComponentStore } from "../utility/vouchers.store";
+import { AppState } from "../../store";
+import { InventoryService } from "../../services/inventory.service";
+import { InventoryAction } from "../../actions/inventory/inventory.actions";
 
 type PendingReportType = "WITHOUT_CHALLAN" | "NOT_INVOICED"; // | "PARTIALLY_INVOICED" | "FULLY_INVOICED"
 type PendingDocumentType = "DC" | "RC";
@@ -61,6 +65,10 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
     public partyInput = new FormControl("");
     public reportTypeOptions: Array<{ label: string; value: PendingReportType }> = [];
     public filters: PendingReportFilters = this.createDefaultFilters();
+    /** True when inventory is managed via business documents (DC/RN). */
+    public inventoryViaBusinessDocument = false;
+    /** True after inventory settings have been read from the store. */
+    public inventorySettingsResolved = false;
 
     private documentType: PendingDocumentType = "DC";
     private searchColumn: "number" | "party" = "number";
@@ -85,7 +93,10 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
         private voucherService: VoucherService,
         private toasterService: ToasterService,
         private componentStore: VoucherComponentStore,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private store: Store<AppState>,
+        private inventoryService: InventoryService,
+        private inventoryAction: InventoryAction
     ) { }
 
     /**
@@ -94,6 +105,23 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.bindSearch();
         this.bindReportLoader();
+
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            const wasEnabled = this.inventoryViaBusinessDocument;
+            this.inventorySettingsResolved = settings != null;
+            this.inventoryViaBusinessDocument = !!settings?.voucherAutomation?.inventoryViaBusinessDocument;
+            if (this.inventorySettingsResolved) {
+                if (this.inventoryViaBusinessDocument && !wasEnabled && this.filtersReady) {
+                    this.loadReport();
+                } else if (!this.inventoryViaBusinessDocument) {
+                    this.dataSource = [];
+                    this.totalResults = 0;
+                    this.balances = null;
+                }
+                this.changeDetectorRef.detectChanges();
+            }
+        });
+        this.ensureInventorySettingsLoaded();
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && Object.keys(response).length) {
@@ -713,11 +741,40 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Loads inventory settings into the store when missing so this page can resolve visibility.
+     *
+     * @private
+     * @memberof PendingReconciliationComponent
+     */
+    private ensureInventorySettingsLoaded(): void {
+        this.store.pipe(select(state => state.inventory.inventorySettings), take(1)).subscribe(settings => {
+            if (settings != null || !this.generalService.companyUniqueName) {
+                return;
+            }
+            this.inventoryService.getInventorySettings().pipe(take(1), takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success" && response.body) {
+                    this.store.dispatch(this.inventoryAction.setInventorySettings(response.body));
+                    return;
+                }
+                this.inventorySettingsResolved = true;
+                this.inventoryViaBusinessDocument = false;
+                this.changeDetectorRef.detectChanges();
+            });
+        });
+    }
+
+    /**
      * @private
      * @memberof PendingReconciliationComponent
      */
     private loadReport(): void {
         if (!this.filters.from || !this.filters.to) {
+            return;
+        }
+        if (!this.inventorySettingsResolved || !this.inventoryViaBusinessDocument) {
+            this.dataSource = [];
+            this.totalResults = 0;
+            this.balances = null;
             return;
         }
         this.fetch$.next();
@@ -759,7 +816,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
             voucherDate: item.date,
             source: item.source,
             voucherType: item.voucherType,
-            documentSubType: item.documentSubType || "",
+            documentSubType: item.challanType ? item.challanType.replace(/_/g, ' ') : '-',
             partyName: account.name,
             accountUniqueName: account.uniqueName,
             grandTotal: item.grandTotal,

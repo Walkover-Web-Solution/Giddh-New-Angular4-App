@@ -651,5 +651,8 @@
         "not_billed": "बिल नहीं",
         "partially_billed": "आंशिक बिल",
         "fully_billed": "पूर्ण बिल"
-    }
+    },
+    "inventory_via_business_document_disabled_title": "इन्वेंटरी दस्तावेज़ सक्षम नहीं हैं",
+    "inventory_via_business_document_disabled_message": "डिलीवरी चालान और रसीद नोट व्यावसायिक दस्तावेज़ों के माध्यम से स्टॉक अपडेट करते हैं। इनका उपयोग करने के लिए, इन्वेंटरी सेटिंग्स में व्यावसायिक दस्तावेज़ों के माध्यम से इन्वेंटरी प्रबंधित करें सक्षम करें।",
+    "go_to_inventory_settings": "इन्वेंटरी सेटिंग्स पर जाएँ"
 }
