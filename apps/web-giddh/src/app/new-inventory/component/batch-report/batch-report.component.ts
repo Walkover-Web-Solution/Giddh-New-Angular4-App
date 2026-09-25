@@ -2,15 +2,16 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { FormControl } from "@angular/forms";
 import { PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
+import { Location } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { forkJoin, of, ReplaySubject } from "rxjs";
 import { catchError, debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import * as customParseFormat from "dayjs/plugin/customParseFormat";
-import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
+import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { BatchReportFilter, BatchReportItem, BatchReportTotals } from "../../../models/interfaces/batch-report.interface";
 import { OrganizationType } from "../../../models/user-login-state";
@@ -119,8 +120,12 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     @ViewChild("advanceFilterDialog") public advanceFilterDialog: TemplateRef<any>;
     /** Draft within-days value while the filter dialog is open. */
     public filterWithinDays: FormControl = new FormControl("");
-    /** Draft expiry-status value while the filter dialog is open. */
-    public filterExpiredOnly: boolean | null = null;
+    /** Draft expiry-status value while the filter dialog is open. Defaults to will expire. */
+    public filterExpiredOnly: boolean | null = false;
+    /** True after Apply is clicked with missing required filters. */
+    public showAdvanceFilterErrors: boolean = false;
+    /** Open advance filter dialog instance. */
+    private advanceFilterDialogRef: MatDialogRef<any>;
     /** True when from/to came from reports query params, so universal date must not overwrite them. */
     private useQueryDateRange: boolean = false;
 
@@ -133,7 +138,8 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private location: Location
     ) {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
     }
@@ -144,6 +150,9 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      * @memberof BatchReportComponent
      */
     public ngOnInit(): void {
+        this.filterWithinDays.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            this.rejectInvalidWithinDays(value);
+        });
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 if (!this.useQueryDateRange) {
@@ -287,24 +296,6 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Count of applied advance filters (badge on the Filters button).
-     *
-     * @readonly
-     * @type {number}
-     * @memberof BatchReportComponent
-     */
-    public get advanceFilterCount(): number {
-        let count = 0;
-        if (this.withinDaysValue > 0) {
-            count++;
-        }
-        if (this.expiredOnly !== null) {
-            count++;
-        }
-        return count;
-    }
-
-    /**
      * Applied within-days value as a number (0 when empty).
      *
      * @readonly
@@ -313,6 +304,76 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      */
     public get withinDaysValue(): number {
         return Number(this.withinDaysControl.value) || 0;
+    }
+
+    /**
+     * True when the dialog within-days value is a positive number.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchReportComponent
+     */
+    public get hasFilterWithinDays(): boolean {
+        return Number(this.filterWithinDays.value) > 0;
+    }
+
+    /**
+     * Keeps only digits in Within Days. Negative signs, decimals, and other characters are removed.
+     *
+     * @private
+     * @param {*} value
+     * @memberof BatchReportComponent
+     */
+    private rejectInvalidWithinDays(value: any): void {
+        if (value === "" || value === null || value === undefined) {
+            return;
+        }
+        const digitsOnly = String(value).replace(/\D/g, "");
+        if (digitsOnly !== String(value)) {
+            this.filterWithinDays.setValue(digitsOnly, { emitEvent: false });
+        }
+    }
+
+    /**
+     * True when both required advance filters are filled.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchReportComponent
+     */
+    public get isAdvanceFilterValid(): boolean {
+        return this.hasFilterWithinDays && this.filterExpiredOnly !== null;
+    }
+
+    /**
+     * Expiry-status options for the advance filter dropdown.
+     *
+     * @readonly
+     * @type {IOption[]}
+     * @memberof BatchReportComponent
+     */
+    public get expiryStatusOptions(): IOption[] {
+        return [
+            { label: this.localeData?.will_expire ?? "", value: "false" },
+            { label: this.localeData?.already_expired ?? "", value: "true" }
+        ];
+    }
+
+    /**
+     * Selected expiry-status label in the advance filter dropdown.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BatchReportComponent
+     */
+    public get expiryStatusFilterLabel(): string {
+        if (this.filterExpiredOnly === true) {
+            return this.localeData?.already_expired ?? "";
+        }
+        if (this.filterExpiredOnly === false) {
+            return this.localeData?.will_expire ?? "";
+        }
+        return "";
     }
 
     /**
@@ -374,8 +435,9 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      */
     public openAdvanceFilterDialog(): void {
         this.filterWithinDays.setValue(this.withinDaysControl.value ?? "", { emitEvent: false });
-        this.filterExpiredOnly = this.expiredOnly;
-        this.dialog.open(this.advanceFilterDialog, {
+        this.filterExpiredOnly = this.expiredOnly !== null ? this.expiredOnly : false;
+        this.showAdvanceFilterErrors = false;
+        this.advanceFilterDialogRef = this.dialog.open(this.advanceFilterDialog, {
             panelClass: "mat-dialog-sm",
             autoFocus: false,
             role: "alertdialog",
@@ -384,15 +446,38 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Set the draft expiry-status from the reactive dropdown.
+     *
+     * @param {IOption} event
+     * @memberof BatchReportComponent
+     */
+    public selectExpiryStatus(event: IOption): void {
+        if (event?.value === "true") {
+            this.filterExpiredOnly = true;
+        } else if (event?.value === "false") {
+            this.filterExpiredOnly = false;
+        } else {
+            this.filterExpiredOnly = null;
+        }
+    }
+
+    /**
      * Apply draft advance filters and refetch from page 1.
      *
      * @memberof BatchReportComponent
      */
     public applyAdvanceFilters(): void {
+        this.rejectInvalidWithinDays(this.filterWithinDays.value);
+        if (!this.isAdvanceFilterValid) {
+            this.showAdvanceFilterErrors = true;
+            this.cdr.detectChanges();
+            return;
+        }
         this.withinDaysControl.setValue(this.filterWithinDays.value ?? "", { emitEvent: false });
         this.expiredOnly = this.filterExpiredOnly;
         this.page = 1;
         this.pageIndex = 0;
+        this.advanceFilterDialogRef?.close();
         this.getBatches();
         this.cdr.detectChanges();
     }
@@ -1066,6 +1151,20 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             queryParams: {},
             replaceUrl: true
         });
+    }
+
+    /**
+     * Go back to the page the user opened this report from.
+     *
+     * @memberof BatchReportComponent
+     */
+    public backToPreviousPage(): void {
+        if (window.history.length > 1) {
+            this.location.back();
+            return;
+        }
+        const type = (this.inventoryType || "PRODUCT").toLowerCase().replace("_", "");
+        this.router.navigate(["/pages/inventory/v2", type, "reports", "stock"]);
     }
 
     /**

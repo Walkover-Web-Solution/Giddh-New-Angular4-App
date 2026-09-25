@@ -20,6 +20,7 @@ import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.serv
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { SettingsWarehouseService } from 'apps/web-giddh/src/app/services/settings.warehouse.service';
+import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/action/warehouse.action';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { transporterModes } from 'apps/web-giddh/src/app/shared/helpers/transporterModes';
@@ -184,6 +185,10 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public forceClear: boolean = false;
     /** True when company has batch tracking enabled. */
     public batchTrackingEnabled: boolean = false;
+    /** Company warehouses used only to send warehouseUniqueName into Select Batches. */
+    private batchCompanyWarehouses: Array<{ name?: string; uniqueName?: string; isDefault?: boolean }> = [];
+    /** True after company warehouse list is subscribed for batch select. */
+    private batchCompanyWarehousesLoaded: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -200,7 +205,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private warehouseService: SettingsWarehouseService,
         public dialog: MatDialog,
-        private invoiceServices: InvoiceService
+        private invoiceServices: InvoiceService,
+        private warehouseActions: WarehouseActions
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
@@ -266,6 +272,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.batchTrackingEnabled = !!activeCompany.batchTrackingEnabled;
+                if (this.batchTrackingEnabled) {
+                    this.loadBatchCompanyWarehouses();
+                }
             }
         });
         this.store.pipe(select(select => select.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
@@ -2379,7 +2388,11 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const warehouse = this.getSourceWarehouse();
+        const warehouse = this.getBatchWarehouseForDialog();
+        if (!warehouse?.uniqueName) {
+            this.toasty.showSnackBar("warning", this.localeData?.select_warehouse_first);
+            return;
+        }
         const selectedStock = this.stockList?.find(stock => stock.value === stockUniqueName);
         this.dialog.open(BatchSelectDialogComponent, {
             ...ASIDE_PANE_CONFIG,
@@ -2411,18 +2424,63 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Source warehouse used for batch availability.
+     * Company warehouses used only as Select Batches warehouseUniqueName.
+     *
+     * @private
+     * @memberof CreateBranchTransferComponent
+     */
+    private loadBatchCompanyWarehouses(): void {
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+        if (this.batchCompanyWarehousesLoaded) {
+            return;
+        }
+        this.batchCompanyWarehousesLoaded = true;
+        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.results) {
+                this.batchCompanyWarehouses = (response.results || []).filter(warehouse => !warehouse?.isArchived);
+            }
+        });
+    }
+
+    /**
+     * Warehouse sent to Select Batches.
+     * Receipt note and multiple receivers require the form warehouse.
+     * Multiple products in delivery challan falls back to the company default warehouse.
      *
      * @private
      * @return {{ name: string; uniqueName: string }}
      * @memberof CreateBranchTransferComponent
      */
-    private getSourceWarehouse(): { name: string; uniqueName: string } {
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-        const warehouse = sourcesArray?.at(0)?.get('warehouse');
+    private getBatchWarehouseForDialog(): { name: string; uniqueName: string } {
+        const selected = this.getSelectedBatchWarehouse();
+        if (selected.uniqueName) {
+            return selected;
+        }
+        if (this.branchTransferMode === "delivery-challan" && this.transferType === "products") {
+            const defaultWarehouse = this.batchCompanyWarehouses?.find(warehouse => warehouse?.isDefault) || this.batchCompanyWarehouses?.[0];
+            return {
+                name: defaultWarehouse?.name || "",
+                uniqueName: defaultWarehouse?.uniqueName || ""
+            };
+        }
+        return { name: "", uniqueName: "" };
+    }
+
+    /**
+     * Warehouse selected on the form for batch availability.
+     * Receipt note uses the receiver warehouse. Delivery challan uses the sender warehouse.
+     *
+     * @private
+     * @return {{ name: string; uniqueName: string }}
+     * @memberof CreateBranchTransferComponent
+     */
+    private getSelectedBatchWarehouse(): { name: string; uniqueName: string } {
+        const useReceiverWarehouse = this.branchTransferMode === "receipt-note";
+        const parties = this.branchTransferCreateEditForm.get(useReceiverWarehouse ? "destinations" : "sources") as UntypedFormArray;
+        const warehouse = parties?.at(0)?.get("warehouse");
         return {
-            name: warehouse?.get('name')?.value || "",
-            uniqueName: warehouse?.get('uniqueName')?.value || ""
+            name: warehouse?.get("name")?.value || "",
+            uniqueName: warehouse?.get("uniqueName")?.value || ""
         };
     }
 

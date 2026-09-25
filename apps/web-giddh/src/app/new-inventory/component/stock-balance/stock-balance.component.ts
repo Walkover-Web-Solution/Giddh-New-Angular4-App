@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
+import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
@@ -9,6 +10,7 @@ import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../app.const
 import { VoucherSelectedBatch } from "../../../models/interfaces/batch-report.interface";
 import { StockOpeningBatchDialogComponent, StockOpeningBatchDialogResult } from "../stock-opening-batch-dialog/stock-opening-batch-dialog.component";
 import { PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { AppState } from '../../../store';
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
@@ -16,7 +18,7 @@ import { GroupStockReportRequest } from "../../../models/api-models/Inventory";
 import { SettingsFinancialYearActions } from "../../../actions/settings/financial-year/financial-year.action";
 import { GeneralService } from "../../../services/general.service";
 import { ToasterService } from "../../../services/toaster.service";
-import { SelectFieldComponent } from "../../../theme/form-fields/select-field/select-field.component";
+import { ReactiveDropdownFieldComponent } from "../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
 import { ServiceConfig } from "../../../services/service.config";
 import { cloneDeep } from '../../../lodash-optimized';
 @Component({
@@ -28,12 +30,8 @@ import { cloneDeep } from '../../../lodash-optimized';
 
 
 export class StockBalanceComponent implements OnInit, OnDestroy {
-    /**  Selector for warehouseInput1 input field */
-    @ViewChild('warehouseInput1', { static: false }) warehouseInput1: ElementRef;
-    /**  Selector for warehouseInput2 input field */
-    @ViewChild('warehouseInput2', { static: false }) warehouseInput2: ElementRef;
-    /** Open Account Selection Dropdown instance */
-    @ViewChild('warehouseDropdown', { static: false }) public warehouseDropdown: SelectFieldComponent;
+    /** Unit dropdowns currently in edit mode. */
+    @ViewChildren("warehouseDropdown") public warehouseDropdowns: QueryList<ReactiveDropdownFieldComponent>;
     /** Pagination limit */
     public paginationLimit: number = PAGINATION_LIMIT;
     /** Holds available page size options */
@@ -55,9 +53,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     /** Holds stock group name */
     public stockGroupName: string = "";
     /** Hide/Show for unique name list */
-    public showUniqueName: boolean = false;
+    public showUniqueName: boolean = true;
     /** Hide/Show for group name list */
-    public showGroupName: boolean = false;
+    public showGroupName: boolean = true;
     /** Hold group stock report request */
     public GroupStockReportRequest: GroupStockReportRequest;
     /** Hold stocks report */
@@ -70,14 +68,18 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public selectedWarehouse: any[] = [];
     /** Holded all selected warehouse checked  */
     public allSelectedWarehouse: any[] = [];
+    /** Warehouse options for the multi-select dropdown. */
+    public warehouseOptions: IOption[] = [];
+    /** Flattened mat-table rows for stocks and expanded variants. */
+    public tableRows: MatTableDataSource<any> = new MatTableDataSource([]);
+    /** Mat-table column ids. */
+    public tableDisplayedColumns: string[] = ["stock", "unique_name", "stock_group"];
     /** True if api call in progress */
     public isLoading: boolean = false;
-    /** True if click on particular unit dropdown */
-    public isOpen: boolean = false;
-    /** This will use for instance of lwarehouses Dropdown */
-    public warehousesDropdown: UntypedFormControl = new UntypedFormControl();
     /** Hold all warehouses */
     public allWarehouses: any[] = [];
+    /** True when the stock header search is open. */
+    public showStockSearchInput: boolean = false;
     /** Hold module type */
     public moduleType = 'INVENTORY_WAREHOUSE_OPENING_BALANCE';
     /** This will use for stock balance column check values */
@@ -109,7 +111,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private toaster: ToasterService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private router: Router
     ) {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
     }
@@ -120,14 +123,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     * @memberof StockBalanceComponent
     */
     public ngOnInit(): void {
-        /** This will use for filter link purchase orders  */
-        this.warehousesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            let warehousesClone = cloneDeep(this.allWarehouses);
-            if (search) {
-                warehousesClone = this.allWarehouses?.filter(branch => (branch.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
-            }
-            this.warehouses = warehousesClone;
-        });
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.isLoading = true;
         this.imgPath = this.serviceConfig.IMG_PATH;
@@ -150,6 +145,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                 // Handle warehouses data
                 this.warehouses = resp[1]?.results;
                 this.allWarehouses = resp[1]?.results;
+                this.warehouseOptions = (this.allWarehouses || []).map(warehouse => ({
+                    label: warehouse?.name,
+                    value: warehouse?.uniqueName
+                }));
                 let stockGroupUniqueName = resp[0]?.body?.results && resp[0]?.body?.results[0] ? resp[0]?.body?.results[0]?.uniqueName : null;
                 let warehouseUniqueName = resp[1]?.results && resp[1]?.results[0] ? resp[1]?.results[0]?.uniqueName : null;
                 let financialYearLimits = resp[2]?.startDate;
@@ -210,9 +209,13 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     * @memberof StockBalanceComponent
     */
     public getStockVariants(stock: any): void {
-        if (!stock?.stock) {
-            this.inventoryService.getStock(stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response?.status === "success") {
+        if (stock?.stock || stock?.variantsLoading) {
+            return;
+        }
+        stock.variantsLoading = true;
+        this.inventoryService.getStock(stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            stock.variantsLoading = false;
+            if (response && response?.status === "success") {
                     stock.stock = response?.body;
                     stock.stockOriginal = cloneDeep(response?.body);
                     (Array.isArray(stock?.stock?.variants) ? stock?.stock?.variants : []).forEach(variant => {
@@ -222,7 +225,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                         variant.warehouseBalance.forEach(balance => {
                             balance.batches = this.normalizeWarehouseBatches(balance.batches);
                         });
-                        (Array.isArray(this.warehouses) ? this.warehouses : []).forEach(warehouse => {
+                        (Array.isArray(this.allWarehouses) ? this.allWarehouses : []).forEach(warehouse => {
                             const warehouseFound = variant?.warehouseBalance?.filter(balance => balance?.warehouse?.uniqueName === warehouse?.uniqueName);
                             if (!warehouseFound?.length) {
                                 variant.warehouseBalance.push({
@@ -238,11 +241,12 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     stock.stock.stockUnitCode = response?.body?.stockUnit?.code;
                     stock.stock.stockUnitName = response?.body?.stockUnit?.name;
                     stock.stock.stockUnitUniqueName = response?.body?.stockUnit?.uniqueName;
+                    this.refreshTableRows();
+                    this.cdr.detectChanges();
                 } else {
                     this.toaster.showSnackBar("error", response?.message);
                 }
             });
-        }
     }
 
     /**
@@ -280,7 +284,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     this.stockGroupName = response?.body?.stockGroupName;
                     this.stocksList?.forEach(stock => {
                         stock.warehouses = [];
-                        this.warehouses?.forEach(warehouse => {
+                        this.allWarehouses?.forEach(warehouse => {
                             stock.warehouses.push({ name: warehouse?.name, uniqueName: warehouse?.uniqueName });
                         });
                     });
@@ -292,6 +296,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     this.GroupStockReportRequest.totalItems = response.body?.totalItems;
                     this.GroupStockReportRequest.totalPages = response.body?.totalPages;
                     this.GroupStockReportRequest.count = response.body?.count;
+                    this.updateTableDisplayedColumns();
+                    this.refreshTableRows();
                     this.cdr.detectChanges();
                 } else {
                     groupStockReportRequest.totalItems = 0;
@@ -353,18 +359,150 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This function will use for update calculation by warehouse uniquename
-    *
-    * @memberof StockBalanceComponent
-    */
-    public updateCalculationWarehouse(uniqueName: any): void {
-        if (uniqueName) {
-            if (this.allSelectedWarehouse?.includes(uniqueName)) {
-                this.allSelectedWarehouse = this.generalService.removeValueFromArray(this.allSelectedWarehouse, uniqueName);
-            } else {
-                this.allSelectedWarehouse.push(uniqueName);
-            }
+     * Apply warehouse multi-select changes and load newly selected warehouse balances.
+     *
+     * @param {Array<string | number>} values
+     * @memberof StockBalanceComponent
+     */
+    public onWarehouseSelectionChange(values: Array<string | number>): void {
+        const nextSelected = (values || []).map(value => String(value));
+        const added = nextSelected.filter(uniqueName => !this.allSelectedWarehouse.includes(uniqueName));
+        this.selectedWarehouse = nextSelected;
+        this.allSelectedWarehouse = [...nextSelected];
+        added.forEach(uniqueName => this.calculationWarehouse(uniqueName));
+        this.updateTableDisplayedColumns();
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Visible warehouse columns for the mat-table.
+     *
+     * @readonly
+     * @type {any[]}
+     * @memberof StockBalanceComponent
+     */
+    public get visibleWarehouses(): any[] {
+        return (this.allWarehouses || []).filter(warehouse => this.selectedWarehouse?.includes(warehouse?.uniqueName));
+    }
+
+    /**
+     * Rebuild mat-table column ids from visible warehouses and customise columns.
+     *
+     * @private
+     * @memberof StockBalanceComponent
+     */
+    private updateTableDisplayedColumns(): void {
+        const columns = ["stock"];
+        if (this.showUniqueName) {
+            columns.push("unique_name");
         }
+        if (this.showGroupName) {
+            columns.push("stock_group");
+        }
+        this.visibleWarehouses.forEach(warehouse => {
+            columns.push(this.getWarehouseColumn(warehouse.uniqueName));
+        });
+        this.tableDisplayedColumns = columns;
+    }
+
+    /**
+     * Warehouse column id for mat-table.
+     *
+     * @param {string} uniqueName
+     * @return {*}  {string}
+     * @memberof StockBalanceComponent
+     */
+    public getWarehouseColumn(uniqueName: string): string {
+        return "wh_" + uniqueName;
+    }
+
+    /**
+     * Collapsed stock warehouse cell.
+     *
+     * @param {*} stock
+     * @param {string} warehouseUniqueName
+     * @return {*}  {*}
+     * @memberof StockBalanceComponent
+     */
+    public getStockWarehouse(stock: any, warehouseUniqueName: string): any {
+        return (stock?.warehouses || []).find(warehouse => warehouse?.uniqueName === warehouseUniqueName);
+    }
+
+    /**
+     * Expanded variant warehouse cell.
+     *
+     * @param {*} variant
+     * @param {string} warehouseUniqueName
+     * @return {*}  {*}
+     * @memberof StockBalanceComponent
+     */
+    public getVariantWarehouse(variant: any, warehouseUniqueName: string): any {
+        return (variant?.warehouseBalance || []).find(balance => balance?.warehouse?.uniqueName === warehouseUniqueName);
+    }
+
+    /**
+     * Expand or collapse a stock row and load variants.
+     *
+     * @param {*} stock
+     * @memberof StockBalanceComponent
+     */
+    public toggleStockRow(stock: any): void {
+        if (!stock || stock.variantsLoading) {
+            return;
+        }
+        stock.display = !stock.display;
+        if (stock.display) {
+            this.getStockVariants(stock);
+        }
+        this.refreshTableRows();
+    }
+
+    /**
+     * Show the stock header search.
+     *
+     * @param {string} fieldName
+     * @memberof StockBalanceComponent
+     */
+    public toggleSearch(fieldName: string): void {
+        if (fieldName === "stock") {
+            this.showStockSearchInput = true;
+        }
+    }
+
+    /**
+     * Hide the stock header search when clicking outside and the field is empty.
+     *
+     * @param {*} event
+     * @param {*} element
+     * @param {string} searchedFieldName
+     * @memberof StockBalanceComponent
+     */
+    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        if (this.generalService.childOf(event?.target, element)) {
+            return;
+        }
+        if (searchedFieldName === "stock" && !this.productNameSearching?.value) {
+            this.showStockSearchInput = false;
+        }
+    }
+
+    /**
+     * Rebuild flattened table rows.
+     *
+     * @private
+     * @memberof StockBalanceComponent
+     */
+    private refreshTableRows(): void {
+        const rows = [];
+        (this.stocksList || []).forEach(stock => {
+            rows.push({ rowType: "stock", stock });
+            if (stock?.display && stock?.stock?.variants?.length) {
+                stock.stock.variants.forEach(variant => {
+                    rows.push({ rowType: "variant", stock, variant });
+                });
+            }
+        });
+        this.tableRows.data = rows;
     }
 
     /**
@@ -375,7 +513,26 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     */
     public selectGroupName(event: any): void {
         this.GroupStockReportRequest.stockGroupUniqueName = event?.value;
+        this.stockGroupName = event?.label ?? "";
         this.getStocks();
+    }
+
+    /**
+     * Update warehouse unit from the reactive dropdown.
+     *
+     * @param {*} warehouseVariant
+     * @param {*} stock
+     * @param {IOption} event
+     * @memberof StockBalanceComponent
+     */
+    public selectStockUnit(warehouseVariant: any, stock: any, event: IOption): void {
+        if (!warehouseVariant.stockUnit) {
+            warehouseVariant.stockUnit = {};
+        }
+        warehouseVariant.stockUnit.uniqueName = event?.value;
+        warehouseVariant.stockUnit.name = event?.label;
+        warehouseVariant.stockUnit.code = event?.additional?.code;
+        this.stockUpdate(stock, warehouseVariant);
     }
 
     /**
@@ -447,26 +604,56 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for focus on warehouse click
+     * Close every unit dropdown that is currently open.
      *
      * @memberof StockBalanceComponent
      */
-    public setInputFocus(event: any): void {
+    public closeUnitDropdowns(): void {
+        this.warehouseDropdowns?.forEach(dropdown => dropdown.closeDropdownPanel());
+    }
+
+    /**
+     * Close the unit dropdown and leave warehouse edit mode.
+     *
+     * @param {*} event
+     * @param {*} warehouseVariant
+     * @memberof StockBalanceComponent
+     */
+    public closeWarehouseEdit(warehouseVariant: any): void {
+        this.closeUnitDropdowns();
+        warehouseVariant.display = false;
+    }
+
+    /**
+     * Focus the opening amount, quantity, or unit field in the clicked row.
+     *
+     * @param {number} field
+     * @param {Event} [clickEvent]
+     * @memberof StockBalanceComponent
+     */
+    public setInputFocus(field: number, clickEvent?: Event): void {
+        this.closeUnitDropdowns();
+        const container = (clickEvent?.currentTarget as HTMLElement)?.closest('.warehouse-cols');
+        this.cdr.detectChanges();
         setTimeout(() => {
-            if (event === 1) {
-                this.warehouseInput1.nativeElement.focus();
-                this.isOpen = false;
-                this.warehouseDropdown?.closeDropdownPanel();
-            } else if (event === 2) {
-                this.warehouseInput2.nativeElement.focus();
-                this.isOpen = false;
-                this.warehouseDropdown?.closeDropdownPanel();
-            } else if (event === 3) {
-                this.isOpen = true;
-                this.warehouseDropdown?.openDropdownPanel();
+            if (!container) {
+                return;
             }
-            this.cdr.detectChanges();
-        }, 20);
+            if (field === 1) {
+                container.querySelector<HTMLElement>('.warehouse-edit-input.col-opening')?.focus();
+            } else if (field === 2) {
+                container.querySelector<HTMLElement>('.warehouse-edit-input.col-qty')?.focus();
+            } else if (field === 3) {
+                const unitInput = container.querySelector<HTMLElement>('.select-field-input');
+                const dropdown = this.warehouseDropdowns?.find(item => item.selectField?.nativeElement === unitInput);
+                if (dropdown) {
+                    dropdown.openDropdownPanel();
+                } else {
+                    unitInput?.focus();
+                    unitInput?.click();
+                }
+            }
+        });
     }
 
     /**
@@ -489,6 +676,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                 this.showGroupName = false;
             }
         }
+        this.updateTableDisplayedColumns();
+        this.refreshTableRows();
         this.cdr.detectChanges();
     }
 
@@ -515,31 +704,64 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     * @memberof StockBalanceComponent
     */
     /**
-     * Report-row batches for the collapsed warehouse chip.
+     * Batch count from a collapsed warehouse row.
      *
      * @param {*} warehouse
-     * @return {*}  {VoucherSelectedBatch[]}
+     * @return {*}  {number}
      * @memberof StockBalanceComponent
      */
-    public getCollapsedWarehouseBatches(warehouse: any): VoucherSelectedBatch[] {
-        const count = Number(warehouse?.batchCount) || 0;
+    public getBatchCount(warehouse: any): number {
+        return Number(warehouse?.batchCount) || 0;
+    }
+
+    /**
+     * Label for the collapsed batch column (`-`, batch name, or `{count} Batch`).
+     *
+     * @param {*} warehouse
+     * @return {*}  {string}
+     * @memberof StockBalanceComponent
+     */
+    public getBatchDisplay(warehouse: any): string {
+        const count = this.getBatchCount(warehouse);
         if (count <= 0) {
-            return [];
+            return "-";
         }
         if (count === 1) {
-            return [{
-                uniqueName: warehouse?.batch?.uniqueName || warehouse?.batchName || "",
-                name: warehouse?.batchName || warehouse?.batch?.name || "",
-                batchNumber: warehouse?.batchName || warehouse?.batch?.name || "",
-                quantity: Number(warehouse?.openingBalance?.quantity) || 0
-            }];
+            return warehouse?.batchName || warehouse?.batch?.name || "-";
         }
-        return Array.from({ length: count }, (_, index) => ({
-            uniqueName: String(index),
-            name: "",
-            batchNumber: "",
-            quantity: 0
-        }));
+        return `${count} ${this.localeData?.warehouse_opening_balance?.batch || this.localeData?.batch || "Batch"}`;
+    }
+
+    /**
+     * Opens the batch report filtered by stock and warehouse.
+     *
+     * @param {*} stock
+     * @param {*} warehouse
+     * @param {Event} [event]
+     * @memberof StockBalanceComponent
+     */
+    public openBatchReport(stock: any, warehouse: any, event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+        if (this.getBatchCount(warehouse) <= 0) {
+            return;
+        }
+        const inventoryType = stock?.type || stock?.stock?.type || "PRODUCT";
+        const type = inventoryType.toUpperCase() === "FIXED_ASSETS" ? "fixedassets" : inventoryType.toLowerCase();
+        const queryParams: any = {};
+        if (stock?.stockUniqueName) {
+            queryParams.stockUniqueNames = stock.stockUniqueName;
+        }
+        if (warehouse?.uniqueName) {
+            queryParams.warehouseUniqueNames = warehouse.uniqueName;
+        }
+        if (this.GroupStockReportRequest?.from) {
+            queryParams.from = this.GroupStockReportRequest.from;
+        }
+        if (this.GroupStockReportRequest?.to) {
+            queryParams.to = this.GroupStockReportRequest.to;
+        }
+        this.router.navigate(["/pages/inventory/v2", type, "batch"], { queryParams });
     }
 
     /**

@@ -8,6 +8,9 @@
 >
     @if (dataSource?.data?.length || hasActiveFilters) {
         <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-2 mb-3">
+            <button matButton="outlined" class="report-back-button" (click)="backToPreviousPage()">
+                {{ commonLocaleData?.app_back }}
+            </button>
             <div class="custom-datepicker-wrapper">
                 <div
                     class="custom-datepicker"
@@ -84,9 +87,6 @@
             <button
                 matButton="outlined"
                 class="ml-auto advance-filter-button"
-                matBadgeColor="primary"
-                [matBadge]="advanceFilterCount"
-                [matBadgeHidden]="!advanceFilterCount"
                 (click)="openAdvanceFilterDialog()"
             >
                 <span class="d-inline-flex align-items-center column-gap-05">
@@ -399,6 +399,11 @@
                 ></no-data>
             }
         } @else {
+            <div class="d-flex align-items-center mb-3">
+                <button matButton="outlined" class="report-back-button" (click)="backToPreviousPage()">
+                    {{ commonLocaleData?.app_back }}
+                </button>
+            </div>
             <div class="batch-empty-state d-flex justify-content-center align-items-center">
                 <button matButton="filled" (click)="openBatchDialog()">
                     {{ localeData?.add_batch }}
@@ -433,9 +438,6 @@
     <div class="advance-search-dialog">
         <div cdkFocusInitial class="dialog-header">
             <span>{{ commonLocaleData?.app_advanced_filter }}</span>
-            <button matIconButton mat-dialog-close aria-label="cross icon">
-                <i class="icon-cross"></i>
-            </button>
         </div>
         <mat-dialog-content class="dialog-body">
             <div class="row">
@@ -446,24 +448,27 @@
                         [label]="localeData?.within_days"
                         [placeholder]="localeData?.within_days_placeholder"
                         [formControl]="filterWithinDays"
+                        [required]="true"
+                        [min]="1"
+                        [showError]="showAdvanceFilterErrors && !hasFilterWithinDays"
                     ></input-field>
                 </div>
                 <div class="col-12 mt-3">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{ localeData?.expiry_status }}</mat-label>
-                        <mat-select
-                            name="filterExpiredOnly"
-                            [(ngModel)]="filterExpiredOnly"
-                            [placeholder]="localeData?.expiry_status"
-                        >
-                            <mat-option [value]="false">{{ localeData?.will_expire }}</mat-option>
-                            <mat-option [value]="true">{{ localeData?.already_expired }}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <reactive-dropdown-field
+                        [name]="'filterExpiredOnly'"
+                        [label]="localeData?.expiry_status"
+                        [placeholder]="localeData?.expiry_status"
+                        [options]="expiryStatusOptions"
+                        [labelValue]="expiryStatusFilterLabel"
+                        (selectedOption)="selectExpiryStatus($event)"
+                        (onClear)="selectExpiryStatus(null)"
+                        [required]="true"
+                        [showError]="showAdvanceFilterErrors && filterExpiredOnly === null"
+                    ></reactive-dropdown-field>
                 </div>
             </div>
             <div class="d-flex justify-content-end column-gap-1 mt-4">
-                <button type="button" matButton="filled" mat-dialog-close (click)="applyAdvanceFilters()">
+                <button type="button" matButton="filled" (click)="applyAdvanceFilters()">
                     {{ commonLocaleData?.app_apply }}
                 </button>
                 <button type="button" matButton="outlined" mat-dialog-close>
