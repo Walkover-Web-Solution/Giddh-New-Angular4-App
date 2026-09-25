@@ -4,6 +4,8 @@
 @let isTallyTemplateOrTemplateA = isTemplateA || isTallyTemplate;
 
 @let isTemplateTypeInvoice = templateType === voucherTypeEnum.invoice;
+@let isTemplateTypeProforma = templateType === voucherTypeEnum.proforma;
+@let isTemplateTypeEstimate = templateType === voucherTypeEnum.estimate;
 @let isTemplateTypeVoucher = templateType === voucherTypeEnum.voucher;
 @let isTemplateTypePurchaseOrder = templateType === voucherTypeEnum.purchase_order;
 @let isTemplateTypePurchaseBill = templateType === voucherTypeEnum.purchase_bill;
@@ -440,7 +442,7 @@
                                         @if (
                                             sectionSettings?.header.displayPlaceOfSupply &&
                                             !isThermalTemplate &&
-                                            (isTemplateTypeInvoice || isTemplateTypeVoucher)
+                                            (isTemplateTypeInvoice || isTemplateTypeVoucher || isTemplateTypeProforma || isTemplateTypeEstimate)
                                         ) {
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -2704,7 +2706,7 @@
                                         @if (
                                             sectionSettings?.footer?.showNotesAtLastPage &&
                                             isTemplateA &&
-                                            (isTemplateTypeInvoice || isTemplateTypeVoucher)
+                                            (isTemplateTypeInvoice || isTemplateTypeVoucher || isTemplateTypeProforma || isTemplateTypeEstimate)
                                         ) {
                                             <ng-container
                                                 *ngTemplateOutlet="

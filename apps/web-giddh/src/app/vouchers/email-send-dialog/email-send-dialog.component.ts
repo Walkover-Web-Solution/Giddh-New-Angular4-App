@@ -114,7 +114,7 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
             return;
         }
         const emailsArray = this.sendEmailForm.get('email.to').value?.split(',').map(email => email.trim());
-        if (this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice || this.invoiceType.isCashInvoice) {
+        if (this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice || this.invoiceType.isCashInvoice || this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote) {
             this.successEvent.emit({
                 email: emailsArray,
                 invoiceType: this.copyTypes.value,

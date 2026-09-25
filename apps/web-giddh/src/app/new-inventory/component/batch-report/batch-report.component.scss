@@ -1,0 +1,52 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.batch-report {
+    .report-back-button {
+        height: 37px;
+    }
+
+    .filter-dropdown {
+        min-width: 200px;
+        max-width: 260px;
+        flex: 0 0 auto;
+    }
+
+    .batch-empty-state {
+        min-height: 360px;
+    }
+
+    .applied-filter-chip {
+        background: var(--color-border-light);
+    }
+
+    .batch-summary-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    @media (max-width: 1200px) {
+        .batch-summary-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            row-gap: 8px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .batch-summary-grid {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+    }
+}
+
+:host ::ng-deep .batch-report-table .search-table {
+    min-width: 0;
+    max-width: 100%;
+
+    input.form-control {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+}

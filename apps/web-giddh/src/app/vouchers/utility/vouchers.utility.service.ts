@@ -49,6 +49,8 @@ export class VouchersUtilityService {
         let isPurchaseOrder = voucherType === VoucherTypeEnum.purchaseOrder;
         let isReceiptInvoice = voucherType === VoucherTypeEnum.receipt;
         let isPaymentInvoice = voucherType === VoucherTypeEnum.payment;
+        let isDeliveryChallan = voucherType === VoucherTypeEnum.deliveryChallan;
+        let isReceiptNote = voucherType === VoucherTypeEnum.receiptNote;
 
         // special case when we double click on account name and that accountUniqueName is cash then we have to mark as Cash Invoice
         if (isSalesInvoice && !isLastInvoiceCopied) {
@@ -58,11 +60,15 @@ export class VouchersUtilityService {
             }
         }
 
-        return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder, isReceiptInvoice, isPaymentInvoice };
+        return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder, isReceiptInvoice, isPaymentInvoice, isDeliveryChallan, isReceiptNote };
     }
 
     public parseVoucherType(voucherType: string): string {
-        return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType?.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
+        if ([VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receiptNote, VoucherTypeEnum.deliveryChallan].includes(voucherType as VoucherTypeEnum)) {
+            return voucherType;
+        }
+
+        return voucherType?.toString().replace(/-/g, " ");
     }
 
     /**
@@ -132,7 +138,7 @@ export class VouchersUtilityService {
         let withStocks: boolean;
         let group: string;
         if (searchType === SearchType.CUSTOMER) {
-            if (![VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.payment].includes(voucherType as VoucherTypeEnum)) {
+            if (![VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.payment, VoucherTypeEnum.receiptNote].includes(voucherType as VoucherTypeEnum)) {
                 group = 'sundrydebtors';
             } else {
                 group = 'sundrycreditors';
@@ -140,7 +146,7 @@ export class VouchersUtilityService {
         } else if (searchType === SearchType.ITEM) {
             group = [VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(voucherType as VoucherTypeEnum) 
                     ? 'bankaccounts, cash, loanandoverdraft' 
-                    : ([VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.cashBill, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.purchaseOrder].includes(voucherType as VoucherTypeEnum) 
+                    : ([VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.cashBill, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receiptNote].includes(voucherType as VoucherTypeEnum)
                         ? 'operatingcost, indirectexpenses, fixedassets' 
                         : 'otherincome, revenuefromoperations, fixedassets');
             withStocks = true;
@@ -232,6 +238,14 @@ export class VouchersUtilityService {
                 voucherName = localeData?.invoice_types?.payment;
                 break;
 
+            case VoucherTypeEnum.deliveryChallan:
+                voucherName = localeData?.invoice_types?.delivery_challan;
+                break;
+
+            case VoucherTypeEnum.receiptNote:
+                voucherName = localeData?.invoice_types?.receipt_note;
+                break;
+
             default:
                 voucherName = voucherType;
                 break;
@@ -241,7 +255,7 @@ export class VouchersUtilityService {
     }
 
     public getParentGroupForAccountCreate(voucherType: string): string {
-        if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.payment) {
+        if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.payment || voucherType === VoucherTypeEnum.receiptNote) {
             return 'sundrycreditors';
         } else {
             return 'sundrydebtors';
@@ -283,11 +297,165 @@ export class VouchersUtilityService {
      * @memberof VouchersUtilityService
      */
     public prepareVoucherForm(voucherType: string, formConfiguration?: any): VoucherForm {
-        if (formConfiguration) {
-            return formConfiguration.find(form => form.type === voucherType);
-        } else {
-            return GIDDH_VOUCHER_FORM.find(form => form.type === voucherType);
+        const sourceVoucherType = voucherType === VoucherTypeEnum.deliveryChallan
+            ? VoucherTypeEnum.sales
+            : voucherType === VoucherTypeEnum.receiptNote
+                ? VoucherTypeEnum.purchase
+                : voucherType;
+        const voucherForms = formConfiguration || GIDDH_VOUCHER_FORM;
+        const voucherForm = voucherForms.find(form => form.type === voucherType)
+            || voucherForms.find(form => form.type === sourceVoucherType);
+
+        return voucherForm ? { ...voucherForm, type: voucherType } : voucherForm;
+    }
+
+    /**
+     * Maps delivery challan/receipt note details response to the voucher details
+     * structure expected by the voucher create/update form.
+     *
+     * @param {*} response Delivery challan/receipt note details response body
+     * @return {*} Voucher details
+     * @memberof VouchersUtilityService
+     */
+    public formatInventoryVoucherDetails(response: any): any {
+        if (!response) {
+            return {};
         }
+
+        const voucherDetails = { ...response };
+
+        if (voucherDetails.account) {
+            voucherDetails.account = {
+                ...voucherDetails.account,
+                name: voucherDetails.account.name ?? voucherDetails.account.customerName,
+                customerName: voucherDetails.account.customerName ?? voucherDetails.account.name
+            };
+        }
+
+        if (!voucherDetails.salesPerson && voucherDetails.salesPersonUniqueName) {
+            voucherDetails.salesPerson = { name: "", uniqueName: voucherDetails.salesPersonUniqueName };
+        }
+
+        const transporter = voucherDetails.transporterDetails;
+        if (transporter) {
+            voucherDetails.transporterDetails = {
+                transporterName: transporter.transporterName ?? transporter.name ?? "",
+                transporterId: transporter.transporterId ?? "",
+                vehicleNumber: transporter.vehicleNumber ?? "",
+                transportMode: transporter.transportMode ?? "Road",
+                transportDocNo: transporter.transportDocNo ?? transporter.transportDocumentNumber ?? "",
+                transportDocDate: transporter.transportDocDate ?? transporter.transportDocumentDate ?? "",
+                distance: Number(transporter.distance ?? transporter.distanceKm ?? 0),
+                driverName: transporter.driverName ?? "",
+                driverPhone: transporter.driverPhone ?? ""
+            };
+        }
+
+        const documentItemsByVariant: Record<string, any> = {};
+        const documentItemsByStock: Record<string, any> = {};
+        const variantNames = {};
+        voucherDetails.documentItems?.forEach((item) => {
+            if (item.variant?.uniqueName) {
+                variantNames[item.variant.uniqueName] = item.variant.name;
+                documentItemsByVariant[item.variant.uniqueName] = item;
+            }
+            if (item.stock?.uniqueName) {
+                documentItemsByStock[item.stock.uniqueName] = item;
+            }
+        });
+
+        let voucherGrandTotal = 0;
+        voucherDetails.entries = (voucherDetails.entries || []).map((entry) => {
+            let entryTotal = 0;
+            const transactions = entry.transactions?.map((transaction) => {
+                const stock = transaction.stock;
+                if (!stock) {
+                    const amount = Number(transaction.amount?.amountForAccount) || 0;
+                    entryTotal += amount;
+                    return transaction;
+                }
+
+                const documentItem = documentItemsByVariant[stock.variant?.uniqueName]
+                    ?? documentItemsByStock[stock.uniqueName];
+                const rate = Number(
+                    stock.rate?.rateForAccount
+                    ?? stock.rate?.amountForAccount
+                    ?? documentItem?.rate
+                    ?? 0
+                );
+                const quantity = Number(stock.quantity ?? documentItem?.quantity ?? 0);
+
+                let amount = Number(transaction.amount?.amountForAccount) || 0;
+                if (!amount && documentItem?.amount != null) {
+                    amount = Number(documentItem.amount) || 0;
+                }
+                if (!amount && quantity && rate) {
+                    amount = giddhRoundOff(quantity * rate, 2);
+                }
+                entryTotal += amount;
+
+                return {
+                    ...transaction,
+                    account: {
+                        name: transaction.account?.name,
+                        uniqueName: transaction.account?.uniqueName
+                    },
+                    amount: {
+                        ...(transaction.amount || {}),
+                        amountForAccount: amount,
+                        amountForCompany: amount
+                    },
+                    stock: {
+                        ...stock,
+                        quantity,
+                        rate: {
+                            ...(stock.rate || {}),
+                            rateForAccount: rate,
+                            amountForAccount: rate,
+                            amountForCompany: stock.rate?.amountForCompany ?? rate
+                        },
+                        variant: {
+                            ...stock.variant,
+                            name: stock.variant?.name ?? variantNames[stock.variant?.uniqueName] ?? ""
+                        },
+                        unitRates: stock.unitRates?.length
+                            ? stock.unitRates
+                            : (stock.stockUnit?.uniqueName
+                                ? [{
+                                    stockUnitCode: stock.stockUnit?.code,
+                                    stockUnitUniqueName: stock.stockUnit?.uniqueName,
+                                    rate: rate
+                                }]
+                                : [])
+                    }
+                };
+            });
+
+            return {
+                ...entry,
+                transactions,
+                entryTotal: {
+                    amountForAccount: entryTotal,
+                    amountForCompany: entryTotal
+                },
+                entryTotalWithoutTcsTds: {
+                    amountForAccount: entryTotal,
+                    amountForCompany: entryTotal
+                }
+            };
+        });
+
+        voucherDetails.entries?.forEach((entry) => {
+            voucherGrandTotal += Number(entry?.entryTotal?.amountForAccount) || 0;
+        });
+
+        voucherDetails.grandTotal = {
+            ...(voucherDetails.grandTotal || {}),
+            amountForAccount: voucherGrandTotal,
+            amountForCompany: voucherGrandTotal
+        };
+
+        return voucherDetails;
     }
 
     public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean, exchangeRate: number, options?: { applyTcsToGrandTotal?: boolean }): any {
@@ -423,6 +591,10 @@ export class VouchersUtilityService {
 
                 if (entry.transactions[0].stock) {
                     delete entry.transactions[0].stock.maxQuantity;
+                    delete entry.transactions[0].stock.batch;
+                    if (!entry.transactions[0].stock.batches?.length) {
+                        delete entry.transactions[0].stock.batches;
+                    }
                 }
 
                 delete entry.otherTax;
@@ -485,6 +657,12 @@ export class VouchersUtilityService {
         invoiceForm.dueDate = this.convertDateToString(invoiceForm.dueDate);
         if (invoiceForm.templateDetails?.other?.shippingDate) {
             invoiceForm.templateDetails.other.shippingDate = this.convertDateToString(invoiceForm.templateDetails.other.shippingDate);
+        }
+        if (invoiceForm.transporterDetails?.transportDocDate) {
+            invoiceForm.transporterDetails.transportDocDate = this.convertDateToString(invoiceForm.transporterDetails.transportDocDate);
+        }
+        if (invoiceForm.transporterDetails) {
+            invoiceForm.transporterDetails.distance = Number(invoiceForm.transporterDetails.distance) || 0;
         }
 
         invoiceForm = this.formatBillingShippingAddress(invoiceForm);

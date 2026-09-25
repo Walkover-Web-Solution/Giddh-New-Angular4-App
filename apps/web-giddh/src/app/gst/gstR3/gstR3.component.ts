@@ -103,6 +103,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public isTabScreen: boolean = false;
     /** Holds selected service */
     public selectedService: TaxServiceType;
+    /** Holds Tax Service Enum */
+    public taxServiceEnum = TaxServiceEnum;
     /** Holds aside authentication dialog ref */
     public asideAuthenticationDialogRef: MatDialogRef<any>;
     /** Holds cancel confirmation dialog ref */
@@ -806,7 +808,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof FilingHeaderComponent
      */
     public openSettingAsidePane(): void {
-        this.selectedService = TaxServiceEnum.TAXPRO;
+        this.selectedService = TaxServiceEnum.EXCELLON;
         this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {...ASIDE_PANE_CONFIG, autoFocus: false});
     }
 
@@ -833,7 +835,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.componentStore.fileGstr3B({
             period: this.currentPeriod,
             gstNumber: this.activeCompanyGstNumber,
-            via: TaxServiceEnum.TAXPRO,
+            via: TaxServiceEnum.EXCELLON,
             monthYear,
             currentDateTime
         });

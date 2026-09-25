@@ -11,6 +11,7 @@ import { NewInventoryAdvanceSearch } from "../new-inventory-advance-search/new-i
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { InventoryService } from "../../../services/inventory.service";
+import { CommonService } from "../../../services/common.service";
 import { GeneralService } from "../../../services/general.service";
 import { OrganizationType } from "../../../models/user-login-state";
 import { ToasterService } from "../../../services/toaster.service";
@@ -18,9 +19,9 @@ import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
 import { Router } from "@angular/router";
-import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
+import { InventoryModuleName, InventoryReportType, ReportNature } from "../../inventory.enum";
 import { InventoryComponentStore } from "../inventory.store";
-import { cloneDeep, concat, filter, find, forEach, includes, indexOf, map, some } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: "report-filters",
@@ -70,6 +71,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
     /** Emits the selected custom fields filters */
     @Output() public selectedDynamicColumns: EventEmitter<any> = new EventEmitter();
+    /** Emits when report nature (Books/Inventory) is changed */
+    @Output() public reportNatureChange: EventEmitter<string> = new EventEmitter();
     /** True if show advance search model*/
     public showAdvanceSearchModal: boolean = false;
     /** Search field form control */
@@ -144,12 +147,19 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public dynamicCustomColumns: any[] = [];
     /** Hide selected options from dropdown list */
     public hideSelectedOptions: boolean = true;
+    /** True if report nature is Inventory, false if Books */
+    public reportAsPerInventory: boolean = false;
+    /** Report nature enum for template bindings */
+    public reportNature: typeof ReportNature = ReportNature;
+    /** Inventory module name */
+    public inventoryModuleName: typeof InventoryModuleName = InventoryModuleName;
 
     constructor(
         public dialog: MatDialog,
         private location: Location,
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
+        private commonService: CommonService,
         private generalService: GeneralService,
         private toaster: ToasterService,
         private store: Store<AppState>,
@@ -240,6 +250,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.moduleName?.currentValue && changes?.moduleName?.currentValue !== changes?.moduleName?.previousValue) {
+            this.getReportNature();
+        }
         if (changes?.fromToDate?.currentValue?.from) {
             this.selectedDateRange = { startDate: dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT), endDate: dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT) };
             this.selectedDateRangeUi = dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -551,6 +564,51 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             showClearFilter: this.showClearFilter,
             advanceSearchModalResponse: this.advanceSearchModalResponse,
             stockReportRequestExport: this.stockReportRequestExport
+        });
+    }
+
+    /**
+     * Fetches saved report nature (Books/Inventory) from report-filters API
+     *
+     * @memberof ReportFiltersComponent
+     */
+    public getReportNature(): void {
+        if (!this.moduleName || this.moduleName === InventoryModuleName.transaction) {
+            return;
+        }
+        // Prefer current module; fall back to item-wise so Settings and all report tabs stay aligned
+        this.commonService.getSelectedTableColumns(this.moduleName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success' && response?.body?.reportNature) {
+                this.reportAsPerInventory = response.body.reportNature === ReportNature.Inventory;
+                this.changeDetection.detectChanges();
+                return;
+            }
+        });
+    }
+
+    /**
+     * Saves report nature for the current module and refreshes report data
+     *
+     * @param {ReportNature} reportNature Selected report nature
+     * @memberof ReportFiltersComponent
+     */
+    public onReportNatureChange(reportNature: ReportNature): void {
+        if (!this.moduleName) {
+            return;
+        }
+        this.reportAsPerInventory = reportNature === ReportNature.Inventory;
+        this.isLoading.emit(true);
+        this.commonService.saveSelectedTableColumns({ module: this.moduleName, reportNature }).pipe(take(1)).subscribe(response => {
+            this.isLoading.emit(false);
+            if (response?.status === 'success') {
+                this.reportNatureChange.emit(reportNature);
+            } else {
+                this.reportAsPerInventory = !this.reportAsPerInventory;
+                if (response?.message) {
+                    this.toaster.errorToast(response.message);
+                }
+                this.changeDetection.detectChanges();
+            }
         });
     }
 

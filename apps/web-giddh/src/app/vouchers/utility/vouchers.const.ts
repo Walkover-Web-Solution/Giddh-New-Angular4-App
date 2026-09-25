@@ -38,8 +38,16 @@ export enum VoucherTypeEnum {
     estimates = 'estimates',
     proformas = 'proformas',
     bill = 'bill',
-    recurring = 'recurring'
+    recurring = 'recurring',
+    deliveryChallan = 'delivery-challan',
+    receiptNote = 'receipt-note'
 };
+
+/** Challan type for delivery challan / receipt note */
+export enum ChallanTypeEnum {
+    STOCK_TRANSFER = 'STOCK_TRANSFER',
+    JOBWORK = 'JOBWORK'
+}
 
 export const SearchType = {
     CUSTOMER: 'customer',

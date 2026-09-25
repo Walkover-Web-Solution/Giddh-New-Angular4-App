@@ -114,6 +114,30 @@
                                                             ></reactive-dropdown-field>
                                                         </span>
                                                     </div>
+                                                    <div
+                                                        class="mb-3 mt-3"
+                                                        *ngIf="
+                                                            batchTrackingEnabled &&
+                                                            branchTransferCreateEditForm?.get('products.0.uniqueName').value
+                                                        "
+                                                    >
+                                                        <batch-chip-list
+                                                            *ngIf="getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length"
+                                                            [compact]="true"
+                                                            [batches]="branchTransferCreateEditForm.get('products.0.batches').value"
+                                                            [localeData]="localeData"
+                                                            [commonLocaleData]="commonLocaleData"
+                                                            (edit)="openBatchSelectDialog(0, $event)"
+                                                        ></batch-chip-list>
+                                                        <a
+                                                            *ngIf="!getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length"
+                                                            href="javascript:void(0);"
+                                                            class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                            (click)="openBatchSelectDialog(0, $event)"
+                                                        >
+                                                            {{ localeData?.select_batch }}
+                                                        </a>
+                                                    </div>
                                                     <div class="mb-3 mt-3">
                                                         <input-field
                                                             [type]="'text'"
@@ -531,6 +555,29 @@
                                                                 "
                                                             ></reactive-dropdown-field>
                                                         </span>
+                                                    </div>
+                                                    <div
+                                                        class="mb-3 mt-3"
+                                                        *ngIf="
+                                                            batchTrackingEnabled &&
+                                                            branchTransferCreateEditForm?.get('products.0.uniqueName').value
+                                                        "
+                                                    >
+                                                        <batch-chip-list
+                                                            *ngIf="getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length"
+                                                            [batches]="branchTransferCreateEditForm.get('products.0.batches').value"
+                                                            [localeData]="localeData"
+                                                            [commonLocaleData]="commonLocaleData"
+                                                            (edit)="openBatchSelectDialog(0, $event)"
+                                                        ></batch-chip-list>
+                                                        <a
+                                                            *ngIf="!getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length"
+                                                            href="javascript:void(0);"
+                                                            class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                            (click)="openBatchSelectDialog(0, $event)"
+                                                        >
+                                                            {{ localeData?.select_batch }}
+                                                        </a>
                                                     </div>
                                                     <div class="mb-3 mt-3">
                                                         <input-field
@@ -1498,6 +1545,27 @@
                                                                 </div>
                                                             </div>
                                                         </span>
+                                                        <div
+                                                            *ngIf="batchTrackingEnabled && product.get('uniqueName').value"
+                                                            class="text-left"
+                                                        >
+                                                            <batch-chip-list
+                                                                *ngIf="getProductBatches(product)?.length"
+                                                                class="d-block mt-2"
+                                                                [batches]="product.get('batches').value"
+                                                                [localeData]="localeData"
+                                                                [commonLocaleData]="commonLocaleData"
+                                                                (edit)="openBatchSelectDialog(i, $event)"
+                                                            ></batch-chip-list>
+                                                            <a
+                                                                *ngIf="!getProductBatches(product)?.length"
+                                                                href="javascript:void(0);"
+                                                                class="d-inline-block mt-2 font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                                (click)="openBatchSelectDialog(i, $event)"
+                                                            >
+                                                                {{ localeData?.select_batch }}
+                                                            </a>
+                                                        </div>
                                                     </span>
                                                 </td>
 

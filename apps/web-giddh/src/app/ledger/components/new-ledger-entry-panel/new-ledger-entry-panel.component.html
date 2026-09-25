@@ -52,6 +52,20 @@
         </div>
         <!-- Variant dropdown for stock selection -->
         <ng-container *ngTemplateOutlet="variantAndWarehouseDropdown"></ng-container>
+        <batch-chip-list
+            *ngIf="
+                activeCompany?.batchTrackingEnabled &&
+                currentTxn?.selectedAccount?.stock &&
+                currentTxn?.inventory?.batches?.length
+            "
+            class="d-block my-2"
+            [batches]="currentTxn?.inventory?.batches"
+            [isInbound]="isBatchInbound(blankLedger?.voucherType)"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [showEdit]="!isReadOnly"
+            (edit)="openBatchSelectDialog($event)"
+        ></batch-chip-list>
         <!-- reverse charge transction end  -->
         <!--  tourist scheme template start      -->
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
@@ -78,6 +92,28 @@
                             [allowDecimalDigitsOnly]="true"
                             [customDecimalPlaces]="4"
                         ></input-field>
+                        <div
+                            *ngIf="
+                                activeCompany?.batchTrackingEnabled &&
+                                currentTxn?.selectedAccount?.stock &&
+                                !getEntryBatches()?.length &&
+                                !isReadOnly
+                            "
+                            class="mt-1"
+                            (click)="$event.stopPropagation()"
+                        >
+                            <div
+                                tabindex="0"
+                                role="button"
+                                cdkMonitorElementFocus
+                                class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                (click)="openBatchSelectDialog($event)"
+                                (keydown.enter)="$event.preventDefault(); openBatchSelectDialog($event)"
+                                (keydown.space)="$event.preventDefault(); openBatchSelectDialog($event)"
+                            >
+                                {{ localeData?.select_batch }}
+                            </div>
+                        </div>
                     </div>
                     <!-- Unit -->
                     <div *ngIf="currentTxn?.unitRate">

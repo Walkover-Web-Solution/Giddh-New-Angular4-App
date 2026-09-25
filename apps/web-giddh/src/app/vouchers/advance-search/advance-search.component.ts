@@ -1,14 +1,22 @@
-import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { filter, Observable, ReplaySubject, take, tap } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { filter, Observable, of as observableOf, ReplaySubject, take, takeUntil, tap } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../../shared/helpers/defaultDateFormat';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, DATE_REGEX, IOption } from '../../app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, DATE_REGEX, IOption } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../shared/sales-person/sales-person.component';
 import { GeneralService } from '../../services/general.service';
+import { SearchService } from '../../services/search.service';
+import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { AppState } from '../../store';
+import { VouchersUtilityService } from '../utility/vouchers.utility.service';
+import { SearchType } from '../utility/vouchers.const';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'app-advance-search',
@@ -23,7 +31,9 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** Holds Voucher Type */
-    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order' | 'payment';
+    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order' | 'payment' | 'inventory-document';
+    /** Actual voucher type (e.g. delivery-challan / receipt-note) for inventory-document labels */
+    @Input() public voucherType: string;
     /** Holds Advance Filter Values */
     @Input() public advanceFilters: any;
     /** Holds true if  EInvoice is enabled */
@@ -46,8 +56,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public dayjs: any = dayjs;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** Directive to get reference of element */
-    @ViewChild('filterDatepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -58,6 +66,25 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public paymentStatusOptions: IOption[] = [];
     /** Purchase order status options */
     public purchaseOrderStatusOptions: IOption[] = [];
+    /** Operators supported by inventory document filters */
+    public inventoryAmountOperators: IOption[] = [];
+    public linkedInvoiceOptions: any[] = [];
+    /** Warehouse dropdown options */
+    public warehouses: IOption[] = [];
+    /** Branch dropdown options */
+    public branches: IOption[] = [];
+    /** Selected warehouse label for dropdown display */
+    public selectedWarehouseName: string = '';
+    /** Selected branch label for dropdown display */
+    public selectedBranchName: string = '';
+    /** Current organization type */
+    public currentOrganizationType: string;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** Account search request state */
+    public accountSearchRequest: any;
+    /** Account dropdown options */
+    public accounts$: Observable<IOption[]>;
     /** Holds field label values */
     public fieldLabelValues: any = {
         invoiceDateRange: '',
@@ -80,7 +107,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private dialog: MatDialog,
         private salesPersonStore: SalesPersonComponentStore,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private store: Store<AppState>,
+        private warehouseActions: WarehouseActions,
+        private settingsBranchAction: SettingsBranchActions,
+        private searchService: SearchService,
+        private changeDetectorRef: ChangeDetectorRef,
+        private vouchersUtilityService: VouchersUtilityService
     ) { }
 
     /**
@@ -89,6 +122,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchComponent
      */
     public ngOnInit(): void {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
+        this.store.pipe(select(state => state.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         this.filtersForEntryTotal = [
             { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
             { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
@@ -123,6 +163,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_payment_status?.converted, value: 'converted' },
             { label: this.commonLocaleData?.app_payment_status?.partially_converted, value: 'partially-converted' },
             { label: this.commonLocaleData?.app_payment_status?.expired, value: 'expired' }
+        ];
+
+        this.inventoryAmountOperators = this.filtersForEntryTotal;
+        this.linkedInvoiceOptions = [
+            { label: this.commonLocaleData?.app_all, value: null },
+            { label: this.localeData?.linked_invoice_filter?.linked, value: true },
+            { label: this.localeData?.linked_invoice_filter?.not_linked, value: false }
         ];
 
         this.eInvoiceStatusDropdownOptions = [
@@ -181,7 +228,11 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             dueTo: [(this.advanceFilters?.dueTo && dayjs(this.advanceFilters?.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
             receiptType: [''],
             salesPersonName: [this.advanceFilters?.salesPersonName ?? ''],
-            salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? []]
+            salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? []],
+            amountOperator: [this.advanceFilters?.amountOperator ?? 'EQUALS'],
+            warehouseUniqueName: [this.advanceFilters?.warehouseUniqueName ?? ''],
+            branchUniqueName: [this.advanceFilters?.branchUniqueName ?? ''],
+            accountUniqueNames: [this.normalizePartyUniqueNameValue(this.advanceFilters?.accountUniqueNames)]
         });
 
         const invoiceDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.invoiceDateRange);
@@ -213,6 +264,11 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             this.fieldLabelValues.adjustmentVoucherOptions = adjustmentVoucherOptions[0]?.label;
         }
         this.getSalesPersonList();
+        if (this.type === 'inventory-document') {
+            this.getWarehouses();
+            this.getBranches();
+            this.searchAccount();
+        }
     }
 
     /**
@@ -401,6 +457,12 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             });
         };
 
+        if (this.type === 'inventory-document') {
+            formatDateField('date');
+            clearDateFields(allDateControlNames);
+            return;
+        }
+
         // Process each date control based on the type
         allDateControlNames.forEach(controlName => {
             switch (this.type) {
@@ -450,7 +512,16 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      */
     public search(): void {
         this.parseAllDateField();
-        this.applyFilterEvent.emit(this.searchForm?.value);
+        const formValue = { ...this.searchForm?.value };
+        if (this.type === 'inventory-document') {
+            formValue.accountUniqueNames = this.normalizePartyUniqueNameValue(formValue.accountUniqueNames);
+            const showBranchDropdown = this.branches?.length > 1 &&
+                (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch);
+            if (!showBranchDropdown) {
+                formValue.branchUniqueName = '';
+            }
+        }
+        this.applyFilterEvent.emit(formValue);
         this.closeDialogEvent.emit();
     }
 
@@ -490,5 +561,131 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT, archive: '' } });
+    }
+
+    /**
+     * Loads warehouses for inventory document filters
+     *
+     * @private
+     * @memberof AdvanceSearchComponent
+     */
+    private getWarehouses(): void {
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses?.results?.length) {
+                this.warehouses = warehouses.results
+                    .filter(warehouse => !warehouse.isArchived)
+                    .map(warehouse => ({ label: warehouse?.name, value: warehouse?.uniqueName }));
+                const selectedWarehouse = this.warehouses.find(warehouse => warehouse.value === this.searchForm?.get('warehouseUniqueName')?.value);
+                this.selectedWarehouseName = selectedWarehouse?.label ?? '';
+                this.changeDetectorRef.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Loads branches for inventory document filters
+     *
+     * @private
+     * @memberof AdvanceSearchComponent
+     */
+    private getBranches(): void {
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
+        this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.length) {
+                this.branches = response.map(branch => ({
+                    label: branch?.name,
+                    value: branch?.uniqueName
+                }));
+                const selectedBranch = this.branches.find(branch => branch.value === this.searchForm?.get('branchUniqueName')?.value);
+                this.selectedBranchName = selectedBranch?.label ?? '';
+                this.changeDetectorRef.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Normalizes party unique name filter into multi-select array value
+     *
+     * @private
+     * @param {*} value
+     * @return {string[]}
+     * @memberof AdvanceSearchComponent
+     */
+    private normalizePartyUniqueNameValue(value: any): string[] {
+        if (Array.isArray(value)) {
+            return value.filter(Boolean);
+        }
+        return value ? [value] : [];
+    }
+
+    /**
+     * Gets list of accounts with searching (DC: sundrydebtors, RN: sundrycreditors)
+     *
+     * @param {string} [query='']
+     * @param {number} [page=1]
+     * @memberof AdvanceSearchComponent
+     */
+    public searchAccount(query: string = '', page: number = 1): void {
+        if (this.accountSearchRequest?.isLoading) {
+            return;
+        }
+
+        const accountSearchRequest = this.vouchersUtilityService.getSearchRequestObject(
+            this.voucherType,
+            query,
+            page,
+            SearchType.CUSTOMER
+        );
+        this.accountSearchRequest = cloneDeep(accountSearchRequest);
+        this.accountSearchRequest.isLoading = true;
+
+        this.searchService
+            .searchAccountV3(accountSearchRequest)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((response) => {
+                if (response?.body?.results?.length) {
+                    this.accountSearchRequest.loadMore = true;
+                    let existingAccounts = [];
+                    if (page > 1) {
+                        this.accounts$?.subscribe((res) => (existingAccounts = res || []));
+                    }
+                    const newResults = response.body.results.map((res) => ({
+                        label: res.name,
+                        value: res.uniqueName,
+                        additional: res
+                    }));
+                    this.accounts$ = observableOf(existingAccounts.concat(...newResults));
+                } else {
+                    this.accountSearchRequest.loadMore = false;
+                    if (page === 1) {
+                        this.accounts$ = observableOf([]);
+                    }
+                }
+                this.accountSearchRequest.isLoading = false;
+                this.changeDetectorRef.detectChanges();
+            });
+    }
+
+    /**
+     * Search accounts for party dropdown
+     *
+     * @param {string} query
+     * @memberof AdvanceSearchComponent
+     */
+    public onAccountSearchQueryChanged(query: string): void {
+        this.searchAccount(query, 1);
+    }
+
+    /**
+     * Handles account dropdown scroll end
+     *
+     * @memberof AdvanceSearchComponent
+     */
+    public handleAccountScrollEnd(): void {
+        if (this.accountSearchRequest?.loadMore) {
+            const page = (this.accountSearchRequest.page || 1) + 1;
+            this.searchAccount(decodeURIComponent(this.accountSearchRequest.q || ''), page);
+        }
     }
 }
