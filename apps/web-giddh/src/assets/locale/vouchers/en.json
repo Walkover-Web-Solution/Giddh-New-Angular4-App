@@ -221,5 +221,9 @@
     "transport_doc_date": "Transport Doc Date",
     "distance_km": "Distance (KM)",
     "driver_name": "Driver Name",
-    "driver_phone": "Driver Phone"
+    "driver_phone": "Driver Phone",
+    "challan_type": "Challan Type",
+    "receipt_note_type": "Receipt Note Type",
+    "stock_transfer": "Stock Transfer",
+    "jobwork": "Jobwork"
 }

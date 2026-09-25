@@ -266,7 +266,7 @@ export class GeneralService {
             return localStorage.getItem(param);
         } else {
             const giddhQuery = this.getCookieValue('giddh_query');
-            return giddhQuery[param] || "";
+            return (giddhQuery && giddhQuery[param]) || "";
         }
     }
 

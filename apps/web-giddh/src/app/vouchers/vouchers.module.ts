@@ -105,6 +105,8 @@ import { DscPinDialogComponent } from "./dsc-pin-dialog/dsc-pin-dialog.component
 import { BatchSelectDialogComponent } from "./batch-select-dialog/batch-select-dialog.component";
 import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-list.component";
 import { AdjustInventoryModule } from "../new-inventory/component/adjust-inventory/adjust-inventory.module";
+import { PendingReconciliationComponent } from "./pending-reconciliation/pending-reconciliation.component";
+import { LinkedInvoiceDialogComponent } from "./linked-invoice-dialog/linked-invoice-dialog.component";
 
 @NgModule({
     declarations: [
@@ -132,6 +134,7 @@ import { AdjustInventoryModule } from "../new-inventory/component/adjust-invento
         CancelEInvoiceDialogComponent,
         AllTemplatesComponent,
         DscPinDialogComponent,
+        PendingReconciliationComponent,
     ],
     imports: [
         CommonModule,
@@ -141,6 +144,7 @@ import { AdjustInventoryModule } from "../new-inventory/component/adjust-invento
         FormFieldsModule,
         BatchSelectDialogComponent,
         BatchChipListComponent,
+        LinkedInvoiceDialogComponent,
         VouchersRoutingModule,
         MatTabsModule,
         MatTableModule,

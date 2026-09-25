@@ -55,6 +55,7 @@ import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-e
 import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { ExportInventoryMasterComponent } from "./component/export-inventory-master/export-inventory-master.component";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
@@ -139,6 +140,7 @@ import { StockOpeningBatchDialogComponent } from "./component/stock-opening-batc
         DragDropModule,
         CustomPriceModule,
         WatchVideoModule,
+        MatButtonToggleModule,
         MatSlideToggleModule,
         MatExpansionModule,
         MatPaginatorModule,

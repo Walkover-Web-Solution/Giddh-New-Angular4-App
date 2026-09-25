@@ -43,6 +43,12 @@ export enum VoucherTypeEnum {
     receiptNote = 'receipt-note'
 };
 
+/** Challan type for delivery challan / receipt note */
+export enum ChallanTypeEnum {
+    STOCK_TRANSFER = 'STOCK_TRANSFER',
+    JOBWORK = 'JOBWORK'
+}
+
 export const SearchType = {
     CUSTOMER: 'customer',
     ITEM: 'item',

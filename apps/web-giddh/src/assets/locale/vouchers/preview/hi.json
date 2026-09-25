@@ -79,6 +79,8 @@
     "cr_note_no": "क्रेडिट नोट संख्या.",
     "dr_note_no": "डेबिट नोट संख्या.",
     "linked_invoice": "लिंक्ड इनवॉइस",
+    "view_linked_invoice": "लिंक्ड इनवॉइस",
+    "no_linked_invoice_found": "कोई लिंक्ड इनवॉइस नहीं मिला",
     "linked_voucher": "जुड़ा हुआ वाउचर",
     "overdue_today": "आज तक आगे निकल गया",
     "overdue_days": "[DAYS] दिनों से अधिक हो जाना",
@@ -609,6 +611,11 @@
     },
     "preview_and_convert_invoice": "पूर्वावलोकन करें और चालान में बदलें",
     "preview_and_convert_bill": "पूर्वावलोकन करें और बिल में बदलें",
+    "convert_to_dc": "DC में बदलें",
+    "convert_to_rn": "RN में बदलें",
+    "preview_and_convert_to_dc": "पूर्वावलोकन करें और DC में बदलें",
+    "preview_and_convert_to_rn": "पूर्वावलोकन करें और RN में बदलें",
+    "document_converted_successfully": "दस्तावेज़ सफलतापूर्वक परिवर्तित हुआ",
     "mark_return": "रिटर्न चिह्नित करें",
     "make_adjustment": "समायोजन करें",
     "convert_process_stock_items": "स्टॉक आइटम कन्वर्ट और प्रोसेस करें",
@@ -617,9 +624,32 @@
     "total_qty": "कुल मात्रा",
     "invoiced_qty": "चालान मात्रा",
     "return_qty": "रिटर्न मात्रा",
+    "cn_qty": "CN मात्रा",
     "create_cn": "क्रेडिट नोट बनाएं",
     "proceed": "आगे बढ़ें",
     "select_return_items": "रिटर्न के लिए कम से कम एक आइटम चुनें",
     "return_success": "रिटर्न सफलतापूर्वक प्रोसेस हुआ",
-    "download_signed_bill": "डिजिटल साइन किए गए बिल डाउनलोड करें"
+    "download_signed_bill": "डिजिटल साइन किए गए बिल डाउनलोड करें",
+    "dc_invoice_reconciliation": "DC - इनवॉइस समाधान",
+    "rn_bill_reconciliation": "RN - बिल समाधान",
+    "report_type": "रिपोर्ट प्रकार",
+    "pending_report_types": {
+        "WITHOUT_CHALLAN": "लंबित DC",
+        "NOT_INVOICED": "लंबित इनवॉइस"
+    },
+    "pending_report_types_rn": {
+        "WITHOUT_CHALLAN": "लंबित RN",
+        "NOT_INVOICED": "लंबित बिल"
+    },
+    "linked_invoice_count": "लिंक्ड इनवॉइस संख्या",
+    "linked_bill_count": "लिंक्ड बिल संख्या",
+    "pending_balances": {
+        "total": "कुल",
+        "not_invoiced": "इनवॉइस नहीं",
+        "partially_invoiced": "आंशिक इनवॉइस",
+        "fully_invoiced": "पूर्ण इनवॉइस",
+        "not_billed": "बिल नहीं",
+        "partially_billed": "आंशिक बिल",
+        "fully_billed": "पूर्ण बिल"
+    }
 }

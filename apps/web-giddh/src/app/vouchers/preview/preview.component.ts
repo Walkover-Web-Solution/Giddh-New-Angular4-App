@@ -30,6 +30,7 @@ import { ServiceConfig } from "../../services/service.config";
 import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
 import { DscService } from "../../services/dsc.service";
 import { VoucherService } from "../../services/voucher.service";
+import { LinkedInvoiceDialogComponent } from "../linked-invoice-dialog/linked-invoice-dialog.component";
 
 @Component({
     selector: "preview",
@@ -891,6 +892,26 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Opens linked invoice dialog for delivery challan / receipt note
+     *
+     * @memberof VouchersPreviewComponent
+     */
+    public openLinkedInvoiceDialog(): void {
+        if (!this.selectedInvoice?.uniqueName) {
+            return;
+        }
+
+        this.dialog.open(LinkedInvoiceDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                voucherUniqueName: this.selectedInvoice.uniqueName,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
+        });
+    }
+
+    /**
      * Open history dialog
      *
      * @memberof VouchersPreviewComponent
@@ -1668,7 +1689,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
+        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma, VoucherTypeEnum.deliveryChallan, VoucherTypeEnum.receiptNote].includes(this.voucherType)) {
             if (this.selectedInvoice && this.selectedInvoice.blob) {
                 return saveAs(this.selectedInvoice.blob, `${this.selectedInvoice?.account?.name ?? this.selectedInvoice?.account?.customerName} - ${this.selectedInvoice.voucherNumber}.pdf`);
             } else {
@@ -1889,6 +1910,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public redirectToGetAllPage(): void {
+        if (this.queryParams.redirect) {
+            this.router.navigateByUrl(this.queryParams.redirect);
+            return;
+        }
         if (!this.queryParams.isRecurringVoucher) {
             const isInventoryDocument = !!this.getInventoryVoucherType();
             this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {

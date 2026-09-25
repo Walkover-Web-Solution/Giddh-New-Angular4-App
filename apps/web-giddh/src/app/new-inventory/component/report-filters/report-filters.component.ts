@@ -149,6 +149,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public hideSelectedOptions: boolean = true;
     /** True if report nature is Inventory, false if Books */
     public reportAsPerInventory: boolean = false;
+    /** Report nature enum for template bindings */
+    public reportNature: typeof ReportNature = ReportNature;
     /** Inventory module name */
     public inventoryModuleName: typeof InventoryModuleName = InventoryModuleName;
 
@@ -587,15 +589,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * Saves report nature for the current module and refreshes report data
      *
-     * @param {*} event
+     * @param {ReportNature} reportNature Selected report nature
      * @memberof ReportFiltersComponent
      */
-    public onReportNatureChange(event: any): void {
-        if (!this.moduleName || this.moduleName === InventoryModuleName.transaction) {
+    public onReportNatureChange(reportNature: ReportNature): void {
+        if (!this.moduleName) {
             return;
         }
-        this.reportAsPerInventory = event?.checked;
-        const reportNature = this.reportAsPerInventory ? ReportNature.Inventory : ReportNature.Books;
+        this.reportAsPerInventory = reportNature === ReportNature.Inventory;
         this.isLoading.emit(true);
         this.commonService.saveSelectedTableColumns({ module: this.moduleName, reportNature }).pipe(take(1)).subscribe(response => {
             this.isLoading.emit(false);

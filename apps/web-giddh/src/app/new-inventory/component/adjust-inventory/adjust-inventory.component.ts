@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { AdjustInventoryComponentStore } from './utility/adjust-inventory.store';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -174,6 +174,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private changeDetectorRef: ChangeDetectorRef,
         private inventoryService: InventoryService,
+        private elementRef: ElementRef<HTMLElement>,
         @Optional() private dialogRef: MatDialogRef<AdjustInventoryComponent>,
         @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: AdjustInventoryDialogData
     ) {
@@ -800,6 +801,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
     * @memberof AdjustInventoryComponent
     */
     public resetForm(): void {
+        this.isFormSubmitted = false;
         if (this.isBusinessDocumentMode) {
             const date = this.adjustInventoryCreateEditForm.get('date')?.value;
             const warehouseName = this.adjustInventoryCreateEditForm.get('warehouseName')?.value;
@@ -1051,7 +1053,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
     public updateInventoryAdjustment(): void {
         this.isFormSubmitted = false;
         if (this.adjustInventoryCreateEditForm.invalid) {
-            this.isFormSubmitted = true;
+            this.markFormInvalidAndFocus();
             return;
         }
         let mappedVariants = this.selection.selected.map(item => (
@@ -1091,7 +1093,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
         }
 
         if (this.adjustInventoryCreateEditForm.invalid) {
-            this.isFormSubmitted = true;
+            this.markFormInvalidAndFocus();
             return;
         }
         let mappedVariants = this.selection.selected.map(item => (
@@ -1118,6 +1120,39 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Marks form as submitted and focuses the first invalid field
+     *
+     * @private
+     * @memberof AdjustInventoryComponent
+     */
+    private markFormInvalidAndFocus(): void {
+        this.isFormSubmitted = true;
+        this.adjustInventoryCreateEditForm.markAllAsTouched();
+        this.changeDetectorRef.detectChanges();
+        this.focusFirstInvalidField();
+    }
+
+    /**
+     * Scrolls to and focuses the first invalid / error field
+     *
+     * @private
+     * @memberof AdjustInventoryComponent
+     */
+    private focusFirstInvalidField(): void {
+        setTimeout(() => {
+            const hostEl = this.elementRef.nativeElement;
+            const firstInvalid = hostEl.querySelector<HTMLElement>(
+                '.mat-form-field-invalid input, .error-box, reactive-dropdown-field.ng-invalid input, text-field.ng-invalid input, input.ng-invalid'
+            );
+            if (!firstInvalid) {
+                return;
+            }
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalid.focus?.();
+        });
+    }
+
+    /**
      * Creates inventory adjustment for DC/RN with items[] payload
      *
      * @private
@@ -1132,7 +1167,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
         const missingVariants = this.adjustmentItems.some(item => !item.selection.selected?.length);
 
         if (headerInvalid || itemsInvalid || missingVariants) {
-            this.isFormSubmitted = true;
+            this.markFormInvalidAndFocus();
             return;
         }
 

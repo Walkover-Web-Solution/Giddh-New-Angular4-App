@@ -783,13 +783,21 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getVoucherDetails = this.effect((data: Observable<{ isCopyVoucher: boolean, accountUniqueName: string, payload: any }>) => {
+    readonly getVoucherDetails = this.effect((data: Observable<{ isCopyVoucher: boolean, accountUniqueName: string, payload: any, clearVoucherIdentity?: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getVoucherDetails(req.accountUniqueName, req.payload).pipe(
                     tap(
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
+                            if (req.clearVoucherIdentity) {
+                                delete voucherDetails.uniqueName;
+                                delete voucherDetails.number;
+                                voucherDetails.entries = voucherDetails.entries?.map((entry) => {
+                                    const { uniqueName, ...entryWithoutUniqueName } = entry || {};
+                                    return entryWithoutUniqueName;
+                                });
+                            }
                             voucherDetails.isCopyVoucher = req.isCopyVoucher;
                             return this.patchState({
                                 voucherDetails: voucherDetails

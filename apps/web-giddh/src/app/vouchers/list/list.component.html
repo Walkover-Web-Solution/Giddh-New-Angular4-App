@@ -5958,7 +5958,7 @@
                 <div class="d-flex align-items-center column-gap-1">
                     @if (!isCompany && !isConsolidatedBranch) {
                         <button matButton="filled" [routerLink]="['/pages/vouchers', urlVoucherType, 'create']" class="w-100">
-                            {{
+                            + {{
                                 voucherType === voucherTypeEnum.deliveryChallan
                                     ? localeData?.new_delivery_challan
                                     : localeData?.new_receipt_note
@@ -6103,8 +6103,8 @@
                         <td mat-cell *matCellDef="let element" class="text-right">
                             <amount-field
                                 [amount]="element?.grandTotal?.amountForAccount"
-                                [currencySymbol]="element?.account?.currency?.symbol || company.baseCurrencySymbol"
-                                [currencyCode]="element?.currencyCode || element?.account?.currency?.code || company.baseCurrency"
+                                [currencySymbol]="element?.accountCurrencySymbol"
+                                [currencyCode]="element?.accountCurrencyCode"
                             ></amount-field>
                         </td>
                     </ng-container>
@@ -6120,7 +6120,7 @@
                                 voucherType === voucherTypeEnum.deliveryChallan ? localeData?.linked_invoice_no : localeData?.linked_bill_no
                             }}
                         </th>
-                        <td mat-cell *matCellDef="let element">{{ element?.linkedInvoiceNumbers?.join(', ') || '-' }}</td>
+                        <td mat-cell *matCellDef="let element">{{ element?.linkedInvoiceNumber || element?.linkedInvoiceNumbers?.join(', ') || '-' }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="more_options">
@@ -6309,16 +6309,15 @@
 
 <!-- No Date Found Message Template -->
 <ng-template #noDataFoundMessage let-show>
-    <no-data
-        *ngIf="
-            activeModule === 'pending'
-                ? !(isGetAllRequestInProcess$ | async) && !ledgersData?.length
-                : !(getVouchersInProgress$ | async) && !dataSource?.length
-        "
-        [primaryMessage]="commonLocaleData?.app_no_data_found"
-        [primaryMessageClass]="'font-size-24 text-center mt-200'"
-        [secondaryMessage]="' '"
-    ></no-data>
+    @if (activeModule === 'pending'
+    ? !(isGetAllRequestInProcess$ | async) && !ledgersData?.length
+    : !(getVouchersInProgress$ | async) && !dataSource?.length) {
+        <no-data
+            [primaryMessage]="commonLocaleData?.app_no_data_found"
+            [primaryMessageClass]="'font-size-24 no-data'"
+            [secondaryMessage]="' '"
+        ></no-data>
+    }
 </ng-template>
 
 <!-- Send Email Template -->

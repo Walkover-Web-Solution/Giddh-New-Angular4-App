@@ -69,6 +69,7 @@ import {
     TaxCollectionDeductionType,
     TaxType,
     VoucherTypeEnum,
+    ChallanTypeEnum,
 } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -112,7 +113,7 @@ import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { VoucherService } from "../../services/voucher.service";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { transporterModes } from "../../shared/helpers/transporterModes";
-import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from "../../models/api-models/Invoice";
+import { IEwayBillfilter } from "../../models/api-models/Invoice";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
@@ -127,6 +128,7 @@ import { MatSelectChange } from "@angular/material/select";
 import { ServiceConfig } from "../../services/service.config";
 import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
 import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
+import { ManageTransporterComponent } from "../../shared/manage-transporter/manage-transporter.component";
 import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
@@ -158,8 +160,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     /** Template Reference for Generic aside menu account */
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
-    /** Template for manage transporter aside */
-    @ViewChild("transporterAsideMenu") public transporterAsideMenu: TemplateRef<any>;
     /** Instance of aside Menu Product Service modal */
     @ViewChild("asideMenuProductService") asideMenuProductService: TemplateRef<any>;
     /* Selector for send email modal */
@@ -320,20 +320,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     /** Transporter dropdown options for delivery challan and receipt note */
     public transporterDropdown$: Observable<IOption[]>;
-    /** Saved transporter list for manage transporter aside */
-    public transporterList$: Observable<IEwayBillTransporter[]>;
-    /** Transporter list pagination details */
-    public transporterListDetails: IAllTransporterDetails;
     /** Transporter list filter request */
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
-    /** Form group for creating or updating a transporter */
-    public generateNewTransporterForm: FormGroup;
-    /** True when transporter aside is in edit mode */
-    public transportEditMode: boolean = false;
-    /** Current transporter id being edited */
-    public currentTransporterId: string;
     /** Transport mode options */
     public transporterModeOptions: IOption[] = transporterModes.map((mode) => ({ label: mode.label, value: mode.value }));
+    /** Challan type options for delivery challan and receipt note */
+    public challanTypeOptions: IOption[] = [];
     /** Holds template data */
     public templateData: any = {
         customField1Label: "",
@@ -805,7 +797,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isCashSalesInvoice ||
             this.invoiceType.isCreditNote ||
             this.invoiceType.isEstimateInvoice ||
-            this.invoiceType.isProformaInvoice
+            this.invoiceType.isProformaInvoice ||
+            this.invoiceType.isDeliveryChallan
         );
     }
 
@@ -890,17 +883,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get recurrenceFormGroup(): FormGroup {
         return this.invoiceForm.get('recurrencePreviewRequest') as FormGroup;
     }
-
-    /** Transporter id control on manage transporter form */
-    public get transporterId(): FormControl {
-        return this.generateNewTransporterForm?.get("transporterId") as FormControl;
-    }
-
-    /** Transporter name control on manage transporter form */
-    public get transporterName(): FormControl {
-        return this.generateNewTransporterForm?.get("transporterName") as FormControl;
-    }
-
 
     /** Tax validations */
     public taxNumberValidations: any = {
@@ -1004,16 +986,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         this.getVoucherVersion();
         this.initVoucherForm();
-        this.initGenerateNewTransporterForm();
         this.transporterFilterRequest.page = 1;
         this.transporterFilterRequest.count = PAGINATION_LIMIT;
-        this.store.pipe(select(state => state.ewaybillstate.TransporterListDetails), takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                this.transporterListDetails = response;
-            }
-        });
         this.store.pipe(select(state => state.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe((response) => {
-            this.transporterList$ = observableOf(response || []);
             this.transporterDropdown$ = observableOf((response || []).map((transporter) => ({
                 label: transporter.transporterName,
                 value: transporter.transporterId
@@ -1073,9 +1048,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.redirectUrl = this.queryParams.redirect;
                         }
 
-                        if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName) {
+                        if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
+                            || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
                             this.inventoryDocumentListRedirectUrl = this.queryParams.redirect
-                                || `/pages/vouchers/preview/${this.queryParams.rnUniqueName ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
+                                || `/pages/vouchers/preview/${(this.queryParams.rnUniqueName || this.queryParams.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
                             this.redirectUrl = this.inventoryDocumentListRedirectUrl;
                         } else {
                             this.inventoryDocumentListRedirectUrl = "";
@@ -1091,7 +1067,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
 
                         this.resetVoucherForm(
-                            !params?.uniqueName && !this.queryParams?.dcUniqueName && !this.queryParams?.rnUniqueName,
+                            !params?.uniqueName
+                                && !this.queryParams?.dcUniqueName
+                                && !this.queryParams?.rnUniqueName
+                                && !this.queryParams?.invoiceUniqueName
+                                && !this.queryParams?.billUniqueName,
                             true
                         );
                         this.invoiceForm.get('isRecurringVoucher')?.patchValue(this.queryParams.isRecurringVoucher ? true : false);
@@ -1152,6 +1132,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.isCopyMode = true;
                             this.useDefaultAccountDetails = false;
                             this.prefillFromInventoryDocument();
+                        } else if (this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
+                            // Prefill create DC/RN from invoice/bill (pending reconciliation Pending DC)
+                            this.isCopyMode = true;
+                            this.useDefaultAccountDetails = false;
+                            this.prefillFromInvoiceVoucher();
                         } else {
                             this.depositAccountName = "";
                         }
@@ -1529,45 +1514,55 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                         if (!voucherDetails.isCopyVoucher) {
                             this.getAccountDetails(voucherDetails.account?.uniqueName);
-                            this.fillBillingShippingAddress(
-                                "account",
-                                "billingDetails",
-                                voucherDetails.account?.billingDetails,
-                                0
-                            );
-                            this.fillBillingShippingAddress(
-                                "account",
-                                "shippingDetails",
-                                voucherDetails.account?.shippingDetails,
-                                0
-                            );
 
-                            this.copyAccountBillingInShippingAddress = isEqual(
-                                voucherDetails.account?.billingDetails,
-                                voucherDetails.account?.shippingDetails
-                            );
+                            // Business-document (RN/DC) APIs often omit billing/shipping; only fill when present.
+                            // Missing account addresses are filled from account defaults in updateAccountDataInForm.
+                            if (voucherDetails.account?.billingDetails) {
+                                this.fillBillingShippingAddress(
+                                    "account",
+                                    "billingDetails",
+                                    voucherDetails.account.billingDetails,
+                                    0
+                                );
+                                this.fillBillingShippingAddress(
+                                    "account",
+                                    "shippingDetails",
+                                    voucherDetails.account?.shippingDetails ?? voucherDetails.account.billingDetails,
+                                    0
+                                );
+
+                                this.copyAccountBillingInShippingAddress = isEqual(
+                                    voucherDetails.account?.billingDetails,
+                                    voucherDetails.account?.shippingDetails
+                                );
+                            }
 
                             if (
                                 this.invoiceType.isPurchaseOrder ||
                                 ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
                             ) {
-                                this.fillBillingShippingAddress(
-                                    "company",
-                                    "billingDetails",
-                                    voucherDetails.company?.billingDetails,
-                                    0
-                                );
-                                this.fillBillingShippingAddress(
-                                    "company",
-                                    "shippingDetails",
-                                    voucherDetails.company?.shippingDetails,
-                                    0
-                                );
+                                if (voucherDetails.company?.billingDetails) {
+                                    this.fillBillingShippingAddress(
+                                        "company",
+                                        "billingDetails",
+                                        voucherDetails.company.billingDetails,
+                                        0
+                                    );
+                                    this.fillBillingShippingAddress(
+                                        "company",
+                                        "shippingDetails",
+                                        voucherDetails.company?.shippingDetails ?? voucherDetails.company.billingDetails,
+                                        0
+                                    );
 
-                                this.copyCompanyBillingInShippingAddress = isEqual(
-                                    voucherDetails.company?.billingDetails,
-                                    voucherDetails.company?.shippingDetails
-                                );
+                                    this.copyCompanyBillingInShippingAddress = isEqual(
+                                        voucherDetails.company?.billingDetails,
+                                        voucherDetails.company?.shippingDetails
+                                    );
+                                } else {
+                                    // defaultCompanyAddress / no company payload → same defaults as normal create
+                                    this.fillDefaultCompanyAddresses();
+                                }
                             }
                             this.invoiceForm.get('account.placeOfSupply.name')?.setValue(voucherDetails.account?.placeOfSupply?.name || '');
                             this.invoiceForm.get('account.placeOfSupply.code')?.setValue(voucherDetails.account?.placeOfSupply?.code || '');
@@ -1712,6 +1707,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             driverName: voucherDetails?.transporterDetails?.driverName ?? "",
                             driverPhone: voucherDetails?.transporterDetails?.driverPhone ?? ""
                         });
+                        this.invoiceForm.get("documentSubType")?.patchValue(
+                            voucherDetails?.documentSubType === ChallanTypeEnum.JOBWORK
+                                ? ChallanTypeEnum.JOBWORK
+                                : ChallanTypeEnum.STOCK_TRANSFER
+                        );
 
                         if (this.isRecurringVoucher[1]?.isRecurringVoucher || voucherDetails?.recurrencePreviewRequest) {
                             const recurrencePreviewRequest = voucherDetails.recurrencePreviewRequest;
@@ -1785,8 +1785,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (voucherDetails.isCopyVoucher) {
                             this.recentVouchersAsideRef?.close();
                             this.focusOnCopyPreviousBtn();
-                        } else if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName) {
-                            // Prefill from DC/RN — keep customer/vendor dropdown closed
+                        } else if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
+                            || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
+                            // Prefill from DC/RN or invoice/bill — keep customer/vendor dropdown closed
                             this.openAccountDropdown = false;
                         } else if (this.isUpdateMode) {
                             setTimeout(() => {
@@ -2257,6 +2258,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherDateLabel = this.localeData?.dr_note_date;
         } else if (this.invoiceType.isPurchaseInvoice) {
             this.voucherDateLabel = this.localeData?.bill_date;
+            this.voucherDueDateLabel = this.localeData?.due_date;
         } else if (this.invoiceType.isReceiptInvoice) {
             this.voucherDateLabel = this.localeData?.receipt_date;
         } else if (this.invoiceType.isPaymentInvoice) {
@@ -2619,10 +2621,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.company.branch = response.find((branch) => !branch.parentBranch);
                 }
                 this.branchCurrentAddressInfo = this.company.branch.addresses.find((address)=>address.isDefault);
-                this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
-                    name: this.branchCurrentAddressInfo.stateName || '',
-                    code: this.branchCurrentAddressInfo.stateCode || '',
-                });
+                this.setDefaultDestinationOfSupply();
             }
         });
     }
@@ -2736,109 +2735,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Initializes the form used to create or update a transporter
-     *
-     * @private
-     * @memberof VoucherCreateComponent
-     */
-    private initGenerateNewTransporterForm(): void {
-        this.generateNewTransporterForm = this.formBuilder.group({
-            transporterId: [null, Validators.required],
-            transporterName: [null, Validators.required]
-        });
-    }
-
-    /**
      * Opens manage transporter aside
      *
      * @memberof VoucherCreateComponent
      */
     public openTransporterModel(): void {
-        this.dialog.open(this.transporterAsideMenu, ASIDE_PANE_CONFIG);
-    }
-
-    /**
-     * Saves a new transporter and refreshes the dropdown list
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public generateTransporter(): void {
-        this.store.dispatch(this.invoiceActions.addEwayBillTransporter(this.generateNewTransporterForm?.value));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.clearTransportForm();
-    }
-
-    /**
-     * Updates an existing transporter and refreshes the dropdown list
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public updateTransporter(): void {
-        this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currentTransporterId, this.generateNewTransporterForm?.value));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.transportEditMode = false;
-    }
-
-    /**
-     * Clears the manage transporter form
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public clearTransportForm(): void {
-        this.generateNewTransporterForm?.reset();
-        this.transportEditMode = false;
-        this.currentTransporterId = null;
-    }
-
-    /**
-     * Enables edit mode for the selected transporter
-     *
-     * @param {*} trans
-     * @memberof VoucherCreateComponent
-     */
-    public editTransporter(trans: any): void {
-        if (trans) {
-            this.generateNewTransporterForm.get("transporterId")?.patchValue(trans.transporterId);
-            this.generateNewTransporterForm.get("transporterName")?.patchValue(trans.transporterName);
-            this.currentTransporterId = trans.transporterId;
-            this.transportEditMode = true;
-        }
-    }
-
-    /**
-     * Deletes a transporter and refreshes the dropdown list
-     *
-     * @param {IEwayBillTransporter} trans
-     * @memberof VoucherCreateComponent
-     */
-    public deleteTransporter(trans: IEwayBillTransporter): void {
-        this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-    }
-
-    /**
-     * Sorts the transporter list
-     *
-     * @param {'asc' | 'desc'} type
-     * @param {string} columnName
-     * @memberof VoucherCreateComponent
-     */
-    public sortTransporterList(type: "asc" | "desc", columnName: string): void {
-        this.transporterFilterRequest.sort = type;
-        this.transporterFilterRequest.sortBy = columnName;
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-    }
-
-    /**
-     * Handles transporter list pagination
-     *
-     * @param {PageEvent} event
-     * @memberof VoucherCreateComponent
-     */
-    public transporterPageChanged(event: PageEvent): void {
-        this.transporterFilterRequest.page = this.transporterFilterRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
-        this.transporterFilterRequest.count = event.pageSize;
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+        this.dialog.open(ManageTransporterComponent, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -3624,6 +3526,46 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Fills default billing and shipping addresses for company (Deliver To)
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private fillDefaultCompanyAddresses(): void {
+        const companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
+        const defaultAddress = companyDefaultAddress.defaultAddress;
+        const findIndex = this.company?.addresses?.findIndex(
+            (address: any) => address.uniqueName === companyDefaultAddress.defaultAddress?.uniqueName
+        );
+        const index = findIndex > -1 ? findIndex : 0;
+
+        if (defaultAddress) {
+            this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
+            this.fillBillingShippingAddress("company", "shippingDetails", defaultAddress, index);
+            if (!this.isUpdateMode) {
+                this.setDefaultSupplyFields();
+            }
+        }
+    }
+
+    /**
+     * Whether form already has address content for the given entity/address type
+     *
+     * @private
+     * @param {string} entityType
+     * @param {string} addressType
+     * @returns {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    private hasAddressDetails(entityType: string, addressType: string): boolean {
+        const addressValue = this.invoiceForm.controls[entityType]?.get(addressType)?.get("address")?.value;
+        if (Array.isArray(addressValue)) {
+            return addressValue.some((line: string) => !!line?.trim());
+        }
+        return !!addressValue;
+    }
+
+    /**
      * Returns the gstNumber of the default address (lowercased), or empty string if not found
      *
      * @private
@@ -3640,6 +3582,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Prefills destinationOfSupply from the current branch default address.
+     * Independent of account selection so it survives voucher-type route changes
+     * after resetVoucherForm clears the form (branchList$ does not re-emit).
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setDefaultDestinationOfSupply(): void {
+        if (!this.invoiceForm || !this.branchCurrentAddressInfo) {
+            return;
+        }
+        this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
+            name: this.branchCurrentAddressInfo.stateName || '',
+            code: this.branchCurrentAddressInfo.stateCode || '',
+        });
+    }
+
+    /**
      * Sets default values for placeOfSupply, sourceOfSupply, destinationOfSupply
      * based on account gstNumber (B2B vs B2C) and billing/shipping address states.
      * Only applies when company country is India.
@@ -3648,7 +3608,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private setDefaultSupplyFields(): void {
-        if (!this.isIndianCompanyAndAccount || !this.invoiceForm) {
+        if (!this.invoiceForm) {
+            return;
+        }
+
+        // Destination is company-branch based; restore after route/form reset even before account is selected
+        if (this.company.countryCode === 'IN' && this.showSourceDestinationOfSupply) {
+            this.setDefaultDestinationOfSupply();
+        }
+
+        if (!this.isIndianCompanyAndAccount) {
             return;
         }
 
@@ -3671,10 +3640,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.get('account.sourceOfSupply')?.patchValue({
                 name: sourceState?.get('name')?.value || '',
                 code: sourceState?.get('code')?.value || '',
-            });
-            this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
-                name: this.branchCurrentAddressInfo.stateName || '',
-                code: this.branchCurrentAddressInfo.stateCode || '',
             });
         }
     }
@@ -3757,18 +3722,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceType.isPurchaseOrder ||
                 ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
             ) {
-                let companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
-                let defaultAddress = companyDefaultAddress.defaultAddress;
-                const findIndex = this.company.addresses.findIndex((address: any) => address.uniqueName === companyDefaultAddress.defaultAddress?.uniqueName);
-                let index = findIndex > -1 ? findIndex : 0;
-
-                if (defaultAddress) {
-                    this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
-                    this.fillBillingShippingAddress("company", "shippingDetails", defaultAddress, index);
-                    if (!this.isUpdateMode) {
-                        this.setDefaultSupplyFields();
-                    }
-                }
+                this.fillDefaultCompanyAddresses();
             }
 
             this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(accountData?.name);
@@ -3782,53 +3736,78 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
                 !this.invoiceType.isCashInvoice
             ) {
-                const accountBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                    accountData.addresses,
-                    this.invoiceForm.controls["account"]?.get("billingDetails")?.value
-                );
-                const accountShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                    accountData.addresses,
-                    this.invoiceForm.controls["account"]?.get("shippingDetails")?.value
-                );
+                // RN/DC may omit addresses — use account defaults (includes name) when form has none
+                if (!this.hasAddressDetails("account", "billingDetails")) {
+                    this.fillDefaultAccountAddresses(accountData);
+                } else {
+                    const accountBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                        accountData.addresses,
+                        this.invoiceForm.controls["account"]?.get("billingDetails")?.value
+                    );
+                    const accountShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                        accountData.addresses,
+                        this.invoiceForm.controls["account"]?.get("shippingDetails")?.value
+                    );
 
-                if (accountBillingAddressIndex > -1) {
-                    this.invoiceForm.controls["account"]
-                        ?.get("billingDetails")
-                        .get("index")
-                        .patchValue(accountBillingAddressIndex);
-                }
+                    if (accountBillingAddressIndex > -1) {
+                        this.invoiceForm.controls["account"]
+                            ?.get("billingDetails")
+                            .get("index")
+                            .patchValue(accountBillingAddressIndex);
+                        this.invoiceForm.controls["account"]
+                            ?.get("billingDetails")
+                            .get("name")
+                            .patchValue(accountData.addresses?.[accountBillingAddressIndex]?.name ?? "");
+                    }
 
-                if (accountShippingAddressIndex > -1) {
-                    this.invoiceForm.controls["account"]
-                        ?.get("shippingDetails")
-                        .get("index")
-                        .patchValue(accountShippingAddressIndex);
+                    if (accountShippingAddressIndex > -1) {
+                        this.invoiceForm.controls["account"]
+                            ?.get("shippingDetails")
+                            .get("index")
+                            .patchValue(accountShippingAddressIndex);
+                        this.invoiceForm.controls["account"]
+                            ?.get("shippingDetails")
+                            .get("name")
+                            .patchValue(accountData.addresses?.[accountShippingAddressIndex]?.name ?? "");
+                    }
                 }
 
                 if (
                     this.invoiceType.isPurchaseOrder ||
                     ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
                 ) {
-                    const companyBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                        this.company?.addresses,
-                        this.invoiceForm.controls["company"]?.get("billingDetails")?.value
-                    );
-                    const companyShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                        this.company?.addresses,
-                        this.invoiceForm.controls["company"]?.get("shippingDetails")?.value
-                    );
+                    if (!this.hasAddressDetails("company", "billingDetails")) {
+                        this.fillDefaultCompanyAddresses();
+                    } else {
+                        const companyBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                            this.company?.addresses,
+                            this.invoiceForm.controls["company"]?.get("billingDetails")?.value
+                        );
+                        const companyShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                            this.company?.addresses,
+                            this.invoiceForm.controls["company"]?.get("shippingDetails")?.value
+                        );
 
-                    if (companyBillingAddressIndex > -1) {
-                        this.invoiceForm.controls["company"]
-                            ?.get("billingDetails")
-                            .get("index")
-                            .patchValue(companyBillingAddressIndex);
-                    }
-                    if (companyShippingAddressIndex > -1) {
-                        this.invoiceForm.controls["company"]
-                            ?.get("shippingDetails")
-                            .get("index")
-                            .patchValue(companyShippingAddressIndex);
+                        if (companyBillingAddressIndex > -1) {
+                            this.invoiceForm.controls["company"]
+                                ?.get("billingDetails")
+                                .get("index")
+                                .patchValue(companyBillingAddressIndex);
+                            this.invoiceForm.controls["company"]
+                                ?.get("billingDetails")
+                                .get("name")
+                                .patchValue(this.company?.addresses?.[companyBillingAddressIndex]?.name ?? "");
+                        }
+                        if (companyShippingAddressIndex > -1) {
+                            this.invoiceForm.controls["company"]
+                                ?.get("shippingDetails")
+                                .get("index")
+                                .patchValue(companyShippingAddressIndex);
+                            this.invoiceForm.controls["company"]
+                                ?.get("shippingDetails")
+                                .get("name")
+                                .patchValue(this.company?.addresses?.[companyShippingAddressIndex]?.name ?? "");
+                        }
                     }
                 }
             }
@@ -3981,7 +3960,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPersonName: [''],
             salesPersonUniqueName: [''],
             annexureCharges: this.formBuilder.array([this.getAnnexureChargeFormGroup()]),
-            transporterDetails: this.getTransporterDetailsFormGroup()
+            transporterDetails: this.getTransporterDetailsFormGroup(),
+            documentSubType: [ChallanTypeEnum.STOCK_TRANSFER]
         });
     }
 
@@ -5694,7 +5674,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.dateChangeType = "voucher";
-        if (!(this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder)) {
+        if (!(this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder || this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)) {
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                 panelClass: "mat-dialog-sm",
                 data: {
@@ -7187,6 +7167,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!this.showsTransporterDetails) {
             delete invoiceForm.transporterDetails;
+            delete invoiceForm.documentSubType;
         }
 
         if (!this.isIndianCompanyAndAccount) {
@@ -7639,6 +7620,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     invoiceForm.businessDocumentUniqueNames = [businessDocumentUniqueName];
                 }
 
+                // Link invoice/bill when creating DC/RN from pending reconciliation (Pending DC)
+                const linkedVoucherUniqueName = this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName;
+                if (linkedVoucherUniqueName && (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)) {
+                    invoiceForm.businessDocumentUniqueNames = [linkedVoucherUniqueName];
+                }
+
                 const generateRequest = (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)
                     ? this.voucherService.generateInventoryVoucher(this.voucherType, invoiceForm)
                     : this.voucherService.generateVoucher(invoiceForm.account?.uniqueName, invoiceForm);
@@ -7654,13 +7641,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 ocrType: this.ocrType
                             });
 
-                            if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName || this.inventoryDocumentListRedirectUrl) {
+                            if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
+                                || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName
+                                || this.inventoryDocumentListRedirectUrl) {
                                 const listRedirectUrl = this.inventoryDocumentListRedirectUrl
-                                    || `/pages/vouchers/preview/${this.queryParams?.rnUniqueName ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
+                                    || `/pages/vouchers/preview/${(this.queryParams?.rnUniqueName || this.queryParams?.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
                                 delete this.queryParams.dcUniqueName;
                                 delete this.queryParams.rnUniqueName;
+                                delete this.queryParams.invoiceUniqueName;
+                                delete this.queryParams.billUniqueName;
                                 this.inventoryDocumentListRedirectUrl = "";
                                 this.redirectUrl = "";
+                                // Clear leave confirmation before navigate; otherwise PageLeaveConfirmationGuard
+                                // blocks redirect because account/customerName is still set (showPageLeaveConfirmation).
+                                this.resetVoucherForm(false);
                                 this.toasterService.showSnackBar(
                                     "success",
                                     response?.body?.number
@@ -7840,6 +7834,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             driverName: "",
             driverPhone: ""
         });
+        this.invoiceForm.get("documentSubType")?.patchValue(ChallanTypeEnum.STOCK_TRANSFER);
 
         // Restore custom fields with preserved uniqueName but cleared values
         if (customFieldsData.length > 0) {
@@ -9378,6 +9373,44 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Prefills DC/RN create form from invoice/bill query params (pending reconciliation).
+     * Does not set voucher uniqueName so a new DC/RN is created.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private prefillFromInvoiceVoucher(): void {
+        const isFromBill = !!this.queryParams?.billUniqueName;
+        const voucherUniqueName = isFromBill
+            ? this.queryParams.billUniqueName
+            : this.queryParams.invoiceUniqueName;
+        const accountUniqueName = this.queryParams?.accountUniqueName
+            || this.activatedRoute.snapshot.params?.accountUniqueName;
+
+        if (!voucherUniqueName || !accountUniqueName) {
+            return;
+        }
+
+        if (isFromBill && !this.invoiceType.isReceiptNote) {
+            return;
+        }
+        if (!isFromBill && !this.invoiceType.isDeliveryChallan) {
+            return;
+        }
+
+        this.startLoader(true);
+        this.componentStore.getVoucherDetails({
+            isCopyVoucher: false,
+            accountUniqueName,
+            clearVoucherIdentity: true,
+            payload: {
+                uniqueName: voucherUniqueName,
+                voucherType: isFromBill ? VoucherTypeEnum.purchase : VoucherTypeEnum.sales
+            }
+        });
+    }
+
+    /**
      * Gets voucher details
      *
      * @private
@@ -9650,6 +9683,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.isUpdateMode) {
                 this.getUpdateVoucherText();
             }
+            this.challanTypeOptions = [
+                { label: this.localeData?.stock_transfer, value: ChallanTypeEnum.STOCK_TRANSFER },
+                // { label: this.localeData?.jobwork, value: ChallanTypeEnum.JOBWORK } // Hide for now becuase jobwork is not supported yet
+            ];
         }, 100);
     }
 
@@ -10229,7 +10266,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getAddressDisplayText(addressType: string, entityType: string): string {
         const addressControl = this.invoiceForm?.controls?.[entityType]?.get(`${addressType}Details`);
-
         if (!addressControl) {
             return '';
         }

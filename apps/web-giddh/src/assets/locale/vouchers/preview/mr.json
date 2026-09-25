@@ -79,6 +79,8 @@
     "cr_note_no": "क्रेडिट नोट नंबर",
     "dr_note_no": "डेबिट टीप क्रमांक",
     "linked_invoice": "लिंक्ड चलन",
+    "view_linked_invoice": "लिंक्ड चलन",
+    "no_linked_invoice_found": "कोणतेही लिंक्ड चलन सापडले नाही",
     "linked_voucher": "लिंक्ड व्हाउचर",
     "overdue_today": "आज ओव्हरड्यू",
     "overdue_days": "[DAYS] दिवसांपेक्षा जास्त",
@@ -609,6 +611,11 @@
     },
     "preview_and_convert_invoice": "पूर्वावलोकन करा आणि चलनात रूपांतरित करा",
     "preview_and_convert_bill": "पूर्वावलोकन करा आणि बिलमध्ये रूपांतरित करा",
+    "convert_to_dc": "DC मध्ये रूपांतरित करा",
+    "convert_to_rn": "RN मध्ये रूपांतरित करा",
+    "preview_and_convert_to_dc": "पूर्वावलोकन करा आणि DC मध्ये रूपांतरित करा",
+    "preview_and_convert_to_rn": "पूर्वावलोकन करा आणि RN मध्ये रूपांतरित करा",
+    "document_converted_successfully": "दस्तऐवज यशस्वीरित्या रूपांतरित झाला",
     "mark_return": "रिटर्न चिन्हांकित करा",
     "make_adjustment": "समायोजन करा",
     "convert_process_stock_items": "स्टॉक आयटम रूपांतरित आणि प्रक्रिया करा",
@@ -617,9 +624,32 @@
     "total_qty": "एकूण प्रमाण",
     "invoiced_qty": "इनव्हॉइस प्रमाण",
     "return_qty": "रिटर्न प्रमाण",
+    "cn_qty": "CN प्रमाण",
     "create_cn": "क्रेडिट नोट तयार करा",
     "proceed": "पुढे जा",
     "select_return_items": "रिटर्नसाठी किमान एक आयटम निवडा",
     "return_success": "रिटर्न यशस्वीरित्या प्रक्रिया झाला",
-    "download_signed_bill": "डिजिटल साइन किए गए बिल डाउनलोड करा"
+    "download_signed_bill": "डिजिटल साइन किए गए बिल डाउनलोड करा",
+    "dc_invoice_reconciliation": "DC - इनव्हॉइस समाधान",
+    "rn_bill_reconciliation": "RN - बिल समाधान",
+    "report_type": "अहवाल प्रकार",
+    "pending_report_types": {
+        "WITHOUT_CHALLAN": "प्रलंबित DC",
+        "NOT_INVOICED": "प्रलंबित इनव्हॉइस"
+    },
+    "pending_report_types_rn": {
+        "WITHOUT_CHALLAN": "प्रलंबित RN",
+        "NOT_INVOICED": "प्रलंबित बिल"
+    },
+    "linked_invoice_count": "लिंक्ड चलन संख्या",
+    "linked_bill_count": "लिंक्ड बिल संख्या",
+    "pending_balances": {
+        "total": "एकूण",
+        "not_invoiced": "इनव्हॉइस नाही",
+        "partially_invoiced": "अंशतः इनव्हॉइस",
+        "fully_invoiced": "पूर्ण इनव्हॉइस",
+        "not_billed": "बिल नाही",
+        "partially_billed": "अंशतः बिल",
+        "fully_billed": "पूर्ण बिल"
+    }
 }

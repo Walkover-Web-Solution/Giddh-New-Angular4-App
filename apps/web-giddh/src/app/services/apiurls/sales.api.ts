@@ -15,7 +15,9 @@ export const INVENTORY_VOUCHER_API = {
     DELETE: 'company/:companyUniqueName/business-documents/:voucherUniqueName',
     EVENT_RESOLUTIONS: 'company/:companyUniqueName/:voucherType/:voucherUniqueName/event-resolutions',
     EVENTS: 'company/:companyUniqueName/:voucherType/:voucherUniqueName/events',
-    HISTORY: 'company/:companyUniqueName/business-documents/:voucherUniqueName/versions'
+    HISTORY: 'company/:companyUniqueName/business-documents/:voucherUniqueName/versions',
+    LINKED_INVOICE_HISTORY: 'company/:companyUniqueName/business-documents/:voucherUniqueName/history',
+    PENDING_REPORT: 'company/:companyUniqueName/business-documents/pending-report'
 };
 export const SALES_API_V4 = {
     GENERATE_SALES: `v4/${URL}invoices/generate-sales`,
