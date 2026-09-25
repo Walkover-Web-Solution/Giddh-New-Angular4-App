@@ -462,6 +462,28 @@ export class VoucherService {
     }
 
     /**
+     * Gets business document linked invoice history (DC/RN)
+     *
+     * @param {string} voucherUniqueName
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof VoucherService
+     */
+    public getBusinessDocumentLinkedInvoiceHistory(voucherUniqueName: string): Observable<BaseResponse<any, string>> {
+        const url = this.config.apiUrl + INVENTORY_VOUCHER_API.LINKED_INVOICE_HISTORY
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':voucherUniqueName', encodeURIComponent(voucherUniqueName));
+
+        return this.http.get(url).pipe(
+            map((res) => {
+                const data: BaseResponse<any, string> = res;
+                data.queryString = { voucherUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, voucherUniqueName))
+        );
+    }
+
+    /**
      * Executes an inventory document event (return, replacement, etc.)
      *
      * @param {string} voucherType

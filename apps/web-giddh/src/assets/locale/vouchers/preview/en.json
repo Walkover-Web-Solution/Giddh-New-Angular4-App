@@ -79,6 +79,8 @@
     "cr_note_no": "Cr Note No.",
     "dr_note_no": "Dr Note No.",
     "linked_invoice": "Linked Invoice",
+    "view_linked_invoice": "Linked Invoice",
+    "no_linked_invoice_found": "No linked invoices found",
     "linked_voucher": "Linked Voucher",
     "overdue_today": "Overdue by Today",
     "overdue_days": "Overdue by [DAYS] days",
