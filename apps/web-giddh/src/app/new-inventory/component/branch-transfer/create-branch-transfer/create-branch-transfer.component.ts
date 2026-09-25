@@ -1471,6 +1471,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 uniqueName: event?.value
             });
             this.getWarehouseDetails('destinations', index);
+            if (this.branchTransferMode === "receipt-note" && !this.isDefaultLoad) {
+                this.clearAllProductBatches();
+            }
         }
     }
 
@@ -1491,7 +1494,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 uniqueName: event?.value
             });
             this.getWarehouseDetails('sources', index);
-            this.clearAllProductBatches();
+            if (this.branchTransferMode !== "receipt-note" && !this.isDefaultLoad) {
+                this.clearAllProductBatches();
+            }
         }
     }
 
@@ -2555,7 +2560,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Clears batches when the source warehouse changes.
+     * Clears batches when the warehouse used for batch availability changes.
+     * Receipt note uses the receiver warehouse; delivery challan uses the sender warehouse.
      *
      * @private
      * @memberof CreateBranchTransferComponent

@@ -752,6 +752,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         if (stock?.stockUniqueName) {
             queryParams.stockUniqueNames = stock.stockUniqueName;
         }
+        const stockName = stock?.stockName || stock?.name || stock?.stock?.name;
+        if (stockName) {
+            queryParams.stockNames = stockName;
+        }
         if (warehouse?.uniqueName) {
             queryParams.warehouseUniqueNames = warehouse.uniqueName;
         }

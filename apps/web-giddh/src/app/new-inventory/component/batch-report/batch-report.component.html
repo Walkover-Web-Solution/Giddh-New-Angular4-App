@@ -8,9 +8,11 @@
 >
     @if (dataSource?.data?.length || hasActiveFilters) {
         <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-2 mb-3">
-            <button matButton="outlined" class="report-back-button" (click)="backToPreviousPage()">
-                {{ commonLocaleData?.app_back }}
-            </button>
+            @if (showBackButton) {
+                <button matButton="outlined" class="report-back-button" (click)="backToPreviousPage()">
+                    {{ commonLocaleData?.app_back }}
+                </button>
+            }
             <div class="custom-datepicker-wrapper">
                 <div
                     class="custom-datepicker"
@@ -30,29 +32,26 @@
                     />
                 </div>
             </div>
-            @if (stocks?.length) {
-                <div class="filter-dropdown">
-                    <multi-select-dropdown
-                        [name]="'batchSelectedStock'"
-                        [label]="localeData?.select_stock"
-                        [placeholder]="localeData?.select_stock"
-                        [options]="stocks"
-                        [enableDynamicSearch]="true"
-                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                        [(ngModel)]="selectedStock"
-                        (selectionChange)="onStockChange()"
-                        (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
-                        (scrollEnd)="onStockScrollEnd()"
-                    ></multi-select-dropdown>
-                </div>
-            }
+            <div class="filter-dropdown">
+                <multi-select-dropdown
+                    [name]="'batchSelectedStock'"
+                    [label]="localeData?.select_stock"
+                    [options]="stocks"
+                    [enableDynamicSearch]="true"
+                    [searchQuery]="stocksSearchQuery"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                    [(ngModel)]="selectedStock"
+                    (selectionChange)="onStockChange()"
+                    (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
+                    (scrollEnd)="onStockScrollEnd()"
+                ></multi-select-dropdown>
+            </div>
 
             @if (variants?.length) {
                 <div class="filter-dropdown">
                     <multi-select-dropdown
                         [name]="'batchSelectedVariant'"
                         [label]="localeData?.select_variant"
-                        [placeholder]="localeData?.select_variant"
                         [options]="variants"
                         [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                         [(ngModel)]="selectedVariant"
@@ -66,7 +65,6 @@
                     <multi-select-dropdown
                         [name]="'batchSelectedWarehouse'"
                         [label]="commonLocaleData?.app_select_warehouse"
-                        [placeholder]="commonLocaleData?.app_select_warehouse"
                         [options]="warehouses"
                         [optionValue]="'uniqueName'"
                         [optionLabel]="'name'"
@@ -401,11 +399,13 @@
                 ></no-data>
             }
         } @else {
-            <div class="d-flex align-items-center mb-3">
-                <button matButton="outlined" class="report-back-button" (click)="backToPreviousPage()">
-                    {{ commonLocaleData?.app_back }}
-                </button>
-            </div>
+            @if (showBackButton) {
+                <div class="d-flex align-items-center mb-3">
+                    <button matButton="outlined" class="report-back-button" (click)="backToPreviousPage()">
+                        {{ commonLocaleData?.app_back }}
+                    </button>
+                </div>
+            }
             <div class="batch-empty-state d-flex justify-content-center align-items-center">
                 <button matButton="filled" (click)="openBatchDialog()">
                     {{ localeData?.add_batch }}
