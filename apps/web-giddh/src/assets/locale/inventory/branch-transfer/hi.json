@@ -55,6 +55,7 @@
     "n_batches_negative": "[COUNT] बैच नकारात्मक",
     "batch_not_found": "इस कोड का कोई बैच नहीं मिला",
     "select_variant_first": "पहले वेरिएंट चुनें",
+    "select_warehouse_first": "पहले गोदाम चुनें",
     "batch_expiry": "समाप्ति",
     "batch_available": "उपलब्ध",
     "batch_manufacturing": "निर्माण",

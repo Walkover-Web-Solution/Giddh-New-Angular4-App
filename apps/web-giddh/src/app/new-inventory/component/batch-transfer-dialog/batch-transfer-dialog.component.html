@@ -1,9 +1,6 @@
 <div class="advance-search-dialog">
     <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.transfer_batch }}</span>
-        <button matIconButton mat-dialog-close aria-label="cross icon">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         @if (hasLoadedBatches && hasNoTargetBatches) {

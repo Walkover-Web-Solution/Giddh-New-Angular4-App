@@ -55,6 +55,7 @@
     "n_batches_negative": "[COUNT] batches negative",
     "batch_not_found": "No batch found with this code",
     "select_variant_first": "Select a variant first",
+    "select_warehouse_first": "Select a warehouse first",
     "batch_expiry": "Expiry",
     "batch_available": "Available",
     "batch_manufacturing": "Mfg",
