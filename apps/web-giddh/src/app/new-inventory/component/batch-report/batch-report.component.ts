@@ -78,6 +78,14 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public selectedWarehouse: string[] = [];
     /** Stock options for the filter dropdown. */
     public stocks: Array<{ label: string; value: string }> = [];
+    /** Current stocks dropdown page. */
+    private stocksPageNumber: number = 1;
+    /** Total stock pages from the API. */
+    private stocksTotalPages: number = 1;
+    /** Latest stock search text sent as `q`. */
+    private stocksSearchQuery: string = "";
+    /** Blocks overlapping stock list requests while scrolling. */
+    private preventStocksApiCall: boolean = false;
     /** Variant options for the filter dropdown. */
     public variants: Array<{ label: string; value: string }> = [];
     /** Warehouse options for the filter dropdown. */
@@ -162,6 +170,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
                 if (this.inventoryType) {
+                    this.preventStocksApiCall = false;
                     this.loadStocks();
                     this.loadVariants();
                     this.getBatches();
@@ -178,6 +187,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             }
             this.inventoryType = inventoryType;
             this.resetFilters(false);
+            this.resetStockPagination();
             const query = this.route.snapshot.queryParams;
             this.applyQueryFilters(query);
             this.loadStocks();
@@ -391,6 +401,27 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return this.localeData?.will_expire ?? "";
         }
         return "";
+    }
+
+    /**
+     * Search stocks from the dropdown — reload page 1 from the API.
+     *
+     * @param {string} query Search text
+     * @memberof BatchReportComponent
+     */
+    public onStockSearchQueryChanged(query: string): void {
+        this.preventStocksApiCall = false;
+        this.stocksTotalPages = 1;
+        this.loadStocks(1, query ?? "");
+    }
+
+    /**
+     * Load the next stock page when the dropdown is scrolled to the end.
+     *
+     * @memberof BatchReportComponent
+     */
+    public onStockScrollEnd(): void {
+        this.loadStocks(this.stocksPageNumber + 1, this.stocksSearchQuery);
     }
 
     /**
@@ -907,31 +938,85 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Load stock options from the stocks V2 API.
+     * Reset stock dropdown paging so the next load starts from page 1.
      *
      * @private
      * @memberof BatchReportComponent
      */
-    private loadStocks(): void {
+    private resetStockPagination(): void {
+        this.stocks = [];
+        this.stocksPageNumber = 1;
+        this.stocksTotalPages = 1;
+        this.stocksSearchQuery = "";
+        this.preventStocksApiCall = false;
+    }
+
+    /**
+     * Load stock options from the stocks V2 API.
+     *
+     * @private
+     * @param {number} [page=1] Page number
+     * @param {string} [query] Search text
+     * @memberof BatchReportComponent
+     */
+    private loadStocks(page: number = 1, query?: string): void {
         if (!this.inventoryType) {
             return;
         }
+        if (typeof query === "string") {
+            this.stocksSearchQuery = query;
+        }
+        if (page > this.stocksTotalPages || this.preventStocksApiCall) {
+            return;
+        }
+        this.preventStocksApiCall = true;
+        this.stocksPageNumber = page;
         this.inventoryService.getStocksV2({
             inventoryType: this.inventoryType,
-            page: 1,
-            q: "",
+            page,
+            q: this.stocksSearchQuery ?? "",
             count: PAGINATION_LIMIT
         }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.stocks = (response.body?.results ?? [])
+                this.stocksTotalPages = response.body?.totalPages || 1;
+                const next = (response.body?.results ?? [])
                     .map((stock: any) => ({
                         label: stock?.name ?? stock?.uniqueName,
                         value: stock?.uniqueName
                     }))
                     .filter(option => option.value);
-                this.cdr.detectChanges();
+                this.mergeStockOptions(page, next);
+            } else if (page === 1) {
+                this.stocks = [];
+                this.stocksTotalPages = 1;
             }
+            setTimeout(() => {
+                this.preventStocksApiCall = false;
+            }, 500);
+            this.cdr.detectChanges();
+        }, () => {
+            this.preventStocksApiCall = false;
+            this.cdr.detectChanges();
         });
+    }
+
+    /**
+     * Replace stocks on page 1 (keep selected labels) and append later pages.
+     *
+     * @private
+     * @param {number} page Current page
+     * @param {Array<{ label: string; value: string }>} next New options
+     * @memberof BatchReportComponent
+     */
+    private mergeStockOptions(page: number, next: Array<{ label: string; value: string }>): void {
+        if (page === 1) {
+            const selected = new Set(this.selectedStock ?? []);
+            const keep = this.stocks.filter(option => selected.has(option.value) && !next.some(item => item.value === option.value));
+            this.stocks = [...keep, ...next];
+            return;
+        }
+        const existing = new Set(this.stocks.map(option => option.value));
+        this.stocks = [...this.stocks, ...next.filter(option => !existing.has(option.value))];
     }
 
     /**
@@ -1040,6 +1125,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.page = 1;
             this.pageIndex = 0;
+            this.preventStocksApiCall = false;
             this.loadStocks();
             this.loadVariants();
             this.getBatches();

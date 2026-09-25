@@ -30,7 +30,6 @@
                     />
                 </div>
             </div>
-
             @if (stocks?.length) {
                 <div class="filter-dropdown">
                     <multi-select-dropdown
@@ -38,9 +37,12 @@
                         [label]="localeData?.select_stock"
                         [placeholder]="localeData?.select_stock"
                         [options]="stocks"
+                        [enableDynamicSearch]="true"
                         [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                         [(ngModel)]="selectedStock"
                         (selectionChange)="onStockChange()"
+                        (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
+                        (scrollEnd)="onStockScrollEnd()"
                     ></multi-select-dropdown>
                 </div>
             }
