@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, signal } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatMenuTrigger } from "@angular/material/menu";
@@ -48,7 +48,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
     public dataSource: any[] = [];
     public totalResults = 0;
     public balances: any = null;
-    public loading = false;
+    public loading = signal<boolean>(false);
     public isSearching = false;
     public filtersApplied = false;
     public showNumberSearch = false;
@@ -84,7 +84,8 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private voucherService: VoucherService,
         private toasterService: ToasterService,
-        private componentStore: VoucherComponentStore
+        private componentStore: VoucherComponentStore,
+        private changeDetectorRef: ChangeDetectorRef
     ) { }
 
     /**
@@ -311,7 +312,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
         if (!row?.uniqueName) {
             return;
         }
-        const viewType = this.voucherType === VoucherTypeEnum.receiptNote ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan;
+        const viewType = this.voucherType === VoucherTypeEnum.receiptNote ? (this.filters.reportType === "WITHOUT_CHALLAN" ? VoucherTypeEnum.purchase : VoucherTypeEnum.receiptNote) : ( this.filters.reportType === "WITHOUT_CHALLAN" ? VoucherTypeEnum.sales : VoucherTypeEnum.deliveryChallan);
         this.router.navigate(["/pages/vouchers/view", viewType, row.uniqueName], {
             queryParams: {
                 page: this.filters.page || 1,
@@ -437,7 +438,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
     private bindReportLoader(): void {
         this.fetch$.pipe(
             switchMap(() => {
-                this.loading = true;
+                this.loading.set(true);
                 return this.voucherService.getPendingBusinessDocumentReport({
                     from: this.filters.from,
                     to: this.filters.to,
@@ -450,7 +451,8 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
                     reportType: this.filters.reportType,
                     documentType: this.documentType
                 }).pipe(finalize(() => {
-                    this.loading = false;
+                    this.loading.set(false);
+                    this.changeDetectorRef.detectChanges();
                 }));
             }),
             takeUntil(this.destroyed$)
