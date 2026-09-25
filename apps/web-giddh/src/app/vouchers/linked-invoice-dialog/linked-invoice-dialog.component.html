@@ -1,0 +1,118 @@
+<div
+    appTranslate
+    (commonLocaleData)="commonLocaleData.set($event)"
+    [keyboardShortcut]="'esc'"
+    [config]="{ dialogMode: true }"
+    (onShortcutPress)="closeDialog()"
+    class="aside-dialog-wrapper"
+>
+    <div cdkFocusInitial class="dialog-header">
+        <p class="modal-title">{{ localeData()?.linked_invoice }} details</p>
+        <button matIconButton type="button" aria-label="Close dialog" (click)="closeDialog()">
+            <i class="icon-cross" aria-hidden="true"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-content">
+        <div class="d-flex mb-3 p-0 align-items-center">
+            <mat-form-field class="w-100" appearance="outline">
+                <mat-label>{{ commonLocaleData()?.app_search }}</mat-label>
+                <input
+                    matInput
+                    tabindex="0"
+                    type="text"
+                    name="linked-invoice-search"
+                    [formControl]="searchValue"
+                    [placeholder]="commonLocaleData()?.app_search_by_invoice_number_customer_name_and_amount"
+                />
+                <button
+                    matIconButton
+                    matSuffix
+                    type="button"
+                    tabindex="-1"
+                    aria-label="Search or Clear"
+                    (click)="searchValue.value ? searchValue.setValue('') : null"
+                >
+                    <i [class]="searchValue.value ? 'icon-cross font-size-16' : 'icon-search font-size-16'" aria-hidden="true"></i>
+                </button>
+            </mat-form-field>
+            @if (showClearFilter()) {
+                <a
+                    href="javascript:void(0);"
+                    class="cursor-pointer refresh-button p-2 ml-2"
+                    (click)="resetFilter()"
+                    [attr.aria-label]="commonLocaleData()?.app_reset_filter"
+                    [matTooltip]="commonLocaleData()?.app_reset_filter"
+                >
+                    <span class="icon-refresh" aria-hidden="true"></span>
+                </a>
+            }
+        </div>
+
+        @if (isLoading()) {
+            <giddh-page-loader class="mt-5"></giddh-page-loader>
+        } @else if (filteredLinkedInvoices().length > 0) {
+            <section class="table-responsive mt-3">
+                <table
+                    class="giddh-table table border"
+                    mat-table
+                    [dataSource]="filteredLinkedInvoices()"
+                    [attr.aria-label]="localeData()?.linked_invoice"
+                >
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef width="20%" scope="col">
+                            <span class="pl-3">{{ commonLocaleData()?.app_date }}</span>
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="pl-3">{{ element.date | giddhDate }}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="invoiceNumber">
+                        <th mat-header-cell *matHeaderCellDef width="20%" scope="col">
+                            {{ commonLocaleData()?.app_invoice_number }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <a href="javascript:void(0);" (click)="openInvoice(element)">
+                                {{ element.invoiceNumber }}
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="customerName">
+                        <th mat-header-cell *matHeaderCellDef width="20%" scope="col">
+                            {{ commonLocaleData()?.app_customer_name }}
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="white-space-normal">
+                            {{ element.customerName }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="amount">
+                        <th mat-header-cell *matHeaderCellDef width="20%" scope="col">
+                            {{ commonLocaleData()?.app_amount }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <amount-field
+                                [amount]="element.amount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            ></amount-field>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+            </section>
+        } @else {
+            <div class="mt-4 no-data-found text-center">
+                <img [src]="imgPath() + 'search-data-not-found.svg'" alt="result not found" />
+                <br />
+                {{ localeData()?.no_linked_invoice_found || commonLocaleData()?.app_no_result_found }}
+            </div>
+        }
+    </mat-dialog-content>
+</div>
+<ng-template #attachments>
+    <attachments [selectedItem]="selectedItem()"></attachments>
+</ng-template>

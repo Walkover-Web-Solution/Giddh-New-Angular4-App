@@ -79,6 +79,8 @@
     "cr_note_no": "क्रेडिट नोट नंबर",
     "dr_note_no": "डेबिट टीप क्रमांक",
     "linked_invoice": "लिंक्ड चलन",
+    "view_linked_invoice": "लिंक्ड चलन",
+    "no_linked_invoice_found": "कोणतेही लिंक्ड चलन सापडले नाही",
     "linked_voucher": "लिंक्ड व्हाउचर",
     "overdue_today": "आज ओव्हरड्यू",
     "overdue_days": "[DAYS] दिवसांपेक्षा जास्त",

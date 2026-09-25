@@ -126,6 +126,12 @@
                         <p>{{ selectedInvoice?.account?.customerName || selectedInvoice?.account?.name }}</p>
                     </div>
                     <div class="d-flex column-gap-1 flex-wrap row-gap-1">
+                        @if (invoiceType.isDeliveryChallan || invoiceType.isReceiptNote) {
+                            <button matButton="filled" type="button" (click)="openLinkedInvoiceDialog()">
+                                <i class="icon-invoice mr-1" aria-hidden="true"></i>
+                                {{ localeData?.view_linked_invoice }}
+                            </button>
+                        }
                         <button
                             matButton="filled"
                             (click)="toggleActivityHistoryAsidePane()"

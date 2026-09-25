@@ -30,6 +30,7 @@ import { ServiceConfig } from "../../services/service.config";
 import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
 import { DscService } from "../../services/dsc.service";
 import { VoucherService } from "../../services/voucher.service";
+import { LinkedInvoiceDialogComponent } from "../linked-invoice-dialog/linked-invoice-dialog.component";
 
 @Component({
     selector: "preview",
@@ -887,6 +888,26 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             },
             panelClass: "mat-dialog-md",
             disableClose: true
+        });
+    }
+
+    /**
+     * Opens linked invoice dialog for delivery challan / receipt note
+     *
+     * @memberof VouchersPreviewComponent
+     */
+    public openLinkedInvoiceDialog(): void {
+        if (!this.selectedInvoice?.uniqueName) {
+            return;
+        }
+
+        this.dialog.open(LinkedInvoiceDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                voucherUniqueName: this.selectedInvoice.uniqueName,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
         });
     }
 
