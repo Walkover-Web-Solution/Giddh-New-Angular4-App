@@ -34,6 +34,8 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
     @Input() public optionLabel: string = "label";
     /** When true, search is emitted to the parent instead of filtering locally */
     @Input() public enableDynamicSearch: boolean = false;
+    /** Prefills the panel search box without emitting a search */
+    @Input() public searchQuery: string = "";
     /** Name attribute for the inner select */
     @Input() public name: string = "";
     /** True if field is required */
@@ -162,6 +164,14 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
         }
         if (changes.showAllOption && !changes.showAllOption.firstChange) {
             this.syncUiFromControl();
+        }
+        if (changes.searchQuery) {
+            const term = (this.searchQuery ?? "").trim();
+            this.searchControl.setValue(term);
+            this.isSearching.set(!!term);
+            if (term) {
+                this.skipInitialDynamicSearch = false;
+            }
         }
         if (changes.showError || changes.label || changes.placeholder || changes.allOptionLabel) {
             this.changeDetectorRef.markForCheck();

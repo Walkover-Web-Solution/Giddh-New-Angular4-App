@@ -1294,7 +1294,7 @@
                                                                                 <span>
                                                                                     {{ localeData?.batch_qty_exceeds_opening }}
                                                                                     <strong class="text-orange">
-                                                                                        ({{ getVariantBatchOpeningQtyTotal(variant) }} / {{ variant.warehouseBalance[0].openingQuantity || 0 }})
+                                                                                        ({{ getVariantBatchOpeningQtyTotal(variant) }} / {{ getVariantWarehouseOpeningQty(variant) }})
                                                                                     </strong>
                                                                                 </span>
                                                                                 <a
@@ -1595,7 +1595,7 @@
                                                                         <span>
                                                                             {{ localeData?.batch_qty_exceeds_opening }}
                                                                             <strong class="text-orange">
-                                                                                ({{ getVariantBatchOpeningQtyTotal(stockVariant) }} / {{ stockVariant.warehouseBalance[0].openingQuantity || 0 }})
+                                                                                ({{ getVariantBatchOpeningQtyTotal(stockVariant) }} / {{ getVariantWarehouseOpeningQty(stockVariant) }})
                                                                             </strong>
                                                                         </span>
                                                                         <a

@@ -82,8 +82,10 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     private stocksPageNumber: number = 1;
     /** Total stock pages from the API. */
     private stocksTotalPages: number = 1;
-    /** Latest stock search text sent as `q`. */
-    private stocksSearchQuery: string = "";
+    /** Latest stock search text sent as `q` and shown in the stock dropdown search. */
+    public stocksSearchQuery: string = "";
+    /** Stock names from the redirect query, aligned with `selectedStock`. */
+    private queryStockNames: string[] = [];
     /** Blocks overlapping stock list requests while scrolling. */
     private preventStocksApiCall: boolean = false;
     /** Variant options for the filter dropdown. */
@@ -136,6 +138,8 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     private advanceFilterDialogRef: MatDialogRef<any>;
     /** True when from/to came from reports query params, so universal date must not overwrite them. */
     private useQueryDateRange: boolean = false;
+    /** True when this page was opened from item-wise, variant-wise, or stock-balance. */
+    public showBackButton: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -190,7 +194,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.resetStockPagination();
             const query = this.route.snapshot.queryParams;
             this.applyQueryFilters(query);
-            this.loadStocks();
+            this.loadStocks(1, this.queryStockNames[0] || "");
             this.loadVariants();
             this.loadBranchesAndWarehouses();
             if (this.hasQueryFilters(query)) {
@@ -206,6 +210,8 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.clearQueryParams();
             this.page = 1;
             this.pageIndex = 0;
+            this.preventStocksApiCall = false;
+            this.loadStocks(1, this.queryStockNames[0] || "");
             this.loadVariants();
             this.getBatches();
             this.cdr.detectChanges();
@@ -566,6 +572,10 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         this.page = 1;
         this.pageIndex = 0;
         if (refetch) {
+            this.showBackButton = false;
+            this.preventStocksApiCall = false;
+            this.stocksTotalPages = 1;
+            this.loadStocks(1, "");
             this.loadVariants();
             this.getBatches();
         }
@@ -948,6 +958,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         this.stocksPageNumber = 1;
         this.stocksTotalPages = 1;
         this.stocksSearchQuery = "";
+        this.queryStockNames = [];
         this.preventStocksApiCall = false;
     }
 
@@ -1156,13 +1167,17 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      */
     private applyQueryFilters(query: any): void {
         if (!this.hasQueryFilters(query)) {
+            this.showBackButton = false;
             return;
         }
+        this.showBackButton = true;
         const stock = this.parseQueryList(query?.stockUniqueNames);
+        const stockNames = this.parseQueryList(query?.stockNames);
         const variant = this.parseQueryList(query?.variantUniqueNames);
         const warehouse = this.parseQueryList(query?.warehouseUniqueNames);
         if (stock.length) {
             this.selectedStock = stock;
+            this.queryStockNames = stockNames;
         }
         if (variant.length) {
             this.selectedVariant = variant;
