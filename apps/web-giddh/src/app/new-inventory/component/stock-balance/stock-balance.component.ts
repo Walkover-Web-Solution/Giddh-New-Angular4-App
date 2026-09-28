@@ -189,9 +189,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             }
         ];
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.batchTrackingEnabled = !!activeCompany.batchTrackingEnabled;
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
             }
         });
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {

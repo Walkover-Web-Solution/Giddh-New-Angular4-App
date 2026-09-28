@@ -76,9 +76,9 @@ export class CreateRecipeComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof CreateRecipeComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.batchTrackingEnabled = !!activeCompany.batchTrackingEnabled;
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
             }
         });
         this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
