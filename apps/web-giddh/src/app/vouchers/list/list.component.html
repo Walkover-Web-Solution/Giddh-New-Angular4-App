@@ -6002,11 +6002,20 @@
                     <multi-select-dropdown
                         class="width-200"
                         [name]="'inventoryDocumentStatus'"
-                        [label]="commonLocaleData?.app_status"
+                        [label]="localeData?.document_status"
                         [options]="inventoryStatusOptions"
                         [showAllOption]="true"
                         [formControl]="inventoryStatusFilter"
                         (selectionChange)="applyInventoryStatusFilter($event)"
+                    ></multi-select-dropdown>
+                    <multi-select-dropdown
+                        class="width-200"
+                        [name]="'invoiceStatuses'"
+                        [label]="voucherType === voucherTypeEnum.deliveryChallan ? localeData?.invoice_status : localeData?.bill_status"
+                        [options]="invoiceStatusOptions"
+                        [showAllOption]="true"
+                        [formControl]="invoiceStatuses"
+                        (selectionChange)="applyInvoiceStatusFilter($event)"
                     ></multi-select-dropdown>
                 </div>
                 <button

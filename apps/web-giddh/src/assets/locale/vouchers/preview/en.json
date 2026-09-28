@@ -600,9 +600,11 @@
     "inventory_invoice_status": {
         "invoiced": "Invoiced",
         "partially_invoiced": "Partially Invoiced",
+        "fully_invoiced": "Fully Invoiced",
         "not_invoiced": "Not Invoiced",
         "billed": "Billed",
         "partially_billed": "Partially Billed",
+        "fully_billed": "Fully Billed",
         "not_billed": "Not Billed"
     },
     "linked_invoice_filter": {

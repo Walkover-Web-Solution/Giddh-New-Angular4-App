@@ -3775,9 +3775,15 @@
                                 @if (isMainVoucher) {
                                     <div class="vouchers-actions d-flex justify-content-end column-gap-1 pt-4 pb-4 mt-4">
                                         @if (!isUpdateMode) {
-                                            <button matButton="outlined" (click)="resetVoucherForm()">
-                                                {{ commonLocaleData?.app_clear }}
-                                            </button>
+                                            @if (isBusinessDocumentCreate) {
+                                                <button matButton="outlined" (click)="cancelUpdateVoucher()">
+                                                    {{ commonLocaleData?.app_back }}
+                                                </button>
+                                            } @else {
+                                                <button matButton="outlined" (click)="resetVoucherForm()">
+                                                    {{ commonLocaleData?.app_clear }}
+                                                </button>
+                                            }
                                             @for (btn of getPrimaryActionButtons(); track btn.label) {
                                                 @if (btn.condition) {
                                                     <button matButton="filled" (click)="btn.action()">
