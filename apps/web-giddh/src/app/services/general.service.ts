@@ -262,11 +262,24 @@ export class GeneralService {
     }
 
     getUtmParameter(param: string): string {
-        if (localStorage.getItem(param)) {
-            return localStorage.getItem(param);
-        } else {
-            const giddhQuery = this.getCookieValue('giddh_query');
-            return giddhQuery[param] || "";
+        const localValue = localStorage.getItem(param);
+        if (localValue) {
+            return localValue;
+        }
+
+        try {
+            const cookieValue = this.getRawCookieValue('giddh_query');
+            if (!cookieValue) {
+                return "";
+            }
+
+            const giddhQuery = JSON.parse(decodeURIComponent(cookieValue)) as Record<string, unknown>;
+            const queryValue = giddhQuery?.[param];
+            return (typeof queryValue === 'string' || typeof queryValue === 'number')
+                ? String(queryValue)
+                : "";
+        } catch {
+            return "";
         }
     }
 
@@ -744,11 +757,22 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getCookieValue(name: any): any {
+        const cookieValue = this.getRawCookieValue(name);
+        return cookieValue ? cookieValue.toUpperCase() : null;
+    }
+
+    /**
+     * Returns the raw cookie value without transforming case.
+     *
+     * @param {string} name Cookie name
+     * @returns {(string | null)} Raw cookie value or null when missing
+     * @memberof GeneralService
+     */
+    public getRawCookieValue(name: string): string | null {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) {
-            const cookieValue = parts.pop().split(';').shift();
-            return cookieValue.toUpperCase();
+            return parts.pop()?.split(';').shift() ?? null;
         }
         return null;
     }
