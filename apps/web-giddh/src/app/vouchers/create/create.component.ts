@@ -6846,6 +6846,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             queryParams.search = this.queryParams.search;
         }
 
+        if (this.queryParams?.redirect || this.redirectUrl) {
+            queryParams.redirect = this.queryParams?.redirect || this.redirectUrl;
+        }
+
         const recurringPath = this.isRecurringVoucher?.[1]?.isRecurringVoucher ? "/recurring" : "";
         if (this.isRecurringVoucher?.[1]?.isRecurringVoucher) {
             queryParams.recurringVoucherUniqueName = uniqueName;
@@ -6865,8 +6869,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public cancelUpdateVoucher(): void {
         if (this.inventoryDocumentListRedirectUrl) {
             this.router.navigateByUrl(this.inventoryDocumentListRedirectUrl);
-        } else if (this.redirectUrl) {
-            this.router.navigateByUrl(this.redirectUrl);
         } else {
             this.redirectToVoucherPreview();
         }
@@ -6878,13 +6880,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public updateVoucher(): void {
-        if (this.redirectUrl) {
-            this.saveVoucher(() => {
-                this.router.navigateByUrl(this.redirectUrl);
-            });
-        } else {
-            this.saveVoucher();
-        }
+        this.saveVoucher();
     }
 
     /**
