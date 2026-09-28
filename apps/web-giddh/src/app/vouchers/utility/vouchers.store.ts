@@ -816,13 +816,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getInventoryVoucherDetails = this.effect((data: Observable<{ voucherType: string, voucherUniqueName: string, isCopyVoucher?: boolean, clearVoucherIdentity?: boolean }>) => {
+    readonly getInventoryVoucherDetails = this.effect((data: Observable<{ voucherType: string, voucherUniqueName: string, isCopyVoucher?: boolean, clearVoucherIdentity?: boolean, isBusinessDocumentCreate?: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getInventoryVoucherDetails(req.voucherType, req.voucherUniqueName).pipe(
                     tap(
                         (res: BaseResponse<any, any>) => {
-                            let voucherDetails = this.vouchersUtilityService.formatInventoryVoucherDetails(res?.body);
+                            let voucherDetails = this.vouchersUtilityService.formatInventoryVoucherDetails(res?.body, !!req.isBusinessDocumentCreate);
                             // Strip voucher/entry identity when creating invoice/bill from DC/RN
                             if (req.clearVoucherIdentity) {
                                 delete voucherDetails.uniqueName;

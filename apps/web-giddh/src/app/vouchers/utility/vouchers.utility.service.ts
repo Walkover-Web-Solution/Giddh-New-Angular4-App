@@ -314,10 +314,11 @@ export class VouchersUtilityService {
      * structure expected by the voucher create/update form.
      *
      * @param {*} response Delivery challan/receipt note details response body
+     * @param {boolean} isBusinessDocumentCreate Whether the voucher is being created from a business document
      * @return {*} Voucher details
      * @memberof VouchersUtilityService
      */
-    public formatInventoryVoucherDetails(response: any): any {
+    public formatInventoryVoucherDetails(response: any, isBusinessDocumentCreate: boolean = false): any {
         if (!response) {
             return {};
         }
@@ -383,7 +384,8 @@ export class VouchersUtilityService {
                     ?? documentItem?.rate
                     ?? 0
                 );
-                const quantity = Number(stock.quantity ?? documentItem?.quantity ?? 0);
+                const stockQuantity = stock.quantity ?? documentItem?.quantity ?? 0;
+                const quantity = Number(isBusinessDocumentCreate ? (documentItem?.remainingQuantity ?? 0) : stockQuantity);
 
                 let amount = Number(transaction.amount?.amountForAccount) || 0;
                 if (!amount && documentItem?.amount != null) {

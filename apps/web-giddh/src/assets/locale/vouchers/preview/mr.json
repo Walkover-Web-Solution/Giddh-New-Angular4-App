@@ -600,9 +600,11 @@
     "inventory_invoice_status": {
         "invoiced": "इनव्हॉइस केले",
         "partially_invoiced": "अंशतः इनव्हॉइस",
+        "fully_invoiced": "पूर्ण इनव्हॉइस",
         "not_invoiced": "इनव्हॉइस नाही",
         "billed": "बिल केले",
         "partially_billed": "अंशतः बिल",
+        "fully_billed": "पूर्ण बिल",
         "not_billed": "बिल नाही"
     },
     "linked_invoice_filter": {
