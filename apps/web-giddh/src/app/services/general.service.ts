@@ -270,15 +270,20 @@ export class GeneralService {
         try {
             const cookieValue = this.getRawCookieValue('giddh_query');
             if (!cookieValue) {
+                console.warn(`[getUtmParameter] No localStorage or giddh_query cookie for "${param}"`);
                 return "";
             }
 
             const giddhQuery = JSON.parse(decodeURIComponent(cookieValue)) as Record<string, unknown>;
             const queryValue = giddhQuery?.[param];
-            return (typeof queryValue === 'string' || typeof queryValue === 'number')
-                ? String(queryValue)
-                : "";
-        } catch {
+            if (typeof queryValue === 'string' || typeof queryValue === 'number') {
+                return String(queryValue);
+            }
+
+            console.warn(`[getUtmParameter] giddh_query cookie has no "${param}"`, giddhQuery);
+            return "";
+        } catch (error) {
+            console.error(`[getUtmParameter] Failed to read "${param}" from giddh_query cookie`, error);
             return "";
         }
     }
