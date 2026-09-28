@@ -1,4 +1,5 @@
 .inventory-settings {
+    min-height: calc(100vh - var(--header-height));
     .left-arrow::after {
         position: absolute;
         content: '->';

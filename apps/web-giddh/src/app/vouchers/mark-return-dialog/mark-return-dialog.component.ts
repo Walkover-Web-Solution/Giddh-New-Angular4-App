@@ -4,6 +4,7 @@ import { finalize, ReplaySubject, takeUntil } from "rxjs";
 import { VoucherService } from "../../services/voucher.service";
 import { ToasterService } from "../../services/toaster.service";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
+import { VoucherTypeEnum } from "../utility/vouchers.const";
 
 export interface MarkReturnDialogData {
     voucherUniqueName: string;
@@ -53,6 +54,8 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     public isSubmitting: boolean = false;
     /** Event name */
     public eventName: string = "RETURN";
+    /** True when source voucher is receipt note (DN + Debit Note labels) */
+    public isReceiptNote: boolean = false;
     /** Destroy subject */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -66,6 +69,42 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         this.localeData = data?.localeData || {};
         this.commonLocaleData = data?.commonLocaleData || {};
         this.eventName = data?.event || "RETURN";
+        this.isReceiptNote = data?.voucherType === VoucherTypeEnum.receiptNote;
+    }
+
+    /**
+     * Hint text based on source voucher type
+     *
+     * @readonly
+     * @type {string}
+     * @memberof MarkReturnDialogComponent
+     */
+    public get returnDialogHint(): string {
+        return this.isReceiptNote
+            ? this.localeData?.return_dialog_hint_receipt_note
+            : this.localeData?.return_dialog_hint;
+    }
+
+    /**
+     * Create Credit/Debit Note column label
+     *
+     * @readonly
+     * @type {string}
+     * @memberof MarkReturnDialogComponent
+     */
+    public get createNoteLabel(): string {
+        return this.isReceiptNote ? this.localeData?.create_dn : this.localeData?.create_cn;
+    }
+
+    /**
+     * CN/DN quantity column label
+     *
+     * @readonly
+     * @type {string}
+     * @memberof MarkReturnDialogComponent
+     */
+    public get noteQtyLabel(): string {
+        return this.isReceiptNote ? this.localeData?.dn_qty : this.localeData?.cn_qty;
     }
 
     /**
@@ -320,12 +359,13 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
             items: selectedRows.map(mapReturnItem)
         };
 
-        const creditNoteRows = selectedRows.filter(
+        const noteRows = selectedRows.filter(
             (row) => row.createCn && row.showCreateCn && Number(row.cnQty) > 0
         );
-        if (creditNoteRows.length) {
-            payload.creditNote = {
-                items: creditNoteRows.map(mapCnItem)
+        if (noteRows.length) {
+            const noteKey = this.isReceiptNote ? "debitNote" : "creditNote";
+            payload[noteKey] = {
+                items: noteRows.map(mapCnItem)
             };
         }
 
