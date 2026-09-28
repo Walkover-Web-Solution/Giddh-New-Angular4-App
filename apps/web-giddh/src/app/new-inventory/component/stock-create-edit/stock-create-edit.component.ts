@@ -405,9 +405,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             }
         });
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.batchTrackingEnabled = !!activeCompany.batchTrackingEnabled;
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
                 this.ensureDefaultStockBatch();
                 this.loadBatchAvailabilityForStock();
                 this.changeDetection.detectChanges();
