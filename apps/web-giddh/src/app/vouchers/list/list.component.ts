@@ -61,6 +61,22 @@ export interface VoucherBalances {
     normalReceiptTotal?: Number;
 }
 
+/** Inventory document list balances from getInventoryVouchers API */
+export interface InventoryVoucherBalances {
+    totalCount?: number;
+    totalAmount?: number;
+    notInvoicedCount?: number;
+    notInvoicedAmount?: number;
+    partiallyInvoicedCount?: number;
+    partiallyInvoicedAmount?: number;
+    fullyInvoicedCount?: number;
+    fullyInvoicedAmount?: number;
+    openCount?: number;
+    closedCount?: number;
+    expiredCount?: number;
+    cancelledCount?: number;
+}
+
 /** Interface for report filter table column */
 interface IReportFilterTableColumn {
     value: string;
@@ -202,6 +218,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         advanceReceiptTotal: 0,
         normalReceiptTotal: 0
     });
+    /** Holds inventory document list balances */
+    public inventoryBalances = signal<InventoryVoucherBalances | null>(null);
     /** Holds company specific data */
     public company: any = {
         baseCurrency: '',
@@ -1161,6 +1179,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.totalResults = response?.totalItems;
             this.selectAllVouchers({ checked: false });
             this.isColumnsLoading = false;
+            if (this.isInventoryDocument) {
+                this.inventoryBalances.set(response?.balances ?? null);
+            }
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
 
@@ -1245,6 +1266,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     document.getElementById(this.activeSearchField)?.focus();
                 }, 200);
             }
+        } else if (!response && this.isInventoryDocument) {
+            this.inventoryBalances.set(null);
         }
     }
 
@@ -1344,6 +1367,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(AdjustInventoryComponent, {
             panelClass: ["mat-dialog-lg"],
             autoFocus: false,
+            disableClose: true,
             maxHeight: "90vh",
             data: {
                 ...(isReceiptNote
@@ -1374,6 +1398,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(MarkReturnDialogComponent, {
             panelClass: ["mat-dialog-lg"],
             autoFocus: false,
+            disableClose: true,
             data: {
                 voucherUniqueName: voucher.uniqueName,
                 voucherType: this.voucherType,
@@ -1403,6 +1428,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-sm'],
+            disableClose: true,
             data: {
                 configuration: this.generalService.deleteConfiguration(
                     this.localeData?.cancel_voucher_confirmation_message,
@@ -1440,6 +1466,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-sm'],
+            disableClose: true,
             data: {
                 configuration: this.generalService.deleteConfiguration(
                     this.localeData?.delete_voucher,
@@ -1868,6 +1895,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (!this.inventorySettingsResolved || !this.inventoryViaBusinessDocument) {
                 this.dataSource = [];
                 this.totalResults = 0;
+                this.inventoryBalances.set(null);
                 return;
             }
             this.componentStore.getInventoryVouchers({

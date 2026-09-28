@@ -1793,6 +1793,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             queryParams['search'] = searchString;
         }
 
+        if (this.queryParams.redirect) {
+            queryParams['redirect'] = this.queryParams.redirect;
+        }
+
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
             this.router.navigate([`/pages/vouchers/estimates/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`], { queryParams: queryParams });
         } else if (this.voucherType === VoucherTypeEnum.generateProforma) {

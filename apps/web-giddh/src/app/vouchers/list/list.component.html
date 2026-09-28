@@ -6034,6 +6034,74 @@
                 </button>
             </div>
 
+            @if (inventoryBalances(); as balances) {
+                <div class="total-wrapper d-flex column-gap-05 w-100 mb-3">
+                    <div class="total-sale opening-box p-2 w-25">
+                        <p class="font-size-12">
+                            {{ localeData?.pending_balances?.total }} ({{ balances.totalCount || 0 }})
+                        </p>
+                        <span class="font-size-16">
+                            <amount-field
+                                [amount]="balances.totalAmount"
+                                [currencySymbol]="company.baseCurrencySymbol"
+                                [currencyCode]="company.baseCurrency"
+                            ></amount-field>
+                        </span>
+                    </div>
+                    <div class="total-sale due-box p-2 w-25">
+                        <p class="font-size-12">
+                            {{
+                                voucherType === voucherTypeEnum.deliveryChallan
+                                    ? localeData?.pending_balances?.not_invoiced
+                                    : localeData?.pending_balances?.not_billed
+                            }}
+                            ({{ balances.notInvoicedCount || 0 }})
+                        </p>
+                        <span class="font-size-16">
+                            <amount-field
+                                [amount]="balances.notInvoicedAmount"
+                                [currencySymbol]="company.baseCurrencySymbol"
+                                [currencyCode]="company.baseCurrency"
+                            ></amount-field>
+                        </span>
+                    </div>
+                    <div class="total-sale payment-receipt p-2 w-25">
+                        <p class="font-size-12">
+                            {{
+                                voucherType === voucherTypeEnum.deliveryChallan
+                                    ? localeData?.pending_balances?.partially_invoiced
+                                    : localeData?.pending_balances?.partially_billed
+                            }}
+                            ({{ balances.partiallyInvoicedCount || 0 }})
+                        </p>
+                        <span class="font-size-16">
+                            <amount-field
+                                [amount]="balances.partiallyInvoicedAmount"
+                                [currencySymbol]="company.baseCurrencySymbol"
+                                [currencyCode]="company.baseCurrency"
+                            ></amount-field>
+                        </span>
+                    </div>
+                    <div class="total-sale closing-box p-2 w-25">
+                        <p class="font-size-12">
+                            {{
+                                voucherType === voucherTypeEnum.deliveryChallan
+                                    ? localeData?.pending_balances?.fully_invoiced
+                                    : localeData?.pending_balances?.fully_billed
+                            }}
+                            ({{ balances.fullyInvoicedCount || 0 }})
+                        </p>
+                        <span class="font-size-16">
+                            <amount-field
+                                [amount]="balances.fullyInvoicedAmount"
+                                [currencySymbol]="company.baseCurrencySymbol"
+                                [currencyCode]="company.baseCurrency"
+                            ></amount-field>
+                        </span>
+                    </div>
+                </div>
+            }
+
             <div class="table-responsive overflow-visible">
                 <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                 <table
