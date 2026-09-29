@@ -805,11 +805,18 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     /**
      * Open setting aside pane dialog
      *
-     * @memberof FilingHeaderComponent
+     * @param {Event} [event]
+     * @param {TaxServiceType} [selectedService]
+     * @memberof FileGstR3Component
      */
-    public openSettingAsidePane(): void {
-        this.selectedService = TaxServiceEnum.EXCELLON;
-        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {...ASIDE_PANE_CONFIG, autoFocus: false});
+    public openSettingAsidePane(event?: Event, selectedService?: TaxServiceType): void {
+        event?.preventDefault();
+        if (this.gstAuthenticated) {
+            return;
+        }
+
+        this.selectedService = selectedService || TaxServiceEnum.EXCELLON;
+        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, { ...ASIDE_PANE_CONFIG, autoFocus: false });
     }
 
     /**

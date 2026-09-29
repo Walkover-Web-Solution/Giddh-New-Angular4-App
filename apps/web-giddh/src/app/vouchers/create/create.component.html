@@ -153,7 +153,8 @@
                                                 "
                                                 [label]="
                                                     invoiceType.isPurchaseOrder ||
-                                                    invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote ||
+                                                    invoiceType.isPurchaseInvoice ||
+                                                    invoiceType.isReceiptNote ||
                                                     invoiceType.isDebitNote ||
                                                     invoiceType.isPaymentInvoice
                                                         ? localeData?.vendor_name
@@ -161,7 +162,8 @@
                                                 "
                                                 [placeholder]="
                                                     invoiceType.isPurchaseOrder ||
-                                                    invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote ||
+                                                    invoiceType.isPurchaseInvoice ||
+                                                    invoiceType.isReceiptNote ||
                                                     invoiceType.isDebitNote ||
                                                     invoiceType.isPaymentInvoice
                                                         ? localeData?.select_vendor
@@ -2017,7 +2019,7 @@
                                                             <ng-container formGroupName="0">
                                                                 <batch-chip-list
                                                                     *ngIf="
-                                                                        activeCompany?.batchTrackingEnabled &&
+                                                                        batchTrackingEnabled() &&
                                                                         transaction.get('stock.uniqueName')?.value &&
                                                                         getEntryBatches(transaction)?.length
                                                                     "
@@ -2143,7 +2145,7 @@
                                                                     </ng-container>
                                                                     <div
                                                                         *ngIf="
-                                                                            activeCompany?.batchTrackingEnabled &&
+                                                                            batchTrackingEnabled() &&
                                                                             transaction.get('stock.uniqueName')?.value &&
                                                                             !getEntryBatches(transaction)?.length
                                                                         "
@@ -2868,7 +2870,8 @@
                                                                 (currentVoucherFormDetails?.depositAllowed ||
                                                                     ((invoiceType.isSalesInvoice ||
                                                                         invoiceType.isDeliveryChallan ||
-                                                                        invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote ||
+                                                                        invoiceType.isPurchaseInvoice ||
+                                                                        invoiceType.isReceiptNote ||
                                                                         invoiceType.isCreditNote ||
                                                                         invoiceType.isDebitNote ||
                                                                         invoiceType.isReceiptInvoice ||
@@ -2968,7 +2971,7 @@
                                                                                     ((invoiceType.isSalesInvoice ||
                                                                                         invoiceType.isDeliveryChallan ||
                                                                                         invoiceType.isPurchaseInvoice ||
-                                                                                            invoiceType.isReceiptNote ||
+                                                                                        invoiceType.isReceiptNote ||
                                                                                         invoiceType.isCreditNote ||
                                                                                         invoiceType.isDebitNote ||
                                                                                         invoiceType.isReceiptInvoice ||
@@ -2983,7 +2986,7 @@
                                                                                             (invoiceType.isSalesInvoice ||
                                                                                                 invoiceType.isDeliveryChallan ||
                                                                                                 invoiceType.isPurchaseInvoice ||
-                                                                                                    invoiceType.isReceiptNote ||
+                                                                                                invoiceType.isReceiptNote ||
                                                                                                 invoiceType.isCreditNote ||
                                                                                                 invoiceType.isDebitNote ||
                                                                                                 invoiceType.isReceiptInvoice ||
