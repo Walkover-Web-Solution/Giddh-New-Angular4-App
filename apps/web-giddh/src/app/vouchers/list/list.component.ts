@@ -788,7 +788,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
 
                 if (this.queryParams.page) {
-                    if (this.activeModule === 'list') {
+                    // Inventory DC/RN list persists from/to only on datepicker change
+                    if (this.activeModule === 'list' && !this.isInventoryDocument) {
                         this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
                     }
                     this.advanceFilters.page = this.queryParams.page;
@@ -3101,6 +3102,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (universalDate?.length > 1) {
             this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
             this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.isUniversalDateApplicable = true;
+            this.customDateSelected = false;
         }
         this.advanceFilters = {
             sortBy: '',
@@ -3155,11 +3158,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             return;
         }
 
+        // Persist from/to only when user changed date via list datepicker (not universal date)
+        const shouldPersistDate = !this.isUniversalDateApplicable;
+
         this.generalService.saveRouteQueryFilters({
             required: 'module',
             module: 'list',
-            from: this.advanceFilters.from || null,
-            to: this.advanceFilters.to || null,
+            from: shouldPersistDate ? (this.advanceFilters.from || null) : null,
+            to: shouldPersistDate ? (this.advanceFilters.to || null) : null,
             page: this.advanceFilters.page || 1,
             count: this.advanceFilters.count || null,
             q: this.advanceFilters.q || null,
