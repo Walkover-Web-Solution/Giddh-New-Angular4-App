@@ -602,6 +602,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private redirectUrl: string = "";
     /** List URL to return to after DC/RN → invoice/bill convert flow */
     private inventoryDocumentListRedirectUrl: string = "";
+    /** True when create is opened from DC/RN/invoice/bill convert (preview & convert) */
+    public isBusinessDocumentCreate: boolean = false;
     /** Holds text for update voucher button */
     public updateVoucherText: string = "";
     /** Holds purchase order details to put PO in PO list if not available */
@@ -1057,10 +1059,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                         if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
                             || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
+                            this.isBusinessDocumentCreate = true;
                             this.inventoryDocumentListRedirectUrl = this.queryParams.redirect
                                 || `/pages/vouchers/preview/${(this.queryParams.rnUniqueName || this.queryParams.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
                             this.redirectUrl = this.inventoryDocumentListRedirectUrl;
                         } else {
+                            this.isBusinessDocumentCreate = false;
                             this.inventoryDocumentListRedirectUrl = "";
                         }
 
@@ -6849,6 +6853,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             queryParams.search = this.queryParams.search;
         }
 
+        if (this.queryParams?.redirect || this.redirectUrl) {
+            queryParams.redirect = this.queryParams?.redirect || this.redirectUrl;
+        }
+
         const recurringPath = this.isRecurringVoucher?.[1]?.isRecurringVoucher ? "/recurring" : "";
         if (this.isRecurringVoucher?.[1]?.isRecurringVoucher) {
             queryParams.recurringVoucherUniqueName = uniqueName;
@@ -6868,8 +6876,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public cancelUpdateVoucher(): void {
         if (this.inventoryDocumentListRedirectUrl) {
             this.router.navigateByUrl(this.inventoryDocumentListRedirectUrl);
-        } else if (this.redirectUrl) {
-            this.router.navigateByUrl(this.redirectUrl);
         } else {
             this.redirectToVoucherPreview();
         }
@@ -6881,13 +6887,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public updateVoucher(): void {
-        if (this.redirectUrl) {
-            this.saveVoucher(() => {
-                this.router.navigateByUrl(this.redirectUrl);
-            });
-        } else {
-            this.saveVoucher();
-        }
+        this.saveVoucher();
     }
 
     /**
@@ -7657,6 +7657,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 delete this.queryParams.rnUniqueName;
                                 delete this.queryParams.invoiceUniqueName;
                                 delete this.queryParams.billUniqueName;
+                                this.isBusinessDocumentCreate = false;
                                 this.inventoryDocumentListRedirectUrl = "";
                                 this.redirectUrl = "";
                                 // Clear leave confirmation before navigate; otherwise PageLeaveConfirmationGuard
@@ -9375,7 +9376,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             voucherUniqueName,
             // false so voucherDetails$ fills account/entries/dates; uniqueName cleared via isCopyMode + store strip
             isCopyVoucher: false,
-            clearVoucherIdentity: true
+            clearVoucherIdentity: true,
+            isBusinessDocumentCreate: true
         });
     }
 

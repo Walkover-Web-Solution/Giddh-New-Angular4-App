@@ -600,9 +600,11 @@
     "inventory_invoice_status": {
         "invoiced": "Invoiced",
         "partially_invoiced": "Partially Invoiced",
+        "fully_invoiced": "Fully Invoiced",
         "not_invoiced": "Not Invoiced",
         "billed": "Billed",
         "partially_billed": "Partially Billed",
+        "fully_billed": "Fully Billed",
         "not_billed": "Not Billed"
     },
     "linked_invoice_filter": {
@@ -620,12 +622,15 @@
     "make_adjustment": "Make Adjustment",
     "convert_process_stock_items": "Convert and Process Stock Items",
     "return_dialog_hint": "Select items to return — a Receipt Note (RN) will be created for checked items. Turn on Create CN for any item that also needs a Credit Note.",
+    "return_dialog_hint_receipt_note": "Select items to return — a Delivery Note (DN) will be created for checked items. Turn on Create DN for any item that also needs a Debit Note.",
     "item_stock_variant": "Item - Stock & Variant",
     "total_qty": "Total Qty",
     "invoiced_qty": "Invoiced Qty",
     "return_qty": "Return Qty",
     "cn_qty": "CN Qty",
+    "dn_qty": "DN Qty",
     "create_cn": "Create Credit Note",
+    "create_dn": "Create Debit Note",
     "proceed": "Proceed",
     "select_return_items": "Select at least one item to return",
     "return_success": "Return processed successfully",
