@@ -153,8 +153,8 @@
                                                 "
                                                 [label]="
                                                     invoiceType.isPurchaseOrder ||
-                                                    (invoiceType.isPurchaseInvoice || 
-                                                    invoiceType.isReceiptNote) ||
+                                                    invoiceType.isPurchaseInvoice ||
+                                                    invoiceType.isReceiptNote ||
                                                     invoiceType.isDebitNote ||
                                                     invoiceType.isPaymentInvoice
                                                         ? localeData?.vendor_name
@@ -162,8 +162,8 @@
                                                 "
                                                 [placeholder]="
                                                     invoiceType.isPurchaseOrder ||
-                                                    (invoiceType.isPurchaseInvoice || 
-                                                    invoiceType.isReceiptNote) ||
+                                                    invoiceType.isPurchaseInvoice ||
+                                                    invoiceType.isReceiptNote ||
                                                     invoiceType.isDebitNote ||
                                                     invoiceType.isPaymentInvoice
                                                         ? localeData?.select_vendor
@@ -178,8 +178,7 @@
                                                 [openDropdown]="openAccountDropdown"
                                                 [createNewText]="
                                                     !invoiceType.isPurchaseOrder &&
-                                                    !(invoiceType.isPurchaseInvoice || 
-                                                    invoiceType.isReceiptNote) &&
+                                                    !(invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) &&
                                                     !invoiceType.isDebitNote &&
                                                     !invoiceType.isPaymentInvoice
                                                         ? localeData?.add_customer
@@ -288,7 +287,10 @@
                                     <ng-container
                                         *ngIf="
                                             !invoiceType.isCashInvoice &&
-                                            ((invoiceType.isSalesInvoice || invoiceType.isDeliveryChallan) || invoiceType.isCreditNote || invoiceType.isReceiptInvoice)
+                                            (invoiceType.isSalesInvoice ||
+                                                invoiceType.isDeliveryChallan ||
+                                                invoiceType.isCreditNote ||
+                                                invoiceType.isReceiptInvoice)
                                         "
                                     >
                                         <img
@@ -301,7 +303,8 @@
                                     <ng-container
                                         *ngIf="
                                             !invoiceType.isCashInvoice &&
-                                            ((invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) ||
+                                            (invoiceType.isPurchaseInvoice ||
+                                                invoiceType.isReceiptNote ||
                                                 invoiceType.isDebitNote ||
                                                 invoiceType.isPurchaseOrder ||
                                                 invoiceType.isPaymentInvoice)
@@ -836,36 +839,33 @@
                                 </div>
 
                                 <!-- Row 2 DC/RN Chalan Type -->
-                                 @if (invoiceType.isDeliveryChallan || invoiceType.isReceiptNote) {
-                                <div
-                                    class="row pb-2"
-                                >
-                                    <div class="col-6 mt-3">
-                                        <reactive-dropdown-field
-                                            appEnterNext
-                                            formControlName="documentSubType"
-                                            [name]="'documentSubType'"
-                                            [label]="
-                                                invoiceType.isDeliveryChallan
-                                                    ? localeData?.challan_type
-                                                    : localeData?.receipt_note_type
-                                            "
-                                            [placeholder]="
-                                                invoiceType.isDeliveryChallan
-                                                    ? localeData?.challan_type
-                                                    : localeData?.receipt_note_type
-                                            "
-                                            [options]="challanTypeOptions"
-                                            [required]="true"
-                                        ></reactive-dropdown-field>
+                                @if (invoiceType.isDeliveryChallan || invoiceType.isReceiptNote) {
+                                    <div class="row pb-2">
+                                        <div class="col-6 mt-3">
+                                            <reactive-dropdown-field
+                                                appEnterNext
+                                                formControlName="documentSubType"
+                                                [name]="'documentSubType'"
+                                                [label]="
+                                                    invoiceType.isDeliveryChallan ? localeData?.challan_type : localeData?.receipt_note_type
+                                                "
+                                                [placeholder]="
+                                                    invoiceType.isDeliveryChallan ? localeData?.challan_type : localeData?.receipt_note_type
+                                                "
+                                                [options]="challanTypeOptions"
+                                                [required]="true"
+                                            ></reactive-dropdown-field>
+                                        </div>
                                     </div>
-                                </div>
                                 }
 
                                 <!-- Row 3 for Deliver To Only show in Cash Invoice -->
                                 <div
                                     class="row pb-2"
-                                    *ngIf="invoiceType.isPurchaseOrder || ((invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) && !invoiceType.isCashInvoice)"
+                                    *ngIf="
+                                        invoiceType.isPurchaseOrder ||
+                                        ((invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) && !invoiceType.isCashInvoice)
+                                    "
                                     formGroupName="company"
                                 >
                                     <div class="col-12 mt-3 mb-3">
@@ -1157,9 +1157,7 @@
                                                     [placeholder]="commonLocaleData?.app_state"
                                                     formControlName="code"
                                                     [options]="companyStateList$ | async"
-                                                    [labelValue]="
-                                                        invoiceForm.controls['account'].get('destinationOfSupply.name')?.value
-                                                    "
+                                                    [labelValue]="invoiceForm.controls['account'].get('destinationOfSupply.name')?.value"
                                                     [forceClear]="forceClear"
                                                     [required]="!!branchCurrentAddressInfo.taxNumber"
                                                     [showError]="
@@ -1242,8 +1240,14 @@
                                             "
                                             [type]="'text'"
                                             formControlName="number"
-                                            [readonly]="(isUpdateMode && !(invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote)) || !useCustomVoucherNumber"
-                                            [disabled]="(isUpdateMode && !(invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote)) || !useCustomVoucherNumber"
+                                            [readonly]="
+                                                (isUpdateMode && !(invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote)) ||
+                                                !useCustomVoucherNumber
+                                            "
+                                            [disabled]="
+                                                (isUpdateMode && !(invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote)) ||
+                                                !useCustomVoucherNumber
+                                            "
                                         ></input-field>
                                     </div>
 
@@ -1777,9 +1781,9 @@
                                                                 'justify-content-between':
                                                                     !invoiceType.isPurchaseOrder &&
                                                                     !invoiceType.isEstimateInvoice &&
-                                                                    !invoiceType.isProformaInvoice&&
+                                                                    !invoiceType.isProformaInvoice &&
                                                                     !invoiceType.isDeliveryChallan &&
-                                                                    !invoiceType.isReceiptNote
+                                                                    !invoiceType.isReceiptNote,
                                                             }"
                                                         >
                                                             <div
@@ -2015,7 +2019,7 @@
                                                             <ng-container formGroupName="0">
                                                                 <batch-chip-list
                                                                     *ngIf="
-                                                                        activeCompany?.batchTrackingEnabled &&
+                                                                        batchTrackingEnabled() &&
                                                                         transaction.get('stock.uniqueName')?.value &&
                                                                         getEntryBatches(transaction)?.length
                                                                     "
@@ -2141,7 +2145,7 @@
                                                                     </ng-container>
                                                                     <div
                                                                         *ngIf="
-                                                                            activeCompany?.batchTrackingEnabled &&
+                                                                            batchTrackingEnabled() &&
                                                                             transaction.get('stock.uniqueName')?.value &&
                                                                             !getEntryBatches(transaction)?.length
                                                                         "
@@ -2155,8 +2159,14 @@
                                                                             [attr.id]="'select-batch-' + entryIndex"
                                                                             class="font-size-12 font-weight-semibold text-primary cursor-pointer"
                                                                             (click)="openBatchSelectDialog(entryIndex, $event)"
-                                                                            (keydown.enter)="$event.preventDefault(); openBatchSelectDialog(entryIndex, $event)"
-                                                                            (keydown.space)="$event.preventDefault(); openBatchSelectDialog(entryIndex, $event)"
+                                                                            (keydown.enter)="
+                                                                                $event.preventDefault();
+                                                                                openBatchSelectDialog(entryIndex, $event)
+                                                                            "
+                                                                            (keydown.space)="
+                                                                                $event.preventDefault();
+                                                                                openBatchSelectDialog(entryIndex, $event)
+                                                                            "
                                                                         >
                                                                             {{ localeData?.select_batch }}
                                                                         </div>
@@ -2858,8 +2868,10 @@
                                                                 !invoiceType.isDeliveryChallan &&
                                                                 !invoiceType.isReceiptNote &&
                                                                 (currentVoucherFormDetails?.depositAllowed ||
-                                                                    (((invoiceType.isSalesInvoice || invoiceType.isDeliveryChallan) ||
-                                                                        (invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) ||
+                                                                    ((invoiceType.isSalesInvoice ||
+                                                                        invoiceType.isDeliveryChallan ||
+                                                                        invoiceType.isPurchaseInvoice ||
+                                                                        invoiceType.isReceiptNote ||
                                                                         invoiceType.isCreditNote ||
                                                                         invoiceType.isDebitNote ||
                                                                         invoiceType.isReceiptInvoice ||
@@ -2956,8 +2968,10 @@
                                                                                     (currentVoucherFormDetails?.depositAllowed &&
                                                                                         !isUpdateMode &&
                                                                                         !invoiceType.isCashInvoice) ||
-                                                                                    (((invoiceType.isSalesInvoice || invoiceType.isDeliveryChallan) ||
-                                                                                        (invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) ||
+                                                                                    ((invoiceType.isSalesInvoice ||
+                                                                                        invoiceType.isDeliveryChallan ||
+                                                                                        invoiceType.isPurchaseInvoice ||
+                                                                                        invoiceType.isReceiptNote ||
                                                                                         invoiceType.isCreditNote ||
                                                                                         invoiceType.isDebitNote ||
                                                                                         invoiceType.isReceiptInvoice ||
@@ -2969,8 +2983,10 @@
                                                                                     <div
                                                                                         class="d-flex align-items-center column-gap-1"
                                                                                         *ngIf="
-                                                                                            ((invoiceType.isSalesInvoice || invoiceType.isDeliveryChallan) ||
-                                                                                                (invoiceType.isPurchaseInvoice || invoiceType.isReceiptNote) ||
+                                                                                            (invoiceType.isSalesInvoice ||
+                                                                                                invoiceType.isDeliveryChallan ||
+                                                                                                invoiceType.isPurchaseInvoice ||
+                                                                                                invoiceType.isReceiptNote ||
                                                                                                 invoiceType.isCreditNote ||
                                                                                                 invoiceType.isDebitNote ||
                                                                                                 invoiceType.isReceiptInvoice ||
@@ -3064,383 +3080,378 @@
                                                     </div>
 
                                                     <!-- Other Details Section -->
-                                                        <div class="col-12 mt-3">
-                                                            <mat-accordion>
-                                                                <mat-expansion-panel [expanded]="ocrDataEnabled">
-                                                                    <mat-expansion-panel-header>
-                                                                        <mat-panel-title>
-                                                                            {{ commonLocaleData?.app_other_details }}
-                                                                        </mat-panel-title>
-                                                                    </mat-expansion-panel-header>
+                                                    <div class="col-12 mt-3">
+                                                        <mat-accordion>
+                                                            <mat-expansion-panel [expanded]="ocrDataEnabled">
+                                                                <mat-expansion-panel-header>
+                                                                    <mat-panel-title>
+                                                                        {{ commonLocaleData?.app_other_details }}
+                                                                    </mat-panel-title>
+                                                                </mat-expansion-panel-header>
 
-                                                                    <div class="row row-gap-15 mx-0 px-2 pb-3 mt-2">
-                                                                        @if (!invoiceType.isDeliveryChallan && !invoiceType.isReceiptNote) {
-                                                                            <ng-container formGroupName="templateDetails">
-                                                                                <ng-container
-                                                                                    formGroupName="other"
-                                                                                    *ngIf="
-                                                                                        !invoiceType.isReceiptInvoice &&
-                                                                                        !invoiceType.isPaymentInvoice
-                                                                                    "
-                                                                                >
-                                                                                    <div class="col-4 px-2">
-                                                                                        <giddh-datepicker
-                                                                                            type="text"
-                                                                                            (keydown.enter)="$event.preventDefault()"
-                                                                                            [label]="templateData?.shippedDateLabel"
-                                                                                            [closeDatepickerOnFocus]="true"
-                                                                                            [placeholder]="'DD-MM-YYYY'"
-                                                                                            name="shippingDate"
-                                                                                            [showToggleIcon]="false"
-                                                                                            [appearance]="'outline'"
-                                                                                            formControlName="shippingDate"
-                                                                                            appEnterNext
-                                                                                        ></giddh-datepicker>
-                                                                                    </div>
-                                                                                    <div class="col-4 px-2">
-                                                                                        <input-field
-                                                                                            appEnterNext
-                                                                                            [type]="'text'"
-                                                                                            [placeholder]="
-                                                                                                templateData?.shippedViaLabel ||
-                                                                                                localeData?.ship_via
-                                                                                            "
-                                                                                            [name]="'shippedVia'"
-                                                                                            formControlName="shippedVia"
-                                                                                        ></input-field>
-                                                                                    </div>
-                                                                                    <div class="col-4 px-2">
-                                                                                        <input-field
-                                                                                            appEnterNext
-                                                                                            [type]="'text'"
-                                                                                            [placeholder]="
-                                                                                                templateData?.trackingNumber ||
-                                                                                                localeData?.tracking_number
-                                                                                            "
-                                                                                            [name]="'trackingNumber'"
-                                                                                            formControlName="trackingNumber"
-                                                                                        ></input-field>
-                                                                                    </div>
-                                                                                    <ng-container *ngIf="!invoiceType.isPurchaseOrder">
-                                                                                        <div class="col-4 px-2">
-                                                                                            <input-field
-                                                                                                appEnterNext
-                                                                                                [type]="'text'"
-                                                                                                [placeholder]="
-                                                                                                    templateData?.customField1Label ||
-                                                                                                    localeData?.field1
-                                                                                                "
-                                                                                                [name]="'customField1'"
-                                                                                                formControlName="customField1"
-                                                                                            ></input-field>
-                                                                                        </div>
-                                                                                        <div class="col-4 px-2">
-                                                                                            <input-field
-                                                                                                appEnterNext
-                                                                                                [type]="'text'"
-                                                                                                [placeholder]="
-                                                                                                    templateData?.customField2Label ||
-                                                                                                    localeData?.field2
-                                                                                                "
-                                                                                                [name]="'customField2'"
-                                                                                                formControlName="customField2"
-                                                                                            ></input-field>
-                                                                                        </div>
-                                                                                        <div class="col-4 px-2">
-                                                                                            <input-field
-                                                                                                appEnterNext
-                                                                                                [type]="'text'"
-                                                                                                [placeholder]="
-                                                                                                    templateData?.customField3Label ||
-                                                                                                    localeData?.field3
-                                                                                                "
-                                                                                                [name]="'customField3'"
-                                                                                                formControlName="customField3"
-                                                                                            ></input-field>
-                                                                                        </div>
-                                                                                    </ng-container>
-                                                                                </ng-container>
-                                                                            </ng-container>
-                                                                            <ng-container formGroupName="account">
-                                                                                <ng-container formArrayName="customFields">
-                                                                                    <ng-container
-                                                                                        *ngFor="
-                                                                                            let field of accountCustomFields$ | async;
-                                                                                            let i = index
-                                                                                        "
-                                                                                    >
-                                                                                        <div class="col-4 px-2" [formGroupName]="i">
-                                                                                            <ng-container [ngSwitch]="field.fieldType.type">
-                                                                                                <ng-container
-                                                                                                    *ngSwitchCase="formFieldsType.BOOLEAN"
-                                                                                                >
-                                                                                                    <div
-                                                                                                        class="d-flex align-items-center column-gap-1 h-100"
-                                                                                                    >
-                                                                                                        <label
-                                                                                                            class="font-weight-medium"
-                                                                                                            [attr.id]="
-                                                                                                                'customField_' +
-                                                                                                                field.uniqueName
-                                                                                                            "
-                                                                                                        >
-                                                                                                            {{ field.fieldName | titlecase }}
-                                                                                                        </label>
-                                                                                                        <mat-radio-group
-                                                                                                            appEnterNext
-                                                                                                            [attr.aria-labelledby]="
-                                                                                                                'customField_' +
-                                                                                                                field.uniqueName
-                                                                                                            "
-                                                                                                            [name]="
-                                                                                                                'customField_' +
-                                                                                                                field.uniqueName
-                                                                                                            "
-                                                                                                            formControlName="value"
-                                                                                                        >
-                                                                                                            <mat-radio-button
-                                                                                                                color="primary"
-                                                                                                                [value]="true"
-                                                                                                                (keydown.enter)="
-                                                                                                                    $event.target.click()
-                                                                                                                "
-                                                                                                            >
-                                                                                                                {{ commonLocaleData?.app_true }}
-                                                                                                            </mat-radio-button>
-                                                                                                            <mat-radio-button
-                                                                                                                appEnterNext
-                                                                                                                color="primary"
-                                                                                                                [value]="false"
-                                                                                                                (keydown.enter)="
-                                                                                                                    $event.target.click()
-                                                                                                                "
-                                                                                                            >
-                                                                                                                {{
-                                                                                                                    commonLocaleData?.app_false
-                                                                                                                }}
-                                                                                                            </mat-radio-button>
-                                                                                                        </mat-radio-group>
-                                                                                                    </div>
-                                                                                                </ng-container>
-                                                                                                <ng-container
-                                                                                                    *ngSwitchCase="formFieldsType.STRING"
-                                                                                                >
-                                                                                                    <input-field
-                                                                                                        appEnterNext
-                                                                                                        [type]="'text'"
-                                                                                                        [label]="field.fieldName"
-                                                                                                        [placeholder]="
-                                                                                                            commonLocaleData?.app_enter +
-                                                                                                            ' ' +
-                                                                                                            field.fieldName
-                                                                                                        "
-                                                                                                        [name]="
-                                                                                                            'customField_' + field.uniqueName
-                                                                                                        "
-                                                                                                        formControlName="value"
-                                                                                                        [minLength]="field.dataRange?.min"
-                                                                                                        [maxLength]="field.dataRange?.max"
-                                                                                                        [showError]="
-                                                                                                            shouldShowCustomFieldError(i)
-                                                                                                        "
-                                                                                                    ></input-field>
-                                                                                                </ng-container>
-                                                                                                <ng-container
-                                                                                                    *ngSwitchCase="formFieldsType.NUMBER"
-                                                                                                >
-                                                                                                    <input-field
-                                                                                                        appEnterNext
-                                                                                                        [type]="'number'"
-                                                                                                        [allowDecimalDigitsOnly]="true"
-                                                                                                        [label]="field.fieldName"
-                                                                                                        [placeholder]="
-                                                                                                            commonLocaleData?.app_enter +
-                                                                                                            ' ' +
-                                                                                                            field.fieldName
-                                                                                                        "
-                                                                                                        [name]="
-                                                                                                            'customField_' + field.uniqueName
-                                                                                                        "
-                                                                                                        formControlName="value"
-                                                                                                        [min]="field.dataRange?.min"
-                                                                                                        [max]="field.dataRange?.max"
-                                                                                                        [showError]="
-                                                                                                            shouldShowCustomFieldError(i)
-                                                                                                        "
-                                                                                                    ></input-field>
-                                                                                                </ng-container>
-                                                                                                <ng-container
-                                                                                                    *ngSwitchCase="formFieldsType.BARCODE"
-                                                                                                >
-                                                                                                    <input-field
-                                                                                                        appEnterNext
-                                                                                                        [type]="'text'"
-                                                                                                        [label]="field.fieldName"
-                                                                                                        [placeholder]="
-                                                                                                            commonLocaleData?.app_enter +
-                                                                                                            ' ' +
-                                                                                                            field.fieldName
-                                                                                                        "
-                                                                                                        [name]="
-                                                                                                            'customField_' + field.uniqueName
-                                                                                                        "
-                                                                                                        formControlName="value"
-                                                                                                        [minLength]="field.dataRange?.min"
-                                                                                                        [maxLength]="field.dataRange?.max"
-                                                                                                        [showError]="
-                                                                                                            shouldShowCustomFieldError(i)
-                                                                                                        "
-                                                                                                    ></input-field>
-                                                                                                </ng-container>
-                                                                                            </ng-container>
-                                                                                        </div>
-                                                                                    </ng-container>
-                                                                                </ng-container>
-                                                                            </ng-container>
-                                                                        }
+                                                                <div class="row row-gap-15 mx-0 px-2 pb-3 mt-2">
+                                                                    @if (!invoiceType.isDeliveryChallan && !invoiceType.isReceiptNote) {
                                                                         <ng-container formGroupName="templateDetails">
-                                                                            <ng-container formGroupName="other">
-                                                                                <div class="col-12 px-2">
-                                                                                    <mat-form-field
-                                                                                        class="initial-height w-100"
-                                                                                        appearance="outline"
-                                                                                    >
-                                                                                        <mat-label>
-                                                                                            {{ commonLocaleData?.app_note }}
-                                                                                        </mat-label>
-                                                                                        <textarea
-                                                                                            matInput
-                                                                                            [placeholder]="localeData?.enter_note"
-                                                                                            name="message2"
-                                                                                            formControlName="message2"
-                                                                                            [maxlength]="
-                                                                                                shouldApplyMaxLengthOnNotes &&
-                                                                                                !templateData.showNotesAtLastPage
-                                                                                                    ? 200
-                                                                                                    : null
-                                                                                            "
-                                                                                        ></textarea>
-                                                                                    </mat-form-field>
-                                                                                    <ng-container
-                                                                                        *ngIf="
-                                                                                            shouldApplyMaxLengthOnNotes &&
-                                                                                            invoiceForm?.get(
-                                                                                                'templateDetails.other.message2'
-                                                                                            )?.value?.length &&
-                                                                                            !templateData.showNotesAtLastPage
+                                                                            <ng-container
+                                                                                formGroupName="other"
+                                                                                *ngIf="
+                                                                                    !invoiceType.isReceiptInvoice &&
+                                                                                    !invoiceType.isPaymentInvoice
+                                                                                "
+                                                                            >
+                                                                                <div class="col-4 px-2">
+                                                                                    <giddh-datepicker
+                                                                                        type="text"
+                                                                                        (keydown.enter)="$event.preventDefault()"
+                                                                                        [label]="templateData?.shippedDateLabel"
+                                                                                        [closeDatepickerOnFocus]="true"
+                                                                                        [placeholder]="'DD-MM-YYYY'"
+                                                                                        name="shippingDate"
+                                                                                        [showToggleIcon]="false"
+                                                                                        [appearance]="'outline'"
+                                                                                        formControlName="shippingDate"
+                                                                                        appEnterNext
+                                                                                    ></giddh-datepicker>
+                                                                                </div>
+                                                                                <div class="col-4 px-2">
+                                                                                    <input-field
+                                                                                        appEnterNext
+                                                                                        [type]="'text'"
+                                                                                        [placeholder]="
+                                                                                            templateData?.shippedViaLabel ||
+                                                                                            localeData?.ship_via
                                                                                         "
-                                                                                    >
-                                                                                        <span class="max-character-label">
-                                                                                            {{
-                                                                                                commonLocaleData?.app_characters_left
-                                                                                            }}:&nbsp;
-                                                                                        </span>
-                                                                                        <span class="max-character-value">
-                                                                                            {{
-                                                                                                200 -
-                                                                                                    invoiceForm?.get(
-                                                                                                        'templateDetails.other.message2'
-                                                                                                    )?.value?.length
-                                                                                            }}
-                                                                                        </span>
-                                                                                    </ng-container>
+                                                                                        [name]="'shippedVia'"
+                                                                                        formControlName="shippedVia"
+                                                                                    ></input-field>
                                                                                 </div>
-                                                                                <div
-                                                                                    class="col-12 px-2"
-                                                                                    *ngIf="
-                                                                                        !invoiceType.isPurchaseOrder &&
-                                                                                        !invoiceType.isEstimateInvoice &&
-                                                                                        !invoiceType.isProformaInvoice
-                                                                                    "
-                                                                                >
-                                                                                    <ng-container *ngIf="!selectedFileName">
-                                                                                        <div
-                                                                                            class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2"
-                                                                                            [matTooltip]="'No file chosen'"
-                                                                                            matTooltipPosition="right"
-                                                                                            tabindex="0"
-                                                                                            role="button"
-                                                                                            [attr.aria-label]="localeData?.attach_file"
-                                                                                            cdkMonitorElementFocus
-                                                                                            (keydown.enter)="
-                                                                                                $event.preventDefault(); triggerFileInput()
-                                                                                            "
-                                                                                            (keydown.space)="
-                                                                                                $event.preventDefault(); triggerFileInput()
-                                                                                            "
-                                                                                        >
-                                                                                            <input
-                                                                                                type="file"
-                                                                                                #fileInput
-                                                                                                class="position-absolute"
-                                                                                                name="invoiceFile"
-                                                                                                id="invoiceFile"
-                                                                                                (change)="uploadFile(false)"
-                                                                                                droppable="true"
-                                                                                                tabindex="-1"
-                                                                                                aria-hidden="true"
-                                                                                            />
-                                                                                            <ng-container *ngIf="isFileUploading">
-                                                                                                <mat-spinner [diameter]="30"></mat-spinner>
-                                                                                            </ng-container>
-                                                                                            <ng-container *ngIf="!isFileUploading">
-                                                                                                <div class="attachment-add-icon">
-                                                                                                    <i class="icon-add"></i>
-                                                                                                </div>
-                                                                                                <span class="attachment-placeholder">
-                                                                                                    {{ localeData?.attach_file }}
-                                                                                                </span>
-                                                                                            </ng-container>
-                                                                                        </div>
-                                                                                    </ng-container>
-                                                                                    <ng-container
-                                                                                        *ngIf="!isFileUploading && selectedFileName"
-                                                                                    >
-                                                                                        <div
-                                                                                            class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green"
-                                                                                        >
-                                                                                            <div class="attachment-add-icon">
-                                                                                                <i class="icon-tick"></i>
-                                                                                            </div>
-                                                                                            <span class="attachment-placeholder">
-                                                                                                {{ selectedFileName }}
-                                                                                            </span>
-                                                                                            <button
-                                                                                                id="deleteAttachment"
-                                                                                                mat-icon-button
-                                                                                                (click)="deleteAttachementConfirmation()"
-                                                                                                class="ml-auto remove-attachment font-size-16"
-                                                                                            >
-                                                                                                <i class="icon-cross"></i>
-                                                                                            </button>
-                                                                                        </div>
-                                                                                    </ng-container>
+                                                                                <div class="col-4 px-2">
+                                                                                    <input-field
+                                                                                        appEnterNext
+                                                                                        [type]="'text'"
+                                                                                        [placeholder]="
+                                                                                            templateData?.trackingNumber ||
+                                                                                            localeData?.tracking_number
+                                                                                        "
+                                                                                        [name]="'trackingNumber'"
+                                                                                        formControlName="trackingNumber"
+                                                                                    ></input-field>
                                                                                 </div>
+                                                                                <ng-container *ngIf="!invoiceType.isPurchaseOrder">
+                                                                                    <div class="col-4 px-2">
+                                                                                        <input-field
+                                                                                            appEnterNext
+                                                                                            [type]="'text'"
+                                                                                            [placeholder]="
+                                                                                                templateData?.customField1Label ||
+                                                                                                localeData?.field1
+                                                                                            "
+                                                                                            [name]="'customField1'"
+                                                                                            formControlName="customField1"
+                                                                                        ></input-field>
+                                                                                    </div>
+                                                                                    <div class="col-4 px-2">
+                                                                                        <input-field
+                                                                                            appEnterNext
+                                                                                            [type]="'text'"
+                                                                                            [placeholder]="
+                                                                                                templateData?.customField2Label ||
+                                                                                                localeData?.field2
+                                                                                            "
+                                                                                            [name]="'customField2'"
+                                                                                            formControlName="customField2"
+                                                                                        ></input-field>
+                                                                                    </div>
+                                                                                    <div class="col-4 px-2">
+                                                                                        <input-field
+                                                                                            appEnterNext
+                                                                                            [type]="'text'"
+                                                                                            [placeholder]="
+                                                                                                templateData?.customField3Label ||
+                                                                                                localeData?.field3
+                                                                                            "
+                                                                                            [name]="'customField3'"
+                                                                                            formControlName="customField3"
+                                                                                        ></input-field>
+                                                                                    </div>
+                                                                                </ng-container>
                                                                             </ng-container>
                                                                         </ng-container>
-                                                                    </div>
-                                                                </mat-expansion-panel>
-                                                            </mat-accordion>
+                                                                        <ng-container formGroupName="account">
+                                                                            <ng-container formArrayName="customFields">
+                                                                                <ng-container
+                                                                                    *ngFor="
+                                                                                        let field of accountCustomFields$ | async;
+                                                                                        let i = index
+                                                                                    "
+                                                                                >
+                                                                                    <div class="col-4 px-2" [formGroupName]="i">
+                                                                                        <ng-container [ngSwitch]="field.fieldType.type">
+                                                                                            <ng-container
+                                                                                                *ngSwitchCase="formFieldsType.BOOLEAN"
+                                                                                            >
+                                                                                                <div
+                                                                                                    class="d-flex align-items-center column-gap-1 h-100"
+                                                                                                >
+                                                                                                    <label
+                                                                                                        class="font-weight-medium"
+                                                                                                        [attr.id]="
+                                                                                                            'customField_' +
+                                                                                                            field.uniqueName
+                                                                                                        "
+                                                                                                    >
+                                                                                                        {{ field.fieldName | titlecase }}
+                                                                                                    </label>
+                                                                                                    <mat-radio-group
+                                                                                                        appEnterNext
+                                                                                                        [attr.aria-labelledby]="
+                                                                                                            'customField_' +
+                                                                                                            field.uniqueName
+                                                                                                        "
+                                                                                                        [name]="
+                                                                                                            'customField_' +
+                                                                                                            field.uniqueName
+                                                                                                        "
+                                                                                                        formControlName="value"
+                                                                                                    >
+                                                                                                        <mat-radio-button
+                                                                                                            color="primary"
+                                                                                                            [value]="true"
+                                                                                                            (keydown.enter)="
+                                                                                                                $event.target.click()
+                                                                                                            "
+                                                                                                        >
+                                                                                                            {{ commonLocaleData?.app_true }}
+                                                                                                        </mat-radio-button>
+                                                                                                        <mat-radio-button
+                                                                                                            appEnterNext
+                                                                                                            color="primary"
+                                                                                                            [value]="false"
+                                                                                                            (keydown.enter)="
+                                                                                                                $event.target.click()
+                                                                                                            "
+                                                                                                        >
+                                                                                                            {{
+                                                                                                                commonLocaleData?.app_false
+                                                                                                            }}
+                                                                                                        </mat-radio-button>
+                                                                                                    </mat-radio-group>
+                                                                                                </div>
+                                                                                            </ng-container>
+                                                                                            <ng-container
+                                                                                                *ngSwitchCase="formFieldsType.STRING"
+                                                                                            >
+                                                                                                <input-field
+                                                                                                    appEnterNext
+                                                                                                    [type]="'text'"
+                                                                                                    [label]="field.fieldName"
+                                                                                                    [placeholder]="
+                                                                                                        commonLocaleData?.app_enter +
+                                                                                                        ' ' +
+                                                                                                        field.fieldName
+                                                                                                    "
+                                                                                                    [name]="
+                                                                                                        'customField_' + field.uniqueName
+                                                                                                    "
+                                                                                                    formControlName="value"
+                                                                                                    [minLength]="field.dataRange?.min"
+                                                                                                    [maxLength]="field.dataRange?.max"
+                                                                                                    [showError]="
+                                                                                                        shouldShowCustomFieldError(i)
+                                                                                                    "
+                                                                                                ></input-field>
+                                                                                            </ng-container>
+                                                                                            <ng-container
+                                                                                                *ngSwitchCase="formFieldsType.NUMBER"
+                                                                                            >
+                                                                                                <input-field
+                                                                                                    appEnterNext
+                                                                                                    [type]="'number'"
+                                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                                    [label]="field.fieldName"
+                                                                                                    [placeholder]="
+                                                                                                        commonLocaleData?.app_enter +
+                                                                                                        ' ' +
+                                                                                                        field.fieldName
+                                                                                                    "
+                                                                                                    [name]="
+                                                                                                        'customField_' + field.uniqueName
+                                                                                                    "
+                                                                                                    formControlName="value"
+                                                                                                    [min]="field.dataRange?.min"
+                                                                                                    [max]="field.dataRange?.max"
+                                                                                                    [showError]="
+                                                                                                        shouldShowCustomFieldError(i)
+                                                                                                    "
+                                                                                                ></input-field>
+                                                                                            </ng-container>
+                                                                                            <ng-container
+                                                                                                *ngSwitchCase="formFieldsType.BARCODE"
+                                                                                            >
+                                                                                                <input-field
+                                                                                                    appEnterNext
+                                                                                                    [type]="'text'"
+                                                                                                    [label]="field.fieldName"
+                                                                                                    [placeholder]="
+                                                                                                        commonLocaleData?.app_enter +
+                                                                                                        ' ' +
+                                                                                                        field.fieldName
+                                                                                                    "
+                                                                                                    [name]="
+                                                                                                        'customField_' + field.uniqueName
+                                                                                                    "
+                                                                                                    formControlName="value"
+                                                                                                    [minLength]="field.dataRange?.min"
+                                                                                                    [maxLength]="field.dataRange?.max"
+                                                                                                    [showError]="
+                                                                                                        shouldShowCustomFieldError(i)
+                                                                                                    "
+                                                                                                ></input-field>
+                                                                                            </ng-container>
+                                                                                        </ng-container>
+                                                                                    </div>
+                                                                                </ng-container>
+                                                                            </ng-container>
+                                                                        </ng-container>
+                                                                    }
+                                                                    <ng-container formGroupName="templateDetails">
+                                                                        <ng-container formGroupName="other">
+                                                                            <div class="col-12 px-2">
+                                                                                <mat-form-field
+                                                                                    class="initial-height w-100"
+                                                                                    appearance="outline"
+                                                                                >
+                                                                                    <mat-label>
+                                                                                        {{ commonLocaleData?.app_note }}
+                                                                                    </mat-label>
+                                                                                    <textarea
+                                                                                        matInput
+                                                                                        [placeholder]="localeData?.enter_note"
+                                                                                        name="message2"
+                                                                                        formControlName="message2"
+                                                                                        [maxlength]="
+                                                                                            shouldApplyMaxLengthOnNotes &&
+                                                                                            !templateData.showNotesAtLastPage
+                                                                                                ? 200
+                                                                                                : null
+                                                                                        "
+                                                                                    ></textarea>
+                                                                                </mat-form-field>
+                                                                                <ng-container
+                                                                                    *ngIf="
+                                                                                        shouldApplyMaxLengthOnNotes &&
+                                                                                        invoiceForm?.get('templateDetails.other.message2')
+                                                                                            ?.value?.length &&
+                                                                                        !templateData.showNotesAtLastPage
+                                                                                    "
+                                                                                >
+                                                                                    <span class="max-character-label">
+                                                                                        {{ commonLocaleData?.app_characters_left }}:&nbsp;
+                                                                                    </span>
+                                                                                    <span class="max-character-value">
+                                                                                        {{
+                                                                                            200 -
+                                                                                                invoiceForm?.get(
+                                                                                                    'templateDetails.other.message2'
+                                                                                                )?.value?.length
+                                                                                        }}
+                                                                                    </span>
+                                                                                </ng-container>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-12 px-2"
+                                                                                *ngIf="
+                                                                                    !invoiceType.isPurchaseOrder &&
+                                                                                    !invoiceType.isEstimateInvoice &&
+                                                                                    !invoiceType.isProformaInvoice
+                                                                                "
+                                                                            >
+                                                                                <ng-container *ngIf="!selectedFileName">
+                                                                                    <div
+                                                                                        class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2"
+                                                                                        [matTooltip]="'No file chosen'"
+                                                                                        matTooltipPosition="right"
+                                                                                        tabindex="0"
+                                                                                        role="button"
+                                                                                        [attr.aria-label]="localeData?.attach_file"
+                                                                                        cdkMonitorElementFocus
+                                                                                        (keydown.enter)="
+                                                                                            $event.preventDefault(); triggerFileInput()
+                                                                                        "
+                                                                                        (keydown.space)="
+                                                                                            $event.preventDefault(); triggerFileInput()
+                                                                                        "
+                                                                                    >
+                                                                                        <input
+                                                                                            type="file"
+                                                                                            #fileInput
+                                                                                            class="position-absolute"
+                                                                                            name="invoiceFile"
+                                                                                            id="invoiceFile"
+                                                                                            (change)="uploadFile(false)"
+                                                                                            droppable="true"
+                                                                                            tabindex="-1"
+                                                                                            aria-hidden="true"
+                                                                                        />
+                                                                                        <ng-container *ngIf="isFileUploading">
+                                                                                            <mat-spinner [diameter]="30"></mat-spinner>
+                                                                                        </ng-container>
+                                                                                        <ng-container *ngIf="!isFileUploading">
+                                                                                            <div class="attachment-add-icon">
+                                                                                                <i class="icon-add"></i>
+                                                                                            </div>
+                                                                                            <span class="attachment-placeholder">
+                                                                                                {{ localeData?.attach_file }}
+                                                                                            </span>
+                                                                                        </ng-container>
+                                                                                    </div>
+                                                                                </ng-container>
+                                                                                <ng-container *ngIf="!isFileUploading && selectedFileName">
+                                                                                    <div
+                                                                                        class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green"
+                                                                                    >
+                                                                                        <div class="attachment-add-icon">
+                                                                                            <i class="icon-tick"></i>
+                                                                                        </div>
+                                                                                        <span class="attachment-placeholder">
+                                                                                            {{ selectedFileName }}
+                                                                                        </span>
+                                                                                        <button
+                                                                                            id="deleteAttachment"
+                                                                                            mat-icon-button
+                                                                                            (click)="deleteAttachementConfirmation()"
+                                                                                            class="ml-auto remove-attachment font-size-16"
+                                                                                        >
+                                                                                            <i class="icon-cross"></i>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </ng-container>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </ng-container>
+                                                                </div>
+                                                            </mat-expansion-panel>
+                                                        </mat-accordion>
+                                                    </div>
+                                                    @if (!invoiceType.isDeliveryChallan && !invoiceType.isReceiptNote) {
+                                                        <!-- Sample Templates not visible when there is only one sample template and we do not have multiple templates for receipt and payment so hide in that case  -->
+                                                        <div
+                                                            class="col-6 mt-3"
+                                                            formGroupName="templateDetails"
+                                                            *ngIf="
+                                                                (sampleTemplates$ | async)?.length > 1 &&
+                                                                !(invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice)
+                                                            "
+                                                        >
+                                                            <reactive-dropdown-field
+                                                                appEnterNext
+                                                                [label]="localeData?.template"
+                                                                [placeholder]="localeData?.template_placeholder"
+                                                                [options]="sampleTemplates$ | async"
+                                                                formControlName="templateUniqueName"
+                                                            ></reactive-dropdown-field>
                                                         </div>
-                                                        @if (!invoiceType.isDeliveryChallan && !invoiceType.isReceiptNote) {
-                                                            <!-- Sample Templates not visible when there is only one sample template and we do not have multiple templates for receipt and payment so hide in that case  -->
-                                                            <div
-                                                                class="col-6 mt-3"
-                                                                formGroupName="templateDetails"
-                                                                *ngIf="
-                                                                    (sampleTemplates$ | async)?.length > 1 &&
-                                                                    !(invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice)
-                                                                "
-                                                            >
-                                                                <reactive-dropdown-field
-                                                                    appEnterNext
-                                                                    [label]="localeData?.template"
-                                                                    [placeholder]="localeData?.template_placeholder"
-                                                                    [options]="sampleTemplates$ | async"
-                                                                    formControlName="templateUniqueName"
-                                                                ></reactive-dropdown-field>
-                                                            </div>
-                                                        }
+                                                    }
                                                     @if (showsTransporterDetails) {
                                                         <div class="col-12 mt-3">
                                                             <mat-accordion>
@@ -3853,7 +3864,6 @@
         <section class="mb-custom-80"></section>
     </div>
 </div>
-
 
 <ng-template #accountAsideMenu>
     <generic-aside-menu-account

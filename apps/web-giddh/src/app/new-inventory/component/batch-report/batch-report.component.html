@@ -84,22 +84,17 @@
                 </button>
             }
 
-            <button
-                matButton="outlined"
-                class="ml-auto advance-filter-button"
-                (click)="openAdvanceFilterDialog()"
-            >
+            <button matButton="outlined" class="ml-auto advance-filter-button" (click)="openAdvanceFilterDialog()">
                 <span class="d-inline-flex align-items-center column-gap-05">
                     <i class="icon-advance-filter"></i>
                     <span>{{ localeData?.filters }}</span>
                 </span>
             </button>
 
-            
             <button matButton="filled" (click)="openBatchDialog()">
                 {{ localeData?.add_batch }}
             </button>
-            
+
             @if (customiseColumns?.length) {
                 <select-table-column
                     [moduleType]="moduleType"
@@ -113,7 +108,7 @@
         </div>
         @if (hasAdvanceFilters) {
             <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-1 mb-3">
-                @if (expiredOnly !== null) {
+                @if (withinDaysValue > 0 && expiredOnly !== null) {
                     <div class="font-size-12 border-radius-12 px-2 py-1 d-flex align-items-center applied-filter-chip column-gap-05">
                         <span>{{ localeData?.expiry_status }}:</span>
                         <span class="text-primary">{{ expiryStatusLabel }}</span>
@@ -141,7 +136,37 @@
                         </button>
                     </div>
                 }
-                <button type="button" class=" bg-transparent border-none cursor-pointer text-primary" (click)="clearAdvanceFilters()">
+                @if (batchNumberChips?.length) {
+                    <div class="font-size-12 border-radius-12 px-2 py-1 d-flex align-items-center applied-filter-chip column-gap-05">
+                        <span class="flex-shrink-0">{{ localeData?.search_multiple_batch_numbers }}:</span>
+                        <span class="text-primary text-ellipsis" [matTooltip]="appliedBatchNumbersLabel">
+                            {{ appliedBatchNumbersLabel }}
+                        </span>
+                        <button
+                            type="button"
+                            class="bg-transparent border-none cursor-pointer flex-shrink-0"
+                            (click)="removeAdvanceFilter('batchNumber')"
+                            [attr.aria-label]="commonLocaleData?.app_clear"
+                        >
+                            <i class="icon-cross font-size-12"></i>
+                        </button>
+                    </div>
+                }
+                @if (batchUniqueNameChips?.length) {
+                    <div class="font-size-12 border-radius-12 px-2 py-1 d-flex align-items-center applied-filter-chip column-gap-05">
+                        <span class="flex-shrink-0">{{ localeData?.search_multiple_batch_names }}:</span>
+                        <span class="text-primary text-ellipsis" [matTooltip]="appliedBatchNamesLabel">{{ appliedBatchNamesLabel }}</span>
+                        <button
+                            type="button"
+                            class="bg-transparent border-none cursor-pointer flex-shrink-0"
+                            (click)="removeAdvanceFilter('batchUniqueName')"
+                            [attr.aria-label]="commonLocaleData?.app_clear"
+                        >
+                            <i class="icon-cross font-size-12"></i>
+                        </button>
+                    </div>
+                }
+                <button type="button" class="bg-transparent border-none cursor-pointer text-primary" (click)="clearAdvanceFilters()">
                     {{ localeData?.clear_all }}
                 </button>
             </div>
@@ -160,7 +185,7 @@
                         <mat-card-content class="d-flex align-items-center column-gap-2 p-3">
                             <div class="flex-grow-1">
                                 <p class="font-size-14 mb-1">{{ localeData?.batch_count }}</p>
-                                <p class="font-size-16 font-weight-semibold mb-0">{{ totalItems ?? "-" }}</p>
+                                <p class="font-size-16 font-weight-semibold mb-0">{{ totalItems ?? '-' }}</p>
                             </div>
                         </mat-card-content>
                     </mat-card>
@@ -254,7 +279,7 @@
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let element" class="report-td-column">
-                            <span class="text-ellipsis">{{ element?.batchNumber ?? "-" }}</span>
+                            <span class="text-ellipsis">{{ element?.batchNumber ?? '-' }}</span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="name">
@@ -287,13 +312,13 @@
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let element" class="report-td-column">
-                            <span class="text-ellipsis">{{ element?.name ?? "-" }}</span>
+                            <span class="text-ellipsis">{{ element?.name ?? '-' }}</span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="stock">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.stock }}</th>
                         <td mat-cell *matCellDef="let element">
-                            <div class="font-weight-semibold">{{ element?.stock?.name ?? "-" }}</div>
+                            <div class="font-weight-semibold">{{ element?.stock?.name ?? '-' }}</div>
                             @if (element?.variant?.name) {
                                 <div class="font-size-12 light-gray">{{ localeData?.variant }}: {{ element.variant.name }}</div>
                             }
@@ -301,16 +326,16 @@
                     </ng-container>
                     <ng-container matColumnDef="warehouse">
                         <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_warehouse }}</th>
-                        <td mat-cell *matCellDef="let element">{{ element?.warehouse?.name ?? "-" }}</td>
+                        <td mat-cell *matCellDef="let element">{{ element?.warehouse?.name ?? '-' }}</td>
                     </ng-container>
                     <ng-container matColumnDef="manufacturingDate">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.manufacturing_date }}</th>
-                        <td mat-cell *matCellDef="let element">{{ (element?.manufacturingDate | giddhDate) || "-" }}</td>
+                        <td mat-cell *matCellDef="let element">{{ (element?.manufacturingDate | giddhDate) || '-' }}</td>
                     </ng-container>
                     <ng-container matColumnDef="expiryDate">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.expiry_date }}</th>
                         <td mat-cell *matCellDef="let element">
-                            <div>{{ (element?.expiryDate | giddhDate) || "-" }}</div>
+                            <div>{{ (element?.expiryDate | giddhDate) || '-' }}</div>
                             @if (element?.daysRemaining !== null && element?.daysRemaining !== undefined) {
                                 <div class="font-size-12" [ngClass]="getDaysRemainingClass(element.daysRemaining)">
                                     {{ element.daysRemaining }} {{ localeData?.days }}
@@ -320,7 +345,7 @@
                     </ng-container>
                     <ng-container matColumnDef="openingQuantity">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.opening_quantity }}</th>
-                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.openingQuantity ?? "-" }}</td>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.openingQuantity ?? '-' }}</td>
                     </ng-container>
                     <ng-container matColumnDef="openingAmount">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.opening_amount }}</th>
@@ -338,15 +363,15 @@
                     </ng-container>
                     <ng-container matColumnDef="inwardQuantity">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.inward_quantity }}</th>
-                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.inwardQuantity ?? "-" }}</td>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.inwardQuantity ?? '-' }}</td>
                     </ng-container>
                     <ng-container matColumnDef="outwardQuantity">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.outward_quantity }}</th>
-                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.outwardQuantity ?? "-" }}</td>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.outwardQuantity ?? '-' }}</td>
                     </ng-container>
                     <ng-container matColumnDef="availableQuantity">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.available_quantity }}</th>
-                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.availableQuantity ?? "-" }}</td>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{ element?.availableQuantity ?? '-' }}</td>
                     </ng-container>
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef class="text-right">{{ commonLocaleData?.app_action }}</th>
@@ -443,6 +468,52 @@
         </div>
         <mat-dialog-content class="dialog-body">
             <div class="row">
+                <div class="col-12 mt-2">
+                    <mat-form-field class="w-100 initial-height" appearance="outline">
+                        <i class="icon-search font-size-16 ml-2 mr-2" matIconPrefix aria-hidden="true"></i>
+                        <mat-chip-grid #filterBatchNumberChipGrid>
+                            @for (chip of filterBatchNumberChips; track chip; let i = $index) {
+                                <mat-chip-row [removable]="true" (removed)="removeFilterBatchNumberChip(i)">
+                                    {{ chip }}
+                                    <button matChipRemove [attr.aria-label]="commonLocaleData?.app_remove">
+                                        <i class="icon-cross font-size-12"></i>
+                                    </button>
+                                </mat-chip-row>
+                            }
+                            <input
+                                [placeholder]="localeData?.search_multiple_batch_numbers_placeholder"
+                                [attr.aria-label]="localeData?.search_multiple_batch_numbers"
+                                [matChipInputFor]="filterBatchNumberChipGrid"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                [matChipInputAddOnBlur]="true"
+                                (matChipInputTokenEnd)="addFilterBatchNumberChip($event)"
+                            />
+                        </mat-chip-grid>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 mt-3">
+                    <mat-form-field class="w-100 initial-height" appearance="outline">
+                        <i class="icon-search font-size-16 ml-2 mr-2" matIconPrefix aria-hidden="true"></i>
+                        <mat-chip-grid #filterBatchNameChipGrid>
+                            @for (chip of filterBatchUniqueNameChips; track chip.value; let i = $index) {
+                                <mat-chip-row [removable]="true" (removed)="removeFilterBatchUniqueNameChip(i)">
+                                    {{ chip.label }}
+                                    <button matChipRemove [attr.aria-label]="commonLocaleData?.app_remove">
+                                        <i class="icon-cross font-size-12"></i>
+                                    </button>
+                                </mat-chip-row>
+                            }
+                            <input
+                                [placeholder]="localeData?.search_multiple_batch_names_placeholder"
+                                [attr.aria-label]="localeData?.search_multiple_batch_names"
+                                [matChipInputFor]="filterBatchNameChipGrid"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                [matChipInputAddOnBlur]="true"
+                                (matChipInputTokenEnd)="addFilterBatchUniqueNameChip($event)"
+                            />
+                        </mat-chip-grid>
+                    </mat-form-field>
+                </div>
                 <div class="col-12 mt-3">
                     <input-field
                         [name]="'withinDays'"
@@ -450,9 +521,7 @@
                         [label]="localeData?.within_days"
                         [placeholder]="localeData?.within_days_placeholder"
                         [formControl]="filterWithinDays"
-                        [required]="true"
                         [min]="1"
-                        [showError]="showAdvanceFilterErrors && !hasFilterWithinDays"
                     ></input-field>
                 </div>
                 <div class="col-12 mt-3">
@@ -464,8 +533,8 @@
                         [labelValue]="expiryStatusFilterLabel"
                         (selectedOption)="selectExpiryStatus($event)"
                         (onClear)="selectExpiryStatus(null)"
-                        [required]="true"
-                        [showError]="showAdvanceFilterErrors && filterExpiredOnly === null"
+                        [required]="hasFilterWithinDays"
+                        [showError]="showAdvanceFilterErrors && hasFilterWithinDays && filterExpiredOnly === null"
                     ></reactive-dropdown-field>
                 </div>
             </div>

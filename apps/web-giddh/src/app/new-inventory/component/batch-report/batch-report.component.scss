@@ -20,6 +20,7 @@
 
     .applied-filter-chip {
         background: var(--color-border-light);
+        max-width: min(100%, 420px);
     }
 
     .batch-summary-grid {
