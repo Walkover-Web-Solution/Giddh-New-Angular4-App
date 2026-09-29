@@ -59,6 +59,8 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* This will hold active company data */
     public activeCompany: any = {};
+    /** True if company batch tracking is enabled */
+    public batchTrackingEnabled: boolean = false;
     /** Pagination limit */
 
     /** Holds available page size options */
@@ -189,9 +191,14 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
-                const wasEnabled = this.activeCompany?.batchTrackingEnabled;
                 this.activeCompany = activeCompany;
-                if (wasEnabled !== activeCompany.batchTrackingEnabled && this.displayedColumns?.length) {
+            }
+        });
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                const wasEnabled = this.batchTrackingEnabled;
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
+                if (wasEnabled !== this.batchTrackingEnabled && this.displayedColumns?.length) {
                     this.displayedColumns = this.withBatchColumn(this.displayedColumns);
                     this.changeDetection.detectChanges();
                 }
@@ -585,7 +592,7 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      */
     private withBatchColumn(columns: string[]): string[] {
         const cols = (columns ?? []).filter(column => column !== 'batch');
-        if (!this.activeCompany?.batchTrackingEnabled) {
+        if (!this.batchTrackingEnabled) {
             return cols;
         }
         let insertIndex = 0;
@@ -652,6 +659,12 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         const queryParams: any = {};
         if (stockUniqueNames?.length) {
             queryParams.stockUniqueNames = stockUniqueNames.join(',');
+        }
+        const stockNames = element?.stock?.name
+            ? [element.stock.name]
+            : [];
+        if (stockNames?.length) {
+            queryParams.stockNames = stockNames.join(',');
         }
         if (variantUniqueNames?.length) {
             queryParams.variantUniqueNames = variantUniqueNames.join(',');
