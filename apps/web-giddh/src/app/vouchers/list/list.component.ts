@@ -3271,6 +3271,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 + " - "
                 + dayjs(params.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.isUniversalDateApplicable = false;
+            this.advanceFiltersApplied = true;
         }
 
         if (params.page) {
