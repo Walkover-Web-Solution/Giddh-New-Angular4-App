@@ -303,21 +303,29 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * True when any list filter is active.
+     * True when header filters (stock, variant, warehouse, or column search) are active.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchReportComponent
+     */
+    public get hasHeaderFilters(): boolean {
+        return !!(this.selectedStock?.length
+            || this.selectedVariant?.length
+            || this.selectedWarehouse?.length
+            || this.batchNumberSearchText
+            || this.nameSearchText);
+    }
+
+    /**
+     * True when header or advance filters are active.
      *
      * @readonly
      * @type {boolean}
      * @memberof BatchReportComponent
      */
     public get hasActiveFilters(): boolean {
-        return !!(this.selectedStock?.length
-            || this.selectedVariant?.length
-            || this.selectedWarehouse?.length
-            || this.batchNumberSearchText
-            || this.nameSearchText
-            || this.batchNumberChips?.length
-            || this.batchUniqueNameChips?.length
-            || (this.withinDaysValue > 0 && this.expiredOnly !== null));
+        return this.hasHeaderFilters || this.hasAdvanceFilters;
     }
 
     /**
@@ -328,7 +336,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      * @memberof BatchReportComponent
      */
     public get hasAdvanceFilters(): boolean {
-        return (this.withinDaysValue > 0 && this.expiredOnly !== null)
+        return this.expiredOnly !== null
             || !!this.batchNumberChips?.length
             || !!this.batchUniqueNameChips?.length;
     }
@@ -386,6 +394,17 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      */
     public get hasFilterWithinDays(): boolean {
         return Number(this.filterWithinDays.value) > 0;
+    }
+
+    /**
+     * Within Days is required only for Will Expire. Already Expired can apply without days.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchReportComponent
+     */
+    public get isFilterWithinDaysRequired(): boolean {
+        return this.filterExpiredOnly === false;
     }
 
     /**
@@ -551,20 +570,19 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      */
     public applyAdvanceFilters(): void {
         this.rejectInvalidWithinDays(this.filterWithinDays.value);
-        const hasExpiryPair = this.hasFilterWithinDays && this.filterExpiredOnly !== null;
-        if (this.hasFilterWithinDays && this.filterExpiredOnly === null) {
+        const hasExpiryStatus = this.filterExpiredOnly !== null;
+        if ((this.hasFilterWithinDays && !hasExpiryStatus) || (this.isFilterWithinDaysRequired && !this.hasFilterWithinDays)) {
             this.showAdvanceFilterErrors = true;
             this.cdr.detectChanges();
             return;
         }
         this.batchNumberChips = [...this.filterBatchNumberChips];
         this.batchUniqueNameChips = this.filterBatchUniqueNameChips.map(chip => ({ ...chip }));
-        if (hasExpiryPair) {
+        this.expiredOnly = this.filterExpiredOnly;
+        if (this.hasFilterWithinDays) {
             this.withinDaysControl.setValue(this.filterWithinDays.value ?? "", { emitEvent: false });
-            this.expiredOnly = this.filterExpiredOnly;
         } else {
             this.withinDaysControl.setValue("", { emitEvent: false });
-            this.expiredOnly = null;
         }
         this.page = 1;
         this.pageIndex = 0;
@@ -626,12 +644,6 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         this.searchName.setValue("", { emitEvent: false });
         this.showBatchNumberSearchInput = false;
         this.showNameSearchInput = false;
-        this.batchNumberChips = [];
-        this.batchUniqueNameChips = [];
-        this.filterBatchNumberChips = [];
-        this.filterBatchUniqueNameChips = [];
-        this.withinDaysControl.setValue("", { emitEvent: false });
-        this.expiredOnly = null;
         this.page = 1;
         this.pageIndex = 0;
         if (refetch) {
@@ -1041,9 +1053,11 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         if (batchNumbers.length) {
             payload.batchNumbers = batchNumbers;
         }
+        if (this.expiredOnly !== null) {
+            payload.expiredOnly = this.expiredOnly;
+        }
         if (withinDays > 0 && this.expiredOnly !== null) {
             payload.withinDays = withinDays;
-            payload.expiredOnly = this.expiredOnly;
         }
         this.inventoryService.getAllBatches({ page: this.page, count: this.count, from: this.fromDate, to: this.toDate }, payload)
             .pipe(takeUntil(this.cancelApi$), takeUntil(this.destroyed$))
