@@ -680,6 +680,23 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         if (to) {
             queryParams.to = to;
         }
+        const batches = Array.isArray(element?.batches) && element.batches.length
+            ? element.batches
+            : (element?.batchNumber || element?.batch?.batchNumber || element?.batchName || element?.batch?.name
+                ? [{
+                    name: element.batch?.name || element.batchName,
+                    batchNumber: element.batch?.batchNumber || element.batchNumber,
+                    value: element.batch?.batchNumber || element.batchNumber
+                }]
+                : []);
+        const batchNumbers = batches.map(batch => batch?.batchNumber || batch?.value).filter(batchNumber => !!batchNumber);
+        const batchNames = batches.map(batch => batch?.name || batch?.batchName).filter(batchName => !!batchName);
+        if (batchNumbers.length) {
+            queryParams.batchNumbers = batchNumbers.join(',');
+        }
+        if (batchNames.length) {
+            queryParams.batchNames = batchNames.join(',');
+        }
         this.router.navigate(['/pages/inventory/v2', type, 'batch'], { queryParams });
     }
 }

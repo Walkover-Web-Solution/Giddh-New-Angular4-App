@@ -277,6 +277,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     /** Invoice Settings */
     public activeCompany: any;
+    /** True when inventory settings have batch management enabled. */
+    public batchTrackingEnabled = signal(false);
     /** This will hold onboarding api form request */
     public onboardingFormRequest: OnboardingFormRequest = { formName: "", country: "" };
     /** Onboarding account form fields */
@@ -993,6 +995,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 label: transporter.transporterName,
                 value: transporter.transporterId
             })));
+        });
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled.set(!!settings?.batchManagement?.enabled);
+            }
         });
         this.getCustomFields();
         this.getCountryList();
@@ -3375,7 +3382,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         event?.preventDefault();
         event?.stopPropagation();
 
-        if (!this.activeCompany?.batchTrackingEnabled) {
+        if (!this.batchTrackingEnabled()) {
             return;
         }
 

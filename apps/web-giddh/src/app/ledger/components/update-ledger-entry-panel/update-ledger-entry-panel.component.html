@@ -1304,11 +1304,7 @@
                         </div>
                     </div>
                     <batch-chip-list
-                        *ngIf="
-                            activeCompany?.batchTrackingEnabled &&
-                            isStockPresent &&
-                            vm.stockTrxEntry?.inventory?.batches?.length
-                        "
+                        *ngIf="batchTrackingEnabled && isStockPresent && vm.stockTrxEntry?.inventory?.batches?.length"
                         class="d-block mb-2"
                         [batches]="vm.stockTrxEntry?.inventory?.batches"
                         [isInbound]="isBatchInbound(vm.selectedLedger?.voucher?.shortCode || vm.selectedLedger?.voucher?.name)"
@@ -1347,10 +1343,7 @@
                                         ></input-field>
                                         <div
                                             *ngIf="
-                                                activeCompany?.batchTrackingEnabled &&
-                                                isStockPresent &&
-                                                !getEntryBatches()?.length &&
-                                                !isEinvoiceGenerated
+                                                batchTrackingEnabled && isStockPresent && !getEntryBatches()?.length && !isEinvoiceGenerated
                                             "
                                             class="mt-1 text-left"
                                             (click)="$event.stopPropagation()"

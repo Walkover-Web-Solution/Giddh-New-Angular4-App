@@ -53,11 +53,7 @@
         <!-- Variant dropdown for stock selection -->
         <ng-container *ngTemplateOutlet="variantAndWarehouseDropdown"></ng-container>
         <batch-chip-list
-            *ngIf="
-                activeCompany?.batchTrackingEnabled &&
-                currentTxn?.selectedAccount?.stock &&
-                currentTxn?.inventory?.batches?.length
-            "
+            *ngIf="batchTrackingEnabled && currentTxn?.selectedAccount?.stock && currentTxn?.inventory?.batches?.length"
             class="d-block my-2"
             [batches]="currentTxn?.inventory?.batches"
             [isInbound]="isBatchInbound(blankLedger?.voucherType)"
@@ -93,12 +89,7 @@
                             [customDecimalPlaces]="4"
                         ></input-field>
                         <div
-                            *ngIf="
-                                activeCompany?.batchTrackingEnabled &&
-                                currentTxn?.selectedAccount?.stock &&
-                                !getEntryBatches()?.length &&
-                                !isReadOnly
-                            "
+                            *ngIf="batchTrackingEnabled && currentTxn?.selectedAccount?.stock && !getEntryBatches()?.length && !isReadOnly"
                             class="mt-1"
                             (click)="$event.stopPropagation()"
                         >

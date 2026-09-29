@@ -273,8 +273,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public invoiceSettings: any = {};
     /** True if unit dropdown  is open */
     public isUnitOpen: boolean = false;
-    /** Active company from session, used for batch tracking. */
+    /** Active company from session. */
     public activeCompany: any;
+    /** True when inventory settings have batch management enabled. */
+    public batchTrackingEnabled: boolean = false;
     /** Stores the stock variants */
     public stockVariants: BehaviorSubject<Array<IOption>> = new BehaviorSubject([]);
     /** True, if stock category is 'expenses' and inclusive tax is applied */
@@ -401,6 +403,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
+        });
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
+                this.cdRef.detectChanges();
+            }
         });
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -864,7 +872,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     transaction.selectedAccount.stock.variant.purchaseTaxInclusive ||
                     transaction.selectedAccount.stock.variant.fixedAssetTaxInclusive;
             }
-            if (transaction?.inventory && (!this.activeCompany?.batchTrackingEnabled || !transaction.inventory.batches?.length)) {
+            if (transaction?.inventory && (!this.batchTrackingEnabled || !transaction.inventory.batches?.length)) {
                 delete transaction.inventory.batches;
             }
         });
@@ -1964,7 +1972,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         event?.preventDefault();
         event?.stopPropagation();
 
-        if (!this.activeCompany?.batchTrackingEnabled) {
+        if (!this.batchTrackingEnabled) {
             return;
         }
 

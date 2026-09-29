@@ -107,6 +107,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public pettyCashBaseAccountUniqueName: string;
     /** Stores the active company details */
     @Input() public activeCompany: any;
+    /** True when inventory settings have batch management enabled. */
+    public batchTrackingEnabled: boolean = false;
     @Input() public searchResultsPaginationPage: any;
     @Input() public searchResultsPaginationTotalPages: any;
     @Input() public generateEInvoice: boolean = null;
@@ -471,6 +473,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
+                this.changeDetectorRef.detectChanges();
             }
         });
         this.vm.selectedLedger = new LedgerResponse();
@@ -960,7 +968,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
                     transaction.inventory.warehouse.name = this.selectedWarehouseName;
                 }
-                if (!this.activeCompany?.batchTrackingEnabled || !transaction.inventory.batches?.length) {
+                if (!this.batchTrackingEnabled || !transaction.inventory.batches?.length) {
                     delete transaction.inventory.batches;
                 }
                 if (transaction.inventory.batch) {
@@ -2625,7 +2633,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         event?.preventDefault();
         event?.stopPropagation();
 
-        if (!this.activeCompany?.batchTrackingEnabled || this.isEinvoiceGenerated) {
+        if (!this.batchTrackingEnabled || this.isEinvoiceGenerated) {
             return;
         }
 
