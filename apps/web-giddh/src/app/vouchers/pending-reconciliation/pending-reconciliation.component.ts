@@ -816,7 +816,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
             voucherDate: item.date,
             source: item.source,
             voucherType: item.voucherType,
-            documentSubType: item.challanType ? item.challanType.replace(/_/g, ' ') : '-',
+            challanType: item.challanType ? item.challanType.replace(/_/g, ' ') : '-',
             partyName: account.name,
             accountUniqueName: account.uniqueName,
             grandTotal: item.grandTotal,

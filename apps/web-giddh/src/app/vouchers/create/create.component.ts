@@ -1711,8 +1711,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             driverName: voucherDetails?.transporterDetails?.driverName ?? "",
                             driverPhone: voucherDetails?.transporterDetails?.driverPhone ?? ""
                         });
-                        this.invoiceForm.get("documentSubType")?.patchValue(
-                            voucherDetails?.documentSubType === ChallanTypeEnum.JOBWORK
+                        this.invoiceForm.get("challanType")?.patchValue(
+                            voucherDetails?.challanType === ChallanTypeEnum.JOBWORK
                                 ? ChallanTypeEnum.JOBWORK
                                 : ChallanTypeEnum.STOCK_TRANSFER
                         );
@@ -3965,7 +3965,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPersonUniqueName: [''],
             annexureCharges: this.formBuilder.array([this.getAnnexureChargeFormGroup()]),
             transporterDetails: this.getTransporterDetailsFormGroup(),
-            documentSubType: [ChallanTypeEnum.STOCK_TRANSFER]
+            challanType: [ChallanTypeEnum.STOCK_TRANSFER]
         });
     }
 
@@ -7167,7 +7167,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!this.showsTransporterDetails) {
             delete invoiceForm.transporterDetails;
-            delete invoiceForm.documentSubType;
+            delete invoiceForm.challanType;
         }
 
         if (!this.isIndianCompanyAndAccount) {
@@ -7835,7 +7835,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             driverName: "",
             driverPhone: ""
         });
-        this.invoiceForm.get("documentSubType")?.patchValue(ChallanTypeEnum.STOCK_TRANSFER);
+        this.invoiceForm.get("challanType")?.patchValue(ChallanTypeEnum.STOCK_TRANSFER);
 
         // Restore custom fields with preserved uniqueName but cleared values
         if (customFieldsData.length > 0) {

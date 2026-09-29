@@ -37,7 +37,7 @@ interface LinkedInvoiceEntity {
     entityType: string;
     uniqueName: string;
     name: string;
-    number: string;
+    number?: string;
     type: string;
     date: string;
     status: string;
@@ -275,7 +275,8 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
 
         for (const step of steps) {
             const entity = step.target;
-            if (!entity?.number) {
+            // RN / adjustment targets may omit `number`; uniqueName is enough to open the voucher
+            if (!entity?.uniqueName && !entity?.number) {
                 continue;
             }
 
@@ -287,7 +288,7 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
             uniqueRows.set(key, {
                 id: step.id,
                 date: this.extractDate(step.createdAt) || entity.date || '',
-                invoiceNumber: entity.number,
+                invoiceNumber: entity.number || entity.uniqueName || '',
                 customerName: entity.name || '',
                 amount: entity.amount?.amountForAccount ?? 0,
                 uniqueName: entity.uniqueName || '',
