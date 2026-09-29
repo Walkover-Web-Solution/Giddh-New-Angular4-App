@@ -288,7 +288,7 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
             uniqueRows.set(key, {
                 id: step.id,
                 date: this.extractDate(step.createdAt) || entity.date || '',
-                invoiceNumber: entity.number || entity.uniqueName || '',
+                invoiceNumber: entity.number || 'N/A',
                 customerName: entity.name || '',
                 amount: entity.amount?.amountForAccount ?? 0,
                 uniqueName: entity.uniqueName || '',

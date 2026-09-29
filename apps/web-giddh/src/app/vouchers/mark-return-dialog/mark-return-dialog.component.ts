@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { finalize, ReplaySubject, takeUntil } from "rxjs";
+import { ReplaySubject, takeUntil } from "rxjs";
 import { VoucherService } from "../../services/voucher.service";
 import { ToasterService } from "../../services/toaster.service";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -136,15 +136,12 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.voucherService
             .getInventoryEventResolutions(this.data.voucherType, this.data.voucherUniqueName, this.eventName)
-            .pipe(
-                takeUntil(this.destroyed$),
-                finalize(() => {
-                    this.isLoading = false;
-                    this.changeDetectorRef.detectChanges();
-                })
-            )
+            .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (response) => {
+                    // HandleCatch never completes, so do not rely on finalize to clear the loader
+                    this.isLoading = false;
+                    this.changeDetectorRef.detectChanges();
                     if (response?.status === "success" && response?.body) {
                         this.rows = (response.body.items || []).map((item: any) => this.mapItemToRow(item));
                     } else {
@@ -153,6 +150,8 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
                     }
                 },
                 error: (error) => {
+                    this.isLoading = false;
+                    this.changeDetectorRef.detectChanges();
                     this.showApiError(error);
                     this.dialogRef.close();
                 }
@@ -373,15 +372,12 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         this.changeDetectorRef.detectChanges();
         this.voucherService
             .executeInventoryDocumentEvent(this.data.voucherType, this.data.voucherUniqueName, payload)
-            .pipe(
-                takeUntil(this.destroyed$),
-                finalize(() => {
-                    this.isSubmitting = false;
-                    this.changeDetectorRef.detectChanges();
-                })
-            )
+            .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (response) => {
+                    // HandleCatch never completes, so do not rely on finalize to clear the loader
+                    this.isSubmitting = false;
+                    this.changeDetectorRef.detectChanges();
                     if (response?.status === "success") {
                         this.toaster.successToast(
                             (typeof response?.body === "string" ? response.body : null)
@@ -394,6 +390,8 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
                     }
                 },
                 error: (error) => {
+                    this.isSubmitting = false;
+                    this.changeDetectorRef.detectChanges();
                     this.showApiError(error);
                 }
             });
