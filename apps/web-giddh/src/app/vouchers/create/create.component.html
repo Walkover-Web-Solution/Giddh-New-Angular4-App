@@ -801,12 +801,13 @@
                                             appEnterNext
                                             [cssClass]="'border-none'"
                                             [name]="'warehouse'"
-                                            formControlName="uniqueName"
                                             [label]="localeData?.select_warehouse_placeholder"
                                             [placeholder]="commonLocaleData?.app_select"
                                             [options]="warehouses"
-                                            [labelValue]="invoiceForm.controls['warehouse']?.get('name')?.value"
+                                            [labelValue]="invoiceForm.get('warehouse.name')?.value"
+                                            [useCustomLabelValue]="true"
                                             [forceClear]="forceClear"
+                                            (selectedOption)="selectWarehouse($event)"
                                         ></reactive-dropdown-field>
                                     </div>
 

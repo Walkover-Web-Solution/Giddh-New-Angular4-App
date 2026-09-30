@@ -442,7 +442,10 @@
                                         @if (
                                             sectionSettings?.header.displayPlaceOfSupply &&
                                             !isThermalTemplate &&
-                                            (isTemplateTypeInvoice || isTemplateTypeVoucher || isTemplateTypeProforma || isTemplateTypeEstimate)
+                                            (isTemplateTypeInvoice ||
+                                                isTemplateTypeVoucher ||
+                                                isTemplateTypeProforma ||
+                                                isTemplateTypeEstimate)
                                         ) {
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -581,7 +584,12 @@
                                             ></ng-container>
                                         }
 
-                                        @if (showGstComposition && isTallyTemplateOrTemplateA) {
+                                        @if (
+                                            showGstComposition &&
+                                            isTallyTemplateOrTemplateA &&
+                                            !isTemplateTypeEstimate &&
+                                            !isTemplateTypeProforma
+                                        ) {
                                             <!-- irn and ack number -->
                                             @if (sectionSettings?.header.showEInvoiceDetails) {
                                                 <ng-container
@@ -1615,7 +1623,12 @@
                                                 ></ng-container>
                                             }
                                             <!-- date -->
-                                            @if (sectionSettings?.table.date && !isThermalTemplate) {
+                                            @if (
+                                                sectionSettings?.table.date &&
+                                                !isThermalTemplate &&
+                                                !isTemplateTypeEstimate &&
+                                                !isTemplateTypeProforma
+                                            ) {
                                                 <ng-container
                                                     *ngTemplateOutlet="
                                                         labelRow;
@@ -2002,7 +2015,7 @@
                                                         "
                                                     ></ng-container>
                                                 }
-    
+
                                                 <!-- tds -->
                                                 @if (sectionSettings?.footer?.tds) {
                                                     <ng-container
@@ -2706,7 +2719,10 @@
                                         @if (
                                             sectionSettings?.footer?.showNotesAtLastPage &&
                                             isTemplateA &&
-                                            (isTemplateTypeInvoice || isTemplateTypeVoucher || isTemplateTypeProforma || isTemplateTypeEstimate)
+                                            (isTemplateTypeInvoice ||
+                                                isTemplateTypeVoucher ||
+                                                isTemplateTypeProforma ||
+                                                isTemplateTypeEstimate)
                                         ) {
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -2810,7 +2826,10 @@
                                                     </td>
                                                     <td class="p-2 text-center">
                                                         <span class="font-size-12">
-                                                            @if (!customTemplate.sections['footer'].data['showNotesAtLastPage']?.display && isCharacterFieldFocused('footer', 'message1', 'value')) {
+                                                            @if (
+                                                                !customTemplate.sections['footer'].data['showNotesAtLastPage']?.display &&
+                                                                isCharacterFieldFocused('footer', 'message1', 'value')
+                                                            ) {
                                                                 {{
                                                                     getRemainingCharacters(
                                                                         200,
@@ -2907,7 +2926,10 @@
                                                     </td>
                                                     <td class="p-2 text-center">
                                                         <span class="font-size-12">
-                                                            @if (!customTemplate.sections['footer'].data['showNotesAtLastPage']?.display && isCharacterFieldFocused('footer', 'message1', 'value')) {
+                                                            @if (
+                                                                !customTemplate.sections['footer'].data['showNotesAtLastPage']?.display &&
+                                                                isCharacterFieldFocused('footer', 'message1', 'value')
+                                                            ) {
                                                                 {{
                                                                     getRemainingCharacters(
                                                                         200,
@@ -3001,7 +3023,10 @@
                                                     </td>
                                                     <td class="p-2 text-center">
                                                         <span class="font-size-12">
-                                                            @if (!customTemplate.sections['footer'].data['showNotesAtLastPage']?.display && isCharacterFieldFocused('footer', 'message1', 'secondaryValue')) {
+                                                            @if (
+                                                                !customTemplate.sections['footer'].data['showNotesAtLastPage']?.display &&
+                                                                isCharacterFieldFocused('footer', 'message1', 'secondaryValue')
+                                                            ) {
                                                                 {{
                                                                     getRemainingCharacters(
                                                                         200,

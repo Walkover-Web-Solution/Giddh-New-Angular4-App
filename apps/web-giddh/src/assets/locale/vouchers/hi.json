@@ -153,6 +153,7 @@
     "n_batches_negative": "[COUNT] बैच नकारात्मक",
     "batch_not_found": "इस कोड का कोई बैच नहीं मिला",
     "select_variant_first": "पहले वेरिएंट चुनें",
+    "warehouse_change_batch_confirmation": "वेयरहाउस बदलने से सभी चयनित बैच रीसेट हो जाएंगे। क्या आप जारी रखना चाहते हैं?",
     "account_missing_in_stock": "खाता स्टॉक से लिंक नहीं है।",
     "add_new_address": "+ नया पता जोड़ें",
     "po_created": "वाउचर नंबर के साथ रसीद की खरीद आदेश - [PO_NUMBER]",

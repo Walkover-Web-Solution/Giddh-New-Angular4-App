@@ -130,6 +130,8 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public withinDaysControl: FormControl = new FormControl("");
     /** Expired-only filter (`true` already expired, `false` will expire). */
     public expiredOnly: boolean | null = null;
+    /** Archive status filter (`true` archive, `false` unarchive, `null` all). */
+    public archiveStatus: boolean | null = null;
     /** From date sent on get-all (`DD-MM-YYYY`). */
     public fromDate: string = "";
     /** To date sent on get-all (`DD-MM-YYYY`). */
@@ -150,6 +152,8 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public filterWithinDays: FormControl = new FormControl("");
     /** Draft expiry-status value while the filter dialog is open. Defaults to will expire. */
     public filterExpiredOnly: boolean | null;
+    /** Draft archive-status value while the filter dialog is open. */
+    public filterArchiveStatus: boolean | null = null;
     /** True after Apply is clicked with missing required filters. */
     public showAdvanceFilterErrors: boolean = false;
     /** Open advance filter dialog instance. */
@@ -337,6 +341,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      */
     public get hasAdvanceFilters(): boolean {
         return this.expiredOnly !== null
+            || this.archiveStatus !== null
             || !!this.batchNumberChips?.length
             || !!this.batchUniqueNameChips?.length;
     }
@@ -473,6 +478,55 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Archive-status options for the advance filter dropdown.
+     *
+     * @readonly
+     * @type {IOption[]}
+     * @memberof BatchReportComponent
+     */
+    public get archiveStatusOptions(): IOption[] {
+        return [
+            { label: this.commonLocaleData?.app_all ?? "", value: "all" },
+            { label: this.commonLocaleData?.app_archive ?? "", value: "true" },
+            { label: this.commonLocaleData?.app_unarchive ?? "", value: "false" }
+        ];
+    }
+
+    /**
+     * Selected archive-status label in the advance filter dropdown.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BatchReportComponent
+     */
+    public get archiveStatusFilterLabel(): string {
+        if (this.filterArchiveStatus === true) {
+            return this.commonLocaleData?.app_archive ?? "";
+        }
+        if (this.filterArchiveStatus === false) {
+            return this.commonLocaleData?.app_unarchive ?? "";
+        }
+        return this.commonLocaleData?.app_all ?? "";
+    }
+
+    /**
+     * Label for the applied archive-status chip.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BatchReportComponent
+     */
+    public get archiveStatusLabel(): string {
+        if (this.archiveStatus === true) {
+            return this.commonLocaleData?.app_archive ?? "";
+        }
+        if (this.archiveStatus === false) {
+            return this.commonLocaleData?.app_unarchive ?? "";
+        }
+        return "";
+    }
+
+    /**
      * Search stocks from the dropdown — reload page 1 from the API.
      *
      * @param {string} query Search text
@@ -536,6 +590,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public openAdvanceFilterDialog(): void {
         this.filterWithinDays.setValue(this.withinDaysControl.value ?? "", { emitEvent: false });
         this.filterExpiredOnly = this.expiredOnly !== null ? this.expiredOnly : null;
+        this.filterArchiveStatus = this.archiveStatus;
         this.filterBatchNumberChips = [...this.batchNumberChips];
         this.filterBatchUniqueNameChips = this.batchUniqueNameChips.map(chip => ({ ...chip }));
         this.showAdvanceFilterErrors = false;
@@ -564,6 +619,22 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Set the draft archive-status from the reactive dropdown.
+     *
+     * @param {IOption} event
+     * @memberof BatchReportComponent
+     */
+    public selectArchiveStatus(event: IOption): void {
+        if (event?.value === "true") {
+            this.filterArchiveStatus = true;
+        } else if (event?.value === "false") {
+            this.filterArchiveStatus = false;
+        } else {
+            this.filterArchiveStatus = null;
+        }
+    }
+
+    /**
      * Apply draft advance filters and refetch from page 1.
      *
      * @memberof BatchReportComponent
@@ -579,6 +650,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         this.batchNumberChips = [...this.filterBatchNumberChips];
         this.batchUniqueNameChips = this.filterBatchUniqueNameChips.map(chip => ({ ...chip }));
         this.expiredOnly = this.filterExpiredOnly;
+        this.archiveStatus = this.filterArchiveStatus;
         if (this.hasFilterWithinDays) {
             this.withinDaysControl.setValue(this.filterWithinDays.value ?? "", { emitEvent: false });
         } else {
@@ -594,13 +666,15 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     /**
      * Remove one applied advance filter and refetch.
      *
-     * @param {("withinDays" | "expiredOnly" | "batchNumber" | "batchUniqueName")} type Filter to clear
+     * @param {("withinDays" | "expiredOnly" | "status" | "batchNumber" | "batchUniqueName")} type Filter to clear
      * @memberof BatchReportComponent
      */
-    public removeAdvanceFilter(type: "withinDays" | "expiredOnly" | "batchNumber" | "batchUniqueName"): void {
+    public removeAdvanceFilter(type: "withinDays" | "expiredOnly" | "status" | "batchNumber" | "batchUniqueName"): void {
         if (type === "withinDays" || type === "expiredOnly") {
             this.withinDaysControl.setValue("", { emitEvent: false });
             this.expiredOnly = null;
+        } else if (type === "status") {
+            this.archiveStatus = null;
         } else if (type === "batchNumber") {
             this.batchNumberChips = [];
         } else if (type === "batchUniqueName") {
@@ -620,6 +694,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public clearAdvanceFilters(): void {
         this.withinDaysControl.setValue("", { emitEvent: false });
         this.expiredOnly = null;
+        this.archiveStatus = null;
         this.batchNumberChips = [];
         this.batchUniqueNameChips = [];
         this.page = 1;
@@ -1058,6 +1133,9 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         }
         if (withinDays > 0 && this.expiredOnly !== null) {
             payload.withinDays = withinDays;
+        }
+        if (this.archiveStatus !== null) {
+            payload.archive = this.archiveStatus;
         }
         this.inventoryService.getAllBatches({ page: this.page, count: this.count, from: this.fromDate, to: this.toDate }, payload)
             .pipe(takeUntil(this.cancelApi$), takeUntil(this.destroyed$))
