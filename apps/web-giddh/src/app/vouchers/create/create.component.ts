@@ -7235,10 +7235,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         invoiceForm.deposits = deposits;
         delete invoiceForm.annexureCharges;
 
+        // Delete Entry Date for Voucher Types that don't require it
         if (
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice ||
-            this.invoiceType.isPurchaseOrder
+            this.invoiceType.isPurchaseOrder ||
+            this.invoiceType.isDeliveryChallan ||
+            this.invoiceType.isReceiptNote
         ) {
             invoiceForm.entries.forEach((control) => {
                 if (control?.date) {
