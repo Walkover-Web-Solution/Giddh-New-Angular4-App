@@ -2320,10 +2320,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.componentStore.getInvoiceSettings();
             } else {
                 this.invoiceSettings = settings;
-                if ([VoucherTypeEnum.sales, VoucherTypeEnum.cash, VoucherTypeEnum.deliveryChallan].includes(this.voucherType as VoucherTypeEnum)) {
+                if ([VoucherTypeEnum.sales, VoucherTypeEnum.cash].includes(this.voucherType as VoucherTypeEnum)) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
                     this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomInvoiceNumber;
-                } else if ([VoucherTypeEnum.purchase, VoucherTypeEnum.cashBill, VoucherTypeEnum.receiptNote].includes(this.voucherType as VoucherTypeEnum)) {
+                } else if ([VoucherTypeEnum.purchase, VoucherTypeEnum.cashBill].includes(this.voucherType as VoucherTypeEnum)) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
                     this.useCustomVoucherNumber = true;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
@@ -2346,7 +2346,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
                     this.applyRoundOff = settings.purchaseBillSettings?.purchaseOrderRoundOff;
                 }
-
                 this.invoiceForm.get("roundOffApplicable")?.patchValue(this.applyRoundOff);
 
                 this.updateDueDate();

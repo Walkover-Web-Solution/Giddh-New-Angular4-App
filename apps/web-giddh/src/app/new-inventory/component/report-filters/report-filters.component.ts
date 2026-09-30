@@ -153,6 +153,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public reportNature: typeof ReportNature = ReportNature;
     /** Inventory module name */
     public inventoryModuleName: typeof InventoryModuleName = InventoryModuleName;
+    /** True when inventory via business document setting is enabled */
+    public inventoryViaBusinessDocument: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -184,6 +186,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
+        });
+
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            this.inventoryViaBusinessDocument = !!settings?.voucherAutomation?.inventoryViaBusinessDocument;
+            this.changeDetection.detectChanges();
         });
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {

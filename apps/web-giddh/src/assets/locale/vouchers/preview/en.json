@@ -657,7 +657,9 @@
         "partially_billed": "Partially Billed",
         "fully_billed": "Fully Billed"
     },
-    "inventory_via_business_document_disabled_title": "Inventory documents are not enabled",
-    "inventory_via_business_document_disabled_message": "Delivery Challans and Receipt Notes update stock through business documents. To use them, enable Manage inventory through business documents in Inventory Settings.",
-    "go_to_inventory_settings": "Go to Inventory Settings"
+    "inventory_via_business_document_disabled_title_delivery_challan": "Delivery Challans are turned off",
+    "inventory_via_business_document_disabled_title_receipt_note": "Receipt Notes are turned off",
+    "inventory_via_business_document_disabled_title": "Delivery Challans and Receipt Notes are turned off",
+    "inventory_via_business_document_disabled_message": "To create Delivery Challans and Receipt Notes, turn on <strong>Manage inventory through Delivery Challans and Receipt Notes</strong> in Inventory Settings.",
+    "turn_on_in_inventory_settings": "Turn on in Inventory Settings"
 }

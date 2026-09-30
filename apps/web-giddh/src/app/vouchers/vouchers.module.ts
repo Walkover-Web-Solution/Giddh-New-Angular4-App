@@ -107,6 +107,7 @@ import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-lis
 import { AdjustInventoryModule } from "../new-inventory/component/adjust-inventory/adjust-inventory.module";
 import { PendingReconciliationComponent } from "./pending-reconciliation/pending-reconciliation.component";
 import { LinkedInvoiceDialogComponent } from "./linked-invoice-dialog/linked-invoice-dialog.component";
+import { FeaturePermissionMessageComponent } from "../shared/feature-permission-message/feature-permission-message.component";
 
 @NgModule({
     declarations: [
@@ -217,7 +218,8 @@ import { LinkedInvoiceDialogComponent } from "./linked-invoice-dialog/linked-inv
         AsideRecurrenceVoucherCreateComponent,
         GiddhDatePipe,
         GoToBranchComponent,
-        AdjustInventoryModule
+        AdjustInventoryModule,
+        FeaturePermissionMessageComponent
     ],
     exports: [
         VoucherCreateComponent,

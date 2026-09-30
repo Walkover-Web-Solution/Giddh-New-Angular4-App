@@ -906,7 +906,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             data: {
                 voucherUniqueName: this.selectedInvoice.uniqueName,
                 localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
+                commonLocaleData: this.commonLocaleData,
+                voucherType: this.voucherType
             }
         });
     }
@@ -980,7 +981,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public sendEmail(response: any): void {
         if (response) {
-            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
+            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice || this.invoiceType.isDeliveryChallan) {
+                const voucherType = this.voucherType === VoucherTypeEnum.deliveryChallan ? 'DC' : this.voucherType;
                 this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName,
                     payload: {
@@ -988,7 +990,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                         email: {
                             to: response.email ?? response
                         },
-                        voucherType: this.voucherType,
+                        voucherType: voucherType,
                         uniqueName: this.selectedInvoice?.uniqueName
                     }
                 });
