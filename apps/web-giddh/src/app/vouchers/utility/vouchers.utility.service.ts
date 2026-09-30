@@ -368,12 +368,13 @@ export class VouchersUtilityService {
         let voucherGrandTotal = 0;
         voucherDetails.entries = (voucherDetails.entries || []).map((entry) => {
             let entryTotal = 0;
-            const transactions = entry.transactions?.map((transaction) => {
+            const transactions = (entry.transactions || []).reduce((acc, transaction) => {
                 const stock = transaction.stock;
                 if (!stock) {
                     const amount = Number(transaction.amount?.amountForAccount) || 0;
                     entryTotal += amount;
-                    return transaction;
+                    acc.push(transaction);
+                    return acc;
                 }
 
                 const documentItem = documentItemsByVariant[stock.variant?.uniqueName]
@@ -387,6 +388,11 @@ export class VouchersUtilityService {
                 const stockQuantity = stock.quantity ?? documentItem?.quantity ?? 0;
                 const quantity = Number(isBusinessDocumentCreate ? (documentItem?.remainingQuantity ?? 0) : stockQuantity);
 
+                // Skip stock lines with no remaining/usable quantity
+                if (!(quantity > 0)) {
+                    return acc;
+                }
+
                 let amount = Number(transaction.amount?.amountForAccount) || 0;
                 if (!amount && documentItem?.amount != null) {
                     amount = Number(documentItem.amount) || 0;
@@ -396,7 +402,7 @@ export class VouchersUtilityService {
                 }
                 entryTotal += amount;
 
-                return {
+                acc.push({
                     ...transaction,
                     account: {
                         name: transaction.account?.name,
@@ -430,8 +436,9 @@ export class VouchersUtilityService {
                                 }]
                                 : [])
                     }
-                };
-            });
+                });
+                return acc;
+            }, []);
 
             return {
                 ...entry,
@@ -445,7 +452,7 @@ export class VouchersUtilityService {
                     amountForCompany: entryTotal
                 }
             };
-        });
+        }).filter((entry) => entry.transactions?.length > 0);
 
         voucherDetails.entries?.forEach((entry) => {
             voucherGrandTotal += Number(entry?.entryTotal?.amountForAccount) || 0;
