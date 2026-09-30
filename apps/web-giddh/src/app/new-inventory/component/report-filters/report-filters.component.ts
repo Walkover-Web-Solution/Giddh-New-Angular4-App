@@ -580,7 +580,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public getReportNature(): void {
-        if (!this.moduleName || this.moduleName === InventoryModuleName.transaction) {
+        if (!this.moduleName) {
             return;
         }
         // Prefer current module; fall back to item-wise so Settings and all report tabs stay aligned
