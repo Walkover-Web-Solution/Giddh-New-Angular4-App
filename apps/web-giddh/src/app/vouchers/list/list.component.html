@@ -6235,7 +6235,7 @@
                                     <i class="icon-dots-three-vertical"></i>
                                 </span>
                                 <mat-menu #inventoryActionsMenu="matMenu">
-                                    @if (element?.invoiceStatus !== 'FULLY_INVOICED') {
+                                    @if (!['FULLY_INVOICED'].includes(element?.invoiceStatus) && element?.documentStatusCode !== 'FULL_RETURN') {
                                         <button mat-menu-item (click)="convertInventoryDocument(element)">
                                             {{
                                                 voucherType === voucherTypeEnum.deliveryChallan
@@ -6254,9 +6254,11 @@
                                             {{ localeData?.make_adjustment }}
                                         </button>
                                     }
-                                    <button mat-menu-item (click)="openMarkReturnDialog(element)">
-                                        {{ localeData?.mark_return }}
-                                    </button>
+                                    @if (element?.documentStatusCode !== 'FULL_RETURN') {
+                                        <button mat-menu-item (click)="openMarkReturnDialog(element)">
+                                            {{ localeData?.mark_return }}
+                                        </button>
+                                    }
                                     <mat-divider></mat-divider>
                                     <button mat-menu-item class="text-danger" (click)="cancelInventoryDocument(element)">
                                         {{
