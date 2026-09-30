@@ -488,7 +488,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         return [
             { label: this.commonLocaleData?.app_all ?? "", value: "all" },
             { label: this.commonLocaleData?.app_archive ?? "", value: "true" },
-            { label: this.commonLocaleData?.app_unarchive ?? "", value: "false" }
+            { label: this.commonLocaleData?.app_active ?? "", value: "false" }
         ];
     }
 
@@ -504,7 +504,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return this.commonLocaleData?.app_archive ?? "";
         }
         if (this.filterArchiveStatus === false) {
-            return this.commonLocaleData?.app_unarchive ?? "";
+            return this.commonLocaleData?.app_active ?? "";
         }
         return this.commonLocaleData?.app_all ?? "";
     }
@@ -521,7 +521,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return this.commonLocaleData?.app_archive ?? "";
         }
         if (this.archiveStatus === false) {
-            return this.commonLocaleData?.app_unarchive ?? "";
+            return this.commonLocaleData?.app_active ?? "";
         }
         return "";
     }

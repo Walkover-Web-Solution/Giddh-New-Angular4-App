@@ -2335,15 +2335,13 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * Clear the only remaining batch row instead of removing it.
      *
      * @param {*} variant Variant row
-     * @param {number} index Batch row index
+     * @param {number} index Flattened batch row index
      * @memberof StockCreateEditComponent
      */
     public resetVariantBatchRow(variant: any, index: number): void {
-        const batches = this.getWarehouseBatches(variant);
-        if (!batches[index]) {
+        if (!this.replaceBatchAtFlattenedIndex(variant, index, this.createEmptyVariantBatch())) {
             return;
         }
-        batches.splice(index, 1, this.createEmptyVariantBatch());
         this.syncVariantOpeningFromBatches(variant);
         this.updateBatchAvailabilityOptions();
     }
@@ -2446,15 +2444,35 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     private removeBatchAtFlattenedIndex(variant: any, index: number): void {
+        this.replaceBatchAtFlattenedIndex(variant, index);
+    }
+
+    /**
+     * Replace or remove a batch on the source warehouse array for a flattened index.
+     * Pass `replacement` to reset the row; omit it to remove the row.
+     *
+     * @private
+     * @param {*} variant Variant row
+     * @param {number} index Flattened batch index
+     * @param {*} [replacement] Optional empty batch used for reset
+     * @return {*}  {boolean} True when the index was found
+     * @memberof StockCreateEditComponent
+     */
+    private replaceBatchAtFlattenedIndex(variant: any, index: number, replacement?: any): boolean {
         let remaining = index;
         for (const warehouse of this.getWarehousesInDisplayOrder(variant)) {
             const count = warehouse.batches?.length || 0;
             if (remaining < count) {
-                warehouse.batches.splice(remaining, 1);
-                return;
+                if (replacement) {
+                    warehouse.batches.splice(remaining, 1, replacement);
+                } else {
+                    warehouse.batches.splice(remaining, 1);
+                }
+                return true;
             }
             remaining -= count;
         }
+        return false;
     }
 
     public resetForm(stockCreateEditForm: NgForm): void {

@@ -137,9 +137,13 @@
                                                 (edit)="openBatchSelectDialog('finished', undefined, $event)"
                                             ></batch-chip-list>
                                             <a
-                                                *ngIf="!getManufacturingBatches(manufacturingObject.manufacturingDetails[0].batches)?.length && !isCompany && !isConsolidatedBranch"
+                                                *ngIf="
+                                                    !getManufacturingBatches(manufacturingObject.manufacturingDetails[0].batches)?.length &&
+                                                    !isCompany &&
+                                                    !isConsolidatedBranch
+                                                "
                                                 href="javascript:void(0);"
-                                                class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                 (click)="openBatchSelectDialog('finished', undefined, $event)"
                                             >
                                                 {{ localeData?.select_batch }}
@@ -274,7 +278,7 @@
                                                                         linkedStock.cssClass +
                                                                         (linkedStock.variantNameError ? ' required-field-error' : '')
                                                                     "
-                                                                    [name]="'variantUniqueName' + i"   
+                                                                    [name]="'variantUniqueName' + i"
                                                                     [scrollableElementId]="'variant' + i"
                                                                     [placeholder]="commonLocaleData?.app_select_variant"
                                                                     [options]="linkedStock.variants"
@@ -320,9 +324,13 @@
                                                                     (edit)="openBatchSelectDialog('raw', i, $event)"
                                                                 ></batch-chip-list>
                                                                 <a
-                                                                    *ngIf="!getManufacturingBatches(linkedStock.batches)?.length && !isCompany && !isConsolidatedBranch"
+                                                                    *ngIf="
+                                                                        !getManufacturingBatches(linkedStock.batches)?.length &&
+                                                                        !isCompany &&
+                                                                        !isConsolidatedBranch
+                                                                    "
                                                                     href="javascript:void(0);"
-                                                                    class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                                    class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                                     (click)="openBatchSelectDialog('raw', i, $event)"
                                                                 >
                                                                     {{ localeData?.select_batch }}
@@ -669,7 +677,9 @@
                                                             <td *ngIf="batchTrackingEnabled" class="table-batch text-right">
                                                                 <ng-container *ngIf="byProductLinkedStock.stockUniqueName">
                                                                     <batch-chip-list
-                                                                        *ngIf="getManufacturingBatches(byProductLinkedStock.batches)?.length"
+                                                                        *ngIf="
+                                                                            getManufacturingBatches(byProductLinkedStock.batches)?.length
+                                                                        "
                                                                         [compact]="true"
                                                                         [batches]="byProductLinkedStock.batches"
                                                                         [isInbound]="true"
@@ -679,9 +689,14 @@
                                                                         (edit)="openBatchSelectDialog('byProduct', i, $event)"
                                                                     ></batch-chip-list>
                                                                     <a
-                                                                        *ngIf="!getManufacturingBatches(byProductLinkedStock.batches)?.length && !isCompany && !isConsolidatedBranch"
+                                                                        *ngIf="
+                                                                            !getManufacturingBatches(byProductLinkedStock.batches)
+                                                                                ?.length &&
+                                                                            !isCompany &&
+                                                                            !isConsolidatedBranch
+                                                                        "
                                                                         href="javascript:void(0);"
-                                                                        class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                                        class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                                         (click)="openBatchSelectDialog('byProduct', i, $event)"
                                                                     >
                                                                         {{ localeData?.select_batch }}
@@ -734,7 +749,9 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td>{{ commonLocaleData?.app_total }}</td>
-                                                        <td [attr.colspan]="batchTrackingEnabled ? 3 : 2">{{ totals.totalStockQuantity }}</td>
+                                                        <td [attr.colspan]="batchTrackingEnabled ? 3 : 2">
+                                                            {{ totals.totalStockQuantity }}
+                                                        </td>
                                                         <td colspan="2"></td>
                                                         <td>&nbsp;</td>
                                                     </tr>

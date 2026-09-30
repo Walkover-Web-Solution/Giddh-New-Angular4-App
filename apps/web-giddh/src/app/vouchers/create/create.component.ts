@@ -3475,8 +3475,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Confirm warehouse change before applying it. Yes selects the warehouse
-     * and resets batches; No leaves warehouse and batches unchanged.
+     * Select warehouse. Confirms only when any stock line has batches selected;
+     * otherwise applies the warehouse change immediately.
      *
      * @param {IOption} event Selected warehouse
      * @memberof VoucherCreateComponent
@@ -3487,6 +3487,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!nextUniqueName || nextUniqueName === this.getConfirmedWarehouseUniqueName()) {
             return;
         }
+
+        if (!this.hasAnyVoucherBatches()) {
+            this.applyWarehouseSelection(nextName, nextUniqueName);
+            return;
+        }
+
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: "630px",
             data: {
@@ -3547,6 +3553,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         this.invoiceForm.get("warehouse.uniqueName")?.patchValue(defaultWarehouse.uniqueName);
         this.invoiceForm.get("warehouse.name")?.patchValue(defaultWarehouse.name);
+    }
+
+    /**
+     * True when any voucher entry has at least one selected batch.
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    private hasAnyVoucherBatches(): boolean {
+        const entries = this.invoiceForm.get("entries") as FormArray;
+        return !!entries?.controls?.some((entry) => {
+            const transaction = this.getTransactionFormGroup(entry as FormGroup);
+            return this.getEntryBatches(transaction)?.length > 0;
+        });
     }
 
     /**
