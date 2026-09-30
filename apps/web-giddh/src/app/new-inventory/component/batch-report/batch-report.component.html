@@ -136,6 +136,20 @@
                         </button>
                     </div>
                 }
+                @if (archiveStatus !== null) {
+                    <div class="font-size-12 border-radius-12 px-2 py-1 d-flex align-items-center applied-filter-chip column-gap-05">
+                        <span>{{ commonLocaleData?.app_status }}:</span>
+                        <span class="text-primary">{{ archiveStatusLabel }}</span>
+                        <button
+                            type="button"
+                            class="bg-transparent border-none cursor-pointer"
+                            (click)="removeAdvanceFilter('status')"
+                            [attr.aria-label]="commonLocaleData?.app_clear"
+                        >
+                            <i class="icon-cross font-size-12"></i>
+                        </button>
+                    </div>
+                }
                 @if (batchNumberChips?.length) {
                     <div class="font-size-12 border-radius-12 px-2 py-1 d-flex align-items-center applied-filter-chip column-gap-05">
                         <span class="flex-shrink-0">{{ localeData?.search_multiple_batch_numbers }}:</span>
@@ -514,7 +528,7 @@
                         </mat-chip-grid>
                     </mat-form-field>
                 </div>
-                <div class="col-12 mt-3">
+                <div class="col-6 mt-3">
                     <input-field
                         [name]="'withinDays'"
                         [type]="'number'"
@@ -527,7 +541,7 @@
                         [showError]="showAdvanceFilterErrors && isFilterWithinDaysRequired && !hasFilterWithinDays"
                     ></input-field>
                 </div>
-                <div class="col-12 mt-3">
+                <div class="col-6 mt-3">
                     <reactive-dropdown-field
                         [name]="'filterExpiredOnly'"
                         [label]="localeData?.expiry_status"
@@ -538,6 +552,17 @@
                         (onClear)="selectExpiryStatus(null)"
                         [required]="hasFilterWithinDays"
                         [showError]="showAdvanceFilterErrors && hasFilterWithinDays && filterExpiredOnly === null"
+                    ></reactive-dropdown-field>
+                </div>
+                <div class="col-12 mt-3">
+                    <reactive-dropdown-field
+                        [name]="'filterArchiveStatus'"
+                        [label]="commonLocaleData?.app_status"
+                        [placeholder]="commonLocaleData?.app_status"
+                        [options]="archiveStatusOptions"
+                        [labelValue]="archiveStatusFilterLabel"
+                        (selectedOption)="selectArchiveStatus($event)"
+                        (onClear)="selectArchiveStatus(null)"
                     ></reactive-dropdown-field>
                 </div>
             </div>
