@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -28,6 +28,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
+import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { cloneDeep, isEmpty } from '../../../../lodash-optimized';
 
 @Component({
@@ -189,6 +190,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     private batchCompanyWarehouses: Array<{ name?: string; uniqueName?: string; isDefault?: boolean }> = [];
     /** True after company warehouse list is subscribed for batch select. */
     private batchCompanyWarehousesLoaded: boolean = false;
+    /** Warehouse change confirmation dialog ref — avoids opening it twice. */
+    private warehouseChangeDialogRef: MatDialogRef<NewConfirmationModalComponent>;
 
     constructor(
         private route: ActivatedRoute,
@@ -1455,49 +1458,107 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for select reciever warehouse
+     * Select receiver warehouse. For receipt note, confirms before changing warehouse
+     * when any product has batches selected.
      *
      * @param {*} event
      * @param {number} index
+     * @param {boolean} [openNextDropdown=false]
      * @memberof CreateBranchTransferComponent
      */
-    public selectReceiverWarehouse(event: any, index: number): void {
-        if (event?.value) {
-            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
-            const destinationGroup = destinationsArray.at(index) as UntypedFormGroup;
-            const destinationsWarehouseFormGroup = destinationGroup.get('warehouse') as UntypedFormGroup;
+    public selectReceiverWarehouse(event: any, index: number, openNextDropdown: boolean = false): void {
+        if (!event?.value) {
+            return;
+        }
+
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        const destinationGroup = destinationsArray.at(index) as UntypedFormGroup;
+        const destinationsWarehouseFormGroup = destinationGroup.get('warehouse') as UntypedFormGroup;
+        const previousWarehouseUniqueName = destinationsWarehouseFormGroup.get('uniqueName')?.value;
+        const warehouseChanged = previousWarehouseUniqueName !== event?.value;
+        const shouldClearBatches =
+            this.branchTransferMode === "receipt-note" &&
+            !this.isDefaultLoad &&
+            warehouseChanged;
+        // Confirm only when replacing an already-selected warehouse (not first pick / auto-select after clear).
+        const shouldConfirmClear =
+            shouldClearBatches &&
+            !!previousWarehouseUniqueName &&
+            this.hasAnyProductBatches();
+
+        const applySelection = (): void => {
             destinationsWarehouseFormGroup.patchValue({
                 name: event?.label,
                 uniqueName: event?.value
             });
             this.getWarehouseDetails('destinations', index);
-            if (this.branchTransferMode === "receipt-note" && !this.isDefaultLoad) {
+            if (shouldClearBatches) {
                 this.clearAllProductBatches();
             }
+            if (openNextDropdown) {
+                this.openDropdown('first', 'destinations');
+            }
+            this.detectChanges();
+        };
+
+        if (shouldConfirmClear) {
+            this.confirmWarehouseChange(applySelection);
+            return;
         }
+
+        applySelection();
     }
 
     /**
-     * This will be use for select sender warehouse
+     * Select sender warehouse. For delivery challan, confirms before changing warehouse
+     * when any product has batches selected.
      *
      * @param {*} event
      * @param {number} index
+     * @param {boolean} [openNextDropdown=false]
      * @memberof CreateBranchTransferComponent
      */
-    public selectSenderWarehouse(event: any, index: number): void {
-        if (event?.value) {
-            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-            const sourceGroup = sourcesArray.at(index) as UntypedFormGroup;
-            const sourcesWarehouseFormGroup = sourceGroup.get('warehouse') as UntypedFormGroup;
+    public selectSenderWarehouse(event: any, index: number, openNextDropdown: boolean = false): void {
+        if (!event?.value) {
+            return;
+        }
+
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        const sourceGroup = sourcesArray.at(index) as UntypedFormGroup;
+        const sourcesWarehouseFormGroup = sourceGroup.get('warehouse') as UntypedFormGroup;
+        const previousWarehouseUniqueName = sourcesWarehouseFormGroup.get('uniqueName')?.value;
+        const warehouseChanged = previousWarehouseUniqueName !== event?.value;
+        const shouldClearBatches =
+            this.branchTransferMode !== "receipt-note" &&
+            !this.isDefaultLoad &&
+            warehouseChanged;
+        // Confirm only when replacing an already-selected warehouse (not first pick / auto-select after clear).
+        const shouldConfirmClear =
+            shouldClearBatches &&
+            !!previousWarehouseUniqueName &&
+            this.hasAnyProductBatches();
+
+        const applySelection = (): void => {
             sourcesWarehouseFormGroup.patchValue({
                 name: event?.label,
                 uniqueName: event?.value
             });
             this.getWarehouseDetails('sources', index);
-            if (this.branchTransferMode !== "receipt-note" && !this.isDefaultLoad) {
+            if (shouldClearBatches) {
                 this.clearAllProductBatches();
             }
+            if (openNextDropdown) {
+                this.openDropdown('first', 'destinations');
+            }
+            this.detectChanges();
+        };
+
+        if (shouldConfirmClear) {
+            this.confirmWarehouseChange(applySelection);
+            return;
         }
+
+        applySelection();
     }
 
     /**
@@ -1649,6 +1710,10 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     sourcesStockDetailsFormGroup.get('quantity')?.setValue(null);
                 }
             }
+            // Delivery challan batches depend on sender warehouse.
+            if (this.branchTransferMode !== "receipt-note" && !this.isDefaultLoad) {
+                this.clearAllProductBatches();
+            }
             this.resetSourceWarehouses(index, true, true);
             if (destinationsFormGroup && destinationsWarehouseFormGroup &&
                 destinationsWarehouseFormGroup.get('uniqueName')?.value === null) {
@@ -1663,6 +1728,10 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 if (destinationsStockDetailsFormGroup) {
                     destinationsStockDetailsFormGroup.get('quantity')?.setValue(null);
                 }
+            }
+            // Receipt note batches depend on receiver warehouse.
+            if (this.branchTransferMode === "receipt-note" && !this.isDefaultLoad) {
+                this.clearAllProductBatches();
             }
             this.resetDestinationWarehouses(index, true, true);
             if (sourceFormGroup && sourcesWarehouseFormGroup &&
@@ -2571,6 +2640,48 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         for (let i = 0; i < (productsArray?.length || 0); i++) {
             productsArray.at(i).get('batches')?.setValue([]);
         }
+    }
+
+    /**
+     * True when any product row has at least one selected batch.
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof CreateBranchTransferComponent
+     */
+    private hasAnyProductBatches(): boolean {
+        const productsArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+        return !!productsArray?.controls?.some((product) => this.getProductBatches(product)?.length > 0);
+    }
+
+    /**
+     * Confirm warehouse change when batches would be reset.
+     *
+     * @private
+     * @param {() => void} onConfirm
+     * @memberof CreateBranchTransferComponent
+     */
+    private confirmWarehouseChange(onConfirm: () => void): void {
+        if (this.warehouseChangeDialogRef) {
+            return;
+        }
+        this.warehouseChangeDialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: "630px",
+            data: {
+                configuration: this.generalService.deleteConfiguration(
+                    this.localeData?.warehouse_change_batch_confirmation,
+                    this.commonLocaleData
+                )
+            }
+        });
+        this.warehouseChangeDialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            this.warehouseChangeDialogRef = undefined;
+            if (response === this.commonLocaleData?.app_yes) {
+                onConfirm();
+            } else {
+                this.detectChanges();
+            }
+        });
     }
 
     /**

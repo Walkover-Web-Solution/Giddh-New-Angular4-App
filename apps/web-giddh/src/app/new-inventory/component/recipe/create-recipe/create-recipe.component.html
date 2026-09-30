@@ -61,7 +61,7 @@
                                             <a
                                                 *ngIf="!getRecipeBatches(recipe.batches)?.length"
                                                 href="javascript:void(0);"
-                                                class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                 (click)="openBatchSelectDialog('finished', i, undefined, $event)"
                                             >
                                                 {{ localeData?.select_batch }}
@@ -105,7 +105,9 @@
                                                         <th>{{ commonLocaleData?.app_name }}</th>
                                                         <th>{{ commonLocaleData?.app_variant }}</th>
                                                         <th>{{ commonLocaleData?.app_quantity }}</th>
-                                                        <th *ngIf="batchTrackingEnabled" class="table-batch text-center">{{ localeData?.batch }}</th>
+                                                        <th *ngIf="batchTrackingEnabled" class="table-batch text-center">
+                                                            {{ localeData?.batch }}
+                                                        </th>
                                                         <th>{{ commonLocaleData?.app_unit }}</th>
                                                         <th></th>
                                                     </tr>
@@ -187,7 +189,7 @@
                                                                 <a
                                                                     *ngIf="!getRecipeBatches(linkedStock.batches)?.length"
                                                                     href="javascript:void(0);"
-                                                                    class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                                    class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                                     (click)="openBatchSelectDialog('raw', i, j, $event)"
                                                                 >
                                                                     {{ localeData?.select_batch }}
@@ -248,7 +250,9 @@
                                                         <th>{{ commonLocaleData?.app_name }}</th>
                                                         <th>{{ commonLocaleData?.app_variant }}</th>
                                                         <th>{{ commonLocaleData?.app_quantity }}</th>
-                                                        <th *ngIf="batchTrackingEnabled" class="table-batch text-center">{{ localeData?.batch }}</th>
+                                                        <th *ngIf="batchTrackingEnabled" class="table-batch text-center">
+                                                            {{ localeData?.batch }}
+                                                        </th>
                                                         <th>{{ commonLocaleData?.app_unit }}</th>
                                                         <th></th>
                                                     </tr>
@@ -331,7 +335,7 @@
                                                                 <a
                                                                     *ngIf="!getRecipeBatches(byProductLinkedStock.batches)?.length"
                                                                     href="javascript:void(0);"
-                                                                    class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                                    class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                                     (click)="openBatchSelectDialog('byProduct', i, k, $event)"
                                                                 >
                                                                     {{ localeData?.select_batch }}

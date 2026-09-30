@@ -1293,6 +1293,7 @@
                                         <reactive-dropdown-field
                                             id="update-ledger-select-warehouse"
                                             [labelValue]="selectedWarehouseName"
+                                            [useCustomLabelValue]="true"
                                             [placeholder]="localeData?.select_warehouse"
                                             [options]="warehouses"
                                             (selectedOption)="selectWarehouse($event)"
@@ -1352,7 +1353,7 @@
                                                 tabindex="0"
                                                 role="button"
                                                 cdkMonitorElementFocus
-                                                class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                 (click)="openBatchSelectDialog($event)"
                                                 (keydown.enter)="$event.preventDefault(); openBatchSelectDialog($event)"
                                                 (keydown.space)="$event.preventDefault(); openBatchSelectDialog($event)"
