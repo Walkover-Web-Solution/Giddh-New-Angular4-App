@@ -48,10 +48,11 @@
         ></multi-select-dropdown>
     </div>
     <!-- Report Filter Toggle -->
-     @if (moduleName === inventoryModuleName.group ||
+     @if (inventoryViaBusinessDocument &&
+     (moduleName === inventoryModuleName.group ||
      moduleName === inventoryModuleName.stock ||
      moduleName === inventoryModuleName.variant ||
-     moduleName === inventoryModuleName.transaction) {
+     moduleName === inventoryModuleName.transaction)) {
          <div
              class="white-space-nowrap d-flex align-items-center pl-1 mx-auto"
          >

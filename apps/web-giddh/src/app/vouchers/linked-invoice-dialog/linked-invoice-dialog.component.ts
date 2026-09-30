@@ -18,12 +18,14 @@ import { KeyboardShortutModule } from '../../shared/helpers/directives/keyboardS
 import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 import { AttachmentsModule } from '../../theme/attachments/attachments.module';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
+import { VoucherTypeEnum } from '../utility/vouchers.const';
 
 /** Dialog input for linked invoice history */
 export interface LinkedInvoiceDialogData {
     voucherUniqueName: string;
     localeData: Record<string, string>;
     commonLocaleData: Record<string, string>;
+    voucherType: string;
 }
 
 /** Amount shape from business-document history API */
@@ -105,6 +107,7 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
     private readonly toaster = inject(ToasterService);
     private readonly serviceConfig = inject<IServiceConfigArgs>(ServiceConfig, { optional: true });
     readonly dialogData = inject<LinkedInvoiceDialogData>(MAT_DIALOG_DATA);
+    readonly voucherType = signal<string>(this.dialogData?.voucherType ?? '');
     private readonly attachmentsTemplate = viewChild<TemplateRef<unknown>>('attachments');
 
     /** Common locale JSON */
@@ -127,6 +130,8 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
     readonly searchValue = new FormControl<string>('', { nonNullable: true });
     /** Table columns */
     readonly displayedColumns: string[] = ['date', 'invoiceNumber', 'customerName', 'amount'];
+    /** Voucher type enum */
+    readonly voucherTypeEnum = VoucherTypeEnum;
 
     /** Filtered rows based on search */
     readonly filteredLinkedInvoices = computed(() => {

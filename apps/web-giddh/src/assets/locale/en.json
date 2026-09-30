@@ -417,6 +417,7 @@
     "app_select_voucher": "Select Voucher",
     "app_invoice_date": "Invoice Date",
     "app_invoice_number": "Invoice Number",
+    "app_bill_number": "Bill Number",
     "app_sku": "SKU",
     "app_igst": "IGST",
     "app_cgst": "CGST",
