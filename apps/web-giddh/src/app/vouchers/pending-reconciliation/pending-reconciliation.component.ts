@@ -5,8 +5,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
 import { Sort } from "@angular/material/sort";
 import { PageEvent } from "@angular/material/paginator";
 import { select, Store } from "@ngrx/store";
-import { ReplaySubject, Subject, debounceTime, distinctUntilChanged, filter, from, skip, switchMap, take, takeUntil } from "rxjs";
-import { finalize } from "rxjs/operators";
+import { ReplaySubject, Subject, catchError, debounceTime, distinctUntilChanged, filter, from, of, skip, switchMap, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from "../../app.constant";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
@@ -209,8 +208,8 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
         // Keep suppressSearch true so any in-flight debounceTime(700) valueChanges
         // (from number/party search) cannot call applySearch after persistAndLoad.
         this.suppressSearch = true;
-        this.numberInput.patchValue("", { emitEvent: false });
-        this.partyInput.patchValue("", { emitEvent: false });
+        this.numberInput.setValue("", { emitEvent: false, emitModelToViewChange: false });
+        this.partyInput.setValue("", { emitEvent: false, emitModelToViewChange: false });
         this.showNumberSearch = false;
         this.showPartySearch = false;
         this.isSearching = false;
@@ -432,7 +431,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
                 return;
             }
             this.searchColumn = "number";
-            this.partyInput.patchValue("", { emitEvent: false });
+            this.resetInactiveSearchControl(this.partyInput, "party");
             this.applySearch(value);
         });
         this.partyInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(value => {
@@ -440,9 +439,30 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
                 return;
             }
             this.searchColumn = "party";
-            this.numberInput.patchValue("", { emitEvent: false });
+            this.resetInactiveSearchControl(this.numberInput, "number");
             this.applySearch(value);
         });
+    }
+
+    /**
+     * Clears the inactive header search without echoing valueChanges.
+     * text-field.writeValue() calls onChange, which re-emits even when patchValue used emitEvent: false.
+     *
+     * @private
+     * @param {FormControl} control
+     * @param {"number" | "party"} fieldName
+     * @memberof PendingReconciliationComponent
+     */
+    private resetInactiveSearchControl(control: FormControl, fieldName: "number" | "party"): void {
+        if (fieldName === "party") {
+            this.showPartySearch = false;
+        } else {
+            this.showNumberSearch = false;
+        }
+        if (!control.value) {
+            return;
+        }
+        control.setValue("", { emitEvent: false, emitModelToViewChange: false });
     }
 
     /**
@@ -453,7 +473,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
     private applySearch(value: string): void {
         this.filters.q = value || "";
         this.filters.page = 1;
-        this.isSearching = true;
+        this.isSearching = !!this.filters.q;
         this.userHasAppliedFilter = true;
         this.refreshAppliedState();
         this.persistAndLoad();
@@ -470,7 +490,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
                 return this.voucherService.getPendingBusinessDocumentReport({
                     from: this.filters.from,
                     to: this.filters.to,
-                    q: this.filters.q || "",
+                    q: encodeURIComponent(this.filters.q || ""),
                     page: this.filters.page,
                     count: this.filters.count,
                     sort: this.filters.sort || "",
@@ -478,13 +498,18 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
                 }, {
                     reportType: this.filters.reportType,
                     documentType: this.documentType
-                }).pipe(finalize(() => {
-                    this.loading.set(false);
-                    this.changeDetectorRef.detectChanges();
-                }));
+                }).pipe(
+                    // HandleCatch emits without completing; take(1) unsubscribes so switchMap can accept later fetches.
+                    take(1),
+                    catchError(() => of({ status: "error", message: "", body: null }))
+                );
             }),
             takeUntil(this.destroyed$)
-        ).subscribe(response => this.handleResponse(response));
+        ).subscribe(response => {
+            this.loading.set(false);
+            this.handleResponse(response);
+            this.changeDetectorRef.detectChanges();
+        });
     }
 
     /**
@@ -626,10 +651,10 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
             this.searchColumn = params.searchColumn === "party" ? "party" : "number";
             this.suppressSearch = true;
             if (this.searchColumn === "party") {
-                this.partyInput.patchValue(params.q, { emitEvent: false });
+                this.partyInput.setValue(params.q, { emitEvent: false, emitModelToViewChange: false });
                 this.showPartySearch = true;
             } else {
-                this.numberInput.patchValue(params.q, { emitEvent: false });
+                this.numberInput.setValue(params.q, { emitEvent: false, emitModelToViewChange: false });
                 this.showNumberSearch = true;
             }
             this.suppressSearch = false;
@@ -793,6 +818,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
             this.dataSource = [];
             this.totalResults = 0;
             this.balances = null;
+            this.restoreSearchInput();
             return;
         }
         const body = response?.body ?? {};
@@ -800,6 +826,33 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
         this.totalResults = body.totalItems ?? items.length;
         this.balances = body.balances ?? null;
         this.dataSource = items.map(item => this.normalizeRow(item));
+        this.restoreSearchInput();
+    }
+
+    /**
+     * Keeps the active search field visible with the current query after reload.
+     *
+     * @private
+     * @memberof PendingReconciliationComponent
+     */
+    private restoreSearchInput(): void {
+        if (!this.filters.q) {
+            return;
+        }
+        this.isSearching = true;
+        if (this.searchColumn === "party") {
+            this.showPartySearch = true;
+            this.showNumberSearch = false;
+            if (this.partyInput.value !== this.filters.q) {
+                this.partyInput.setValue(this.filters.q, { emitEvent: false, emitModelToViewChange: false });
+            }
+        } else {
+            this.showNumberSearch = true;
+            this.showPartySearch = false;
+            if (this.numberInput.value !== this.filters.q) {
+                this.numberInput.setValue(this.filters.q, { emitEvent: false, emitModelToViewChange: false });
+            }
+        }
     }
 
     /**

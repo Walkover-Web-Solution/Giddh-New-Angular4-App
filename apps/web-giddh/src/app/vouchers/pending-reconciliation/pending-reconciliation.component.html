@@ -104,7 +104,7 @@
                 @if (loading()) {
                     <giddh-page-loader></giddh-page-loader>
                 }
-                @if (!loading() && (dataSource?.length || isSearching)) {
+                @if ((!loading() && dataSource?.length) || isSearching) {
                     <table
                         mat-table
                         [dataSource]="dataSource"
