@@ -44,7 +44,6 @@ const detectElectron = () => {
 (window as any).LOCAL_ENV = !environment.production;
 (window as any).errlyticsNeeded = false;
 (window as any).errlyticsKey = '';
-(window as any).enableVoucherAdjustmentMultiCurrency = false;
 
 // Angular 21 Compatibility Layer - Global Error Suppression
 (function setupAngular21Compatibility() {

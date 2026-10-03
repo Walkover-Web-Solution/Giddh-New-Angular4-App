@@ -533,8 +533,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public displayLabel = (option: any): string => {
-        
-        return this.controlLabelValue || this.labelValue || option?.label || '';
+        return this.useCustomLabelValue  ? this.labelValue || (option?.label || '') : (option?.label || '');
     };
 
     /**

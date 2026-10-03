@@ -76,7 +76,7 @@
             }}
         </div>
 
-        <div class="mb-1">
+        <div class="mb-2">
             <input-field
                 [name]="'searchBatchNumber'"
                 [type]="'text'"
@@ -117,10 +117,13 @@
                 <mat-checkbox
                     [checked]="row.selected"
                     (change)="toggleRow(row, $event.checked)"
-                    [aria-label]="row.batchNumber || row.name"
+                    (keydown.enter)="$event.preventDefault(); toggleRow(row, !row.selected)"
+                    [aria-label]="row.batchNumber && row.name ? row.batchNumber + ' · ' + row.name : row.batchNumber || row.name"
                 ></mat-checkbox>
                 <div class="flex-grow-1 min-width-0">
-                    <div class="font-weight-semibold">{{ row.batchNumber || row.name }}</div>
+                    <div class="font-weight-semibold">
+                        {{ row.batchNumber && row.name ? row.batchNumber + ' · ' + row.name : row.batchNumber || row.name }}
+                    </div>
                     <div class="font-size-12 mt-1">
                         <span
                             *ngIf="row.expiryDate"
