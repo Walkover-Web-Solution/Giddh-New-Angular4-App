@@ -55,6 +55,7 @@ export interface VoucherState {
     vouchersForAdjustment: any;
     voucherListForCreditDebitNote: any;
     pendingPurchaseOrders: any[];
+    pendingBusinessDocuments: any[];
     purchaseOrdersList: any[];
     countryList: any[];
     ledgerEntries: any[];
@@ -121,6 +122,7 @@ const DEFAULT_STATE: VoucherState = {
     vouchersForAdjustment: null,
     voucherListForCreditDebitNote: null,
     pendingPurchaseOrders: null,
+    pendingBusinessDocuments: null,
     purchaseOrdersList: null,
     countryList: null,
     ledgerEntries: null,
@@ -201,6 +203,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public vouchersForAdjustment$ = this.select((state) => state.vouchersForAdjustment);
     public voucherListForCreditDebitNote$ = this.select((state) => state.voucherListForCreditDebitNote);
     public pendingPurchaseOrders$ = this.select((state) => state.pendingPurchaseOrders);
+    public pendingBusinessDocuments$ = this.select((state) => state.pendingBusinessDocuments);
     public purchaseOrdersList$ = this.select((state) => state.purchaseOrdersList);
     public countryList$ = this.select((state) => state.countryList);
     public deleteAttachmentIsSuccess$ = this.select((state) => state.deleteAttachmentIsSuccess);
@@ -989,6 +992,44 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    readonly getPendingBusinessDocuments = this.effect((data: Observable<{
+        queryParams: any;
+        body: { reportType: string; documentType: string };
+    }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getPendingBusinessDocumentReport(req.queryParams, req.body).pipe(
+                    tap(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === "success") {
+                                const results = Array.isArray(res.body?.results)
+                                    ? res.body.results
+                                    : (Array.isArray(res.body) ? res.body : []);
+                                return this.patchState({
+                                    pendingBusinessDocuments: results.map((item: any) => ({
+                                        number: item?.number,
+                                        uniqueName: item?.uniqueName,
+                                        accountUniqueName: item?.account?.uniqueName || item?.accountUniqueName
+                                    }))
+                                });
+                            }
+                            return this.patchState({
+                                pendingBusinessDocuments: null
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                pendingBusinessDocuments: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
     readonly getPurchaseOrders = this.effect((data: Observable<{ request: any }>) => {
         return data.pipe(
             mergeMap((req) => {
@@ -1433,6 +1474,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     vouchersForAdjustment: null,
                     voucherListForCreditDebitNote: null,
                     pendingPurchaseOrders: null,
+                    pendingBusinessDocuments: null,
                     exchangeRate: null,
                     createdTemplates: null
                 });
