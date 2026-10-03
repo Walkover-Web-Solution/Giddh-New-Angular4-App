@@ -363,6 +363,27 @@
                                         </a>
                                     </p>
                                 </div>
+                                @if ((pendingBusinessDocuments$ | async)?.length > 0) {
+                                    <div class="col-12">
+                                        <p>
+                                            <small>{{ getPendingBusinessDocumentLabel() }}</small>
+                                        </p>
+                                        <p class="font-size-15">
+                                            @for (document of pendingBusinessDocuments$ | async; track document.uniqueName; let i = $index) {
+                                                <a
+                                                    href="javascript:;"
+                                                    [attr.aria-label]="document.number"
+                                                    (click)="selectPendingBusinessDocument(document)"
+                                                >
+                                                    {{ document.number }}
+                                                    @if (i < (pendingBusinessDocuments$ | async)?.length - 1) {
+                                                        <span>&nbsp;|&nbsp;</span>
+                                                    }
+                                                </a>
+                                            }
+                                        </p>
+                                    </div>
+                                }
                             </div>
                         </div>
 

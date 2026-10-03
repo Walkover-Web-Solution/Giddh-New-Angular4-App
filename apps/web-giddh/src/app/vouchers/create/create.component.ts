@@ -106,7 +106,8 @@ import {
     API_BULK_FETCH_LIMIT,
     FormFieldsType,
     PAGE_SIZE_OPTIONS,
-    PAGINATION_LIMIT
+    PAGINATION_LIMIT,
+    PAGINATION_LIMIT_BULK_STOCK
 } from "../../app.constant";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -228,6 +229,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public linkedPoOrders$: Observable<any> = this.componentStore.linkedPoOrders$;
     /** Pending purchase orders Observable */
     public pendingPurchaseOrders$: Observable<any> = this.componentStore.pendingPurchaseOrders$;
+    /** Pending DC/RN/invoice/bill documents for selected account */
+    public pendingBusinessDocuments$: Observable<any[]> = this.componentStore.pendingBusinessDocuments$;
     /** Account search request */
     public accountSearchRequest: any;
     /** Annexure account search request */
@@ -277,6 +280,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     /** Invoice Settings */
     public activeCompany: any;
+    /** True when inventory is managed via business documents (DC/RN). */
+    public inventoryViaBusinessDocument = false;
     /** True when inventory settings have batch management enabled. */
     public batchTrackingEnabled = signal(false);
     /** This will hold onboarding api form request */
@@ -406,6 +411,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
     /** Holds universal date */
     public universalDate: any;
+    /** Holds universal date range for pending business document report */
+    private universalDateRange: { from: string; to: string } = { from: "", to: "" };
     /** List of stock variants */
     public stockVariants: any[] = [];
     /** List of stock units */
@@ -1001,6 +1008,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
             if (settings) {
                 this.batchTrackingEnabled.set(!!settings?.batchManagement?.enabled);
+                const wasEnabled = this.inventoryViaBusinessDocument;
+                this.inventoryViaBusinessDocument = !!settings?.voucherAutomation?.inventoryViaBusinessDocument;
+                if (this.inventoryViaBusinessDocument && !wasEnabled) {
+                    const accountUniqueName = this.invoiceForm?.controls?.["account"]?.get("uniqueName")?.value;
+                    if (accountUniqueName) {
+                        this.fetchPendingBusinessDocuments(accountUniqueName);
+                    }
+                } else if (!this.inventoryViaBusinessDocument) {
+                    this.componentStore.patchState({ pendingBusinessDocuments: null });
+                }
             }
         });
         this.getCustomFields();
@@ -1221,6 +1238,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 try {
+                    const previousFrom = this.universalDateRange.from;
+                    const previousTo = this.universalDateRange.to;
+                    this.universalDateRange = {
+                        from: dayjs(response[0]).format(GIDDH_DATE_FORMAT),
+                        to: dayjs(response[1]).format(GIDDH_DATE_FORMAT)
+                    };
                     this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
                     if (!this.isUpdateMode && !this.isVoucherDateChanged) {
                         this.invoiceForm.get("date")?.patchValue(this.universalDate);
@@ -1235,8 +1258,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             annexureCharges.at(0)?.get("date")?.patchValue(this.universalDate);
                         }
                     }
+                    if (
+                        (!previousFrom || !previousTo)
+                        || previousFrom !== this.universalDateRange.from
+                        || previousTo !== this.universalDateRange.to
+                    ) {
+                        const accountUniqueName = this.invoiceForm?.controls?.["account"]?.get("uniqueName")?.value;
+                        if (accountUniqueName) {
+                            this.fetchPendingBusinessDocuments(accountUniqueName);
+                        }
+                    }
                 } catch (e) {
                     this.universalDate = dayjs().format(GIDDH_DATE_FORMAT);
+                    this.universalDateRange = { from: this.universalDate, to: this.universalDate };
                 }
             }
         });
@@ -2680,7 +2714,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getCreatedTemplates(): void {
-        this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.createdTemplates$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe((response) => {
             let templateType = VoucherTypeEnum.invoice;
             if (this.voucherType === VoucherTypeEnum.purchase) {
                 templateType = VoucherTypeEnum.purchase_bill;
@@ -2968,6 +3002,144 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (request.companyUniqueName && accountUniqueName) {
                 this.componentStore.getPendingPurchaseOrders({ request: request, payload: payload });
             }
+        }
+
+        this.fetchPendingBusinessDocuments(accountUniqueName);
+    }
+
+    /**
+     * Fetches pending DC/RN or invoice/bill list for the selected account.
+     * Sales → pending DC, Purchase → pending RN, DC → pending invoice, RN → pending bill.
+     *
+     * @private
+     * @param {string} accountUniqueName
+     * @memberof VoucherCreateComponent
+     */
+    private fetchPendingBusinessDocuments(accountUniqueName: string): void {
+        if (
+            !accountUniqueName
+            || !this.inventoryViaBusinessDocument
+            || this.invoiceType.isCashInvoice
+            || !this.universalDateRange?.from
+            || !this.universalDateRange?.to
+        ) {
+            this.componentStore.patchState({ pendingBusinessDocuments: null });
+            return;
+        }
+
+        let reportType: "WITHOUT_CHALLAN" | "NOT_INVOICED";
+        let documentType: "DC" | "RC";
+
+        if (this.invoiceType.isSalesInvoice) {
+            reportType = "NOT_INVOICED";
+            documentType = "DC";
+        } else if (this.invoiceType.isPurchaseInvoice) {
+            reportType = "NOT_INVOICED";
+            documentType = "RC";
+        } else if (this.invoiceType.isDeliveryChallan) {
+            reportType = "WITHOUT_CHALLAN";
+            documentType = "DC";
+        } else if (this.invoiceType.isReceiptNote) {
+            reportType = "WITHOUT_CHALLAN";
+            documentType = "RC";
+        } else {
+            this.componentStore.patchState({ pendingBusinessDocuments: null });
+            return;
+        }
+
+        this.componentStore.getPendingBusinessDocuments({
+            queryParams: {
+                from: this.universalDateRange.from,
+                to: this.universalDateRange.to,
+                accountUniqueName: encodeURIComponent(accountUniqueName),
+                page: 1,
+                count: API_BULK_FETCH_LIMIT,
+                sort: "",
+                sortBy: "",
+                q: ""
+            },
+            body: { reportType, documentType }
+        });
+    }
+
+    /**
+     * Label for pending business documents list based on current voucher type.
+     *
+     * @return {string}
+     * @memberof VoucherCreateComponent
+     */
+    public getPendingBusinessDocumentLabel(): string {
+        if (this.invoiceType.isSalesInvoice) {
+            return this.localeData?.pending_dc;
+        }
+        if (this.invoiceType.isPurchaseInvoice) {
+            return this.localeData?.pending_rn;
+        }
+        if (this.invoiceType.isDeliveryChallan) {
+            return this.localeData?.pending_invoice;
+        }
+        if (this.invoiceType.isReceiptNote) {
+            return this.localeData?.pending_bill;
+        }
+        return "";
+    }
+
+    /**
+     * Prefills create form from a pending DC/RN or invoice/bill click
+     * (same get-single flow as queryParams dcUniqueName / rnUniqueName / invoiceUniqueName / billUniqueName).
+     *
+     * @param {*} document
+     * @memberof VoucherCreateComponent
+     */
+    public selectPendingBusinessDocument(document: any): void {
+        if (!document?.uniqueName) {
+            return;
+        }
+
+        const accountUniqueName = document.accountUniqueName
+            || this.invoiceForm.controls["account"]?.get("uniqueName")?.value;
+
+        if (this.invoiceType.isSalesInvoice) {
+            this.queryParams = { ...(this.queryParams || {}), dcUniqueName: document.uniqueName };
+            this.isBusinessDocumentCreate = true;
+            this.isCopyMode = true;
+            this.useDefaultAccountDetails = false;
+            this.prefillFromInventoryDocument();
+            return;
+        }
+
+        if (this.invoiceType.isPurchaseInvoice) {
+            this.queryParams = { ...(this.queryParams || {}), rnUniqueName: document.uniqueName };
+            this.isBusinessDocumentCreate = true;
+            this.isCopyMode = true;
+            this.useDefaultAccountDetails = false;
+            this.prefillFromInventoryDocument();
+            return;
+        }
+
+        if (this.invoiceType.isDeliveryChallan) {
+            this.queryParams = {
+                ...(this.queryParams || {}),
+                invoiceUniqueName: document.uniqueName,
+                accountUniqueName
+            };
+            this.isBusinessDocumentCreate = true;
+            this.isCopyMode = true;
+            this.useDefaultAccountDetails = false;
+            this.prefillFromInvoiceVoucher();
+            return;
+        }
+
+        if (this.invoiceType.isReceiptNote) {
+            this.queryParams = {
+                ...(this.queryParams || {}),
+                billUniqueName: document.uniqueName,
+                accountUniqueName
+            };
+            this.isBusinessDocumentCreate = true;
+            this.isCopyMode = true;
+            this.useDefaultAccountDetails = false;
+            this.prefillFromInvoiceVoucher();
         }
     }
 
