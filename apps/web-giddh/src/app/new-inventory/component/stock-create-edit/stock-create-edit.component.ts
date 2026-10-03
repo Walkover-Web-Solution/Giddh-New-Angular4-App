@@ -2140,11 +2140,14 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (!this.batchTrackingEnabled || !variant?.warehouseBalance?.[0]) {
             return false;
         }
-        return this.getVariantBatchOpeningQtyTotal(variant) > this.getVariantWarehouseOpeningQty(variant);
+        const openingQty = this.isVariantAvailable
+            ? (Number(variant.warehouseBalance[0].openingQuantity) || 0)
+            : (Number(this.stockForm?.openingQuantity) || 0);
+        return this.getVariantBatchOpeningQtyTotal(variant) > openingQty;
     }
 
     /**
-     * Sets variant opening qty to the current batch qty total.
+     * Sets opening qty from API fields to the current batch qty total.
      *
      * @param {*} variant Variant row
      * @memberof StockCreateEditComponent
@@ -2153,7 +2156,11 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (!variant?.warehouseBalance?.[0]) {
             return;
         }
-        variant.warehouseBalance[0].openingQuantity = this.getVariantBatchOpeningQtyTotal(variant);
+        const batchQtyTotal = this.getVariantBatchOpeningQtyTotal(variant);
+        variant.warehouseBalance[0].openingQuantity = batchQtyTotal;
+        if (!this.isVariantAvailable) {
+            this.stockForm.openingQuantity = batchQtyTotal;
+        }
     }
 
     /**
@@ -2170,33 +2177,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     /**
-     * Parsed variant-level opening amount.
-     *
-     * @param {*} variant Variant row
-     * @return {*}  {number}
-     * @memberof StockCreateEditComponent
-     */
-    public getVariantOpeningAmount(variant: any): number {
-        return (variant?.warehouseBalance ?? []).reduce((total, warehouse) => {
-            return total + this.parseOpeningAmount(warehouse?.openingAmount);
-        }, 0);
-    }
-
-    /**
-     * Sum of opening quantities on every warehouse.
-     *
-     * @param {*} variant Variant row
-     * @return {*}  {number}
-     * @memberof StockCreateEditComponent
-     */
-    public getVariantWarehouseOpeningQty(variant: any): number {
-        return (variant?.warehouseBalance ?? []).reduce((total, warehouse) => {
-            return total + (Number(warehouse?.openingQuantity) || 0);
-        }, 0);
-    }
-
-    /**
-     * True when batch opening amount total exceeds the variant opening amount.
+     * True when batch opening amount total exceeds the opening amount from API.
      *
      * @param {*} variant Variant row
      * @return {*}  {boolean}
@@ -2206,11 +2187,14 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (!this.batchTrackingEnabled || !variant?.warehouseBalance?.[0]) {
             return false;
         }
-        return this.getVariantBatchOpeningAmountTotal(variant) > this.getVariantOpeningAmount(variant);
+        const openingAmount = this.isVariantAvailable
+            ? this.parseOpeningAmount(variant.warehouseBalance[0].openingAmount)
+            : this.parseOpeningAmount(this.stockForm?.openingAmount);
+        return this.getVariantBatchOpeningAmountTotal(variant) > openingAmount;
     }
 
     /**
-     * True when batch qty or amount total exceeds variant opening values.
+     * True when batch qty or amount total exceeds opening values.
      *
      * @param {*} variant Variant row
      * @return {*}  {boolean}
@@ -2221,7 +2205,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     /**
-     * Sets variant opening amount to the current batch amount total.
+     * Sets opening amount from API fields to the current batch amount total.
      *
      * @param {*} variant Variant row
      * @memberof StockCreateEditComponent
@@ -2230,7 +2214,11 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (!variant?.warehouseBalance?.[0]) {
             return;
         }
-        variant.warehouseBalance[0].openingAmount = this.getVariantBatchOpeningAmountTotal(variant);
+        const batchAmountTotal = this.getVariantBatchOpeningAmountTotal(variant);
+        variant.warehouseBalance[0].openingAmount = batchAmountTotal;
+        if (!this.isVariantAvailable) {
+            this.stockForm.openingAmount = batchAmountTotal;
+        }
     }
 
     /**

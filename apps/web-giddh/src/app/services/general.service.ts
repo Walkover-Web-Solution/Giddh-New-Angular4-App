@@ -1352,12 +1352,19 @@ export class GeneralService {
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
             let balanceDueTooltipText;
-            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
-                const gainLossText = localeData?.exchange_gain_loss_label?.
-                    replace("[BASE_CURRENCY]", baseCurrency)?.
-                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
-                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss);
-                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
+            if (item.gainLoss) {
+                const profitType = item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss;
+                const gainLossAmount = Math.abs(item.gainLoss);
+                const buildGainLossTooltip = (amount: number): string => {
+                    const gainLossText = localeData?.exchange_gain_loss_label?.
+                        replace("[BASE_CURRENCY]", baseCurrency)?.
+                        replace("[AMOUNT]", String(amount ?? 0))?.
+                        replace('[PROFIT_TYPE]', profitType);
+                    // Locale label already ends with ": ", so do not add another colon.
+                    return `${gainLossText ?? ""}${gainLossAmount}`;
+                };
+                grandTotalTooltipText = buildGainLossTooltip(grandTotalAmountForCompany);
+                balanceDueTooltipText = buildGainLossTooltip(balanceDueAmountForCompany);
             } else {
                 balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
             }
