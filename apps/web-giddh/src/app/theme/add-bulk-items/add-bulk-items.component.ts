@@ -5,7 +5,7 @@ import { cloneDeep } from "../../lodash-optimized";
 import { SearchService } from "../../services/search.service";
 import { Observable, ReplaySubject, debounceTime, of, takeUntil, BehaviorSubject } from "rxjs";
 import { OptionInterface } from "../../models/api-models/Voucher";
-import { SearchType } from "../../vouchers/utility/vouchers.const";
+import { SearchType, VoucherTypeEnum } from "../../vouchers/utility/vouchers.const";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { SalesAddBulkStockItems } from "../../models/api-models/Sales";
 import { ToasterService } from "../../services/toaster.service";
@@ -315,6 +315,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         }
 
         let stockSearchRequest = this.vouchersUtilityService.getSearchRequestObject(this.inputData.voucherType, query, page, SearchType.ITEM);
+        if (this.inputData.voucherType === VoucherTypeEnum.deliveryChallan || this.inputData.voucherType === VoucherTypeEnum.receiptNote) {
+            stockSearchRequest.onlyStock = true;
+        }
         this.stockSearchRequest = cloneDeep(stockSearchRequest);
         this.stockSearchRequest.isLoading = true;
 
@@ -398,6 +401,8 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                     category: data.body.category,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
+                    hsnNumber: data.body.hsnNumber,
+                    sacNumber: data.body.sacNumber,
                     stock: data.body.stock,
                     combinedUniqueName: data.body.stock?.variant ? `${item.uniqueName}#${data.body.stock.variant?.uniqueName}` : '',
                     skuCode: data.body.stock?.skuCode,

@@ -49,6 +49,8 @@ import { ActionTypeEnum } from '../../../shared/sales-person/utility/sales-perso
 import { LedgerDropdownTypeEnum } from '../../../models/api-models/Ledger';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
+import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
+import { BatchSelectDialogResult, VoucherSelectedBatch } from '../../../models/interfaces/batch-report.interface';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -271,6 +273,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public invoiceSettings: any = {};
     /** True if unit dropdown  is open */
     public isUnitOpen: boolean = false;
+    /** Active company from session. */
+    public activeCompany: any;
+    /** True when inventory settings have batch management enabled. */
+    public batchTrackingEnabled: boolean = false;
     /** Stores the stock variants */
     public stockVariants: BehaviorSubject<Array<IOption>> = new BehaviorSubject([]);
     /** True, if stock category is 'expenses' and inclusive tax is applied */
@@ -293,6 +299,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public deleteAttachedFileDialogRef: MatDialogRef<any>;
     /** Delete attached file dialog ref */
     public salesPersonDialogRef: MatDialogRef<any>;
+    /** Batch select dialog ref — keeps ledger panel open while aside is open */
+    public batchSelectDialogRef: MatDialogRef<any>;
+    /** Warehouse change confirmation dialog ref — keeps ledger panel open while dialog is open */
+    public warehouseChangeDialogRef: MatDialogRef<any>;
     /** Reference variant dropdown */
     @ViewChild("variantDropdownRef") public variantDropdownRef: ReactiveDropdownFieldComponent;
     /** Reference warehouse dropdown */
@@ -390,6 +400,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
+                this.cdRef.detectChanges();
             }
         });
 
@@ -546,6 +566,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.currentTxn?.currentValue?.selectedAccount) {
+            const previousStockUniqueName = changes.currentTxn.previousValue?.selectedAccount?.stock?.uniqueName;
+            const currentStockUniqueName = changes.currentTxn.currentValue?.selectedAccount?.stock?.uniqueName;
+            if (previousStockUniqueName && currentStockUniqueName && currentStockUniqueName !== previousStockUniqueName) {
+                this.resetEntryBatch();
+            }
             this.currentTxn.taxInclusiveAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (!this.currentTxn?.isStock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);
@@ -848,6 +873,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 transaction.inventory.taxInclusive = transaction.selectedAccount.stock.variant.salesTaxInclusive ||
                     transaction.selectedAccount.stock.variant.purchaseTaxInclusive ||
                     transaction.selectedAccount.stock.variant.fixedAssetTaxInclusive;
+            }
+            if (transaction?.inventory && (!this.batchTrackingEnabled || !transaction.inventory.batches?.length)) {
+                delete transaction.inventory.batches;
             }
         });
         this.saveBlankLedger.emit(true);
@@ -1163,7 +1191,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxControl?.isTaxDialogOpen || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxControl?.isTaxDialogOpen || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.batchSelectDialogRef || this.warehouseChangeDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
             return;
         }
 
@@ -1925,9 +1953,122 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public variantChanged(event: IOption): void {
         if (event.value) {
+            const variantChanged = event.value !== this.selectedStockVariant?.value;
             this.selectedStockVariant = event;
+            if (variantChanged) {
+                this.resetEntryBatch();
+            }
             // Must not call the variant API when stock is changed
             this.stockVariantSelected.emit(event.value);
+        }
+    }
+
+
+    /**
+     * Opens the Select Batches aside for the current stock line.
+     *
+     * @param {Event} [event]
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public openBatchSelectDialog(event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+
+        if (!this.batchTrackingEnabled) {
+            return;
+        }
+
+        const stockUniqueName = this.currentTxn?.inventory?.stock?.uniqueName || this.currentTxn?.selectedAccount?.stock?.uniqueName;
+        if (!stockUniqueName) {
+            return;
+        }
+
+        const variants = this.stockVariants.getValue() || [];
+        const hasVariants = variants.length > 1;
+        const variantUniqueName = this.selectedStockVariant?.value || this.currentTxn?.inventory?.variant?.uniqueName;
+        if (hasVariants && !variantUniqueName) {
+            this.toaster.showSnackBar("warning", this.localeData?.select_variant_first);
+            return;
+        }
+
+        const warehouse = this.warehouses?.find(item => item.value === this.selectedWarehouse);
+        this.batchSelectDialogRef = this.dialog.open(BatchSelectDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                stockName: this.currentTxn?.inventory?.stock?.name || this.currentTxn?.selectedAccount?.stock?.name,
+                stockUniqueName,
+                variantUniqueName,
+                variantName: this.selectedStockVariant?.label,
+                hasVariants,
+                inventoryType: "PRODUCT",
+                warehouseName: warehouse?.label || this.getWarehouseLabel(),
+                warehouseUniqueName: this.selectedWarehouse || this.defaultWarehouse,
+                unitCode: this.currentTxn?.inventory?.unit?.stockUnitCode || this.currentTxn?.inventory?.unit?.code,
+                lineQuantity: Number(this.currentTxn?.inventory?.quantity) || 0,
+                selectedBatches: cloneDeep(this.currentTxn?.inventory?.batches) || [],
+                currencySymbol: this.selectedPrefixForCurrency,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData,
+                isInbound: this.isBatchInbound(this.blankLedger?.voucherType)
+            }
+        });
+
+        this.batchSelectDialogRef.afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
+            this.batchSelectDialogRef = undefined;
+            if (!result || !this.currentTxn?.inventory) {
+                return;
+            }
+            this.currentTxn.inventory.batches = result.batches ?? [];
+            if (result.overrideLineQuantity) {
+                this.changeQuantity(String(result.allocatedQuantity));
+            }
+            this.cdRef.detectChanges();
+        });
+    }
+
+    /**
+     * Selected batches on the current stock line.
+     *
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public getEntryBatches(): VoucherSelectedBatch[] {
+        const batches = this.currentTxn?.inventory?.batches;
+        return Array.isArray(batches) ? batches : [];
+    }
+
+    /**
+     * True when the ledger voucher receives stock (bill / credit note).
+     *
+     * @param {string} [voucherType]
+     * @return {*}  {boolean}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public isBatchInbound(voucherType?: string): boolean {
+        const type = String(voucherType ?? "").toLowerCase();
+        return [
+            "pur",
+            "purchase",
+            "cash bill",
+            "credit note",
+            "cash credit note",
+            "purchase-order",
+            "purchase_order",
+            "purchase_bill",
+            "bill",
+            "receipt note"
+        ].includes(type);
+    }
+
+    /**
+     * Clears selected batches on the current stock line.
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private resetEntryBatch(): void {
+        if (this.currentTxn?.inventory) {
+            this.currentTxn.inventory.batches = [];
         }
     }
 
@@ -2069,6 +2210,54 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getWarehouseLabel(): string {
         return this.warehouses?.find(item => item.value === this.selectedWarehouse)?.label || '';
+    }
+
+    /**
+     * Select warehouse. Confirms only when the stock line has batches selected;
+     * otherwise applies the warehouse change immediately.
+     *
+     * @param {IOption} event Selected warehouse
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public selectWarehouse(event: IOption): void {
+        const nextUniqueName = event?.value || "";
+        if (!nextUniqueName || nextUniqueName === this.selectedWarehouse) {
+            return;
+        }
+
+        if (!this.getEntryBatches()?.length) {
+            this.applyWarehouseSelection(nextUniqueName);
+            return;
+        }
+
+        this.warehouseChangeDialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: "630px",
+            data: {
+                configuration: this.generalService.deleteConfiguration(
+                    this.localeData?.warehouse_change_batch_confirmation,
+                    this.commonLocaleData
+                )
+            }
+        });
+        this.warehouseChangeDialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            this.warehouseChangeDialogRef = undefined;
+            if (response === this.commonLocaleData?.app_yes) {
+                this.applyWarehouseSelection(nextUniqueName);
+                this.resetEntryBatch();
+                this.cdRef.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Apply the selected warehouse after confirmation.
+     *
+     * @private
+     * @param {string} uniqueName Warehouse unique name
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private applyWarehouseSelection(uniqueName: string): void {
+        this.selectedWarehouse = uniqueName;
     }
 
     /**

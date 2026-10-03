@@ -129,17 +129,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     protected giddhBalanceDecimalPlaces = signal<number>(2);
     /** Show/hide page loader */
     public showLoader = signal<boolean>(false);
-
-    /**
-     * Determines if dropdown should open automatically
-     * Returns true if there is exactly one adjustment and it has no uniqueName
-     *
-     * @returns {boolean}
-     * @memberof AdvanceReceiptAdjustmentComponent
-     */
-    protected get shouldOpenDropdown(): boolean {
-        return this.adjustVoucherForm?.adjustments?.length === 1 && !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName;
-    }
+    /** Opens voucher dropdown after dialog content and API data are ready */
+    protected shouldOpenDropdown = signal<boolean>(false);
 
     constructor(
         private store: Store<AppState>,
@@ -221,6 +212,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         }
                     });
                     this.assignCurrencyInAdjustVoucherForm();
+                    this.adjustVoucherOptions$.set(this.adjustVoucherOptions);
+                    this.updateShouldOpenDropdown();
                 } else {
                     if ((!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) && this.isVoucherModule()) {
                         this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
@@ -270,6 +263,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public onClear(isFormReset?: boolean): void {
+        this.shouldOpenDropdown.set(false);
         this.isFormReset.set(isFormReset ?? false);
         this.adjustVoucherForm = {
             tdsTaxUniqueName: '',
@@ -392,9 +386,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
 
                     this.adjustVoucherOptions$.set(this.adjustVoucherOptions);
-                    this.changeDetectionRef.detectChanges();
                 }
                 this.showLoader.set(false);
+                this.updateShouldOpenDropdown();
+                this.changeDetectionRef.detectChanges();
             });
         }
     }
@@ -1226,7 +1221,20 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
             
             this.showLoader.set(false);
+            this.updateShouldOpenDropdown();
             this.changeDetectionRef.detectChanges();
         });
+    }
+
+    /**
+     * Enables auto-open for the voucher dropdown once voucher options are loaded.
+     *
+     * @private
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    private updateShouldOpenDropdown(): void {
+        const shouldOpen = this.adjustVoucherForm?.adjustments?.length === 1
+            && !this.adjustVoucherForm?.adjustments?.[0]?.uniqueName;
+        this.shouldOpenDropdown.set(shouldOpen);
     }
 }

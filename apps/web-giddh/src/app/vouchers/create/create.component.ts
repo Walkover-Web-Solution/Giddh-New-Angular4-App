@@ -69,6 +69,7 @@ import {
     TaxCollectionDeductionType,
     TaxType,
     VoucherTypeEnum,
+    ChallanTypeEnum,
 } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -104,11 +105,16 @@ import {
     IOption,
     API_BULK_FETCH_LIMIT,
     FormFieldsType,
-    PAGE_SIZE_OPTIONS
+    PAGE_SIZE_OPTIONS,
+    PAGINATION_LIMIT,
+    PAGINATION_LIMIT_BULK_STOCK
 } from "../../app.constant";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { VoucherService } from "../../services/voucher.service";
+import { InvoiceActions } from "../../actions/invoice/invoice.actions";
+import { transporterModes } from "../../shared/helpers/transporterModes";
+import { IEwayBillfilter } from "../../models/api-models/Invoice";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
@@ -123,6 +129,7 @@ import { MatSelectChange } from "@angular/material/select";
 import { ServiceConfig } from "../../services/service.config";
 import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
 import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
+import { ManageTransporterComponent } from "../../shared/manage-transporter/manage-transporter.component";
 import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
@@ -138,6 +145,8 @@ import { RecurrenceFormService } from "../../services/aside-recurring-voucher.se
 import { RecurringEndType, RecurringRepeatOption, RecurringFrequencyUnit, RecurringRepeatType, RecurringMonthlyMode } from "../../models/enums/recurring-voucher.enum";
 import { AccountCategoryEnum } from "../../shared/Enums/common.enum";
 import { CopyParticularDialogComponent } from "../copy-particular-dialog/copy-particular-dialog.component";
+import { BatchSelectDialogComponent } from "../batch-select-dialog/batch-select-dialog.component";
+import { BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -220,6 +229,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public linkedPoOrders$: Observable<any> = this.componentStore.linkedPoOrders$;
     /** Pending purchase orders Observable */
     public pendingPurchaseOrders$: Observable<any> = this.componentStore.pendingPurchaseOrders$;
+    /** Pending DC/RN/invoice/bill documents for selected account */
+    public pendingBusinessDocuments$: Observable<any[]> = this.componentStore.pendingBusinessDocuments$;
     /** Account search request */
     public accountSearchRequest: any;
     /** Annexure account search request */
@@ -269,6 +280,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     /** Invoice Settings */
     public activeCompany: any;
+    /** True when inventory is managed via business documents (DC/RN). */
+    public inventoryViaBusinessDocument = false;
+    /** True when inventory settings have batch management enabled. */
+    public batchTrackingEnabled = signal(false);
     /** This will hold onboarding api form request */
     public onboardingFormRequest: OnboardingFormRequest = { formName: "", country: "" };
     /** Onboarding account form fields */
@@ -307,7 +322,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         isPurchaseOrder: false,
         isReceiptInvoice: false,
         isPaymentInvoice: false,
+        isDeliveryChallan: false,
+        isReceiptNote: false,
     };
+    /** Transporter dropdown options for delivery challan and receipt note */
+    public transporterDropdown$: Observable<IOption[]>;
+    /** Transporter list filter request */
+    public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
+    /** Transport mode options */
+    public transporterModeOptions: IOption[] = transporterModes.map((mode) => ({ label: mode.label, value: mode.value }));
+    /** Challan type options for delivery challan and receipt note */
+    public challanTypeOptions: IOption[] = [];
     /** Holds template data */
     public templateData: any = {
         customField1Label: "",
@@ -364,6 +389,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public bulkStockAsideMenuRef: MatDialogRef<any>;
     /** Discount dialog ref */
     public discountDialogRef: MatDialogRef<any>;
+    /** Batch select dialog ref */
+    public batchSelectDialogRef: MatDialogRef<any>;
+    /** True while the batch select dialog is open or focus is being restored. */
+    private isBatchSelectDialogOpen: boolean = false;
     /** Stores the current voucher form detail */
     public currentVoucherFormDetails: VoucherForm;
     /** RCM modal configuration */
@@ -382,6 +411,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
     /** Holds universal date */
     public universalDate: any;
+    /** Holds universal date range for pending business document report */
+    private universalDateRange: { from: string; to: string } = { from: "", to: "" };
     /** List of stock variants */
     public stockVariants: any[] = [];
     /** List of stock units */
@@ -574,7 +605,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** True if we need to fill default account details in voucher */
     private useDefaultAccountDetails: boolean = true;
     /** Holds redirect url to redirect after voucher update */
+    /** Redirect URL after cancel/update */
     private redirectUrl: string = "";
+    /** List URL to return to after DC/RN → invoice/bill convert flow */
+    private inventoryDocumentListRedirectUrl: string = "";
+    /** True when create is opened from DC/RN/invoice/bill convert (preview & convert) */
+    public isBusinessDocumentCreate: boolean = false;
     /** Holds text for update voucher button */
     public updateVoucherText: string = "";
     /** Holds purchase order details to put PO in PO list if not available */
@@ -648,7 +684,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public get shouldApplyMaxLengthOnNotes(): boolean {
         return (
-            this.invoiceType?.isSalesInvoice ||
+            this.invoiceType.isSalesInvoice ||
             this.invoiceType?.isProformaInvoice ||
             this.invoiceType?.isEstimateInvoice
         );
@@ -689,7 +725,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
         if (
-            (this.invoiceType?.isSalesInvoice ||
+            ((this.invoiceType.isSalesInvoice || 
+                this.invoiceType.isDeliveryChallan) ||
                 this.invoiceType?.isCreditNote ||
                 this.invoiceType?.isProformaInvoice ||
                 this.invoiceType?.isEstimateInvoice) &&
@@ -736,7 +773,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return this.company.countryCode === 'IN' && this.account.countryCode === 'IN';
     }
 
-    
+    /**
+     * True when transporter details section should be shown (delivery challan / receipt note)
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get showsTransporterDetails(): boolean {
+        return this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote;
+    }
 
     /**
      * True if voucher is a cash sales invoice (not purchase, debit note, or credit note)
@@ -762,7 +808,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isCashSalesInvoice ||
             this.invoiceType.isCreditNote ||
             this.invoiceType.isEstimateInvoice ||
-            this.invoiceType.isProformaInvoice
+            this.invoiceType.isProformaInvoice ||
+            this.invoiceType.isDeliveryChallan
+        );
+    }
+
+    /**
+     * True when the voucher receives stock (bill, receipt note, credit note).
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get isBatchInbound(): boolean {
+        return !!(
+            this.invoiceType?.isPurchaseInvoice ||
+            this.invoiceType?.isReceiptNote ||
+            this.invoiceType?.isCreditNote
         );
     }
 
@@ -775,7 +837,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public get showSourceDestinationOfSupply(): boolean {
         return (
-            this.invoiceType.isPurchaseInvoice ||
+            (this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) ||
             this.invoiceType.isDebitNote ||
             this.invoiceType.isPurchaseOrder
         );
@@ -792,8 +854,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get showDueDate(): boolean {
         return (
             this.currentVoucherFormDetails?.dueDate ||
-            this.invoiceType.isSalesInvoice ||
-            this.invoiceType.isPurchaseInvoice ||
+            (this.invoiceType.isSalesInvoice || this.invoiceType.isDeliveryChallan) ||
+            (this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) ||
             this.invoiceType.isPurchaseOrder ||
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isEstimateInvoice
@@ -814,7 +876,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         return (
             this.invoiceType.isSalesInvoice ||
-            this.invoiceType.isPurchaseInvoice ||
+            this.invoiceType.isPurchase ||
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isPurchaseOrder ||
@@ -832,7 +894,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get recurrenceFormGroup(): FormGroup {
         return this.invoiceForm.get('recurrencePreviewRequest') as FormGroup;
     }
-
 
     /** Tax validations */
     public taxNumberValidations: any = {
@@ -885,6 +946,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private toasterService: ToasterService,
         private commonService: CommonService,
         private voucherService: VoucherService,
+        private invoiceActions: InvoiceActions,
         private purchaseOrderService: PurchaseOrderService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private settingsTaxesAction: SettingsTaxesActions,
@@ -935,6 +997,29 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         this.getVoucherVersion();
         this.initVoucherForm();
+        this.transporterFilterRequest.page = 1;
+        this.transporterFilterRequest.count = PAGINATION_LIMIT;
+        this.store.pipe(select(state => state.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe((response) => {
+            this.transporterDropdown$ = observableOf((response || []).map((transporter) => ({
+                label: transporter.transporterName,
+                value: transporter.transporterId
+            })));
+        });
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled.set(!!settings?.batchManagement?.enabled);
+                const wasEnabled = this.inventoryViaBusinessDocument;
+                this.inventoryViaBusinessDocument = !!settings?.voucherAutomation?.inventoryViaBusinessDocument;
+                if (this.inventoryViaBusinessDocument && !wasEnabled) {
+                    const accountUniqueName = this.invoiceForm?.controls?.["account"]?.get("uniqueName")?.value;
+                    if (accountUniqueName) {
+                        this.fetchPendingBusinessDocuments(accountUniqueName);
+                    }
+                } else if (!this.inventoryViaBusinessDocument) {
+                    this.componentStore.patchState({ pendingBusinessDocuments: null });
+                }
+            }
+        });
         this.getCustomFields();
         this.getCountryList();
         this.getDiscountsList();
@@ -989,6 +1074,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.redirectUrl = this.queryParams.redirect;
                         }
 
+                        if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
+                            || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
+                            this.isBusinessDocumentCreate = true;
+                            this.inventoryDocumentListRedirectUrl = this.queryParams.redirect
+                                || `/pages/vouchers/preview/${(this.queryParams.rnUniqueName || this.queryParams.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
+                            this.redirectUrl = this.inventoryDocumentListRedirectUrl;
+                        } else {
+                            this.isBusinessDocumentCreate = false;
+                            this.inventoryDocumentListRedirectUrl = "";
+                        }
+
                         this.company.countryName = "";
                         this.openAccountDropdown = false;
                         this.urlVoucherType = params.voucherType;
@@ -998,7 +1094,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
                         }
 
-                        this.resetVoucherForm(!params?.uniqueName, true);
+                        this.resetVoucherForm(
+                            !params?.uniqueName
+                                && !this.queryParams?.dcUniqueName
+                                && !this.queryParams?.rnUniqueName
+                                && !this.queryParams?.invoiceUniqueName
+                                && !this.queryParams?.billUniqueName,
+                            true
+                        );
                         this.invoiceForm.get('isRecurringVoucher')?.patchValue(this.queryParams.isRecurringVoucher ? true : false);
                         // Initialize recurring voucher form after resetVoucherForm creates the form structure
                         if (this.queryParams.isRecurringVoucher && !this.isUpdateMode) {
@@ -1021,7 +1124,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getCompanyProfile();
                         this.getIsTcsTdsApplicable();
                         this.getInvoiceSettings();
-                        this.getCreatedTemplates();
+                        if (!this.invoiceType.isDeliveryChallan && !this.invoiceType.isReceiptNote) {
+                            this.getCreatedTemplates();
+                        }
                         this.getAccountOnboardingFormData();
                         this.setDefaultSupplyFields();
 
@@ -1049,9 +1154,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.useDefaultAccountDetails = false;
                             this.getVoucherDetails(params);
                             this.getUpdateVoucherText();
+                        } else if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName) {
+                            // Prefill create invoice/bill from delivery challan / receipt note
+                            // isCopyMode clears voucher/entry uniqueName & number; keep isCopyVoucher false so form fields fill
+                            this.isCopyMode = true;
+                            this.useDefaultAccountDetails = false;
+                            this.prefillFromInventoryDocument();
+                        } else if (this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
+                            // Prefill create DC/RN from invoice/bill (pending reconciliation Pending DC)
+                            this.isCopyMode = true;
+                            this.useDefaultAccountDetails = false;
+                            this.prefillFromInvoiceVoucher();
                         } else {
                             this.depositAccountName = "";
-                    }
+                        }
 
                         if (params?.accountUniqueName === "cash") {
                             this.invoiceType.isCashInvoice = true;
@@ -1122,6 +1238,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 try {
+                    const previousFrom = this.universalDateRange.from;
+                    const previousTo = this.universalDateRange.to;
+                    this.universalDateRange = {
+                        from: dayjs(response[0]).format(GIDDH_DATE_FORMAT),
+                        to: dayjs(response[1]).format(GIDDH_DATE_FORMAT)
+                    };
                     this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
                     if (!this.isUpdateMode && !this.isVoucherDateChanged) {
                         this.invoiceForm.get("date")?.patchValue(this.universalDate);
@@ -1136,8 +1258,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             annexureCharges.at(0)?.get("date")?.patchValue(this.universalDate);
                         }
                     }
+                    if (
+                        (!previousFrom || !previousTo)
+                        || previousFrom !== this.universalDateRange.from
+                        || previousTo !== this.universalDateRange.to
+                    ) {
+                        const accountUniqueName = this.invoiceForm?.controls?.["account"]?.get("uniqueName")?.value;
+                        if (accountUniqueName) {
+                            this.fetchPendingBusinessDocuments(accountUniqueName);
+                        }
+                    }
                 } catch (e) {
                     this.universalDate = dayjs().format(GIDDH_DATE_FORMAT);
+                    this.universalDateRange = { from: this.universalDate, to: this.universalDate };
                 }
             }
         });
@@ -1426,45 +1559,55 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                         if (!voucherDetails.isCopyVoucher) {
                             this.getAccountDetails(voucherDetails.account?.uniqueName);
-                            this.fillBillingShippingAddress(
-                                "account",
-                                "billingDetails",
-                                voucherDetails.account?.billingDetails,
-                                0
-                            );
-                            this.fillBillingShippingAddress(
-                                "account",
-                                "shippingDetails",
-                                voucherDetails.account?.shippingDetails,
-                                0
-                            );
 
-                            this.copyAccountBillingInShippingAddress = isEqual(
-                                voucherDetails.account?.billingDetails,
-                                voucherDetails.account?.shippingDetails
-                            );
+                            // Business-document (RN/DC) APIs often omit billing/shipping; only fill when present.
+                            // Missing account addresses are filled from account defaults in updateAccountDataInForm.
+                            if (voucherDetails.account?.billingDetails) {
+                                this.fillBillingShippingAddress(
+                                    "account",
+                                    "billingDetails",
+                                    voucherDetails.account.billingDetails,
+                                    0
+                                );
+                                this.fillBillingShippingAddress(
+                                    "account",
+                                    "shippingDetails",
+                                    voucherDetails.account?.shippingDetails ?? voucherDetails.account.billingDetails,
+                                    0
+                                );
+
+                                this.copyAccountBillingInShippingAddress = isEqual(
+                                    voucherDetails.account?.billingDetails,
+                                    voucherDetails.account?.shippingDetails
+                                );
+                            }
 
                             if (
                                 this.invoiceType.isPurchaseOrder ||
-                                (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)
+                                ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
                             ) {
-                                this.fillBillingShippingAddress(
-                                    "company",
-                                    "billingDetails",
-                                    voucherDetails.company?.billingDetails,
-                                    0
-                                );
-                                this.fillBillingShippingAddress(
-                                    "company",
-                                    "shippingDetails",
-                                    voucherDetails.company?.shippingDetails,
-                                    0
-                                );
+                                if (voucherDetails.company?.billingDetails) {
+                                    this.fillBillingShippingAddress(
+                                        "company",
+                                        "billingDetails",
+                                        voucherDetails.company.billingDetails,
+                                        0
+                                    );
+                                    this.fillBillingShippingAddress(
+                                        "company",
+                                        "shippingDetails",
+                                        voucherDetails.company?.shippingDetails ?? voucherDetails.company.billingDetails,
+                                        0
+                                    );
 
-                                this.copyCompanyBillingInShippingAddress = isEqual(
-                                    voucherDetails.company?.billingDetails,
-                                    voucherDetails.company?.shippingDetails
-                                );
+                                    this.copyCompanyBillingInShippingAddress = isEqual(
+                                        voucherDetails.company?.billingDetails,
+                                        voucherDetails.company?.shippingDetails
+                                    );
+                                } else {
+                                    // defaultCompanyAddress / no company payload → same defaults as normal create
+                                    this.fillDefaultCompanyAddresses();
+                                }
                             }
                             this.invoiceForm.get('account.placeOfSupply.name')?.setValue(voucherDetails.account?.placeOfSupply?.name || '');
                             this.invoiceForm.get('account.placeOfSupply.code')?.setValue(voucherDetails.account?.placeOfSupply?.code || '');
@@ -1593,6 +1736,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                         this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
                         this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
+                        if (voucherDetails?.salesPerson?.uniqueName && !voucherDetails?.salesPerson?.name) {
+                            this.salesPersonList$.pipe(filter(Boolean), take(1)).subscribe((salesPersonList: IOption[]) => {
+                                this.invoiceForm.get('salesPersonName').patchValue(salesPersonList?.find(salesPerson => salesPerson?.value === voucherDetails.salesPerson.uniqueName)?.label || '');
+                            });
+                        }
+                        this.invoiceForm.get("transporterDetails")?.patchValue({
+                            transporterName: voucherDetails?.transporterDetails?.transporterName ?? "",
+                            transporterId: voucherDetails?.transporterDetails?.transporterId ?? "",
+                            vehicleNumber: voucherDetails?.transporterDetails?.vehicleNumber ?? "",
+                            transportMode: voucherDetails?.transporterDetails?.transportMode ?? "Road",
+                            transportDocNo: voucherDetails?.transporterDetails?.transportDocNo ?? "",
+                            transportDocDate: voucherDetails?.transporterDetails?.transportDocDate ?? "",
+                            distance: voucherDetails?.transporterDetails?.distance ?? 0,
+                            driverName: voucherDetails?.transporterDetails?.driverName ?? "",
+                            driverPhone: voucherDetails?.transporterDetails?.driverPhone ?? ""
+                        });
+                        this.invoiceForm.get("challanType")?.patchValue(
+                            voucherDetails?.challanType === ChallanTypeEnum.JOBWORK
+                                ? ChallanTypeEnum.JOBWORK
+                                : ChallanTypeEnum.STOCK_TRANSFER
+                        );
 
                         if (this.isRecurringVoucher[1]?.isRecurringVoucher || voucherDetails?.recurrencePreviewRequest) {
                             const recurrencePreviewRequest = voucherDetails.recurrencePreviewRequest;
@@ -1661,10 +1825,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
 
                         this.checkIfEntriesHasStock();
+                        this.calculateVoucherTotals();
 
                         if (voucherDetails.isCopyVoucher) {
                             this.recentVouchersAsideRef?.close();
                             this.focusOnCopyPreviousBtn();
+                        } else if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
+                            || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
+                            // Prefill from DC/RN or invoice/bill — keep customer/vendor dropdown closed
+                            this.openAccountDropdown = false;
                         } else if (this.isUpdateMode) {
                             setTimeout(() => {
                                 this.customerVendorDropdown.focusInputField();
@@ -1968,9 +2137,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     transactionFormGroup.get("account.name")?.patchValue(item.account?.name);
                     transactionFormGroup.get("account.uniqueName")?.patchValue(item.account?.uniqueName);
                     transactionFormGroup.get("amount.amountForAccount").patchValue(item.amount.amountForAccount);
-                    entryFormGroup.get("hsnNumber")?.patchValue(item.hsnNumber);
-                    entryFormGroup.get("sacNumber")?.patchValue(item.sacNumber);
-                    entryFormGroup.get("showCodeType")?.patchValue(item.hsnNumber ? "hsn" : "sac");
+                    this.patchEntryHsnSac(entryFormGroup, {
+                        hsnNumber: item.hsnNumber,
+                        sacNumber: item.sacNumber,
+                        stock: item.additional?.stock || item.stock,
+                        hasStock: !!item.stock,
+                    });
 
                     if (item.stock) {
                         transactionFormGroup.get("stock.name")?.patchValue(item.stock.name);
@@ -1999,6 +2171,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     } else {
                         this.stockVariants[entryIndex] = observableOf([]);
                         this.stockUnits[entryIndex] = observableOf([]);
+                        this.resetEntryBatch(entryIndex, transactionFormGroup);
                     }
                     this.checkIfEntriesHasStock();
                 });
@@ -2106,6 +2279,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 voucherType.depositAllowed = false;
             }
         }
+
+        if (this.showsTransporterDetails) {
+            this.getTransportersList();
+        }
     }
 
     /**
@@ -2126,10 +2303,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherDateLabel = this.localeData?.dr_note_date;
         } else if (this.invoiceType.isPurchaseInvoice) {
             this.voucherDateLabel = this.localeData?.bill_date;
+            this.voucherDueDateLabel = this.localeData?.due_date;
         } else if (this.invoiceType.isReceiptInvoice) {
             this.voucherDateLabel = this.localeData?.receipt_date;
         } else if (this.invoiceType.isPaymentInvoice) {
             this.voucherDateLabel = this.localeData?.payment_date;
+        } else if (this.invoiceType.isDeliveryChallan) {
+            this.voucherDateLabel = this.localeData?.delivery_challan_date;
+            this.voucherDueDateLabel = this.localeData?.due_date;
+        } else if (this.invoiceType.isReceiptNote) {
+            this.voucherDateLabel = this.localeData?.receipt_note_date;
+            this.voucherDueDateLabel = this.localeData?.due_date;
         } else {
             this.voucherDateLabel = this.commonLocaleData?.app_invoice_date;
             this.voucherDueDateLabel = this.localeData?.due_date;
@@ -2170,10 +2354,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.componentStore.getInvoiceSettings();
             } else {
                 this.invoiceSettings = settings;
-                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
+                if ([VoucherTypeEnum.sales, VoucherTypeEnum.cash].includes(this.voucherType as VoucherTypeEnum)) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
                     this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomInvoiceNumber;
-                } else if (this.voucherType === VoucherTypeEnum.purchase || this.voucherType === VoucherTypeEnum.cashBill) {
+                } else if ([VoucherTypeEnum.purchase, VoucherTypeEnum.cashBill].includes(this.voucherType as VoucherTypeEnum)) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
                     this.useCustomVoucherNumber = true;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
@@ -2196,7 +2380,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
                     this.applyRoundOff = settings.purchaseBillSettings?.purchaseOrderRoundOff;
                 }
-
                 this.invoiceForm.get("roundOffApplicable")?.patchValue(this.applyRoundOff);
 
                 this.updateDueDate();
@@ -2450,6 +2633,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 let warehouseResults = response.results?.filter((warehouse) => !warehouse.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
+                this.setDefaultWarehouseIfEmpty();
                 this.checkIfEntriesHasStock();
             }
         });
@@ -2482,10 +2666,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.company.branch = response.find((branch) => !branch.parentBranch);
                 }
                 this.branchCurrentAddressInfo = this.company.branch.addresses.find((address)=>address.isDefault);
-                this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
-                    name: this.branchCurrentAddressInfo.stateName || '',
-                    code: this.branchCurrentAddressInfo.stateCode || '',
-                });
+                this.setDefaultDestinationOfSupply();
             }
         });
     }
@@ -2533,7 +2714,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getCreatedTemplates(): void {
-        this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.createdTemplates$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe((response) => {
             let templateType = VoucherTypeEnum.invoice;
             if (this.voucherType === VoucherTypeEnum.purchase) {
                 templateType = VoucherTypeEnum.purchase_bill;
@@ -2541,6 +2722,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 templateType = VoucherTypeEnum.purchase_order;
             } else if (this.voucherType === VoucherTypeEnum.debitNote || this.voucherType === VoucherTypeEnum.creditNote) {
                 templateType = VoucherTypeEnum.voucher;
+            } else if (this.voucherType === VoucherTypeEnum.estimates) {
+                templateType = VoucherTypeEnum.estimate;
+            } else if (this.voucherType === VoucherTypeEnum.proformas) {
+                templateType = VoucherTypeEnum.proforma;
             }
 
             if (!response) {
@@ -2582,6 +2767,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
         });
+    }
+
+    /**
+     * Loads saved transporters for delivery challan and receipt note
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private getTransportersList(): void {
+        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+    }
+
+    /**
+     * Opens manage transporter aside
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public openTransporterModel(): void {
+        this.dialog.open(ManageTransporterComponent, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -2675,6 +2879,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             page,
             SearchType.ITEM
         );
+
+        if (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote) {
+            stockSearchRequest.onlyStock = true;
+        }
 
         const updatedRequest = cloneDeep(stockSearchRequest);
         updatedRequest.isLoading = true;
@@ -2795,6 +3003,144 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.componentStore.getPendingPurchaseOrders({ request: request, payload: payload });
             }
         }
+
+        this.fetchPendingBusinessDocuments(accountUniqueName);
+    }
+
+    /**
+     * Fetches pending DC/RN or invoice/bill list for the selected account.
+     * Sales → pending DC, Purchase → pending RN, DC → pending invoice, RN → pending bill.
+     *
+     * @private
+     * @param {string} accountUniqueName
+     * @memberof VoucherCreateComponent
+     */
+    private fetchPendingBusinessDocuments(accountUniqueName: string): void {
+        if (
+            !accountUniqueName
+            || !this.inventoryViaBusinessDocument
+            || this.invoiceType.isCashInvoice
+            || !this.universalDateRange?.from
+            || !this.universalDateRange?.to
+        ) {
+            this.componentStore.patchState({ pendingBusinessDocuments: null });
+            return;
+        }
+
+        let reportType: "WITHOUT_CHALLAN" | "NOT_INVOICED";
+        let documentType: "DC" | "RC";
+
+        if (this.invoiceType.isSalesInvoice) {
+            reportType = "NOT_INVOICED";
+            documentType = "DC";
+        } else if (this.invoiceType.isPurchaseInvoice) {
+            reportType = "NOT_INVOICED";
+            documentType = "RC";
+        } else if (this.invoiceType.isDeliveryChallan) {
+            reportType = "WITHOUT_CHALLAN";
+            documentType = "DC";
+        } else if (this.invoiceType.isReceiptNote) {
+            reportType = "WITHOUT_CHALLAN";
+            documentType = "RC";
+        } else {
+            this.componentStore.patchState({ pendingBusinessDocuments: null });
+            return;
+        }
+
+        this.componentStore.getPendingBusinessDocuments({
+            queryParams: {
+                from: this.universalDateRange.from,
+                to: this.universalDateRange.to,
+                accountUniqueName: encodeURIComponent(accountUniqueName),
+                page: 1,
+                count: API_BULK_FETCH_LIMIT,
+                sort: "",
+                sortBy: "",
+                q: ""
+            },
+            body: { reportType, documentType }
+        });
+    }
+
+    /**
+     * Label for pending business documents list based on current voucher type.
+     *
+     * @return {string}
+     * @memberof VoucherCreateComponent
+     */
+    public getPendingBusinessDocumentLabel(): string {
+        if (this.invoiceType.isSalesInvoice) {
+            return this.localeData?.pending_dc;
+        }
+        if (this.invoiceType.isPurchaseInvoice) {
+            return this.localeData?.pending_rn;
+        }
+        if (this.invoiceType.isDeliveryChallan) {
+            return this.localeData?.pending_invoice;
+        }
+        if (this.invoiceType.isReceiptNote) {
+            return this.localeData?.pending_bill;
+        }
+        return "";
+    }
+
+    /**
+     * Prefills create form from a pending DC/RN or invoice/bill click
+     * (same get-single flow as queryParams dcUniqueName / rnUniqueName / invoiceUniqueName / billUniqueName).
+     *
+     * @param {*} document
+     * @memberof VoucherCreateComponent
+     */
+    public selectPendingBusinessDocument(document: any): void {
+        if (!document?.uniqueName) {
+            return;
+        }
+
+        const accountUniqueName = document.accountUniqueName
+            || this.invoiceForm.controls["account"]?.get("uniqueName")?.value;
+
+        if (this.invoiceType.isSalesInvoice) {
+            this.queryParams = { ...(this.queryParams || {}), dcUniqueName: document.uniqueName };
+            this.isBusinessDocumentCreate = true;
+            this.isCopyMode = true;
+            this.useDefaultAccountDetails = false;
+            this.prefillFromInventoryDocument();
+            return;
+        }
+
+        if (this.invoiceType.isPurchaseInvoice) {
+            this.queryParams = { ...(this.queryParams || {}), rnUniqueName: document.uniqueName };
+            this.isBusinessDocumentCreate = true;
+            this.isCopyMode = true;
+            this.useDefaultAccountDetails = false;
+            this.prefillFromInventoryDocument();
+            return;
+        }
+
+        if (this.invoiceType.isDeliveryChallan) {
+            this.queryParams = {
+                ...(this.queryParams || {}),
+                invoiceUniqueName: document.uniqueName,
+                accountUniqueName
+            };
+            this.isBusinessDocumentCreate = true;
+            this.isCopyMode = true;
+            this.useDefaultAccountDetails = false;
+            this.prefillFromInvoiceVoucher();
+            return;
+        }
+
+        if (this.invoiceType.isReceiptNote) {
+            this.queryParams = {
+                ...(this.queryParams || {}),
+                billUniqueName: document.uniqueName,
+                accountUniqueName
+            };
+            this.isBusinessDocumentCreate = true;
+            this.isCopyMode = true;
+            this.useDefaultAccountDetails = false;
+            this.prefillFromInvoiceVoucher();
+        }
     }
 
     /**
@@ -2874,13 +3220,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         try {
             const accountName = transaction?.get('account.name')?.value;
             const stockName = transaction?.get('stock.name')?.value;
-            
-            if (accountName) {
-                return stockName ? stockName : accountName;
-            }
-            return '';
+            return stockName || accountName || '';
         } catch (error) {
-            console.error('Error getting account display label:', error);
             return '';
         }
     }
@@ -2939,6 +3280,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             if (isClear) {
                 transactionFormGroup.reset();
+                this.resetEntryBatch(entryIndex);
                 return;
             }
 
@@ -2947,6 +3289,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (event?.additional?.stock?.uniqueName) {
                 transactionFormGroup.get("stock.name")?.patchValue(event?.additional?.stock?.name);
                 transactionFormGroup.get("stock.uniqueName")?.patchValue(event?.additional?.stock?.uniqueName);
+                transactionFormGroup.get("stock.hasVariants")?.patchValue(!!event?.additional?.hasVariants);
+                this.patchEntryHsnSac(entryFormGroup, {
+                    hsnNumber: event?.additional?.hsnNumber,
+                    sacNumber: event?.additional?.sacNumber,
+                    stock: event?.additional?.stock,
+                    hasStock: true,
+                });
+                this.resetEntryBatch(entryIndex, transactionFormGroup);
 
                 if (event.additional.stock.customField1?.value) {
                     transactionFormGroup.get("stock.customField1")?.patchValue({
@@ -2974,6 +3324,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 const stockFormGroup = transactionFormGroup.get("stock") as FormGroup;
                 const newStockFormGroup = this.getStockFormGroup();
                 stockFormGroup.patchValue(newStockFormGroup.value);
+                this.patchEntryHsnSac(entryFormGroup, {
+                    hsnNumber: event?.additional?.hsnNumber,
+                    sacNumber: event?.additional?.sacNumber,
+                    hasStock: false,
+                });
+                this.resetEntryBatch(entryIndex, transactionFormGroup);
             }
 
             if (event?.additional?.hasVariants) {
@@ -3161,13 +3517,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public selectVariant(event: any, entryIndex: number, isClear: boolean = false): void {
-        if (event && !isClear) {
-            const entryFormGroup = this.getEntryFormGroup(entryIndex);
-            const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        const entryFormGroup = this.getEntryFormGroup(entryIndex);
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+        if (isClear) {
+            this.resetEntryBatch(entryIndex, transactionFormGroup);
+            return;
+        }
+
+        if (event) {
             const transactionStockVariantFormGroup = transactionFormGroup.get("stock").get("variant");
 
             transactionStockVariantFormGroup.get("name")?.patchValue(event?.label);
             transactionStockVariantFormGroup.get("uniqueName")?.patchValue(event?.value);
+            this.resetEntryBatch(entryIndex, transactionFormGroup);
 
             if (transactionFormGroup.get("stock.variant.getParticular")?.value) {
                 this.componentStore.getParticularDetails({
@@ -3182,6 +3545,255 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get("stock.variant.getParticular")?.patchValue(true);
             }
         }
+    }
+
+    /**
+     * Opens the Select Batches aside dialog for a line.
+     *
+     * @param {number} entryIndex
+     * @param {Event} [event]
+     * @memberof VoucherCreateComponent
+     */
+    public openBatchSelectDialog(entryIndex: number, event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+
+        if (!this.batchTrackingEnabled()) {
+            return;
+        }
+
+        const entryFormGroup = this.getEntryFormGroup(entryIndex);
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        const stockUniqueName = transactionFormGroup.get("stock.uniqueName")?.value;
+        if (!stockUniqueName) {
+            return;
+        }
+
+        const hasVariants = !!transactionFormGroup.get("stock.hasVariants")?.value;
+        const variantUniqueName = transactionFormGroup.get("stock.variant.uniqueName")?.value;
+        if (hasVariants && !variantUniqueName) {
+            this.toasterService.showSnackBar("warning", this.localeData?.select_variant_first);
+            return;
+        }
+
+        this.activeEntryIndex = entryIndex;
+        this.isBatchSelectDialogOpen = true;
+        const warehouseName = this.invoiceForm.get("warehouse.name")?.value || this.warehouses?.find(warehouse => warehouse?.isDefault)?.name;
+        const warehouseUniqueName = this.invoiceForm.get("warehouse.uniqueName")?.value || this.warehouses?.find(warehouse => warehouse?.isDefault)?.uniqueName;
+        const focusTarget = (event?.currentTarget ?? event?.target ?? document.activeElement) as HTMLElement;
+
+        this.batchSelectDialogRef = this.dialog.open(BatchSelectDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                stockName: transactionFormGroup.get("stock.name")?.value,
+                stockUniqueName,
+                variantUniqueName,
+                variantName: transactionFormGroup.get("stock.variant.name")?.value,
+                hasVariants,
+                inventoryType: "PRODUCT",
+                warehouseName,
+                warehouseUniqueName,
+                unitCode: transactionFormGroup.get("stock.stockUnit.code")?.value,
+                lineQuantity: Number(transactionFormGroup.get("stock.quantity")?.value) || 0,
+                selectedBatches: cloneDeep(transactionFormGroup.get("stock.batches")?.value) || [],
+                currencySymbol: this.account?.baseCurrencySymbol || this.company?.baseCurrencySymbol,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData,
+                isInbound: this.isBatchInbound
+            }
+        });
+
+        this.batchSelectDialogRef.afterClosed().pipe(take(1)).subscribe((result?: BatchSelectDialogResult) => {
+            this.activeEntryIndex = entryIndex;
+            if (result) {
+                transactionFormGroup.get("stock.batches")?.patchValue(result.batches ?? []);
+                if (result.overrideLineQuantity) {
+                    transactionFormGroup.get("stock.quantity")?.patchValue(result.allocatedQuantity);
+                    this.handleQuantityBlur(transactionFormGroup);
+                }
+            }
+            this.changeDetection.detectChanges();
+            this.restoreBatchSelectFocus(entryIndex, focusTarget);
+            setTimeout(() => {
+                this.isBatchSelectDialogOpen = false;
+            }, 200);
+        });
+    }
+
+    /**
+     * Keep the line active and return keyboard focus to Select batch / Edit.
+     *
+     * @private
+     * @param {number} entryIndex
+     * @param {HTMLElement} [focusTarget]
+     * @memberof VoucherCreateComponent
+     */
+    private restoreBatchSelectFocus(entryIndex: number, focusTarget?: HTMLElement): void {
+        setTimeout(() => {
+            const selectBatch = document.getElementById(`select-batch-${entryIndex}`);
+            if (selectBatch) {
+                this.focusMonitor.focusVia(selectBatch, "keyboard");
+                return;
+            }
+            const editBatch = document.querySelector(`#edit-batch-${entryIndex} button`) as HTMLElement;
+            if (editBatch) {
+                this.focusMonitor.focusVia(editBatch, "keyboard");
+                return;
+            }
+            if (focusTarget?.isConnected) {
+                this.focusMonitor.focusVia(focusTarget, "keyboard");
+            }
+        }, 100);
+    }
+
+    /**
+     * Select warehouse. Confirms only when any stock line has batches selected;
+     * otherwise applies the warehouse change immediately.
+     *
+     * @param {IOption} event Selected warehouse
+     * @memberof VoucherCreateComponent
+     */
+    public selectWarehouse(event: IOption): void {
+        const nextUniqueName = event?.value || "";
+        const nextName = event?.label || "";
+        if (!nextUniqueName || nextUniqueName === this.getConfirmedWarehouseUniqueName()) {
+            return;
+        }
+
+        if (!this.hasAnyVoucherBatches()) {
+            this.applyWarehouseSelection(nextName, nextUniqueName);
+            return;
+        }
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: "630px",
+            data: {
+                configuration: this.generalService.deleteConfiguration(
+                    this.localeData?.warehouse_change_batch_confirmation,
+                    this.commonLocaleData
+                )
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.applyWarehouseSelection(nextName, nextUniqueName);
+                this.resetAllVoucherBatches();
+            }
+        });
+    }
+
+    /**
+     * Apply the selected warehouse after confirmation.
+     *
+     * @private
+     * @param {string} name Warehouse name
+     * @param {string} uniqueName Warehouse unique name
+     * @memberof VoucherCreateComponent
+     */
+    private applyWarehouseSelection(name: string, uniqueName: string): void {
+        this.invoiceForm.get("warehouse.uniqueName")?.patchValue(uniqueName);
+        this.invoiceForm.get("warehouse.name")?.patchValue(name);
+    }
+
+
+    /**
+     * Current confirmed warehouse unique name, with form and default fallbacks.
+     *
+     * @private
+     * @return {*}  {string}
+     * @memberof VoucherCreateComponent
+     */
+    private getConfirmedWarehouseUniqueName(): string {
+        return this.invoiceForm.get("warehouse.uniqueName")?.value
+            || this.warehouses?.find((warehouse) => warehouse?.isDefault)?.uniqueName
+            || "";
+    }
+
+    /**
+     * Put the company default warehouse on the form when none is selected yet.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setDefaultWarehouseIfEmpty(): void {
+        if (this.invoiceForm.get("warehouse.uniqueName")?.value || !this.warehouses?.length) {
+            return;
+        }
+        const defaultWarehouse = this.warehouses.find((warehouse) => warehouse?.isDefault) || this.warehouses[0];
+        if (!defaultWarehouse) {
+            return;
+        }
+        this.invoiceForm.get("warehouse.uniqueName")?.patchValue(defaultWarehouse.uniqueName);
+        this.invoiceForm.get("warehouse.name")?.patchValue(defaultWarehouse.name);
+    }
+
+    /**
+     * True when any voucher entry has at least one selected batch.
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    private hasAnyVoucherBatches(): boolean {
+        const entries = this.invoiceForm.get("entries") as FormArray;
+        return !!entries?.controls?.some((entry) => {
+            const transaction = this.getTransactionFormGroup(entry as FormGroup);
+            return this.getEntryBatches(transaction)?.length > 0;
+        });
+    }
+
+    /**
+     * Clear batches on every voucher entry.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private resetAllVoucherBatches(): void {
+        const entries = this.invoiceForm.get("entries") as FormArray;
+        entries?.controls?.forEach((entry, entryIndex) => {
+            this.resetEntryBatch(entryIndex, this.getTransactionFormGroup(entry as FormGroup));
+        });
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Selected batches on a transaction.
+     *
+     * @param {AbstractControl} transaction
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof VoucherCreateComponent
+     */
+    public getEntryBatches(transaction: AbstractControl): VoucherSelectedBatch[] {
+        const batches = transaction?.get("stock.batches")?.value;
+        return Array.isArray(batches) ? batches : [];
+    }
+
+    /**
+     * Clears selected batches when stock or variant changes.
+     *
+     * @private
+     * @param {number} entryIndex
+     * @param {FormGroup} [transactionFormGroup]
+     * @memberof VoucherCreateComponent
+     */
+    private resetEntryBatch(entryIndex: number, transactionFormGroup?: FormGroup): void {
+        transactionFormGroup?.get("stock.batches")?.patchValue([]);
+    }
+
+    /**
+     * Prefill batches from voucher stock payload.
+     *
+     * @private
+     * @param {*} [entryData]
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof VoucherCreateComponent
+     */
+    private getInitialStockBatches(entryData?: any): VoucherSelectedBatch[] {
+        const stock = entryData?.transactions?.[0]?.stock;
+        if (Array.isArray(stock?.batches) && stock.batches.length) {
+            return cloneDeep(stock.batches);
+        }
+        return [];
     }
 
     /**
@@ -3207,6 +3819,46 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Fills default billing and shipping addresses for company (Deliver To)
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private fillDefaultCompanyAddresses(): void {
+        const companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
+        const defaultAddress = companyDefaultAddress.defaultAddress;
+        const findIndex = this.company?.addresses?.findIndex(
+            (address: any) => address.uniqueName === companyDefaultAddress.defaultAddress?.uniqueName
+        );
+        const index = findIndex > -1 ? findIndex : 0;
+
+        if (defaultAddress) {
+            this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
+            this.fillBillingShippingAddress("company", "shippingDetails", defaultAddress, index);
+            if (!this.isUpdateMode) {
+                this.setDefaultSupplyFields();
+            }
+        }
+    }
+
+    /**
+     * Whether form already has address content for the given entity/address type
+     *
+     * @private
+     * @param {string} entityType
+     * @param {string} addressType
+     * @returns {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    private hasAddressDetails(entityType: string, addressType: string): boolean {
+        const addressValue = this.invoiceForm.controls[entityType]?.get(addressType)?.get("address")?.value;
+        if (Array.isArray(addressValue)) {
+            return addressValue.some((line: string) => !!line?.trim());
+        }
+        return !!addressValue;
+    }
+
+    /**
      * Returns the gstNumber of the default address (lowercased), or empty string if not found
      *
      * @private
@@ -3223,6 +3875,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Prefills destinationOfSupply from the current branch default address.
+     * Independent of account selection so it survives voucher-type route changes
+     * after resetVoucherForm clears the form (branchList$ does not re-emit).
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setDefaultDestinationOfSupply(): void {
+        if (!this.invoiceForm || !this.branchCurrentAddressInfo) {
+            return;
+        }
+        this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
+            name: this.branchCurrentAddressInfo.stateName || '',
+            code: this.branchCurrentAddressInfo.stateCode || '',
+        });
+    }
+
+    /**
      * Sets default values for placeOfSupply, sourceOfSupply, destinationOfSupply
      * based on account gstNumber (B2B vs B2C) and billing/shipping address states.
      * Only applies when company country is India.
@@ -3231,7 +3901,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private setDefaultSupplyFields(): void {
-        if (!this.isIndianCompanyAndAccount || !this.invoiceForm) {
+        if (!this.invoiceForm) {
+            return;
+        }
+
+        // Destination is company-branch based; restore after route/form reset even before account is selected
+        if (this.company.countryCode === 'IN' && this.showSourceDestinationOfSupply) {
+            this.setDefaultDestinationOfSupply();
+        }
+
+        if (!this.isIndianCompanyAndAccount) {
             return;
         }
 
@@ -3254,10 +3933,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.get('account.sourceOfSupply')?.patchValue({
                 name: sourceState?.get('name')?.value || '',
                 code: sourceState?.get('code')?.value || '',
-            });
-            this.invoiceForm.get('account.destinationOfSupply')?.patchValue({
-                name: this.branchCurrentAddressInfo.stateName || '',
-                code: this.branchCurrentAddressInfo.stateCode || '',
             });
         }
     }
@@ -3338,20 +4013,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             if (
                 this.invoiceType.isPurchaseOrder ||
-                (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)
+                ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
             ) {
-                let companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
-                let defaultAddress = companyDefaultAddress.defaultAddress;
-                const findIndex = this.company.addresses.findIndex((address: any) => address.uniqueName === companyDefaultAddress.defaultAddress?.uniqueName);
-                let index = findIndex > -1 ? findIndex : 0;
-
-                if (defaultAddress) {
-                    this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
-                    this.fillBillingShippingAddress("company", "shippingDetails", defaultAddress, index);
-                    if (!this.isUpdateMode) {
-                        this.setDefaultSupplyFields();
-                    }
-                }
+                this.fillDefaultCompanyAddresses();
             }
 
             this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(accountData?.name);
@@ -3365,53 +4029,78 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
                 !this.invoiceType.isCashInvoice
             ) {
-                const accountBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                    accountData.addresses,
-                    this.invoiceForm.controls["account"]?.get("billingDetails")?.value
-                );
-                const accountShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                    accountData.addresses,
-                    this.invoiceForm.controls["account"]?.get("shippingDetails")?.value
-                );
+                // RN/DC may omit addresses — use account defaults (includes name) when form has none
+                if (!this.hasAddressDetails("account", "billingDetails")) {
+                    this.fillDefaultAccountAddresses(accountData);
+                } else {
+                    const accountBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                        accountData.addresses,
+                        this.invoiceForm.controls["account"]?.get("billingDetails")?.value
+                    );
+                    const accountShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                        accountData.addresses,
+                        this.invoiceForm.controls["account"]?.get("shippingDetails")?.value
+                    );
 
-                if (accountBillingAddressIndex > -1) {
-                    this.invoiceForm.controls["account"]
-                        ?.get("billingDetails")
-                        .get("index")
-                        .patchValue(accountBillingAddressIndex);
-                }
+                    if (accountBillingAddressIndex > -1) {
+                        this.invoiceForm.controls["account"]
+                            ?.get("billingDetails")
+                            .get("index")
+                            .patchValue(accountBillingAddressIndex);
+                        this.invoiceForm.controls["account"]
+                            ?.get("billingDetails")
+                            .get("name")
+                            .patchValue(accountData.addresses?.[accountBillingAddressIndex]?.name ?? "");
+                    }
 
-                if (accountShippingAddressIndex > -1) {
-                    this.invoiceForm.controls["account"]
-                        ?.get("shippingDetails")
-                        .get("index")
-                        .patchValue(accountShippingAddressIndex);
+                    if (accountShippingAddressIndex > -1) {
+                        this.invoiceForm.controls["account"]
+                            ?.get("shippingDetails")
+                            .get("index")
+                            .patchValue(accountShippingAddressIndex);
+                        this.invoiceForm.controls["account"]
+                            ?.get("shippingDetails")
+                            .get("name")
+                            .patchValue(accountData.addresses?.[accountShippingAddressIndex]?.name ?? "");
+                    }
                 }
 
                 if (
                     this.invoiceType.isPurchaseOrder ||
-                    (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)
+                    ((this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) && !this.invoiceType.isCashInvoice)
                 ) {
-                    const companyBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                        this.company?.addresses,
-                        this.invoiceForm.controls["company"]?.get("billingDetails")?.value
-                    );
-                    const companyShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
-                        this.company?.addresses,
-                        this.invoiceForm.controls["company"]?.get("shippingDetails")?.value
-                    );
+                    if (!this.hasAddressDetails("company", "billingDetails")) {
+                        this.fillDefaultCompanyAddresses();
+                    } else {
+                        const companyBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                            this.company?.addresses,
+                            this.invoiceForm.controls["company"]?.get("billingDetails")?.value
+                        );
+                        const companyShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(
+                            this.company?.addresses,
+                            this.invoiceForm.controls["company"]?.get("shippingDetails")?.value
+                        );
 
-                    if (companyBillingAddressIndex > -1) {
-                        this.invoiceForm.controls["company"]
-                            ?.get("billingDetails")
-                            .get("index")
-                            .patchValue(companyBillingAddressIndex);
-                    }
-                    if (companyShippingAddressIndex > -1) {
-                        this.invoiceForm.controls["company"]
-                            ?.get("shippingDetails")
-                            .get("index")
-                            .patchValue(companyShippingAddressIndex);
+                        if (companyBillingAddressIndex > -1) {
+                            this.invoiceForm.controls["company"]
+                                ?.get("billingDetails")
+                                .get("index")
+                                .patchValue(companyBillingAddressIndex);
+                            this.invoiceForm.controls["company"]
+                                ?.get("billingDetails")
+                                .get("name")
+                                .patchValue(this.company?.addresses?.[companyBillingAddressIndex]?.name ?? "");
+                        }
+                        if (companyShippingAddressIndex > -1) {
+                            this.invoiceForm.controls["company"]
+                                ?.get("shippingDetails")
+                                .get("index")
+                                .patchValue(companyShippingAddressIndex);
+                            this.invoiceForm.controls["company"]
+                                ?.get("shippingDetails")
+                                .get("name")
+                                .patchValue(this.company?.addresses?.[companyShippingAddressIndex]?.name ?? "");
+                        }
                     }
                 }
             }
@@ -3563,7 +4252,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPurchaseAsReceiptPayment: [null], //temp
             salesPersonName: [''],
             salesPersonUniqueName: [''],
-            annexureCharges: this.formBuilder.array([this.getAnnexureChargeFormGroup()])
+            annexureCharges: this.formBuilder.array([this.getAnnexureChargeFormGroup()]),
+            transporterDetails: this.getTransporterDetailsFormGroup(),
+            challanType: [ChallanTypeEnum.STOCK_TRANSFER]
         });
     }
 
@@ -3617,6 +4308,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             type: ["DEBIT"],
         });
     }
+
+    /**
+     * Returns transporter details form group for delivery challan and receipt note
+     *
+     * @private
+     * @return {*}  {FormGroup}
+     * @memberof VoucherCreateComponent
+     */
+    private getTransporterDetailsFormGroup(): FormGroup {
+        return this.formBuilder.group({
+            transporterName: [""],
+            transporterId: [""],
+            vehicleNumber: [""],
+            transportMode: ["Road"],
+            transportDocNo: [""],
+            transportDocDate: [""],
+            distance: [0],
+            driverName: [""],
+            driverPhone: [""]
+        });
+    }
+
     /**
      * Returns address form group
      *
@@ -3653,6 +4366,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             voucherDate = this.invoiceForm?.get("date")?.value;
         }
+        const entryTransaction = entryData?.transactions?.[0];
+        const entryHsnSac = entryData
+            ? this.resolveEntryHsnSac({
+                hsnNumber: entryData.hsnNumber,
+                sacNumber: entryData.sacNumber,
+                stock: entryTransaction?.stock,
+                hasStock: !!entryTransaction?.stock?.uniqueName || !!entryTransaction?.stock?.name,
+            })
+            : { hsnNumber: "", sacNumber: "", showCodeType: "sac" as const };
         return this.formBuilder.group({
             date: [
                 !this.invoiceType.isPurchaseOrder &&
@@ -3664,9 +4386,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             description: [entryData ? entryData?.description : ""],
             voucherType: [this.voucherType],
             uniqueName: [this.isCopyMode ? "" : entryData && copyUniqueName ? entryData?.uniqueName : ""],
-            showCodeType: [entryData && entryData?.hsnNumber ? "hsn" : "sac"], //temp
-            hsnNumber: [entryData ? entryData?.hsnNumber : ""],
-            sacNumber: [entryData ? entryData?.sacNumber : ""],
+            showCodeType: [entryHsnSac.showCodeType],
+            hsnNumber: [entryHsnSac.hsnNumber ?? ""],
+            sacNumber: [entryHsnSac.sacNumber ?? ""],
             totalDiscount: [""], // temp
             totalTax: [0], // temp
             totalTaxWithoutCess: [""], //temp
@@ -3782,6 +4504,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             skuCodeHeading: [entryData ? entryData?.transactions[0]?.stock?.skuCodeHeading : ""],
             skuCode: [entryData ? entryData?.transactions[0]?.stock?.sku : ""],
             uniqueName: [entryData ? entryData?.transactions[0]?.stock?.uniqueName : ""],
+            batches: [this.getInitialStockBatches(entryData)],
             customField1: this.formBuilder.group({
                 key: [
                     entryData?.transactions[0]?.stock?.customField1?.value
@@ -4273,10 +4996,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.giddhBalanceDecimalPlaces
                     );
 
+                    const bulkHsnSac = this.resolveEntryHsnSac({
+                        hsnNumber: item.additional?.hsnNumber,
+                        sacNumber: item.additional?.sacNumber,
+                        stock: item.additional?.stock,
+                        hasStock: !!item.additional?.stock?.uniqueName,
+                    });
                     let entry = {
-                        hsnNumber: item.additional?.stock?.hsnNumber,
-                        sacNumber: item.additional?.stock?.sacNumber,
-                        showCodeType: item.additional?.stock?.hsnNumber ? "hsn" : "sac",
+                        hsnNumber: bulkHsnSac.hsnNumber,
+                        sacNumber: bulkHsnSac.sacNumber,
+                        showCodeType: bulkHsnSac.showCodeType,
                         transactions: [
                             {
                                 account: {
@@ -5225,7 +5954,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (
             !this.invoiceType.isCashInvoice &&
             (this.invoiceType.isSalesInvoice ||
-                this.invoiceType.isPurchaseInvoice ||
+                this.invoiceType.isPurchase ||
                 this.invoiceType.isCreditNote ||
                 this.invoiceType.isDebitNote)
         ) {
@@ -5238,7 +5967,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.dateChangeType = "voucher";
-        if (!(this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder)) {
+        if (!(this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder || this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)) {
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                 panelClass: "mat-dialog-sm",
                 data: {
@@ -5735,6 +6464,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleOutsideClick(event: any): void {
+        if (this.isBatchSelectDialogOpen || event?.target?.closest?.(".cdk-overlay-pane, .mat-mdc-dialog-container, .aside-dialog-wrapper")) {
+            return;
+        }
         const activeTaxComponent = this.activeEntryIndex !== null && this.commonTaxControll 
             ? this.commonTaxControll.toArray()[this.activeEntryIndex] 
             : null;
@@ -5749,7 +6481,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             !this.dialog.getDialogById(this.accountAsideMenuRef?.id) &&
             !activeTaxComponent?.isTaxDialogOpen &&
             !this.dialog.getDialogById(this.productServiceAsideMenuRef?.id) &&
-            !this.dialog.getDialogById(this.discountDialogRef?.id)
+            !this.dialog.getDialogById(this.discountDialogRef?.id) &&
+            !this.dialog.getDialogById(this.batchSelectDialogRef?.id)
         ) {
             this.activeEntryIndex = null;
         }
@@ -6374,7 +7107,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
                 });
             } else {
-                if (this.voucherType === "sales" && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+                if ([VoucherTypeEnum.sales].includes(this.voucherType as VoucherTypeEnum) && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
                     this.openEwayBillDialog();
                 } else {
                     this.saveVoucher();
@@ -6402,6 +7135,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             queryParams.search = this.queryParams.search;
         }
 
+        if (this.queryParams?.redirect || this.redirectUrl) {
+            queryParams.redirect = this.queryParams?.redirect || this.redirectUrl;
+        }
+
         const recurringPath = this.isRecurringVoucher?.[1]?.isRecurringVoucher ? "/recurring" : "";
         if (this.isRecurringVoucher?.[1]?.isRecurringVoucher) {
             queryParams.recurringVoucherUniqueName = uniqueName;
@@ -6419,8 +7156,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public cancelUpdateVoucher(): void {
-        if (this.redirectUrl) {
-            this.router.navigateByUrl(this.redirectUrl);
+        if (this.inventoryDocumentListRedirectUrl) {
+            this.router.navigateByUrl(this.inventoryDocumentListRedirectUrl);
         } else {
             this.redirectToVoucherPreview();
         }
@@ -6432,13 +7169,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public updateVoucher(): void {
-        if (this.redirectUrl) {
-            this.saveVoucher(() => {
-                this.router.navigateByUrl(this.redirectUrl);
-            });
-        } else {
-            this.saveVoucher();
-        }
+        this.saveVoucher();
     }
 
     /**
@@ -6697,10 +7428,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         invoiceForm.deposits = deposits;
         delete invoiceForm.annexureCharges;
 
+        // Delete Entry Date for Voucher Types that don't require it
         if (
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice ||
-            this.invoiceType.isPurchaseOrder
+            this.invoiceType.isPurchaseOrder ||
+            this.invoiceType.isDeliveryChallan ||
+            this.invoiceType.isReceiptNote
         ) {
             invoiceForm.entries.forEach((control) => {
                 if (control?.date) {
@@ -6722,6 +7456,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
+
+        if (!this.showsTransporterDetails) {
+            delete invoiceForm.transporterDetails;
+            delete invoiceForm.challanType;
+        }
 
         if (!this.isIndianCompanyAndAccount) {
             delete invoiceForm.account?.placeOfSupply;
@@ -6763,7 +7502,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (
             (this.invoiceType.isSalesInvoice ||
-                this.invoiceType.isPurchaseInvoice ||
+                this.invoiceType.isPurchase ||
                 this.invoiceType.isCreditNote ||
                 this.invoiceType.isDebitNote ||
                 this.invoiceType.isReceiptInvoice ||
@@ -7031,6 +7770,39 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
 
+            if (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote) {
+                invoiceForm.type = this.invoiceType.isDeliveryChallan ? VoucherTypeEnum.sales : VoucherTypeEnum.purchase;
+
+                invoiceForm.entries = invoiceForm.entries?.map((entry) => {
+                    entry.voucherType = invoiceForm.type;
+                    return entry;
+                });
+
+                if (!this.isUkAccount) {
+                    if (invoiceForm.account?.billingDetails?.state?.code) {
+                        invoiceForm.account.billingDetails.stateCode = invoiceForm.account.billingDetails.state?.code;
+                        invoiceForm.account.billingDetails.stateName = invoiceForm.account.billingDetails.state?.name;
+                    }
+
+                    if (invoiceForm.account?.shippingDetails?.state?.code) {
+                        invoiceForm.account.shippingDetails.stateCode = invoiceForm.account.shippingDetails.state?.code;
+                        invoiceForm.account.shippingDetails.stateName = invoiceForm.account.shippingDetails.state?.name;
+                    }
+                }
+
+                if (!this.isUkCompany) {
+                    if (invoiceForm.company?.billingDetails?.state?.code) {
+                        invoiceForm.company.billingDetails.stateCode = invoiceForm.company.billingDetails.state?.code;
+                        invoiceForm.company.billingDetails.stateName = invoiceForm.company.billingDetails.state?.name;
+                    }
+
+                    if (invoiceForm.company?.shippingDetails?.state?.code) {
+                        invoiceForm.company.shippingDetails.stateCode = invoiceForm.company.shippingDetails.state?.code;
+                        invoiceForm.company.shippingDetails.stateName = invoiceForm.company.shippingDetails.state?.name;
+                    }
+                }
+            }
+
             if (this.invoiceType.isPurchaseInvoice && invoiceForm.linkedPo?.length) {
                 invoiceForm.purchaseOrders = [];
                 invoiceForm.linkedPo?.forEach((order) => {
@@ -7109,8 +7881,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             if (this.isUpdateMode) {
-                this.voucherService
-                    .updateVoucher(invoiceForm)
+                const updateRequest = (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)
+                    ? this.voucherService.updateInventoryVoucher(this.voucherType, invoiceForm.uniqueName, invoiceForm)
+                    : this.voucherService.updateVoucher(invoiceForm);
+
+                updateRequest
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
@@ -7131,8 +7906,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.eWayBillResponse = null;
                 }
                 invoiceForm.isRecurringVoucher = this.queryParams.isRecurringVoucher ? true : false;
-                this.voucherService
-                    .generateVoucher(invoiceForm.account?.uniqueName, invoiceForm)
+
+                const businessDocumentUniqueName = this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName;
+                if (businessDocumentUniqueName) {
+                    invoiceForm.businessDocumentUniqueNames = [businessDocumentUniqueName];
+                }
+
+                // Link invoice/bill when creating DC/RN from pending reconciliation (Pending DC)
+                const linkedVoucherUniqueName = this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName;
+                if (linkedVoucherUniqueName && (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)) {
+                    invoiceForm.businessDocumentUniqueNames = [linkedVoucherUniqueName];
+                }
+
+                const generateRequest = (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)
+                    ? this.voucherService.generateInventoryVoucher(this.voucherType, invoiceForm)
+                    : this.voucherService.generateVoucher(invoiceForm.account?.uniqueName, invoiceForm);
+
+                generateRequest
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
@@ -7142,6 +7932,32 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 type: OcrAction.Save,
                                 ocrType: this.ocrType
                             });
+
+                            if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
+                                || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName
+                                || this.inventoryDocumentListRedirectUrl) {
+                                const listRedirectUrl = this.inventoryDocumentListRedirectUrl
+                                    || `/pages/vouchers/preview/${(this.queryParams?.rnUniqueName || this.queryParams?.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
+                                delete this.queryParams.dcUniqueName;
+                                delete this.queryParams.rnUniqueName;
+                                delete this.queryParams.invoiceUniqueName;
+                                delete this.queryParams.billUniqueName;
+                                this.isBusinessDocumentCreate = false;
+                                this.inventoryDocumentListRedirectUrl = "";
+                                this.redirectUrl = "";
+                                // Clear leave confirmation before navigate; otherwise PageLeaveConfirmationGuard
+                                // blocks redirect because account/customerName is still set (showPageLeaveConfirmation).
+                                this.resetVoucherForm(false);
+                                this.toasterService.showSnackBar(
+                                    "success",
+                                    response?.body?.number
+                                        ? `${this.localeData?.entry_created}: ${response?.body.number}`
+                                        : this.commonLocaleData?.app_messages?.voucher_saved
+                                );
+                                this.router.navigateByUrl(listRedirectUrl);
+                                return;
+                            }
+
                             const isCashSalesPurchaseInvoice =
                                 this.invoiceType.isCashInvoice &&
                                 ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) ||
@@ -7300,6 +8116,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.invoiceForm.reset();
+        this.invoiceForm.get("transporterDetails")?.patchValue({
+            transporterName: "",
+            transporterId: "",
+            vehicleNumber: "",
+            transportMode: "Road",
+            transportDocNo: "",
+            transportDocDate: "",
+            distance: 0,
+            driverName: "",
+            driverPhone: ""
+        });
+        this.invoiceForm.get("challanType")?.patchValue(ChallanTypeEnum.STOCK_TRANSFER);
 
         // Restore custom fields with preserved uniqueName but cleared values
         if (customFieldsData.length > 0) {
@@ -7366,6 +8194,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         };
         this.hasStock = false;
         this.showWarehouse = false;
+        this.setDefaultWarehouseIfEmpty();
         this.isAccountChanged = false;
 
         this.isAdjustAmount = false;
@@ -8005,9 +8834,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup.get("account.name")?.patchValue(item.account?.name);
             transactionFormGroup.get("account.uniqueName")?.patchValue(item.account?.uniqueName);
             transactionFormGroup.get("amount.amountForAccount").patchValue(item.amount.amountForAccount);
-            entryFormGroup.get("hsnNumber")?.patchValue(item.hsnNumber);
-            entryFormGroup.get("sacNumber")?.patchValue(item.sacNumber);
-            entryFormGroup.get("showCodeType")?.patchValue(item.hsnNumber ? "hsn" : "sac");
+            this.patchEntryHsnSac(entryFormGroup, {
+                hsnNumber: item.hsnNumber,
+                sacNumber: item.sacNumber,
+                stock: item.additional?.stock || item.stock,
+                hasStock: !!item.stock,
+            });
 
             if (item.stock) {
                 transactionFormGroup.get("stock.name")?.patchValue(item.stock.name);
@@ -8033,6 +8865,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 this.stockVariants[entryIndex] = observableOf([]);
                 this.stockUnits[entryIndex] = observableOf([]);
+                this.resetEntryBatch(entryIndex, transactionFormGroup);
             }
 
             this.checkIfEntriesHasStock();
@@ -8243,6 +9076,64 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup.get("otherTax.amount").patchValue(amount);
     }
 
+    /**
+     * Resolves HSN/SAC for an entry line from stock or account source.
+     * When a stock item is selected, stock codes are used first; account codes are used as fallback
+     * only if the stock has no HSN/SAC. For non-stock lines, account codes are used directly.
+     *
+     * @private
+     * @param {{ hsnNumber?: string | null; sacNumber?: string | null; stock?: { hsnNumber?: string | null; sacNumber?: string | null; uniqueName?: string; name?: string } | null; hasStock?: boolean }} source
+     * @returns {{ hsnNumber: string | null; sacNumber: string | null; showCodeType: 'hsn' | 'sac' }}
+     * @memberof VoucherCreateComponent
+     */
+    private resolveEntryHsnSac(source: {
+        hsnNumber?: string | null;
+        sacNumber?: string | null;
+        stock?: { hsnNumber?: string | null; sacNumber?: string | null; uniqueName?: string; name?: string } | null;
+        hasStock?: boolean;
+    }): { hsnNumber: string | null; sacNumber: string | null; showCodeType: "hsn" | "sac" } {
+        const hasStock = source.hasStock ?? !!(source.stock?.uniqueName || source.stock?.name);
+        let hsnNumber = source.hsnNumber ?? "";
+        let sacNumber = source.sacNumber ?? "";
+
+        if (hasStock && source.stock) {
+            const stockHsnNumber = source.stock.hsnNumber ?? "";
+            const stockSacNumber = source.stock.sacNumber ?? "";
+            if (stockHsnNumber || stockSacNumber) {
+                hsnNumber = stockHsnNumber;
+                sacNumber = stockSacNumber;
+            }
+        }
+
+        return {
+            hsnNumber: hsnNumber || null,
+            sacNumber: sacNumber || null,
+            showCodeType: hsnNumber ? "hsn" : "sac",
+        };
+    }
+
+    /**
+     * Patches entry-level HSN/SAC controls using stock-first, account-fallback logic.
+     *
+     * @private
+     * @param {FormGroup} entryFormGroup
+     * @param {{ hsnNumber?: string | null; sacNumber?: string | null; stock?: { hsnNumber?: string | null; sacNumber?: string | null; uniqueName?: string; name?: string } | null; hasStock?: boolean }} source
+     * @memberof VoucherCreateComponent
+     */
+    private patchEntryHsnSac(
+        entryFormGroup: FormGroup,
+        source: {
+            hsnNumber?: string | null;
+            sacNumber?: string | null;
+            stock?: { hsnNumber?: string | null; sacNumber?: string | null; uniqueName?: string; name?: string } | null;
+            hasStock?: boolean;
+        }
+    ): void {
+        const resolved = this.resolveEntryHsnSac(source);
+        entryFormGroup.get("hsnNumber")?.patchValue(resolved.hsnNumber);
+        entryFormGroup.get("sacNumber")?.patchValue(resolved.sacNumber);
+        entryFormGroup.get("showCodeType")?.patchValue(resolved.showCodeType);
+    }
 
     /**
      * Prefils entry
@@ -8291,9 +9182,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get("stock.customField2.value")?.patchValue(response?.stock?.customField2Value);
             }
 
-            entryFormGroup.get("hsnNumber")?.patchValue(response.stock.hsnNumber || response.hsnNumber);
-            entryFormGroup.get("sacNumber")?.patchValue(response.stock.sacNumber || response.sacNumber);
-            entryFormGroup.get("showCodeType")?.patchValue(response.stock.hsnNumber || response.hsnNumber ? "hsn" : "sac");
+            this.patchEntryHsnSac(entryFormGroup, {
+                hsnNumber: response.hsnNumber,
+                sacNumber: response.sacNumber,
+                stock: response.stock,
+                hasStock: true,
+            });
 
             transactionFormGroup.get("stock.stockUnit.code")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
             transactionFormGroup.get("stock.stockUnit.uniqueName")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
@@ -8351,10 +9245,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.stockVariants[entryIndex] = observableOf([]);
             this.stockUnits[entryIndex] = observableOf([]);
+            this.resetEntryBatch(entryIndex, transactionFormGroup);
 
-            entryFormGroup.get("hsnNumber")?.patchValue(response.hsnNumber);
-            entryFormGroup.get("sacNumber")?.patchValue(response.sacNumber);
-            entryFormGroup.get("showCodeType")?.patchValue(response.hsnNumber ? "hsn" : "sac");
+            this.patchEntryHsnSac(entryFormGroup, {
+                hsnNumber: response.hsnNumber,
+                sacNumber: response.sacNumber,
+                hasStock: false,
+            });
             if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
                 this.account.applicableDiscounts?.forEach((selectedDiscount) => {
                     this.discountsList()?.forEach((discount) => {
@@ -8735,6 +9632,80 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Prefills invoice/bill create form from delivery challan or receipt note query params.
+     * Does not set voucher uniqueName so a new invoice/bill is created.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private prefillFromInventoryDocument(): void {
+        const isFromReceiptNote = !!this.queryParams?.rnUniqueName;
+        const voucherUniqueName = isFromReceiptNote
+            ? this.queryParams.rnUniqueName
+            : this.queryParams.dcUniqueName;
+
+        if (!voucherUniqueName) {
+            return;
+        }
+
+        // Invoice create only accepts dcUniqueName; bill create only accepts rnUniqueName
+        if (isFromReceiptNote && !this.invoiceType.isPurchaseInvoice) {
+            return;
+        }
+        if (!isFromReceiptNote && !this.invoiceType.isSalesInvoice) {
+            return;
+        }
+
+        this.startLoader(true);
+        this.componentStore.getInventoryVoucherDetails({
+            voucherType: isFromReceiptNote ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan,
+            voucherUniqueName,
+            // false so voucherDetails$ fills account/entries/dates; uniqueName cleared via isCopyMode + store strip
+            isCopyVoucher: false,
+            clearVoucherIdentity: true,
+            isBusinessDocumentCreate: true
+        });
+    }
+
+    /**
+     * Prefills DC/RN create form from invoice/bill query params (pending reconciliation).
+     * Does not set voucher uniqueName so a new DC/RN is created.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private prefillFromInvoiceVoucher(): void {
+        const isFromBill = !!this.queryParams?.billUniqueName;
+        const voucherUniqueName = isFromBill
+            ? this.queryParams.billUniqueName
+            : this.queryParams.invoiceUniqueName;
+        const accountUniqueName = this.queryParams?.accountUniqueName
+            || this.activatedRoute.snapshot.params?.accountUniqueName;
+
+        if (!voucherUniqueName || !accountUniqueName) {
+            return;
+        }
+
+        if (isFromBill && !this.invoiceType.isReceiptNote) {
+            return;
+        }
+        if (!isFromBill && !this.invoiceType.isDeliveryChallan) {
+            return;
+        }
+
+        this.startLoader(true);
+        this.componentStore.getVoucherDetails({
+            isCopyVoucher: false,
+            accountUniqueName,
+            clearVoucherIdentity: true,
+            payload: {
+                uniqueName: voucherUniqueName,
+                voucherType: isFromBill ? VoucherTypeEnum.purchase : VoucherTypeEnum.sales
+            }
+        });
+    }
+
+    /**
      * Gets voucher details
      *
      * @private
@@ -8749,7 +9720,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.startLoader(true);
 
-        if (this.invoiceType.isPurchaseOrder) {
+        if (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote) {
+            this.componentStore.getInventoryVoucherDetails({
+                voucherType: this.voucherType,
+                voucherUniqueName: params?.uniqueName,
+                isCopyVoucher: this.isCopyMode
+            });
+        } else if (this.invoiceType.isPurchaseOrder) {
             this.componentStore.getPurchaseOrderDetails(params?.uniqueName);
         } else if (this.invoiceType.isEstimateInvoice) {
             this.componentStore.getEstimateProformaDetails({
@@ -8980,7 +9957,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                                     ? this.localeData?.invoice_types?.receipt
                                                     : this.invoiceType.isPaymentInvoice
                                                         ? this.localeData?.invoice_types?.payment
-                                                        : this.localeData?.invoice_types?.purchase_order;
+                                                        : this.invoiceType.isDeliveryChallan
+                                                            ? this.localeData?.invoice_types?.delivery_challan
+                                                            : this.invoiceType.isReceiptNote
+                                                                ? this.localeData?.invoice_types?.receipt_note
+                                                                : this.localeData?.invoice_types?.purchase_order;
 
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.updateVoucherText = updateVoucherText?.replace("[INVOICE_TYPE]", invoiceType);
@@ -8992,10 +9973,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public translationComplete(): void {
-        this.getVoucherDateLabelPlaceholder();
-        if (this.isUpdateMode) {
-            this.getUpdateVoucherText();
-        }
+        setTimeout(() => {
+            this.getVoucherDateLabelPlaceholder();
+            if (this.isUpdateMode) {
+                this.getUpdateVoucherText();
+            }
+            this.challanTypeOptions = [
+                { label: this.localeData?.stock_transfer, value: ChallanTypeEnum.STOCK_TRANSFER },
+                // { label: this.localeData?.jobwork, value: ChallanTypeEnum.JOBWORK } // Hide for now becuase jobwork is not supported yet
+            ];
+        }, 100);
     }
 
     /**
@@ -9574,7 +10561,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getAddressDisplayText(addressType: string, entityType: string): string {
         const addressControl = this.invoiceForm?.controls?.[entityType]?.get(`${addressType}Details`);
-
         if (!addressControl) {
             return '';
         }
@@ -9618,7 +10604,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     protected isRecurringVoucherSupported(): boolean {
-        return !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice && !this.invoiceType.isPurchaseOrder;
+        return !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice && !this.invoiceType.isPurchaseOrder && !this.invoiceType.isDeliveryChallan && !this.invoiceType.isReceiptNote;
     }
 
     /**
@@ -9715,6 +10701,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 label: this.queryParams.isRecurringVoucher ? this.localeData?.generate_recurring_payment : this.localeData?.create_payment,
                 action: () => this.generateVoucher(),
                 condition: this.invoiceType.isPaymentInvoice
+            },
+            {
+                label: this.localeData?.generate_delivery_challan,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isDeliveryChallan
+            },
+            {
+                label: this.localeData?.generate_receipt_note,
+                action: () => this.generateVoucher(),
+                condition: this.invoiceType.isReceiptNote
             }
         ];
     }
@@ -9728,7 +10724,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     protected shouldShowMoreOptions(): boolean {
         return !this.queryParams.isRecurringVoucher && (
-            this.invoiceType.isSalesInvoice ||
+            (this.invoiceType.isSalesInvoice || this.invoiceType.isDeliveryChallan) ||
             this.invoiceType.isEstimateInvoice ||
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isReceiptInvoice ||

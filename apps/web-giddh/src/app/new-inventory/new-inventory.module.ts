@@ -13,6 +13,7 @@ import { TranslateDirectiveModule } from "../theme/translate/translate.directive
 import { CommonModule } from "@angular/common";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { MatButtonModule } from "@angular/material/button";
+import { MatBadgeModule } from "@angular/material/badge";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -54,18 +55,25 @@ import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-e
 import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { ExportInventoryMasterComponent } from "./component/export-inventory-master/export-inventory-master.component";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { AdjustInventoryComponent } from "./component/adjust-inventory/adjust-inventory.component";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/aside-create-reason.component";
+import { AdjustInventoryModule } from "./component/adjust-inventory/adjust-inventory.module";
 import { PreviewVariantImageComponent } from "./component/preview-variant-image/preview-variant-image.component";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 import { StockAgingReportComponent } from "./component/stock-aging-report/stock-aging-report.component";
+import { BatchReportComponent } from "./component/batch-report/batch-report.component";
+import { BatchCreateEditComponent } from "./component/batch-create-edit/batch-create-edit.component";
+import { BatchArchiveDialogComponent } from "./component/batch-archive-dialog/batch-archive-dialog.component";
+import { BatchTransferDialogComponent } from "./component/batch-transfer-dialog/batch-transfer-dialog.component";
 import { MatCardModule } from "@angular/material/card";
 import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-editor.component";
+import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-list.component";
+import { BatchSelectDialogComponent } from "../vouchers/batch-select-dialog/batch-select-dialog.component";
+import { StockOpeningBatchDialogComponent } from "./component/stock-opening-batch-dialog/stock-opening-batch-dialog.component";
 
 @NgModule({
     declarations: [
@@ -74,7 +82,6 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         StockGroupListComponent,
         ProductServiceListComponent,
         InventoryTransactionListComponent,
-        AdjustInventoryComponent,
         AdjustInventoryListComponent,
         NewInventoryAdvanceSearch,
         StockBalanceComponent,
@@ -88,19 +95,22 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         BulkStockEditComponent,
         BulkStockAdvanceFilterComponent,
         ExportInventoryMasterComponent,
-        AdjustInventoryComponent,
-        AsideCreateNewReasonComponent,
         PreviewVariantImageComponent,
-        StockAgingReportComponent
+        StockAgingReportComponent,
+        BatchReportComponent,
+        BatchArchiveDialogComponent,
+        BatchTransferDialogComponent
     ],
     imports: [
         NewInventoryRoutingModule,
         SharedModule,
         CommonModule,
+        BatchCreateEditComponent,
         FormFieldsModule,
         TranslateDirectiveModule,
         DecimalDigitsModule,
         MatButtonModule,
+        MatBadgeModule,
         MatIconModule,
         MatMenuModule,
         MatCheckboxModule,
@@ -130,6 +140,7 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         DragDropModule,
         CustomPriceModule,
         WatchVideoModule,
+        MatButtonToggleModule,
         MatSlideToggleModule,
         MatExpansionModule,
         MatPaginatorModule,
@@ -138,7 +149,11 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         GiddhDatePipe,
         GoToBranchComponent,
         MatCardModule,
-        AgeRangeEditorComponent
+        AgeRangeEditorComponent,
+        AdjustInventoryModule,
+        BatchChipListComponent,
+        BatchSelectDialogComponent,
+        StockOpeningBatchDialogComponent
     ],
     exports: [
         NewInventoryComponent,
@@ -146,13 +161,12 @@ import { AgeRangeEditorComponent } from "../theme/age-range-editor/age-range-edi
         StockGroupListComponent,
         ProductServiceListComponent,
         InventoryTransactionListComponent,
-        AdjustInventoryComponent,
         AdjustInventoryListComponent,
         NewInventoryAdvanceSearch,
         ReportFiltersComponent,
         MatDivider,
         BulkStockAdvanceFilterComponent,
-        AdjustInventoryComponent,
+        AdjustInventoryModule,
         PreviewVariantImageComponent
     ]
 })

@@ -1,0 +1,96 @@
+---
+description: Enforce modern Angular/TypeScript practices and reuse existing Giddh CSS utilities/theme classes.
+globs: apps/web-giddh/**/*.{html,scss,css,ts}
+alwaysApply: true
+---
+
+# Angular / TypeScript / CSS Rules
+
+Write all new code and modifications using the project's latest supported Angular practices. Preserve existing patterns only when required for compatibility; do not introduce legacy patterns.
+
+## Angular
+
+- Use standalone components/directives/pipes. Do not add `standalone: true` in Angular v20+ decorators.
+- Use `ChangeDetectionStrategy.OnPush` for components.
+- Use `signal()` for local reactive state and `computed()` for derived state.
+- Use `effect()` only for genuine side effects; never for derived state.
+- Use `input()` / `output()` instead of `@Input()` / `@Output()`.
+- Use `inject()` instead of constructor injection for new code.
+- Use lazy-loaded routes for feature areas.
+- Prefer `@defer` for genuinely heavy/deferred UI when it provides a measurable benefit.
+- Reuse existing services, components, directives, pipes, and utilities before creating new ones.
+- Do not introduce unnecessary RxJS when signals are sufficient.
+- Do not unnecessarily migrate working RxJS code to signals.
+
+### Templates
+
+- ALWAYS use modern control flow: `@if`, `@else`, `@for`, `@switch`, `@case`.
+- NEVER introduce `*ngIf`, `*ngFor`, or `*ngSwitch`.
+- Every `@for` MUST use `track` with the most stable available identifier.
+- Keep templates simple; move complex/business logic into TypeScript or `computed()`.
+- Use `[class]` / `[class.*]` instead of `ngClass`.
+- Use `[style.*]` / CSS variables instead of `ngStyle`.
+- Prefer Reactive Forms over Template-driven Forms.
+- Use `NgOptimizedImage` for static images where applicable.
+
+### TypeScript
+
+- Use strict, strongly typed TypeScript.
+- NEVER use `any`; use `unknown` when the type is genuinely unknown.
+- Prefer type inference when the type is obvious.
+- Prefer `const`, `readonly`, immutable updates, and small focused functions.
+- Reuse existing interfaces/types instead of creating duplicates.
+- Avoid unnecessary subscriptions; when subscriptions are required, manage their lifecycle correctly.
+- Do not create reactive state for non-reactive values.
+
+## Accessibility
+
+- All UI changes MUST follow WCAG 2.2 AA and pass AXE checks.
+- Ensure keyboard accessibility, visible focus, semantic HTML, sufficient color contrast, and appropriate ARIA attributes.
+- Do not use ARIA where native semantic HTML provides the correct behavior.
+
+## CSS / SCSS
+
+Before creating CSS/SCSS, ALWAYS check:
+
+`apps/web-giddh/src/assets/styles/CSS_UTILITIES.md`
+
+Prefer existing Giddh utilities, theme classes, CSS variables, and Bootstrap utilities before writing custom styles.
+
+Reuse existing utilities such as:
+- `d-flex`, `flex-column`
+- `align-items-*`, `justify-content-*`
+- `column-gap-*`, `row-gap-*`
+- `m-*`, `p-*`
+- `text-primary`, `text-light`, `text-orange`
+- `font-size-*`, `font-weight-*`, `line-height-*`
+- `aside-dialog-wrapper`, `dialog-header`, `dialog-body`
+
+Rules:
+- Keep feature-specific styles in the component SCSS.
+- Prefer theme variables/tokens over hardcoded colors.
+- Do not create a new class when an existing utility provides the same styling.
+- Do not duplicate existing utilities in component SCSS.
+- Do not add one-off feature styles to global utility files.
+- Prefer existing utility combinations over new utilities.
+- Use `.pointer-events-none`; never introduce the misspelled `.pointer-event-none`.
+- Remember: `.w-100` means `100%`; `.width-100` / `.w100` means `100px`.
+
+## Reuse Before Create
+
+Before writing new code, check for an existing:
+1. Component / service / directive / pipe
+2. Type / interface / utility function
+3. Angular pattern already used in the feature
+4. Giddh CSS utility / theme class
+5. Small feature-specific implementation
+
+Create a new shared abstraction only when it is genuinely reusable.
+
+## Scope
+
+- Make only changes required for the requested task.
+- Do not perform unrelated refactoring, modernization, formatting, or RxJS-to-signal migrations.
+- Preserve existing working behavior unless the task requires changing it.
+- Read only relevant files and prefer targeted searches.
+- Do not scan `node_modules`, build output, coverage, cache, or generated files.
