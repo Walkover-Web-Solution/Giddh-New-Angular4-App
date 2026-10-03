@@ -134,8 +134,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showInvoiceNoSearch: boolean = false;
     /** Holds show Purchase Order Number Search input visibility status */
     public showPurchaseOrderNumberSearch: boolean = false;
-    /** Which table-header search column owns `advanceFilters.q` (number vs party) */
-    private searchColumn: "number" | "party" = "number";
+    /** Holds show Linked Invoice Search input visibility status */
+    public showLinkedInvoiceSearch: boolean = false;
+    /** Which table-header search column owns `advanceFilters.q` (number vs party vs linkedInvoice) */
+    private searchColumn: "number" | "party" | "linkedInvoice" = "number";
     /** Holds voucher Number form control */
     public voucherNumberInput: FormControl = new FormControl(null);
     /** Holds account Unique Name form control */
@@ -144,6 +146,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public accountNameInput: FormControl = new FormControl(null);
     /** Holds Purchase Order Unique Name form control */
     public purchaseOrderUniqueNameInput: FormControl = new FormControl(null);
+    /** Holds Linked Invoice Number form control */
+    public linkedInvoiceInput: FormControl = new FormControl(null);
     /** True if searching is in progress */
     public isSearching: boolean = false;
     /** True while DSC certificates are being preloaded; disables signed-PDF download buttons. */
@@ -909,7 +913,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (search || search === '') {
                 this.searchColumn = "number";
                 this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
+                this.linkedInvoiceInput.patchValue(null, { emitEvent: false });
                 this.showCustomerSearch = false;
+                this.showLinkedInvoiceSearch = false;
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
                         this.advanceFilters.proformaNumber = search;
@@ -933,12 +939,30 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (search || search === '') {
                 this.searchColumn = "party";
                 this.voucherNumberInput.patchValue(null, { emitEvent: false });
+                this.linkedInvoiceInput.patchValue(null, { emitEvent: false });
                 this.showInvoiceNoSearch = false;
+                this.showLinkedInvoiceSearch = false;
                 if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.advanceFilters.vendorName = search;
                 } else {
                     this.advanceFilters.q = search;
                 }
+                this.isSearching = true;
+                this.checkSearchingIsEmpty();
+                this.advanceFilters.page = 1;
+                this.getVouchers(this.isUniversalDateApplicable);
+                this.saveInventoryListFilters();
+            }
+        });
+
+        this.linkedInvoiceInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search || search === '') {
+                this.searchColumn = "linkedInvoice";
+                this.voucherNumberInput.patchValue(null, { emitEvent: false });
+                this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
+                this.showInvoiceNoSearch = false;
+                this.showCustomerSearch = false;
+                this.advanceFilters.q = search;
                 this.isSearching = true;
                 this.checkSearchingIsEmpty();
                 this.advanceFilters.page = 1;
@@ -1161,7 +1185,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (this.voucherType === VoucherTypeEnum.purchase) {
             searchingFieldIsEmpty = (this.purchaseOrderUniqueNameInput.value?.length > 0) || (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value?.length > 0);
         } else {
-            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value?.length > 0);
+            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value?.length > 0) || (this.linkedInvoiceInput.value?.length > 0);
         }
 
         this.advanceFiltersApplied = this.isSearching = searchingFieldIsEmpty;
@@ -2624,6 +2648,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "documentNumber") {
                     this.showInvoiceNoSearch = true;
+                } else if (fieldName === "linkedInvoice") {
+                    this.showLinkedInvoiceSearch = true;
                 }
                 break;
         }
@@ -2650,6 +2676,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
                 return;
             }
+        } else if (searchedFieldName === 'linkedInvoice') {
+            if (this.linkedInvoiceInput.value !== null && this.linkedInvoiceInput.value !== '') {
+                return;
+            }
         } else if (searchedFieldName === 'purchaseOrderNumbers') {
             if (this.purchaseOrderUniqueNameInput.value !== null && this.purchaseOrderUniqueNameInput.value !== '') {
                 return;
@@ -2667,6 +2697,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.showInvoiceNoSearch = false;
             } else if (searchedFieldName === 'accountUniqueName') {
                 this.showCustomerSearch = false;
+            } else if (searchedFieldName === 'linkedInvoice') {
+                this.showLinkedInvoiceSearch = false;
             } else if (searchedFieldName === 'purchaseOrderNumbers') {
                 this.showPurchaseOrderNumberSearch = false;
             } else if (searchedFieldName === 'accountName') {
@@ -3122,12 +3154,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
         this.accountNameInput.patchValue(null, { emitEvent: false });
         this.purchaseOrderUniqueNameInput.patchValue(null, { emitEvent: false });
+        this.linkedInvoiceInput.patchValue(null, { emitEvent: false });
         this.inventoryStatusFilter.patchValue([SELECTED_ALL_OPTION], { emitEvent: false });
         this.invoiceStatuses.patchValue([SELECTED_ALL_OPTION], { emitEvent: false });
         this.showCustomerSearch = false;
         this.showInvoiceNoSearch = false;
         this.showPurchaseOrderNumberSearch = false;
         this.showAccountSearch = false;
+        this.showLinkedInvoiceSearch = false;
         this.searchColumn = "number";
         this.advanceFiltersApplied = false;
         this.isSearching = false;
@@ -3282,17 +3316,26 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
         if (params.q) {
             this.advanceFilters.q = params.q;
-            this.searchColumn = params.searchColumn === "party" ? "party" : "number";
+            this.searchColumn = params.searchColumn === "party"
+                ? "party"
+                : params.searchColumn === "linkedInvoice"
+                    ? "linkedInvoice"
+                    : "number";
+            this.voucherNumberInput.patchValue(null, { emitEvent: false });
+            this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
+            this.linkedInvoiceInput.patchValue(null, { emitEvent: false });
+            this.showInvoiceNoSearch = false;
+            this.showCustomerSearch = false;
+            this.showLinkedInvoiceSearch = false;
             if (this.searchColumn === "party") {
                 this.accountUniqueNameInput.patchValue(params.q, { emitEvent: false });
-                this.voucherNumberInput.patchValue(null, { emitEvent: false });
                 this.showCustomerSearch = true;
-                this.showInvoiceNoSearch = false;
+            } else if (this.searchColumn === "linkedInvoice") {
+                this.linkedInvoiceInput.patchValue(params.q, { emitEvent: false });
+                this.showLinkedInvoiceSearch = true;
             } else {
                 this.voucherNumberInput.patchValue(params.q, { emitEvent: false });
-                this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
                 this.showInvoiceNoSearch = true;
-                this.showCustomerSearch = false;
             }
             this.advanceFiltersApplied = true;
             this.isSearching = true;

@@ -6217,12 +6217,27 @@
                         </ng-container>
 
                         <ng-container matColumnDef="linkedInvoice">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{
-                                    voucherType === voucherTypeEnum.deliveryChallan
-                                        ? localeData?.linked_invoice_no
-                                        : localeData?.linked_bill_no
-                                }}
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                #linkedInvoice
+                                (clickOutside)="handleClickOutside($event, linkedInvoice, 'linkedInvoice')"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        searchTemplate;
+                                        context: {
+                                            $implicit: showLinkedInvoiceSearch,
+                                            fieldName: 'linkedInvoice',
+                                            voucherType: voucherType,
+                                            formControl: linkedInvoiceInput,
+                                            title:
+                                                voucherType === voucherTypeEnum.deliveryChallan
+                                                    ? localeData?.linked_invoice_no
+                                                    : localeData?.linked_bill_no,
+                                        }
+                                    "
+                                ></ng-container>
                             </th>
                             <td mat-cell *matCellDef="let element">
                                 {{ element?.linkedInvoiceNumber || element?.linkedInvoiceNumbers?.join(', ') || '-' }}
