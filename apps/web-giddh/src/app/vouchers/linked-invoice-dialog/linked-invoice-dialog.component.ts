@@ -46,14 +46,24 @@ interface LinkedInvoiceEntity {
     amount?: LinkedInvoiceAmount;
 }
 
+/** Line item linked in a history step */
+interface LinkedInvoiceSourceItem {
+    id: number;
+    quantity?: number;
+    rate?: number;
+    amount?: number;
+}
+
 /** Single history step from API */
 interface LinkedInvoiceStep {
     id: number;
     createdAt: string;
     relationType: string;
     isActive: boolean;
+    linkedQuantity?: number;
     source?: LinkedInvoiceEntity;
     target?: LinkedInvoiceEntity;
+    sourceItem?: LinkedInvoiceSourceItem;
 }
 
 /** Mapped row for the linked invoice table */
@@ -295,13 +305,47 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
                 date: this.extractDate(step.createdAt) || entity.date || '',
                 invoiceNumber: entity.number || 'N/A',
                 customerName: entity.name || '',
-                amount: entity.amount?.amountForAccount ?? 0,
+                amount: this.resolveStepAmount(step),
                 uniqueName: entity.uniqueName || '',
                 voucherType: entity.type || ''
             });
         }
 
         return Array.from(uniqueRows.values());
+    }
+
+    /**
+     * Resolves display amount for a history step.
+     * Target vouchers often omit amount; fall back to source / sourceItem.
+     *
+     * @private
+     * @param {LinkedInvoiceStep} step
+     * @return {*}  {number}
+     * @memberof LinkedInvoiceDialogComponent
+     */
+    private resolveStepAmount(step: LinkedInvoiceStep): number {
+        const targetAmount = step.target?.amount?.amountForAccount;
+        if (targetAmount != null) {
+            return targetAmount;
+        }
+
+        const sourceAmount = step.source?.amount?.amountForAccount;
+        if (sourceAmount != null) {
+            return sourceAmount;
+        }
+
+        const sourceItemAmount = step.sourceItem?.amount;
+        if (sourceItemAmount != null) {
+            return sourceItemAmount;
+        }
+
+        const rate = step.sourceItem?.rate;
+        const linkedQuantity = step.linkedQuantity;
+        if (rate != null && linkedQuantity != null) {
+            return rate * linkedQuantity;
+        }
+
+        return 0;
     }
 
     /**
