@@ -316,7 +316,7 @@ export class VoucherService {
             count: request.count,
             from: request.from,
             to: request.to,
-            q: request.q,
+            q: request.q ? encodeURIComponent(request.q) : '',
             sort: request.sort,
             sortBy: request.sortBy
         };

@@ -6217,12 +6217,27 @@
                         </ng-container>
 
                         <ng-container matColumnDef="linkedInvoice">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{
-                                    voucherType === voucherTypeEnum.deliveryChallan
-                                        ? localeData?.linked_invoice_no
-                                        : localeData?.linked_bill_no
-                                }}
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                #linkedInvoice
+                                (clickOutside)="handleClickOutside($event, linkedInvoice, 'linkedInvoice')"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        searchTemplate;
+                                        context: {
+                                            $implicit: showLinkedInvoiceSearch,
+                                            fieldName: 'linkedInvoice',
+                                            voucherType: voucherType,
+                                            formControl: linkedInvoiceInput,
+                                            title:
+                                                voucherType === voucherTypeEnum.deliveryChallan
+                                                    ? localeData?.linked_invoice_no
+                                                    : localeData?.linked_bill_no,
+                                        }
+                                    "
+                                ></ng-container>
                             </th>
                             <td mat-cell *matCellDef="let element">
                                 {{ element?.linkedInvoiceNumber || element?.linkedInvoiceNumbers?.join(', ') || '-' }}
@@ -6236,38 +6251,40 @@
                                     <i class="icon-dots-three-vertical"></i>
                                 </span>
                                 <mat-menu #inventoryActionsMenu="matMenu">
-                                    @if (!['FULLY_INVOICED'].includes(element?.invoiceStatus) && element?.documentStatusCode !== 'FULL_RETURN') {
-                                        <button mat-menu-item (click)="convertInventoryDocument(element)">
+                                    @if (element?.documentStatusCode !== 'CANCELLED') {
+                                        @if (!['FULLY_INVOICED'].includes(element?.invoiceStatus) && element?.documentStatusCode !== 'FULL_RETURN') {
+                                            <button mat-menu-item (click)="convertInventoryDocument(element)">
+                                                {{
+                                                    voucherType === voucherTypeEnum.deliveryChallan
+                                                        ? localeData?.convert_invoice
+                                                        : localeData?.convert_to_bill
+                                                }}
+                                            </button>
+                                            <button mat-menu-item (click)="previewAndConvertInventoryDocument(element)">
+                                                {{
+                                                    voucherType === voucherTypeEnum.deliveryChallan
+                                                        ? localeData?.preview_and_convert_invoice
+                                                        : localeData?.preview_and_convert_bill
+                                                }}
+                                            </button>
+                                            <button mat-menu-item (click)="openMakeAdjustmentDialog(element)">
+                                                {{ localeData?.make_adjustment }}
+                                            </button>
+                                        }
+                                        @if (element?.documentStatusCode !== 'FULL_RETURN') {
+                                            <button mat-menu-item (click)="openMarkReturnDialog(element)">
+                                                {{ localeData?.mark_return }}
+                                            </button>
+                                        }
+                                        <mat-divider></mat-divider>
+                                        <button mat-menu-item class="text-danger" (click)="cancelInventoryDocument(element)">
                                             {{
                                                 voucherType === voucherTypeEnum.deliveryChallan
-                                                    ? localeData?.convert_invoice
-                                                    : localeData?.convert_to_bill
+                                                    ? localeData?.cancel_challan
+                                                    : localeData?.cancel_receipt_note
                                             }}
                                         </button>
-                                        <button mat-menu-item (click)="previewAndConvertInventoryDocument(element)">
-                                            {{
-                                                voucherType === voucherTypeEnum.deliveryChallan
-                                                    ? localeData?.preview_and_convert_invoice
-                                                    : localeData?.preview_and_convert_bill
-                                            }}
-                                        </button>
-                                        <button mat-menu-item (click)="openMakeAdjustmentDialog(element)">
-                                            {{ localeData?.make_adjustment }}
-                                        </button>
                                     }
-                                    @if (element?.documentStatusCode !== 'FULL_RETURN') {
-                                        <button mat-menu-item (click)="openMarkReturnDialog(element)">
-                                            {{ localeData?.mark_return }}
-                                        </button>
-                                    }
-                                    <mat-divider></mat-divider>
-                                    <button mat-menu-item class="text-danger" (click)="cancelInventoryDocument(element)">
-                                        {{
-                                            voucherType === voucherTypeEnum.deliveryChallan
-                                                ? localeData?.cancel_challan
-                                                : localeData?.cancel_receipt_note
-                                        }}
-                                    </button>
                                     <button mat-menu-item class="text-danger" (click)="deleteInventoryDocument(element)">
                                         {{
                                             voucherType === voucherTypeEnum.deliveryChallan
