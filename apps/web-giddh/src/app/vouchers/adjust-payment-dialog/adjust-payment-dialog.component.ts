@@ -103,8 +103,6 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True, if multi-currency support to voucher adjustment is enabled */
-    public enableVoucherAdjustmentMultiCurrency: boolean;
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
     /** Reference voucher search field */
@@ -243,7 +241,6 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
     }
 
     /**

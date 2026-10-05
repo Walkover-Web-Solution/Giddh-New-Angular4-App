@@ -624,8 +624,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
     /** Force clear for billing-shipping dropdown */
     public billingShippingForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
-    /** True, if multi-currency support to voucher adjustment is enabled */
-    public enableVoucherAdjustmentMultiCurrency: boolean;
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
     /** Stores the current voucher form detail */
@@ -849,7 +847,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.router.navigate(['pages', 'home']);
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
-        this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
         this.invFormData = new VoucherClass();
         this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
@@ -1399,13 +1396,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             this.calculateAdjustedVoucherTotal(results[0].voucherAdjustments.adjustments);
                             this.advanceReceiptAdjustmentData = results[0].voucherAdjustments;
                             this.originalVoucherAdjustments = cloneDeep(results[0].voucherAdjustments);
-                            if (this.enableVoucherAdjustmentMultiCurrency) {
-                                if (this.isMulticurrencyAccount) {
-                                    this.adjustPaymentData.convertedTotalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentCompanyAmount;
-                                }
-                            } else {
+                            if (this.isMulticurrencyAccount) {
                                 this.adjustPaymentData.convertedTotalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentCompanyAmount;
-                                this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
                             }
                             this.isAdjustAmount = true;
                         } else {

@@ -545,18 +545,16 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         stock.stock.stockUnitName = stock?.stock?.stockUnit?.name;
         stock.stock.stockUnitUniqueName = stock?.stock?.stockUnit?.uniqueName;
         const payload = this.buildStockUpdatePayload(stock?.stock);
-        setTimeout(() => {
-            this.inventoryService.updateStock(payload, stock?.stock?.stockGroup?.uniqueName, stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response?.status === "success") {
-                    this.toaster.showSnackBar("success", "Stock updated successfully");
-                    this.calculationWarehouse(warehouse?.warehouse?.uniqueName);
-                    stock.stockOriginal = cloneDeep(stock?.stock);
-                } else {
-                    stock.stock = cloneDeep(stock?.stockOriginal);
-                    this.toaster.showSnackBar("error", response?.message);
-                }
-            });
-        }, 3000);
+        this.inventoryService.updateStock(payload, stock?.stock?.stockGroup?.uniqueName, stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response?.status === "success") {
+                this.toaster.showSnackBar("success", "Stock updated successfully");
+                this.calculationWarehouse(warehouse?.warehouse?.uniqueName);
+                stock.stockOriginal = cloneDeep(stock?.stock);
+            } else {
+                stock.stock = cloneDeep(stock?.stockOriginal);
+                this.toaster.showSnackBar("error", response?.message);
+            }
+        });
     }
 
     /**
@@ -873,7 +871,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
      */
     private mapBatchesForPayload(batches?: any[]): any[] {
         return (Array.isArray(batches) ? batches : [])
-            .filter(batch => (batch?.uniqueName || String(batch?.batchNumber ?? "").trim()) && (Number(batch.quantity) > 0 || Number(batch.openingQuantity) > 0))
+            .filter(batch => !!(String(batch?.batchNumber ?? "").trim() && String(batch?.name ?? "").trim()))
             .map(batch => {
                 const quantity = Number(batch.openingQuantity ?? batch.quantity) || 0;
                 const mapped: any = {
