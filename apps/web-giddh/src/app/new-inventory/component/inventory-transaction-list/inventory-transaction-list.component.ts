@@ -18,7 +18,7 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import { ReportFiltersComponent } from "../report-filters/report-filters.component";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
+import { InventoryModuleName, InventoryReportType, ReportNature } from "../../inventory.enum";
 import { OrganizationType } from "../../../models/user-login-state";
 import { ServiceConfig } from "../../../services/service.config";
 import { cloneDeep } from '../../../lodash-optimized';
@@ -123,6 +123,8 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds inventory type module  */
     public moduleType: string = '';
+    /** Currently selected report nature */
+    public selectedReportNature: ReportNature = ReportNature.Inventory;
 
     constructor(
         private generalService: GeneralService,
@@ -221,6 +223,19 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Updates report nature and reloads transaction report
+     *
+     * @param {ReportNature} reportNature
+     * @memberof InventoryTransactionListComponent
+     */
+    public onReportNatureChange(reportNature: ReportNature): void {
+        this.selectedReportNature = reportNature;
+        if (this.isReportLoaded) {
+            this.getStockTransactionalReport(true, reportNature);
+        }
+    }
+
+    /**
      * This will use for get stock transactions report data
      *
      * @param {boolean} [apiCall=true]
@@ -228,7 +243,7 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      * @return {*}  {void}
      * @memberof InventoryTransactionListComponent
      */
-    public getStockTransactionalReport(fetchBalance: boolean = true): void {
+    public getStockTransactionalReport(fetchBalance: boolean = true, reportNature: ReportNature = this.selectedReportNature): void {
         this.dataSource = [];
         this.isLoading = true;
         this.isReportLoaded = true;
@@ -244,6 +259,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
             stockReportRequest.stocks = undefined;
             stockReportRequest.variants = undefined;
             stockReportRequest.inventoryType = this.moduleType;
+            if (reportNature) {
+                stockReportRequest.reportMode = reportNature;
+            }
             this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
@@ -287,6 +305,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
                 balanceReportRequest.from = undefined;
                 balanceReportRequest.to = undefined;
                 balanceReportRequest.inventoryType = this.moduleType;
+                if (reportNature) {
+                    balanceReportRequest.reportMode = reportNature;
+                }
                 this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     if (response && response.body && response.status === 'success') {
                         this.stockTransactionReportBalance = response.body;

@@ -18,7 +18,7 @@ import { ToasterService } from "../../../services/toaster.service";
 import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { InventoryModuleName, InventoryReportType, ReportNature } from "../../inventory.enum";
 import { InventoryComponentStore } from "../inventory.store";
 import { cloneDeep } from '../../../lodash-optimized';
@@ -149,6 +149,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public hideSelectedOptions: boolean = true;
     /** True if report nature is Inventory, false if Books */
     public reportAsPerInventory: boolean = false;
+    /** Currently selected report nature (Books/Inventory) */
+    public selectedReportNature: ReportNature;
+    /** True if filters emit is waiting for report nature */
+    private pendingEmitFilters: boolean = false;
     /** Report nature enum for template bindings */
     public reportNature: typeof ReportNature = ReportNature;
     /** Inventory module name */
@@ -166,9 +170,15 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         private toaster: ToasterService,
         private store: Store<AppState>,
         public router: Router,
+        private route: ActivatedRoute,
         private componentStore: InventoryComponentStore
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        const reportMode = this.route.snapshot.queryParams?.['reportMode'];
+        if (reportMode === ReportNature.Inventory || reportMode === ReportNature.Books) {
+            this.selectedReportNature = reportMode;
+            this.reportAsPerInventory = reportMode === ReportNature.Inventory;
+        }
     }
 
     /**
@@ -343,6 +353,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             showRate: false,
             showValue: false
         }
+        if (this.selectedReportNature) {
+            this.stockReportRequestExport.reportMode = this.selectedReportNature;
+        }
 
         /* for column value filter selected common */
         this.dynamicCustomColumns?.forEach(column => {
@@ -435,6 +448,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             showAccountUniqueName: false,
             showRate: false,
             showValue: false
+        }
+        if (this.selectedReportNature) {
+            this.stockReportRequestExport.reportMode = this.selectedReportNature;
         }
 
         /* for column value filter selected common */
@@ -557,6 +573,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     private emitFilters(): void {
+        if (this.isReportNaturePending()) {
+            this.pendingEmitFilters = true;
+            return;
+        }
+        this.pendingEmitFilters = false;
         let mappedDynamicValues: string[] = [];
         if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
             mappedDynamicValues = this.dynamicCustomColumns.map(column => column.value);
@@ -570,7 +591,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             todaySelected: this.todaySelected,
             showClearFilter: this.showClearFilter,
             advanceSearchModalResponse: this.advanceSearchModalResponse,
-            stockReportRequestExport: this.stockReportRequestExport
+            stockReportRequestExport: this.stockReportRequestExport,
+            reportMode: this.selectedReportNature
         });
     }
 
@@ -583,13 +605,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (!this.moduleName) {
             return;
         }
-        // Prefer current module; fall back to item-wise so Settings and all report tabs stay aligned
+        if (this.applyReportNatureFromQueryParams()) {
+            return;
+        }
         this.commonService.getSelectedTableColumns(this.moduleName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success' && response?.body?.reportNature) {
-                this.reportAsPerInventory = response.body.reportNature === ReportNature.Inventory;
-                this.changeDetection.detectChanges();
-                return;
-            }
+            const reportNature = response?.status === 'success' && (response?.body?.reportNature === ReportNature.Inventory || response?.body?.reportNature === ReportNature.Books)
+                ? response.body.reportNature
+                : ReportNature.Books;
+            this.setReportNature(reportNature, false);
         });
     }
 
@@ -603,19 +626,87 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (!this.moduleName) {
             return;
         }
+        this.setReportNature(reportNature, true);
+    }
+
+    /**
+     * Applies report nature from URL query params when present
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof ReportFiltersComponent
+     */
+    private applyReportNatureFromQueryParams(): boolean {
+        const reportMode = this.route.snapshot.queryParams?.['reportMode'];
+        if (reportMode === ReportNature.Inventory || reportMode === ReportNature.Books) {
+            this.setReportNature(reportMode, false);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Sets report nature, optionally syncs query params, and notifies parent
+     *
+     * @private
+     * @param {ReportNature} reportNature
+     * @param {boolean} updateQueryParams
+     * @memberof ReportFiltersComponent
+     */
+    private setReportNature(reportNature: ReportNature, updateQueryParams: boolean): void {
+        this.selectedReportNature = reportNature;
         this.reportAsPerInventory = reportNature === ReportNature.Inventory;
-        this.isLoading.emit(true);
-        this.commonService.saveSelectedTableColumns({ module: this.moduleName, reportNature }).pipe(take(1)).subscribe(response => {
-            this.isLoading.emit(false);
-            if (response?.status === 'success') {
-                this.reportNatureChange.emit(reportNature);
-            } else {
-                this.reportAsPerInventory = !this.reportAsPerInventory;
-                if (response?.message) {
-                    this.toaster.errorToast(response.message);
-                }
-                this.changeDetection.detectChanges();
-            }
+        if (updateQueryParams) {
+            this.syncReportModeQueryParam(reportNature);
+        }
+        this.reportNatureChange.emit(reportNature);
+        if (this.pendingEmitFilters) {
+            this.emitFilters();
+        }
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * True when report nature is required but not resolved yet
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof ReportFiltersComponent
+     */
+    private isReportNaturePending(): boolean {
+        return this.isInventoryReportModule() && !this.selectedReportNature;
+    }
+
+    /**
+     * True for inventory report modules that support report nature
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof ReportFiltersComponent
+     */
+    private isInventoryReportModule(): boolean {
+        return this.moduleName === InventoryModuleName.group
+            || this.moduleName === InventoryModuleName.stock
+            || this.moduleName === InventoryModuleName.variant
+            || this.moduleName === InventoryModuleName.transaction;
+    }
+
+    /**
+     * Stores report nature in URL query params
+     *
+     * @private
+     * @param {ReportNature} reportNature
+     * @memberof ReportFiltersComponent
+     */
+    private syncReportModeQueryParam(reportNature: ReportNature): void {
+        if (this.route.snapshot.queryParams?.['reportMode'] === reportNature) {
+            return;
+        }
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { reportMode: reportNature },
+            queryParamsHandling: 'merge',
+            replaceUrl: true
         });
     }
 

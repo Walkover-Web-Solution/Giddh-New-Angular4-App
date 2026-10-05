@@ -155,16 +155,20 @@ export class CommonService {
     *
     * @param {string} module
     * @param {boolean} customColumns
+    * @param {string} [reportMode]
     * @return {*}  {Observable<BaseResponse<any, string>>}
     * @memberof CommonService
     */
-    public getSelectedTableColumns(module: string, customColumns?: boolean): Observable<BaseResponse<any, string>> {
+    public getSelectedTableColumns(module: string, customColumns?: boolean, reportMode?: string): Observable<BaseResponse<any, string>> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS
+        let url = this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             ?.replace(':module', module)
-            ?.replace(':customColumns', encodeURIComponent(customColumns ? 'true' : 'false'))
-        ).pipe(map((res) => {
+            ?.replace(':customColumns', encodeURIComponent(customColumns ? 'true' : 'false'));
+        if (reportMode) {
+            url += `&reportMode=${encodeURIComponent(reportMode)}`;
+        }
+        return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.request = '';
             data.queryString = {};
