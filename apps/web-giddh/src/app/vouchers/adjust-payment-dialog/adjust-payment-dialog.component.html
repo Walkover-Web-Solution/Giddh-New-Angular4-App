@@ -167,7 +167,7 @@
                                         [type]="'text'"
                                         [cssClass]="'text-right'"
                                         [name]="'amount' + entry?.uniqueName"
-                                        [prefix]="entry.currency.symbol"
+                                        [prefix]="entry?.currency?.symbol"
                                         [mask]="inputMaskFormat"
                                         [useMask]="true"
                                         [(ngModel)]="entry.adjustmentAmount.amountForAccount"
