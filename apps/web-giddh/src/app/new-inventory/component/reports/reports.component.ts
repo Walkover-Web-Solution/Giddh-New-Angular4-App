@@ -476,6 +476,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     sort: stockReportRequest.sort ?? '',
                     sortBy: stockReportRequest.sortBy ?? '',
                     stockGroupUniqueName: this.reportUniqueName ?? '',
+                    reportNature: reportNature ?? ''
                 };
 
                 stockReportRequest.from = undefined;
@@ -487,9 +488,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 stockReportRequest.totalItems = undefined;
                 stockReportRequest.totalPages = undefined;
                 stockReportRequest.inventoryType = this.moduleType;
-                if (reportNature) {
-                    stockReportRequest.reportMode = reportNature;
-                }
                 this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
@@ -531,12 +529,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     count: stockReportRequest.count ?? PAGINATION_LIMIT,
                     page: stockReportRequest.page ?? 1,
                     sort: stockReportRequest.sort ?? '',
-                    sortBy: stockReportRequest.sortBy ?? ''
+                    sortBy: stockReportRequest.sortBy ?? '',
+                    reportNature: reportNature ?? ''
                 };
                 stockReportRequest.inventoryType = this.moduleType;
-                if (reportNature) {
-                    stockReportRequest.reportMode = reportNature;
-                }
                 this.inventoryService.getItemWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
@@ -576,12 +572,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     count: stockReportRequest.count ?? PAGINATION_LIMIT,
                     page: stockReportRequest.page ?? 1,
                     sort: stockReportRequest.sort ?? '',
-                    sortBy: stockReportRequest.sortBy ?? ''
+                    sortBy: stockReportRequest.sortBy ?? '',
+                    reportNature: reportNature ?? ''
                 };
                 stockReportRequest.inventoryType = this.moduleType;
-                if (reportNature) {
-                    stockReportRequest.reportMode = reportNature;
-                }
                 this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
@@ -631,12 +625,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
                         entity: ''
                     };
                 }
+                queryParams['reportNature'] = reportNature ?? '';
                 balanceReportRequest.from = undefined;
                 balanceReportRequest.to = undefined;
                 balanceReportRequest.inventoryType = this.moduleType;
-                if (reportNature) {
-                    balanceReportRequest.reportMode = reportNature;
-                }
                 this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     if (response && response.body && response.status === 'success') {
                         this.stockTransactionReportBalance = response.body;

@@ -275,19 +275,15 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Clamp return qty within returnable limit
+     * Normalizes return qty without clamping over the returnable limit
      *
      * @param {MarkReturnRow} row
      * @memberof MarkReturnDialogComponent
      */
     public onReturnQtyChange(row: MarkReturnRow): void {
-        const maxQty = Math.max(row.returnableQuantity, 0);
         let qty = Number(row.returnQty);
         if (isNaN(qty) || qty < 0) {
             qty = 0;
-        }
-        if (qty > maxQty) {
-            qty = maxQty;
         }
         row.returnQty = giddhRoundOff(qty, 4);
         if (row.returnQty > 0) {
@@ -296,21 +292,80 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Clamp credit note qty within creditable limit
+     * Normalizes credit/debit note qty without clamping over the creditable limit
      *
      * @param {MarkReturnRow} row
      * @memberof MarkReturnDialogComponent
      */
     public onCnQtyChange(row: MarkReturnRow): void {
-        const maxQty = Math.max(row.creditableQuantity, 0);
         let qty = Number(row.cnQty);
         if (isNaN(qty) || qty < 0) {
             qty = 0;
         }
-        if (qty > maxQty) {
-            qty = maxQty;
-        }
         row.cnQty = giddhRoundOff(qty, 4);
+    }
+
+    /**
+     * True when return qty exceeds returnable quantity
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public isReturnQtyInvalid(row: MarkReturnRow): boolean {
+        return Number(row.returnQty) > Math.max(row.returnableQuantity, 0);
+    }
+
+    /**
+     * True when CN/DN qty exceeds creditable quantity
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public isCnQtyInvalid(row: MarkReturnRow): boolean {
+        if (!this.isCnQtyEditable(row)) {
+            return false;
+        }
+        return Number(row.cnQty) > Math.max(row.creditableQuantity, 0);
+    }
+
+    /**
+     * Return qty overflow message
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {string}
+     * @memberof MarkReturnDialogComponent
+     */
+    public getReturnQtyError(row: MarkReturnRow): string {
+        return (this.localeData?.return_qty_exceeds ?? "")
+            .replace("[RETURN_QTY]", String(row.returnQty))
+            .replace("[RETURNABLE_QTY]", String(row.returnableQuantity));
+    }
+
+    /**
+     * CN/DN qty overflow message
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {string}
+     * @memberof MarkReturnDialogComponent
+     */
+    public getNoteQtyError(row: MarkReturnRow): string {
+        const messageKey = this.isReceiptNote ? "dn_qty_exceeds" : "cn_qty_exceeds";
+        return (this.localeData?.[messageKey] ?? "")
+            .replace("[QTY]", String(row.cnQty))
+            .replace("[AVAILABLE_QTY]", String(row.creditableQuantity));
+    }
+
+    /**
+     * True when any row has invalid qty
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public get hasInvalidQty(): boolean {
+        return this.rows.some((row) => this.isReturnQtyInvalid(row) || this.isCnQtyInvalid(row));
     }
 
     /**
@@ -321,7 +376,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
      * @memberof MarkReturnDialogComponent
      */
     public get canProceed(): boolean {
-        return this.rows.some((row) => row.selected && Number(row.returnQty) > 0);
+        return !this.hasInvalidQty && this.rows.some((row) => row.selected && Number(row.returnQty) > 0);
     }
 
     /**
@@ -330,7 +385,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
      * @memberof MarkReturnDialogComponent
      */
     public proceed(): void {
-        if (!this.canProceed || this.isSubmitting) {
+        if (!this.canProceed || this.isSubmitting || this.hasInvalidQty) {
             return;
         }
 

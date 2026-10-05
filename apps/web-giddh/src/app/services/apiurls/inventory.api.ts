@@ -82,12 +82,12 @@ export const INVENTORY_API = {
     GET_STOCK_V2: 'v2/company/:companyUniqueName/stock/:stockUniqueName',
     DELETE_STOCK_V2: 'v2/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // DELETE call
     UPDATE_STOCK_V2: 'v2/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName',
-    TRANSACTION_STOCK_REPORT_V2: 'company/:companyUniqueName/inventory/transaction-report?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType', // post for filter rest all get
-    TRANSACTION_STOCK_REPORT_BALANCE_V2: 'company/:companyUniqueName/inventory/balance?stockGroupUniqueName=:stockGroupUniqueName&entity=:entity&from=:from&to=:to',
+    TRANSACTION_STOCK_REPORT_V2: 'company/:companyUniqueName/inventory/transaction-report?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType&reportNature=:reportNature', // post for filter rest all get
+    TRANSACTION_STOCK_REPORT_BALANCE_V2: 'company/:companyUniqueName/inventory/balance?stockGroupUniqueName=:stockGroupUniqueName&entity=:entity&from=:from&to=:to&reportNature=:reportNature',
     SEARCH_STOCK_TRANSACTION_FILTERS: 'company/:companyUniqueName/inventory-search',
-    INVENTORY_GROUP_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/group-wise?stockGroupUniqueName=:stockGroupUniqueName&from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
-    INVENTORY_ITEM_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/item-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
-    INVENTORY_VARIANT_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/variant-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
+    INVENTORY_GROUP_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/group-wise?stockGroupUniqueName=:stockGroupUniqueName&from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&reportNature=:reportNature',
+    INVENTORY_ITEM_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/item-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&reportNature=:reportNature',
+    INVENTORY_VARIANT_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/variant-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&reportNature=:reportNature',
     MASTER: {
         TOP_INVENTORY_GROUPS: 'company/:companyUniqueName/top-inventory-groups?inventoryType=:inventoryType&page=:page&count=:count',
         GET_MASTER: 'company/:companyUniqueName/inventory/:stockGroupUniqueName/masters?page=:page&count=:count',
@@ -103,10 +103,10 @@ export const INVENTORY_API = {
     CREATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/assign-discount', // POST Call
     UPDATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/variant/:variantUniqueName/update-discount', // Patch Call
     GET_STOCK_DETAILS: 'v2/company/:companyUniqueName/stock/:stockUniqueName/details?userType=:userType', // GET call
-    INVENTORY_ITEM_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/item-wise?from=:from&to=:to',
-    INVENTORY_VARIANT_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/variant-wise?from=:from&to=:to',
-    INVENTORY_GROUP_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/group-wise?from=:from&to=:to',
-    INVENTORY_TRANSACTION_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/transaction-wise?from=:from&to=:to',
+    INVENTORY_ITEM_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/item-wise?from=:from&to=:to&reportNature=:reportNature',
+    INVENTORY_VARIANT_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/variant-wise?from=:from&to=:to&reportNature=:reportNature',
+    INVENTORY_GROUP_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/group-wise?from=:from&to=:to&reportNature=:reportNature',
+    INVENTORY_TRANSACTION_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/transaction-wise?from=:from&to=:to&reportNature=:reportNature',
     INVENTORY_ADJUST: {
         REPORT: 'company/:companyUniqueName/inventory-adjustment/adjustment-report?page=:page&from=:from&to=:to&count=:count&sortBy=:sortBy&sort=:sort&q=:q&searchBy=:searchBy&inventoryType=:inventoryType', // POST call
         DELETE: 'company/:companyUniqueName/inventory-adjustment/:referenceNo?voucherVersion=2', // DELETE call

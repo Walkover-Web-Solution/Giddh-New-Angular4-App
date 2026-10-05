@@ -353,8 +353,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     protected readonly selectedPdfVoucherNumber = signal<string>('');
     /** Signal holding the sanitized URL for the PDF preview iframe */
     protected readonly previewPdfUrl = signal<SafeResourceUrl>(null);
+    /** True when PDF preview dialog is for a pending business document and should show Copy */
+    protected readonly showPendingDocumentPreviewAction = signal(false);
     /** Holds URL string for revoking blob object */
     private previewPdfFileURL: string = '';
+    /** Pending document opened in the PDF preview dialog */
+    private pendingDocumentForPreview: { number?: string; uniqueName?: string; accountUniqueName?: string } | null = null;
+    /** Dialog ref for pending business document PDF preview */
+    private pendingBusinessDocumentPreviewRef: MatDialogRef<unknown>;
     /** Form Group for invoice form */
     public invoiceForm: FormGroup;
     /** This will open account dropdown by default */
@@ -3050,14 +3056,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             queryParams: {
                 from: this.universalDateRange.from,
                 to: this.universalDateRange.to,
-                accountUniqueName: encodeURIComponent(accountUniqueName),
                 page: 1,
                 count: API_BULK_FETCH_LIMIT,
                 sort: "",
-                sortBy: "",
-                q: ""
+                sortBy: ""
             },
-            body: { reportType, documentType }
+            body: {
+                reportType,
+                documentType,
+                accountUniqueNames: [accountUniqueName]
+            }
         });
     }
 
@@ -3079,6 +3087,84 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         if (this.invoiceType.isReceiptNote) {
             return this.localeData?.pending_bill;
+        }
+        return "";
+    }
+
+    /**
+     * Opens PDF preview for a pending DC/RN or invoice/bill, then Copy prefills the form.
+     *
+     * @param {{ number?: string; uniqueName?: string; accountUniqueName?: string }} document
+     * @memberof VoucherCreateComponent
+     */
+    public openPendingBusinessDocumentPreview(document: { number?: string; uniqueName?: string; accountUniqueName?: string }): void {
+        if (!document?.uniqueName) {
+            return;
+        }
+
+        const previewVoucherType = this.getPendingDocumentPreviewVoucherType();
+        if (!previewVoucherType) {
+            return;
+        }
+
+        this.pendingDocumentForPreview = document;
+        this.showPendingDocumentPreviewAction.set(true);
+        this.selectedPdfVoucherNumber.set(document.number ?? '');
+        this.previewPdfUrl.set(null);
+        this.componentStore.downloadVoucherPdf({
+            model: {
+                voucherType: previewVoucherType,
+                uniqueName: document.uniqueName
+            },
+            type: 'ALL',
+            fileType: 'base64',
+            voucherType: previewVoucherType,
+            isDownloadFromDialog: true
+        });
+        this.pendingBusinessDocumentPreviewRef = this.dialog.open(this.voucherPdfPreviewTemplate, {
+            width: "980px",
+            maxWidth: "90vw",
+            height: "90vh",
+            maxHeight: "90vh"
+        });
+        this.pendingBusinessDocumentPreviewRef.afterClosed().pipe(take(1)).subscribe(() => {
+            this.showPendingDocumentPreviewAction.set(false);
+            this.pendingDocumentForPreview = null;
+        });
+    }
+
+    /**
+     * Copies the pending document from the PDF preview into the create form.
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public usePendingBusinessDocumentFromPreview(): void {
+        const document = this.pendingDocumentForPreview;
+        this.pendingBusinessDocumentPreviewRef?.close();
+        if (document) {
+            this.selectPendingBusinessDocument(document);
+        }
+    }
+
+    /**
+     * Voucher type used to download PDF for the pending document list.
+     *
+     * @private
+     * @return {string}
+     * @memberof VoucherCreateComponent
+     */
+    private getPendingDocumentPreviewVoucherType(): string {
+        if (this.invoiceType.isSalesInvoice) {
+            return VoucherTypeEnum.deliveryChallan;
+        }
+        if (this.invoiceType.isPurchaseInvoice) {
+            return VoucherTypeEnum.receiptNote;
+        }
+        if (this.invoiceType.isDeliveryChallan) {
+            return VoucherTypeEnum.sales;
+        }
+        if (this.invoiceType.isReceiptNote) {
+            return VoucherTypeEnum.purchase;
         }
         return "";
     }
@@ -6589,6 +6675,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openVoucherPdfPreview(voucher: LastInvoices): void {
+        this.showPendingDocumentPreviewAction.set(false);
         this.selectedPdfVoucherNumber.set(voucher?.voucherNumber ?? '');
         this.previewPdfUrl.set(null);
         this.componentStore.downloadVoucherPdf({
@@ -6632,6 +6719,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
+        this.showPendingDocumentPreviewAction.set(false);
         this.selectedPdfVoucherNumber.set(item?.voucherNumber ?? '');
         this.previewPdfUrl.set(null);
         this.componentStore.downloadVoucherPdf({

@@ -595,7 +595,11 @@
         "open": "Open",
         "closed": "Closed",
         "expired": "Expired",
-        "cancelled": "Cancelled"
+        "cancelled": "Cancelled",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "received": "Received",
+        "completed": "Completed"
     },
     "inventory_invoice_status": {
         "invoiced": "Invoiced",
@@ -633,6 +637,9 @@
     "create_dn": "Create Debit Note",
     "proceed": "Proceed",
     "select_return_items": "Select at least one item to return",
+    "return_qty_exceeds": "Return quantity [RETURN_QTY] exceeds returnable quantity [RETURNABLE_QTY].",
+    "cn_qty_exceeds": "CN quantity [QTY] exceeds creditable quantity [AVAILABLE_QTY].",
+    "dn_qty_exceeds": "DN quantity [QTY] exceeds creditable quantity [AVAILABLE_QTY].",
     "return_success": "Return processed successfully",
     "download_signed_bill": "Download Digitally Signed Bill",
     "dc_invoice_reconciliation": "DC - Invoice Reconciliation",

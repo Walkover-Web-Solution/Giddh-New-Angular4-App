@@ -2066,15 +2066,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     private setInventoryFilterOptions(): void {
         const documentStatus = this.localeData?.inventory_document_status || {};
-        this.inventoryStatusOptions = [
-            { label: documentStatus.open, value: 'OPEN' },
-            { label: documentStatus.closed, value: 'CLOSED' },
-            { label: documentStatus.expired, value: 'EXPIRED' },
-            { label: documentStatus.cancelled, value: 'CANCELLED' }
-        ];
+        const isReceiptNote = this.voucherType === VoucherTypeEnum.receiptNote;
+        this.inventoryStatusOptions = isReceiptNote
+            ? [
+                { label: documentStatus.received, value: 'RECEIVED' },
+                { label: documentStatus.completed, value: 'COMPLETED' },
+                { label: documentStatus.cancelled, value: 'CANCELLED' }
+            ]
+            : [
+                { label: documentStatus.shipped, value: 'SHIPPED' },
+                { label: documentStatus.delivered, value: 'DELIVERED' },
+                { label: documentStatus.cancelled, value: 'CANCELLED' }
+            ];
 
         const invoiceStatus = this.localeData?.inventory_invoice_status || {};
-        const isReceiptNote = this.voucherType === VoucherTypeEnum.receiptNote;
         this.invoiceStatusOptions = [
             {
                 label: isReceiptNote ? invoiceStatus.not_billed : invoiceStatus.not_invoiced,

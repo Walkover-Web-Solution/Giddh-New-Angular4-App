@@ -174,10 +174,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         private componentStore: InventoryComponentStore
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-        const reportMode = this.route.snapshot.queryParams?.['reportMode'];
-        if (reportMode === ReportNature.Inventory || reportMode === ReportNature.Books) {
-            this.selectedReportNature = reportMode;
-            this.reportAsPerInventory = reportMode === ReportNature.Inventory;
+        const reportNature = this.route.snapshot.queryParams?.['reportNature'];
+        if (reportNature === ReportNature.Inventory || reportNature === ReportNature.Books) {
+            this.selectedReportNature = reportNature;
+            this.reportAsPerInventory = reportNature === ReportNature.Inventory;
         }
     }
 
@@ -353,9 +353,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             showRate: false,
             showValue: false
         }
-        if (this.selectedReportNature) {
-            this.stockReportRequestExport.reportMode = this.selectedReportNature;
-        }
 
         /* for column value filter selected common */
         this.dynamicCustomColumns?.forEach(column => {
@@ -448,9 +445,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             showAccountUniqueName: false,
             showRate: false,
             showValue: false
-        }
-        if (this.selectedReportNature) {
-            this.stockReportRequestExport.reportMode = this.selectedReportNature;
         }
 
         /* for column value filter selected common */
@@ -592,7 +586,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             showClearFilter: this.showClearFilter,
             advanceSearchModalResponse: this.advanceSearchModalResponse,
             stockReportRequestExport: this.stockReportRequestExport,
-            reportMode: this.selectedReportNature
+            reportNature: this.selectedReportNature
         });
     }
 
@@ -637,9 +631,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     private applyReportNatureFromQueryParams(): boolean {
-        const reportMode = this.route.snapshot.queryParams?.['reportMode'];
-        if (reportMode === ReportNature.Inventory || reportMode === ReportNature.Books) {
-            this.setReportNature(reportMode, false);
+        const reportNature = this.route.snapshot.queryParams?.['reportNature'];
+        if (reportNature === ReportNature.Inventory || reportNature === ReportNature.Books) {
+            this.setReportNature(reportNature, false);
             return true;
         }
         return false;
@@ -657,7 +651,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedReportNature = reportNature;
         this.reportAsPerInventory = reportNature === ReportNature.Inventory;
         if (updateQueryParams) {
-            this.syncReportModeQueryParam(reportNature);
+            this.syncReportNatureQueryParam(reportNature);
         }
         this.reportNatureChange.emit(reportNature);
         if (this.pendingEmitFilters) {
@@ -698,13 +692,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @param {ReportNature} reportNature
      * @memberof ReportFiltersComponent
      */
-    private syncReportModeQueryParam(reportNature: ReportNature): void {
-        if (this.route.snapshot.queryParams?.['reportMode'] === reportNature) {
+    private syncReportNatureQueryParam(reportNature: ReportNature): void {
+        if (this.route.snapshot.queryParams?.['reportNature'] === reportNature) {
             return;
         }
         this.router.navigate([], {
             relativeTo: this.route,
-            queryParams: { reportMode: reportNature },
+            queryParams: { reportNature: reportNature },
             queryParamsHandling: 'merge',
             replaceUrl: true
         });
@@ -1161,10 +1155,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         let stockReportRequestExport = this.stockReportRequestExport;
         let queryParams = {
             from: this.fromDate,
-            to: this.toDate
+            to: this.toDate,
+            reportNature: this.selectedReportNature ?? ''
         };
         delete stockReportRequestExport.from;
         delete stockReportRequestExport.to;
+        delete stockReportRequestExport.reportNature;
 
         stockReportRequestExport.inventoryType = this.moduleType;
 

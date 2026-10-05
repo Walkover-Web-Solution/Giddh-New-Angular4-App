@@ -994,11 +994,11 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getPendingBusinessDocuments = this.effect((data: Observable<{
         queryParams: any;
-        body: { reportType: string; documentType: string };
+        body: { reportType: string; documentType: string; accountUniqueNames: string[] };
     }>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.voucherService.getPendingBusinessDocumentReport(req.queryParams, req.body).pipe(
+                return this.voucherService.getPendingBusinessDocumentsByAccounts(req.queryParams, req.body).pipe(
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {

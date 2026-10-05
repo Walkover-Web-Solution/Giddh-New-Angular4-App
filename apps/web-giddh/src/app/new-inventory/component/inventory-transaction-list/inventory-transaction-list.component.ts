@@ -260,7 +260,7 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
             stockReportRequest.variants = undefined;
             stockReportRequest.inventoryType = this.moduleType;
             if (reportNature) {
-                stockReportRequest.reportMode = reportNature;
+                stockReportRequest.reportNature = reportNature;
             }
             this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                 this.isLoading = false;
@@ -300,14 +300,12 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
                     from: balanceReportRequest.from ?? '',
                     to: balanceReportRequest.to ?? '',
                     stockGroupUniqueName: '',
-                    entity: ''
+                    entity: '',
+                    reportNature: reportNature ?? ''
                 };
                 balanceReportRequest.from = undefined;
                 balanceReportRequest.to = undefined;
                 balanceReportRequest.inventoryType = this.moduleType;
-                if (reportNature) {
-                    balanceReportRequest.reportMode = reportNature;
-                }
                 this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     if (response && response.body && response.status === 'success') {
                         this.stockTransactionReportBalance = response.body;
