@@ -119,6 +119,27 @@ export class WhiteLabelService {
     }
 
     /**
+     * Official Giddh app vs white-label tenant.
+     * Electron sets AppUrl to `./` (no Giddh hostname), so URL matching alone is not enough.
+     */
+    private resolveIsGiddhDomain(): boolean {
+        const giddhAppUrls: readonly string[] = [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION];
+        const appUrl = this.getAppUrl();
+        const normalizedAppUrl = appUrl?.endsWith('/') ? appUrl : `${appUrl}/`;
+
+        if (giddhAppUrls.includes(normalizedAppUrl)) {
+            return true;
+        }
+
+        // Electron AppUrl is './' and window.location.hostname is ''
+        if (this.environmentService.isElectron || !window.location.hostname) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get Portal URL with white label override
      */
     getPortalUrl(): string {
@@ -238,7 +259,7 @@ export class WhiteLabelService {
         const region = localStorage.getItem('Country-Region') || undefined;
         const body = this.whiteLabelConfig?.body || {};
 
-        const isGiddhDomain = [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].includes(this.getAppUrl() as GiddhUiDomain);
+        const isGiddhDomain = this.resolveIsGiddhDomain();
 
         return {
             // API URLs (both cases for backward compatibility)

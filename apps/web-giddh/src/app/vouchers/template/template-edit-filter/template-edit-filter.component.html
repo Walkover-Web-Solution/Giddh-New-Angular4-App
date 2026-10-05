@@ -2506,7 +2506,7 @@
                                         }
 
                                         <!-- Total Quantity -->
-                                        @if (sectionSettings?.footer?.totalQuantity && isThermalTemplate && isVoucherTypeSales) {
+                                        @if (sectionSettings?.table?.totalQuantity && isThermalTemplate && isVoucherTypeSales) {
                                             <ng-container
                                                 *ngTemplateOutlet="
                                                     labelRow;
@@ -2514,7 +2514,7 @@
                                                         rowId: 'totalQuantityRow',
                                                         showInputField: true,
                                                         showCheckbox: true,
-                                                        section: 'footer',
+                                                        section: 'table',
                                                         field: 'totalQuantity',
                                                         callbacks: [onChangeFieldVisibility],
                                                         name: 'totalQuantity',

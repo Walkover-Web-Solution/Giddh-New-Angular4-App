@@ -133,8 +133,22 @@ export class GeneralService {
         private toasterService: ToasterService,
         private uiSettingsService: UiSettingsService
     ) {
-        const isGiddhDomain = this.config?.IS_GIDDH_DOMAIN ?? [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].map(url => new URL(url).hostname).includes(window.location.hostname);
-        this.isGiddhDomain.set(isGiddhDomain);
+        this.isGiddhDomain.set(Boolean(this.config?.IS_GIDDH_DOMAIN) || this.resolveIsGiddhDomainFromLocation());
+    }
+
+    /**
+     * Fallback when ServiceConfig is missing or Electron reports an empty hostname.
+     */
+    private resolveIsGiddhDomainFromLocation(): boolean {
+        const hostname = window.location.hostname;
+        // Electron uses file:// so hostname is ''
+        if (Configuration.isElectron || !hostname) {
+            return true;
+        }
+
+        const giddhHostnames = [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION]
+            .map(url => new URL(url).hostname);
+        return giddhHostnames.includes(hostname);
     }
 
     public SetIAmLoaded(iAmLoaded: boolean) {

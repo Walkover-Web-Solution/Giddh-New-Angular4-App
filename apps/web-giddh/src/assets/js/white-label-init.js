@@ -13,7 +13,8 @@
 window.onload = function () {
     var whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
     const GIDDH_DOMAINS = ['localhost', 'test.giddh.com', 'books.giddh.com'];
-    const isGiddhDomain = GIDDH_DOMAINS.includes(window.location.hostname);
+    const hostname = window.location.hostname;
+    const isGiddhDomain = GIDDH_DOMAINS.includes(hostname) || !hostname;
 
     // Apply primary logo (white label or Giddh default)
     var logoUrl = (whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.logos && whiteLabelConfig.body.logos.dark)
