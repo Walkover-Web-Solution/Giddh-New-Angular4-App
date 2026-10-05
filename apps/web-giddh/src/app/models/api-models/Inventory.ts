@@ -2,6 +2,7 @@
 // Using inline constants to break circular dependency
 const DROPDOWN_ITEMS_COUNT_LIMIT = 20;
 const PAGINATION_LIMIT = 20;
+import { ReportNature } from '../../new-inventory/inventory.enum';
 import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
 import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocks-item.interface';
 
@@ -274,6 +275,7 @@ export class StockTransactionReportRequestExport {
     public showAccountUniqueName?: boolean;
     public showRate?: boolean;
     public showValue?: boolean;
+    public reportMode?: ReportNature;
     constructor() {
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];

@@ -3,7 +3,7 @@ import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
 import { ToasterService } from "../../services/toaster.service";
-import { InventoryModuleName } from "../../new-inventory/inventory.enum";
+import { InventoryModuleName, ReportNature } from "../../new-inventory/inventory.enum";
 import { ContactsModule } from "../../contact/contacts.enum";
 import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.const";
 @Component({
@@ -26,6 +26,10 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     @Input() public moduleType: string = "";
     /** Holds module name for customised columns */
     @Input() public moduleName: string = "";
+    /** Report mode (Books/Inventory) used while fetching customised columns */
+    @Input() public reportMode: string = "";
+    /** True if columns API should wait until reportMode is available */
+    @Input() public waitForReportMode: boolean = false;
     /** Holds mat tooltip position  */
     @Input() public matTooltipPosition: string = "";
     /** Holds mat tooltip name  */
@@ -103,7 +107,10 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue || changes?.moduleName?.currentValue !== changes?.moduleName?.previousValue) {
+        const moduleChanged = changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue
+            || changes?.moduleName?.currentValue !== changes?.moduleName?.previousValue;
+        const reportModeChanged = changes?.reportMode?.currentValue !== changes?.reportMode?.previousValue;
+        if ((moduleChanged || reportModeChanged) && this.canFetchSelectedColumns()) {
             this.getSelectedColumns();
         }
     }
@@ -118,6 +125,9 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             this.filteredDisplayColumns();
             const saveColumnReq = {
                 module: this.moduleType,
+                ...(this.isInventoryReportModule()
+                    ? { reportNature: this.getReportNature() }
+                    : {}),
                 ...(this.isDynamicMode
                     ? { reportFilterColumns: this.dynamicCustomColumns }
                     : { columns: this.displayedColumns })
@@ -166,6 +176,45 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     }
 
     /**
+     * True when columns can be fetched for the current inputs
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof SelectTableColumnComponent
+     */
+    private canFetchSelectedColumns(): boolean {
+        if (!this.moduleType) {
+            return false;
+        }
+        return !(this.waitForReportMode && !this.reportMode);
+    }
+
+    /**
+     * True for inventory report modules that support report nature
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof SelectTableColumnComponent
+     */
+    private isInventoryReportModule(): boolean {
+        return this.moduleType === InventoryModuleName.group
+            || this.moduleType === InventoryModuleName.stock
+            || this.moduleType === InventoryModuleName.variant
+            || this.moduleType === InventoryModuleName.transaction;
+    }
+
+    /**
+     * Returns valid report nature; defaults to BOOKS
+     *
+     * @private
+     * @return {*}  {ReportNature}
+     * @memberof SelectTableColumnComponent
+     */
+    private getReportNature(): ReportNature {
+        return this.reportMode === ReportNature.Inventory ? ReportNature.Inventory : ReportNature.Books;
+    }
+
+    /**
     * This will get customised columns
     *
     * @memberof SelectTableColumnComponent
@@ -174,7 +223,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         const isDynamic = this.isDynamicMode;
         this.dynamicCustomColumns = [];
         this.commonService
-            .getSelectedTableColumns(this.moduleType, isDynamic)
+            .getSelectedTableColumns(this.moduleType, isDynamic, this.reportMode || undefined)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 const { status, body } = response || {};

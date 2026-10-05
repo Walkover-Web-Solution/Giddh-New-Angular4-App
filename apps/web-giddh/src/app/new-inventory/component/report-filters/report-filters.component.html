@@ -181,6 +181,8 @@
             </button>
             <select-table-column
                 [moduleType]="moduleName"
+                [reportMode]="selectedReportNature"
+                [waitForReportMode]="true"
                 [customiseColumns]="customiseColumns"
                 (isLoading)="isLoading = $event"
                 (selectedColumns)="setDisplayColumns($event)"

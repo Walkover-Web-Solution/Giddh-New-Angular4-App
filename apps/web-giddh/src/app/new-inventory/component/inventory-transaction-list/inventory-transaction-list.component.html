@@ -24,7 +24,7 @@
             (resetFilters)="resetFilter()"
             (isLoading)="isLoading = $event"
             (selectedColumns)="getCustomiseHeaderColumns($event)"
-            (reportNatureChange)="getStockTransactionalReport(true)"
+            (reportNatureChange)="onReportNatureChange($event)"
         ></report-filters>
         <div class="inventory-transaction-list" *ngIf="!isLoading">
             <div

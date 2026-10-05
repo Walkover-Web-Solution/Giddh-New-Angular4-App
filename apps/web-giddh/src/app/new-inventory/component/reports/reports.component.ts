@@ -14,7 +14,7 @@ import { ReportFiltersComponent } from '../report-filters/report-filters.compone
 import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import * as dayjs from "dayjs";
 import { ActivatedRoute, Router } from '@angular/router';
-import { INVENTORY_COMMON_COLUMNS, InventoryReportType, InventoryModuleName } from '../../inventory.enum';
+import { INVENTORY_COMMON_COLUMNS, InventoryReportType, InventoryModuleName, ReportNature } from '../../inventory.enum';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { CommonActions } from '../../../actions/common.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
@@ -137,6 +137,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
     private filtersSubject$ = new Subject<any>();
     /** Subject for dynamic columns changes */
     private dynamicColumnsSubject$ = new Subject<any>();
+    /** Currently selected report nature */
+    public selectedReportNature: ReportNature = ReportNature.Inventory;
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -360,8 +362,18 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 this.handleDynamicColumnsChange(dynamicColumnsData);
             }
             
-            this.getReport(true);
+            this.getReport(true, this.selectedReportNature);
         });
+    }
+
+    /**
+     * Updates report nature and reloads report data
+     *
+     * @param {ReportNature} reportNature
+     * @memberof ReportsComponent
+     */
+    public onReportNatureChange(reportNature: ReportNature): void {
+        this.selectedReportNature = reportNature;
     }
 
     /**
@@ -439,7 +451,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @return {*}  {void}
      * @memberof ReportsComponent
      */
-    public getReport(fetchBalance: boolean = true): void {
+    public getReport(fetchBalance: boolean = true, reportNature: ReportNature = this.selectedReportNature): void {
         if (this.todaySelected) {
             this.stockReportRequest.from = '';
             this.stockReportRequest.to = '';
@@ -475,6 +487,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 stockReportRequest.totalItems = undefined;
                 stockReportRequest.totalPages = undefined;
                 stockReportRequest.inventoryType = this.moduleType;
+                if (reportNature) {
+                    stockReportRequest.reportMode = reportNature;
+                }
                 this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
@@ -519,6 +534,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     sortBy: stockReportRequest.sortBy ?? ''
                 };
                 stockReportRequest.inventoryType = this.moduleType;
+                if (reportNature) {
+                    stockReportRequest.reportMode = reportNature;
+                }
                 this.inventoryService.getItemWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
@@ -561,6 +579,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     sortBy: stockReportRequest.sortBy ?? ''
                 };
                 stockReportRequest.inventoryType = this.moduleType;
+                if (reportNature) {
+                    stockReportRequest.reportMode = reportNature;
+                }
                 this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
@@ -613,6 +634,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 balanceReportRequest.from = undefined;
                 balanceReportRequest.to = undefined;
                 balanceReportRequest.inventoryType = this.moduleType;
+                if (reportNature) {
+                    balanceReportRequest.reportMode = reportNature;
+                }
                 this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     if (response && response.body && response.status === 'success') {
                         this.stockTransactionReportBalance = response.body;

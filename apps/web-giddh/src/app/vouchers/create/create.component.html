@@ -375,7 +375,7 @@
                                                     [attr.aria-label]="document.number"
                                                     (click)="selectPendingBusinessDocument(document)"
                                                 >
-                                                    {{ document.number }}
+                                                    {{ document.number || 'N/A' }}
                                                     @if (i < (pendingBusinessDocuments$ | async)?.length - 1) {
                                                         <span>&nbsp;|&nbsp;</span>
                                                     }

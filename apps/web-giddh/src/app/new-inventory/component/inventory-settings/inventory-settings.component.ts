@@ -194,21 +194,22 @@ export class InventorySettingsComponent implements OnInit {
             return;
         }
         const module = REPORT_NATURE_CONTROL_MODULES[control];
-        this.settingsForm.controls.reports.controls[control].setValue(reportNature, { emitEvent: false });
+        const selectedReportNature = reportNature === ReportNature.Inventory ? ReportNature.Inventory : ReportNature.Books;
+        this.settingsForm.controls.reports.controls[control].setValue(selectedReportNature, { emitEvent: false });
 
-        this.commonService.saveSelectedTableColumns({ module, reportNature }).pipe(
+        this.commonService.saveSelectedTableColumns({ module, reportNature: selectedReportNature }).pipe(
             take(1),
             takeUntilDestroyed(this.destroyRef)
         ).subscribe((response) => {
             if (response?.status === "success") {
                 this.originalReportNature.update((current) => ({
                     ...current,
-                    [control]: reportNature
+                    [control]: selectedReportNature
                 }));
                 this.settingsForm.controls.reports.controls[control].markAsPristine();
                 return;
             }
-            const previous = reportNature === ReportNature.Inventory ? ReportNature.Books : ReportNature.Inventory;
+            const previous = selectedReportNature === ReportNature.Inventory ? ReportNature.Books : ReportNature.Inventory;
             this.settingsForm.controls.reports.controls[control].setValue(previous, { emitEvent: false });
             if (response?.message) {
                 this.toaster.showSnackBar("error", response.message);
