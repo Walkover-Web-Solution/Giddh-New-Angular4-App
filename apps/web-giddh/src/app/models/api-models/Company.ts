@@ -31,6 +31,7 @@ export class SocketNewCompanyRequest {
     public utm_content: string;
     public BusinessNature: string;
     public ref: string;
+    public source: any;
 }
 
 export class StateDetailsRequest {

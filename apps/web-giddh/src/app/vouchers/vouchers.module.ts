@@ -104,6 +104,10 @@ import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-par
 import { DscPinDialogComponent } from "./dsc-pin-dialog/dsc-pin-dialog.component";
 import { BatchSelectDialogComponent } from "./batch-select-dialog/batch-select-dialog.component";
 import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-list.component";
+import { AdjustInventoryModule } from "../new-inventory/component/adjust-inventory/adjust-inventory.module";
+import { PendingReconciliationComponent } from "./pending-reconciliation/pending-reconciliation.component";
+import { LinkedInvoiceDialogComponent } from "./linked-invoice-dialog/linked-invoice-dialog.component";
+import { FeaturePermissionMessageComponent } from "../shared/feature-permission-message/feature-permission-message.component";
 
 @NgModule({
     declarations: [
@@ -131,6 +135,7 @@ import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-lis
         CancelEInvoiceDialogComponent,
         AllTemplatesComponent,
         DscPinDialogComponent,
+        PendingReconciliationComponent,
     ],
     imports: [
         CommonModule,
@@ -140,6 +145,7 @@ import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-lis
         FormFieldsModule,
         BatchSelectDialogComponent,
         BatchChipListComponent,
+        LinkedInvoiceDialogComponent,
         VouchersRoutingModule,
         MatTabsModule,
         MatTableModule,
@@ -211,7 +217,9 @@ import { BatchChipListComponent } from "../shared/batch-chip-list/batch-chip-lis
         CommonTaxComponent,
         AsideRecurrenceVoucherCreateComponent,
         GiddhDatePipe,
-        GoToBranchComponent
+        GoToBranchComponent,
+        AdjustInventoryModule,
+        FeaturePermissionMessageComponent
     ],
     exports: [
         VoucherCreateComponent,

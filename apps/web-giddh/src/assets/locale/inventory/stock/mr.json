@@ -117,5 +117,6 @@
     "update_opening_qty": "उघडण्याचे प्रमाण अद्यतनित करा",
     "update_opening_amount": "उघडण्याची रक्कम अद्यतनित करा",
     "batch_already_added": "हा बॅच आधीच जोडला आहे",
-    "create_custom_batch": "कस्टम बॅच नंबर तयार करण्यासाठी टाइप करा"
+    "create_custom_batch": "कस्टम बॅच नंबर तयार करण्यासाठी टाइप करा",
+    "batch_required_fields": "कृपया बॅचची सर्व आवश्यक फील्ड भरा"
 }

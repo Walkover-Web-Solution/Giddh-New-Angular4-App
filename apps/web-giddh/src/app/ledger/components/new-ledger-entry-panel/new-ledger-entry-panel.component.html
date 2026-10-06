@@ -53,13 +53,10 @@
         <!-- Variant dropdown for stock selection -->
         <ng-container *ngTemplateOutlet="variantAndWarehouseDropdown"></ng-container>
         <batch-chip-list
-            *ngIf="
-                activeCompany?.batchTrackingEnabled &&
-                currentTxn?.selectedAccount?.stock &&
-                currentTxn?.inventory?.batches?.length
-            "
+            *ngIf="batchTrackingEnabled && currentTxn?.selectedAccount?.stock && currentTxn?.inventory?.batches?.length"
             class="d-block my-2"
             [batches]="currentTxn?.inventory?.batches"
+            [isInbound]="isBatchInbound(blankLedger?.voucherType)"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
             [showEdit]="!isReadOnly"
@@ -92,22 +89,21 @@
                             [customDecimalPlaces]="4"
                         ></input-field>
                         <div
-                            *ngIf="
-                                activeCompany?.batchTrackingEnabled &&
-                                currentTxn?.selectedAccount?.stock &&
-                                !getEntryBatches()?.length &&
-                                !isReadOnly
-                            "
+                            *ngIf="batchTrackingEnabled && currentTxn?.selectedAccount?.stock && !getEntryBatches()?.length && !isReadOnly"
                             class="mt-1"
                             (click)="$event.stopPropagation()"
                         >
-                            <a
-                                href="javascript:void(0)"
-                                class="font-size-12 font-weight-semibold text-primary"
+                            <div
+                                tabindex="0"
+                                role="button"
+                                cdkMonitorElementFocus
+                                class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                 (click)="openBatchSelectDialog($event)"
+                                (keydown.enter)="$event.preventDefault(); openBatchSelectDialog($event)"
+                                (keydown.space)="$event.preventDefault(); openBatchSelectDialog($event)"
                             >
                                 {{ localeData?.select_batch }}
-                            </a>
+                            </div>
                         </div>
                     </div>
                     <!-- Unit -->
@@ -1126,8 +1122,9 @@
                 [label]="localeData?.select_warehouse"
                 [placeholder]="localeData?.select_warehouse"
                 [options]="warehouses"
-                [(ngModel)]="selectedWarehouse"
                 [labelValue]="getWarehouseLabel()"
+                [useCustomLabelValue]="true"
+                (selectedOption)="selectWarehouse($event)"
                 [disabled]="isReadOnly"
             ></reactive-dropdown-field>
         </div>

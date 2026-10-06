@@ -1293,6 +1293,7 @@
                                         <reactive-dropdown-field
                                             id="update-ledger-select-warehouse"
                                             [labelValue]="selectedWarehouseName"
+                                            [useCustomLabelValue]="true"
                                             [placeholder]="localeData?.select_warehouse"
                                             [options]="warehouses"
                                             (selectedOption)="selectWarehouse($event)"
@@ -1304,13 +1305,10 @@
                         </div>
                     </div>
                     <batch-chip-list
-                        *ngIf="
-                            activeCompany?.batchTrackingEnabled &&
-                            isStockPresent &&
-                            vm.stockTrxEntry?.inventory?.batches?.length
-                        "
+                        *ngIf="batchTrackingEnabled && isStockPresent && vm.stockTrxEntry?.inventory?.batches?.length"
                         class="d-block mb-2"
                         [batches]="vm.stockTrxEntry?.inventory?.batches"
+                        [isInbound]="isBatchInbound(vm.selectedLedger?.voucher?.shortCode || vm.selectedLedger?.voucher?.name)"
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
                         [showEdit]="!isEinvoiceGenerated"
@@ -1346,21 +1344,22 @@
                                         ></input-field>
                                         <div
                                             *ngIf="
-                                                activeCompany?.batchTrackingEnabled &&
-                                                isStockPresent &&
-                                                !getEntryBatches()?.length &&
-                                                !isEinvoiceGenerated
+                                                batchTrackingEnabled && isStockPresent && !getEntryBatches()?.length && !isEinvoiceGenerated
                                             "
                                             class="mt-1 text-left"
                                             (click)="$event.stopPropagation()"
                                         >
-                                            <a
-                                                href="javascript:void(0)"
-                                                class="font-size-12 font-weight-semibold text-primary"
+                                            <div
+                                                tabindex="0"
+                                                role="button"
+                                                cdkMonitorElementFocus
+                                                class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                 (click)="openBatchSelectDialog($event)"
+                                                (keydown.enter)="$event.preventDefault(); openBatchSelectDialog($event)"
+                                                (keydown.space)="$event.preventDefault(); openBatchSelectDialog($event)"
                                             >
                                                 {{ localeData?.select_batch }}
-                                            </a>
+                                            </div>
                                         </div>
                                     </div>
 

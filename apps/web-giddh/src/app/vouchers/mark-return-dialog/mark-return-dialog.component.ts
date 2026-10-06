@@ -1,9 +1,10 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { finalize, ReplaySubject, takeUntil } from "rxjs";
+import { ReplaySubject, takeUntil } from "rxjs";
 import { VoucherService } from "../../services/voucher.service";
 import { ToasterService } from "../../services/toaster.service";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
+import { VoucherTypeEnum } from "../utility/vouchers.const";
 
 export interface MarkReturnDialogData {
     voucherUniqueName: string;
@@ -14,6 +15,7 @@ export interface MarkReturnDialogData {
 }
 
 export interface MarkReturnRow {
+    sourceItemId: number;
     stock: { name: string; uniqueName: string };
     variant: { name: string; uniqueName: string };
     stockUnit: { name: string; code: string; uniqueName: string };
@@ -23,6 +25,8 @@ export interface MarkReturnRow {
     returnableQuantity: number;
     creditableQuantity: number;
     returnQty: number;
+    /** Credit note quantity (sent in creditNote.items when createCn is on) */
+    cnQty: number;
     /** Checked = mark as return → Receipt Note (items payload) */
     selected: boolean;
     /** Optional Create CN for this selected return item */
@@ -44,13 +48,15 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     /** Rows mapped from API */
     public rows: MarkReturnRow[] = [];
     /** Displayed table columns */
-    public displayedColumns: string[] = ["select", "item", "totalQty", "invoicedQty", "returnQty", "action"];
+    public displayedColumns: string[] = ["select", "item", "totalQty", "invoicedQty", "returnQty", "action", "cnQty"];
     /** True while GET resolutions is loading */
     public isLoading: boolean = true;
     /** True while POST event is in progress */
     public isSubmitting: boolean = false;
     /** Event name */
     public eventName: string = "RETURN";
+    /** True when source voucher is receipt note (DN + Debit Note labels) */
+    public isReceiptNote: boolean = false;
     /** Destroy subject */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -64,6 +70,42 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         this.localeData = data?.localeData || {};
         this.commonLocaleData = data?.commonLocaleData || {};
         this.eventName = data?.event || "RETURN";
+        this.isReceiptNote = data?.voucherType === VoucherTypeEnum.receiptNote;
+    }
+
+    /**
+     * Hint text based on source voucher type
+     *
+     * @readonly
+     * @type {string}
+     * @memberof MarkReturnDialogComponent
+     */
+    public get returnDialogHint(): string {
+        return this.isReceiptNote
+            ? this.localeData?.return_dialog_hint_receipt_note
+            : this.localeData?.return_dialog_hint;
+    }
+
+    /**
+     * Create Credit/Debit Note column label
+     *
+     * @readonly
+     * @type {string}
+     * @memberof MarkReturnDialogComponent
+     */
+    public get createNoteLabel(): string {
+        return this.isReceiptNote ? this.localeData?.create_dn : this.localeData?.create_cn;
+    }
+
+    /**
+     * CN/DN quantity column label
+     *
+     * @readonly
+     * @type {string}
+     * @memberof MarkReturnDialogComponent
+     */
+    public get noteQtyLabel(): string {
+        return this.isReceiptNote ? this.localeData?.dn_qty : this.localeData?.cn_qty;
     }
 
     /**
@@ -95,15 +137,12 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.voucherService
             .getInventoryEventResolutions(this.data.voucherType, this.data.voucherUniqueName, this.eventName)
-            .pipe(
-                takeUntil(this.destroyed$),
-                finalize(() => {
-                    this.isLoading = false;
-                    this.changeDetectorRef.detectChanges();
-                })
-            )
+            .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (response) => {
+                    // HandleCatch never completes, so do not rely on finalize to clear the loader
+                    this.isLoading = false;
+                    this.changeDetectorRef.detectChanges();
                     if (response?.status === "success" && response?.body) {
                         this.rows = (response.body.items || []).map((item: any) => this.mapItemToRow(item));
                     } else {
@@ -112,6 +151,8 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
                     }
                 },
                 error: (error) => {
+                    this.isLoading = false;
+                    this.changeDetectorRef.detectChanges();
                     this.showApiError(error);
                     this.dialogRef.close();
                 }
@@ -131,6 +172,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         const creditableQuantity = Number(item.creditableQuantity ?? 0);
 
         return {
+            sourceItemId: item.sourceItemId,
             stock: item.stock,
             variant: item.variant,
             stockUnit: item.stockUnit,
@@ -140,6 +182,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
             returnableQuantity,
             creditableQuantity,
             returnQty: returnableQuantity,
+            cnQty: creditableQuantity,
             selected: returnableQuantity > 0,
             createCn: false,
             showCreateCn: creditableQuantity > 0
@@ -223,24 +266,108 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Clamp return qty within returnable limit
+     * Whether CN qty input is editable
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public isCnQtyEditable(row: MarkReturnRow): boolean {
+        return row.selected && row.createCn && row.showCreateCn && row.creditableQuantity > 0;
+    }
+
+    /**
+     * Normalizes return qty without clamping over the returnable limit
      *
      * @param {MarkReturnRow} row
      * @memberof MarkReturnDialogComponent
      */
     public onReturnQtyChange(row: MarkReturnRow): void {
-        const maxQty = Math.max(row.returnableQuantity, 0);
         let qty = Number(row.returnQty);
         if (isNaN(qty) || qty < 0) {
             qty = 0;
-        }
-        if (qty > maxQty) {
-            qty = maxQty;
         }
         row.returnQty = giddhRoundOff(qty, 4);
         if (row.returnQty > 0) {
             row.selected = true;
         }
+    }
+
+    /**
+     * Normalizes credit/debit note qty without clamping over the creditable limit
+     *
+     * @param {MarkReturnRow} row
+     * @memberof MarkReturnDialogComponent
+     */
+    public onCnQtyChange(row: MarkReturnRow): void {
+        let qty = Number(row.cnQty);
+        if (isNaN(qty) || qty < 0) {
+            qty = 0;
+        }
+        row.cnQty = giddhRoundOff(qty, 4);
+    }
+
+    /**
+     * True when return qty exceeds returnable quantity
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public isReturnQtyInvalid(row: MarkReturnRow): boolean {
+        return Number(row.returnQty) > Math.max(row.returnableQuantity, 0);
+    }
+
+    /**
+     * True when CN/DN qty exceeds creditable quantity
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public isCnQtyInvalid(row: MarkReturnRow): boolean {
+        if (!this.isCnQtyEditable(row)) {
+            return false;
+        }
+        return Number(row.cnQty) > Math.max(row.creditableQuantity, 0);
+    }
+
+    /**
+     * Return qty overflow message
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {string}
+     * @memberof MarkReturnDialogComponent
+     */
+    public getReturnQtyError(row: MarkReturnRow): string {
+        return (this.localeData?.return_qty_exceeds ?? "")
+            .replace("[RETURN_QTY]", String(row.returnQty))
+            .replace("[RETURNABLE_QTY]", String(row.returnableQuantity));
+    }
+
+    /**
+     * CN/DN qty overflow message
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {string}
+     * @memberof MarkReturnDialogComponent
+     */
+    public getNoteQtyError(row: MarkReturnRow): string {
+        const messageKey = this.isReceiptNote ? "dn_qty_exceeds" : "cn_qty_exceeds";
+        return (this.localeData?.[messageKey] ?? "")
+            .replace("[QTY]", String(row.cnQty))
+            .replace("[AVAILABLE_QTY]", String(row.creditableQuantity));
+    }
+
+    /**
+     * True when any row has invalid qty
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public get hasInvalidQty(): boolean {
+        return this.rows.some((row) => this.isReturnQtyInvalid(row) || this.isCnQtyInvalid(row));
     }
 
     /**
@@ -251,7 +378,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
      * @memberof MarkReturnDialogComponent
      */
     public get canProceed(): boolean {
-        return this.rows.some((row) => row.selected && Number(row.returnQty) > 0);
+        return !this.hasInvalidQty && this.rows.some((row) => row.selected && Number(row.returnQty) > 0);
     }
 
     /**
@@ -260,7 +387,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
      * @memberof MarkReturnDialogComponent
      */
     public proceed(): void {
-        if (!this.canProceed || this.isSubmitting) {
+        if (!this.canProceed || this.isSubmitting || this.hasInvalidQty) {
             return;
         }
 
@@ -271,21 +398,32 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const mapItem = (row: MarkReturnRow) => ({
+        const mapReturnItem = (row: MarkReturnRow) => ({
+            sourceItemId: row.sourceItemId,
             stock: { uniqueName: row.stock?.uniqueName },
             variant: { uniqueName: row.variant?.uniqueName },
             quantity: Number(row.returnQty)
         });
 
+        const mapCnItem = (row: MarkReturnRow) => ({
+            sourceItemId: row.sourceItemId,
+            stock: { uniqueName: row.stock?.uniqueName },
+            variant: { uniqueName: row.variant?.uniqueName },
+            quantity: Number(row.cnQty)
+        });
+
         const payload: any = {
             event: this.eventName,
-            items: selectedRows.map(mapItem)
+            items: selectedRows.map(mapReturnItem)
         };
 
-        const creditNoteRows = selectedRows.filter((row) => row.createCn && row.showCreateCn);
-        if (creditNoteRows.length) {
-            payload.creditNote = {
-                items: creditNoteRows.map(mapItem)
+        const noteRows = selectedRows.filter(
+            (row) => row.createCn && row.showCreateCn && Number(row.cnQty) > 0
+        );
+        if (noteRows.length) {
+            const noteKey = this.isReceiptNote ? "debitNote" : "creditNote";
+            payload[noteKey] = {
+                items: noteRows.map(mapCnItem)
             };
         }
 
@@ -293,15 +431,12 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         this.changeDetectorRef.detectChanges();
         this.voucherService
             .executeInventoryDocumentEvent(this.data.voucherType, this.data.voucherUniqueName, payload)
-            .pipe(
-                takeUntil(this.destroyed$),
-                finalize(() => {
-                    this.isSubmitting = false;
-                    this.changeDetectorRef.detectChanges();
-                })
-            )
+            .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: (response) => {
+                    // HandleCatch never completes, so do not rely on finalize to clear the loader
+                    this.isSubmitting = false;
+                    this.changeDetectorRef.detectChanges();
                     if (response?.status === "success") {
                         this.toaster.successToast(
                             (typeof response?.body === "string" ? response.body : null)
@@ -314,6 +449,8 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
                     }
                 },
                 error: (error) => {
+                    this.isSubmitting = false;
+                    this.changeDetectorRef.detectChanges();
                     this.showApiError(error);
                 }
             });

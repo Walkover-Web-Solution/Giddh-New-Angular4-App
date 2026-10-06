@@ -133,8 +133,22 @@ export class GeneralService {
         private toasterService: ToasterService,
         private uiSettingsService: UiSettingsService
     ) {
-        const isGiddhDomain = this.config?.IS_GIDDH_DOMAIN ?? [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].map(url => new URL(url).hostname).includes(window.location.hostname);
-        this.isGiddhDomain.set(isGiddhDomain);
+        this.isGiddhDomain.set(Boolean(this.config?.IS_GIDDH_DOMAIN) || this.resolveIsGiddhDomainFromLocation());
+    }
+
+    /**
+     * Fallback when ServiceConfig is missing or Electron reports an empty hostname.
+     */
+    private resolveIsGiddhDomainFromLocation(): boolean {
+        const hostname = window.location.hostname;
+        // Electron uses file:// so hostname is ''
+        if (Configuration.isElectron || !hostname) {
+            return true;
+        }
+
+        const giddhHostnames = [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION]
+            .map(url => new URL(url).hostname);
+        return giddhHostnames.includes(hostname);
     }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -236,32 +250,54 @@ export class GeneralService {
 
     storeUtmParameters(routerParams: any): void {
         if (routerParams['utm_source']) {
-            localStorage.setItem('utm_source', routerParams['utm_source']);
+            localStorage.setItem('utm_source', decodeURIComponent(routerParams['utm_source']));
         }
         if (routerParams['utm_medium']) {
-            localStorage.setItem('utm_medium', routerParams['utm_medium']);
+            localStorage.setItem('utm_medium', decodeURIComponent(routerParams['utm_medium']));
         }
         if (routerParams['utm_campaign']) {
-            localStorage.setItem('utm_campaign', routerParams['utm_campaign']);
+            localStorage.setItem('utm_campaign', decodeURIComponent(routerParams['utm_campaign']));
         }
         if (routerParams['utm_term']) {
-            localStorage.setItem('utm_term', routerParams['utm_term']);
+            localStorage.setItem('utm_term', decodeURIComponent(routerParams['utm_term']));
         }
         if (routerParams['utm_content']) {
-            localStorage.setItem('utm_content', routerParams['utm_content']);
+            localStorage.setItem('utm_content', decodeURIComponent(routerParams['utm_content']));
         }
         if (routerParams['region']) {
-            localStorage.setItem('region', routerParams['region']);
+            localStorage.setItem('region', decodeURIComponent(routerParams['region']));
         }
         if (routerParams['ref']) {
-            localStorage.setItem('ref', routerParams['ref']);
+            localStorage.setItem('ref', decodeURIComponent(routerParams['ref']));
+        }
+        if (routerParams['source']) {
+            localStorage.setItem('source', decodeURIComponent(routerParams['source']));
         }
     }
 
     getUtmParameter(param: string): string {
-        if (localStorage.getItem(param)) {
-            return localStorage.getItem(param);
-        } else {
+        const localValue = localStorage.getItem(param);
+        if (localValue) {
+            return localValue;
+        }
+
+        try {
+            const cookieValue = this.getRawCookieValue('giddh_query');
+            if (!cookieValue) {
+                console.warn(`[getUtmParameter] No localStorage or giddh_query cookie for "${param}"`);
+                return "";
+            }
+
+            const giddhQuery = JSON.parse(decodeURIComponent(cookieValue)) as Record<string, unknown>;
+            const queryValue = giddhQuery?.[param];
+            if (typeof queryValue === 'string' || typeof queryValue === 'number') {
+                return String(queryValue);
+            }
+
+            console.warn(`[getUtmParameter] giddh_query cookie has no "${param}"`, giddhQuery);
+            return "";
+        } catch (error) {
+            console.error(`[getUtmParameter] Failed to read "${param}" from giddh_query cookie`, error);
             return "";
         }
     }
@@ -274,6 +310,10 @@ export class GeneralService {
         localStorage.removeItem("utm_content");
         localStorage.removeItem("region");
         localStorage.removeItem("ref");
+        localStorage.removeItem("source");
+
+        // Remove giddh_query cookie
+        this.setCookie('giddh_query', null, 0);
     }
 
     getLastElement(array) {
@@ -736,11 +776,22 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getCookieValue(name: any): any {
+        const cookieValue = this.getRawCookieValue(name);
+        return cookieValue ? cookieValue.toUpperCase() : null;
+    }
+
+    /**
+     * Returns the raw cookie value without transforming case.
+     *
+     * @param {string} name Cookie name
+     * @returns {(string | null)} Raw cookie value or null when missing
+     * @memberof GeneralService
+     */
+    public getRawCookieValue(name: string): string | null {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) {
-            const cookieValue = parts.pop().split(';').shift();
-            return cookieValue.toUpperCase();
+            return parts.pop()?.split(';').shift() ?? null;
         }
         return null;
     }
@@ -1315,12 +1366,19 @@ export class GeneralService {
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
             let balanceDueTooltipText;
-            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
-                const gainLossText = localeData?.exchange_gain_loss_label?.
-                    replace("[BASE_CURRENCY]", baseCurrency)?.
-                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
-                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss);
-                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
+            if (item.gainLoss) {
+                const profitType = item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss;
+                const gainLossAmount = Math.abs(item.gainLoss);
+                const buildGainLossTooltip = (amount: number): string => {
+                    const gainLossText = localeData?.exchange_gain_loss_label?.
+                        replace("[BASE_CURRENCY]", baseCurrency)?.
+                        replace("[AMOUNT]", String(amount ?? 0))?.
+                        replace('[PROFIT_TYPE]', profitType);
+                    // Locale label already ends with ": ", so do not add another colon.
+                    return `${gainLossText ?? ""}${gainLossAmount}`;
+                };
+                grandTotalTooltipText = buildGainLossTooltip(grandTotalAmountForCompany);
+                balanceDueTooltipText = buildGainLossTooltip(balanceDueAmountForCompany);
             } else {
                 balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
             }

@@ -1,3 +1,4 @@
+import { A11yModule, FocusMonitor } from "@angular/cdk/a11y";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -8,7 +9,7 @@ import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { catchError, debounceTime, distinctUntilChanged, switchMap, take, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import * as customParseFormat from "dayjs/plugin/customParseFormat";
-import { ASIDE_PANE_CONFIG } from "../../app.constant";
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG } from "../../app.constant";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_WITH_SPACE } from "../../shared/helpers/defaultDateFormat";
 import { BatchReportItem } from "../../models/interfaces/batch-report.interface";
 import { BatchSelectDialogData, BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
@@ -31,6 +32,7 @@ interface BatchSelectRow extends VoucherSelectedBatch {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
+        A11yModule,
         CommonModule,
         FormsModule,
         MatButtonModule,
@@ -70,7 +72,8 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private inventoryService: InventoryService,
         private toasterService: ToasterService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private focusMonitor: FocusMonitor
     ) {
         this.localeData = dialogData?.localeData ?? {};
         this.commonLocaleData = dialogData?.commonLocaleData ?? {};
@@ -114,22 +117,6 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Amount of selected batches (qty * rate).
-     *
-     * @readonly
-     * @type {number}
-     * @memberof BatchSelectDialogComponent
-     */
-    public get selectedAmount(): number {
-        return this.rows.reduce((total, row) => {
-            if (!row.selected) {
-                return total;
-            }
-            return total + (Number(row.quantity) || 0) * (Number(row.rate) || 0);
-        }, 0);
-    }
-
-    /**
      * Quantity allocated above the line quantity.
      *
      * @readonly
@@ -163,7 +150,21 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @memberof BatchSelectDialogComponent
      */
     public get negativeStockRow(): BatchSelectRow | null {
+        if (this.isInbound) {
+            return null;
+        }
         return this.rows.find(row => row.selected && this.getNegativeQuantity(row) > 0) ?? null;
+    }
+
+    /**
+     * True when stock is received (bill / receipt / credit note), not issued.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchSelectDialogComponent
+     */
+    public get isInbound(): boolean {
+        return !!this.dialogData?.isInbound;
     }
 
     /**
@@ -174,7 +175,7 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @memberof BatchSelectDialogComponent
      */
     public get subtitle(): string {
-        return [this.dialogData?.stockName, this.dialogData?.warehouseName, this.dialogData?.unitCode ? `unit: ${this.dialogData.unitCode}` : ""]
+        return [this.dialogData?.stockName, this.dialogData?.unitCode ? `unit: ${this.dialogData.unitCode}` : ""]
             .filter(Boolean)
             .join(" · ");
     }
@@ -258,7 +259,7 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(BatchCreateEditComponent, {
             ...ASIDE_PANE_CONFIG,
             data: {
-                inventoryType: this.dialogData?.inventoryType || "PRODUCT",
+                lockStock: true,
                 batch: {
                     stock: {
                         uniqueName: this.dialogData?.stockUniqueName,
@@ -277,6 +278,13 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
             if (saved) {
                 this.loadBatches(this.searchTerm?.trim() ?? "");
             }
+            this.cdr.markForCheck();
+            setTimeout(() => {
+                const addBatch = document.getElementById("add-batch");
+                if (addBatch) {
+                    this.focusMonitor.focusVia(addBatch, "keyboard");
+                }
+            }, 100);
         });
     }
 
@@ -316,9 +324,10 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
                 name: row.name,
                 batchNumber: row.batchNumber,
                 quantity: Number(row.quantity) || 0,
-                rate: Number(row.rate) || 0,
                 availableQuantity: Number(row.availableQuantity) || 0,
-                expiryDate: row.expiryDate
+                expiryDate: row.expiryDate,
+                manufacturingDate: row.manufacturingDate,
+                warehouse: row.warehouse
             }));
 
         this.dialogRef.close({
@@ -363,14 +372,45 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Quantity that will take the batch below zero.
+     * Quantity that will take the batch below zero on an invoice.
      *
      * @param {BatchSelectRow} row
      * @return {*}  {number}
      * @memberof BatchSelectDialogComponent
      */
     public getNegativeQuantity(row: BatchSelectRow): number {
+        if (this.isInbound) {
+            return 0;
+        }
         return Math.max((Number(row.quantity) || 0) - (Number(row.availableQuantity) || 0), 0);
+    }
+
+    /**
+     * True when the projected-balance line should show for this row.
+     *
+     * @param {BatchSelectRow} row
+     * @return {*}  {boolean}
+     * @memberof BatchSelectDialogComponent
+     */
+    public shouldShowProjectedBalance(row: BatchSelectRow): boolean {
+        if (!row?.selected || !(Number(row.quantity) > 0)) {
+            return false;
+        }
+        return this.isInbound || this.getNegativeQuantity(row) > 0;
+    }
+
+    /**
+     * Invoice: amount below zero. Bill: available plus received quantity.
+     *
+     * @param {BatchSelectRow} row
+     * @return {*}  {number}
+     * @memberof BatchSelectDialogComponent
+     */
+    public getProjectedQuantity(row: BatchSelectRow): number {
+        if (this.isInbound) {
+            return (Number(row.availableQuantity) || 0) + (Number(row.quantity) || 0);
+        }
+        return this.getNegativeQuantity(row);
     }
 
     /**
@@ -422,10 +462,11 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
             uniqueName,
             isVariant,
             page: 1,
-            count: 50,
+            count: API_BULK_FETCH_LIMIT,
             sort: "asc",
             sortBy: "expiry",
-            q: query
+            q: query,
+            warehouseUniqueName: this.dialogData?.warehouseUniqueName
         }).pipe(
             catchError(() => of({ status: "error" })),
             switchMap(response => of({ query, response }))
@@ -467,9 +508,10 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
                 name: row.name,
                 batchNumber: row.batchNumber,
                 quantity: Number(row.quantity) || 0,
-                rate: Number(row.rate) || 0,
                 availableQuantity: Number(row.availableQuantity) || 0,
-                expiryDate: row.expiryDate
+                expiryDate: row.expiryDate,
+                manufacturingDate: row.manufacturingDate,
+                warehouse: row.warehouse
             }));
         return current.length ? current : (this.dialogData?.selectedBatches ?? []);
     }
@@ -528,8 +570,9 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
                 name: item.name,
                 batchNumber: item.batchNumber,
                 expiryDate: item.expiryDate,
+                manufacturingDate: item.manufacturingDate,
+                warehouse: item.warehouse,
                 availableQuantity: Number(item.availableQuantity) || 0,
-                rate: Number(item.rate) || 0,
                 selected: !!existing,
                 quantity: existing ? Number(existing.quantity) || 0 : 0
             });
@@ -555,8 +598,9 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
                     name: item.name,
                     batchNumber: item.batchNumber,
                     expiryDate: item.expiryDate,
+                    manufacturingDate: item.manufacturingDate,
+                    warehouse: item.warehouse,
                     availableQuantity: Number(item.availableQuantity) || 0,
-                    rate: Number(item.rate) || 0,
                     selected: true,
                     quantity: Number(item.quantity) || 0
                 });
@@ -601,6 +645,9 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      */
     private getDefaultQuantity(row: BatchSelectRow): number {
         const remaining = Math.max((Number(this.dialogData?.lineQuantity) || 0) - this.allocatedQuantity, 0);
+        if (this.isInbound) {
+            return remaining > 0 ? remaining : 1;
+        }
         const available = Number(row.availableQuantity) || 0;
         if (remaining > 0) {
             return available > 0 ? Math.min(remaining, available) : remaining;

@@ -79,6 +79,8 @@
     "cr_note_no": "क्रेडिट नोट संख्या.",
     "dr_note_no": "डेबिट नोट संख्या.",
     "linked_invoice": "लिंक्ड इनवॉइस",
+    "view_linked_invoice": "लिंक्ड इनवॉइस",
+    "no_linked_invoice_found": "कोई लिंक्ड इनवॉइस नहीं मिला",
     "linked_voucher": "जुड़ा हुआ वाउचर",
     "overdue_today": "आज तक आगे निकल गया",
     "overdue_days": "[DAYS] दिनों से अधिक हो जाना",
@@ -593,14 +595,20 @@
         "open": "ओपन",
         "closed": "क्लोज्ड",
         "expired": "समय सीमा समाप्त",
-        "cancelled": "रद्द"
+        "cancelled": "रद्द",
+        "shipped": "शिप्ड",
+        "delivered": "डिलीवर्ड",
+        "received": "प्राप्त",
+        "completed": "पूर्ण"
     },
     "inventory_invoice_status": {
         "invoiced": "इनवॉइस किया गया",
         "partially_invoiced": "आंशिक इनवॉइस",
+        "fully_invoiced": "पूर्ण इनवॉइस",
         "not_invoiced": "इनवॉइस नहीं",
         "billed": "बिल किया गया",
         "partially_billed": "आंशिक बिल",
+        "fully_billed": "पूर्ण बिल",
         "not_billed": "बिल नहीं"
     },
     "linked_invoice_filter": {
@@ -609,17 +617,56 @@
     },
     "preview_and_convert_invoice": "पूर्वावलोकन करें और चालान में बदलें",
     "preview_and_convert_bill": "पूर्वावलोकन करें और बिल में बदलें",
+    "convert_to_dc": "DC में बदलें",
+    "convert_to_rn": "RN में बदलें",
+    "preview_and_convert_to_dc": "पूर्वावलोकन करें और DC में बदलें",
+    "preview_and_convert_to_rn": "पूर्वावलोकन करें और RN में बदलें",
+    "document_converted_successfully": "दस्तावेज़ सफलतापूर्वक परिवर्तित हुआ",
     "mark_return": "रिटर्न चिह्नित करें",
     "make_adjustment": "समायोजन करें",
     "convert_process_stock_items": "स्टॉक आइटम कन्वर्ट और प्रोसेस करें",
     "return_dialog_hint": "रिटर्न के लिए आइटम चुनें — चुने गए आइटम के लिए रसीद नोट (RN) बनेगा। किसी आइटम के लिए क्रेडिट नोट भी चाहिए तो Create CN चालू करें।",
+    "return_dialog_hint_receipt_note": "रिटर्न के लिए आइटम चुनें — चुने गए आइटम के लिए डिलीवरी नोट (DN) बनेगा। किसी आइटम के लिए डेबिट नोट भी चाहिए तो Create DN चालू करें।",
     "item_stock_variant": "आइटम - स्टॉक और वेरिएंट",
     "total_qty": "कुल मात्रा",
     "invoiced_qty": "चालान मात्रा",
     "return_qty": "रिटर्न मात्रा",
+    "cn_qty": "CN मात्रा",
+    "dn_qty": "DN मात्रा",
     "create_cn": "क्रेडिट नोट बनाएं",
+    "create_dn": "डेबिट नोट बनाएं",
     "proceed": "आगे बढ़ें",
     "select_return_items": "रिटर्न के लिए कम से कम एक आइटम चुनें",
+    "return_qty_exceeds": "रिटर्न मात्रा [RETURN_QTY] वापसी योग्य मात्रा [RETURNABLE_QTY] से अधिक है।",
+    "cn_qty_exceeds": "CN मात्रा [QTY] क्रेडिट योग्य मात्रा [AVAILABLE_QTY] से अधिक है।",
+    "dn_qty_exceeds": "DN मात्रा [QTY] डेबिट योग्य मात्रा [AVAILABLE_QTY] से अधिक है।",
     "return_success": "रिटर्न सफलतापूर्वक प्रोसेस हुआ",
-    "download_signed_bill": "डिजिटल साइन किए गए बिल डाउनलोड करें"
+    "download_signed_bill": "डिजिटल साइन किए गए बिल डाउनलोड करें",
+    "dc_invoice_reconciliation": "DC - इनवॉइस समाधान",
+    "rn_bill_reconciliation": "RN - बिल समाधान",
+    "report_type": "रिपोर्ट प्रकार",
+    "pending_report_types": {
+        "WITHOUT_CHALLAN": "लंबित DC",
+        "NOT_INVOICED": "लंबित इनवॉइस"
+    },
+    "pending_report_types_rn": {
+        "WITHOUT_CHALLAN": "लंबित RN",
+        "NOT_INVOICED": "लंबित बिल"
+    },
+    "linked_invoice_count": "लिंक्ड इनवॉइस संख्या",
+    "linked_bill_count": "लिंक्ड बिल संख्या",
+    "pending_balances": {
+        "total": "कुल",
+        "not_invoiced": "इनवॉइस नहीं",
+        "partially_invoiced": "आंशिक इनवॉइस",
+        "fully_invoiced": "पूर्ण इनवॉइस",
+        "not_billed": "बिल नहीं",
+        "partially_billed": "आंशिक बिल",
+        "fully_billed": "पूर्ण बिल"
+    },
+    "inventory_via_business_document_disabled_title_delivery_challan": "डिलीवरी चालान बंद हैं",
+    "inventory_via_business_document_disabled_title_receipt_note": "रसीद नोट बंद हैं",
+    "inventory_via_business_document_disabled_title": "डिलीवरी चालान और रसीद नोट बंद हैं",
+    "inventory_via_business_document_disabled_message": "डिलीवरी चालान और रसीद नोट बनाने के लिए, इन्वेंटरी सेटिंग्स में <strong>डिलीवरी चालान और रसीद नोट के माध्यम से इन्वेंटरी प्रबंधित करें</strong> चालू करें।",
+    "turn_on_in_inventory_settings": "इन्वेंटरी सेटिंग्स में चालू करें"
 }

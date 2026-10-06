@@ -107,6 +107,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public pettyCashBaseAccountUniqueName: string;
     /** Stores the active company details */
     @Input() public activeCompany: any;
+    /** True when inventory settings have batch management enabled. */
+    public batchTrackingEnabled: boolean = false;
     @Input() public searchResultsPaginationPage: any;
     @Input() public searchResultsPaginationTotalPages: any;
     @Input() public generateEInvoice: boolean = null;
@@ -471,6 +473,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
+                this.changeDetectorRef.detectChanges();
             }
         });
         this.vm.selectedLedger = new LedgerResponse();
@@ -874,14 +882,53 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /**
-     *This will select warehouse
+     * Select warehouse. Confirms only when the stock line has batches selected;
+     * otherwise applies the warehouse change immediately.
      *
-     * @param {*} event
+     * @param {IOption} event Selected warehouse
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public selectWarehouse(event: any): void {
-        this.selectedWarehouse = event?.value;
-        this.selectedWarehouseName = event?.label;
+    public selectWarehouse(event: IOption): void {
+        const nextUniqueName = event?.value || "";
+        const nextName = event?.label || "";
+        if (!nextUniqueName || nextUniqueName === this.selectedWarehouse) {
+            return;
+        }
+
+        if (!this.getEntryBatches()?.length) {
+            this.applyWarehouseSelection(nextName, nextUniqueName);
+            return;
+        }
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: "630px",
+            data: {
+                configuration: this.generalService.deleteConfiguration(
+                    this.localeData?.warehouse_change_batch_confirmation,
+                    this.commonLocaleData
+                )
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.applyWarehouseSelection(nextName, nextUniqueName);
+                this.resetEntryBatch();
+                this.changeDetectorRef.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Apply the selected warehouse after confirmation.
+     *
+     * @private
+     * @param {string} name Warehouse name
+     * @param {string} uniqueName Warehouse unique name
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private applyWarehouseSelection(name: string, uniqueName: string): void {
+        this.selectedWarehouse = uniqueName;
+        this.selectedWarehouseName = name;
     }
 
     public saveLedgerTransaction() {
@@ -960,7 +1007,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
                     transaction.inventory.warehouse.name = this.selectedWarehouseName;
                 }
-                if (!this.activeCompany?.batchTrackingEnabled || !transaction.inventory.batches?.length) {
+                if (!this.batchTrackingEnabled || !transaction.inventory.batches?.length) {
                     delete transaction.inventory.batches;
                 }
                 if (transaction.inventory.batch) {
@@ -1995,8 +2042,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 voucherUniqueName: this.vm.selectedLedger.voucherUniqueName
             },
             accountDetails: {
-                currencySymbol: enableVoucherAdjustmentMultiCurrency ? this.vm.selectedLedger?.particular?.currency?.symbol ?? this.profileObj?.baseCurrencySymbol ?? '' : this.profileObj?.baseCurrencySymbol ?? '',
-                currencyCode: enableVoucherAdjustmentMultiCurrency ? this.vm.selectedLedger?.particular?.currency?.code ?? this.profileObj?.baseCurrency ?? '' : this.profileObj?.baseCurrency ?? ''
+                currencySymbol: this.vm.selectedLedger?.particular?.currency?.symbol ?? this.profileObj?.baseCurrencySymbol ?? '',
+                currencyCode: this.vm.selectedLedger?.particular?.currency?.code ?? this.profileObj?.baseCurrency ?? ''
             },
             activeAccountUniqueName: this.activeAccount?.uniqueName,
             type: this.entrySide
@@ -2625,7 +2672,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         event?.preventDefault();
         event?.stopPropagation();
 
-        if (!this.activeCompany?.batchTrackingEnabled || this.isEinvoiceGenerated) {
+        if (!this.batchTrackingEnabled || this.isEinvoiceGenerated) {
             return;
         }
 
@@ -2659,7 +2706,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 selectedBatches: cloneDeep(inventory?.batches) || [],
                 currencySymbol: this.vm.selectedPrefixForCurrency,
                 localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
+                commonLocaleData: this.commonLocaleData,
+                isInbound: this.isBatchInbound(this.vm.selectedLedger?.voucher?.shortCode || this.vm.selectedLedger?.voucher?.name)
             }
         });
 
@@ -3141,6 +3189,29 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      *
      * @memberof UpdateLedgerEntryPanelComponent
      */
+    /**
+     * True when the ledger voucher receives stock (bill / credit note).
+     *
+     * @param {string} [voucherType]
+     * @return {*}  {boolean}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public isBatchInbound(voucherType?: string): boolean {
+        const type = String(voucherType ?? "").toLowerCase();
+        return [
+            "pur",
+            "purchase",
+            "cash bill",
+            "credit note",
+            "cash credit note",
+            "purchase-order",
+            "purchase_order",
+            "purchase_bill",
+            "bill",
+            "receipt note"
+        ].includes(type);
+    }
+
     public clearSalesPerson(): void {
         this.vm.selectedLedger.salesPerson.name = null;
         this.vm.selectedLedger.salesPersonUniqueName = null;

@@ -268,17 +268,42 @@ export class UpdateLedgerVm {
             return 0;
         }), this.giddhBalanceDecimalPlaces);
 
-        this.selectedLedger?.transactions?.forEach((entry) => {
-            if (entry.particular.uniqueName === 'roundoff') {
-                entry.amount = giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
-                entry.convertedAmount = this.calculateConversionRate(entry.amount);
-            }
-        });
+        // Recalculate round-off only when there is a primary (non-roundoff) line to derive it from.
+        // Journal entries that are themselves only "Round Off" (e.g. adjustment JV) must keep the API amount
+        // and include that amount in Dr/Cr totals (not the grandTotal fractional difference).
+        const hasPrimaryTxn = this.selectedLedger?.transactions?.some((tr) =>
+            !!tr?.particular?.uniqueName &&
+            tr.particular.uniqueName !== 'roundoff' &&
+            !tr.isTax &&
+            !tr.isDiscount
+        );
 
-        if (this.entryTotal.drTotal > this.entryTotal.crTotal) {
-            this.entryTotal.drTotal += giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
+        if (hasPrimaryTxn) {
+            const calculatedRoundOff = giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
+
+            this.selectedLedger?.transactions?.forEach((entry) => {
+                if (entry.particular?.uniqueName === 'roundoff') {
+                    entry.amount = calculatedRoundOff;
+                    entry.convertedAmount = this.calculateConversionRate(entry.amount);
+                }
+            });
+
+            if (this.entryTotal.drTotal > this.entryTotal.crTotal) {
+                this.entryTotal.drTotal = giddhRoundOff(this.entryTotal.drTotal + calculatedRoundOff, this.giddhBalanceDecimalPlaces);
+            } else {
+                this.entryTotal.crTotal = giddhRoundOff(this.entryTotal.crTotal + calculatedRoundOff, this.giddhBalanceDecimalPlaces);
+            }
         } else {
-            this.entryTotal.crTotal += giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
+            this.selectedLedger?.transactions?.forEach((entry) => {
+                if (entry.particular?.uniqueName === 'roundoff') {
+                    const amount = Number(entry.amount) || 0;
+                    if (entry.type === 'DEBIT') {
+                        this.entryTotal.drTotal = giddhRoundOff(this.entryTotal.drTotal + amount, this.giddhBalanceDecimalPlaces);
+                    } else if (entry.type === 'CREDIT') {
+                        this.entryTotal.crTotal = giddhRoundOff(this.entryTotal.crTotal + amount, this.giddhBalanceDecimalPlaces);
+                    }
+                }
+            });
         }
 
         this.convertedEntryTotal = {

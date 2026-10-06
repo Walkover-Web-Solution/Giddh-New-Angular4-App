@@ -1,12 +1,12 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { AdjustInventoryComponentStore } from './utility/adjust-inventory.store';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 import { Observable, ReplaySubject, takeUntil, of as observableOf, combineLatest, map, debounceTime, distinctUntilChanged } from 'rxjs';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest } from '../../../models/api-models/Inventory';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
@@ -18,7 +18,30 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { SettingsFinancialYearActions } from '../../../actions/settings/financial-year/financial-year.action';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AdjustmentInventory, DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG } from '../../../app.constant';
-import { cloneDeep, concat, filter, forEach, get, set } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
+import { InventoryService } from '../../../services/inventory.service';
+import { VoucherTypeEnum } from '../../../vouchers/utility/vouchers.const';
+
+/** Dialog / query-param data for DC/RN inventory adjustment */
+export interface AdjustInventoryDialogData {
+    dcUniqueName?: string;
+    rnUniqueName?: string;
+    inventoryType?: string;
+}
+
+/** Per-stock UI state when adjusting from DC/RN */
+export interface AdjustmentItemUiState {
+    entityName: string;
+    entityUniqueName: string;
+    entity: string;
+    preselectedVariantUniqueNames: string[];
+    dataSource: MatTableDataSource<any>;
+    selection: SelectionModel<any>;
+    stockGroupClosingBalance: { newValue: number; changeValue: number; closing: any };
+    panelOpenState: boolean;
+    showHideTable: boolean;
+}
+
 @Component({
     selector: 'adjust-inventory',
 
@@ -28,7 +51,7 @@ import { cloneDeep, concat, filter, forEach, get, set } from '../../../lodash-op
     providers: [AdjustInventoryComponentStore]
 })
 
-export class AdjustInventoryComponent implements OnInit {
+export class AdjustInventoryComponent implements OnInit, OnDestroy {
     /** Instance of create reason template */
     @ViewChild("createReason", { static: false }) public createReason: any;
     /** This will hold local JSON data */
@@ -124,6 +147,18 @@ export class AdjustInventoryComponent implements OnInit {
     public inventoryData: any[] = [];
     /** True if update mode */
     public updateMode: boolean = false;
+    /** True when opened from DC/RN (query param or dialog) */
+    public isBusinessDocumentMode: boolean = false;
+    /** True when opened inside MatDialog */
+    public isDialogMode: boolean = false;
+    /** DC/RN unique name for businessDocumentUniqueName payload */
+    public businessDocumentUniqueName: string = '';
+    /** Per-item UI state for DC/RN multi-stock adjustment */
+    public adjustmentItems: AdjustmentItemUiState[] = [];
+    /** Items form array getter */
+    public get itemsFormArray(): FormArray {
+        return this.adjustInventoryCreateEditForm?.get('items') as FormArray;
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -137,8 +172,13 @@ export class AdjustInventoryComponent implements OnInit {
         private router: Router,
         private location: Location,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private inventoryService: InventoryService,
+        private elementRef: ElementRef<HTMLElement>,
+        @Optional() private dialogRef: MatDialogRef<AdjustInventoryComponent>,
+        @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: AdjustInventoryDialogData
     ) {
+        this.isDialogMode = !!this.dialogRef;
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         /** Activate router observable */
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -163,10 +203,16 @@ export class AdjustInventoryComponent implements OnInit {
     public ngOnInit(): void {
         this.inventoryList$ = observableOf([]);
         this.initForm();
+        this.resolveBusinessDocumentSource();
         this.getWarehouses();
         this.getReasons();
         this.getExpensesAccount();
-        this.searchInventory(false);
+        if (!this.isBusinessDocumentMode) {
+            this.searchInventory(false);
+        }
+        if (!this.referenceNumber && !this.isBusinessDocumentMode) {
+            this.apiCallInProgress = false;
+        }
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -198,6 +244,22 @@ export class AdjustInventoryComponent implements OnInit {
                                 uniqueName: this.adjustInventoryCreateEditForm.value.entityUniqueName,
                             }
                         }, false);
+                }
+            });
+        }
+
+        if (this.isBusinessDocumentMode) {
+            this.componentStore.businessDocumentDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response) {
+                    this.prefillFromBusinessDocument(response);
+                }
+            });
+            this.componentStore.businessDocumentInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProgress => {
+                if (inProgress === false && this.isBusinessDocumentMode) {
+                    this.apiCallInProgress = false;
+                    this.changeDetectorRef.detectChanges();
+                } else if (inProgress) {
+                    this.apiCallInProgress = true;
                 }
             });
         }
@@ -238,7 +300,7 @@ export class AdjustInventoryComponent implements OnInit {
                         label: item.label,
                         additional: item
                     }));
-                    if (mappedWarehouses?.length === 1) {
+                    if (mappedWarehouses?.length === 1 && !this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value) {
                         this.adjustInventoryCreateEditForm.get('warehouseName')?.patchValue(mappedWarehouses[0]?.label);
                         this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(mappedWarehouses[0]?.value);
                     }
@@ -254,7 +316,7 @@ export class AdjustInventoryComponent implements OnInit {
                         label: item.name,
                         additional: item
                     }));
-                    if (mappedAccounts?.length === 1) {
+                    if (mappedAccounts?.length === 1 && !this.adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.value) {
                         this.adjustInventoryCreateEditForm.get('expenseAccountName')?.patchValue(mappedAccounts[0]?.label);
                         this.adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.patchValue(mappedAccounts[0]?.value);
                     }
@@ -264,7 +326,7 @@ export class AdjustInventoryComponent implements OnInit {
             });
 
         this.componentStore.stockGroupClosingBalance$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && !this.referenceNumber) {
+            if (response && !this.referenceNumber && !this.isBusinessDocumentMode) {
                 this.stockGroupClosingBalance.closing = response;
                 this.changeDetectorRef.detectChanges();
             }
@@ -275,6 +337,9 @@ export class AdjustInventoryComponent implements OnInit {
             this.componentStore.variantWiseReport$.pipe(map(response => response?.results))
         ]).pipe(takeUntil(this.destroyed$))
             .subscribe(([itemWise, variantWise]) => {
+                if (this.isBusinessDocumentMode) {
+                    return;
+                }
 
                 if (itemWise) {
                     const mappedIItemWise = itemWise.map(item => ({
@@ -324,7 +389,11 @@ export class AdjustInventoryComponent implements OnInit {
         this.createAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.apiCallInProgress = false;
-                this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust`]);
+                if (this.isDialogMode) {
+                    this.dialogRef?.close(true);
+                } else {
+                    this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust`]);
+                }
             } else if (response !== null) {
                 this.apiCallInProgress = false;
             }
@@ -341,6 +410,306 @@ export class AdjustInventoryComponent implements OnInit {
         });
 
 
+    }
+
+    /**
+     * Cleanup
+     *
+     * @memberof AdjustInventoryComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
+     * Resolves DC/RN unique name from dialog data or query params
+     *
+     * @private
+     * @memberof AdjustInventoryComponent
+     */
+    private resolveBusinessDocumentSource(): void {
+        const fromDialog = this.dialogData?.dcUniqueName || this.dialogData?.rnUniqueName;
+        if (fromDialog) {
+            this.setBusinessDocumentMode(
+                this.dialogData.dcUniqueName,
+                this.dialogData.rnUniqueName,
+                this.dialogData.inventoryType
+            );
+            return;
+        }
+
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
+            if (queryParams?.dcUniqueName || queryParams?.rnUniqueName) {
+                this.setBusinessDocumentMode(
+                    queryParams.dcUniqueName,
+                    queryParams.rnUniqueName,
+                    this.inventoryType
+                );
+            }
+        });
+    }
+
+    /**
+     * Enables business-document mode and loads DC/RN details
+     *
+     * @private
+     * @param {string} dcUniqueName
+     * @param {string} rnUniqueName
+     * @param {string} [inventoryType]
+     * @memberof AdjustInventoryComponent
+     */
+    private setBusinessDocumentMode(dcUniqueName?: string, rnUniqueName?: string, inventoryType?: string): void {
+        const isReceiptNote = !!rnUniqueName;
+        const uniqueName = rnUniqueName || dcUniqueName || '';
+        if (!uniqueName || this.businessDocumentUniqueName === uniqueName) {
+            return;
+        }
+
+        this.businessDocumentUniqueName = uniqueName;
+        this.isBusinessDocumentMode = true;
+        this.inventoryType = (inventoryType || this.inventoryType || 'product').toLowerCase();
+        this.apiCallInProgress = true;
+        this.clearSingleItemValidators();
+        this.componentStore.getBusinessDocumentDetails({
+            voucherType: isReceiptNote ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan,
+            voucherUniqueName: this.businessDocumentUniqueName
+        });
+    }
+
+    /**
+     * Removes single-item validators when adjusting multiple stocks from DC/RN
+     *
+     * @private
+     * @memberof AdjustInventoryComponent
+     */
+    private clearSingleItemValidators(): void {
+        ['entity', 'entityUniqueName', 'reasonUniqueName', 'adjustmentMethod', 'calculationMethod', 'changeInValue']
+            .forEach(controlName => {
+                const control = this.adjustInventoryCreateEditForm.get(controlName);
+                control?.clearValidators();
+                control?.updateValueAndValidity({ emitEvent: false });
+            });
+    }
+
+    /**
+     * Prefills form and item rows from DC/RN voucher details
+     *
+     * @private
+     * @param {*} voucherDetails
+     * @memberof AdjustInventoryComponent
+     */
+    private prefillFromBusinessDocument(voucherDetails: any): void {
+        if (!voucherDetails) {
+            return;
+        }
+
+        if (voucherDetails.date) {
+            this.adjustInventoryCreateEditForm.get('date')?.patchValue(voucherDetails.date);
+            this.stockReportRequest.to = voucherDetails.date;
+        }
+        if (voucherDetails.warehouse?.uniqueName) {
+            this.adjustInventoryCreateEditForm.get('warehouseName')?.patchValue(voucherDetails.warehouse?.name);
+            this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(voucherDetails.warehouse?.uniqueName);
+        }
+
+        const stocks = this.extractStocksFromVoucher(voucherDetails);
+        this.adjustmentItems = [];
+        const itemsArray = this.formBuilder.array([]);
+        stocks.forEach((stock) => {
+            itemsArray.push(this.createItemFormGroup(stock) as any);
+            this.adjustmentItems.push({
+                entityName: stock.entityName,
+                entityUniqueName: stock.entityUniqueName,
+                entity: stock.entity,
+                preselectedVariantUniqueNames: stock.variantUniqueNames || [],
+                dataSource: new MatTableDataSource<any>([]),
+                selection: new SelectionModel<any>(true, []),
+                stockGroupClosingBalance: { newValue: 0, changeValue: 0, closing: 0 },
+                panelOpenState: true,
+                showHideTable: true
+            });
+        });
+        this.adjustInventoryCreateEditForm.setControl('items', itemsArray);
+        this.adjustmentItems.forEach((_, index) => this.loadItemVariants(index));
+        this.apiCallInProgress = false;
+        this.changeDetectorRef.detectChanges();
+    }
+
+    /**
+     * Extracts unique stocks (with variants) from voucher entries
+     *
+     * @private
+     * @param {*} voucherDetails
+     * @return {*} 
+     * @memberof AdjustInventoryComponent
+     */
+    private extractStocksFromVoucher(voucherDetails: any): Array<{
+        entity: string;
+        entityName: string;
+        entityUniqueName: string;
+        variantUniqueNames: string[];
+    }> {
+        const stockMap = new Map<string, {
+            entity: string;
+            entityName: string;
+            entityUniqueName: string;
+            variantUniqueNames: string[];
+        }>();
+
+        (voucherDetails?.entries || []).forEach((entry: any) => {
+            (entry?.transactions || []).forEach((transaction: any) => {
+                const stock = transaction?.stock;
+                if (!stock?.uniqueName) {
+                    return;
+                }
+                if (!stockMap.has(stock.uniqueName)) {
+                    stockMap.set(stock.uniqueName, {
+                        entity: 'STOCK',
+                        entityName: stock.name ? `${stock.name} (STOCK)` : stock.uniqueName,
+                        entityUniqueName: stock.uniqueName,
+                        variantUniqueNames: []
+                    });
+                }
+                const variantUniqueName = stock.variant?.uniqueName;
+                if (variantUniqueName) {
+                    const mapped = stockMap.get(stock.uniqueName);
+                    if (mapped && !mapped.variantUniqueNames.includes(variantUniqueName)) {
+                        mapped.variantUniqueNames.push(variantUniqueName);
+                    }
+                }
+            });
+        });
+
+        return Array.from(stockMap.values());
+    }
+
+    /**
+     * Creates form group for one stock adjustment item
+     *
+     * @private
+     * @param {*} stock
+     * @return {*}  {FormGroup}
+     * @memberof AdjustInventoryComponent
+     */
+    private createItemFormGroup(stock: any): FormGroup {
+        return this.formBuilder.group({
+            entity: [stock?.entity ?? 'STOCK', Validators.required],
+            entityName: [stock?.entityName ?? null],
+            entityUniqueName: [stock?.entityUniqueName ?? null, Validators.required],
+            reasonName: [null],
+            reasonUniqueName: [null, Validators.required],
+            adjustmentMethodName: [null],
+            adjustmentMethod: [null, Validators.required],
+            calculationMethod: [null, Validators.required],
+            changeInValue: [null, Validators.required],
+            variantUniqueNames: [stock?.variantUniqueNames ?? []]
+        });
+    }
+
+    /**
+     * Loads variant-wise report + closing balance for a DC/RN stock item
+     *
+     * @param {number} itemIndex
+     * @memberof AdjustInventoryComponent
+     */
+    public loadItemVariants(itemIndex: number): void {
+        const item = this.adjustmentItems[itemIndex];
+        const itemForm = this.itemsFormArray?.at(itemIndex) as FormGroup;
+        if (!item || !itemForm) {
+            return;
+        }
+
+        let toDate: any;
+        if (typeof this.adjustInventoryCreateEditForm.get('date')?.value === 'object') {
+            toDate = dayjs(this.adjustInventoryCreateEditForm.get('date')?.value).format(GIDDH_DATE_FORMAT);
+        } else {
+            toDate = this.adjustInventoryCreateEditForm.get('date')?.value;
+        }
+
+        const stockReportRequest = new StockTransactionReportRequest();
+        stockReportRequest.to = toDate;
+        stockReportRequest.from = this.stockReportRequest.from;
+        stockReportRequest.archived = false;
+        stockReportRequest.count = DROPDOWN_ITEMS_COUNT_LIMIT;
+        stockReportRequest.inventoryType = this.inventoryType?.toUpperCase();
+        stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName
+            ? [this.generalService.currentBranchUniqueName]
+            : [];
+        stockReportRequest.warehouseUniqueNames = this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value
+            ? [this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value]
+            : [];
+        stockReportRequest.stockGroupUniqueNames = [];
+        stockReportRequest.stockUniqueNames = [item.entityUniqueName];
+
+        const queryParams = {
+            from: stockReportRequest.from ?? '',
+            to: stockReportRequest.to ?? '',
+            count: DROPDOWN_ITEMS_COUNT_LIMIT,
+            page: 1,
+            sort: '',
+            sortBy: ''
+        };
+
+        const balanceStockReportRequest = new BalanceStockTransactionReportRequest();
+        balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName
+            ? [this.generalService.currentBranchUniqueName]
+            : [];
+        balanceStockReportRequest.from = undefined;
+        balanceStockReportRequest.to = undefined;
+        balanceStockReportRequest.stockGroupUniqueNames = [];
+        balanceStockReportRequest.stockUniqueNames = [item.entityUniqueName];
+        balanceStockReportRequest['inventoryType'] = this.inventoryType?.toUpperCase();
+        balanceStockReportRequest.warehouseUniqueNames = this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value
+            ? [this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value]
+            : [];
+
+        const balanceQueryParams = {
+            from: this.stockReportRequest.from ?? '',
+            to: toDate ?? '',
+            stockGroupUniqueName: '',
+            entity: ''
+        };
+
+        this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(res => {
+                if (res?.status === 'success') {
+                    const data = (res?.body?.results || []).map(result => ({
+                        ...result,
+                        newValue: 0,
+                        changeValue: 0
+                    }));
+                    item.dataSource = new MatTableDataSource<any>(data);
+                    item.selection.clear();
+                    data.forEach(row => {
+                        const variantUniqueName = row?.variant?.uniqueName;
+                        if (!item.preselectedVariantUniqueNames?.length || item.preselectedVariantUniqueNames.includes(variantUniqueName)) {
+                            item.selection.select(row);
+                        }
+                    });
+                    this.changeDetectorRef.detectChanges();
+                }
+            });
+
+        this.inventoryService.getStockTransactionReportBalance(balanceQueryParams, balanceStockReportRequest as any)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(res => {
+                if (res?.status === 'success') {
+                    item.stockGroupClosingBalance.closing = res?.body;
+                    this.calculateInventoryForItem(itemIndex);
+                    this.changeDetectorRef.detectChanges();
+                }
+            });
+    }
+
+    /**
+     * Closes dialog when opened from voucher list
+     *
+     * @memberof AdjustInventoryComponent
+     */
+    public closeDialog(success: boolean = false): void {
+        this.dialogRef?.close(success);
     }
 
     /**
@@ -432,6 +801,45 @@ export class AdjustInventoryComponent implements OnInit {
     * @memberof AdjustInventoryComponent
     */
     public resetForm(): void {
+        this.isFormSubmitted = false;
+        if (this.isBusinessDocumentMode) {
+            const date = this.adjustInventoryCreateEditForm.get('date')?.value;
+            const warehouseName = this.adjustInventoryCreateEditForm.get('warehouseName')?.value;
+            const warehouseUniqueName = this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value;
+            this.adjustInventoryCreateEditForm.patchValue({
+                refNo: null,
+                expenseAccountName: null,
+                expenseAccountUniqueName: null,
+                description: null,
+                date
+            });
+            this.adjustInventoryCreateEditForm.get('warehouseName')?.patchValue(warehouseName);
+            this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(warehouseUniqueName);
+            this.itemsFormArray?.controls?.forEach((control, index) => {
+                control.patchValue({
+                    reasonName: null,
+                    reasonUniqueName: null,
+                    adjustmentMethodName: null,
+                    adjustmentMethod: null,
+                    calculationMethod: null,
+                    changeInValue: null
+                });
+                const item = this.adjustmentItems[index];
+                if (item) {
+                    item.stockGroupClosingBalance = { newValue: 0, changeValue: 0, closing: item.stockGroupClosingBalance.closing };
+                    item.selection.clear();
+                    (item.dataSource?.data || []).forEach(row => {
+                        const variantUniqueName = row?.variant?.uniqueName;
+                        if (!item.preselectedVariantUniqueNames?.length || item.preselectedVariantUniqueNames.includes(variantUniqueName)) {
+                            item.selection.select(row);
+                        }
+                    });
+                }
+            });
+            this.adjustInventoryCreateEditForm.updateValueAndValidity();
+            return;
+        }
+
         const refNo = this.adjustInventoryCreateEditForm.get("refNo").value; // not reset
         this.adjustInventoryCreateEditForm.reset();
         this.adjustInventoryCreateEditForm.get("date").patchValue(this.stockReportRequest.to);
@@ -489,7 +897,11 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public back(event: boolean): void {
         if (event) {
-            this.location.back();
+            if (this.isDialogMode) {
+                this.closeDialog(false);
+            } else {
+                this.location.back();
+            }
         }
     }
 
@@ -641,7 +1053,7 @@ export class AdjustInventoryComponent implements OnInit {
     public updateInventoryAdjustment(): void {
         this.isFormSubmitted = false;
         if (this.adjustInventoryCreateEditForm.invalid) {
-            this.isFormSubmitted = true;
+            this.markFormInvalidAndFocus();
             return;
         }
         let mappedVariants = this.selection.selected.map(item => (
@@ -674,8 +1086,14 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public createInventoryAdjustment(): void {
         this.isFormSubmitted = false;
+
+        if (this.isBusinessDocumentMode) {
+            this.createBusinessDocumentInventoryAdjustment();
+            return;
+        }
+
         if (this.adjustInventoryCreateEditForm.invalid) {
-            this.isFormSubmitted = true;
+            this.markFormInvalidAndFocus();
             return;
         }
         let mappedVariants = this.selection.selected.map(item => (
@@ -702,6 +1120,220 @@ export class AdjustInventoryComponent implements OnInit {
     }
 
     /**
+     * Marks form as submitted and focuses the first invalid field
+     *
+     * @private
+     * @memberof AdjustInventoryComponent
+     */
+    private markFormInvalidAndFocus(): void {
+        this.isFormSubmitted = true;
+        this.adjustInventoryCreateEditForm.markAllAsTouched();
+        this.changeDetectorRef.detectChanges();
+        this.focusFirstInvalidField();
+    }
+
+    /**
+     * Scrolls to and focuses the first invalid / error field
+     *
+     * @private
+     * @memberof AdjustInventoryComponent
+     */
+    private focusFirstInvalidField(): void {
+        setTimeout(() => {
+            const hostEl = this.elementRef.nativeElement;
+            const firstInvalid = hostEl.querySelector<HTMLElement>(
+                '.mat-form-field-invalid input, .error-box, reactive-dropdown-field.ng-invalid input, text-field.ng-invalid input, input.ng-invalid'
+            );
+            if (!firstInvalid) {
+                return;
+            }
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalid.focus?.();
+        });
+    }
+
+    /**
+     * Creates inventory adjustment for DC/RN with items[] payload
+     *
+     * @private
+     * @return {*}  {void}
+     * @memberof AdjustInventoryComponent
+     */
+    private createBusinessDocumentInventoryAdjustment(): void {
+        const headerInvalid = ['date', 'expenseAccountUniqueName'].some(
+            key => this.adjustInventoryCreateEditForm.get(key)?.invalid
+        );
+        const itemsInvalid = !this.itemsFormArray?.length || this.itemsFormArray.controls.some(control => control.invalid);
+        const missingVariants = this.adjustmentItems.some(item => !item.selection.selected?.length);
+
+        if (headerInvalid || itemsInvalid || missingVariants) {
+            this.markFormInvalidAndFocus();
+            return;
+        }
+
+        let toDate;
+        if (typeof this.adjustInventoryCreateEditForm.get('date')?.value === 'object') {
+            toDate = dayjs(this.adjustInventoryCreateEditForm.get('date')?.value).format(GIDDH_DATE_FORMAT);
+        } else {
+            toDate = this.adjustInventoryCreateEditForm.get('date')?.value;
+        }
+
+        const items = this.itemsFormArray.controls.map((control: AbstractControl, index: number) => {
+            const value = cloneDeep(control.value);
+            value.variantUniqueNames = this.adjustmentItems[index].selection.selected.map(
+                selected => selected?.variant?.uniqueName
+            );
+            delete value?.adjustmentMethodName;
+            delete value?.reasonName;
+            return value;
+        });
+
+        const formValue = {
+            businessDocumentUniqueName: this.businessDocumentUniqueName,
+            date: toDate,
+            refNo: this.adjustInventoryCreateEditForm.get('refNo')?.value,
+            expenseAccountUniqueName: this.adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.value,
+            warehouseUniqueName: this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value,
+            description: this.adjustInventoryCreateEditForm.get('description')?.value,
+            items
+        };
+
+        this.apiCallInProgress = true;
+        this.componentStore.createInventoryAdjustment({
+            formValue,
+            branchUniqueName: this.generalService.currentBranchUniqueName
+        });
+    }
+
+    /**
+     * Calculates closing/change/new values for a DC/RN item row
+     *
+     * @param {number} itemIndex
+     * @memberof AdjustInventoryComponent
+     */
+    public calculateInventoryForItem(itemIndex: number): void {
+        const item = this.adjustmentItems[itemIndex];
+        const itemForm = this.itemsFormArray?.at(itemIndex) as FormGroup;
+        if (!item || !itemForm) {
+            return;
+        }
+
+        item.stockGroupClosingBalance.changeValue = 0;
+        item.stockGroupClosingBalance.newValue = 0;
+
+        const adjustmentMethod = itemForm.get('adjustmentMethod')?.value;
+        const calculationMethod = itemForm.get('calculationMethod')?.value;
+        const changeInValue = itemForm.get('changeInValue')?.value;
+        const entityUniqueName = itemForm.get('entityUniqueName')?.value;
+
+        if (!entityUniqueName || !adjustmentMethod || !calculationMethod || changeInValue === null || changeInValue === undefined) {
+            return;
+        }
+
+        if (adjustmentMethod === AdjustmentInventory.QuantityWise && calculationMethod === AdjustmentInventory.Percentage) {
+            let changeValue = item.stockGroupClosingBalance.closing?.closing?.quantity * (changeInValue / 100);
+            let newValue = item.stockGroupClosingBalance.closing?.closing?.quantity - changeValue;
+            item.stockGroupClosingBalance.changeValue = giddhRoundOff(changeValue, this.giddhBalanceDecimalPlaces);
+            item.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+            item.dataSource.data = item.dataSource.data.map(result => {
+                result.changeValue = result.closing?.quantity * (changeInValue / 100);
+                result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
+                return result;
+            });
+        }
+
+        if (adjustmentMethod === AdjustmentInventory.QuantityWise && calculationMethod === AdjustmentInventory.Value) {
+            let changeValue = changeInValue * item.dataSource?.data?.length;
+            let newValue = item.stockGroupClosingBalance.closing?.closing?.quantity - changeValue;
+            item.stockGroupClosingBalance.changeValue = giddhRoundOff(changeValue, this.giddhBalanceDecimalPlaces);
+            item.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+            item.dataSource.data = item.dataSource.data.map(result => {
+                result.changeValue = changeInValue;
+                result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
+                return result;
+            });
+        }
+
+        if (adjustmentMethod === AdjustmentInventory.ValueWise && calculationMethod === AdjustmentInventory.Percentage) {
+            let changeValue = item.stockGroupClosingBalance.closing?.closing?.amount * (changeInValue / 100);
+            let newValue = item.stockGroupClosingBalance.closing?.closing?.amount - changeValue;
+            item.stockGroupClosingBalance.changeValue = giddhRoundOff(changeValue, this.giddhBalanceDecimalPlaces);
+            item.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+            item.dataSource.data = item.dataSource.data.map(result => {
+                result.changeValue = result.closing?.amount * (changeInValue / 100);
+                result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
+                return result;
+            });
+        }
+
+        if (adjustmentMethod === AdjustmentInventory.ValueWise && calculationMethod === AdjustmentInventory.Value) {
+            let changeValue = changeInValue * item.dataSource?.data?.length;
+            let newValue = item.stockGroupClosingBalance.closing?.closing?.amount - changeValue;
+            item.stockGroupClosingBalance.changeValue = giddhRoundOff(changeValue, this.giddhBalanceDecimalPlaces);
+            item.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+            item.dataSource.data = item.dataSource.data.map(result => {
+                result.changeValue = changeInValue;
+                result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
+                return result;
+            });
+        }
+
+        item.showHideTable = false;
+        setTimeout(() => {
+            item.showHideTable = true;
+            this.changeDetectorRef.detectChanges();
+        });
+    }
+
+    /**
+     * Master toggle for a DC/RN item variants table
+     *
+     * @param {number} itemIndex
+     * @memberof AdjustInventoryComponent
+     */
+    public masterToggleItem(itemIndex: number): void {
+        const item = this.adjustmentItems[itemIndex];
+        if (!item) {
+            return;
+        }
+        if (this.isItemAllSelected(itemIndex)) {
+            item.selection.clear();
+        } else {
+            (item.dataSource?.filteredData || item.dataSource?.data || []).forEach(row => item.selection.select(row));
+        }
+    }
+
+    /**
+     * Whether all variants are selected for a DC/RN item
+     *
+     * @param {number} itemIndex
+     * @return {*}  {boolean}
+     * @memberof AdjustInventoryComponent
+     */
+    public isItemAllSelected(itemIndex: number): boolean {
+        const item = this.adjustmentItems[itemIndex];
+        if (!item) {
+            return false;
+        }
+        return item.selection.selected.length === item.dataSource?.data?.length && item.dataSource?.data?.length > 0;
+    }
+
+    /**
+     * Checkbox label helper for DC/RN item rows
+     *
+     * @param {number} itemIndex
+     * @param {*} [row]
+     * @return {*}  {string}
+     * @memberof AdjustInventoryComponent
+     */
+    public itemCheckboxLabel(itemIndex: number, row?: any): string {
+        if (!row) {
+            return `${this.isItemAllSelected(itemIndex) ? 'deselect' : 'select'} 'all'`;
+        }
+        return `${this.adjustmentItems[itemIndex]?.selection.isSelected(row) ? 'deselect' : 'select'} row ${row + 1}`;
+    }
+
+    /**
      * This will be use for clean request object
      *
      * @param {*} updatedData
@@ -713,6 +1345,7 @@ export class AdjustInventoryComponent implements OnInit {
         delete updatedData?.expenseAccountName;
         delete updatedData?.reasonName;
         delete updatedData?.warehouseName;
+        delete updatedData?.items;
         return updatedData;
     }
 

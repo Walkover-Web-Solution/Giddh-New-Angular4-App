@@ -67,6 +67,7 @@ export interface BatchReportFilter {
     batchNumbers?: string[];
     withinDays?: number;
     expiredOnly?: boolean;
+    archive?: boolean;
     inventoryType?: string;
 }
 
@@ -74,11 +75,11 @@ export interface BatchReportFilter {
 export interface BatchSaveRequest {
     batchNumber: string;
     name: string;
-    stock: BatchEntityRef;
-    warehouse: BatchEntityRef;
-    variant: BatchEntityRef;
-    openingQuantity?: number;
-    openingAmount?: number;
+    stock?: BatchEntityRef;
+    warehouse?: BatchEntityRef;
+    variant?: BatchEntityRef;
+    openingQuantity?: number | null;
+    openingAmount?: number | null;
     rate?: number;
     manufacturingDate?: string;
     expiryDate?: string;
@@ -102,6 +103,8 @@ export interface BatchDetails {
     openingQuantity?: number;
     openingAmount?: number;
     rate?: number;
+    isUsed?: boolean;
+    linkedEntities?: string[];
 }
 
 /** Selected batch line used on vouchers / ledger entries. */
@@ -110,9 +113,10 @@ export interface VoucherSelectedBatch {
     name?: string;
     batchNumber?: string;
     quantity: number;
-    rate?: number;
     availableQuantity?: number;
     expiryDate?: string;
+    manufacturingDate?: string;
+    warehouse?: BatchEntityRef;
 }
 
 /** Input data for the batch select aside dialog. */
@@ -131,6 +135,8 @@ export interface BatchSelectDialogData {
     currencySymbol?: string;
     localeData?: any;
     commonLocaleData?: any;
+    /** True for bills / other inbound stock (purchase, receipt, credit note). */
+    isInbound?: boolean;
 }
 
 /** Result returned when the batch select aside closes with a selection. */

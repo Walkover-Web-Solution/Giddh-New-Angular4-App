@@ -312,13 +312,13 @@ export class VouchersUtilityService {
     /**
      * Maps delivery challan/receipt note details response to the voucher details
      * structure expected by the voucher create/update form.
-     * Also normalizes partial consume/invoice cases using documentItems.remainingQuantity.
      *
      * @param {*} response Delivery challan/receipt note details response body
+     * @param {boolean} isBusinessDocumentCreate Whether the voucher is being created from a business document
      * @return {*} Voucher details
      * @memberof VouchersUtilityService
      */
-    public formatInventoryVoucherDetails(response: any): any {
+    public formatInventoryVoucherDetails(response: any, isBusinessDocumentCreate: boolean = false): any {
         if (!response) {
             return {};
         }
@@ -368,12 +368,13 @@ export class VouchersUtilityService {
         let voucherGrandTotal = 0;
         voucherDetails.entries = (voucherDetails.entries || []).map((entry) => {
             let entryTotal = 0;
-            const transactions = entry.transactions?.map((transaction) => {
+            const transactions = (entry.transactions || []).reduce((acc, transaction) => {
                 const stock = transaction.stock;
                 if (!stock) {
                     const amount = Number(transaction.amount?.amountForAccount) || 0;
                     entryTotal += amount;
-                    return transaction;
+                    acc.push(transaction);
+                    return acc;
                 }
 
                 const documentItem = documentItemsByVariant[stock.variant?.uniqueName]
@@ -384,26 +385,24 @@ export class VouchersUtilityService {
                     ?? documentItem?.rate
                     ?? 0
                 );
-                const originalQuantity = Number(documentItem?.quantity ?? stock.quantity ?? 0);
-                // Prefer remaining qty after partial invoice/return; fall back to transaction qty
-                const quantity = documentItem?.remainingQuantity != null
-                    ? Number(documentItem.remainingQuantity)
-                    : Number(stock.quantity ?? 0);
+                const stockQuantity = stock.quantity ?? documentItem?.quantity ?? 0;
+                const quantity = Number(isBusinessDocumentCreate ? (documentItem?.remainingQuantity ?? 0) : stockQuantity);
+
+                // Skip stock lines with no remaining/usable quantity
+                if (!(quantity > 0)) {
+                    return acc;
+                }
 
                 let amount = Number(transaction.amount?.amountForAccount) || 0;
-                if (documentItem && originalQuantity > 0) {
-                    // Pro-rate full document amount for remaining qty (handles partial invoice/return)
-                    amount = giddhRoundOff(
-                        (quantity / originalQuantity) * Number(documentItem.amount ?? (originalQuantity * rate)),
-                        2
-                    );
-                } else if (quantity && rate) {
-                    // Fix inconsistent transaction amount vs qty × rate
+                if (!amount && documentItem?.amount != null) {
+                    amount = Number(documentItem.amount) || 0;
+                }
+                if (!amount && quantity && rate) {
                     amount = giddhRoundOff(quantity * rate, 2);
                 }
                 entryTotal += amount;
 
-                return {
+                acc.push({
                     ...transaction,
                     account: {
                         name: transaction.account?.name,
@@ -437,8 +436,9 @@ export class VouchersUtilityService {
                                 }]
                                 : [])
                     }
-                };
-            });
+                });
+                return acc;
+            }, []);
 
             return {
                 ...entry,
@@ -452,13 +452,7 @@ export class VouchersUtilityService {
                     amountForCompany: entryTotal
                 }
             };
-        }).filter((entry) => {
-            const transaction = entry?.transactions?.[0];
-            if (transaction?.stock) {
-                return Number(transaction.stock.quantity) > 0;
-            }
-            return Number(transaction?.amount?.amountForAccount) > 0;
-        });
+        }).filter((entry) => entry.transactions?.length > 0);
 
         voucherDetails.entries?.forEach((entry) => {
             voucherGrandTotal += Number(entry?.entryTotal?.amountForAccount) || 0;

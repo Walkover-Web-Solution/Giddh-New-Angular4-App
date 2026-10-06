@@ -55,6 +55,7 @@ export interface VoucherState {
     vouchersForAdjustment: any;
     voucherListForCreditDebitNote: any;
     pendingPurchaseOrders: any[];
+    pendingBusinessDocuments: any[];
     purchaseOrdersList: any[];
     countryList: any[];
     ledgerEntries: any[];
@@ -121,6 +122,7 @@ const DEFAULT_STATE: VoucherState = {
     vouchersForAdjustment: null,
     voucherListForCreditDebitNote: null,
     pendingPurchaseOrders: null,
+    pendingBusinessDocuments: null,
     purchaseOrdersList: null,
     countryList: null,
     ledgerEntries: null,
@@ -201,6 +203,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public vouchersForAdjustment$ = this.select((state) => state.vouchersForAdjustment);
     public voucherListForCreditDebitNote$ = this.select((state) => state.voucherListForCreditDebitNote);
     public pendingPurchaseOrders$ = this.select((state) => state.pendingPurchaseOrders);
+    public pendingBusinessDocuments$ = this.select((state) => state.pendingBusinessDocuments);
     public purchaseOrdersList$ = this.select((state) => state.purchaseOrdersList);
     public countryList$ = this.select((state) => state.countryList);
     public deleteAttachmentIsSuccess$ = this.select((state) => state.deleteAttachmentIsSuccess);
@@ -783,13 +786,21 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getVoucherDetails = this.effect((data: Observable<{ isCopyVoucher: boolean, accountUniqueName: string, payload: any }>) => {
+    readonly getVoucherDetails = this.effect((data: Observable<{ isCopyVoucher: boolean, accountUniqueName: string, payload: any, clearVoucherIdentity?: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getVoucherDetails(req.accountUniqueName, req.payload).pipe(
                     tap(
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
+                            if (req.clearVoucherIdentity) {
+                                delete voucherDetails.uniqueName;
+                                delete voucherDetails.number;
+                                voucherDetails.entries = voucherDetails.entries?.map((entry) => {
+                                    const { uniqueName, ...entryWithoutUniqueName } = entry || {};
+                                    return entryWithoutUniqueName;
+                                });
+                            }
                             voucherDetails.isCopyVoucher = req.isCopyVoucher;
                             return this.patchState({
                                 voucherDetails: voucherDetails
@@ -808,13 +819,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getInventoryVoucherDetails = this.effect((data: Observable<{ voucherType: string, voucherUniqueName: string, isCopyVoucher?: boolean, clearVoucherIdentity?: boolean }>) => {
+    readonly getInventoryVoucherDetails = this.effect((data: Observable<{ voucherType: string, voucherUniqueName: string, isCopyVoucher?: boolean, clearVoucherIdentity?: boolean, isBusinessDocumentCreate?: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getInventoryVoucherDetails(req.voucherType, req.voucherUniqueName).pipe(
                     tap(
                         (res: BaseResponse<any, any>) => {
-                            let voucherDetails = this.vouchersUtilityService.formatInventoryVoucherDetails(res?.body);
+                            let voucherDetails = this.vouchersUtilityService.formatInventoryVoucherDetails(res?.body, !!req.isBusinessDocumentCreate);
                             // Strip voucher/entry identity when creating invoice/bill from DC/RN
                             if (req.clearVoucherIdentity) {
                                 delete voucherDetails.uniqueName;
@@ -972,6 +983,44 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 pendingPurchaseOrders: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getPendingBusinessDocuments = this.effect((data: Observable<{
+        queryParams: any;
+        body: { reportType: string; documentType: string; accountUniqueNames: string[] };
+    }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getPendingBusinessDocumentsByAccounts(req.queryParams, req.body).pipe(
+                    tap(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === "success") {
+                                const results = Array.isArray(res.body?.results)
+                                    ? res.body.results
+                                    : (Array.isArray(res.body) ? res.body : []);
+                                return this.patchState({
+                                    pendingBusinessDocuments: results.map((item: any) => ({
+                                        number: item?.number,
+                                        uniqueName: item?.uniqueName,
+                                        accountUniqueName: item?.account?.uniqueName || item?.accountUniqueName
+                                    }))
+                                });
+                            }
+                            return this.patchState({
+                                pendingBusinessDocuments: null
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                pendingBusinessDocuments: null
                             });
                         }
                     ),
@@ -1425,6 +1474,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     vouchersForAdjustment: null,
                     voucherListForCreditDebitNote: null,
                     pendingPurchaseOrders: null,
+                    pendingBusinessDocuments: null,
                     exchangeRate: null,
                     createdTemplates: null
                 });

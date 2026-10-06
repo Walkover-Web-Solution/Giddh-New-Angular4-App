@@ -316,7 +316,7 @@ export class VoucherService {
             count: request.count,
             from: request.from,
             to: request.to,
-            q: request.q,
+            q: request.q ? encodeURIComponent(request.q) : '',
             sort: request.sort,
             sortBy: request.sortBy
         };
@@ -335,6 +335,47 @@ export class VoucherService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
         );
+    }
+
+    /**
+     * Pending delivery challan / receipt note reconciliation report
+     *
+     * @param {*} queryParams from, to, q, page, count, sort, sortBy
+     * @param {{ reportType: string; documentType: string }} body
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getPendingBusinessDocumentReport(
+        queryParams: any,
+        body: { reportType: string; documentType: string; accountUniqueNames?: string[] }
+    ): Observable<BaseResponse<any, any>> {
+        const contextPath = INVENTORY_VOUCHER_API.PENDING_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        const url = this.vouchersUtilityService.createQueryString(this.config.apiUrl + contextPath, queryParams);
+
+        return this.http.post(url, body).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = { ...queryParams, ...body };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, { ...queryParams, ...body }))
+        );
+    }
+
+    /**
+     * Pending DC/RN report filtered by accounts (same endpoint, POST body uses accountUniqueNames instead of q).
+     *
+     * @param {*} queryParams from, to, page, count, sort, sortBy
+     * @param {{ reportType: string; documentType: string; accountUniqueNames: string[] }} body
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getPendingBusinessDocumentsByAccounts(
+        queryParams: any,
+        body: { reportType: string; documentType: string; accountUniqueNames: string[] }
+    ): Observable<BaseResponse<any, any>> {
+        return this.getPendingBusinessDocumentReport(queryParams, body);
     }
 
     /**
@@ -432,6 +473,28 @@ export class VoucherService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, { voucherType, voucherUniqueName, event }))
+        );
+    }
+
+    /**
+     * Gets business document linked invoice history (DC/RN)
+     *
+     * @param {string} voucherUniqueName
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof VoucherService
+     */
+    public getBusinessDocumentLinkedInvoiceHistory(voucherUniqueName: string): Observable<BaseResponse<any, string>> {
+        const url = this.config.apiUrl + INVENTORY_VOUCHER_API.LINKED_INVOICE_HISTORY
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':voucherUniqueName', encodeURIComponent(voucherUniqueName));
+
+        return this.http.get(url).pipe(
+            map((res) => {
+                const data: BaseResponse<any, string> = res;
+                data.queryString = { voucherUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, voucherUniqueName))
         );
     }
 
@@ -1128,6 +1191,23 @@ export class VoucherService {
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
+        } else if (voucherType === VoucherTypeEnum.deliveryChallan || voucherType === VoucherTypeEnum.receiptNote) {
+            let url = this.config.apiUrl + INVENTORY_VOUCHER_API.HISTORY;
+            url = url
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+                ?.replace(':voucherUniqueName', encodeURIComponent(getRequestObject?.voucherUniqueName));
+            url = this.generalService.createQueryString(url, {
+                page: getRequestObject.page,
+                count: getRequestObject.count
+            });
+
+            return this.http.get(url).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, string> = res;
+                    data.queryString = { voucherType, voucherUniqueName: getRequestObject?.voucherUniqueName };
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
         } else {
             let url = this.config.apiUrl + INVOICE_API.GET_ALL_VERSIONS;
             url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);

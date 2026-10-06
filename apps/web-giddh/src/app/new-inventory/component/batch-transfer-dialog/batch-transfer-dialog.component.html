@@ -1,9 +1,6 @@
 <div class="advance-search-dialog">
     <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.transfer_batch }}</span>
-        <button matIconButton mat-dialog-close aria-label="cross icon">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         @if (hasLoadedBatches && hasNoTargetBatches) {
@@ -38,17 +35,17 @@
                         }
                     </div>
                     <div class="col-12 mt-3">
-                        <reactive-dropdown-field
+                        <input-field
+                            [name]="'warehouse'"
+                            [type]="'text'"
                             [label]="commonLocaleData?.app_warehouse"
                             [placeholder]="commonLocaleData?.app_select_warehouse"
-                            [options]="warehouseOptions"
-                            [labelValue]="warehouseLabel"
-                            formControlName="warehouseUniqueName"
-                            (selectedOption)="selectWarehouse($event)"
-                            (onClear)="selectWarehouse(null)"
+                            [ngModel]="warehouseLabel"
+                            [ngModelOptions]="{standalone: true}"
+                            [readonly]="true"
                             [required]="true"
                             [showError]="isFormSubmitted && !transferForm.get('warehouseUniqueName')?.value"
-                        ></reactive-dropdown-field>
+                        ></input-field>
                     </div>
                     <div class="col-12 mt-3">
                         <input-field

@@ -266,7 +266,11 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public selectOption(option: any): void {
-        if (this.lastSearchString?.length) {
+        // Capture before clearing: dynamic search options are a subset, so selecting
+        // the only visible match must not promote to All.
+        const wasSearching = this.hasActiveSearch();
+        if (wasSearching) {
+            this.lastSearchString = "";
             this.searchFormControl.setValue("");
         }
         const selectedValue = option?.option?.value?.value;
@@ -289,7 +293,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                 }
             }
             this.chipList.push(this.chipPrefix + selectOptionValue + this.chipSuffix);
-            if (this.showAllOption && this.areAllRealOptionsSelected()) {
+            if (this.showAllOption && this.shouldAutoPromoteToAll(wasSearching)) {
                 this.selectAllOptions();
                 return;
             }
@@ -537,7 +541,21 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
+     * True when a search is active (input value or last applied search string).
+     * lastSearchString matters because the input may already be cleared on select
+     * while the debounced valueChanges has not yet updated it.
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private hasActiveSearch(): boolean {
+        return this.hasSearchTerm() || !!this.lastSearchString?.trim();
+    }
+
+    /**
      * Prepends the All option when it should be visible in the panel.
+     * All must stay hidden while searching so a filtered subset is not treated as the full list.
      *
      * @private
      * @param {IOption[]} options
@@ -545,7 +563,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     private prependAllOption(options: IOption[]): IOption[] {
-        if (!this.showAllOption || this.hasSearchTerm() || !this.hasRealOptions()) {
+        if (!this.showAllOption || this.hasActiveSearch() || !this.hasRealOptions()) {
             return options ?? [];
         }
         return [{ label: this.getAllLabel(), value: this.allOptionValue }, ...(options ?? [])];
@@ -581,6 +599,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
 
     /**
      * True when every real option is already selected as an individual chip.
+     * Uses the current options input — for dynamic search that may be a page/search subset.
      *
      * @private
      * @returns {boolean}
@@ -591,6 +610,24 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             .map(option => option?.value)
             .filter(value => value !== undefined && value !== null && value !== this.allOptionValue);
         return allValues.length > 0 && allValues.every(value => this.value?.includes(value));
+    }
+
+    /**
+     * Whether selecting the latest chip should collapse into the All sentinel.
+     * Base: every real option in the source list is selected.
+     * Corner: during dynamic search, options is only the search result set — selecting
+     * the single match must stay as that chip, not All. Explicit All clicks are separate.
+     *
+     * @private
+     * @param {boolean} wasSearching Whether a search was active when the option was chosen.
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private shouldAutoPromoteToAll(wasSearching: boolean): boolean {
+        if (this.enableDynamicSearch && wasSearching) {
+            return false;
+        }
+        return this.areAllRealOptionsSelected();
     }
 
     /**

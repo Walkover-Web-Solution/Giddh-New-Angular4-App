@@ -7,9 +7,6 @@
             )
         </ng-container>
     </span>
-    <button mat-icon-button type="button" (click)="cancel()" [attr.aria-label]="commonLocaleData?.app_close">
-        <i class="icon-cross" aria-hidden="true"></i>
-    </button>
 </div>
 
 <mat-dialog-content
@@ -22,7 +19,7 @@
         <giddh-page-loader [attr.aria-label]="localeData?.convert_process_stock_items"></giddh-page-loader>
     } @else {
         <p id="mark-return-dialog-hint" class="mb-3 text-muted">
-            {{ localeData?.return_dialog_hint }}
+            {{ returnDialogHint }}
         </p>
 
         <div class="table-responsive mark-return-table-wrap overflow-auto border border-radius-4">
@@ -84,33 +81,64 @@
                             <input-field
                                 [type]="'number'"
                                 [allowDecimalDigitsOnly]="true"
-                                name="returnQty"
+                                [name]="'returnQty-' + row.variant?.uniqueName"
                                 [label]="localeData?.return_qty"
                                 [placeholder]="'0'"
                                 [matSuffix]="row.stockUnit?.code || row.stockUnit?.name"
                                 [(ngModel)]="row.returnQty"
                                 (ngModelChange)="onReturnQtyChange(row)"
                                 [disabled]="!row.selected || !isRowSelectable(row)"
+                                [showError]="isReturnQtyInvalid(row)"
                             ></input-field>
+                            @if (isReturnQtyInvalid(row)) {
+                                <div class="text-danger font-size-12 mt-1 text-wrap" role="alert">
+                                    {{ getReturnQtyError(row) }}
+                                </div>
+                            }
                         </div>
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef scope="col" class="text-right">{{ localeData?.create_cn }}</th>
+                    <th mat-header-cell *matHeaderCellDef scope="col" class="text-right">{{ createNoteLabel }}</th>
                     <td mat-cell *matCellDef="let row" class="text-right">
                         @if (row.selected && row.showCreateCn) {
                             <mat-slide-toggle
                                 color="primary"
                                 [(ngModel)]="row.createCn"
                                 [name]="'createCn-' + row.variant?.uniqueName"
-                                [attr.aria-label]="(localeData?.create_cn || '') + ' - ' + (row.stock?.name || '')"
+                                [attr.aria-label]="(createNoteLabel || '') + ' - ' + (row.stock?.name || '')"
                             >
                                 {{ row.createCn ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
                             </mat-slide-toggle>
                         } @else {
                             <span class="text-muted" aria-hidden="true">-</span>
                         }
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="cnQty">
+                    <th mat-header-cell *matHeaderCellDef scope="col">{{ noteQtyLabel }}</th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="d-block w150 my-2">
+                            <input-field
+                                [type]="'number'"
+                                [allowDecimalDigitsOnly]="true"
+                                [name]="'cnQty-' + row.variant?.uniqueName"
+                                [label]="noteQtyLabel"
+                                [placeholder]="'0'"
+                                [matSuffix]="row.stockUnit?.code || row.stockUnit?.name"
+                                [(ngModel)]="row.cnQty"
+                                (ngModelChange)="onCnQtyChange(row)"
+                                [disabled]="!isCnQtyEditable(row)"
+                                [showError]="isCnQtyInvalid(row)"
+                            ></input-field>
+                            @if (isCnQtyInvalid(row)) {
+                                <div class="text-danger font-size-12 mt-1 text-wrap" role="alert">
+                                    {{ getNoteQtyError(row) }}
+                                </div>
+                            }
+                        </div>
                     </td>
                 </ng-container>
 

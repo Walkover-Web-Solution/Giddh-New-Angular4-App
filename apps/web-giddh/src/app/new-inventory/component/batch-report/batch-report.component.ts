@@ -1,22 +1,25 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
+import { MatChipInputEvent } from "@angular/material/chips";
+import { Location } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { forkJoin, of, ReplaySubject } from "rxjs";
+import { catchError, debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import * as customParseFormat from "dayjs/plugin/customParseFormat";
-import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
+import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../../app.constant";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
-import { InventoryReportRequest } from "../../../models/api-models/Inventory";
 import { BatchReportFilter, BatchReportItem, BatchReportTotals } from "../../../models/interfaces/batch-report.interface";
 import { OrganizationType } from "../../../models/user-login-state";
 import { GeneralService } from "../../../services/general.service";
 import { InventoryService } from "../../../services/inventory.service";
+import { LedgerService } from "../../../services/ledger.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { AppState } from "../../../store";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
@@ -26,6 +29,12 @@ import { BatchTransferDialogComponent } from "../batch-transfer-dialog/batch-tra
 import { InventoryModuleName } from "../../inventory.enum";
 
 export { mapAvailabilityBatches } from "./batch-report.helper";
+
+/** Chip shown for batch-name filters (label and value are the batch name). */
+interface BatchFilterChip {
+    label: string;
+    value: string;
+}
 
 dayjs.extend(customParseFormat);
 
@@ -77,6 +86,16 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public selectedWarehouse: string[] = [];
     /** Stock options for the filter dropdown. */
     public stocks: Array<{ label: string; value: string }> = [];
+    /** Current stocks dropdown page. */
+    private stocksPageNumber: number = 1;
+    /** Total stock pages from the API. */
+    private stocksTotalPages: number = 1;
+    /** Latest stock search text sent as `q` and shown in the stock dropdown search. */
+    public stocksSearchQuery: string = "";
+    /** Stock names from the redirect query, aligned with `selectedStock`. */
+    private queryStockNames: string[] = [];
+    /** Blocks overlapping stock list requests while scrolling. */
+    private preventStocksApiCall: boolean = false;
     /** Variant options for the filter dropdown. */
     public variants: Array<{ label: string; value: string }> = [];
     /** Warehouse options for the filter dropdown. */
@@ -93,14 +112,26 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public showBatchNumberSearchInput: boolean = false;
     /** True when the name header search input is expanded. */
     public showNameSearchInput: boolean = false;
-    /** Latest batch-number search text sent as `batchNumbers`. */
+    /** Latest batch-number header search text. */
     public batchNumberSearchText: string = "";
-    /** Latest name search text sent as `q`. */
+    /** Latest name header search text. */
     public nameSearchText: string = "";
+    /** Applied batch-number chips from advance filter / query (`batchNumbers`). */
+    public batchNumberChips: string[] = [];
+    /** Applied name chips from advance filter / query (`batchNames`). Sent to API as `batchUniqueNames`. */
+    public batchUniqueNameChips: BatchFilterChip[] = [];
+    /** Draft batch-number chips while the advance filter dialog is open. */
+    public filterBatchNumberChips: string[] = [];
+    /** Draft name chips while the advance filter dialog is open. */
+    public filterBatchUniqueNameChips: BatchFilterChip[] = [];
+    /** Chip input separator keys (Enter / comma). */
+    public readonly separatorKeysCodes: number[] = [ENTER, COMMA];
     /** Days remaining filter. */
     public withinDaysControl: FormControl = new FormControl("");
     /** Expired-only filter (`true` already expired, `false` will expire). */
     public expiredOnly: boolean | null = null;
+    /** Archive status filter (`true` archive, `false` unarchive, `null` all). */
+    public archiveStatus: boolean | null = null;
     /** From date sent on get-all (`DD-MM-YYYY`). */
     public fromDate: string = "";
     /** To date sent on get-all (`DD-MM-YYYY`). */
@@ -119,20 +150,30 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     @ViewChild("advanceFilterDialog") public advanceFilterDialog: TemplateRef<any>;
     /** Draft within-days value while the filter dialog is open. */
     public filterWithinDays: FormControl = new FormControl("");
-    /** Draft expiry-status value while the filter dialog is open. */
-    public filterExpiredOnly: boolean | null = null;
+    /** Draft expiry-status value while the filter dialog is open. Defaults to will expire. */
+    public filterExpiredOnly: boolean | null;
+    /** Draft archive-status value while the filter dialog is open. */
+    public filterArchiveStatus: boolean | null = null;
+    /** True after Apply is clicked with missing required filters. */
+    public showAdvanceFilterErrors: boolean = false;
+    /** Open advance filter dialog instance. */
+    private advanceFilterDialogRef: MatDialogRef<any>;
     /** True when from/to came from reports query params, so universal date must not overwrite them. */
     private useQueryDateRange: boolean = false;
+    /** True when this page was opened from item-wise, variant-wise, or stock-balance. */
+    public showBackButton: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private cdr: ChangeDetectorRef,
         private inventoryService: InventoryService,
+        private ledgerService: LedgerService,
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private location: Location
     ) {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
     }
@@ -143,6 +184,10 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      * @memberof BatchReportComponent
      */
     public ngOnInit(): void {
+        this.filterWithinDays.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            this.rejectInvalidWithinDays(value);
+            this.cdr.detectChanges();
+        });
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 if (!this.useQueryDateRange) {
@@ -152,6 +197,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
                 if (this.inventoryType) {
+                    this.preventStocksApiCall = false;
                     this.loadStocks();
                     this.loadVariants();
                     this.getBatches();
@@ -168,9 +214,10 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             }
             this.inventoryType = inventoryType;
             this.resetFilters(false);
+            this.resetStockPagination();
             const query = this.route.snapshot.queryParams;
             this.applyQueryFilters(query);
-            this.loadStocks();
+            this.loadStocks(1, this.queryStockNames[0] || "");
             this.loadVariants();
             this.loadBranchesAndWarehouses();
             if (this.hasQueryFilters(query)) {
@@ -186,6 +233,8 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.clearQueryParams();
             this.page = 1;
             this.pageIndex = 0;
+            this.preventStocksApiCall = false;
+            this.loadStocks(1, this.queryStockNames[0] || "");
             this.loadVariants();
             this.getBatches();
             this.cdr.detectChanges();
@@ -258,49 +307,76 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * True when any list filter is active.
+     * True when header filters (stock, variant, warehouse, or column search) are active.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchReportComponent
+     */
+    public get hasHeaderFilters(): boolean {
+        return !!(this.selectedStock?.length
+            || this.selectedVariant?.length
+            || this.selectedWarehouse?.length
+            || this.batchNumberSearchText
+            || this.nameSearchText);
+    }
+
+    /**
+     * True when header or advance filters are active.
      *
      * @readonly
      * @type {boolean}
      * @memberof BatchReportComponent
      */
     public get hasActiveFilters(): boolean {
-        return !!(this.selectedStock?.length
-            || this.selectedVariant?.length
-            || this.selectedWarehouse?.length
-            || this.batchNumberSearchText
-            || this.nameSearchText
-            || this.withinDaysControl.value
-            || this.expiredOnly !== null);
+        return this.hasHeaderFilters || this.hasAdvanceFilters;
     }
 
     /**
-     * True when within-days or expiry-status advance filters are applied.
+     * True when advance filters (expiry or batch chips) are applied.
      *
      * @readonly
      * @type {boolean}
      * @memberof BatchReportComponent
      */
     public get hasAdvanceFilters(): boolean {
-        return this.withinDaysValue > 0 || this.expiredOnly !== null;
+        return this.expiredOnly !== null
+            || this.archiveStatus !== null
+            || !!this.batchNumberChips?.length
+            || !!this.batchUniqueNameChips?.length;
     }
 
     /**
-     * Count of applied advance filters (badge on the Filters button).
+     * True when draft advance filter has batch number or name chips.
      *
      * @readonly
-     * @type {number}
+     * @type {boolean}
      * @memberof BatchReportComponent
      */
-    public get advanceFilterCount(): number {
-        let count = 0;
-        if (this.withinDaysValue > 0) {
-            count++;
-        }
-        if (this.expiredOnly !== null) {
-            count++;
-        }
-        return count;
+    public get hasFilterBatchChips(): boolean {
+        return !!this.filterBatchNumberChips?.length || !!this.filterBatchUniqueNameChips?.length;
+    }
+
+    /**
+     * Comma-separated applied batch numbers for the summary chip.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BatchReportComponent
+     */
+    public get appliedBatchNumbersLabel(): string {
+        return (this.batchNumberChips ?? []).join(", ");
+    }
+
+    /**
+     * Comma-separated applied batch names for the summary chip.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BatchReportComponent
+     */
+    public get appliedBatchNamesLabel(): string {
+        return (this.batchUniqueNameChips ?? []).map(chip => chip.label).filter(label => !!label).join(", ");
     }
 
     /**
@@ -312,6 +388,76 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      */
     public get withinDaysValue(): number {
         return Number(this.withinDaysControl.value) || 0;
+    }
+
+    /**
+     * True when the dialog within-days value is a positive number.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchReportComponent
+     */
+    public get hasFilterWithinDays(): boolean {
+        return Number(this.filterWithinDays.value) > 0;
+    }
+
+    /**
+     * Within Days is required only for Will Expire. Already Expired can apply without days.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchReportComponent
+     */
+    public get isFilterWithinDaysRequired(): boolean {
+        return this.filterExpiredOnly === false;
+    }
+
+    /**
+     * Keeps only digits in Within Days. Negative signs, decimals, and other characters are removed.
+     *
+     * @private
+     * @param {*} value
+     * @memberof BatchReportComponent
+     */
+    private rejectInvalidWithinDays(value: any): void {
+        if (value === "" || value === null || value === undefined) {
+            return;
+        }
+        const digitsOnly = String(value).replace(/\D/g, "");
+        if (digitsOnly !== String(value)) {
+            this.filterWithinDays.setValue(digitsOnly, { emitEvent: false });
+        }
+    }
+
+    /**
+     * Expiry-status options for the advance filter dropdown.
+     *
+     * @readonly
+     * @type {IOption[]}
+     * @memberof BatchReportComponent
+     */
+    public get expiryStatusOptions(): IOption[] {
+        return [
+            { label: this.localeData?.will_expire ?? "", value: "false" },
+            { label: this.localeData?.already_expired ?? "", value: "true" }
+        ];
+    }
+
+    /**
+     * Selected expiry-status label in the advance filter dropdown.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BatchReportComponent
+     */
+    public get expiryStatusFilterLabel(): string {
+        if (this.filterExpiredOnly === true) {
+            return this.localeData?.already_expired ?? "";
+        }
+        if (this.filterExpiredOnly === false) {
+            return this.localeData?.will_expire ?? "";
+        }
+        return "";
     }
 
     /**
@@ -329,6 +475,76 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return this.localeData?.will_expire ?? "";
         }
         return "";
+    }
+
+    /**
+     * Archive-status options for the advance filter dropdown.
+     *
+     * @readonly
+     * @type {IOption[]}
+     * @memberof BatchReportComponent
+     */
+    public get archiveStatusOptions(): IOption[] {
+        return [
+            { label: this.commonLocaleData?.app_all ?? "", value: "all" },
+            { label: this.commonLocaleData?.app_archive ?? "", value: "true" },
+            { label: this.commonLocaleData?.app_active ?? "", value: "false" }
+        ];
+    }
+
+    /**
+     * Selected archive-status label in the advance filter dropdown.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BatchReportComponent
+     */
+    public get archiveStatusFilterLabel(): string {
+        if (this.filterArchiveStatus === true) {
+            return this.commonLocaleData?.app_archive ?? "";
+        }
+        if (this.filterArchiveStatus === false) {
+            return this.commonLocaleData?.app_active ?? "";
+        }
+        return this.commonLocaleData?.app_all ?? "";
+    }
+
+    /**
+     * Label for the applied archive-status chip.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BatchReportComponent
+     */
+    public get archiveStatusLabel(): string {
+        if (this.archiveStatus === true) {
+            return this.commonLocaleData?.app_archive ?? "";
+        }
+        if (this.archiveStatus === false) {
+            return this.commonLocaleData?.app_active ?? "";
+        }
+        return "";
+    }
+
+    /**
+     * Search stocks from the dropdown — reload page 1 from the API.
+     *
+     * @param {string} query Search text
+     * @memberof BatchReportComponent
+     */
+    public onStockSearchQueryChanged(query: string): void {
+        this.preventStocksApiCall = false;
+        this.stocksTotalPages = 1;
+        this.loadStocks(1, query ?? "");
+    }
+
+    /**
+     * Load the next stock page when the dropdown is scrolled to the end.
+     *
+     * @memberof BatchReportComponent
+     */
+    public onStockScrollEnd(): void {
+        this.loadStocks(this.stocksPageNumber + 1, this.stocksSearchQuery);
     }
 
     /**
@@ -373,13 +589,49 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      */
     public openAdvanceFilterDialog(): void {
         this.filterWithinDays.setValue(this.withinDaysControl.value ?? "", { emitEvent: false });
-        this.filterExpiredOnly = this.expiredOnly;
-        this.dialog.open(this.advanceFilterDialog, {
-            width: "500px",
+        this.filterExpiredOnly = this.expiredOnly !== null ? this.expiredOnly : null;
+        this.filterArchiveStatus = this.archiveStatus;
+        this.filterBatchNumberChips = [...this.batchNumberChips];
+        this.filterBatchUniqueNameChips = this.batchUniqueNameChips.map(chip => ({ ...chip }));
+        this.showAdvanceFilterErrors = false;
+        this.advanceFilterDialogRef = this.dialog.open(this.advanceFilterDialog, {
+            panelClass: "mat-dialog-md",
             autoFocus: false,
             role: "alertdialog",
             ariaLabel: "Advance filter Dialog"
         });
+    }
+
+    /**
+     * Set the draft expiry-status from the reactive dropdown.
+     *
+     * @param {IOption} event
+     * @memberof BatchReportComponent
+     */
+    public selectExpiryStatus(event: IOption): void {
+        if (event?.value === "true") {
+            this.filterExpiredOnly = true;
+        } else if (event?.value === "false") {
+            this.filterExpiredOnly = false;
+        } else {
+            this.filterExpiredOnly = null;
+        }
+    }
+
+    /**
+     * Set the draft archive-status from the reactive dropdown.
+     *
+     * @param {IOption} event
+     * @memberof BatchReportComponent
+     */
+    public selectArchiveStatus(event: IOption): void {
+        if (event?.value === "true") {
+            this.filterArchiveStatus = true;
+        } else if (event?.value === "false") {
+            this.filterArchiveStatus = false;
+        } else {
+            this.filterArchiveStatus = null;
+        }
     }
 
     /**
@@ -388,10 +640,25 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      * @memberof BatchReportComponent
      */
     public applyAdvanceFilters(): void {
-        this.withinDaysControl.setValue(this.filterWithinDays.value ?? "", { emitEvent: false });
+        this.rejectInvalidWithinDays(this.filterWithinDays.value);
+        const hasExpiryStatus = this.filterExpiredOnly !== null;
+        if ((this.hasFilterWithinDays && !hasExpiryStatus) || (this.isFilterWithinDaysRequired && !this.hasFilterWithinDays)) {
+            this.showAdvanceFilterErrors = true;
+            this.cdr.detectChanges();
+            return;
+        }
+        this.batchNumberChips = [...this.filterBatchNumberChips];
+        this.batchUniqueNameChips = this.filterBatchUniqueNameChips.map(chip => ({ ...chip }));
         this.expiredOnly = this.filterExpiredOnly;
+        this.archiveStatus = this.filterArchiveStatus;
+        if (this.hasFilterWithinDays) {
+            this.withinDaysControl.setValue(this.filterWithinDays.value ?? "", { emitEvent: false });
+        } else {
+            this.withinDaysControl.setValue("", { emitEvent: false });
+        }
         this.page = 1;
         this.pageIndex = 0;
+        this.advanceFilterDialogRef?.close();
         this.getBatches();
         this.cdr.detectChanges();
     }
@@ -399,14 +666,19 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     /**
      * Remove one applied advance filter and refetch.
      *
-     * @param {("withinDays" | "expiredOnly")} type Filter to clear
+     * @param {("withinDays" | "expiredOnly" | "status" | "batchNumber" | "batchUniqueName")} type Filter to clear
      * @memberof BatchReportComponent
      */
-    public removeAdvanceFilter(type: "withinDays" | "expiredOnly"): void {
-        if (type === "withinDays") {
+    public removeAdvanceFilter(type: "withinDays" | "expiredOnly" | "status" | "batchNumber" | "batchUniqueName"): void {
+        if (type === "withinDays" || type === "expiredOnly") {
             this.withinDaysControl.setValue("", { emitEvent: false });
-        } else {
             this.expiredOnly = null;
+        } else if (type === "status") {
+            this.archiveStatus = null;
+        } else if (type === "batchNumber") {
+            this.batchNumberChips = [];
+        } else if (type === "batchUniqueName") {
+            this.batchUniqueNameChips = [];
         }
         this.page = 1;
         this.pageIndex = 0;
@@ -415,13 +687,16 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Clear only the two advance filters (within days and expiry status).
+     * Clear all advance filters (expiry + batch chips).
      *
      * @memberof BatchReportComponent
      */
     public clearAdvanceFilters(): void {
         this.withinDaysControl.setValue("", { emitEvent: false });
         this.expiredOnly = null;
+        this.archiveStatus = null;
+        this.batchNumberChips = [];
+        this.batchUniqueNameChips = [];
         this.page = 1;
         this.pageIndex = 0;
         this.getBatches();
@@ -444,11 +719,13 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         this.searchName.setValue("", { emitEvent: false });
         this.showBatchNumberSearchInput = false;
         this.showNameSearchInput = false;
-        this.withinDaysControl.setValue("", { emitEvent: false });
-        this.expiredOnly = null;
         this.page = 1;
         this.pageIndex = 0;
         if (refetch) {
+            this.showBackButton = false;
+            this.preventStocksApiCall = false;
+            this.stocksTotalPages = 1;
+            this.loadStocks(1, "");
             this.loadVariants();
             this.getBatches();
         }
@@ -510,6 +787,66 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Add a draft batch-number chip (Enter / comma).
+     *
+     * @param {MatChipInputEvent} event Chip input event
+     * @memberof BatchReportComponent
+     */
+    public addFilterBatchNumberChip(event: MatChipInputEvent): void {
+        const value = (event.value ?? "").trim();
+        event.chipInput?.clear();
+        if (!value || this.filterBatchNumberChips.includes(value)) {
+            return;
+        }
+        this.filterBatchNumberChips = [...this.filterBatchNumberChips, value];
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Remove a draft batch-number chip.
+     *
+     * @param {number} index Chip index
+     * @memberof BatchReportComponent
+     */
+    public removeFilterBatchNumberChip(index: number): void {
+        if (index < 0 || index >= this.filterBatchNumberChips.length) {
+            return;
+        }
+        this.filterBatchNumberChips = this.filterBatchNumberChips.filter((_, chipIndex) => chipIndex !== index);
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Add a draft batch-name chip (Enter / comma).
+     *
+     * @param {MatChipInputEvent} event Chip input event
+     * @memberof BatchReportComponent
+     */
+    public addFilterBatchUniqueNameChip(event: MatChipInputEvent): void {
+        const value = (event.value ?? "").trim();
+        event.chipInput?.clear();
+        if (!value || this.filterBatchUniqueNameChips.some(chip => chip.value === value || chip.label === value)) {
+            return;
+        }
+        this.filterBatchUniqueNameChips = [...this.filterBatchUniqueNameChips, { label: value, value }];
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Remove a draft batch-name chip.
+     *
+     * @param {number} index Chip index
+     * @memberof BatchReportComponent
+     */
+    public removeFilterBatchUniqueNameChip(index: number): void {
+        if (index < 0 || index >= this.filterBatchUniqueNameChips.length) {
+            return;
+        }
+        this.filterBatchUniqueNameChips = this.filterBatchUniqueNameChips.filter((_, chipIndex) => chipIndex !== index);
+        this.cdr.detectChanges();
+    }
+
+    /**
      * Open create or edit batch in an aside dialog.
      *
      * @param {string} [batchUniqueName] Batch unique name for edit mode
@@ -557,7 +894,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         if (this.isBatchUsed(row)) {
             const entities = (row.linkedEntities ?? []).filter(item => !!item).join(", ") || "entry/voucher";
             const dialogRef = this.dialog.open(ConfirmModalComponent, {
-                width: "40%",
+                panelClass: "mat-dialog-md",
                 role: "alertdialog",
                 ariaLabel: "Confirm Archive Dialog",
                 data: {
@@ -575,7 +912,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return;
         }
         const dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: "40%",
+            panelClass: "mat-dialog-md",
             role: "alertdialog",
             ariaLabel: "Confirm Delete Dialog",
             data: {
@@ -645,12 +982,13 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return;
         }
         const dialogRef = this.dialog.open(BatchTransferDialogComponent, {
-            width: "500px",
+            panelClass: "mat-dialog-sm",
             autoFocus: false,
             role: "alertdialog",
             ariaLabel: "Transfer Batch Dialog",
             data: {
                 batch: row,
+                inventoryType: this.inventoryType,
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData
             }
@@ -682,7 +1020,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return;
         }
         const dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: "40%",
+            panelClass: "mat-dialog-sm",
             role: "alertdialog",
             ariaLabel: "Confirm Unarchive Dialog",
             data: {
@@ -711,7 +1049,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             return;
         }
         const dialogRef = this.dialog.open(BatchArchiveDialogComponent, {
-            width: "500px",
+            panelClass: "mat-dialog-sm",
             autoFocus: false,
             role: "alertdialog",
             ariaLabel: "Archive Batch Dialog",
@@ -763,24 +1101,43 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         this.cancelApi$.complete();
         this.cancelApi$ = new ReplaySubject(1);
         this.isLoading = true;
-        const batchNumber = this.batchNumberSearchText;
-        const name = this.nameSearchText;
+        const batchNumbers = [
+            ...this.batchNumberChips,
+            ...(this.batchNumberSearchText ? [this.batchNumberSearchText] : [])
+        ];
+        const batchUniqueNames = [
+            ...this.batchUniqueNameChips.map(chip => chip.value),
+            ...(this.nameSearchText ? [this.nameSearchText] : [])
+        ];
         const withinDays = Number(this.withinDaysControl.value);
         const payload: BatchReportFilter = {
-            stockUniqueNames: this.selectedStock ?? [],
-            variantUniqueNames: this.selectedVariant ?? [],
-            warehouseUniqueNames: this.selectedWarehouse ?? [],
-            batchUniqueNames: name ? [name] : [],
-            batchNumbers: batchNumber ? [batchNumber] : [],
             inventoryType: this.inventoryType
         };
-        if (withinDays > 0) {
-            payload.withinDays = withinDays;
+        if (this.selectedStock?.length) {
+            payload.stockUniqueNames = this.selectedStock;
+        }
+        if (this.selectedVariant?.length) {
+            payload.variantUniqueNames = this.selectedVariant;
+        }
+        if (this.selectedWarehouse?.length) {
+            payload.warehouseUniqueNames = this.selectedWarehouse;
+        }
+        if (batchUniqueNames.length) {
+            payload.batchUniqueNames = batchUniqueNames;
+        }
+        if (batchNumbers.length) {
+            payload.batchNumbers = batchNumbers;
         }
         if (this.expiredOnly !== null) {
             payload.expiredOnly = this.expiredOnly;
         }
-        this.inventoryService.getAllBatches({ q: name, page: this.page, count: this.count, from: this.fromDate, to: this.toDate }, payload)
+        if (withinDays > 0 && this.expiredOnly !== null) {
+            payload.withinDays = withinDays;
+        }
+        if (this.archiveStatus !== null) {
+            payload.archive = this.archiveStatus;
+        }
+        this.inventoryService.getAllBatches({ page: this.page, count: this.count, from: this.fromDate, to: this.toDate }, payload)
             .pipe(takeUntil(this.cancelApi$), takeUntil(this.destroyed$))
             .subscribe(response => {
                 this.isLoading = false;
@@ -810,64 +1167,118 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Load stock options from the item-wise report API.
+     * Reset stock dropdown paging so the next load starts from page 1.
      *
      * @private
      * @memberof BatchReportComponent
      */
-    private loadStocks(): void {
-        if (!this.inventoryType) {
-            return;
-        }
-        const stockReportRequest = new InventoryReportRequest();
-        stockReportRequest["inventoryType"] = this.inventoryType;
-        const queryParams = { from: this.fromDate, to: this.toDate, count: PAGINATION_LIMIT, page: 1, sort: "", sortBy: "" };
-        this.inventoryService.getItemWiseReport(queryParams, stockReportRequest)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(response => {
-                if (response?.status === "success") {
-                    const unique = new Map<string, { label: string; value: string }>();
-                    (response.body?.results ?? []).forEach((row: any) => {
-                        const uniqueName = row?.stock?.uniqueName;
-                        if (uniqueName && !unique.has(uniqueName)) {
-                            unique.set(uniqueName, { label: row?.stock?.name ?? uniqueName, value: uniqueName });
-                        }
-                    });
-                    this.stocks = Array.from(unique.values());
-                    this.cdr.detectChanges();
-                }
-            });
+    private resetStockPagination(): void {
+        this.stocks = [];
+        this.stocksPageNumber = 1;
+        this.stocksTotalPages = 1;
+        this.stocksSearchQuery = "";
+        this.queryStockNames = [];
+        this.preventStocksApiCall = false;
     }
 
     /**
-     * Load variant options from the variant-wise report API.
+     * Load stock options from the stocks V2 API.
+     *
+     * @private
+     * @param {number} [page=1] Page number
+     * @param {string} [query] Search text
+     * @memberof BatchReportComponent
+     */
+    private loadStocks(page: number = 1, query?: string): void {
+        if (!this.inventoryType) {
+            return;
+        }
+        if (typeof query === "string") {
+            this.stocksSearchQuery = query;
+        }
+        if (page > this.stocksTotalPages || this.preventStocksApiCall) {
+            return;
+        }
+        this.preventStocksApiCall = true;
+        this.stocksPageNumber = page;
+        this.inventoryService.getStocksV2({
+            inventoryType: this.inventoryType,
+            page,
+            q: this.stocksSearchQuery ?? "",
+            count: PAGINATION_LIMIT
+        }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.stocksTotalPages = response.body?.totalPages || 1;
+                const next = (response.body?.results ?? [])
+                    .map((stock: any) => ({
+                        label: stock?.name ?? stock?.uniqueName,
+                        value: stock?.uniqueName
+                    }))
+                    .filter(option => option.value);
+                this.mergeStockOptions(page, next);
+            } else if (page === 1) {
+                this.stocks = [];
+                this.stocksTotalPages = 1;
+            }
+            setTimeout(() => {
+                this.preventStocksApiCall = false;
+            }, 500);
+            this.cdr.detectChanges();
+        }, () => {
+            this.preventStocksApiCall = false;
+            this.cdr.detectChanges();
+        });
+    }
+
+    /**
+     * Replace stocks on page 1 (keep selected labels) and append later pages.
+     *
+     * @private
+     * @param {number} page Current page
+     * @param {Array<{ label: string; value: string }>} next New options
+     * @memberof BatchReportComponent
+     */
+    private mergeStockOptions(page: number, next: Array<{ label: string; value: string }>): void {
+        if (page === 1) {
+            const selected = new Set(this.selectedStock ?? []);
+            const keep = this.stocks.filter(option => selected.has(option.value) && !next.some(item => item.value === option.value));
+            this.stocks = [...keep, ...next];
+            return;
+        }
+        const existing = new Set(this.stocks.map(option => option.value));
+        this.stocks = [...this.stocks, ...next.filter(option => !existing.has(option.value))];
+    }
+
+    /**
+     * Load variants for the selected stocks.
      *
      * @private
      * @memberof BatchReportComponent
      */
     private loadVariants(): void {
-        if (!this.inventoryType) {
+        const stockUniqueNames = this.selectedStock ?? [];
+        if (!stockUniqueNames.length) {
+            this.variants = [];
+            this.cdr.detectChanges();
             return;
         }
-        const stockReportRequest = new InventoryReportRequest();
-        stockReportRequest["inventoryType"] = this.inventoryType;
-        stockReportRequest.stockUniqueNames = this.selectedStock ?? [];
-        const queryParams = { from: this.fromDate, to: this.toDate, count: PAGINATION_LIMIT, page: 1, sort: "", sortBy: "" };
-        this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(response => {
-                if (response?.status === "success") {
-                    const unique = new Map<string, { label: string; value: string }>();
-                    (response.body?.results ?? []).forEach((row: any) => {
-                        const uniqueName = row?.variant?.uniqueName;
-                        if (uniqueName && !unique.has(uniqueName)) {
-                            unique.set(uniqueName, { label: row?.variant?.name ?? uniqueName, value: uniqueName });
-                        }
-                    });
-                    this.variants = Array.from(unique.values());
-                    this.cdr.detectChanges();
-                }
+        forkJoin(stockUniqueNames.map(uniqueName =>
+            this.ledgerService.loadStockVariants(uniqueName).pipe(catchError(() => of([])))
+        )).pipe(takeUntil(this.destroyed$)).subscribe(results => {
+            const unique = new Map<string, { label: string; value: string }>();
+            (results ?? []).forEach(variants => {
+                (Array.isArray(variants) ? variants : []).forEach((variant: any) => {
+                    if (variant?.uniqueName && !unique.has(variant.uniqueName)) {
+                        unique.set(variant.uniqueName, {
+                            label: variant?.name ?? variant.uniqueName,
+                            value: variant.uniqueName
+                        });
+                    }
+                });
             });
+            this.variants = Array.from(unique.values());
+            this.cdr.detectChanges();
+        });
     }
 
     /**
@@ -944,6 +1355,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.page = 1;
             this.pageIndex = 0;
+            this.preventStocksApiCall = false;
             this.loadStocks();
             this.loadVariants();
             this.getBatches();
@@ -974,19 +1386,34 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      */
     private applyQueryFilters(query: any): void {
         if (!this.hasQueryFilters(query)) {
+            this.showBackButton = false;
             return;
         }
+        this.showBackButton = true;
         const stock = this.parseQueryList(query?.stockUniqueNames);
+        const stockNames = this.parseQueryList(query?.stockNames);
         const variant = this.parseQueryList(query?.variantUniqueNames);
         const warehouse = this.parseQueryList(query?.warehouseUniqueNames);
         if (stock.length) {
             this.selectedStock = stock;
+            this.queryStockNames = stockNames;
         }
         if (variant.length) {
             this.selectedVariant = variant;
         }
         if (warehouse.length) {
             this.selectedWarehouse = warehouse;
+        }
+        const batchNames = this.parseQueryList(query?.batchNames);
+        if (batchNames.length) {
+            this.batchUniqueNameChips = batchNames.map(name => ({
+                label: name,
+                value: name
+            }));
+        }
+        const batchNumbers = this.parseQueryList(query?.batchNumbers);
+        if (batchNumbers.length) {
+            this.batchNumberChips = batchNumbers;
         }
         this.applyQueryDateRange(query?.from, query?.to);
     }
@@ -1024,7 +1451,8 @@ export class BatchReportComponent implements OnInit, OnDestroy {
      * @memberof BatchReportComponent
      */
     private hasQueryFilters(query: any): boolean {
-        return !!(query?.stockUniqueNames || query?.variantUniqueNames || query?.warehouseUniqueNames || query?.from || query?.to);
+        return !!(query?.stockUniqueNames || query?.variantUniqueNames || query?.warehouseUniqueNames
+            || query?.batchNames || query?.batchNumbers || query?.from || query?.to);
     }
 
     /**
@@ -1055,6 +1483,20 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             queryParams: {},
             replaceUrl: true
         });
+    }
+
+    /**
+     * Go back to the page the user opened this report from.
+     *
+     * @memberof BatchReportComponent
+     */
+    public backToPreviousPage(): void {
+        if (window.history.length > 1) {
+            this.location.back();
+            return;
+        }
+        const type = (this.inventoryType || "PRODUCT").toLowerCase().replace("_", "");
+        this.router.navigate(["/pages/inventory/v2", type, "reports", "stock"]);
     }
 
     /**

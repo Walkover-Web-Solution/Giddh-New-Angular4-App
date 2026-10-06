@@ -71,6 +71,7 @@ export class InventoryActionsConst {
     public static MoveStock = 'MoveStock';
     public static MoveStockResponse = 'MoveStockResponse';
     public static BulkStockResponse = 'BulkStockResponse';
+    public static SetInventorySettings = 'SetInventorySettings';
 }
 
 // Custom Stock Unit Actions

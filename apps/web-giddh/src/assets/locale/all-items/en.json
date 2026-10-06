@@ -311,6 +311,20 @@
                     "link": "/pages/vouchers/preview/delivery-challan/list",
                     "icon": "icon-E-way-bill",
                     "description": "Create delivery challan",
+                    "submenu": [
+                        {
+                            "label": "Report",
+                            "link": "/pages/vouchers/preview/delivery-challan/list",
+                            "icon": "icon-accounts-new",
+                            "description": "Create delivery challan"
+                        },
+                        {
+                            "label": "DC ⇄ Invoice Reconciliation",
+                            "link": "/pages/vouchers/reconciliation/delivery-challan",
+                            "icon": "icon-register-new",
+                            "description": "Reconcile delivery challan with invoice"
+                        }
+                    ],
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
@@ -590,6 +604,20 @@
                     "link": "/pages/vouchers/preview/receipt-note/list",
                     "icon": "icon-reciept-new",
                     "description": "Create receipt note",
+                    "submenu": [
+                        {
+                            "label": "Report",
+                            "link": "/pages/vouchers/preview/receipt-note/list",
+                            "icon": "icon-accounts-new",
+                            "description": "Create receipt note"
+                        },
+                        {
+                            "label": "RN ⇄ Bill Reconciliation",
+                            "link": "/pages/vouchers/reconciliation/receipt-note",
+                            "icon": "icon-register-new",
+                            "description": "Reconcile receipt note with bill"
+                        }
+                    ],
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2

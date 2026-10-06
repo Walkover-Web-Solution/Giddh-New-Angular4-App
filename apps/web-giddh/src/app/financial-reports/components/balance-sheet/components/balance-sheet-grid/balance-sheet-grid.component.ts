@@ -19,6 +19,7 @@ import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Se
 import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
@@ -28,6 +29,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { each } from '../../../../../lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+
+dayjs.extend(customParseFormat);
 
 @Component({
 selector: 'balance-sheet-grid',
@@ -69,6 +72,22 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     private listOfCheckGroupsAccounts: any[] = [];
     /** Holds images folder path */
     public imgPath: string = "";
+
+    /**
+     * Filter from-date minus one day, for the opening "As of" column.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BalanceSheetGridComponent
+     */
+    public get previousFromDate(): string {
+        const from = this.bsData?.dates?.from;
+        if (!from || from === 'Invalid date') {
+            return '';
+        }
+        const parsed = dayjs(from, GIDDH_DATE_FORMAT, true);
+        return parsed.isValid() ? parsed.subtract(1, 'day').format(GIDDH_DATE_FORMAT) : from;
+    }
 
     constructor(
         private cd: ChangeDetectorRef,

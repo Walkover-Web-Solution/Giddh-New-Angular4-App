@@ -79,6 +79,8 @@
     "cr_note_no": "Cr Note No.",
     "dr_note_no": "Dr Note No.",
     "linked_invoice": "Linked Invoice",
+    "view_linked_invoice": "Linked Invoice",
+    "no_linked_invoice_found": "No linked invoices found",
     "linked_voucher": "Linked Voucher",
     "overdue_today": "Overdue by Today",
     "overdue_days": "Overdue by [DAYS] days",
@@ -593,14 +595,20 @@
         "open": "Open",
         "closed": "Closed",
         "expired": "Expired",
-        "cancelled": "Cancelled"
+        "cancelled": "Cancelled",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "received": "Received",
+        "completed": "Completed"
     },
     "inventory_invoice_status": {
         "invoiced": "Invoiced",
         "partially_invoiced": "Partially Invoiced",
+        "fully_invoiced": "Fully Invoiced",
         "not_invoiced": "Not Invoiced",
         "billed": "Billed",
         "partially_billed": "Partially Billed",
+        "fully_billed": "Fully Billed",
         "not_billed": "Not Billed"
     },
     "linked_invoice_filter": {
@@ -609,17 +617,56 @@
     },
     "preview_and_convert_invoice": "Preview & Convert to Invoice",
     "preview_and_convert_bill": "Preview & Convert to Bill",
+    "convert_to_dc": "Convert to DC",
+    "convert_to_rn": "Convert to RN",
+    "preview_and_convert_to_dc": "Preview & Convert to DC",
+    "preview_and_convert_to_rn": "Preview & Convert to RN",
+    "document_converted_successfully": "Document converted successfully",
     "mark_return": "Mark Return",
     "make_adjustment": "Make Adjustment",
     "convert_process_stock_items": "Convert and Process Stock Items",
     "return_dialog_hint": "Select items to return — a Receipt Note (RN) will be created for checked items. Turn on Create CN for any item that also needs a Credit Note.",
+    "return_dialog_hint_receipt_note": "Select items to return — a Delivery Note (DN) will be created for checked items. Turn on Create DN for any item that also needs a Debit Note.",
     "item_stock_variant": "Item - Stock & Variant",
     "total_qty": "Total Qty",
     "invoiced_qty": "Invoiced Qty",
     "return_qty": "Return Qty",
+    "cn_qty": "CN Qty",
+    "dn_qty": "DN Qty",
     "create_cn": "Create Credit Note",
+    "create_dn": "Create Debit Note",
     "proceed": "Proceed",
     "select_return_items": "Select at least one item to return",
+    "return_qty_exceeds": "Return quantity [RETURN_QTY] exceeds returnable quantity [RETURNABLE_QTY].",
+    "cn_qty_exceeds": "CN quantity [QTY] exceeds creditable quantity [AVAILABLE_QTY].",
+    "dn_qty_exceeds": "DN quantity [QTY] exceeds creditable quantity [AVAILABLE_QTY].",
     "return_success": "Return processed successfully",
-    "download_signed_bill": "Download Digitally Signed Bill"
+    "download_signed_bill": "Download Digitally Signed Bill",
+    "dc_invoice_reconciliation": "DC - Invoice Reconciliation",
+    "rn_bill_reconciliation": "RN - Bill Reconciliation",
+    "report_type": "Report Type",
+    "pending_report_types": {
+        "WITHOUT_CHALLAN": "Pending DC",
+        "NOT_INVOICED": "Pending Invoice"
+    },
+    "pending_report_types_rn": {
+        "WITHOUT_CHALLAN": "Pending RN",
+        "NOT_INVOICED": "Pending Bill"
+    },
+    "linked_invoice_count": "Linked Invoice Count",
+    "linked_bill_count": "Linked Bill Count",
+    "pending_balances": {
+        "total": "Total",
+        "not_invoiced": "Not Invoiced",
+        "partially_invoiced": "Partially Invoiced",
+        "fully_invoiced": "Fully Invoiced",
+        "not_billed": "Not Billed",
+        "partially_billed": "Partially Billed",
+        "fully_billed": "Fully Billed"
+    },
+    "inventory_via_business_document_disabled_title_delivery_challan": "Delivery Challans are turned off",
+    "inventory_via_business_document_disabled_title_receipt_note": "Receipt Notes are turned off",
+    "inventory_via_business_document_disabled_title": "Delivery Challans and Receipt Notes are turned off",
+    "inventory_via_business_document_disabled_message": "To create Delivery Challans and Receipt Notes, turn on <strong>Manage inventory through Delivery Challans and Receipt Notes</strong> in Inventory Settings.",
+    "turn_on_in_inventory_settings": "Turn on in Inventory Settings"
 }

@@ -111,8 +111,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True, if multi-currency support to voucher adjustment is enabled */
-    protected enableVoucherAdjustmentMultiCurrency = signal<boolean>(false);
     /** Stores the voucher API version of current company */
     public voucherApiVersion: number;
     /** Current page for reference vouchers */
@@ -236,7 +234,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 this.changeDetectionRef.detectChanges();
             }
         });
-        this.enableVoucherAdjustmentMultiCurrency.set((window as any).enableVoucherAdjustmentMultiCurrency || false);
     }
 
     /**

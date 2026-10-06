@@ -4,6 +4,10 @@
 }
 
 .batch-report {
+    .report-back-button {
+        height: 37px;
+    }
+
     .filter-dropdown {
         min-width: 200px;
         max-width: 260px;
@@ -16,6 +20,7 @@
 
     .applied-filter-chip {
         background: var(--color-border-light);
+        max-width: min(100%, 420px);
     }
 
     .batch-summary-grid {

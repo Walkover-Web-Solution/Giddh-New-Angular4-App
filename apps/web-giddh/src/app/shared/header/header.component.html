@@ -294,9 +294,10 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
+                                                inventoryViaBusinessDocument &&
+                                                ((!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)))
                                             "
                                         >
                                             <div class="mt-4 mb-1 d-flex align-items-center">
