@@ -567,9 +567,10 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             }
             return mappedProduct;
         });
+        this.branchTransferCreateEditForm.markAllAsTouched();
         this.isValidForm = !this.branchTransferCreateEditForm.invalid;
-        this.isLoading = true;
         if (this.isValidForm) {
+            this.isLoading = true;
             if (this.editBranchTransferUniqueName) {
                 this.inventoryService.updateNewBranchTransfer(branchTransferObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     this.isLoading = false;
@@ -1910,10 +1911,11 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     });
                 }
                 setTimeout(() => {
-                    if (this.destinationWarehouses[sourceFormGroup.get('uniqueName')?.value].length === 1) {
+                    const destinationWarehouseOptions = this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value] || [];
+                    if (destinationWarehouseOptions.length === 1) {
                         let event = {
-                            label: this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value][0]?.label,
-                            value: this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value][0]?.value
+                            label: destinationWarehouseOptions[0]?.label,
+                            value: destinationWarehouseOptions[0]?.value
                         }
                         if (withBranches) {
                             this.selectReceiverWarehouse(event, index);

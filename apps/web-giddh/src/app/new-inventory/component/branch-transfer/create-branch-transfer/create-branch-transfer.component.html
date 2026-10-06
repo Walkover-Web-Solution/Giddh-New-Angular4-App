@@ -1975,9 +1975,7 @@
                                     aria-label="uniqueName"
                                     matButton="filled"
                                     *ngIf="isBranch || isCompanyWithSingleBranch"
-                                    class="d-inline-block vertical-align-middle {{ branchTransferCreateEditForm.invalid }}-{{
-                                        isValidSourceTaxNumber
-                                    }}-{{ isValidDestinationTaxNumber }}"
+                                    class="d-inline-block vertical-align-middle"
                                     (click)="submit()"
                                 >
                                     {{ editBranchTransferUniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_create }}
