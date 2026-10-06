@@ -15,6 +15,7 @@ export interface MarkReturnDialogData {
 }
 
 export interface MarkReturnRow {
+    sourceItemId: number;
     stock: { name: string; uniqueName: string };
     variant: { name: string; uniqueName: string };
     stockUnit: { name: string; code: string; uniqueName: string };
@@ -171,6 +172,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         const creditableQuantity = Number(item.creditableQuantity ?? 0);
 
         return {
+            sourceItemId: item.sourceItemId,
             stock: item.stock,
             variant: item.variant,
             stockUnit: item.stockUnit,
@@ -397,12 +399,14 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         }
 
         const mapReturnItem = (row: MarkReturnRow) => ({
+            sourceItemId: row.sourceItemId,
             stock: { uniqueName: row.stock?.uniqueName },
             variant: { uniqueName: row.variant?.uniqueName },
             quantity: Number(row.returnQty)
         });
 
         const mapCnItem = (row: MarkReturnRow) => ({
+            sourceItemId: row.sourceItemId,
             stock: { uniqueName: row.stock?.uniqueName },
             variant: { uniqueName: row.variant?.uniqueName },
             quantity: Number(row.cnQty)
