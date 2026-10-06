@@ -363,33 +363,6 @@
                                         </a>
                                     </p>
                                 </div>
-                                @if ((pendingBusinessDocuments$ | async)?.length > 0) {
-                                    <div class="col-12">
-                                        <p>
-                                            <small>{{ getPendingBusinessDocumentLabel() }}</small>
-                                        </p>
-                                        <p class="font-size-15">
-                                            @for (
-                                                document of pendingBusinessDocuments$ | async;
-                                                track document.uniqueName;
-                                                let i = $index
-                                            ) {
-                                                <a
-                                                    href="javascript:;"
-                                                    [attr.aria-label]="document.number"
-                                                    (click)="openPendingBusinessDocumentPreview(document)"
-                                                    (keydown.enter)="$event.preventDefault(); openPendingBusinessDocumentPreview(document)"
-                                                    (keydown.space)="$event.preventDefault(); openPendingBusinessDocumentPreview(document)"
-                                                >
-                                                    {{ document.number || 'N/A' }}
-                                                    @if (i < (pendingBusinessDocuments$ | async)?.length - 1) {
-                                                        <span>&nbsp;|&nbsp;</span>
-                                                    }
-                                                </a>
-                                            }
-                                        </p>
-                                    </div>
-                                }
                             </div>
                         </div>
 
@@ -1250,6 +1223,82 @@
                                             </mat-option>
                                         </mat-select>
                                     </div>
+                                    @if (pendingBusinessDocumentOptions?.length || selectedBusinessDocumentUniqueNames?.length) {
+                                        <div class="col-6">
+                                            <multi-select-dropdown
+                                                [name]="'linkedBusinessDocuments'"
+                                                [label]="getPendingBusinessDocumentLabel()"
+                                                [placeholder]="getPendingBusinessDocumentLabel()"
+                                                [options]="pendingBusinessDocumentOptions"
+                                                [formControl]="linkedBusinessDocuments"
+                                                [disabled]="showLoader()"
+                                                [panelClass]="'pending-business-document-panel'"
+                                                (selectionChange)="onLinkedBusinessDocumentsChange($event)"
+                                            >
+                                                <ng-template #triggerTemplate let-selected="selected">
+                                                    @for (option of selected; track option?.value; let last = $last) {
+                                                        {{ option?.label }}
+                                                        @if (
+                                                            option?.additional?.grandTotal?.amountForAccount ||
+                                                            option?.additional?.grandTotal?.amountForAccount === 0
+                                                        ) {
+                                                            ({{ company?.baseCurrencySymbol
+                                                            }}{{ option?.additional?.grandTotal?.amountForAccount | giddhNumberFormat }})
+                                                        }
+                                                        @if (!last) {
+                                                            ,
+                                                        }
+                                                    }
+                                                </ng-template>
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <div class="d-flex align-items-center justify-content-between w-100 column-gap-1">
+                                                        <div class="flex-grow-1">
+                                                            <div>{{ option?.label }}</div>
+                                                            <div class="font-size-12 text-light">
+                                                                {{ commonLocaleData?.app_date }}:
+                                                                {{ option?.additional?.date | giddhDate }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex align-items-center column-gap-1">
+                                                            @if (
+                                                                option?.additional?.grandTotal?.amountForAccount ||
+                                                                option?.additional?.grandTotal?.amountForAccount === 0
+                                                            ) {
+                                                                <span>
+                                                                    {{ company?.baseCurrencySymbol }}
+                                                                    {{
+                                                                        option?.additional?.grandTotal?.amountForAccount | giddhNumberFormat
+                                                                    }}
+                                                                </span>
+                                                            }
+                                                            <button
+                                                                type="button"
+                                                                class="pending-bd-preview-btn"
+                                                                tabindex="0"
+                                                                [matTooltip]="commonLocaleData?.app_preview"
+                                                                matTooltipPosition="above"
+                                                                [attr.aria-label]="commonLocaleData?.app_preview"
+                                                                (mousedown)="$event.preventDefault(); $event.stopPropagation()"
+                                                                (click)="previewPendingBusinessDocument($event, option)"
+                                                                (keydown.enter)="
+                                                                    $event.preventDefault();
+                                                                    $event.stopPropagation();
+                                                                    openPendingBusinessDocumentPreview(option?.additional)
+                                                                "
+                                                                (keydown.space)="
+                                                                    $event.preventDefault();
+                                                                    $event.stopPropagation();
+                                                                    openPendingBusinessDocumentPreview(option?.additional)
+                                                                "
+                                                            >
+                                                                <i class="icon-eye" aria-hidden="true"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                            </multi-select-dropdown>
+                                        </div>
+                                    }
                                 </div>
 
                                 <!-- Row 5 -->
@@ -4096,11 +4145,4 @@
             </div>
         </div>
     </mat-dialog-content>
-    @if (showPendingDocumentPreviewAction()) {
-        <mat-dialog-actions class="dialog-footer d-flex justify-content-end">
-            <button matButton="filled" [attr.aria-label]="commonLocaleData?.app_copy" (click)="usePendingBusinessDocumentFromPreview()">
-                {{ commonLocaleData?.app_copy }}
-            </button>
-        </mat-dialog-actions>
-    }
 </ng-template>

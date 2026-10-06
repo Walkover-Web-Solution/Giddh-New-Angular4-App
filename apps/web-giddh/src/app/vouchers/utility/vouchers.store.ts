@@ -1009,7 +1009,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                     pendingBusinessDocuments: results.map((item: any) => ({
                                         number: item?.number,
                                         uniqueName: item?.uniqueName,
-                                        accountUniqueName: item?.account?.uniqueName || item?.accountUniqueName
+                                        accountUniqueName: item?.account?.uniqueName || item?.accountUniqueName,
+                                        date: item?.date,
+                                        grandTotal: item?.grandTotal
                                     }))
                                 });
                             }
