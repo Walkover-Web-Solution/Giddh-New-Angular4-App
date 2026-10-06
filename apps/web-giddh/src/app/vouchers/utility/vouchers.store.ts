@@ -794,6 +794,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
                             if (req.clearVoucherIdentity) {
+                                voucherDetails = this.vouchersUtilityService.formatInventoryVoucherDetails(voucherDetails, true);
                                 delete voucherDetails.uniqueName;
                                 delete voucherDetails.number;
                                 voucherDetails.entries = voucherDetails.entries?.map((entry) => {
@@ -1009,7 +1010,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                     pendingBusinessDocuments: results.map((item: any) => ({
                                         number: item?.number,
                                         uniqueName: item?.uniqueName,
-                                        accountUniqueName: item?.account?.uniqueName || item?.accountUniqueName
+                                        accountUniqueName: item?.account?.uniqueName || item?.accountUniqueName,
+                                        date: item?.date,
+                                        grandTotal: item?.grandTotal
                                     }))
                                 });
                             }
