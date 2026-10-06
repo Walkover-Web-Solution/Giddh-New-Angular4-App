@@ -1238,13 +1238,6 @@
                                                 <ng-template #triggerTemplate let-selected="selected">
                                                     @for (option of selected; track option?.value; let last = $last) {
                                                         {{ option?.label }}
-                                                        @if (
-                                                            option?.additional?.grandTotal?.amountForAccount ||
-                                                            option?.additional?.grandTotal?.amountForAccount === 0
-                                                        ) {
-                                                            ({{ company?.baseCurrencySymbol
-                                                            }}{{ option?.additional?.grandTotal?.amountForAccount | giddhNumberFormat }})
-                                                        }
                                                         @if (!last) {
                                                             ,
                                                         }

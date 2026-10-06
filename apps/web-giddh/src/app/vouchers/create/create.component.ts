@@ -870,8 +870,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get showDueDate(): boolean {
         return (
             this.currentVoucherFormDetails?.dueDate ||
-            (this.invoiceType.isSalesInvoice || this.invoiceType.isDeliveryChallan) ||
-            (this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) ||
+            this.invoiceType.isSalesInvoice ||
+            this.invoiceType.isPurchaseInvoice ||
             this.invoiceType.isPurchaseOrder ||
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isEstimateInvoice
@@ -3199,9 +3199,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * (same get-single flow as queryParams dcUniqueName / rnUniqueName / invoiceUniqueName / billUniqueName).
      *
      * @param {*} document
+     * @param {boolean} [showPageLoader=true]
      * @memberof VoucherCreateComponent
      */
-    public selectPendingBusinessDocument(document: any): void {
+    public selectPendingBusinessDocument(document: any, showPageLoader: boolean = true): void {
         if (!document?.uniqueName) {
             return;
         }
@@ -3214,7 +3215,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isBusinessDocumentCreate = true;
             this.isCopyMode = true;
             this.useDefaultAccountDetails = false;
-            this.prefillFromInventoryDocument();
+            this.prefillFromInventoryDocument(showPageLoader);
             return;
         }
 
@@ -3223,7 +3224,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isBusinessDocumentCreate = true;
             this.isCopyMode = true;
             this.useDefaultAccountDetails = false;
-            this.prefillFromInventoryDocument();
+            this.prefillFromInventoryDocument(showPageLoader);
             return;
         }
 
@@ -3236,7 +3237,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isBusinessDocumentCreate = true;
             this.isCopyMode = true;
             this.useDefaultAccountDetails = false;
-            this.prefillFromInvoiceVoucher();
+            this.prefillFromInvoiceVoucher(showPageLoader);
             return;
         }
 
@@ -3249,7 +3250,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isBusinessDocumentCreate = true;
             this.isCopyMode = true;
             this.useDefaultAccountDetails = false;
-            this.prefillFromInvoiceVoucher();
+            this.prefillFromInvoiceVoucher(showPageLoader);
         }
     }
 
@@ -3326,7 +3327,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.pendingBusinessDocumentPrefillUniqueName = first;
             this.pendingBusinessDocumentsQueuedForAppend = rest;
             const document = this.findPendingBusinessDocument(first);
-            this.selectPendingBusinessDocument(document || { uniqueName: first });
+            this.selectPendingBusinessDocument(document || { uniqueName: first }, false);
             return;
         }
 
@@ -3343,7 +3344,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private appendPendingBusinessDocumentsSequential(uniqueNames: string[], index: number = 0): void {
         if (index >= uniqueNames.length) {
-            this.startLoader(false);
             return;
         }
 
@@ -3377,18 +3377,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 voucherType: this.invoiceType.isReceiptNote ? VoucherTypeEnum.purchase : VoucherTypeEnum.sales
             });
 
-        this.startLoader(true);
         request$.pipe(take(1)).subscribe((res) => {
             if (res?.status === "success" && res.body) {
-                const voucherDetails = isInventorySource
-                    ? this.vouchersUtilityService.formatInventoryVoucherDetails(res.body, true)
-                    : res.body;
+                const voucherDetails = this.vouchersUtilityService.formatInventoryVoucherDetails(res.body, true);
                 this.appendBusinessDocumentEntries(documentUniqueName, voucherDetails?.entries);
             } else {
                 this.toasterService.showSnackBar("error", res?.message);
                 this.uncheckPendingBusinessDocument(documentUniqueName, false);
             }
-            this.startLoader(false);
             done();
         });
     }
@@ -9997,10 +9993,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Prefills invoice/bill create form from delivery challan or receipt note query params.
      * Does not set voucher uniqueName so a new invoice/bill is created.
      *
+     * @param {boolean} [showPageLoader=true]
      * @private
      * @memberof VoucherCreateComponent
      */
-    private prefillFromInventoryDocument(): void {
+    private prefillFromInventoryDocument(showPageLoader: boolean = true): void {
         const isFromReceiptNote = !!this.queryParams?.rnUniqueName;
         const voucherUniqueName = isFromReceiptNote
             ? this.queryParams.rnUniqueName
@@ -10018,7 +10015,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        this.startLoader(true);
+        if (showPageLoader) {
+            this.startLoader(true);
+        }
         this.componentStore.getInventoryVoucherDetails({
             voucherType: isFromReceiptNote ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan,
             voucherUniqueName,
@@ -10033,10 +10032,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Prefills DC/RN create form from invoice/bill query params (pending reconciliation).
      * Does not set voucher uniqueName so a new DC/RN is created.
      *
+     * @param {boolean} [showPageLoader=true]
      * @private
      * @memberof VoucherCreateComponent
      */
-    private prefillFromInvoiceVoucher(): void {
+    private prefillFromInvoiceVoucher(showPageLoader: boolean = true): void {
         const isFromBill = !!this.queryParams?.billUniqueName;
         const voucherUniqueName = isFromBill
             ? this.queryParams.billUniqueName
@@ -10055,7 +10055,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        this.startLoader(true);
+        if (showPageLoader) {
+            this.startLoader(true);
+        }
         this.componentStore.getVoucherDetails({
             isCopyVoucher: false,
             accountUniqueName,

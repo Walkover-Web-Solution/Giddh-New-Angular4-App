@@ -794,6 +794,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
                             if (req.clearVoucherIdentity) {
+                                voucherDetails = this.vouchersUtilityService.formatInventoryVoucherDetails(voucherDetails, true);
                                 delete voucherDetails.uniqueName;
                                 delete voucherDetails.number;
                                 voucherDetails.entries = voucherDetails.entries?.map((entry) => {

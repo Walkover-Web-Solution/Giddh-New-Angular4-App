@@ -297,14 +297,9 @@ export class VouchersUtilityService {
      * @memberof VouchersUtilityService
      */
     public prepareVoucherForm(voucherType: string, formConfiguration?: any): VoucherForm {
-        const sourceVoucherType = voucherType === VoucherTypeEnum.deliveryChallan
-            ? VoucherTypeEnum.sales
-            : voucherType === VoucherTypeEnum.receiptNote
-                ? VoucherTypeEnum.purchase
-                : voucherType;
         const voucherForms = formConfiguration || GIDDH_VOUCHER_FORM;
         const voucherForm = voucherForms.find(form => form.type === voucherType)
-            || voucherForms.find(form => form.type === sourceVoucherType);
+            || voucherForms.find(form => form.type === voucherType);
 
         return voucherForm ? { ...voucherForm, type: voucherType } : voucherForm;
     }
@@ -386,7 +381,12 @@ export class VouchersUtilityService {
                     ?? 0
                 );
                 const stockQuantity = stock.quantity ?? documentItem?.quantity ?? 0;
-                const quantity = Number(isBusinessDocumentCreate ? (documentItem?.remainingQuantity ?? 0) : stockQuantity);
+                const remainingQuantity = documentItem?.remainingQuantity;
+                const quantity = Number(
+                    isBusinessDocumentCreate
+                        ? (remainingQuantity ?? stockQuantity)
+                        : stockQuantity
+                );
 
                 // Skip stock lines with no remaining/usable quantity
                 if (!(quantity > 0)) {
@@ -394,7 +394,9 @@ export class VouchersUtilityService {
                 }
 
                 let amount = Number(transaction.amount?.amountForAccount) || 0;
-                if (!amount && documentItem?.amount != null) {
+                if (isBusinessDocumentCreate && remainingQuantity != null && quantity && rate) {
+                    amount = giddhRoundOff(quantity * rate, 2);
+                } else if (!amount && documentItem?.amount != null) {
                     amount = Number(documentItem.amount) || 0;
                 }
                 if (!amount && quantity && rate) {
