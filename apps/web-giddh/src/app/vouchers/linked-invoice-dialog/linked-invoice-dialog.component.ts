@@ -264,7 +264,9 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (response) => {
                     if (response?.status === 'success') {
-                        this.linkedInvoices.set(this.mapStepsToRows(response?.body?.steps ?? []));
+                        this.linkedInvoices.set(
+                            this.mapStepsToRows(response?.body?.steps ?? [], response?.body?.document)
+                        );
                         return;
                     }
                     this.toaster.showSnackBar('error', response?.message);
@@ -282,10 +284,11 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
      *
      * @private
      * @param {LinkedInvoiceStep[]} steps
+     * @param {LinkedInvoiceEntity} [document]
      * @return {*}  {LinkedInvoiceRow[]}
      * @memberof LinkedInvoiceDialogComponent
      */
-    private mapStepsToRows(steps: LinkedInvoiceStep[]): LinkedInvoiceRow[] {
+    private mapStepsToRows(steps: LinkedInvoiceStep[], document?: LinkedInvoiceEntity): LinkedInvoiceRow[] {
         const uniqueRows = new Map<string, LinkedInvoiceRow>();
 
         for (const step of steps) {
@@ -304,7 +307,7 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
                 id: step.id,
                 date: this.extractDate(step.createdAt) || entity.date || '',
                 invoiceNumber: entity.number || 'N/A',
-                customerName: entity.name || '',
+                customerName: step.source?.name || document?.name || '',
                 amount: this.resolveStepAmount(step),
                 uniqueName: entity.uniqueName || '',
                 voucherType: entity.type || ''
