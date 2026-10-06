@@ -72,7 +72,7 @@ interface LinkedInvoiceRow {
     date: string;
     invoiceNumber: string;
     customerName: string;
-    amount: number;
+    amount: number | null;
     uniqueName: string;
     voucherType: string;
 }
@@ -151,7 +151,7 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
             return rows;
         }
         return rows.filter((row) => {
-            const amountText = String(row.amount ?? '');
+            const amountText = row.amount == null ? 'n/a' : String(row.amount);
             return (
                 row.invoiceNumber?.toLowerCase().includes(query) ||
                 row.customerName?.toLowerCase().includes(query) ||
@@ -308,47 +308,13 @@ export class LinkedInvoiceDialogComponent implements OnInit, OnDestroy {
                 date: this.extractDate(step.createdAt) || entity.date || '',
                 invoiceNumber: entity.number || 'N/A',
                 customerName: step.source?.name || document?.name || '',
-                amount: this.resolveStepAmount(step),
+                amount: step.target?.amount?.amountForAccount ?? null,
                 uniqueName: entity.uniqueName || '',
                 voucherType: entity.type || ''
             });
         }
 
         return Array.from(uniqueRows.values());
-    }
-
-    /**
-     * Resolves display amount for a history step.
-     * Target vouchers often omit amount; fall back to source / sourceItem.
-     *
-     * @private
-     * @param {LinkedInvoiceStep} step
-     * @return {*}  {number}
-     * @memberof LinkedInvoiceDialogComponent
-     */
-    private resolveStepAmount(step: LinkedInvoiceStep): number {
-        const targetAmount = step.target?.amount?.amountForAccount;
-        if (targetAmount != null) {
-            return targetAmount;
-        }
-
-        const sourceAmount = step.source?.amount?.amountForAccount;
-        if (sourceAmount != null) {
-            return sourceAmount;
-        }
-
-        const sourceItemAmount = step.sourceItem?.amount;
-        if (sourceItemAmount != null) {
-            return sourceItemAmount;
-        }
-
-        const rate = step.sourceItem?.rate;
-        const linkedQuantity = step.linkedQuantity;
-        if (rate != null && linkedQuantity != null) {
-            return rate * linkedQuantity;
-        }
-
-        return 0;
     }
 
     /**
