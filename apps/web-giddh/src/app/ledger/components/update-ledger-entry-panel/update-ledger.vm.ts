@@ -268,20 +268,20 @@ export class UpdateLedgerVm {
             return 0;
         }), this.giddhBalanceDecimalPlaces);
 
-        // Recalculate round-off only when there is a primary (non-roundoff) line to derive it from.
-        // Journal entries that are themselves only "Round Off" (e.g. adjustment JV) must keep the API amount
-        // and include that amount in Dr/Cr totals (not the grandTotal fractional difference).
-        const hasPrimaryTxn = this.selectedLedger?.transactions?.some((tr) =>
+        const transactions = this.selectedLedger?.transactions;
+        const hasPrimaryTxn = transactions?.some((tr) =>
             !!tr?.particular?.uniqueName &&
             tr.particular.uniqueName !== 'roundoff' &&
             !tr.isTax &&
             !tr.isDiscount
         );
+        const hasRoundOffTxn = transactions?.some((tr) => tr.particular?.uniqueName === 'roundoff');
 
-        if (hasPrimaryTxn) {
+        // Apply derived round-off only when the API entry includes a round-off line.
+        if (hasPrimaryTxn && hasRoundOffTxn) {
             const calculatedRoundOff = giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
 
-            this.selectedLedger?.transactions?.forEach((entry) => {
+            transactions?.forEach((entry) => {
                 if (entry.particular?.uniqueName === 'roundoff') {
                     entry.amount = calculatedRoundOff;
                     entry.convertedAmount = this.calculateConversionRate(entry.amount);
@@ -293,8 +293,9 @@ export class UpdateLedgerVm {
             } else {
                 this.entryTotal.crTotal = giddhRoundOff(this.entryTotal.crTotal + calculatedRoundOff, this.giddhBalanceDecimalPlaces);
             }
-        } else {
-            this.selectedLedger?.transactions?.forEach((entry) => {
+        } else if (!hasPrimaryTxn) {
+            // Round Off-only JV: keep API amount in Dr/Cr totals.
+            transactions?.forEach((entry) => {
                 if (entry.particular?.uniqueName === 'roundoff') {
                     const amount = Number(entry.amount) || 0;
                     if (entry.type === 'DEBIT') {

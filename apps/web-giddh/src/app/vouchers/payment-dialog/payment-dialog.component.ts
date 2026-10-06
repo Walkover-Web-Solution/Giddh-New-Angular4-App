@@ -95,7 +95,8 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
             if (response) {
                 this.briefAccounts$ = observableOf(response);
                 if (response.length === 1) {
-                    this.setDepositAccountUniqueName(0, response[0]);
+                    // Same as manual selection: set account + amount in account vs company currency.
+                    this.onSelectPaymentMode(response[0], true, 0);
                 }
             }
         });
