@@ -27,8 +27,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     /** Holds module name for customised columns */
     @Input() public moduleName: string = "";
     /** Report mode (Books/Inventory) used while fetching customised columns */
-    @Input() public reportMode: string = "";
-    /** True if columns API should wait until reportMode is available */
+    @Input() public reportNature: string = "";
+    /** True if columns API should wait until reportNature is available */
     @Input() public waitForReportMode: boolean = false;
     /** Holds mat tooltip position  */
     @Input() public matTooltipPosition: string = "";
@@ -109,7 +109,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         const moduleChanged = changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue
             || changes?.moduleName?.currentValue !== changes?.moduleName?.previousValue;
-        const reportModeChanged = changes?.reportMode?.currentValue !== changes?.reportMode?.previousValue;
+        const reportModeChanged = changes?.reportNature?.currentValue !== changes?.reportNature?.previousValue;
         if ((moduleChanged || reportModeChanged) && this.canFetchSelectedColumns()) {
             this.getSelectedColumns();
         }
@@ -186,7 +186,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         if (!this.moduleType) {
             return false;
         }
-        return !(this.waitForReportMode && !this.reportMode);
+        return !(this.waitForReportMode && !this.reportNature);
     }
 
     /**
@@ -211,7 +211,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     private getReportNature(): ReportNature {
-        return this.reportMode === ReportNature.Inventory ? ReportNature.Inventory : ReportNature.Books;
+        return this.reportNature === ReportNature.Inventory ? ReportNature.Inventory : ReportNature.Books;
     }
 
     /**
@@ -223,7 +223,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         const isDynamic = this.isDynamicMode;
         this.dynamicCustomColumns = [];
         this.commonService
-            .getSelectedTableColumns(this.moduleType, isDynamic, this.reportMode || undefined)
+            .getSelectedTableColumns(this.moduleType, isDynamic, this.reportNature || undefined)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 const { status, body } = response || {};

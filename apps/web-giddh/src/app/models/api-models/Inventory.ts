@@ -177,6 +177,7 @@ export class StockTransactionReportRequest {
     public variants?: any[];
     public inventoryType?: string;
     public archived?: boolean;
+    public reportNature?: ReportNature;
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
@@ -275,7 +276,7 @@ export class StockTransactionReportRequestExport {
     public showAccountUniqueName?: boolean;
     public showRate?: boolean;
     public showValue?: boolean;
-    public reportMode?: ReportNature;
+    public reportNature?: ReportNature;
     constructor() {
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];

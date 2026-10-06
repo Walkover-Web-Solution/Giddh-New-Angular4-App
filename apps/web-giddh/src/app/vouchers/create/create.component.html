@@ -369,11 +369,17 @@
                                             <small>{{ getPendingBusinessDocumentLabel() }}</small>
                                         </p>
                                         <p class="font-size-15">
-                                            @for (document of pendingBusinessDocuments$ | async; track document.uniqueName; let i = $index) {
+                                            @for (
+                                                document of pendingBusinessDocuments$ | async;
+                                                track document.uniqueName;
+                                                let i = $index
+                                            ) {
                                                 <a
                                                     href="javascript:;"
                                                     [attr.aria-label]="document.number"
-                                                    (click)="selectPendingBusinessDocument(document)"
+                                                    (click)="openPendingBusinessDocumentPreview(document)"
+                                                    (keydown.enter)="$event.preventDefault(); openPendingBusinessDocumentPreview(document)"
+                                                    (keydown.space)="$event.preventDefault(); openPendingBusinessDocumentPreview(document)"
                                                 >
                                                     {{ document.number || 'N/A' }}
                                                     @if (i < (pendingBusinessDocuments$ | async)?.length - 1) {
@@ -4091,4 +4097,11 @@
             </div>
         </div>
     </mat-dialog-content>
+    @if (showPendingDocumentPreviewAction()) {
+        <mat-dialog-actions class="dialog-footer d-flex justify-content-end">
+            <button matButton="filled" [attr.aria-label]="commonLocaleData?.app_copy" (click)="usePendingBusinessDocumentFromPreview()">
+                {{ commonLocaleData?.app_copy }}
+            </button>
+        </mat-dialog-actions>
+    }
 </ng-template>

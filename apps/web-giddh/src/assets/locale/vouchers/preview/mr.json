@@ -595,7 +595,11 @@
         "open": "ओपन",
         "closed": "बंद",
         "expired": "कालबाह्य",
-        "cancelled": "रद्द"
+        "cancelled": "रद्द",
+        "shipped": "शिप्ड",
+        "delivered": "डिलिव्हर्ड",
+        "received": "प्राप्त",
+        "completed": "पूर्ण"
     },
     "inventory_invoice_status": {
         "invoiced": "इनव्हॉइस केले",
@@ -633,6 +637,9 @@
     "create_dn": "डेबिट नोट तयार करा",
     "proceed": "पुढे जा",
     "select_return_items": "रिटर्नसाठी किमान एक आयटम निवडा",
+    "return_qty_exceeds": "रिटर्न प्रमाण [RETURN_QTY] परत करता येण्याजोग्या प्रमाण [RETURNABLE_QTY] पेक्षा जास्त आहे.",
+    "cn_qty_exceeds": "CN प्रमाण [QTY] क्रेडिट करता येण्याजोग्या प्रमाण [AVAILABLE_QTY] पेक्षा जास्त आहे.",
+    "dn_qty_exceeds": "DN प्रमाण [QTY] डेबिट करता येण्याजोग्या प्रमाण [AVAILABLE_QTY] पेक्षा जास्त आहे.",
     "return_success": "रिटर्न यशस्वीरित्या प्रक्रिया झाला",
     "download_signed_bill": "डिजिटल साइन किए गए बिल डाउनलोड करा",
     "dc_invoice_reconciliation": "DC - इनव्हॉइस समाधान",

@@ -81,14 +81,20 @@
                             <input-field
                                 [type]="'number'"
                                 [allowDecimalDigitsOnly]="true"
-                                name="returnQty"
+                                [name]="'returnQty-' + row.variant?.uniqueName"
                                 [label]="localeData?.return_qty"
                                 [placeholder]="'0'"
                                 [matSuffix]="row.stockUnit?.code || row.stockUnit?.name"
                                 [(ngModel)]="row.returnQty"
                                 (ngModelChange)="onReturnQtyChange(row)"
                                 [disabled]="!row.selected || !isRowSelectable(row)"
+                                [showError]="isReturnQtyInvalid(row)"
                             ></input-field>
+                            @if (isReturnQtyInvalid(row)) {
+                                <div class="text-danger font-size-12 mt-1 text-wrap" role="alert">
+                                    {{ getReturnQtyError(row) }}
+                                </div>
+                            }
                         </div>
                     </td>
                 </ng-container>
@@ -118,14 +124,20 @@
                             <input-field
                                 [type]="'number'"
                                 [allowDecimalDigitsOnly]="true"
-                                name="cnQty"
+                                [name]="'cnQty-' + row.variant?.uniqueName"
                                 [label]="noteQtyLabel"
                                 [placeholder]="'0'"
                                 [matSuffix]="row.stockUnit?.code || row.stockUnit?.name"
                                 [(ngModel)]="row.cnQty"
                                 (ngModelChange)="onCnQtyChange(row)"
                                 [disabled]="!isCnQtyEditable(row)"
+                                [showError]="isCnQtyInvalid(row)"
                             ></input-field>
+                            @if (isCnQtyInvalid(row)) {
+                                <div class="text-danger font-size-12 mt-1 text-wrap" role="alert">
+                                    {{ getNoteQtyError(row) }}
+                                </div>
+                            }
                         </div>
                     </td>
                 </ng-container>

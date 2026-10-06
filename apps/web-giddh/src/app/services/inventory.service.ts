@@ -1114,6 +1114,7 @@ export class InventoryService {
         let updatedStockTransactionRequest = cloneDeep(stockReportRequest);
         delete updatedStockTransactionRequest.from;
         delete updatedStockTransactionRequest.to;
+        delete updatedStockTransactionRequest.reportNature;
         return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
             ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
@@ -1124,6 +1125,7 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
+            ?.replace(':reportNature', encodeURIComponent(stockReportRequest.reportNature ?? ''))
             , updatedStockTransactionRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
@@ -1162,6 +1164,7 @@ export class InventoryService {
             ?.replace(':entity', encodeURIComponent(<any>queryParams.entity))
             ?.replace(':from', encodeURIComponent(queryParams.from))
             ?.replace(':to', encodeURIComponent(queryParams.to))
+            ?.replace(':reportNature', encodeURIComponent(queryParams.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
@@ -1195,6 +1198,7 @@ export class InventoryService {
                 ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
                 ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
+                ?.replace(':reportNature', encodeURIComponent(queryParams?.reportNature ?? ''))
                 , stockReportRequest).pipe(
                     map((res) => {
                         let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -1223,6 +1227,7 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(queryParams.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
+            ?.replace(':reportNature', encodeURIComponent(queryParams.reportNature ?? ''))
 
             , stockReportRequest).pipe(
                 map((res) => {
@@ -1259,6 +1264,7 @@ export class InventoryService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
             ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
+            ?.replace(':reportNature', encodeURIComponent(queryParams?.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -1286,6 +1292,7 @@ export class InventoryService {
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
             ?.replace(':type', encodeURIComponent(queryParams.type))
+            ?.replace(':reportNature', encodeURIComponent(queryParams.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
@@ -1321,6 +1328,7 @@ export class InventoryService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
             ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
+            ?.replace(':reportNature', encodeURIComponent(queryParams?.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -1347,6 +1355,7 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
+            ?.replace(':reportNature', encodeURIComponent(queryParams.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
@@ -1381,6 +1390,7 @@ export class InventoryService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
             ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
+            ?.replace(':reportNature', encodeURIComponent(queryParams?.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;

@@ -347,7 +347,7 @@ export class VoucherService {
      */
     public getPendingBusinessDocumentReport(
         queryParams: any,
-        body: { reportType: string; documentType: string }
+        body: { reportType: string; documentType: string; accountUniqueNames?: string[] }
     ): Observable<BaseResponse<any, any>> {
         const contextPath = INVENTORY_VOUCHER_API.PENDING_REPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
@@ -361,6 +361,21 @@ export class VoucherService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, { ...queryParams, ...body }))
         );
+    }
+
+    /**
+     * Pending DC/RN report filtered by accounts (same endpoint, POST body uses accountUniqueNames instead of q).
+     *
+     * @param {*} queryParams from, to, page, count, sort, sortBy
+     * @param {{ reportType: string; documentType: string; accountUniqueNames: string[] }} body
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getPendingBusinessDocumentsByAccounts(
+        queryParams: any,
+        body: { reportType: string; documentType: string; accountUniqueNames: string[] }
+    ): Observable<BaseResponse<any, any>> {
+        return this.getPendingBusinessDocumentReport(queryParams, body);
     }
 
     /**
