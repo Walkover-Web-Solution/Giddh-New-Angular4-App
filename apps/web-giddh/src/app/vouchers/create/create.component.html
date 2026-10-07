@@ -3861,7 +3861,7 @@
                                 @if (isMainVoucher) {
                                     <div class="vouchers-actions d-flex justify-content-end column-gap-1 pt-4 pb-4 mt-4">
                                         @if (!isUpdateMode) {
-                                            @if (isBusinessDocumentCreate) {
+                                            @if (isPreviewAndInvoiceBusinessDocument) {
                                                 <button matButton="outlined" (click)="cancelUpdateVoucher()">
                                                     {{ commonLocaleData?.app_back }}
                                                 </button>
