@@ -627,6 +627,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private inventoryDocumentListRedirectUrl: string = "";
     /** True when create is opened from DC/RN/invoice/bill convert (preview & convert) */
     public isBusinessDocumentCreate: boolean = false;
+    /** True when create was opened via route queryParams (dc/rn/invoice/bill uniqueName), not dropdown select */
+    public isPreviewAndInvoiceBusinessDocument: boolean = false;
     /** Holds text for update voucher button */
     public updateVoucherText: string = "";
     /** Holds purchase order details to put PO in PO list if not available */
@@ -1090,8 +1092,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.redirectUrl = this.queryParams.redirect;
                         }
 
-                        if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
-                            || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
+                        this.isPreviewAndInvoiceBusinessDocument = !!(
+                            response[1]?.dcUniqueName
+                            || response[1]?.rnUniqueName
+                            || response[1]?.invoiceUniqueName
+                            || response[1]?.billUniqueName
+                        );
+
+                        if (this.isPreviewAndInvoiceBusinessDocument) {
                             this.isBusinessDocumentCreate = true;
                             this.inventoryDocumentListRedirectUrl = this.queryParams.redirect
                                 || `/pages/vouchers/preview/${(this.queryParams.rnUniqueName || this.queryParams.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
@@ -3277,7 +3285,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const added = next.filter((uniqueName) => !previous.includes(uniqueName));
         removed.forEach((uniqueName) => this.removeBusinessDocumentEntries(uniqueName));
         this.selectedBusinessDocumentUniqueNames = next;
-        this.isBusinessDocumentCreate = next.length > 0;
+        this.isBusinessDocumentCreate = next.length > 0 || this.isPreviewAndInvoiceBusinessDocument;
         this.syncQueryParamsFromSelectedDocuments();
 
         if (added.length) {
@@ -3485,7 +3493,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.suppressLinkedBusinessDocumentChange = true;
         this.selectedBusinessDocumentUniqueNames = [...uniqueNames];
         this.linkedBusinessDocuments.setValue([...uniqueNames]);
-        this.isBusinessDocumentCreate = uniqueNames.length > 0;
+        this.isBusinessDocumentCreate = uniqueNames.length > 0 || this.isPreviewAndInvoiceBusinessDocument;
         this.suppressLinkedBusinessDocumentChange = false;
     }
 
@@ -8400,15 +8408,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 ocrType: this.ocrType
                             });
 
-                            if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
-                                || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName
-                                || this.inventoryDocumentListRedirectUrl) {
+                            if (this.isPreviewAndInvoiceBusinessDocument || this.inventoryDocumentListRedirectUrl) {
                                 const listRedirectUrl = this.inventoryDocumentListRedirectUrl
                                     || `/pages/vouchers/preview/${(this.queryParams?.rnUniqueName || this.queryParams?.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
                                 delete this.queryParams.dcUniqueName;
                                 delete this.queryParams.rnUniqueName;
                                 delete this.queryParams.invoiceUniqueName;
                                 delete this.queryParams.billUniqueName;
+                                this.isPreviewAndInvoiceBusinessDocument = false;
                                 this.isBusinessDocumentCreate = false;
                                 this.inventoryDocumentListRedirectUrl = "";
                                 this.redirectUrl = "";
