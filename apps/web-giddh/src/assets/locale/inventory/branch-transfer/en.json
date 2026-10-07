@@ -40,6 +40,7 @@
     "batch": "Batch",
     "select_batch": "Select batch",
     "select_batches": "Select Batches",
+    "warehouse_change_batch_confirmation": "Changing the warehouse will reset all selected batches. Do you want to continue?",
     "allocated_of": "Allocated <strong>[ALLOCATED]</strong> of [TOTAL] [UNIT]",
     "fully_allocated": "Fully allocated",
     "over_line_quantity": "[QTY] [UNIT] over the line quantity",

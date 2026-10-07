@@ -882,14 +882,53 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /**
-     *This will select warehouse
+     * Select warehouse. Confirms only when the stock line has batches selected;
+     * otherwise applies the warehouse change immediately.
      *
-     * @param {*} event
+     * @param {IOption} event Selected warehouse
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public selectWarehouse(event: any): void {
-        this.selectedWarehouse = event?.value;
-        this.selectedWarehouseName = event?.label;
+    public selectWarehouse(event: IOption): void {
+        const nextUniqueName = event?.value || "";
+        const nextName = event?.label || "";
+        if (!nextUniqueName || nextUniqueName === this.selectedWarehouse) {
+            return;
+        }
+
+        if (!this.getEntryBatches()?.length) {
+            this.applyWarehouseSelection(nextName, nextUniqueName);
+            return;
+        }
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: "630px",
+            data: {
+                configuration: this.generalService.deleteConfiguration(
+                    this.localeData?.warehouse_change_batch_confirmation,
+                    this.commonLocaleData
+                )
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.applyWarehouseSelection(nextName, nextUniqueName);
+                this.resetEntryBatch();
+                this.changeDetectorRef.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Apply the selected warehouse after confirmation.
+     *
+     * @private
+     * @param {string} name Warehouse name
+     * @param {string} uniqueName Warehouse unique name
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private applyWarehouseSelection(name: string, uniqueName: string): void {
+        this.selectedWarehouse = uniqueName;
+        this.selectedWarehouseName = name;
     }
 
     public saveLedgerTransaction() {
@@ -2003,8 +2042,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 voucherUniqueName: this.vm.selectedLedger.voucherUniqueName
             },
             accountDetails: {
-                currencySymbol: enableVoucherAdjustmentMultiCurrency ? this.vm.selectedLedger?.particular?.currency?.symbol ?? this.profileObj?.baseCurrencySymbol ?? '' : this.profileObj?.baseCurrencySymbol ?? '',
-                currencyCode: enableVoucherAdjustmentMultiCurrency ? this.vm.selectedLedger?.particular?.currency?.code ?? this.profileObj?.baseCurrency ?? '' : this.profileObj?.baseCurrency ?? ''
+                currencySymbol: this.vm.selectedLedger?.particular?.currency?.symbol ?? this.profileObj?.baseCurrencySymbol ?? '',
+                currencyCode: this.vm.selectedLedger?.particular?.currency?.code ?? this.profileObj?.baseCurrency ?? ''
             },
             activeAccountUniqueName: this.activeAccount?.uniqueName,
             type: this.entrySide

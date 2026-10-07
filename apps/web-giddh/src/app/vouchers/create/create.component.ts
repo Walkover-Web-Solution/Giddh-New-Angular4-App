@@ -2674,6 +2674,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 let warehouseResults = response.results?.filter((warehouse) => !warehouse.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
+                this.setDefaultWarehouseIfEmpty();
                 this.checkIfEntriesHasStock();
             }
         });
@@ -4109,6 +4110,116 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.focusMonitor.focusVia(focusTarget, "keyboard");
             }
         }, 100);
+    }
+
+    /**
+     * Select warehouse. Confirms only when any stock line has batches selected;
+     * otherwise applies the warehouse change immediately.
+     *
+     * @param {IOption} event Selected warehouse
+     * @memberof VoucherCreateComponent
+     */
+    public selectWarehouse(event: IOption): void {
+        const nextUniqueName = event?.value || "";
+        const nextName = event?.label || "";
+        if (!nextUniqueName || nextUniqueName === this.getConfirmedWarehouseUniqueName()) {
+            return;
+        }
+
+        if (!this.hasAnyVoucherBatches()) {
+            this.applyWarehouseSelection(nextName, nextUniqueName);
+            return;
+        }
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: "630px",
+            data: {
+                configuration: this.generalService.deleteConfiguration(
+                    this.localeData?.warehouse_change_batch_confirmation,
+                    this.commonLocaleData
+                )
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.applyWarehouseSelection(nextName, nextUniqueName);
+                this.resetAllVoucherBatches();
+            }
+        });
+    }
+
+    /**
+     * Apply the selected warehouse after confirmation.
+     *
+     * @private
+     * @param {string} name Warehouse name
+     * @param {string} uniqueName Warehouse unique name
+     * @memberof VoucherCreateComponent
+     */
+    private applyWarehouseSelection(name: string, uniqueName: string): void {
+        this.invoiceForm.get("warehouse.uniqueName")?.patchValue(uniqueName);
+        this.invoiceForm.get("warehouse.name")?.patchValue(name);
+    }
+
+
+    /**
+     * Current confirmed warehouse unique name, with form and default fallbacks.
+     *
+     * @private
+     * @return {*}  {string}
+     * @memberof VoucherCreateComponent
+     */
+    private getConfirmedWarehouseUniqueName(): string {
+        return this.invoiceForm.get("warehouse.uniqueName")?.value
+            || this.warehouses?.find((warehouse) => warehouse?.isDefault)?.uniqueName
+            || "";
+    }
+
+    /**
+     * Put the company default warehouse on the form when none is selected yet.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setDefaultWarehouseIfEmpty(): void {
+        if (this.invoiceForm.get("warehouse.uniqueName")?.value || !this.warehouses?.length) {
+            return;
+        }
+        const defaultWarehouse = this.warehouses.find((warehouse) => warehouse?.isDefault) || this.warehouses[0];
+        if (!defaultWarehouse) {
+            return;
+        }
+        this.invoiceForm.get("warehouse.uniqueName")?.patchValue(defaultWarehouse.uniqueName);
+        this.invoiceForm.get("warehouse.name")?.patchValue(defaultWarehouse.name);
+    }
+
+    /**
+     * True when any voucher entry has at least one selected batch.
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    private hasAnyVoucherBatches(): boolean {
+        const entries = this.invoiceForm.get("entries") as FormArray;
+        return !!entries?.controls?.some((entry) => {
+            const transaction = this.getTransactionFormGroup(entry as FormGroup);
+            return this.getEntryBatches(transaction)?.length > 0;
+        });
+    }
+
+    /**
+     * Clear batches on every voucher entry.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private resetAllVoucherBatches(): void {
+        const entries = this.invoiceForm.get("entries") as FormArray;
+        entries?.controls?.forEach((entry, entryIndex) => {
+            this.resetEntryBatch(entryIndex, this.getTransactionFormGroup(entry as FormGroup));
+        });
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -8564,6 +8675,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         };
         this.hasStock = false;
         this.showWarehouse = false;
+        this.setDefaultWarehouseIfEmpty();
         this.isAccountChanged = false;
 
         this.isAdjustAmount = false;

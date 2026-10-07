@@ -32,6 +32,7 @@ import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
 import { GoToBranchComponent } from '../../../shared/go-to-branch/go-to-branch.component';
 import { BatchChipListComponent } from '../../../shared/batch-chip-list/batch-chip-list.component';
 import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
+import { NewConfirmationModalModule } from '../../../theme/new-confirmation-modal/confirmation-modal.module';
 @NgModule({
     imports: [
         CommonModule,
@@ -61,7 +62,8 @@ import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialo
         GiddhDatePipe,
         GoToBranchComponent,
         BatchChipListComponent,
-        BatchSelectDialogComponent
+        BatchSelectDialogComponent,
+        NewConfirmationModalModule
     ],
     exports: [
         AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent

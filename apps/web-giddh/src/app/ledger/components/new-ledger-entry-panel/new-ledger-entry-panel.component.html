@@ -97,7 +97,7 @@
                                 tabindex="0"
                                 role="button"
                                 cdkMonitorElementFocus
-                                class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                 (click)="openBatchSelectDialog($event)"
                                 (keydown.enter)="$event.preventDefault(); openBatchSelectDialog($event)"
                                 (keydown.space)="$event.preventDefault(); openBatchSelectDialog($event)"
@@ -1122,8 +1122,9 @@
                 [label]="localeData?.select_warehouse"
                 [placeholder]="localeData?.select_warehouse"
                 [options]="warehouses"
-                [(ngModel)]="selectedWarehouse"
                 [labelValue]="getWarehouseLabel()"
+                [useCustomLabelValue]="true"
+                (selectedOption)="selectWarehouse($event)"
                 [disabled]="isReadOnly"
             ></reactive-dropdown-field>
         </div>

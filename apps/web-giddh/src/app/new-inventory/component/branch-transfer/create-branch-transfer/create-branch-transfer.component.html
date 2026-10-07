@@ -122,17 +122,20 @@
                                                         "
                                                     >
                                                         <batch-chip-list
-                                                            *ngIf="getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length"
-                                                            [compact]="true"
+                                                            *ngIf="
+                                                                getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length
+                                                            "
                                                             [batches]="branchTransferCreateEditForm.get('products.0.batches').value"
                                                             [localeData]="localeData"
                                                             [commonLocaleData]="commonLocaleData"
                                                             (edit)="openBatchSelectDialog(0, $event)"
                                                         ></batch-chip-list>
                                                         <a
-                                                            *ngIf="!getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length"
+                                                            *ngIf="
+                                                                !getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length
+                                                            "
                                                             href="javascript:void(0);"
-                                                            class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                            class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                             (click)="openBatchSelectDialog(0, $event)"
                                                         >
                                                             {{ localeData?.select_batch }}
@@ -390,9 +393,7 @@
                                                                 branchTransferCreateEditForm.get('destinations.0.uniqueName')?.value
                                                             ]
                                                         "
-                                                        (selectedOption)="
-                                                            selectReceiverWarehouse($event, 0); openDropdown('first', 'destinations')
-                                                        "
+                                                        (selectedOption)="selectReceiverWarehouse($event, 0, true)"
                                                         (onClear)="resetWarehouse('destinations', 0)"
                                                         [required]="true"
                                                         [showError]="
@@ -405,6 +406,7 @@
                                                                 ? branchTransferCreateEditForm.get('destinations.0.warehouse.name').value
                                                                 : ''
                                                         "
+                                                        [useCustomLabelValue]="true"
                                                         [forceClear]="forceClear"
                                                     ></reactive-dropdown-field>
                                                 </div>
@@ -564,16 +566,20 @@
                                                         "
                                                     >
                                                         <batch-chip-list
-                                                            *ngIf="getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length"
+                                                            *ngIf="
+                                                                getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length
+                                                            "
                                                             [batches]="branchTransferCreateEditForm.get('products.0.batches').value"
                                                             [localeData]="localeData"
                                                             [commonLocaleData]="commonLocaleData"
                                                             (edit)="openBatchSelectDialog(0, $event)"
                                                         ></batch-chip-list>
                                                         <a
-                                                            *ngIf="!getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length"
+                                                            *ngIf="
+                                                                !getProductBatches(branchTransferCreateEditForm.get('products.0'))?.length
+                                                            "
                                                             href="javascript:void(0);"
-                                                            class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                            class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                             (click)="openBatchSelectDialog(0, $event)"
                                                         >
                                                             {{ localeData?.select_batch }}
@@ -720,6 +726,7 @@
                                                                 ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value
                                                                 : ''
                                                         "
+                                                        [useCustomLabelValue]="true"
                                                         (onClear)="resetWarehouse('sources', 0)"
                                                         [showError]="
                                                             !isValidForm &&
@@ -822,9 +829,7 @@
                                                                 branchTransferCreateEditForm.get('destinations.0.uniqueName')?.value
                                                             ]
                                                         "
-                                                        (selectedOption)="
-                                                            selectReceiverWarehouse($event, 0); openDropdown('first', 'destinations')
-                                                        "
+                                                        (selectedOption)="selectReceiverWarehouse($event, 0, true)"
                                                         (onClear)="resetWarehouse('destinations', 0)"
                                                         [required]="true"
                                                         [showError]="
@@ -841,6 +846,7 @@
                                                                   ? branchTransferCreateEditForm.get('destinations.0.warehouse.name').value
                                                                   : ''
                                                         "
+                                                        [useCustomLabelValue]="true"
                                                     ></reactive-dropdown-field>
                                                 </div>
                                                 <div formGroupName="warehouse">
@@ -935,8 +941,9 @@
                                                                 !branchTransferCreateEditForm?.get('sources.0.uniqueName')?.value
                                                             "
                                                             [labelValue]="
-                                                                branchTransferCreateEditForm.get('sources.0.warehouse.name').value
+                                                                branchTransferCreateEditForm.get('sources.0.warehouse.name')?.value || ''
                                                             "
+                                                            [useCustomLabelValue]="true"
                                                         ></reactive-dropdown-field>
                                                     </div>
                                                     <div class="mb-3 thrree">
@@ -955,9 +962,8 @@
                                                                     ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value
                                                                     : ''
                                                             "
-                                                            (selectedOption)="
-                                                                selectSenderWarehouse($event, 0); openDropdown('first', 'destinations')
-                                                            "
+                                                            [useCustomLabelValue]="true"
+                                                            (selectedOption)="selectSenderWarehouse($event, 0, true)"
                                                             (onClear)="resetWarehouse('sources', 0)"
                                                             [required]="true"
                                                             [showError]="
@@ -1560,7 +1566,7 @@
                                                             <a
                                                                 *ngIf="!getProductBatches(product)?.length"
                                                                 href="javascript:void(0);"
-                                                                class="d-inline-block mt-2 font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                                class="d-inline-block mt-2 font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                                 (click)="openBatchSelectDialog(i, $event)"
                                                             >
                                                                 {{ localeData?.select_batch }}
@@ -1969,9 +1975,7 @@
                                     aria-label="uniqueName"
                                     matButton="filled"
                                     *ngIf="isBranch || isCompanyWithSingleBranch"
-                                    class="d-inline-block vertical-align-middle {{ branchTransferCreateEditForm.invalid }}-{{
-                                        isValidSourceTaxNumber
-                                    }}-{{ isValidDestinationTaxNumber }}"
+                                    class="d-inline-block vertical-align-middle"
                                     (click)="submit()"
                                 >
                                     {{ editBranchTransferUniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_create }}

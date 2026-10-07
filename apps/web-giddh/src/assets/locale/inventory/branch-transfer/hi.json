@@ -40,6 +40,7 @@
     "batch": "बैच",
     "select_batch": "बैच चुनें",
     "select_batches": "बैच चुनें",
+    "warehouse_change_batch_confirmation": "वेयरहाउस बदलने से सभी चयनित बैच रीसेट हो जाएंगे। क्या आप जारी रखना चाहते हैं?",
     "allocated_of": "आवंटित <strong>[ALLOCATED]</strong> / [TOTAL] [UNIT]",
     "fully_allocated": "पूरी तरह आवंटित",
     "over_line_quantity": "लाइन मात्रा से [QTY] [UNIT] अधिक",

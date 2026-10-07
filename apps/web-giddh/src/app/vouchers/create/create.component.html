@@ -803,12 +803,13 @@
                                             appEnterNext
                                             [cssClass]="'border-none'"
                                             [name]="'warehouse'"
-                                            formControlName="uniqueName"
                                             [label]="localeData?.select_warehouse_placeholder"
                                             [placeholder]="commonLocaleData?.app_select"
                                             [options]="warehouses"
-                                            [labelValue]="invoiceForm.controls['warehouse']?.get('name')?.value"
+                                            [labelValue]="invoiceForm.get('warehouse.name')?.value"
+                                            [useCustomLabelValue]="true"
                                             [forceClear]="forceClear"
+                                            (selectedOption)="selectWarehouse($event)"
                                         ></reactive-dropdown-field>
                                     </div>
 
@@ -2228,7 +2229,7 @@
                                                                             role="button"
                                                                             cdkMonitorElementFocus
                                                                             [attr.id]="'select-batch-' + entryIndex"
-                                                                            class="font-size-12 font-weight-semibold text-primary cursor-pointer"
+                                                                            class="font-size-14 font-weight-semibold text-primary cursor-pointer"
                                                                             (click)="openBatchSelectDialog(entryIndex, $event)"
                                                                             (keydown.enter)="
                                                                                 $event.preventDefault();

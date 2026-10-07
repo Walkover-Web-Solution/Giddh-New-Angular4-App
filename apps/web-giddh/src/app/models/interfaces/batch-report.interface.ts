@@ -67,6 +67,7 @@ export interface BatchReportFilter {
     batchNumbers?: string[];
     withinDays?: number;
     expiredOnly?: boolean;
+    archive?: boolean;
     inventoryType?: string;
 }
 

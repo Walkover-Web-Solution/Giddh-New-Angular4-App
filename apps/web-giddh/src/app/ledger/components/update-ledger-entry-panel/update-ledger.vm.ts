@@ -268,17 +268,43 @@ export class UpdateLedgerVm {
             return 0;
         }), this.giddhBalanceDecimalPlaces);
 
-        this.selectedLedger?.transactions?.forEach((entry) => {
-            if (entry.particular.uniqueName === 'roundoff') {
-                entry.amount = giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
-                entry.convertedAmount = this.calculateConversionRate(entry.amount);
-            }
-        });
+        const transactions = this.selectedLedger?.transactions;
+        const hasPrimaryTxn = transactions?.some((tr) =>
+            !!tr?.particular?.uniqueName &&
+            tr.particular.uniqueName !== 'roundoff' &&
+            !tr.isTax &&
+            !tr.isDiscount
+        );
+        const hasRoundOffTxn = transactions?.some((tr) => tr.particular?.uniqueName === 'roundoff');
 
-        if (this.entryTotal.drTotal > this.entryTotal.crTotal) {
-            this.entryTotal.drTotal += giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
-        } else {
-            this.entryTotal.crTotal += giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
+        // Apply derived round-off only when the API entry includes a round-off line.
+        if (hasPrimaryTxn && hasRoundOffTxn) {
+            const calculatedRoundOff = giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
+
+            transactions?.forEach((entry) => {
+                if (entry.particular?.uniqueName === 'roundoff') {
+                    entry.amount = calculatedRoundOff;
+                    entry.convertedAmount = this.calculateConversionRate(entry.amount);
+                }
+            });
+
+            if (this.entryTotal.drTotal > this.entryTotal.crTotal) {
+                this.entryTotal.drTotal = giddhRoundOff(this.entryTotal.drTotal + calculatedRoundOff, this.giddhBalanceDecimalPlaces);
+            } else {
+                this.entryTotal.crTotal = giddhRoundOff(this.entryTotal.crTotal + calculatedRoundOff, this.giddhBalanceDecimalPlaces);
+            }
+        } else if (!hasPrimaryTxn) {
+            // Round Off-only JV: keep API amount in Dr/Cr totals.
+            transactions?.forEach((entry) => {
+                if (entry.particular?.uniqueName === 'roundoff') {
+                    const amount = Number(entry.amount) || 0;
+                    if (entry.type === 'DEBIT') {
+                        this.entryTotal.drTotal = giddhRoundOff(this.entryTotal.drTotal + amount, this.giddhBalanceDecimalPlaces);
+                    } else if (entry.type === 'CREDIT') {
+                        this.entryTotal.crTotal = giddhRoundOff(this.entryTotal.crTotal + amount, this.giddhBalanceDecimalPlaces);
+                    }
+                }
+            });
         }
 
         this.convertedEntryTotal = {

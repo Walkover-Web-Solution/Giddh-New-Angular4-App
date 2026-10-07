@@ -133,8 +133,22 @@ export class GeneralService {
         private toasterService: ToasterService,
         private uiSettingsService: UiSettingsService
     ) {
-        const isGiddhDomain = this.config?.IS_GIDDH_DOMAIN ?? [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].map(url => new URL(url).hostname).includes(window.location.hostname);
-        this.isGiddhDomain.set(isGiddhDomain);
+        this.isGiddhDomain.set(Boolean(this.config?.IS_GIDDH_DOMAIN) || this.resolveIsGiddhDomainFromLocation());
+    }
+
+    /**
+     * Fallback when ServiceConfig is missing or Electron reports an empty hostname.
+     */
+    private resolveIsGiddhDomainFromLocation(): boolean {
+        const hostname = window.location.hostname;
+        // Electron uses file:// so hostname is ''
+        if (Configuration.isElectron || !hostname) {
+            return true;
+        }
+
+        const giddhHostnames = [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION]
+            .map(url => new URL(url).hostname);
+        return giddhHostnames.includes(hostname);
     }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -1352,12 +1366,19 @@ export class GeneralService {
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
             let balanceDueTooltipText;
-            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
-                const gainLossText = localeData?.exchange_gain_loss_label?.
-                    replace("[BASE_CURRENCY]", baseCurrency)?.
-                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
-                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss);
-                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
+            if (item.gainLoss) {
+                const profitType = item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss;
+                const gainLossAmount = Math.abs(item.gainLoss);
+                const buildGainLossTooltip = (amount: number): string => {
+                    const gainLossText = localeData?.exchange_gain_loss_label?.
+                        replace("[BASE_CURRENCY]", baseCurrency)?.
+                        replace("[AMOUNT]", String(amount ?? 0))?.
+                        replace('[PROFIT_TYPE]', profitType);
+                    // Locale label already ends with ": ", so do not add another colon.
+                    return `${gainLossText ?? ""}${gainLossAmount}`;
+                };
+                grandTotalTooltipText = buildGainLossTooltip(grandTotalAmountForCompany);
+                balanceDueTooltipText = buildGainLossTooltip(balanceDueAmountForCompany);
             } else {
                 balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
             }

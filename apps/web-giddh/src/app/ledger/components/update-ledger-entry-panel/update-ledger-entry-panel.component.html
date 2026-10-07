@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div id="entryModal" class="w-100">
+    <div id="entryModal" class="w-100" *ngIf="vm.selectedLedger">
         <!-- region header -->
         <div cdkFocusInitial class="dialog-header column-gap-3" *ngIf="!isPettyCash">
             <!-- Left Section -->
@@ -1293,6 +1293,7 @@
                                         <reactive-dropdown-field
                                             id="update-ledger-select-warehouse"
                                             [labelValue]="selectedWarehouseName"
+                                            [useCustomLabelValue]="true"
                                             [placeholder]="localeData?.select_warehouse"
                                             [options]="warehouses"
                                             (selectedOption)="selectWarehouse($event)"
@@ -1318,7 +1319,7 @@
                         <ng-container
                             *ngIf="
                                 (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                    vm.selectedLedger.voucher.shortCode !== 'jr';
+                                    vm.selectedLedger?.voucher?.shortCode !== 'jr';
                                 else showOnlySalesPerson
                             "
                         >
@@ -1746,7 +1747,7 @@
                                 </div>
                             </ng-container>
 
-                            <div class="row">
+                            <div class="row" *ngIf="vm.selectedLedger">
                                 <div class="col-12 col-sm-12">
                                     <mat-form-field appearance="outline" class="initial-height w-100">
                                         <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
