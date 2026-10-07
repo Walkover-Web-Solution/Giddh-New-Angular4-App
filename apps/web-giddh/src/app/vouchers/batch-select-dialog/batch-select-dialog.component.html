@@ -8,8 +8,12 @@
 
         <div
             class="soft-panel"
-            [class.soft-panel-default]="overflowQuantity === 0 && !(allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0)"
-            [class.soft-panel-success]="overflowQuantity === 0 && allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0"
+            [class.soft-panel-default]="
+                overflowQuantity === 0 && !(allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0)
+            "
+            [class.soft-panel-success]="
+                overflowQuantity === 0 && allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0
+            "
             [class.soft-panel-warning]="overflowQuantity > 0"
         >
             <div class="d-flex justify-content-between align-items-center">
@@ -18,7 +22,7 @@
                         interpolate(localeData?.allocated_of, {
                             ALLOCATED: allocatedQuantity,
                             TOTAL: dialogData?.lineQuantity || 0,
-                            UNIT: dialogData?.unitCode || ''
+                            UNIT: dialogData?.unitCode || '',
                         })
                     "
                 ></span>
@@ -26,7 +30,7 @@
                     {{
                         interpolate(localeData?.over_line_quantity, {
                             QTY: overflowQuantity,
-                            UNIT: dialogData?.unitCode || ''
+                            UNIT: dialogData?.unitCode || '',
                         })
                     }}
                 </span>
@@ -34,13 +38,16 @@
                     *ngIf="overflowQuantity === 0 && allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0"
                     class="text-green font-size-12 font-weight-semibold"
                 >
-                    <i class="icon-tick mr-1"></i>{{ localeData?.fully_allocated }}
+                    <i class="icon-tick mr-1"></i>
+                    {{ localeData?.fully_allocated }}
                 </span>
             </div>
             <div class="progress-track">
                 <span
                     class="progress-track-fill"
-                    [class.progress-track-fill-success]="overflowQuantity === 0 && allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0"
+                    [class.progress-track-fill-success]="
+                        overflowQuantity === 0 && allocatedQuantity === (dialogData?.lineQuantity || 0) && allocatedQuantity > 0
+                    "
                     [class.progress-track-fill-warning]="overflowQuantity > 0"
                     [style.width.%]="allocationPercent"
                 ></span>
@@ -53,7 +60,7 @@
             <button mat-stroked-button color="warn" type="button" (click)="apply(true)">
                 {{
                     interpolate(localeData?.override_line_quantity, {
-                        QTY: allocatedQuantity
+                        QTY: allocatedQuantity,
                     })
                 }}
             </button>
@@ -64,7 +71,7 @@
                 interpolate(localeData?.negative_stock_warning, {
                     BATCH: negativeRow.batchNumber || negativeRow.name,
                     QTY: getNegativeQuantity(negativeRow),
-                    UNIT: dialogData?.unitCode || ''
+                    UNIT: dialogData?.unitCode || '',
                 })
             }}
         </div>
@@ -82,23 +89,23 @@
                 [autocomplete]="'off'"
             ></input-field>
         </div>
-        <div class="d-flex justify-content-between align-items-center column-gap-1 mb-2">
-            <div
-                id="add-batch"
-                tabindex="0"
-                role="button"
-                cdkMonitorElementFocus
-                class="text-primary font-size-12 font-weight-semibold nowrap cursor-pointer"
-                (click)="openCreateBatch()"
-                (keydown.enter)="$event.preventDefault(); openCreateBatch()"
-                (keydown.space)="$event.preventDefault(); openCreateBatch()"
-            >
-                {{ localeData?.add_batch }}
+        @if (!hasFixedBatches) {
+            <div class="d-flex justify-content-between align-items-center column-gap-1 mb-2">
+                <div
+                    id="add-batch"
+                    tabindex="0"
+                    role="button"
+                    cdkMonitorElementFocus
+                    class="text-primary font-size-12 font-weight-semibold nowrap cursor-pointer"
+                    (click)="openCreateBatch()"
+                    (keydown.enter)="$event.preventDefault(); openCreateBatch()"
+                    (keydown.space)="$event.preventDefault(); openCreateBatch()"
+                >
+                    {{ localeData?.add_batch }}
+                </div>
+                <p class="font-size-12 m-0 text-right flex-grow-1">{{ localeData?.quick_add_hint }} · {{ localeData?.sorted_by_expiry }}</p>
             </div>
-            <p class="font-size-12 m-0 text-right flex-grow-1">
-                {{ localeData?.quick_add_hint }} · {{ localeData?.sorted_by_expiry }}
-            </p>
-        </div>
+        }
 
         <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
 
@@ -122,15 +129,17 @@
                             [ngClass]="{
                                 'text-red font-weight-semibold': getExpiryStatus(row.expiryDate) === 'expired',
                                 'text-orange font-weight-semibold': getExpiryStatus(row.expiryDate) === 'warning',
-                                'text-green font-weight-semibold': getExpiryStatus(row.expiryDate) === 'ok'
+                                'text-green font-weight-semibold': getExpiryStatus(row.expiryDate) === 'ok',
                             }"
                         >
                             {{ localeData?.batch_expiry }} {{ formatExpiry(row.expiryDate) }}
                         </span>
-                        <span *ngIf="row.expiryDate"> · </span>
+                        <span *ngIf="row.expiryDate">·</span>
                         <span>{{ localeData?.batch_available }} {{ row.availableQuantity }} {{ dialogData?.unitCode }}</span>
-                        <span *ngIf="row.manufacturingDate"> · {{ localeData?.batch_manufacturing }} {{ formatExpiry(row.manufacturingDate) }}</span>
-                        <span *ngIf="row.warehouse?.name"> · {{ row.warehouse.name }}</span>
+                        <span *ngIf="row.manufacturingDate">
+                            · {{ localeData?.batch_manufacturing }} {{ formatExpiry(row.manufacturingDate) }}
+                        </span>
+                        <span *ngIf="row.warehouse?.name">· {{ row.warehouse.name }}</span>
                     </div>
                     <div
                         *ngIf="shouldShowProjectedBalance(row)"
@@ -141,7 +150,7 @@
                         {{
                             interpolate(isInbound ? localeData?.batch_will_increase : localeData?.batch_will_go_negative, {
                                 QTY: getProjectedQuantity(row),
-                                UNIT: dialogData?.unitCode || ''
+                                UNIT: dialogData?.unitCode || '',
                             })
                         }}
                     </div>
@@ -169,7 +178,7 @@
                 interpolate(localeData?.batches_summary, {
                     COUNT: selectedCount,
                     QTY: allocatedQuantity,
-                    UNIT: dialogData?.unitCode || ''
+                    UNIT: dialogData?.unitCode || '',
                 })
             }}
         </div>

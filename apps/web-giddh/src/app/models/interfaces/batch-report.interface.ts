@@ -136,6 +136,13 @@ export interface BatchSelectDialogData {
     commonLocaleData?: any;
     /** True for bills / other inbound stock (purchase, receipt, credit note). */
     isInbound?: boolean;
+    /**
+     * When set, dialog only lists these batches (e.g. document return)
+     * instead of warehouse availability.
+     */
+    fixedBatches?: VoucherSelectedBatch[];
+    /** Report nature for batch availability (`INVENTORY` for DC/RN, else `BOOKS`). */
+    reportNature?: string;
 }
 
 /** Result returned when the batch select aside closes with a selection. */

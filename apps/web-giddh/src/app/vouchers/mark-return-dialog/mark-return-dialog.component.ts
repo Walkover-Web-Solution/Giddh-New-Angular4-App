@@ -1,9 +1,13 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ReplaySubject, takeUntil } from "rxjs";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { cloneDeep } from "../../lodash-optimized";
+import { ReplaySubject, take, takeUntil } from "rxjs";
+import { ASIDE_PANE_CONFIG } from "../../app.constant";
+import { BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
 import { VoucherService } from "../../services/voucher.service";
 import { ToasterService } from "../../services/toaster.service";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
+import { BatchSelectDialogComponent } from "../batch-select-dialog/batch-select-dialog.component";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
 
 export interface MarkReturnDialogData {
@@ -32,6 +36,10 @@ export interface MarkReturnRow {
     /** Optional Create CN for this selected return item */
     createCn: boolean;
     showCreateCn: boolean;
+    /** Document batches available for return (quantity cap per batch). */
+    availableBatches: VoucherSelectedBatch[];
+    /** Selected return allocation per batch. */
+    batches: VoucherSelectedBatch[];
 }
 
 @Component({
@@ -63,6 +71,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: MarkReturnDialogData,
         private dialogRef: MatDialogRef<MarkReturnDialogComponent>,
+        private dialog: MatDialog,
         private voucherService: VoucherService,
         private toaster: ToasterService,
         private changeDetectorRef: ChangeDetectorRef
@@ -109,6 +118,17 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * True when any row has document batches (batch-wise return mode).
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public get hasBatchRows(): boolean {
+        return this.rows.some((row) => this.rowHasBatches(row));
+    }
+
+    /**
      * Initializes dialog and loads event resolutions
      *
      * @memberof MarkReturnDialogComponent
@@ -145,6 +165,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
                     this.changeDetectorRef.detectChanges();
                     if (response?.status === "success" && response?.body) {
                         this.rows = (response.body.items || []).map((item: any) => this.mapItemToRow(item));
+                        this.updateDisplayedColumns();
                     } else {
                         this.showApiError(response);
                         this.dialogRef.close();
@@ -170,6 +191,11 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     private mapItemToRow(item: any): MarkReturnRow {
         const returnableQuantity = Number(item.returnableQuantity ?? 0);
         const creditableQuantity = Number(item.creditableQuantity ?? 0);
+        const availableBatches = this.mapApiBatches(item.batches);
+        const batches = cloneDeep(availableBatches);
+        const returnQty = availableBatches.length
+            ? this.getBatchesQuantity(batches)
+            : returnableQuantity;
 
         return {
             sourceItemId: item.sourceItemId,
@@ -181,12 +207,96 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
             invoicedQuantity: Number(item.invoicedQuantity ?? 0),
             returnableQuantity,
             creditableQuantity,
-            returnQty: returnableQuantity,
+            returnQty,
             cnQty: creditableQuantity,
             selected: returnableQuantity > 0,
             createCn: false,
-            showCreateCn: creditableQuantity > 0
+            showCreateCn: creditableQuantity > 0,
+            availableBatches,
+            batches
         };
+    }
+
+    /**
+     * Maps API batches to voucher selected-batch shape.
+     *
+     * @private
+     * @param {*} batches
+     * @return {*}  {VoucherSelectedBatch[]}
+     * @memberof MarkReturnDialogComponent
+     */
+    private mapApiBatches(batches: any): VoucherSelectedBatch[] {
+        if (!Array.isArray(batches)) {
+            return [];
+        }
+        return batches
+            .filter((batch) => !!batch?.uniqueName)
+            .map((batch) => {
+                const quantity = Number(batch.quantity ?? 0);
+                return {
+                    uniqueName: batch.uniqueName,
+                    name: batch.name,
+                    batchNumber: batch.batchNumber,
+                    quantity,
+                    availableQuantity: quantity,
+                    expiryDate: batch.expiryDate,
+                    manufacturingDate: batch.manufacturingDate || batch.createdAt,
+                    warehouse: batch.warehouse
+                };
+            });
+    }
+
+    /**
+     * Sum of selected batch quantities.
+     *
+     * @private
+     * @param {VoucherSelectedBatch[]} batches
+     * @return {*}  {number}
+     * @memberof MarkReturnDialogComponent
+     */
+    private getBatchesQuantity(batches: VoucherSelectedBatch[]): number {
+        return giddhRoundOff(
+            (batches ?? []).reduce((total, batch) => total + (Number(batch.quantity) || 0), 0),
+            4
+        );
+    }
+
+    /**
+     * True when row uses batch-wise return qty.
+     *
+     * @param {MarkReturnRow} row
+     * @return {*}  {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public rowHasBatches(row: MarkReturnRow): boolean {
+        return Array.isArray(row?.availableBatches) && row.availableBatches.length > 0;
+    }
+
+    /**
+     * True when at least one row can create a credit/debit note.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    public get hasCreateNoteRows(): boolean {
+        return this.rows.some((row) => row.showCreateCn);
+    }
+
+    /**
+     * Sets table columns for batch vs plain return qty mode.
+     *
+     * @private
+     * @memberof MarkReturnDialogComponent
+     */
+    private updateDisplayedColumns(): void {
+        const columns = this.hasBatchRows
+            ? ["select", "item", "totalQty", "invoicedQty", "batch"]
+            : ["select", "item", "totalQty", "invoicedQty", "returnQty"];
+        if (this.hasCreateNoteRows) {
+            columns.push("action", "cnQty");
+        }
+        this.displayedColumns = columns;
     }
 
     /**
@@ -308,14 +418,85 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * True when return qty exceeds returnable quantity
+     * Opens batch select dialog to allocate return qty per batch.
+     *
+     * @param {MarkReturnRow} row
+     * @param {Event} [event]
+     * @memberof MarkReturnDialogComponent
+     */
+    public openBatchSelectDialog(row: MarkReturnRow, event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+        if (!this.rowHasBatches(row) || !row.selected || !this.isRowSelectable(row)) {
+            return;
+        }
+
+        const dialogRef = this.dialog.open(BatchSelectDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                stockName: row.stock?.name,
+                stockUniqueName: row.stock?.uniqueName,
+                variantUniqueName: row.variant?.uniqueName,
+                variantName: row.variant?.name,
+                hasVariants: !!row.variant?.uniqueName,
+                warehouseName: row.warehouse?.name,
+                warehouseUniqueName: row.warehouse?.uniqueName,
+                unitCode: row.stockUnit?.code || row.stockUnit?.name,
+                lineQuantity: row.returnableQuantity,
+                selectedBatches: cloneDeep(row.batches ?? []),
+                fixedBatches: cloneDeep(row.availableBatches ?? []),
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData,
+                isInbound: true
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1), takeUntil(this.destroyed$)).subscribe((result?: BatchSelectDialogResult) => {
+            if (!result) {
+                return;
+            }
+            row.batches = result.batches ?? [];
+            row.returnQty = this.getBatchesQuantity(row.batches);
+            if (row.returnQty > 0) {
+                row.selected = true;
+            }
+            this.changeDetectorRef.detectChanges();
+        });
+    }
+
+    /**
+     * True when return qty exceeds returnable quantity or batch caps
      *
      * @param {MarkReturnRow} row
      * @return {*}  {boolean}
      * @memberof MarkReturnDialogComponent
      */
     public isReturnQtyInvalid(row: MarkReturnRow): boolean {
+        if (this.rowHasBatches(row)) {
+            if (this.hasInvalidBatchAllocation(row)) {
+                return true;
+            }
+            return Number(row.returnQty) > Math.max(row.returnableQuantity, 0);
+        }
         return Number(row.returnQty) > Math.max(row.returnableQuantity, 0);
+    }
+
+    /**
+     * True when any selected batch qty exceeds its document available qty.
+     *
+     * @private
+     * @param {MarkReturnRow} row
+     * @return {*}  {boolean}
+     * @memberof MarkReturnDialogComponent
+     */
+    private hasInvalidBatchAllocation(row: MarkReturnRow): boolean {
+        const availableByUniqueName = new Map(
+            (row.availableBatches ?? []).map((batch) => [batch.uniqueName, Number(batch.availableQuantity) || 0])
+        );
+        return (row.batches ?? []).some((batch) => {
+            const maxQty = availableByUniqueName.get(batch.uniqueName) ?? 0;
+            return Number(batch.quantity) > maxQty;
+        });
     }
 
     /**
@@ -398,12 +579,23 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const mapReturnItem = (row: MarkReturnRow) => ({
-            sourceItemId: row.sourceItemId,
-            stock: { uniqueName: row.stock?.uniqueName },
-            variant: { uniqueName: row.variant?.uniqueName },
-            quantity: Number(row.returnQty)
-        });
+        const mapReturnItem = (row: MarkReturnRow) => {
+            const item: any = {
+                sourceItemId: row.sourceItemId,
+                stock: { uniqueName: row.stock?.uniqueName },
+                variant: { uniqueName: row.variant?.uniqueName },
+                quantity: Number(row.returnQty)
+            };
+            if (this.rowHasBatches(row) && row.batches?.length) {
+                item.batches = row.batches
+                    .filter((batch) => Number(batch.quantity) > 0)
+                    .map((batch) => ({
+                        uniqueName: batch.uniqueName,
+                        quantity: Number(batch.quantity)
+                    }));
+            }
+            return item;
+        };
 
         const mapCnItem = (row: MarkReturnRow) => ({
             sourceItemId: row.sourceItemId,

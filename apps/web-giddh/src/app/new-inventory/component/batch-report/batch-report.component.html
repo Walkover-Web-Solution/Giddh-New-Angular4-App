@@ -84,6 +84,19 @@
                 </button>
             }
 
+            @if (inventoryViaBusinessDocument) {
+                <div class="white-space-nowrap d-flex align-items-center">
+                    <mat-button-toggle-group
+                        [value]="reportAsPerInventory ? reportNature.Inventory : reportNature.Books"
+                        (change)="onReportNatureChange($event.value)"
+                        [attr.aria-label]="localeData?.books"
+                    >
+                        <mat-button-toggle [value]="reportNature.Books">{{ localeData?.books }}</mat-button-toggle>
+                        <mat-button-toggle [value]="reportNature.Inventory">{{ localeData?.inventory }}</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            }
+
             <button matButton="outlined" class="ml-auto advance-filter-button" (click)="openAdvanceFilterDialog()">
                 <span class="d-inline-flex align-items-center column-gap-05">
                     <i class="icon-advance-filter"></i>
@@ -98,6 +111,8 @@
             @if (customiseColumns?.length) {
                 <select-table-column
                     [moduleType]="moduleType"
+                    [reportNature]="selectedReportNature"
+                    [waitForReportMode]="inventoryViaBusinessDocument"
                     [customiseColumns]="customiseColumns"
                     (selectedColumns)="showSelectedTableColumns($event)"
                     [localeData]="localeData"

@@ -147,6 +147,7 @@ import { AccountCategoryEnum } from "../../shared/Enums/common.enum";
 import { CopyParticularDialogComponent } from "../copy-particular-dialog/copy-particular-dialog.component";
 import { BatchSelectDialogComponent } from "../batch-select-dialog/batch-select-dialog.component";
 import { BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
+import { ReportNature } from "../../new-inventory/inventory.enum";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -4060,7 +4061,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 currencySymbol: this.account?.baseCurrencySymbol || this.company?.baseCurrencySymbol,
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData,
-                isInbound: this.isBatchInbound
+                isInbound: this.isBatchInbound,
+                reportNature: (this.invoiceType?.isDeliveryChallan || this.invoiceType?.isReceiptNote)
+                    ? ReportNature.Inventory
+                    : ReportNature.Books
             }
         });
 

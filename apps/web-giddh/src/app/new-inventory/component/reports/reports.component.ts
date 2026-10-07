@@ -943,6 +943,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
         if (to) {
             queryParams.to = to;
         }
+        if (this.selectedReportNature) {
+            queryParams.reportNature = this.selectedReportNature;
+        }
         this.router.navigate(['/pages/inventory/v2', type, 'batch'], { queryParams });
     }
 
