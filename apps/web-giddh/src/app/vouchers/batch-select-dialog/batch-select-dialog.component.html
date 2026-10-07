@@ -89,21 +89,23 @@
                 [autocomplete]="'off'"
             ></input-field>
         </div>
-        <div class="d-flex justify-content-between align-items-center column-gap-1 mb-2">
-            <div
-                id="add-batch"
-                tabindex="0"
-                role="button"
-                cdkMonitorElementFocus
-                class="text-primary font-size-14 font-weight-semibold nowrap cursor-pointer"
-                (click)="openCreateBatch()"
-                (keydown.enter)="$event.preventDefault(); openCreateBatch()"
-                (keydown.space)="$event.preventDefault(); openCreateBatch()"
-            >
-                {{ localeData?.add_batch }}
+        @if (!hasFixedBatches) {
+            <div class="d-flex justify-content-between align-items-center column-gap-1 mb-2">
+                <div
+                    id="add-batch"
+                    tabindex="0"
+                    role="button"
+                    cdkMonitorElementFocus
+                    class="text-primary font-size-14 font-weight-semibold nowrap cursor-pointer"
+                    (click)="openCreateBatch()"
+                    (keydown.enter)="$event.preventDefault(); openCreateBatch()"
+                    (keydown.space)="$event.preventDefault(); openCreateBatch()"
+                >
+                    {{ localeData?.add_batch }}
+                </div>
+                <p class="font-size-12 m-0 text-right flex-grow-1">{{ localeData?.quick_add_hint }} · {{ localeData?.sorted_by_expiry }}</p>
             </div>
-            <p class="font-size-12 m-0 text-right flex-grow-1">{{ localeData?.quick_add_hint }} · {{ localeData?.sorted_by_expiry }}</p>
-        </div>
+        }
 
         <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
 

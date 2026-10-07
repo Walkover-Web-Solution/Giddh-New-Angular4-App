@@ -21,6 +21,8 @@
     "group_wise_report_description": "ग्रुप-वाईज अहवाल कोणती स्टॉक शिल्लक दाखवतील ते निवडा.",
     "variant_wise_report": "व्हेरियंट-वाईज अहवाल",
     "variant_wise_report_description": "व्हेरियंट-वाईज अहवाल कोणती स्टॉक शिल्लक दाखवतील ते निवडा.",
+    "batch_wise_report": "बॅच-वाईज अहवाल",
+    "batch_wise_report_description": "बॅच-वाईज अहवाल कोणती स्टॉक शिल्लक दाखवतील ते निवडा.",
     "books": "लेखांकन स्टॉक",
     "inventory": "भौतिक स्टॉक",
     "batch_management": "बॅच व्यवस्थापन",

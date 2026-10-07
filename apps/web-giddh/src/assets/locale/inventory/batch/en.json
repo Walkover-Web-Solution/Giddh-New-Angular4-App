@@ -26,6 +26,8 @@
     "expiry_within": "Expiry Within",
     "expiry_status": "Expiry Status",
     "filters": "Filters",
+    "books": "Accounting Stock",
+    "inventory": "Physical Stock",
     "clear_all": "Clear All",
     "will_expire": "Will Expire",
     "already_expired": "Already Expired",

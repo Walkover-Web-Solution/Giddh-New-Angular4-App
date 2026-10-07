@@ -99,6 +99,60 @@
                     </td>
                 </ng-container>
 
+                <ng-container matColumnDef="batch">
+                    <th mat-header-cell *matHeaderCellDef scope="col" class="min-w-200">{{ localeData?.batch }}</th>
+                    <td mat-cell *matCellDef="let row" class="min-w-200">
+                        @if (rowHasBatches(row)) {
+                            @if (row.batches?.length) {
+                                <batch-chip-list
+                                    class="d-block my-2"
+                                    [batches]="row.batches"
+                                    [isInbound]="true"
+                                    [localeData]="localeData"
+                                    [commonLocaleData]="commonLocaleData"
+                                    [showEdit]="row.selected && isRowSelectable(row)"
+                                    (edit)="openBatchSelectDialog(row, $event)"
+                                ></batch-chip-list>
+                            } @else if (row.selected && isRowSelectable(row)) {
+                                <button
+                                    type="button"
+                                    class="bg-transparent border-none p-0 text-primary font-size-12 font-weight-semibold cursor-pointer"
+                                    (click)="openBatchSelectDialog(row, $event)"
+                                >
+                                    {{ localeData?.select_batch }}
+                                </button>
+                            } @else {
+                                <span class="text-muted" aria-hidden="true">-</span>
+                            }
+                            @if (row.selected && isReturnQtyInvalid(row)) {
+                                <div class="text-danger font-size-12 mt-1 text-wrap" role="alert">
+                                    {{ getReturnQtyError(row) }}
+                                </div>
+                            }
+                        } @else {
+                            <div class="d-block w150 my-2">
+                                <input-field
+                                    [type]="'number'"
+                                    [allowDecimalDigitsOnly]="true"
+                                    [name]="'returnQty-batch-' + row.variant?.uniqueName"
+                                    [label]="localeData?.return_qty"
+                                    [placeholder]="'0'"
+                                    [matSuffix]="row.stockUnit?.code || row.stockUnit?.name"
+                                    [(ngModel)]="row.returnQty"
+                                    (ngModelChange)="onReturnQtyChange(row)"
+                                    [disabled]="!row.selected || !isRowSelectable(row)"
+                                    [showError]="isReturnQtyInvalid(row)"
+                                ></input-field>
+                                @if (isReturnQtyInvalid(row)) {
+                                    <div class="text-danger font-size-12 mt-1 text-wrap" role="alert">
+                                        {{ getReturnQtyError(row) }}
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </td>
+                </ng-container>
+
                 <ng-container matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef scope="col" class="text-right">{{ createNoteLabel }}</th>
                     <td mat-cell *matCellDef="let row" class="text-right">
