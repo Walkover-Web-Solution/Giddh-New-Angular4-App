@@ -3606,10 +3606,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.patchLinkedBusinessDocuments([]);
         if (removeLinkedEntries) {
             previouslySelected.forEach((uniqueName) => this.removeBusinessDocumentEntries(uniqueName));
+            // Only sync on account change. Form reset also calls this method and must keep
+            // route queryParams (dcUniqueName / rnUniqueName / …) so create-from-DC/RN can prefill.
+            this.syncQueryParamsFromSelectedDocuments();
         }
         this.pendingBusinessDocumentPrefillUniqueName = null;
         this.pendingBusinessDocumentsQueuedForAppend = [];
-        this.syncQueryParamsFromSelectedDocuments();
     }
 
     /**
