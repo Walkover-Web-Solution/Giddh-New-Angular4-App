@@ -2513,10 +2513,6 @@ export class GeneralService {
         const basePath = this.router.url.split('?')[0];
         const forcedParams: Record<string, any> = {};
 
-        this.debugLog('[getCurrentPath] router.url:', this.router.url);
-        this.debugLog('[getCurrentPath] basePath:', basePath);
-        this.debugLog('[getCurrentPath] currentUrlParams:', currentUrlParams);
-
         if (currentUrlParams?.required) {
             const requiredKeys: string[] = currentUrlParams.required.split(',');
             requiredKeys.forEach(key => {
@@ -2534,10 +2530,6 @@ export class GeneralService {
         const scopedPath = Object.keys(forcedParams).length
             ? `${basePath}?${Object.entries(forcedParams).map(([k, v]) => `${k}=${v}`).join('&')}`
             : basePath;
-
-        this.debugLog('[getCurrentPath] forcedParams:', forcedParams);
-        this.debugLog('[getCurrentPath] scopedPath:', scopedPath);
-        this.debugLog('[getCurrentPath] replaceOnly:', replaceOnly);
 
         return { path: scopedPath, queryParams: replaceOnly ? forcedParams : currentUrlParams };
     }

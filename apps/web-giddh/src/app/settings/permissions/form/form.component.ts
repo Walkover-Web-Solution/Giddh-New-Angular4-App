@@ -172,7 +172,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
 
         this.permissionForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.hasUnsavedChanges.emit(this.permissionForm?.dirty);
+            this.hasUnsavedChanges.emit(this.permissionForm?.dirty && !this.isUserRestricted);
         });
     }
 

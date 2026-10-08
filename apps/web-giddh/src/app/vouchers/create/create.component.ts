@@ -5571,8 +5571,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     const taxes = this.generalService.fetchTaxesOnPriority(
                         item.additional.stock?.taxes ?? [],
                         item.additional.stock?.groupTaxes ?? [],
-                        item.additional.taxes ?? [],
-                        item.additional.groupTaxes ?? []
+                        this.resolveStockTaxUniqueNames(item.additional.taxes ?? []).applicableTaxUniqueNames ?? [],
+                        this.resolveStockTaxUniqueNames(item.additional.groupTaxes ?? []).applicableTaxUniqueNames ?? []
                     );
 
                     const otherTaxes = this.generalService.fetchTaxesOnPriority(
@@ -9833,8 +9833,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const taxes = this.generalService.fetchTaxesOnPriority(
             response.stock?.taxes ?? [],
             response.stock?.groupTaxes ?? [],
-            response.taxes ?? [],
-            response.groupTaxes ?? []
+            this.resolveStockTaxUniqueNames(response.taxes ?? []).applicableTaxUniqueNames ?? [],
+            this.resolveStockTaxUniqueNames(response.groupTaxes ?? []).applicableTaxUniqueNames ?? []
         );
 
         const otherTaxes = this.generalService.fetchTaxesOnPriority(

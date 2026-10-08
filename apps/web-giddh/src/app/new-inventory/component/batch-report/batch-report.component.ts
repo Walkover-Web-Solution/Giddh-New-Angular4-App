@@ -169,6 +169,9 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     private advanceFilterDialogRef: MatDialogRef<any>;
     /** True when from/to came from reports query params, so universal date must not overwrite them. */
     private useQueryDateRange: boolean = false;
+    /** Session application date range (`DD-MM-YYYY`), used to detect a custom date filter. */
+    private applicationFromDate: string = "";
+    private applicationToDate: string = "";
     /** True when this page was opened from item-wise, variant-wise, or stock-balance. */
     public showBackButton: boolean = false;
 
@@ -210,9 +213,11 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         this.getReportNature();
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
+                this.applicationFromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.applicationToDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                 if (!this.useQueryDateRange) {
-                    this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                    this.fromDate = this.applicationFromDate;
+                    this.toDate = this.applicationToDate;
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
@@ -426,7 +431,22 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             || this.selectedVariant?.length
             || this.selectedWarehouse?.length
             || this.batchNumberSearchText
-            || this.nameSearchText);
+            || this.nameSearchText
+            || this.isCustomDateRange);
+    }
+
+    /**
+     * True when the selected range differs from the session application date.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchReportComponent
+     */
+    private get isCustomDateRange(): boolean {
+        if (!this.fromDate || !this.toDate || !this.applicationFromDate || !this.applicationToDate) {
+            return false;
+        }
+        return this.fromDate !== this.applicationFromDate || this.toDate !== this.applicationToDate;
     }
 
     /**
@@ -827,6 +847,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         this.searchName.setValue("", { emitEvent: false });
         this.showBatchNumberSearchInput = false;
         this.showNameSearchInput = false;
+        this.resetDateRangeToApplication();
         this.page = 1;
         this.pageIndex = 0;
         if (refetch) {
@@ -1475,6 +1496,26 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.getBatches();
         }
         this.cdr.detectChanges();
+    }
+
+    /**
+     * Resets the batch report date range to the session application date (state only).
+     *
+     * @private
+     * @memberof BatchReportComponent
+     */
+    private resetDateRangeToApplication(): void {
+        if (!this.applicationFromDate || !this.applicationToDate) {
+            return;
+        }
+        this.useQueryDateRange = false;
+        this.selectedRangeLabel = "";
+        this.fromDate = this.applicationFromDate;
+        this.toDate = this.applicationToDate;
+        const startDate = dayjs(this.applicationFromDate, GIDDH_DATE_FORMAT);
+        const endDate = dayjs(this.applicationToDate, GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate, endDate };
+        this.selectedDateRangeUi = `${startDate.format(GIDDH_NEW_DATE_FORMAT_UI)} - ${endDate.format(GIDDH_NEW_DATE_FORMAT_UI)}`;
     }
 
     /**

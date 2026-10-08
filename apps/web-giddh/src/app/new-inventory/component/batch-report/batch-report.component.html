@@ -7,119 +7,122 @@
     (translationComplete)="initCustomiseColumns()"
 >
     @if (dataSource?.data?.length || hasActiveFilters) {
-        <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-2 mb-3">
-            @if (showBackButton) {
-                <button matButton="outlined" class="report-back-button" (click)="backToPreviousPage()">
-                    {{ commonLocaleData?.app_back }}
-                </button>
-            }
-            <div class="custom-datepicker-wrapper">
-                <div
-                    class="custom-datepicker"
-                    [matMenuTriggerFor]="universalDatepicker"
-                    #universalDatepickerTrigger="matMenuTrigger"
-                    role="button"
-                    aria-haspopup="true"
-                    aria-controls="universalDatepicker"
-                >
-                    <input
-                        matInput
-                        type="text"
-                        name="selectedDateRange"
-                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
-                        readonly
-                    />
+        <div class="batch-report-toolbar d-flex flex-wrap align-items-center justify-content-between column-gap-2 row-gap-2 mb-3">
+            <div class="batch-report-toolbar-filters d-flex flex-wrap align-items-center column-gap-2 row-gap-2">
+                @if (showBackButton) {
+                    <button matButton="outlined" class="report-back-button" (click)="backToPreviousPage()">
+                        {{ commonLocaleData?.app_back }}
+                    </button>
+                }
+                <div class="custom-datepicker-wrapper">
+                    <div
+                        class="custom-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
+                    >
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
+                        />
+                    </div>
                 </div>
-            </div>
-            <div class="filter-dropdown">
-                <multi-select-dropdown
-                    [name]="'batchSelectedStock'"
-                    [label]="localeData?.select_stock"
-                    [options]="stocks"
-                    [enableDynamicSearch]="true"
-                    [searchQuery]="stocksSearchQuery"
-                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                    [(ngModel)]="selectedStock"
-                    (selectionChange)="onStockChange()"
-                    (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
-                    (scrollEnd)="onStockScrollEnd()"
-                ></multi-select-dropdown>
-            </div>
-
-            @if (variants?.length) {
                 <div class="filter-dropdown">
                     <multi-select-dropdown
-                        [name]="'batchSelectedVariant'"
-                        [label]="localeData?.select_variant"
-                        [options]="variants"
+                        [name]="'batchSelectedStock'"
+                        [label]="localeData?.select_stock"
+                        [options]="stocks"
+                        [enableDynamicSearch]="true"
+                        [searchQuery]="stocksSearchQuery"
                         [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                        [(ngModel)]="selectedVariant"
-                        (selectionChange)="onVariantChange()"
+                        [(ngModel)]="selectedStock"
+                        (selectionChange)="onStockChange()"
+                        (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
+                        (scrollEnd)="onStockScrollEnd()"
                     ></multi-select-dropdown>
                 </div>
-            }
 
-            @if (warehouses?.length > 1) {
-                <div class="filter-dropdown">
-                    <multi-select-dropdown
-                        [name]="'batchSelectedWarehouse'"
-                        [label]="commonLocaleData?.app_select_warehouse"
-                        [options]="warehouses"
-                        [optionValue]="'uniqueName'"
-                        [optionLabel]="'name'"
-                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                        [(ngModel)]="selectedWarehouse"
-                        (selectionChange)="onWarehouseChange()"
-                    ></multi-select-dropdown>
-                </div>
-            }
+                @if (variants?.length) {
+                    <div class="filter-dropdown">
+                        <multi-select-dropdown
+                            [name]="'batchSelectedVariant'"
+                            [label]="localeData?.select_variant"
+                            [options]="variants"
+                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                            [(ngModel)]="selectedVariant"
+                            (selectionChange)="onVariantChange()"
+                        ></multi-select-dropdown>
+                    </div>
+                }
 
-            @if (hasHeaderFilters) {
-                <button matButton="outlined" (click)="resetFilters()">
+                @if (warehouses?.length > 1) {
+                    <div class="filter-dropdown">
+                        <multi-select-dropdown
+                            [name]="'batchSelectedWarehouse'"
+                            [label]="commonLocaleData?.app_select_warehouse"
+                            [options]="warehouses"
+                            [optionValue]="'uniqueName'"
+                            [optionLabel]="'name'"
+                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                            [(ngModel)]="selectedWarehouse"
+                            (selectionChange)="onWarehouseChange()"
+                        ></multi-select-dropdown>
+                    </div>
+                }
+
+                @if (hasHeaderFilters) {
+                    <button matButton="outlined" (click)="resetFilters()">
+                        <span class="d-inline-flex align-items-center column-gap-05">
+                            <i class="icon-cross font-size-14"></i>
+                            {{ commonLocaleData?.app_clear }}
+                        </span>
+                    </button>
+                }
+
+                @if (inventoryViaBusinessDocument) {
+                    <div class="white-space-nowrap d-flex align-items-center">
+                        <mat-button-toggle-group
+                            [value]="reportAsPerInventory ? reportNature.Inventory : reportNature.Books"
+                            (change)="onReportNatureChange($event.value)"
+                            [attr.aria-label]="localeData?.books"
+                        >
+                            <mat-button-toggle [value]="reportNature.Books">{{ localeData?.books }}</mat-button-toggle>
+                            <mat-button-toggle [value]="reportNature.Inventory">{{ localeData?.inventory }}</mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                }
+            </div>
+            <div class="batch-report-toolbar-actions d-flex flex-wrap align-items-center column-gap-2 row-gap-2">
+                <button matButton="outlined" class="advance-filter-button" (click)="openAdvanceFilterDialog()">
                     <span class="d-inline-flex align-items-center column-gap-05">
-                        <i class="icon-cross font-size-14"></i>
-                        {{ commonLocaleData?.app_clear }}
+                        <i class="icon-advance-filter"></i>
+                        <span>{{ localeData?.filters }}</span>
                     </span>
                 </button>
-            }
 
-            @if (inventoryViaBusinessDocument) {
-                <div class="white-space-nowrap d-flex align-items-center">
-                    <mat-button-toggle-group
-                        [value]="reportAsPerInventory ? reportNature.Inventory : reportNature.Books"
-                        (change)="onReportNatureChange($event.value)"
-                        [attr.aria-label]="localeData?.books"
-                    >
-                        <mat-button-toggle [value]="reportNature.Books">{{ localeData?.books }}</mat-button-toggle>
-                        <mat-button-toggle [value]="reportNature.Inventory">{{ localeData?.inventory }}</mat-button-toggle>
-                    </mat-button-toggle-group>
-                </div>
-            }
+                <button matButton="filled" (click)="openBatchDialog()">
+                    {{ localeData?.add_batch }}
+                </button>
 
-            <button matButton="outlined" class="ml-auto advance-filter-button" (click)="openAdvanceFilterDialog()">
-                <span class="d-inline-flex align-items-center column-gap-05">
-                    <i class="icon-advance-filter"></i>
-                    <span>{{ localeData?.filters }}</span>
-                </span>
-            </button>
-
-            <button matButton="filled" (click)="openBatchDialog()">
-                {{ localeData?.add_batch }}
-            </button>
-
-            @if (customiseColumns?.length) {
-                <select-table-column
-                    [moduleType]="moduleType"
-                    [reportNature]="selectedReportNature"
-                    [waitForReportMode]="inventoryViaBusinessDocument"
-                    [customiseColumns]="customiseColumns"
-                    (selectedColumns)="showSelectedTableColumns($event)"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                    [iconClass]="'icon-options select-multiple-icon-options'"
-                ></select-table-column>
-            }
+                @if (customiseColumns?.length) {
+                    <select-table-column
+                        [moduleType]="moduleType"
+                        [reportNature]="selectedReportNature"
+                        [waitForReportMode]="inventoryViaBusinessDocument"
+                        [customiseColumns]="customiseColumns"
+                        (selectedColumns)="showSelectedTableColumns($event)"
+                        [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
+                        [iconClass]="'icon-options select-multiple-icon-options'"
+                    ></select-table-column>
+                }
+            </div>
         </div>
         @if (hasAdvanceFilters) {
             <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-1 mb-3">

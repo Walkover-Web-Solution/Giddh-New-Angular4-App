@@ -3638,8 +3638,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     taxes = this.generalService.fetchTaxesOnPriority(
                         data.body.stock?.taxes ?? [],
                         data.body.stock?.groupTaxes ?? [],
-                        data.body.taxes ?? [],
-                        data.body.groupTaxes ?? []);
+                        this.resolveStockTaxUniqueNamesForLedger(data.body.taxes ?? [],
+                        entryDateForTax).applicableTaxUniqueNames ?? [],
+                        this.resolveStockTaxUniqueNamesForLedger(data.body.groupTaxes ?? [],
+                        entryDateForTax).applicableTaxUniqueNames ?? []);
+                        
                         const isSundryDebtorCreditorAccount = data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryCreditors) || data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryDebtors);
                         if (data.body.oppositeAccount && (isSundryDebtorCreditorAccount || stockGroupTax.length || stockTax.length)) {
                             const stockAccountOtherTax = this.generalService.fetchTaxesOnPriority(
