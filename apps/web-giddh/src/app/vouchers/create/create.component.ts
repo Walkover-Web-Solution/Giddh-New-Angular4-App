@@ -90,7 +90,7 @@ import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
 import { DscService } from "../../services/dsc.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
-import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
+import { cloneDeep, isEqual, orderBy, uniqBy } from "../../lodash-optimized";
 import {
     AdjustedVoucherType,
     BranchHierarchyType,
@@ -1114,7 +1114,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.openAccountDropdown = false;
                         this.urlVoucherType = params.voucherType;
                         this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
-
+                        this.getVoucherVersion();
                         if (this.voucherApiVersion !== 2) {
                             this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
                         }
@@ -5557,19 +5557,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         });
                     }
 
-                    const stockGroupOtherTax: string[] = [];
+                    const stockGroupTaxes = this.resolveStockTaxUniqueNames(item.additional.stock?.groupTaxes);
+                    const stockGroupOtherTax = stockGroupTaxes.otherTaxUniqueNames;
                     if (item.additional.stock?.groupTaxes) {
-                        stockGroupOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
-                            item.additional.stock?.groupTaxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
-                        ).map(tax => tax.uniqueName));
-                        item.additional.stock.groupTaxes = item.additional.stock?.groupTaxes.filter(tax => !stockGroupOtherTax.includes(tax));
+                        item.additional.stock.groupTaxes = stockGroupTaxes.applicableTaxUniqueNames;
                     }
-                    const stockOtherTax: string[] = [];
+                    const stockLineTaxes = this.resolveStockTaxUniqueNames(item.additional.stock?.taxes);
+                    const stockOtherTax = stockLineTaxes.otherTaxUniqueNames;
                     if (item.additional.stock?.taxes) {
-                        stockOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
-                            item.additional.stock?.taxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
-                        ).map(tax => tax.uniqueName));
-                        item.additional.stock.taxes = item.additional.stock?.taxes.filter(tax => !stockOtherTax.includes(tax));
+                        item.additional.stock.taxes = stockLineTaxes.applicableTaxUniqueNames;
                     }
 
                     const taxes = this.generalService.fetchTaxesOnPriority(
@@ -5600,9 +5596,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
                     taxesFormArray.clear();
 
-                    selectedTaxes?.forEach((tax) => {
-                        taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
-                    });
+                    if (this.showTaxColumn) {
+                        selectedTaxes?.forEach((tax) => {
+                            taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+                        });
+                    }
 
                     if (!otherTax && this.account?.applicableTaxes?.length) {
                         this.allCompanyTaxes?.forEach((tax) => {
@@ -5630,7 +5628,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     ) {
                         const amount = this.vouchersUtilityService.calculateInclusiveRate(
                             entryFormGroup?.value,
-                            this.companyTaxes,
+                            this.showTaxColumn ? this.companyTaxes : [],
                             this.company.giddhBalanceDecimalPlaces
                         );
                         transactionFormGroup.get("amount.amountForAccount").patchValue(amount);
@@ -7065,7 +7063,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
                 const amount = this.vouchersUtilityService.calculateInclusiveRate(
                     entryFormGroup?.value,
-                    this.companyTaxes,
+                    this.showTaxColumn ? this.companyTaxes : [],
                     this.company.giddhBalanceDecimalPlaces,
                     Number(entryFormGroup.get("total.amountForAccount")?.value)
                 );
@@ -7075,6 +7073,71 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.calculateTotalTax();
         this.calculateOtherTaxAmount(entryFormGroup, false);
+    }
+
+    /**
+     * Voucher date for tax applicability (aligned with common-tax date input).
+     */
+    private normalizeVoucherDateForTax(date: unknown) {
+        if (!date) {
+            return null;
+        }
+        if (typeof date === "string") {
+            return dayjs(date, GIDDH_DATE_FORMAT);
+        }
+        return dayjs(date);
+    }
+
+    /**
+     * Whether a company tax applies on the voucher date (same rules as common-tax prepareTaxObject).
+     */
+    private isTaxUniqueNameValidForVoucherDate(taxUniqueName: string): boolean {
+        const companyTax = this.allCompanyTaxes?.find((tax) => tax.uniqueName === taxUniqueName);
+        if (!companyTax?.taxDetail?.length) {
+            return true;
+        }
+
+        const normalizedDate = this.normalizeVoucherDateForTax(this.invoiceForm.get("date")?.value);
+        if (!normalizedDate?.isValid()) {
+            return true;
+        }
+
+        const taxDetailsDesc = orderBy(
+            companyTax.taxDetail,
+            (detail: { date: string }) => dayjs(detail.date, GIDDH_DATE_FORMAT),
+            "desc"
+        );
+        const exactDate = taxDetailsDesc.filter((detail) =>
+            dayjs(detail.date, GIDDH_DATE_FORMAT).isSame(normalizedDate, "day")
+        );
+        if (exactDate.length > 0) {
+            return true;
+        }
+
+        const beforeVoucherDate = taxDetailsDesc.filter((detail) =>
+            dayjs(detail.date, GIDDH_DATE_FORMAT).isBefore(normalizedDate, "day")
+        );
+        return beforeVoucherDate.length > 0;
+    }
+
+    /**
+     * Splits stock taxes into GST vs TCS/TDS. Date filter applies only to non-other taxes (same as common-tax GST list).
+     */
+    private resolveStockTaxUniqueNames(taxUniqueNames: string[] | undefined): {
+        applicableTaxUniqueNames: string[];
+        otherTaxUniqueNames: string[];
+    } {
+        const names = taxUniqueNames ?? [];
+
+        const otherTaxUniqueNames = this.allCompanyTaxes
+            .filter((tax) => names.includes(tax.uniqueName) && this.otherTaxTypes.includes(tax.taxType))
+            .map((tax) => tax.uniqueName);
+
+        const applicableTaxUniqueNames = names
+            .filter((uniqueName) => !otherTaxUniqueNames.includes(uniqueName))
+            .filter((uniqueName) => this.isTaxUniqueNameValidForVoucherDate(uniqueName));
+
+        return { applicableTaxUniqueNames, otherTaxUniqueNames };
     }
 
     /**
@@ -9756,19 +9819,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         }
 
-        const stockGroupOtherTax: string[] = [];
+        const stockGroupTaxes = this.resolveStockTaxUniqueNames(response.stock?.groupTaxes);
+        const stockGroupOtherTax = stockGroupTaxes.otherTaxUniqueNames;
         if (response.stock?.groupTaxes) {
-            stockGroupOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
-                response.stock?.groupTaxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
-            ).map(tax => tax.uniqueName));
-            response.stock.groupTaxes = response.stock?.groupTaxes.filter(tax => !stockGroupOtherTax.includes(tax));
+            response.stock.groupTaxes = stockGroupTaxes.applicableTaxUniqueNames;
         }
-        const stockOtherTax: string[] = [];
+        const stockLineTaxes = this.resolveStockTaxUniqueNames(response.stock?.taxes);
+        const stockOtherTax = stockLineTaxes.otherTaxUniqueNames;
         if (response.stock?.taxes) {
-            stockOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
-                response.stock?.taxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
-            ).map(tax => tax.uniqueName));
-            response.stock.taxes = response.stock?.taxes.filter(tax => !stockOtherTax.includes(tax));
+            response.stock.taxes = stockLineTaxes.applicableTaxUniqueNames;
         }
 
         const taxes = this.generalService.fetchTaxesOnPriority(
@@ -9796,9 +9855,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
 
-        selectedTaxes?.forEach((tax) => {
-            taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
-        });
+        if (this.showTaxColumn) {
+            selectedTaxes?.forEach((tax) => {
+                taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+            });
+        }
 
         if (!otherTax && this.account?.applicableTaxes?.length) {
             this.allCompanyTaxes?.forEach((tax) => {
@@ -9821,7 +9882,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if ((response.stock?.variant?.salesTaxInclusive && response.category === AccountCategoryEnum.INCOME) || (response.stock?.variant?.purchaseTaxInclusive && response.category === AccountCategoryEnum.EXPENSE)) {
             const amount = this.vouchersUtilityService.calculateInclusiveRate(
                 entryFormGroup?.value,
-                this.companyTaxes,
+                this.showTaxColumn ? this.companyTaxes : [],
                 this.company.giddhBalanceDecimalPlaces
             );
             transactionFormGroup.get("amount.amountForAccount").patchValue(amount);
@@ -10091,7 +10152,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             const amount = this.vouchersUtilityService.calculateInclusiveRate(
                 entryFormGroup?.value,
-                this.companyTaxes,
+                this.showTaxColumn ? this.companyTaxes : [],
                 this.company.giddhBalanceDecimalPlaces,
                 entryTotal
             );
