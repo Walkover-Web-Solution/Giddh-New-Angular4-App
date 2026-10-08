@@ -5958,7 +5958,7 @@
                 <giddh-page-loader></giddh-page-loader>
             </div>
         } @else if (!inventoryViaBusinessDocument) {
-            <div class="vouchers-wrapper p-3  mt-5 d-flex flex-column align-items-center justify-content-center text-center py-5">
+            <div class="vouchers-wrapper p-3 mt-5 d-flex flex-column align-items-center justify-content-center text-center py-5">
                 <feature-permission-message
                     [title]="
                         voucherType === voucherTypeEnum.receiptNote
@@ -6252,7 +6252,10 @@
                                 </span>
                                 <mat-menu #inventoryActionsMenu="matMenu">
                                     @if (element?.documentStatusCode !== 'CANCELLED') {
-                                        @if (!['FULLY_INVOICED'].includes(element?.invoiceStatus) && element?.documentStatusCode !== 'FULL_RETURN') {
+                                        @if (
+                                            !['FULLY_INVOICED', 'FULLY_BILLED'].includes(element?.invoiceStatus) &&
+                                            element?.documentStatusCode !== 'FULL_RETURN'
+                                        ) {
                                             <button mat-menu-item (click)="convertInventoryDocument(element)">
                                                 {{
                                                     voucherType === voucherTypeEnum.deliveryChallan
