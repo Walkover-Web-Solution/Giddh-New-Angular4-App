@@ -3058,7 +3058,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private fetchPendingBusinessDocuments(accountUniqueName: string): void {
         if (this.lastPendingBusinessDocumentAccount && accountUniqueName !== this.lastPendingBusinessDocumentAccount) {
-            this.resetPendingBusinessDocumentSelection();
+            this.resetPendingBusinessDocumentSelection(true);
         }
         this.lastPendingBusinessDocumentAccount = accountUniqueName || "";
 
@@ -3598,12 +3598,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Clears pending-document dropdown selection without refetching.
      *
      * @private
+     * @param {boolean} [removeLinkedEntries=false] When true, also removes lines mapped to previously selected docs
      * @memberof VoucherCreateComponent
      */
-    private resetPendingBusinessDocumentSelection(): void {
+    private resetPendingBusinessDocumentSelection(removeLinkedEntries: boolean = false): void {
+        const previouslySelected = [...this.selectedBusinessDocumentUniqueNames];
         this.patchLinkedBusinessDocuments([]);
+        if (removeLinkedEntries) {
+            previouslySelected.forEach((uniqueName) => this.removeBusinessDocumentEntries(uniqueName));
+        }
         this.pendingBusinessDocumentPrefillUniqueName = null;
         this.pendingBusinessDocumentsQueuedForAppend = [];
+        this.syncQueryParamsFromSelectedDocuments();
     }
 
     /**
@@ -6665,7 +6671,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.checkIfEntriesHasStock();
         this.calculateVoucherTotals();
         if (mappedUniqueName) {
-            this.uncheckPendingBusinessDocument(mappedUniqueName, true);
+            const hasRemainingLinkedEntries = entries.controls.some(
+                (control) => control.get("businessDocumentItemMapping.uniqueName")?.value === mappedUniqueName
+            );
+            // Uncheck dropdown only when every line from that DC/RN/invoice/bill is gone
+            if (!hasRemainingLinkedEntries) {
+                this.uncheckPendingBusinessDocument(mappedUniqueName, false);
+            }
         }
         if (this.lastInteraction === InteractionType.KEYBOARD && entries.length >= 1 && this.addNewParticular.nativeElement) {
             setTimeout(() => {
