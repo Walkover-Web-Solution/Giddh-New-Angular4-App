@@ -250,6 +250,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.subscribeStoreObservable();
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -287,7 +288,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             this.showPaymentDetails = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote].includes(this.voucherType);
             this.getCreatedTemplates();
             this.getCreateNewVoucherText();
-            this.subscribeStoreObservable();
             this.setPageListFiltersFromQuery(queryParams);
             this.skipNextSearchEmit = queryParams.search ?? '';
             this.search.setValue(this.skipNextSearchEmit, { emitEvent: false });
@@ -348,10 +348,23 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         if (isNewInvoiceSelected && this.selectedInvoice?.uniqueName === voucherUniqueName) {
             return;
         }
-        this.selectedInvoice = this.invoiceList?.find(voucher => voucher?.uniqueName === voucherUniqueName);
-        if (!this.selectedInvoice) {
+        const foundInvoice = this.invoiceList?.find(voucher => voucher?.uniqueName === voucherUniqueName);
+        // Do not clear an in-flight placeholder selection when list/lookup has not found the voucher yet
+        if (!foundInvoice) {
+            this.logVoucherPdfDebug('setSelectedInvoice: voucher not in list, keeping current selection', {
+                voucherUniqueName,
+                selectedInvoiceUniqueName: this.selectedInvoice?.uniqueName ?? null,
+                invoiceListCount: this.invoiceList?.length ?? 0,
+                skipPdfDownload
+            });
             return;
         }
+        this.selectedInvoice = foundInvoice;
+        this.logVoucherPdfDebug('setSelectedInvoice: selected', {
+            voucherUniqueName,
+            skipPdfDownload,
+            hasAccount: !!this.getInvoiceAccountUniqueName(foundInvoice)
+        });
         if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
             this.getVoucherVersions(this.selectedInvoice);
         }
@@ -496,6 +509,18 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         this.componentStore.downloadVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.logVoucherPdfDebug('downloadVoucherResponse$ received', {
+                    responseType: typeof response,
+                    hasData: !!(typeof response === 'string' ? response : response?.data),
+                    dataLength: typeof response === 'string'
+                        ? response.length
+                        : (response?.data?.length ?? 0),
+                    attachmentsCount: response?.attachments?.length ?? 0,
+                    selectedInvoiceUniqueName: this.selectedInvoice?.uniqueName ?? null,
+                    isVoucherDownloading: this.isVoucherDownloading,
+                    isVoucherDownloadError: this.isVoucherDownloadError,
+                    hasSanitizedPdfUrl: !!this.sanitizedPdfFileUrl
+                });
                 this.handleDownloadVoucherPdf(response);
             }
         });
@@ -503,12 +528,18 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         this.isVoucherDownloadError$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (typeof response === 'boolean') {
                 this.isVoucherDownloadError = response;
+                this.logVoucherPdfDebug('isVoucherDownloadError$ updated', { isVoucherDownloadError: response });
             }
         });
 
         this.isVoucherDownloading$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (typeof response === 'boolean') {
                 this.isVoucherDownloading = response;
+                this.logVoucherPdfDebug('isVoucherDownloading$ updated', {
+                    isVoucherDownloading: response,
+                    hasSanitizedPdfUrl: !!this.sanitizedPdfFileUrl,
+                    isVoucherDownloadError: this.isVoucherDownloadError
+                });
             }
         });
 
@@ -621,25 +652,56 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     private handleDownloadVoucherPdf(response: any): void {
-        if (typeof response === 'string' || (response?.hasOwnProperty('data') && response.data)) {
+        const hasUsablePdfData = typeof response === 'string' || (response?.hasOwnProperty('data') && response.data);
+        this.logVoucherPdfDebug('handleDownloadVoucherPdf start', {
+            voucherType: this.voucherType,
+            hasUsablePdfData,
+            selectedInvoiceUniqueName: this.selectedInvoice?.uniqueName ?? null,
+            routeUniqueName: this.params?.voucherUniqueName ?? null
+        });
+        if (hasUsablePdfData) {
             if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt, VoucherTypeEnum.deliveryChallan, VoucherTypeEnum.receiptNote].includes(this.voucherType)) {
                 /** Creating voucher pdf start */
                 if (response) {
                     this.isPdfAvailable = true;
-                    this.selectedInvoice.blob = this.generalService.base64ToBlob(response.data || response, 'application/pdf', 512);
-                    const file = new Blob([this.selectedInvoice.blob], { type: 'application/pdf' });
-                    this.attachedDocumentBlob = file;
-                    URL.revokeObjectURL(this.pdfFileURL);
-                    this.pdfFileURL = URL.createObjectURL(file);
-
-                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                    this.isVoucherDownloadError = false;
-                    this.pdfPreviewLoaded = true;
+                    try {
+                        const blob = this.generalService.base64ToBlob(response.data || response, 'application/pdf', 512);
+                        const file = new Blob([blob], { type: 'application/pdf' });
+                        this.attachedDocumentBlob = file;
+                        URL.revokeObjectURL(this.pdfFileURL);
+                        this.pdfFileURL = URL.createObjectURL(file);
+                        // Set URL before mutating selectedInvoice so a missing selection cannot blank the iframe
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                        this.isVoucherDownloadError = false;
+                        this.pdfPreviewLoaded = true;
+                        if (this.selectedInvoice) {
+                            this.selectedInvoice.blob = blob;
+                        } else if (this.params?.voucherUniqueName) {
+                            this.selectedInvoice = { uniqueName: this.params.voucherUniqueName, blob };
+                            this.logVoucherPdfDebug('handleDownloadVoucherPdf: restored missing selectedInvoice from route');
+                        }
+                        this.logVoucherPdfDebug('handleDownloadVoucherPdf success', {
+                            blobSize: blob?.size ?? 0,
+                            hasSanitizedPdfUrl: !!this.sanitizedPdfFileUrl,
+                            selectedInvoiceUniqueName: this.selectedInvoice?.uniqueName ?? null,
+                            attachmentsCount: response?.attachments?.length ?? 0
+                        });
+                    } catch (error) {
+                        this.sanitizedPdfFileUrl = null;
+                        this.isVoucherDownloadError = true;
+                        this.pdfPreviewHasError = true;
+                        this.pdfPreviewLoaded = false;
+                        this.logVoucherPdfDebug('handleDownloadVoucherPdf base64/blob failed', {
+                            error: error instanceof Error ? error.message : String(error),
+                            selectedInvoiceUniqueName: this.selectedInvoice?.uniqueName ?? null
+                        });
+                    }
                 } else {
                     if (this.voucherType === 'purchase') {
                         this.pdfPreviewLoaded = false;
                     }
                     this.isPdfAvailable = false;
+                    this.logVoucherPdfDebug('handleDownloadVoucherPdf: empty response for sales-like voucher');
                 }
                 /** Creating voucher pdf finish */
                 if (response.attachments?.length > 0) {
@@ -681,29 +743,85 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 }
                 /** Creating attachment finish */
             } else if ([VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(this.voucherType)) {
-                let blob: Blob = this.generalService.base64ToBlob(response, 'application/pdf', 512);
-                this.selectedInvoice.blob = blob;
-                const file = new Blob([blob], { type: 'application/pdf' });
-                URL.revokeObjectURL(this.pdfFileURL);
-                this.pdfFileURL = URL.createObjectURL(file);
-                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                try {
+                    const blob: Blob = this.generalService.base64ToBlob(response, 'application/pdf', 512);
+                    const file = new Blob([blob], { type: 'application/pdf' });
+                    URL.revokeObjectURL(this.pdfFileURL);
+                    this.pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                    if (this.selectedInvoice) {
+                        this.selectedInvoice.blob = blob;
+                    }
+                    this.logVoucherPdfDebug('handleDownloadVoucherPdf proforma/estimate success', {
+                        blobSize: blob?.size ?? 0,
+                        hasSanitizedPdfUrl: !!this.sanitizedPdfFileUrl
+                    });
+                } catch (error) {
+                    this.sanitizedPdfFileUrl = null;
+                    this.isVoucherDownloadError = true;
+                    this.pdfPreviewHasError = true;
+                    this.logVoucherPdfDebug('handleDownloadVoucherPdf proforma/estimate failed', {
+                        error: error instanceof Error ? error.message : String(error)
+                    });
+                }
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                let blob: Blob = this.generalService.base64ToBlob(response, 'application/pdf', 512);
-                this.attachedDocumentBlob = blob;
-                const file = new Blob([blob], { type: 'application/pdf' });
-                URL.revokeObjectURL(this.pdfFileURL);
-                this.pdfFileURL = URL.createObjectURL(file);
-                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                this.pdfPreviewLoaded = true;
+                try {
+                    const blob: Blob = this.generalService.base64ToBlob(response, 'application/pdf', 512);
+                    this.attachedDocumentBlob = blob;
+                    const file = new Blob([blob], { type: 'application/pdf' });
+                    URL.revokeObjectURL(this.pdfFileURL);
+                    this.pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                    this.pdfPreviewLoaded = true;
+                    this.logVoucherPdfDebug('handleDownloadVoucherPdf purchaseOrder success', {
+                        blobSize: blob?.size ?? 0,
+                        hasSanitizedPdfUrl: !!this.sanitizedPdfFileUrl
+                    });
+                } catch (error) {
+                    this.sanitizedPdfFileUrl = null;
+                    this.isVoucherDownloadError = true;
+                    this.pdfPreviewHasError = true;
+                    this.pdfPreviewLoaded = false;
+                    this.logVoucherPdfDebug('handleDownloadVoucherPdf purchaseOrder failed', {
+                        error: error instanceof Error ? error.message : String(error)
+                    });
+                }
+            } else {
+                this.logVoucherPdfDebug('handleDownloadVoucherPdf: unhandled voucherType with usable data', {
+                    voucherType: this.voucherType
+                });
             }
 
         }
         else {
             this.pdfPreviewHasError = true;
+            this.isVoucherDownloadError = true;
             if (this.voucherType === VoucherTypeEnum.purchase) {
                 this.shouldShowUploadAttachment = true;
             }
+            this.logVoucherPdfDebug('handleDownloadVoucherPdf soft-fail: no usable data', {
+                responseType: typeof response,
+                responseKeys: response && typeof response === 'object' ? Object.keys(response) : [],
+                hasSanitizedPdfUrl: !!this.sanitizedPdfFileUrl,
+                isVoucherDownloadError: this.isVoucherDownloadError
+            });
         }
+    }
+
+    /**
+     * Debug logs for voucher PDF preview blank/race issues (search console for [VoucherPdfPreview])
+     *
+     * @private
+     * @param {string} message
+     * @param {Record<string, unknown>} [payload]
+     * @memberof VouchersPreviewComponent
+     */
+    private logVoucherPdfDebug(message: string, payload: Record<string, unknown> = {}): void {
+        console.log('[VoucherPdfPreview]', message, {
+            ...payload,
+            voucherType: this.voucherType,
+            routeUniqueName: this.params?.voucherUniqueName ?? null
+        });
     }
 
     /**
@@ -796,6 +914,11 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public downloadVoucherPdf(fileType: string = ''): void {
         if (this.selectedInvoice && this.canDownloadPdf(this.selectedInvoice)) {
+            this.logVoucherPdfDebug('downloadVoucherPdf start', {
+                selectedInvoiceUniqueName: this.selectedInvoice?.uniqueName ?? null,
+                canDownload: true,
+                initialPdfLoaded: this.initialPdfLoaded
+            });
             this.isVoucherDownloading = true;
             this.isVoucherDownloadError = false;
             this.shouldShowUploadAttachment = false;
@@ -1230,15 +1353,29 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
         if (voucherItem) {
             this.selectedInvoice = voucherItem;
-        } else if (!this.selectedInvoice || this.selectedInvoice.uniqueName === uniqueName) {
+        } else if (!this.selectedInvoice || this.selectedInvoice.uniqueName !== uniqueName) {
+            // Reset placeholder when route voucher changes; keep existing row when uniqueName matches
             this.selectedInvoice = { uniqueName };
+            this.logVoucherPdfDebug('loadPdfForRouteVoucher: set placeholder selectedInvoice', { uniqueName });
         }
         if (this.needsFullDataForPdf() && !voucherItem) {
+            this.logVoucherPdfDebug('loadPdfForRouteVoucher: waiting for full voucher row', {
+                uniqueName,
+                needsFullDataForPdf: true
+            });
             return;
         }
         if (!this.initialPdfLoaded && !this.isVoucherDownloading && this.canDownloadPdf(this.selectedInvoice)) {
             this.initialPdfLoaded = true;
+            this.logVoucherPdfDebug('loadPdfForRouteVoucher: triggering PDF download', { uniqueName });
             this.downloadVoucherPdf('base64');
+        } else {
+            this.logVoucherPdfDebug('loadPdfForRouteVoucher: skipped PDF download', {
+                uniqueName,
+                initialPdfLoaded: this.initialPdfLoaded,
+                isVoucherDownloading: this.isVoucherDownloading,
+                canDownload: this.canDownloadPdf(this.selectedInvoice)
+            });
         }
     }
 
@@ -1371,6 +1508,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     private handleLookupVoucherComplete(): void {
         this.isLookupVouchersInProgress = false;
+        this.logVoucherPdfDebug('handleLookupVoucherComplete', {
+            lookupFound: !!this.lookupVoucherItem,
+            lookupUniqueName: this.lookupVoucherItem?.uniqueName ?? null,
+            isInitialDualLoad: this.isInitialDualLoad,
+            selectedInvoiceUniqueName: this.selectedInvoice?.uniqueName ?? null,
+            hasSanitizedPdfUrl: !!this.sanitizedPdfFileUrl,
+            isVoucherDownloading: this.isVoucherDownloading
+        });
         if (this.isInitialDualLoad) {
             this.invoiceList = this.lookupVoucherItem ? [this.lookupVoucherItem] : [];
             if (this.params?.voucherUniqueName) {
@@ -1403,12 +1548,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
 
         const pageItems = this.normalizeVoucherListItems(response.items);
-        const filteredPageList = routeUniqueName
-            ? pageItems.filter(item => item?.uniqueName !== routeUniqueName)
-            : pageItems;
+        // Only dedupe route voucher when lookup found it; otherwise keep page items intact
         this.invoiceList = this.lookupVoucherItem
-            ? [this.lookupVoucherItem, ...filteredPageList]
-            : filteredPageList;
+            ? [
+                this.lookupVoucherItem,
+                ...(routeUniqueName
+                    ? pageItems.filter(item => item?.uniqueName !== routeUniqueName)
+                    : pageItems)
+            ]
+            : pageItems;
 
         this.isLoadMore = false;
         this.getAllApiCallCount++;
