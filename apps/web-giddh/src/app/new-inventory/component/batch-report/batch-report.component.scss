@@ -4,6 +4,20 @@
 }
 
 .batch-report {
+    .batch-report-toolbar {
+        width: 100%;
+    }
+
+    .batch-report-toolbar-filters {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .batch-report-toolbar-actions {
+        flex: 0 0 auto;
+        margin-left: auto;
+    }
+
     .report-back-button {
         height: 37px;
     }
