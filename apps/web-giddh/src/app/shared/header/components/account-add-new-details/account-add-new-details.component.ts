@@ -4,12 +4,14 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
+    ElementRef,
     EventEmitter,
     Input,
     OnChanges,
     OnDestroy,
     OnInit,
-    Output
+    Output,
+    Renderer2
 } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
@@ -24,10 +26,10 @@ import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
+import { clone, cloneDeep, isEqual, uniqBy } from '../../../../lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
@@ -49,7 +51,8 @@ import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.const
     selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
-    providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore]
+    providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore],
+    standalone:false
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
@@ -179,8 +182,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public availableFieldTypes: any = FieldTypes;
     /** This will hold isMobileNumberInvalid */
     public isMobileNumberInvalid: boolean = false;
-    /** This will hold mobile number field input  */
-    public intl: { [key: string]: any } = {};
     /** True if last duplicate email in portal  users */
     public lastDuplicateEmailIndex: number = -1;
     /** Index of last duplicate contact number in portal users */
@@ -191,8 +192,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public voucherApiVersion: number;
     /** Hold active index of form group */
     public activeIndex: number = 0;
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current currency is not company currency */
     public isForeignCurrency: boolean = false;
     /** Hold all temporary save bulk balance data */
@@ -233,6 +232,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     private activeSalePersonIsTransfer: any;
     /** True if sales person is created */
     public salesPersonCreated: boolean = false;
+    /** Holds active portal index */
+    public activePortalIndex: number | null = null;
 
     constructor(
         private _fb: FormBuilder,
@@ -241,7 +242,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
         private changeDetectorRef: ChangeDetectorRef,
-        private generalService: GeneralService,
+        private elementRef: ElementRef,
+        protected generalService: GeneralService,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService,
@@ -252,7 +254,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private commonService: CommonService,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
         private settingsBranchAction: SettingsBranchActions,
-        private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore,
+        private renderer: Renderer2
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
@@ -271,7 +274,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this.isUKCompany = activeCompany.country === CountryNames.UNITED_KINGDOM;
                     this.getCompanyCustomField();
                 }
-                if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
+                if (this.activeCompany.countryV2) {
                     this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
                 }
                 this.companyCurrency = clone(this.activeCompany?.baseCurrency);
@@ -330,7 +333,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
-
         this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
@@ -377,7 +379,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 let currentEmail = change.get('email')?.value;
                 let emailDuplicateFound = false;
                 if (currentEmail !== "") {
-                    mappings.controls.forEach((control, i) => {
+                    (Array.isArray(mappings.controls) ? mappings.controls : []).forEach((control, i) => {
                         if (lastEmailOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
                             lastEmailOccurrenceIndex = index;
                             change.get('email').setErrors({ duplicate: true });
@@ -392,13 +394,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     change.get('email').setErrors(Object.keys(errors).length ? errors : null);
                 }
 
-
                 // Contact number validation
                 let lastContactOccurrenceIndex = -1;
                 let currentContactNo = change.get('contactNo')?.value;
                 let contactDuplicateFound = false;
                 if (currentContactNo !== "" && currentContactNo) {
-                    mappings.controls.forEach((control, i) => {
+                    (Array.isArray(mappings.controls) ? mappings.controls : []).forEach((control, i) => {
                         if (lastContactOccurrenceIndex === -1 && index !== i && control.get('contactNo')?.value === currentContactNo) {
                             lastContactOccurrenceIndex = index;
                             change.get('contactNo').setErrors({ duplicate: true });
@@ -417,7 +418,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                 this.lastDuplicateEmailIndex = lastEmailOccurrenceIndex;
                 this.lastDuplicateContactIndex = lastContactOccurrenceIndex;
-                
+
                 // Update duplicate contact errors flag
                 this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
             }
@@ -430,9 +431,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             .subscribe((response) => {
                 const users = this.addAccountForm.get('portalDomain') as FormArray;
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
-                    // if (response?.mobileNo && this.intl) {
-                    //     mobileNo = this.intl['init-contact-add']?.getNumber();
-                    // }
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
                         user?.get('name').setValue(response?.attentionTo);
@@ -490,7 +488,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
-        this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
+        this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName.split(',').length >= 2 ? '' : this.activeGroupUniqueName);
 
         this.getCurrency();
         this.isStateRequired = this.checkActiveGroupCountry();
@@ -556,28 +554,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngAfterViewInit() {
-        // Increase timeout and add more robust checking
-        const interval = setInterval(() => {
-            const element = document.getElementById('init-contact-add');
-            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-
-            if (element && intlTelInput) {
-                this.onlyPhoneNumber('init-contact-add');
-                clearInterval(interval);
-            }
-        }, 500); // Reduced interval for faster detection
-
-        // Add fallback timeout to prevent infinite loop
-        setTimeout(() => {
-            clearInterval(interval);
-            // Try one more time after a longer delay
-            setTimeout(() => {
-                const element = document.getElementById('init-contact-add');
-                if (element && !this.intl['init-contact-add']) {
-                    this.onlyPhoneNumber('init-contact-add');
-                }
-            }, 1000);
-        }, 10000); // Clear after 10 seconds max
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName')?.value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
@@ -688,7 +664,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Initializes the GST details form with default values and validators.
-     * 
+     *
      * @returns FormGroup
      * @memberof AccountAddNewDetailsComponent
      */
@@ -717,28 +693,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return gstFields;
     }
 
-    /**
-     * Reinitialize mobile number field if flag is not showing
-     *
-     * @param {string} fieldId
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public reInitializeMobileField(fieldId: string): void {
-        const element = document.getElementById(fieldId);
-        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-
-        if (element && intlTelInput && !this.intl[fieldId]) {
-            this.onlyPhoneNumber(fieldId);
-        }
-    }
-
-    /**
+     /**
      * This will be use for add new portal user
      *
      * @param {*} [user]
+     * @param {boolean} [highLightInput]
      * @memberof AccountAddNewDetailsComponent
      */
-    public addNewPortalUser(user?: any): void {
+    public addNewPortalUser(user?: any, highLightInput?: boolean): void {
         let mappings = this.addAccountForm.get('portalDomain') as FormArray;
         let mappingForm = this._fb.group({
             name: [''],
@@ -749,7 +711,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
         mappings.push(mappingForm);
         if (user) {
-            mappings.controls.forEach(control => {
+            (Array.isArray(mappings.controls) ? mappings.controls : []).forEach(control => {
                 if (!control?.get('name').value && !control?.get('email').value && !control?.get('contactNo').value) {
                     control?.get('name').setValue(user.name);
                     control?.get('email').setValue(user.email);
@@ -759,28 +721,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
         }
-        const lastIndex = mappings.controls.length - 1;
-        const interval = setInterval(() => {
-            const element = document.getElementById('init-contact-portal_' + lastIndex);
-            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-
-            if (element && intlTelInput) {
-                this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
-                clearInterval(interval);
-            }
-        }, 200); // Faster checking for dynamic elements
-
-        // Add fallback timeout
-        setTimeout(() => {
-            clearInterval(interval);
-            // Try one more time after a longer delay
-            setTimeout(() => {
-                const element = document.getElementById('init-contact-portal_' + lastIndex);
-                if (element && !this.intl['init-contact-portal_' + lastIndex]) {
-                    this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
-                }
-            }, 500);
-        }, 5000); // Clear after 5 seconds max
+        if (highLightInput) {
+            const lastIndex = mappings.controls.length - 1;
+            this.activePortalIndex = lastIndex;
+        }
     }
 
     /**
@@ -818,7 +762,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-
     public addGstDetailsForm(value?: string) {    // commented code because we no need GSTIN No. to add new address
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm());
@@ -828,9 +771,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return;
     }
 
-    public removeGstDetailsForm(i: number) {
+    /**
+     * Removes GST details form at specified index and moves focus to the save button.
+     * @param i - Index of the form to remove
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public removeGstDetailsForm(i: number): void {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
+
+        setTimeout(() => {
+            document.querySelector<HTMLButtonElement>('button[aria-label="save"]')?.focus();
+        }, 100);
     }
 
     public addBlankGstForm() {
@@ -859,7 +811,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Validates and extracts the state code from the GST number entered in the given form.
-     * 
+     *
      * @param gstForm The `FormGroup` containing the GST-related form controls.
      * @memberof AccountAddNewDetailsComponent
      */
@@ -913,7 +865,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public openingBalanceTypeChanged(type: string): void {
-        if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
+        if (this.company?.isActive) {
+            return;
+        }
+        if (Number(this.addAccountForm.get('openingBalance')?.value) > 0 || Number(this.addAccountForm.get('foreignOpeningBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
     }
@@ -934,14 +889,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public submit() {
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
-        
+        this.checkNameFieldValidation();
+
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
-            
-            // If duplicate contact errors exist, navigate to portal tab
-            if (this.hasDuplicateContactErrors) {
-                this.goToPortalTab();
-            }
+            this.navigateToFirstErrorTab();
             return;
         }
 
@@ -999,7 +951,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (accountRequest.addresses && accountRequest.addresses.length > 0) {
                 let addressExists = false;
 
-                accountRequest.addresses.forEach(address => {
+                (Array.isArray(accountRequest.addresses) ? accountRequest.addresses : []).forEach(address => {
                     if (address?.address?.trim() || address?.gstNumber?.trim() || address?.stateCode?.trim() || address?.countyCode?.trim() || address?.pincode?.trim()) {
                         addressExists = true;
                     }
@@ -1032,16 +984,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.isHsnSacEnabledAcc || this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-        // if (this.intl) {
-        //     let mobileNo = this.intl['init-contact-add']?.getNumber();
-        //     accountRequest['mobileNo'] = mobileNo;
-        // }
 
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
         if (accountRequest.addresses && accountRequest.addresses.length > 0) {
-            accountRequest.addresses.forEach(address => {
+            (Array.isArray(accountRequest.addresses) ? accountRequest.addresses : []).forEach(address => {
                 if (this.countyList?.length) {
                     delete address['state'];
                     delete address['stateCode'];
@@ -1124,7 +1072,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Checks whether a given unique group name exists within the list of parent groups.
-     * 
+     *
      * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
      * @param uniqueName - The unique name to search for in the parent groups.
      * @returns `true` if any parent group matches the given unique name, otherwise `false`.
@@ -1136,7 +1084,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Handles the selection of a state from a dropdown or similar UI component.
-     * 
+     *
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected state's label and value.
      * @memberof AccountAddNewDetailsComponent
@@ -1152,7 +1100,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Updates the county information in the GST form based on the selected county event.
-     * 
+     *
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected county's label and value.
      * @memberof AccountAddNewDetailsComponent
@@ -1468,17 +1416,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /**
      * Handles tab change
      *
-     * @param {MatTabChangeEvent} event 
+     * @param {MatTabChangeEvent} event
      * @memberof AccountAddNewDetailsComponent
      */
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
-            this.selectedTabLabel = event.tab.textLabel;
+            const tabLabel = event.tab.textLabel || event.tab.ariaLabel;
+            this.selectedTabLabel = tabLabel;
             this.selectedTabIndex = event.index;
-            this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
-            
+            this.isCustomSelectedTab = tabLabel === this.localeData?.tabs?.custom;
+
             // Mark this tab as activated
-            this.activatedTabs.add(event.tab.textLabel);
+            this.activatedTabs.add(tabLabel);
         }
     }
 
@@ -1521,6 +1470,60 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public goToPortalTab(): void {
         this.goToTab(2); // Portal tab is at index 2
+    }
+
+    /**
+     * Checks whether the given form control names contain at least one invalid control
+     *
+     * @param {string[]} controlNames - List of top-level form control names belonging to a tab
+     * @returns {boolean} True if any control in the list is invalid
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public tabHasError(controlNames: string[]): boolean {
+        if (!this.isValidForm) {
+            return controlNames.some(name => this.addAccountForm.get(name)?.invalid);
+        }
+        return false;
+    }
+
+    /**
+     * Navigates to the first tab that contains validation errors
+     *
+     * @private
+     * @memberof AccountAddNewDetailsComponent
+     */
+    private navigateToFirstErrorTab(): void {
+        const tabControlMap: { controlNames: string[]; index: number }[] = [
+            { controlNames: ['addresses'], index: 0 },
+            { controlNames: ['attentionTo', 'mobileNo', 'email'], index: 1 },
+            { controlNames: ['portalDomain'], index: 2 },
+            { controlNames: ['accountBankDetails'], index: 3 },
+            { controlNames: ['uniqueName', 'closingBalanceTriggerAmount', 'hsnOrSac', 'hsnNumber', 'sacNumber'], index: 4 },
+            { controlNames: ['customFields'], index: 5 },
+        ];
+        const firstErrorTab = tabControlMap.find(tab =>
+            tab.controlNames.some(name => this.addAccountForm.get(name)?.invalid)
+        );
+        if (firstErrorTab) {
+            this.goToTab(firstErrorTab.index);
+        }
+        this.scrollToFirstInvalidField();
+    }
+
+    /**
+     * Scrolls the sidebar panel to the first invalid form field
+     *
+     * @private
+     * @memberof AccountAddNewDetailsComponent
+     */
+    private scrollToFirstInvalidField(): void {
+        setTimeout(() => {
+            const hostEl: HTMLElement = this.elementRef.nativeElement;
+            const firstInvalid = hostEl.querySelector<HTMLElement>(
+                'input.ng-invalid, mat-select.ng-invalid, reactive-dropdown-field.ng-invalid, input-field.ng-invalid, select-field.ng-invalid, textarea.ng-invalid'
+            );
+            firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
     }
 
     /**
@@ -1570,15 +1573,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * To render custom field form
+     * Renders custom field form controls with enhanced type safety validation
      *
-     * @param {*} obj
-     * @param {*} customFieldLength
+     * @param {any} obj - Custom field object containing field configuration
+     * @param {number} customFieldLength - Expected number of custom fields
      * @memberof AccountAddNewDetailsComponent
      */
-    public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
+    public renderCustomFieldDetails(obj: any, customFieldLength: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField?.length < customFieldLength) {
+        if (Array.isArray(customField?.value) && customField?.value.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
@@ -1855,100 +1858,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-      *This will use for  fetch mobile number
-     *
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public onlyPhoneNumber(id: string): void {
-        let input = document.getElementById(id);
-        const errorMsg = document.querySelector(`#${id}-error-msg`);
-        const validMsg = document.querySelector(`#${id}-valid-msg`);
-        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
-        if (intlTelInput && input) {
-            this.intl[id] = intlTelInput(input, {
-                nationalMode: true,
-                utilsScript: MOBILE_NUMBER_UTIL_URL,
-                autoHideDialCode: false,
-                separateDialCode: false,
-                initialCountry: 'auto',
-                geoIpLookup: (success, failure) => {
-                    let countryCode = 'in';
-                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
-                    fetchIPApi.subscribe(
-                        (res) => {
-                            if (res?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.ipAddress}`);
-                                fetchCountryByIpApi.subscribe(
-                                    (fetchCountryByIpApiRes) => {
-                                        if (fetchCountryByIpApiRes?.countryCode) {
-                                            return success(fetchCountryByIpApiRes.countryCode);
-                                        } else {
-                                            return success(countryCode);
-                                        }
-                                    },
-                                    (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.ipAddress}`);
-
-                                        fetchCountryByIpInfoApi.subscribe(
-                                            (fetchCountryByIpInfoApiRes) => {
-                                                if (fetchCountryByIpInfoApiRes?.country) {
-                                                    return success(fetchCountryByIpInfoApiRes.country);
-                                                } else {
-                                                    return success(countryCode);
-                                                }
-                                            },
-                                            (fetchCountryByIpInfoApiErr) => {
-                                                return success(countryCode);
-                                            }
-                                        );
-                                    }
-                                );
-                            } else {
-                                return success(countryCode);
-                            }
-                        },
-                        (err) => {
-                            return success(countryCode);
-                        }
-                    );
-                },
-            });
-            let reset = () => {
-                input?.classList?.remove("error");
-                if (errorMsg && validMsg) {
-                    errorMsg.innerHTML = "";
-                    errorMsg.classList.add("d-none");
-                    validMsg.classList.add("d-none");
-                }
-            };
-            input.addEventListener('blur', () => {
-                let phoneNumber = this.intl?.[id]?.getNumber();
-                reset();
-                if (input) {
-                    if (phoneNumber?.length) {
-                        if (this.intl?.[id]?.isValidNumber()) {
-                            validMsg?.classList?.remove("d-none");
-                            this.isMobileNumberInvalid = false;
-                        } else {
-                            input?.classList?.add("error");
-                            this.isMobileNumberInvalid = true;
-                            let errorCode = this.intl?.[id]?.getValidationError();
-                            if (errorMsg && errorMap[errorCode]) {
-                                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                                errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("d-none");
-                            }
-                        }
-                    } else {
-                        this.isMobileNumberInvalid = false;
-                    }
-                }
-            });
-        }
-    }
-
-    /**
       * This will open for get gst information confirmation dialog
       *
       * @memberof AccountAddNewDetailsComponent
@@ -1959,14 +1868,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                        width: '40%',
-                        data: {
+                                width: '40%',
+                                data: {
                             title: this.commonLocaleData?.app_confirmation,
-                            body: this.commonLocaleData?.app_gst_confirm_message1,
-                            ok: this.commonLocaleData?.app_yes,
-                            cancel: this.commonLocaleData?.app_no,
-                            permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
-                        }
+                                body: this.commonLocaleData?.app_gst_confirm_message1,
+                                ok: this.commonLocaleData?.app_yes,
+                                cancel: this.commonLocaleData?.app_no,
+                                permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+                            }
                     });
                     dialogRef.afterClosed().subscribe(response => {
                         if (response) {
@@ -2120,7 +2029,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * Get sales person list as label value
+     * Get Sales Person List
      *
      * @memberof AccountAddNewDetailsComponent
      */
@@ -2141,6 +2050,24 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (!uniqueName || !salesPersonList?.length) return false;
         return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
-}
 
+    /**
+ * Checks name field validation using dynamic validation service
+ *
+ * @private
+ * @memberof AccountAddNewDetailsComponent
+ */
+    private checkNameFieldValidation(): void {
+        const nameControl = this.addAccountForm.get('name');
+
+        // Use the dynamic validation service from GeneralService with localized message
+        this.generalService.validateFieldSimple(
+            nameControl,
+            this.localeData?.account_name || 'Account name',
+            100,
+            this.commonLocaleData?.app_field_validation_error,
+            'warning'
+        );
+    }
+}
 

@@ -14,28 +14,28 @@
  * ==========================================================
  */
 .hero-section {
-  // Base styles (applies to all screen sizes 768px+)
-  padding: 2rem;
-  text-align: center;
+    // Base styles (applies to all screen sizes 768px+)
+    padding: 2rem;
+    text-align: center;
 
-  @include media-breakpoint-up('small-desktop') {
-    // Most common business laptops (1024px+)
-    padding: 3rem;
-    text-align: left;
-  }
+    @include media-breakpoint-up('small-desktop') {
+        // Most common business laptops (1024px+)
+        padding: 3rem;
+        text-align: left;
+    }
 
-  @include media-breakpoint-up('large-desktop') {
-    // External monitors and premium laptops (1440px+)
-    padding: 4rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
+    @include media-breakpoint-up('large-desktop') {
+        // External monitors and premium laptops (1440px+)
+        padding: 4rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
 
-  @include media-breakpoint-up('xl-desktop') {
-    // High-resolution displays (1920px+)
-    padding: 5rem;
-    max-width: 1600px;
-  }
+    @include media-breakpoint-up('xl-desktop') {
+        // High-resolution displays (1920px+)
+        padding: 5rem;
+        max-width: 1600px;
+    }
 }
 
 /* 
@@ -43,20 +43,20 @@
  * ========================================
  */
 .navigation {
-  display: flex;
-  justify-content: space-between;
-  
-  // iPad and tablet users (768px - 1023px)
-  @include exact-breakpoint('tablet') {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  // Most common business laptops and up (1024px+)
-  @include media-breakpoint-up('small-desktop') {
-    flex-direction: row;
-    gap: 2rem;
-  }
+    display: flex;
+    justify-content: space-between;
+
+    // iPad and tablet users (768px - 1023px)
+    @include exact-breakpoint('tablet') {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    // Most common business laptops and up (1024px+)
+    @include media-breakpoint-up('small-desktop') {
+        flex-direction: row;
+        gap: 2rem;
+    }
 }
 
 /*
@@ -64,28 +64,28 @@
  * =====================================
  */
 .card-grid {
-  display: grid;
-  gap: 1rem;
-  
-  // Base: 1 column for tablets
-  grid-template-columns: 1fr;
-  
-  @include media-breakpoint-up('small-desktop') {
-    // Most common business laptops (1024px+)
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-  
-  @include media-breakpoint-up('medium-desktop') {
-    // Modern laptops and smaller monitors (1280px+)
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-  }
-  
-  @include media-breakpoint-up('xl-desktop') {
-    // High-resolution displays (1920px+)
-    grid-template-columns: repeat(4, 1fr);
-  }
+    display: grid;
+    gap: 1rem;
+
+    // Base: 1 column for tablets
+    grid-template-columns: 1fr;
+
+    @include media-breakpoint-up('small-desktop') {
+        // Most common business laptops (1024px+)
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    @include media-breakpoint-up('medium-desktop') {
+        // Modern laptops and smaller monitors (1280px+)
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+
+    @include media-breakpoint-up('xl-desktop') {
+        // High-resolution displays (1920px+)
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
 
 /*
@@ -93,23 +93,23 @@
  * =======================================
  */
 .heading-primary {
-  @include media-breakpoint-down('small-desktop') {
-    // Up to tablets (max 1023px)
-    font-size: var(--font-size-24);
-    line-height: var(--line-height-32);
-  }
-  
-  @include media-breakpoint-up('small-desktop') {
-    // Most common business laptops (1024px+)
-    font-size: var(--font-size-32);
-    line-height: var(--line-height-40);
-  }
-  
-  @include media-breakpoint-up('large-desktop') {
-    // External monitors and premium laptops (1440px+)
-    font-size: var(--font-size-48);
-    line-height: var(--line-height-56);
-  }
+    @include media-breakpoint-down('small-desktop') {
+        // Up to tablets (max 1023px)
+        font-size: var(--font-size-24);
+        line-height: var(--line-height-32);
+    }
+
+    @include media-breakpoint-up('small-desktop') {
+        // Most common business laptops (1024px+)
+        font-size: var(--font-size-32);
+        line-height: var(--line-height-40);
+    }
+
+    @include media-breakpoint-up('large-desktop') {
+        // External monitors and premium laptops (1440px+)
+        font-size: var(--font-size-48);
+        line-height: var(--line-height-56);
+    }
 }
 
 /*
@@ -117,45 +117,45 @@
  * ================================================================
  */
 .layout-with-sidebar {
-  display: flex;
-  
-  @include media-breakpoint-down('small-desktop') {
-    // Up to tablets (max 1023px)
-    flex-direction: column;
-  }
-  
-  @include accounting-breakpoint('sidebar-comfortable') {
-    // Minimum width where sidebar displays comfortably (1200px+)
-    flex-direction: row;
-  }
-  
-  .sidebar {
+    display: flex;
+
     @include media-breakpoint-down('small-desktop') {
-      width: 100%;
-      order: 2;
+        // Up to tablets (max 1023px)
+        flex-direction: column;
     }
-    
-    @include media-breakpoint-up('small-desktop') {
-      width: 250px;
-      order: 1;
-    }
-    
+
     @include accounting-breakpoint('sidebar-comfortable') {
-      width: 280px;
+        // Minimum width where sidebar displays comfortably (1200px+)
+        flex-direction: row;
     }
-  }
-  
-  .main-content {
-    @include media-breakpoint-down('small-desktop') {
-      width: 100%;
-      order: 1;
+
+    .sidebar {
+        @include media-breakpoint-down('small-desktop') {
+            width: 100%;
+            order: 2;
+        }
+
+        @include media-breakpoint-up('small-desktop') {
+            width: 250px;
+            order: 1;
+        }
+
+        @include accounting-breakpoint('sidebar-comfortable') {
+            width: 280px;
+        }
     }
-    
-    @include media-breakpoint-up('small-desktop') {
-      flex: 1;
-      order: 2;
+
+    .main-content {
+        @include media-breakpoint-down('small-desktop') {
+            width: 100%;
+            order: 1;
+        }
+
+        @include media-breakpoint-up('small-desktop') {
+            flex: 1;
+            order: 2;
+        }
     }
-  }
 }
 
 /*
@@ -163,52 +163,54 @@
  * =============================================================
  */
 .form-container {
-  .form-row {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    
-    @include media-breakpoint-down('small-desktop') {
-      // Up to tablets (max 1023px)
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    
-    @include accounting-breakpoint('multi-column-forms') {
-      // Forms can be split into multiple columns (1100px+)
-      flex-direction: row;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  .form-field {
-    flex: 1;
-    
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: var(--font-weight-medium);
-    }
-    
-    input, select, textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: var(--mat-border-radius-4);
-      
-      @include media-breakpoint-up('medium-desktop') {
-        // Modern laptops and smaller monitors (1280px+)
-        padding: 1rem;
-        
-        &:focus {
-          outline: none;
-          border-color: #007bff;
-          box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+    .form-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+
+        @include media-breakpoint-down('small-desktop') {
+            // Up to tablets (max 1023px)
+            flex-direction: column;
+            gap: 0.5rem;
         }
-      }
+
+        @include accounting-breakpoint('multi-column-forms') {
+            // Forms can be split into multiple columns (1100px+)
+            flex-direction: row;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
-  }
+
+    .form-field {
+        flex: 1;
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: var(--font-weight-medium);
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--mat-border-radius-4);
+
+            @include media-breakpoint-up('medium-desktop') {
+                // Modern laptops and smaller monitors (1280px+)
+                padding: 1rem;
+
+                &:focus {
+                    outline: none;
+                    border-color: #007bff;
+                    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+                }
+            }
+        }
+    }
 }
 
 /*
@@ -216,27 +218,27 @@
  * ============================================================
  */
 .data-table-container {
-  .data-table {
-    width: 100%;
-    
-    @include media-breakpoint-down('medium-desktop') {
-      // Up to medium desktop (max 1279px)
-      .optional-column {
-        display: none;
-      }
+    .data-table {
+        width: 100%;
+
+        @include media-breakpoint-down('medium-desktop') {
+            // Up to medium desktop (max 1279px)
+            .optional-column {
+                display: none;
+            }
+        }
+
+        @include accounting-breakpoint('full-data-view') {
+            // All columns can be displayed without scrolling (1400px+)
+            .optional-column {
+                display: table-cell;
+            }
+
+            .actions-column {
+                min-width: 150px;
+            }
+        }
     }
-    
-    @include accounting-breakpoint('full-data-view') {
-      // All columns can be displayed without scrolling (1400px+)
-      .optional-column {
-        display: table-cell;
-      }
-      
-      .actions-column {
-        min-width: 150px;
-      }
-    }
-  }
 }
 
 /*
@@ -244,29 +246,29 @@
  * =========================================
  */
 .accounting-dashboard {
-  .dashboard-grid {
-    display: grid;
-    gap: 1rem;
-    
-    @include exact-breakpoint('tablet') {
-      // iPad and tablet users (768px - 1023px)
-      grid-template-columns: 1fr;
+    .dashboard-grid {
+        display: grid;
+        gap: 1rem;
+
+        @include exact-breakpoint('tablet') {
+            // iPad and tablet users (768px - 1023px)
+            grid-template-columns: 1fr;
+        }
+
+        @include exact-breakpoint('small-desktop') {
+            // Most common business laptops (1024px - 1279px)
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include media-breakpoint-up('medium-desktop') {
+            // Modern laptops and up (1280px+)
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @include accounting-breakpoint('full-data-view') {
+            // High-resolution accounting view (1400px+)
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
     }
-    
-    @include exact-breakpoint('small-desktop') {
-      // Most common business laptops (1024px - 1279px)
-      grid-template-columns: repeat(2, 1fr);
-    }
-    
-    @include media-breakpoint-up('medium-desktop') {
-      // Modern laptops and up (1280px+)
-      grid-template-columns: repeat(3, 1fr);
-    }
-    
-    @include accounting-breakpoint('full-data-view') {
-      // High-resolution accounting view (1400px+)
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2rem;
-    }
-  }
 }

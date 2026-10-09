@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -6,18 +6,22 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="inventory-advance-search">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.advance_search_filter?.advance_search }}</span>
-            <button mat-icon-button aria-label="close" (click)="advanceSearchAction('cancel')">
-                <i class="icon-cross"></i>
-            </button>
         </div>
         <mat-dialog-content class="dialog-body">
             <form>
                 <div class="row mb-3">
                     <div class="col-lg-12">
                         <div class="form-group date-advance-search">
-                            <div class="custom-datepicker w-100" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
+                            <div
+                                class="custom-datepicker w-100"
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #universalDatepickerTrigger="matMenuTrigger"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-controls="universalDatepicker"
+                            >
                                 <input
                                     matInput
                                     type="text"
@@ -35,7 +39,7 @@
                     <div class="col-lg-12">
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 col-12 mb-3 pr-2">
-                                <ng-container *ngIf="reportType === 'TRANSACTION'">
+                                <div *ngIf="reportType === 'TRANSACTION'">
                                     <reactive-dropdown-field
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
                                         [options]="advanceSearchCategoryTransaction"
@@ -43,10 +47,9 @@
                                         [labelValue]="advanceSearchFormObj.param1 ?? ''"
                                         (onClear)="advanceSearchFormObj.param1 = ''"
                                         [label]="localeData?.advance_search_filter?.category"
-                                    >
-                                    </reactive-dropdown-field>
-                                </ng-container>
-                                <ng-container *ngIf="reportType !== 'TRANSACTION'">
+                                    ></reactive-dropdown-field>
+                                </div>
+                                <div *ngIf="reportType !== 'TRANSACTION'">
                                     <reactive-dropdown-field
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
                                         [options]="advanceSearchCategory"
@@ -55,7 +58,7 @@
                                         (onClear)="advanceSearchFormObj.param1 = ''"
                                         [label]="localeData?.advance_search_filter?.category"
                                     ></reactive-dropdown-field>
-                                </ng-container>
+                                </div>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-12 mb-3 pl-2">
                                 <reactive-dropdown-field
@@ -89,23 +92,21 @@
                                     [placeholder]="localeData?.advance_search_filter?.enter_amount"
                                     [name]="'amount'"
                                     [(ngModel)]="advanceSearchFormObj.val"
-                                    [allowDigitsOnly]="true"
+                                    [allowDecimalDigitsOnly]="true"
                                     (onClear)="advanceSearchFormObj.val = ''"
                                     [autocomplete]="'off'"
                                     [label]="localeData?.advance_search_filter?.amount"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-sm-12">
-                        <div class="button-group d-flex justify-content-end column-gap-15">
+                        <div class="button-group d-flex justify-content-end column-gap-1">
                             <button
                                 id="search-btn"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 (click)="advanceSearchAction('search')"
                                 [disabled]="
                                     !advanceSearchFormObj.param1 ||
@@ -116,12 +117,11 @@
                             >
                                 {{ commonLocaleData?.app_search }}
                             </button>
-                            <button
-                                mat-stroked-button
-                                class="mr-0"
-                                (click)="advanceSearchAction('clear')"
-                            >
+                            <button matButton="outlined" class="mr-0" (click)="advanceSearchAction('clear')">
                                 {{ commonLocaleData?.app_reset }}
+                            </button>
+                            <button matButton="outlined" aria-label="close" (click)="advanceSearchAction('cancel')">
+                                {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
                     </div>
@@ -151,4 +151,4 @@
             ></app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
-</ng-container>
+</div>

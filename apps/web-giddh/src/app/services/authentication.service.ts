@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Authentication service for business logic and data management
+ * @author Giddh Development Team
+ * @since 2026
+ */
+
 import { catchError, map, retry } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -18,8 +24,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
+import { get } from '../lodash-optimized';
+import { environment } from '../../environments/environment.generated';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
+/**
+ * AuthenticationService class - Handles authenticationservice functionality
+ * @export
+ * @class AuthenticationService
+ */
+
 export class AuthenticationService {
 
     constructor(private errorHandler: GiddhErrorHandler,
@@ -214,13 +230,32 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
-    // Get Electron App Version
+    /**
+     * Gets environment path for S3 bucket based on environment configuration
+     *
+     * @private
+     * @returns {string} Environment path ('prod' or 'test')
+     * @memberof AuthenticationService
+     */
+    private getS3EnvironmentPath(): string {
+        const isProduction = environment.PRODUCTION_ENV;
+        return isProduction ? 'prod' : 'test';
+    }
+
+    /**
+     * Gets Electron Windows app version from S3
+     *
+     * @public
+     * @returns {*}
+     * @memberof AuthenticationService
+     */
     public GetElectronAppVersion() {
+        const envPath = this.getS3EnvironmentPath();
         let args: any = { headers: {} };
         args.headers['cache-control'] = 'no-cache';
         args.headers['Content-Type'] = 'application/xml';
         args.headers = new HttpHeaders(args.headers);
-        return this.httpClient.get('https://s3-ap-south-1.amazonaws.com/giddh-app-builds/latest.yml', {
+        return this.httpClient.get(`https://s3-ap-south-1.amazonaws.com/app-giddh-test/${envPath}/windows/latest/latest.yml`, {
             headers: args.headers,
             responseType: 'text'
         }).pipe(map((res) => {
@@ -294,17 +329,19 @@ export class AuthenticationService {
     }
 
     /**
-     * To get version of latest Mac app
+     * Gets Electron Mac app version from S3
      *
+     * @public
      * @returns {*}
      * @memberof AuthenticationService
      */
     public getElectronMacAppVersion(): any {
+        const envPath = this.getS3EnvironmentPath();
         let args: any = { headers: {} };
         args.headers['cache-control'] = 'no-cache';
         args.headers['Content-Type'] = 'application/xml';
         args.headers = new HttpHeaders(args.headers);
-        return this.httpClient.get('https://s3-ap-south-1.amazonaws.com/giddh-app-builds/latest-mac.yml', {
+        return this.httpClient.get(`https://s3-ap-south-1.amazonaws.com/app-giddh-test/${envPath}/mac/latest/latest-mac.yml`, {
             headers: args.headers,
             responseType: 'text'
         }).pipe(map((res) => {

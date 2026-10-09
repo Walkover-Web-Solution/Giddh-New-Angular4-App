@@ -1,6 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, filter, take, takeUntil } from 'rxjs/operators';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { takeUntil } from 'rxjs/operators';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
@@ -17,12 +17,14 @@ import { InventoryService } from '../../services/inventory.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { SettingsTagService } from '../../services/settings.tag.service';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'daybook-advance-search-model',
     templateUrl: './daybook-advance-search.component.html',
     styleUrls: ['./daybook-advance-search.component.scss'],
-    providers: [SalesPersonComponentStore]
+    providers: [SalesPersonComponentStore],
+    standalone:false
 
 })
 export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
@@ -39,7 +41,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-public advanceSearchObject: DayBookRequestModel = null;
+    public advanceSearchObject: DayBookRequestModel = null;
     public advanceSearchForm: UntypedFormGroup;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;
@@ -105,10 +107,6 @@ public advanceSearchObject: DayBookRequestModel = null;
     public tags$: Observable<IOption[]>;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    /** This will use for instance of sales person Dropdown */
-    public salesPersonDropdown: FormControl = new FormControl();
-    /** Filtered Sales Person List */
-    public filteredSalesPersonList: IOption[] = [];
 
     constructor(
         private inventoryService: InventoryService,
@@ -151,24 +149,6 @@ public advanceSearchObject: DayBookRequestModel = null;
             { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' },
             { label: this.commonLocaleData?.app_comparision_filters?.exclude, value: 'exclude' }
         ]);
-
-        this.salesPersonList$.pipe(filter(Boolean), take(1)).subscribe(res => {
-            this.filteredSalesPersonList = res as IOption[];
-        });
-
-        this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
-            takeUntil(this.destroyed$)).subscribe((search: string) => {
-                if (!search) {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res as IOption[];
-                    });
-                } else {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res?.filter((salesPerson: IOption) => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
-                    });
-                }
-                this.changeDetectionRef.detectChanges();
-            });
     }
 
     /**
@@ -272,7 +252,7 @@ public advanceSearchObject: DayBookRequestModel = null;
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public emitAdvanceSearchParams(): void {
-        let dataToSend = _.cloneDeep(this.advanceSearchForm?.value) as DayBookRequestModel;
+        let dataToSend = cloneDeep(this.advanceSearchForm?.value) as DayBookRequestModel;
         if (dataToSend.dateOnCheque) {
             if (typeof dataToSend.dateOnCheque === "object") {
                 dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
@@ -297,7 +277,7 @@ public advanceSearchObject: DayBookRequestModel = null;
      */
     public onDDElementSelect(type: string, data: any[]) {
         let values = [];
-        data.forEach(element => {
+        (Array.isArray(data) ? data : []).forEach(element => {
             values.push(element?.value);
         });
         switch (type) {
@@ -652,7 +632,7 @@ public advanceSearchObject: DayBookRequestModel = null;
     public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.stocksSearchResultsPaginationData.query = query;
         if (!this.preventDefaultStockScrollApiCall &&
-            (query || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
+            (typeof query === "string" || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject = {
                 q: encodeURIComponent(query),
@@ -681,6 +661,7 @@ public advanceSearchObject: DayBookRequestModel = null;
                     if (successCallback) {
                         successCallback(data.body.results);
                     }
+                    this.changeDetectionRef.detectChanges();
                 }
             });
         } else {

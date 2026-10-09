@@ -7,12 +7,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { LaddaModule } from 'angular2-ladda';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
+import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { AmountFieldComponentModule } from '../amount-field/amount-field.module';
 import { NgxMaskModule } from '../helpers/directives/ngx-mask';
-import { CurrencyModule } from '../helpers/pipes/currencyPipe/currencyType.module';
 import { ReplacePipeModule } from '../helpers/pipes/replace/replace.module';
 import { AdvanceReceiptAdjustmentComponent } from './advance-receipt-adjustment.component';
+import { GiddhNumberFormatModule } from '../helpers/pipes/number-format/number-format.module';
+import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
 
 @NgModule({
     declarations: [AdvanceReceiptAdjustmentComponent],
@@ -26,14 +28,16 @@ import { AdvanceReceiptAdjustmentComponent } from './advance-receipt-adjustment.
         }),
         AmountFieldComponentModule,
         NgxMaskModule.forRoot(),
-        CurrencyModule,
+        GiddhNumberFormatModule,
         TranslateDirectiveModule,
         ReplacePipeModule,
         MatButtonModule,
         MatDialogModule,
         MatInputModule,
         MatRadioModule,
-        FormFieldsModule
+        FormFieldsModule,
+        GiddhDatePipe,
+        GiddhPageLoaderModule
     ],
     exports: [AdvanceReceiptAdjustmentComponent]
 })

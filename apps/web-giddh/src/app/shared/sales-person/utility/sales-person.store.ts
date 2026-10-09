@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { ComponentStore } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
 import { BaseResponse, CommonPaginatedResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { LocaleService } from "../../../services/locale.service";
@@ -59,7 +59,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
 
     /**
      * Get All Sales Person
-     * 
+     *
      * @param {isDropdown: boolean, params: any} params – when true, maps `res.body.results` to an array of
      *   `{ label: item.name, value: item.uniqueName }` for dropdowns.
      * @memberof SalesPersonComponentStore
@@ -69,7 +69,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap(({ isDropdown, params }) => {
                 this.patchState({ salesPersonListInProgress: true });
                 return this.salesPersonService.salesPerson(HttpMethod.GET, isDropdown, null, params).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 let response = res?.body;
@@ -117,7 +117,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap((req) => {
                 this.patchState({ salesPersonSaveInProgress: true, createUpdateSalesPersonSuccess: false });
                 return this.salesPersonService.salesPerson(req.uniqueName ? HttpMethod.PUT : HttpMethod.POST, req.model, req.uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 if (req.uniqueName) {
@@ -163,7 +163,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap((uniqueName) => {
                 this.patchState({ deleteSalesPersonSuccess: false });
                 return this.salesPersonService.salesPerson(HttpMethod.DELETE, {}, uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
@@ -174,7 +174,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                 if (res.message) {
                                     if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
                                         // Show error message only if linked with entry/voucher
-                                        this.toasterService.showSnackBar('error', res.message); 
+                                        this.toasterService.showSnackBar('error', res.message);
                                         this.patchState({
                                             openTransferAndArchiveDialog: true
                                         });
@@ -212,7 +212,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap((model) => {
                 this.patchState({ archiveSalesPersonSuccess: false });
                 return this.salesPersonService.salesPersonArchive(model.model, model.uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);

@@ -15,14 +15,12 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         FormsModule,
         ReactiveFormsModule,
         SignupRoutingModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
-        }),
+        LaddaModule.forRoot({ style: 'slide-left', spinnerSize: 30 }),
         SharedModule,
         FormFieldsModule
     ],
-    declarations: [SignupComponent]
+    declarations: [
+        SignupComponent
+    ]
 })
-export class SignupModule {
-}
+export class SignupModule {}

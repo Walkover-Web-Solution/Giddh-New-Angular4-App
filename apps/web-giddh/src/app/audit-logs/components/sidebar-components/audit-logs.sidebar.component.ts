@@ -3,9 +3,7 @@ import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { map as lodashMap } from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
-import { flatten, omit, union } from '../../../lodash-optimized';
 import { LogsRequest } from '../../../models/api-models/Logs';
 import { CompanyService } from '../../../services/company.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -15,11 +13,13 @@ import { GroupService } from '../../../services/group.service';
 import { SearchService } from '../../../services/search.service';
 import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption } from '../../../app.constant';
 import { IForceClear } from '../../../models/api-models/Sales';
+import { concat, flatten, map, omit, set, union } from '../../../lodash-optimized';
 
 @Component({
     selector: 'audit-logs-sidebar',
     templateUrl: './audit-logs.sidebar.component.html',
-    styleUrls: ['audit-logs.sidebar.component.scss']
+    styleUrls: ['audit-logs.sidebar.component.scss'],
+    standalone: false
 })
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
@@ -125,7 +125,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
         let listofUN;
-        listofUN = lodashMap(rawList, (listItem) => {
+        listofUN = map(rawList, (listItem) => {
             let newParents;
             let result;
             newParents = union([], parents);

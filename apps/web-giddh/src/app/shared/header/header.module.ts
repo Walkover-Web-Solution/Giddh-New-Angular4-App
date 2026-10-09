@@ -23,6 +23,12 @@ import { CommandKModule } from "../../theme/command-k/command.k.module";
 import { MatDividerModule } from "@angular/material/divider";
 import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
 import { TagsModule } from "../../settings/tags/tags.module";
+import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
+import { GoToBranchComponent } from '../go-to-branch/go-to-branch.component';
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
     declarations: [
@@ -56,7 +62,16 @@ import { TagsModule } from "../../settings/tags/tags.module";
         MatDividerModule,
         GenericAsideMenuAccountModule,
         MatTooltipModule,
-        TagsModule
+        TagsModule,
+        GiddhDatePipe,
+        GoToBranchComponent,
+        MatSlideToggleModule,
+        MatRadioModule,
+        MatFormFieldModule,
+        MatSelectModule
+    ],
+    providers: [
+        GiddhDatePipe
     ],
     exports: [
         HeaderComponent,

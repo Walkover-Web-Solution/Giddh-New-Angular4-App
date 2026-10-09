@@ -18,6 +18,7 @@ const noop = () => {
         }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAccessor {
     /** Instance of input field */
@@ -32,8 +33,6 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public max: number = null;
     /** True if need to allow decimal with digits */
     @Input() public allowDecimalDigitsOnly: boolean = false;
-    /** True if need to allow only digits */
-    @Input() public allowDigitsOnly: boolean = false;
     /** Css classes to be applied on input field */
     @Input() public cssClass: string = "";
     /** Css styles to be applied on input field */
@@ -70,8 +69,10 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public suffix: any;
     /** Holds custom decimal places */
     @Input() public customDecimalPlaces: any;
-    /** Holds mat suffic */
+    /** Holds mat suffix */
     @Input() public matSuffix: any;
+    /** Holds mat suffix css class */
+    @Input() public matSuffixCssClass: any;
     /** Holds mat prefix */
     @Input() public matPrefix: any;
     /** True if field is autocomplete */
@@ -114,6 +115,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Output() public suffixClick: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emits validation status on blur or model change */
     @Output() public patternValidation: EventEmitter<{isValid: boolean, value: string}> = new EventEmitter<{isValid: boolean, value: string}>();
+    /** Emits when the input loses focus */
+    @Output() public onBlurEvent: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -247,7 +250,11 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      *
      * @memberof InputFieldComponent
      */
-    public handleInput(): void {
+    public handleInput(event?: any): void {
+        // Use the actual input value for real-time validation
+        if (event && event.target) {
+            this.validateMinMaxWithValue(event.target.value);
+        }
         this.onChangeCallback(this.value);
     }
 
@@ -257,6 +264,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     public handleChange(): void {
+        this.validateMinMax();
         this.onChangeCallback(this.value);
     }
 
@@ -265,9 +273,11 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      *
      * @memberof InputFieldComponent
      */
-    public emitBlurEvent(): void {
+    public emitBlurEvent(event: FocusEvent): void {
         this.validatePatternOnBlur();
+        this.validateMinMax();
         this.onChange.emit(this.value);
+        this.onBlurEvent.emit(event);
     }
 
     /**
@@ -281,6 +291,44 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
             const isValid = regex.test(this.ngModel);
             this.patternValidation.emit({ isValid, value: this.ngModel });
         }
+    }
+
+    /**
+     * Validates min/max constraints and sets form control errors
+     *
+     * @memberof InputFieldComponent
+     */
+    private validateMinMax(): void {
+        this.validateMinMaxWithValue(this.ngModel);
+    }
+
+    /**
+     * Validates min/max constraints with a specific value
+     *
+     * @param {any} value - The value to validate
+     * @memberof InputFieldComponent
+     */
+    private validateMinMaxWithValue(value: any): void {
+        if (!this.ngControl?.control || !value) return;
+        
+        const numValue = parseFloat(value);
+        if (isNaN(numValue)) return;
+        
+        let errors: any = null;
+        
+        if (this.min !== null && numValue < Number(this.min)) {
+            errors = { min: { actual: numValue, min: Number(this.min) } };
+        } else if (this.max !== null && numValue > Number(this.max)) {
+            errors = { max: { actual: numValue, max: Number(this.max) } };
+        }
+        
+        this.showError = !!errors;
+        this.ngControl.control.setErrors(errors);
+        // Trigger change detection to update visual state immediately
+        this.ngControl.control.markAsTouched();
+        this.stateChanges.next();
+        this.changeDetectionRef.detectChanges();
+            
     }
 
     /**
@@ -309,4 +357,26 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     public handleSuffixClick(): void {
         this.suffixClick.emit(true);
     }
+
+    /**
+     * Handles Enter key press events
+     *
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof InputFieldComponent
+     */
+    public handleEnterKey(event: KeyboardEvent): void {
+        // Check if the input-field component has appEnterNext directive
+        const hostElement = this.elementRef.nativeElement;
+        const hasEnterNextDirective = hostElement.hasAttribute('appEnterNext');
+        
+        // If appEnterNext directive is present, allow it to handle the event
+        if (hasEnterNextDirective) {
+            // Don't prevent default or stop propagation - let the directive handle it
+            return;
+        }
+        
+        // If no appEnterNext directive, prevent default form submission
+        event.preventDefault();
+    }
+
 }

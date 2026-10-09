@@ -11,7 +11,8 @@ import { InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
     selector: 'download-voucher',
     templateUrl: './download-voucher.component.html',
     styleUrls: ['./download-voucher.component.scss'],
-    providers: [VoucherComponentStore]
+    providers: [VoucherComponentStore],
+    standalone: false
 })
 export class DownloadVoucherComponent implements OnInit, OnDestroy {
     /** Last vouchers get in progress Observable */
@@ -108,7 +109,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         let downloadOption = "";
         this.fileType = "pdf";
         if (this.downloadForm?.get('isAttachment').value) {
-            if (this.invoiceType?.length > 0) {
+            if (this.invoiceType?.length > 1) {
                 downloadOption = "ALL";
             } else {
                 downloadOption = "ATTACHMENT";

@@ -1,14 +1,17 @@
 <div class="audit-form-wrap mt-3">
     <div class="clear-both form-field">
-        <label>{{ commonLocaleData?.app_entity }} <sup class="text-danger">*</sup></label>
+        <label>
+            {{ commonLocaleData?.app_entity }}
+            <sup class="text-danger">*</sup>
+        </label>
         <reactive-dropdown-field
             [options]="auditLogFormVM.entities"
             #selectEntity="ngModel"
             [placeholder]="commonLocaleData?.app_select_option"
             (selectedOption)="selectedEntityType($event)"
             [(ngModel)]="auditLogFormVM.selectedEntity"
-            [name]="'selectedEntity'">
-        </reactive-dropdown-field>
+            [name]="'selectedEntity'"
+        ></reactive-dropdown-field>
     </div>
     <div class="clear-both form-field">
         <label>{{ localeData?.operation }}</label>
@@ -17,8 +20,8 @@
             [placeholder]="commonLocaleData?.app_select_option"
             (click)="prepareOperationFormData(selectEntity)"
             [(ngModel)]="auditLogFormVM.selectedOperation"
-            [name]="'selectedOperation'">
-        </reactive-dropdown-field>
+            [name]="'selectedOperation'"
+        ></reactive-dropdown-field>
     </div>
     <div
         class="clear-both form-field"
@@ -38,16 +41,12 @@
             (scrollEnd)="handleScrollEnd()"
             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
             [(ngModel)]="auditLogFormVM.selectedAccountUniqueName"
-            [name]="'selectedAccountUniqueName'">
-        </reactive-dropdown-field>
+            [name]="'selectedAccountUniqueName'"
+        ></reactive-dropdown-field>
     </div>
     <div
         class="clear-both form-field"
-        *ngIf="
-            !auditLogFormVM.selectedEntity ||
-            auditLogFormVM.selectedEntity === 'ACCOUNT' ||
-            auditLogFormVM.selectedEntity === 'GROUP'
-        "
+        *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity === 'ACCOUNT' || auditLogFormVM.selectedEntity === 'GROUP'"
     >
         <label>{{ commonLocaleData?.app_group }}</label>
         <reactive-dropdown-field
@@ -58,8 +57,8 @@
             (scrollEnd)="handleGroupScrollEnd()"
             (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
             [(ngModel)]="auditLogFormVM.selectedGroupUniqueName"
-            [name]="'selectedGroupUniqueName'">
-        </reactive-dropdown-field>
+            [name]="'selectedGroupUniqueName'"
+        ></reactive-dropdown-field>
     </div>
     <div class="clear-both form-field">
         <label>{{ localeData?.user }}</label>
@@ -67,14 +66,15 @@
             [options]="auditLogFormVM.users$ | async"
             [placeholder]="commonLocaleData?.app_select_option"
             [(ngModel)]="auditLogFormVM.selectedUserUniqueName"
-            [name]="'selectedUserUniqueName'">
-        </reactive-dropdown-field>
+            [name]="'selectedUserUniqueName'"
+        ></reactive-dropdown-field>
     </div>
     <div class="d-flex">
         <div class="form-btn-field">
             <label class="d-block">&nbsp;</label>
             <button
-                mat-raised-button color="primary" class="mr-0"
+                matButton="filled"
+                class="mr-0"
                 [ladda]="auditLogFormVM.getLogsInprocess$ | async"
                 [disabled]="!auditLogFormVM.selectedEntity"
                 (click)="getLogFilters()"

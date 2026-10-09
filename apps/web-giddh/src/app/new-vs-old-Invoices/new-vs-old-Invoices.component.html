@@ -1,15 +1,16 @@
-<ng-container
+<div
     appTranslate
     [file]="'new-old-invoices'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
+    class="nvo-page-wrap"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="container-fluid" *ngIf="monthOptions?.length > 0">
+    <div class="container-fluid mb-5" *ngIf="monthOptions?.length > 0">
         <div class="top-bar clear-both">
             <div class="form-inline">
-                <form #carried="ngForm" (ngSubmit)="getSalesBifurcation()">
+                <form #salesByPersonForm="ngForm" (ngSubmit)="getSalesBifurcation()">
                     <div class="d-flex align-items-center column-gap-1 select-fields pb-4">
                         <div class="max-width-500">
                             <reactive-dropdown-field
@@ -20,8 +21,8 @@
                                 #SelectYear="ngModel"
                                 [options]="yearOptions"
                                 [labelValue]="selectedYear"
-                                [required]="true">
-                            </reactive-dropdown-field>
+                                [required]="true"
+                            ></reactive-dropdown-field>
                         </div>
                         <div class="max-width-500">
                             <reactive-dropdown-field
@@ -32,16 +33,13 @@
                                 #SelectType="ngModel"
                                 [options]="GetTypeOptions"
                                 [required]="true"
-                                (selectedOption)="resetData()">
-                            </reactive-dropdown-field>
+                                (selectedOption)="resetData()"
+                            ></reactive-dropdown-field>
                             <div class="height-25px position-absolute" *ngIf="SelectType.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_type }}</div>
                             </div>
                         </div>
-                        <div
-                            class="max-width-500 flex-column"
-                            *ngIf="selectedType === selectedTypeEnum.MONTH"
-                        >
+                        <div class="max-width-500 flex-column" *ngIf="selectedType === selectedTypeEnum.MONTH">
                             <reactive-dropdown-field
                                 [placeholder]="localeData?.select_month_placeholder"
                                 [label]="localeData?.select_month_label"
@@ -49,17 +47,13 @@
                                 [(ngModel)]="selectedmonth"
                                 #SelectMonth="ngModel"
                                 [options]="monthOptions"
-                                [required]="true">
-                            </reactive-dropdown-field>
+                                [required]="true"
+                            ></reactive-dropdown-field>
                             <div class="height-25px position-absolute" *ngIf="SelectMonth.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_month }}</div>
                             </div>
                         </div>
-
-                        <div
-                            class="max-width-500 flex-column"
-                            *ngIf="selectedType === selectedTypeEnum.QUATER"
-                        >
+                        <div class="max-width-500 flex-column" *ngIf="selectedType === selectedTypeEnum.QUARTER">
                             <reactive-dropdown-field
                                 [placeholder]="localeData?.select_quarter_placeholder"
                                 [label]="localeData?.select_quarter_label"
@@ -67,14 +61,26 @@
                                 [(ngModel)]="selectedQuater"
                                 #SelectQuater="ngModel"
                                 [options]="quaterOptions"
-                                [required]="true">
-                            </reactive-dropdown-field>
+                                [required]="true"
+                            ></reactive-dropdown-field>
                             <div class="height-25px position-absolute" *ngIf="SelectQuater.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_quarter }}</div>
                             </div>
                         </div>
+                        @if (fullSalesPersonList?.length) {
+                            <div class="max-width-500">
+                                <multi-select-dropdown
+                                    [label]="commonLocaleData?.app_sales_person"
+                                    [placeholder]="commonLocaleData?.app_sales_person_placeholder"
+                                    [options]="fullSalesPersonList"
+                                    [showAllOption]="true"
+                                    name="sbpSalesPerson"
+                                    [(ngModel)]="selectedSalesPersonUniqueNames"
+                                ></multi-select-dropdown>
+                            </div>
+                        }
                         <div class="btn-group">
-                            <button mat-raised-button color="primary" type="submit" [disabled]="carried.invalid">
+                            <button matButton="filled" type="submit" [disabled]="salesByPersonForm.invalid">
                                 {{ commonLocaleData?.app_go }}
                             </button>
                         </div>
@@ -82,7 +88,7 @@
                 </form>
             </div>
         </div>
-        <ng-container *ngIf="!isLoading">
+        <ng-container *ngIf="!isLoading && !NewVsOldInvoicesQueryRequest.salesPersonUniqueNames">
             <div class="d-flex month-wrapper" *ngIf="selectedType === selectedTypeEnum.MONTH">
                 <div class="div-table">
                     <div class="d-flex">
@@ -90,7 +96,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -100,7 +106,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -110,7 +116,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -123,7 +129,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
                                     : 'new-vs-old-invoices-data-total-sales-month'
                             "
@@ -134,8 +140,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.totalSales,
-                                        'total',
-                                        'client',
+                                        SbpDataType.Total,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.totalSales.month
                                     )
                                 "
@@ -144,14 +150,13 @@
                                     [amount]="newVsOldInvoicesData?.totalSales.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
                                     : 'new-vs-old-invoices-data-total-sales-month'
                             "
@@ -161,14 +166,13 @@
                                     [amount]="newVsOldInvoicesData?.totalSales.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
                                     : 'new-vs-old-invoices-data-total-sales-month'
                             "
@@ -179,8 +183,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.totalSales,
-                                        'total',
-                                        'invoice',
+                                        SbpDataType.Total,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.totalSales.month
                                     )
                                 "
@@ -189,8 +193,7 @@
                                     [amount]="newVsOldInvoicesData?.totalSales.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -206,7 +209,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
                                     : 'new-vs-old-invoices-data-new-sales-month'
                             "
@@ -217,8 +220,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.newSales,
-                                        'new',
-                                        'client',
+                                        SbpDataType.New,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.newSales.month
                                     )
                                 "
@@ -227,14 +230,13 @@
                                     [amount]="newVsOldInvoicesData?.newSales.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
                                     : 'new-vs-old-invoices-data-new-sales-month'
                             "
@@ -244,14 +246,13 @@
                                     [amount]="newVsOldInvoicesData?.newSales.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
                                     : 'new-vs-old-invoices-data-new-sales-month'
                             "
@@ -262,8 +263,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.newSales,
-                                        'new',
-                                        'invoice',
+                                        SbpDataType.New,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.newSales.month
                                     )
                                 "
@@ -272,8 +273,7 @@
                                     [amount]="newVsOldInvoicesData?.newSales.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -282,7 +282,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -293,8 +293,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.oldSales,
-                                        'old',
-                                        'client',
+                                        SbpDataType.Old,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.oldSales.month
                                     )
                                 "
@@ -303,14 +303,13 @@
                                     [amount]="newVsOldInvoicesData?.oldSales?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -320,14 +319,13 @@
                                     [amount]="newVsOldInvoicesData?.oldSales?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -338,8 +336,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.oldSales,
-                                        'old',
-                                        'invoice',
+                                        SbpDataType.Old,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.oldSales.month
                                     )
                                 "
@@ -348,8 +346,7 @@
                                     [amount]="newVsOldInvoicesData?.oldSales?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -358,7 +355,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
@@ -369,8 +366,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[0],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[0].month
                                     )
                                 "
@@ -379,14 +376,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
@@ -396,14 +392,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
@@ -414,8 +409,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[0],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[0].month
                                     )
                                 "
@@ -424,8 +419,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -434,7 +428,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
@@ -445,8 +439,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[1],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[1].month
                                     )
                                 "
@@ -455,14 +449,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
@@ -472,14 +465,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
@@ -490,8 +482,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[1],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[1].month
                                     )
                                 "
@@ -500,8 +492,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -510,7 +501,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
@@ -521,8 +512,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[2],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[2].month
                                     )
                                 "
@@ -531,14 +522,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
@@ -548,14 +538,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
@@ -566,8 +555,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[2],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[2].month
                                     )
                                 "
@@ -576,8 +565,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -586,7 +574,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-3-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-3-month'
                             "
@@ -597,8 +585,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[3],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[3].month
                                     )
                                 "
@@ -607,14 +595,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-3-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-3-month'
                             "
@@ -624,14 +611,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-3-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-3-month'
                             "
@@ -642,8 +628,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[3],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[3].month
                                     )
                                 "
@@ -652,8 +638,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -664,7 +649,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-4-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-4-month'
                             "
@@ -675,8 +660,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[4],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[4].month
                                     )
                                 "
@@ -685,14 +670,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-4-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-4-month'
                             "
@@ -702,14 +686,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-4-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-4-month'
                             "
@@ -720,8 +703,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[4],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[4].month
                                     )
                                 "
@@ -730,21 +713,20 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex quarter-wrapper" *ngIf="selectedType === selectedTypeEnum.QUATER">
+            <div class="d-flex quarter-wrapper" *ngIf="selectedType === selectedTypeEnum.QUARTER">
                 <div class="div-table">
                     <div class="d-flex">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -754,7 +736,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -764,7 +746,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -775,7 +757,7 @@
                     <div
                         class="div-row"
                         [attr.data-reference]="
-                            selectedType === selectedTypeEnum.QUATER
+                            selectedType === selectedTypeEnum.QUARTER
                                 ? 'new-vs-old-invoices-data-total-sales-quater'
                                 : 'new-vs-old-invoices-data-total-sales-month'
                         "
@@ -784,7 +766,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
                                     : 'new-vs-old-invoices-data-total-sales-month'
                             "
@@ -795,8 +777,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.totalSales,
-                                        'total',
-                                        'client',
+                                        SbpDataType.Total,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.totalSales.month
                                     )
                                 "
@@ -805,14 +787,13 @@
                                     [amount]="newVsOldInvoicesData?.totalSales?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
                                     : 'new-vs-old-invoices-data-total-sales-month'
                             "
@@ -822,14 +803,13 @@
                                     [amount]="newVsOldInvoicesData?.totalSales?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
                                     : 'new-vs-old-invoices-data-total-sales-month'
                             "
@@ -840,8 +820,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.totalSales,
-                                        'total',
-                                        'invoice',
+                                        SbpDataType.Total,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.totalSales?.month
                                     )
                                 "
@@ -850,22 +830,21 @@
                                     [amount]="newVsOldInvoicesData?.totalSales?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex quarter-wrapper" *ngIf="selectedType === selectedTypeEnum.QUATER">
+            <div class="d-flex quarter-wrapper" *ngIf="selectedType === selectedTypeEnum.QUARTER">
                 <div class="div-table bg-grey">
                     <div>
-                        <p class="p-heading">{{ bifurcationClients }}</p>
+                        <p class="my-3 font-size-16 font-weight-semibold text-center">{{ bifurcationClients }}</p>
                     </div>
                     <div
                         class="div-row mt-5 mb-5"
                         [attr.data-reference]="
-                            selectedType === selectedTypeEnum.QUATER
+                            selectedType === selectedTypeEnum.QUARTER
                                 ? 'new-vs-old-invoices-data-new-sales-quater'
                                 : 'new-vs-old-invoices-data-new-sales-month'
                         "
@@ -874,7 +853,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
                                     : 'new-vs-old-invoices-data-new-sales-month'
                             "
@@ -885,8 +864,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.newSales,
-                                        'new',
-                                        'client',
+                                        SbpDataType.New,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.newSales.month
                                     )
                                 "
@@ -895,14 +874,13 @@
                                     [amount]="newVsOldInvoicesData?.newSales.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
                                     : 'new-vs-old-invoices-data-new-sales-month'
                             "
@@ -912,14 +890,13 @@
                                     [amount]="newVsOldInvoicesData?.newSales.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
                                     : 'new-vs-old-invoices-data-new-sales-month'
                             "
@@ -930,8 +907,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.newSales,
-                                        'new',
-                                        'invoice',
+                                        SbpDataType.New,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.newSales.month
                                     )
                                 "
@@ -940,8 +917,7 @@
                                     [amount]="newVsOldInvoicesData?.newSales.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -950,7 +926,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -961,8 +937,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.oldSales,
-                                        'old',
-                                        'client',
+                                        SbpDataType.Old,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.oldSales.month
                                     )
                                 "
@@ -971,14 +947,13 @@
                                     [amount]="newVsOldInvoicesData?.oldSales?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -988,14 +963,13 @@
                                     [amount]="newVsOldInvoicesData?.oldSales?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
                                     : 'new-vs-old-invoices-data-old-sales-month'
                             "
@@ -1006,8 +980,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.oldSales,
-                                        'old',
-                                        'invoice',
+                                        SbpDataType.Old,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.oldSales.month
                                     )
                                 "
@@ -1016,8 +990,7 @@
                                     [amount]="newVsOldInvoicesData?.oldSales?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -1026,7 +999,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
@@ -1037,8 +1010,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[0],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[0].month
                                     )
                                 "
@@ -1047,14 +1020,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
@@ -1064,14 +1036,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
@@ -1082,8 +1053,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[0],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[0].month
                                     )
                                 "
@@ -1092,8 +1063,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -1102,7 +1072,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
@@ -1113,8 +1083,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[1],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[1].month
                                     )
                                 "
@@ -1123,14 +1093,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
@@ -1140,14 +1109,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
@@ -1158,8 +1126,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[1],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[1].month
                                     )
                                 "
@@ -1168,8 +1136,7 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
@@ -1178,7 +1145,7 @@
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
@@ -1189,8 +1156,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[2],
-                                        'carried',
-                                        'client',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Client,
                                         newVsOldInvoicesData?.carriedSales[2].month
                                     )
                                 "
@@ -1199,14 +1166,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
@@ -1216,14 +1182,13 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </div>
                         <div
                             class="div-cell align-items-end"
                             [attr.data-reference]="
-                                selectedType === selectedTypeEnum.QUATER
+                                selectedType === selectedTypeEnum.QUARTER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
                                     : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
@@ -1234,8 +1199,8 @@
                                 (click)="
                                     showClientList(
                                         newVsOldInvoicesData?.carriedSales[2],
-                                        'carried',
-                                        'invoice',
+                                        SbpDataType.Carried,
+                                        SbpSubType.Invoice,
                                         newVsOldInvoicesData?.carriedSales[2].month
                                     )
                                 "
@@ -1244,16 +1209,333 @@
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
         </ng-container>
+        <ng-container *ngIf="!isLoading && NewVsOldInvoicesQueryRequest.salesPersonUniqueNames">
+            @if (salesByPersonData) {
+                <div class="sbp-summary-grid d-grid mb-3 column-gap-2">
+                    <!-- Total -->
+                    @if (salesByPersonData?.salesFrom) {
+                        <mat-card class="sbp-summary-card">
+                            <mat-card-content class="d-flex align-items-center column-gap-2 p-3">
+                                <div
+                                    class="sbp-icon-wrap border-radius-circle sbp-icon-blue d-flex align-items-center justify-content-center"
+                                >
+                                    <i class="icon-sales font-size-20"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="font-size-16 font-weight-semibold mb-2">{{ salesByPersonData?.salesFrom?.label }}</p>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span>{{ commonLocaleData?.app_client }}</span>
+                                        <a
+                                            class="cursor-pointer font-weight-medium"
+                                            href="javascript:void(0)"
+                                            (click)="
+                                                showClientList(
+                                                    salesByPersonData?.salesFrom,
+                                                    SbpDataType.Total,
+                                                    SbpSubType.Client,
+                                                    salesByPersonData?.salesFrom?.month,
+                                                    NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                                )
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="salesByPersonData?.salesFrom?.clients"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </a>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span>{{ commonLocaleData?.app_amount }}</span>
+                                        <span class="font-weight-medium">
+                                            <amount-field
+                                                [amount]="salesByPersonData?.salesFrom?.amount"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>{{ localeData?.no_invoices }}</span>
+                                        <a
+                                            class="cursor-pointer font-weight-medium"
+                                            href="javascript:void(0)"
+                                            (click)="
+                                                showClientList(
+                                                    salesByPersonData?.salesFrom,
+                                                    SbpDataType.Total,
+                                                    SbpSubType.Invoice,
+                                                    salesByPersonData?.salesFrom?.month,
+                                                    NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                                )
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="salesByPersonData?.salesFrom?.invoices"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </a>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    }
+                    <!-- New Clients -->
+                    @if (salesByPersonData?.newSales) {
+                        <mat-card class="sbp-summary-card">
+                            <mat-card-content class="d-flex align-items-center column-gap-2 p-3">
+                                <div
+                                    class="sbp-icon-wrap border-radius-circle sbp-icon-teal d-flex align-items-center justify-content-center"
+                                >
+                                    <i class="icon-customer font-size-20"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="font-size-16 font-weight-semibold mb-2">{{ salesByPersonData?.newSales?.label }}</p>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span>{{ commonLocaleData?.app_client }}</span>
+                                        <a
+                                            class="cursor-pointer font-weight-medium"
+                                            href="javascript:void(0)"
+                                            (click)="
+                                                showClientList(
+                                                    salesByPersonData?.newSales,
+                                                    SbpDataType.New,
+                                                    SbpSubType.Client,
+                                                    salesByPersonData?.newSales?.month,
+                                                    NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                                )
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="salesByPersonData?.newSales?.clients"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </a>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span>{{ commonLocaleData?.app_amount }}</span>
+                                        <span class="font-weight-medium">
+                                            <amount-field
+                                                [amount]="salesByPersonData?.newSales?.amount"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>{{ localeData?.no_invoices }}</span>
+                                        <a
+                                            class="cursor-pointer font-weight-medium"
+                                            href="javascript:void(0)"
+                                            (click)="
+                                                showClientList(
+                                                    salesByPersonData?.newSales,
+                                                    SbpDataType.New,
+                                                    SbpSubType.Invoice,
+                                                    salesByPersonData?.newSales?.month,
+                                                    NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                                )
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="salesByPersonData?.newSales?.invoices"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </a>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    }
+                    <!-- Old Clients -->
+                    @if (salesByPersonData?.oldSales) {
+                        <mat-card class="sbp-summary-card">
+                            <mat-card-content class="d-flex align-items-center column-gap-2 p-3">
+                                <div
+                                    class="sbp-icon-wrap border-radius-circle sbp-icon-orange d-flex align-items-center justify-content-center"
+                                >
+                                    <i class="icon-vendor font-size-20"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="font-size-16 font-weight-semibold mb-2">{{ salesByPersonData?.oldSales?.label }}</p>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span>{{ commonLocaleData?.app_client }}</span>
+                                        <a
+                                            class="cursor-pointer font-weight-medium"
+                                            href="javascript:void(0)"
+                                            (click)="
+                                                showClientList(
+                                                    salesByPersonData?.oldSales,
+                                                    SbpDataType.Old,
+                                                    SbpSubType.Client,
+                                                    salesByPersonData?.oldSales?.month,
+                                                    NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                                )
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="salesByPersonData?.oldSales?.clients"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </a>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span>{{ commonLocaleData?.app_amount }}</span>
+                                        <span class="font-weight-medium">
+                                            <amount-field
+                                                [amount]="salesByPersonData?.oldSales?.amount"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>{{ localeData?.no_invoices }}</span>
+                                        <a
+                                            class="cursor-pointer font-weight-medium"
+                                            href="javascript:void(0)"
+                                            (click)="
+                                                showClientList(
+                                                    salesByPersonData?.oldSales,
+                                                    SbpDataType.Old,
+                                                    SbpSubType.Invoice,
+                                                    salesByPersonData?.oldSales?.month,
+                                                    NewVsOldInvoicesQueryRequest.salesPersonUniqueNames
+                                                )
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="salesByPersonData?.oldSales?.invoices"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </a>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    }
+                </div>
+
+                <!-- ── Charts Row ─────────────────────────────────────────────── -->
+                <div class="charts-grid d-flex mb-3 column-gap-2">
+                    <mat-card class="nvo-surface w-50">
+                        <mat-card-header class="d-flex justify-content-between align-items-center px-3 pt-2 pb-2 border-bottom mb-0">
+                            <mat-card-title class="font-size-16 font-weight-semibold mb-0">
+                                {{ localeData?.top_5_salespersons }}
+                            </mat-card-title>
+                            <button
+                                *ngIf="showTopSalesPersonExpandButton()"
+                                class="btn-stroked-icon"
+                                matButton="outlined"
+                                [matTooltip]="localeData?.tooltip_view_all_salespersons_chart"
+                                aria-label="Expand chart"
+                                [matTooltipPosition]="'above'"
+                                (click)="openTopSalesPersonDialog()"
+                            >
+                                <span class="icon-expandIcon"></span>
+                            </button>
+                        </mat-card-header>
+                        <mat-card-content class="chart-height nvo-canvas-fill">
+                            <canvas #sbpTopCanvas></canvas>
+                        </mat-card-content>
+                    </mat-card>
+                    <mat-card class="nvo-surface w-50">
+                        <mat-card-header class="d-flex justify-content-between align-items-center px-3 pt-2 pb-2 border-bottom mb-0">
+                            <mat-card-title class="font-size-16 font-weight-semibold mb-0">
+                                {{ localeData?.new_vs_old_sales }}
+                            </mat-card-title>
+                            <button
+                                *ngIf="showNvoSalesExpandButton()"
+                                class="btn-stroked-icon"
+                                matButton="outlined"
+                                [matTooltip]="localeData?.tooltip_view_all_salespersons_new_vs_old_chart"
+                                aria-label="Expand chart"
+                                [matTooltipPosition]="'above'"
+                                (click)="openNvoSalesDialog()"
+                            >
+                                <span class="icon-expandIcon"></span>
+                            </button>
+                        </mat-card-header>
+                        <mat-card-content class="chart-height nvo-canvas-fill">
+                            <canvas #sbpNvoCanvas></canvas>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <ng-template #topSalesPersonDialogTemplate>
+                    <div class="border-radius-8 overflow-hidden">
+                        <div class="d-flex justify-content-between align-items-center px-3 pt-2 pb-2 border-bottom">
+                            <h3 class="font-size-16 font-weight-semibold mb-0">{{ localeData?.all_salespersons }}</h3>
+                            <button matIconButton aria-label="close" mat-dialog-close>
+                                <i class="icon-cross font-size-20"></i>
+                            </button>
+                        </div>
+                        <div class="top-salesperson-dialog-height nvo-canvas-fill px-3 pt-2 pb-3">
+                            <canvas #topSalesPersonDialogCanvas></canvas>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #nvoSalesDialogTemplate>
+                    <div class="border-radius-8 overflow-hidden">
+                        <div class="d-flex justify-content-between align-items-center px-3 pt-2 pb-2 border-bottom">
+                            <h3 class="font-size-16 font-weight-semibold mb-0">
+                                {{ localeData?.all_salespersons }} - {{ localeData?.new_vs_old_sales }}
+                            </h3>
+                            <button matIconButton aria-label="close" mat-dialog-close>
+                                <i class="icon-cross font-size-20"></i>
+                            </button>
+                        </div>
+                        <div class="top-salesperson-dialog-height nvo-canvas-fill px-3 pt-2 pb-3">
+                            <canvas #nvoSalesDialogCanvas></canvas>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <sales-by-person
+                    [data]="salesByPersonData"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (clientClick)="onSbpClientClick($event)"
+                    (invoiceClick)="onSbpInvoiceClick($event)"
+                    (expandClientClick)="onSbpExpandClientClick($event)"
+                    (expandInvoiceClick)="onSbpExpandInvoiceClick($event)"
+                ></sales-by-person>
+
+                @if (missingSalesPersonNames().length > 0) {
+                    <div
+                        class="missing-salesperson-notice nvo-surface mt-3 border-radius-4 d-flex align-items-center column-gap-1 flex-column px-2 py-5 row-gap-15"
+                    >
+                        <span>{{ localeData?.no_data_salespersons }}</span>
+                        <mat-chip-set>
+                            @for (name of missingSalesPersonNames(); track name) {
+                                <mat-chip>{{ name }}</mat-chip>
+                            }
+                        </mat-chip-set>
+                    </div>
+                }
+            } @else {
+                <no-data
+                    [primaryMessage]="localeData?.no_sales_data_salesperson"
+                    [primaryMessageClass]="'no-data'"
+                    [secondaryMessage]="' '"
+                ></no-data>
+            }
+        </ng-container>
     </div>
     <ng-container *ngIf="isLoading || monthOptions?.length === 0">
         <giddh-page-loader></giddh-page-loader>
     </ng-container>
-</ng-container>
+</div>

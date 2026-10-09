@@ -15,7 +15,9 @@ import { GeneralActions } from "../general/general.actions";
 import { GeneralService } from "../../services/general.service";
 import { LocaleService } from '../../services/locale.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SalesActions {
 
     public GetAccountDetails$: Observable<Action> = createEffect(() => this.action$

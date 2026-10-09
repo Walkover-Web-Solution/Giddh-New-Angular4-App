@@ -6,6 +6,7 @@ import { ViewSubscriptionComponent } from './view-subscription/view-subscription
 import { BuyPlanComponent } from './buy-plan/buy-plan.component';
 import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
+import { WalletComponent } from './wallet/wallet.component';
 
 @NgModule({
     imports: [
@@ -23,13 +24,16 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
                 path: 'subscription/view-subscription/:id', component: ViewSubscriptionComponent
             },
             {
+                path: 'subscription/wallet/:subscriptionId', component: WalletComponent
+            },
+            {
                 path: 'verify-ownership/:requestId', component: VerifyOwnershipDialogComponent
             },
             {
                 path: 'subscription/buy-plan', component: BuyPlanComponent
             },
             {
-                path: 'subscription/buy-plan/:id', component: BuyPlanComponent
+                path: 'subscription/:type/:id', component: BuyPlanComponent
             },
             {
                 path: 'subscription/call-back', component: CallBackPageComponent

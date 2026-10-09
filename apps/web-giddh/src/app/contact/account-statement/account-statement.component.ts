@@ -15,12 +15,14 @@ import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-req
 import { cloneDeep } from "../../lodash-optimized";
 import { TransactionType } from "../../models/api-models/Ledger";
 import { saveAs } from 'file-saver';
+import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
 
 @Component({
     selector: "account-statement",
     templateUrl: "account-statement.component.html",
     styleUrls: ["account-statement.component.scss"],
-    providers: [ContactComponentStore]
+    providers: [ContactComponentStore],
+    standalone: false
 })
 export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Angular Material menu trigger for datepicker */
@@ -37,6 +39,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     @Input() public to: string;
     /** Branch unique name (input from parent) */
     @Input() public branchUniqueName: string;
+    /** Active tab (input from parent) */
+    @Input() public contactActiveTab: string;
     /** Reference to the Material sort component */
     @ViewChild(MatSort) sort!: MatSort;
     /** Holds localized JSON data specific to this module */
@@ -107,6 +111,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         private contactComponentStore: ContactComponentStore,
         private generalService: GeneralService,
+        private giddhNumberFormatPipe: GiddhNumberFormatPipe
     ) {
         this.advanceSearchRequest = new AdvanceSearchRequest();
     }
@@ -125,13 +130,16 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.responseAccountList = response;
                 this.totalRecords = response.totalItems;
                 this.balanceDue = this.responseAccountList.accountSummary?.closingBalance?.amount >= 0
-                    ? (this.responseAccountList.accountSummary.closingBalance.type ===
-                        this.transactionType.Credit
-                        ? "-"
-                        : "") +
+                    ? (this.contactActiveTab === 'vendor' && this.responseAccountList.accountSummary.closingBalance.type === this.transactionType.Credit
+                        ? ''
+                        : this.contactActiveTab === 'vendor'
+                            ? '-'
+                            : this.contactActiveTab === 'customer' && this.responseAccountList.accountSummary.closingBalance.type === this.transactionType.Credit
+                                ? '-'
+                                : '') +
                     (this.responseAccountList.accountAddress?.currency?.symbol ?? "") +
-                    this.responseAccountList.accountSummary.closingBalance.amount
-                    : ""
+                    this.giddhNumberFormatPipe.transform(this.responseAccountList.accountSummary.closingBalance.amount)
+                    : "";
             }
         });
 

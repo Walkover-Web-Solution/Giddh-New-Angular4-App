@@ -12,7 +12,8 @@ const keyMaps = {
  */
 @Directive({
     selector: '[navigationWalker]',
-    exportAs: 'navigationWalker'
+    exportAs: 'navigationWalker',
+    standalone: false
 })
 export class NavigationWalkerDirective implements OnInit, OnDestroy {
 

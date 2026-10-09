@@ -15,10 +15,14 @@ import { SharedModule } from '../shared/shared.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
+import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
 
 @NgModule({
     declarations: [
@@ -48,7 +52,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatButtonModule,
         MatTooltipModule,
         FormFieldsModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        HamburgerMenuModule,
+        GiddhDatePipe,
+        GoToBranchComponent,
+        GenericAsideMenuAccountModule
     ],
 })
 export class ImportExcelModule {

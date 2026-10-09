@@ -27,7 +27,8 @@ import { ServiceConfig } from '../../services/service.config';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
-    styleUrls: ['./branch.component.scss']
+    styleUrls: ['./branch.component.scss'],
+    standalone:false
 })
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Change status modal instance */
@@ -197,7 +198,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = this.serviceConfig.IMG_PATH + 'warehouse-vector.svg';
     }
 
     /**
@@ -233,9 +234,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public openCreateCompanyDialog(): void {
         this.dialog.open(this.addCompanyModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                });
     }
 
     /**
@@ -458,7 +459,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         entity.isDefault = !entity.isDefault;
 
         if (entityType === 'address') {
-            branch.addresses.forEach(branchAddress => {
+            (Array.isArray(branch.addresses) ? branch.addresses : []).forEach(branchAddress => {
                 if (branchAddress?.uniqueName === entity?.uniqueName) {
                     branchAddress.isDefault = entity.isDefault;
                 } else {
@@ -466,7 +467,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             });
         } else if (entityType === 'warehouse') {
-            branch.warehouseResource.forEach(warehouse => {
+            (Array.isArray(branch.warehouseResource) ? branch.warehouseResource : []).forEach(warehouse => {
                 if (warehouse?.uniqueName === entity?.uniqueName) {
                     warehouse.isDefault = entity.isDefault;
                 } else {
@@ -556,9 +557,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         if (unarchivedBranches?.length > 1 || branch?.isArchived) {
             this.branchStatusToUpdate = branch;
             this.statusDialogRef = this.dialog.open(this.statusDialog, {
-                panelClass: 'modal-dialog',
-                width: '1000px'
-            });
+                        panelClass: 'modal-dialog',
+                        width: '1000px',
+                    });
         } else {
             this.toasterService.warningToast(this.localeData?.archive_notallowed);
         }
@@ -585,7 +586,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.statusDialogRef?.close();
         });
     }
-    
+
     /**
      * Opens the address info
      *

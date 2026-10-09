@@ -1,31 +1,32 @@
-<ng-container
+<div
     appTranslate
     [file]="'ledger/advance-search'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="setVoucherTypes($event)"
 >
-    <giddh-page-loader *ngIf="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading">
-    </giddh-page-loader>
+    <giddh-page-loader *ngIf="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading"></giddh-page-loader>
     <div class="advance-search" [hidden]="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ commonLocaleData?.app_advance_search }}</span>
             <div class="d-flex align-items-center column-gap-1">
-                <button 
-                    mat-raised-button
+                <button
+                    matButton="filled"
                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
-                    [matTooltipPosition]="'above'"       
+                    [matTooltipPosition]="'above'"
                     (click)="resetAdvanceSearchModal()"
                 >
-                    <i class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
-                </button>
-                <button mat-icon-button aria-label="close" (click)="onCancel()">
-                    <i class="icon-cross"></i>
+                    <i class="icon-refresh"></i>
+                    {{ commonLocaleData?.app_clear_filter }}
                 </button>
             </div>
         </div>
         <mat-dialog-content class="max-height-65vh">
-            <div class="modal-body theme-foreground-color p-0 clear-both ledger-advance-search-field" id="export-body" *ngIf="advanceSearchForm">
+            <div
+                class="modal-body theme-foreground-color p-0 clear-both ledger-advance-search-field"
+                id="export-body"
+                *ngIf="advanceSearchForm"
+            >
                 <form [formGroup]="advanceSearchForm">
                     <div class="clear-both">
                         <div class="row mb-2 ml-0 mr-0">
@@ -33,9 +34,9 @@
                                 <label>{{ commonLocaleData?.app_date_range }}</label>
                             </div>
                             <div class="col-sm-7">
-                                  <div class="custom-datepicker-wrapper w-100">
-                                    <div 
-                                        class="custom-datepicker w-100" 
+                                <div class="custom-datepicker-wrapper w-100">
+                                    <div
+                                        class="custom-datepicker w-100"
                                         [matMenuTriggerFor]="universalDatepicker"
                                         #universalDatepickerTrigger="matMenuTrigger"
                                         role="button"
@@ -61,7 +62,11 @@
                                             [showClearButton]="false"
                                             [showApplyButton]="false"
                                             [ranges]="datePickerOptions"
-                                            [locale]="{ applyLabel: commonLocaleData?.app_apply, cancelLabel: commonLocaleData?.app_cancel, customRangeLabel: commonLocaleData?.app_custom_range }"
+                                            [locale]="{
+                                                applyLabel: commonLocaleData?.app_apply,
+                                                cancelLabel: commonLocaleData?.app_cancel,
+                                                customRangeLabel: commonLocaleData?.app_custom_range,
+                                            }"
                                             [linkedCalendars]="false"
                                             [singleDatePicker]="false"
                                             [showCancel]="true"
@@ -95,15 +100,15 @@
                                         [label]="localeData?.merge_accounts"
                                         [placeholder]="commonLocaleData?.app_select_accounts"
                                         [options]="accounts$ | async"
+                                        [showAllOption]="true"
                                         (scrollEnd)="handleScrollEnd()"
                                         [enableDynamicSearch]="true"
                                         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                        (onClear)="onDDClear('accountUniqueNames')"
                                     ></select-multiple-fields>
                                 </div>
                             </div>
                         </div>
-    
+
                         <div class="row mr-0 ml-0">
                             <div class="col-sm-5">
                                 <label>{{ localeData?.merge_group }}</label>
@@ -123,16 +128,16 @@
                                         [label]="localeData?.merge_group"
                                         [placeholder]="localeData?.select_groups"
                                         [options]="groups$ | async"
+                                        [showAllOption]="true"
                                         (scrollEnd)="handleGroupScrollEnd()"
                                         [enableDynamicSearch]="true"
                                         (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-                                        (onClear)="onDDClear('groupUniqueNames')"
                                     ></select-multiple-fields>
                                 </div>
                             </div>
                         </div>
                     </div>
-    
+
                     <div class="clear-both mt-2 pt-2 border-top mb-2">
                         <div class="row mr-0 ml-0">
                             <div class="col-md-5">
@@ -150,16 +155,12 @@
                                                 id="includeParticulars"
                                                 [formControl]="advanceSearchForm?.controls['includeParticulars']"
                                             >
-                                                <span
-                                                    class="pull-left"
-                                                    *ngIf="advanceSearchForm.get('includeParticulars')?.value"
-                                                    >{{ commonLocaleData?.app_include }}</span
-                                                >
-                                                <span
-                                                    class="pull-right"
-                                                    *ngIf="!advanceSearchForm.get('includeParticulars')?.value"
-                                                    >{{ commonLocaleData?.app_exclude }}</span
-                                                >
+                                                <span class="pull-left" *ngIf="advanceSearchForm.get('includeParticulars')?.value">
+                                                    {{ commonLocaleData?.app_include }}
+                                                </span>
+                                                <span class="pull-right" *ngIf="!advanceSearchForm.get('includeParticulars')?.value">
+                                                    {{ commonLocaleData?.app_exclude }}
+                                                </span>
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
@@ -175,10 +176,10 @@
                                                 [label]="commonLocaleData?.app_particulars"
                                                 [placeholder]="commonLocaleData?.app_select_accounts"
                                                 [options]="accounts$ | async"
+                                                [showAllOption]="true"
                                                 (scrollEnd)="handleScrollEnd()"
                                                 [enableDynamicSearch]="true"
                                                 (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                                (onClear)="onDDClear('particulars')"
                                             ></select-multiple-fields>
                                         </div>
                                     </div>
@@ -203,16 +204,12 @@
                                                 id="includeVouchers"
                                                 [formControl]="advanceSearchForm?.controls['includeVouchers']"
                                             >
-                                                <span
-                                                    class="pull-left"
-                                                    *ngIf="advanceSearchForm.get('includeVouchers')?.value"
-                                                    >{{ commonLocaleData?.app_include }}</span
-                                                >
-                                                <span
-                                                    class="pull-right"
-                                                    *ngIf="!advanceSearchForm.get('includeVouchers')?.value"
-                                                    >{{ commonLocaleData?.app_exclude }}</span
-                                                >
+                                                <span class="pull-left" *ngIf="advanceSearchForm.get('includeVouchers')?.value">
+                                                    {{ commonLocaleData?.app_include }}
+                                                </span>
+                                                <span class="pull-right" *ngIf="!advanceSearchForm.get('includeVouchers')?.value">
+                                                    {{ commonLocaleData?.app_exclude }}
+                                                </span>
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
@@ -228,7 +225,6 @@
                                                 [label]="commonLocaleData?.app_voucher_type"
                                                 [placeholder]="commonLocaleData?.app_select_accounts"
                                                 [options]="voucherTypeList | async"
-                                                (onClear)="onDDClear('vouchers')"
                                             ></select-multiple-fields>
                                         </div>
                                     </div>
@@ -250,43 +246,26 @@
                                                 id="includeSalesPersons"
                                                 [formControl]="advanceSearchForm?.controls['includeSalesPersons']"
                                             >
-                                                <span
-                                                    class="pull-left"
-                                                    *ngIf="advanceSearchForm.get('includeSalesPersons')?.value"
-                                                    >{{ commonLocaleData?.app_include }}</span
-                                                >
-                                                <span
-                                                    class="pull-right"
-                                                    *ngIf="!advanceSearchForm.get('includeSalesPersons')?.value"
-                                                    >{{ commonLocaleData?.app_exclude }}</span
-                                                >
+                                                <span class="pull-left" *ngIf="advanceSearchForm.get('includeSalesPersons')?.value">
+                                                    {{ commonLocaleData?.app_include }}
+                                                </span>
+                                                <span class="pull-right" *ngIf="!advanceSearchForm.get('includeSalesPersons')?.value">
+                                                    {{ commonLocaleData?.app_exclude }}
+                                                </span>
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
                                     <div class="col-sm-9 col-8 col-12">
                                         <div class="mt-3">
-                                            <mat-form-field appearance="outline" class="initial-height">
-                                                <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
-                                                <mat-select
-                                                    panelClass="py-0"
-                                                    name="salesPerson"
-                                                    [multiple]="true"
-                                                    [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
-                                                >
-                                                    <mat-option class="mt-0">
-                                                        <ngx-mat-select-search
-                                                            [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                                            [formControl]="salesPersonDropdown"
-                                                        >
-                                                            <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                                        </ngx-mat-select-search>
-                                                    </mat-option>
-                                                    <mat-option *ngFor="let salesPerson of filteredSalesPersonList" [value]="salesPerson?.value">
-                                                        {{ salesPerson?.label }}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
+                                            <multi-select-dropdown
+                                                [name]="'salesPerson'"
+                                                [appearance]="'outline'"
+                                                [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
+                                                [label]="commonLocaleData?.app_sales_person"
+                                                [placeholder]="commonLocaleData?.app_sales_person_placeholder"
+                                                [options]="salesPersonList$ | async"
+                                                [showAllOption]="true"
+                                            ></multi-select-dropdown>
                                         </div>
                                     </div>
                                 </div>
@@ -308,8 +287,8 @@
                                                 [placeholder]="commonLocaleData?.app_select_range"
                                                 [formControl]="advanceSearchForm?.controls['amountOption']"
                                                 [options]="comparisonFilterDropDown$ | async"
-                                                (selectedOption)="onRangeSelect('amount', $event)">
-                                            </reactive-dropdown-field>
+                                                (selectedOption)="onRangeSelect('amount', $event)"
+                                            ></reactive-dropdown-field>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-6">
@@ -321,8 +300,7 @@
                                                 [customDecimalPlaces]="2"
                                                 [allowDecimalDigitsOnly]="true"
                                                 [label]="commonLocaleData?.app_amount"
-                                            >
-                                            </input-field>
+                                            ></input-field>
                                         </div>
                                     </div>
                                 </div>
@@ -338,17 +316,16 @@
                                 <div class="row">
                                     <div class="col-6 col-md-6">
                                         <div class="form-group">
-                                            <mat-slide-toggle color="primary" [formControl]="advanceSearchForm?.controls['cancelledEntries']">
-                                                <span
-                                                    class="pull-left"
-                                                    *ngIf="advanceSearchForm.get('cancelledEntries')?.value"
-                                                    >{{ commonLocaleData?.app_include }}</span
-                                                >
-                                                <span
-                                                    class="pull-right"
-                                                    *ngIf="!advanceSearchForm.get('cancelledEntries')?.value"
-                                                    >{{ commonLocaleData?.app_exclude }}</span
-                                                >
+                                            <mat-slide-toggle
+                                                color="primary"
+                                                [formControl]="advanceSearchForm?.controls['cancelledEntries']"
+                                            >
+                                                <span class="pull-left" *ngIf="advanceSearchForm.get('cancelledEntries')?.value">
+                                                    {{ commonLocaleData?.app_include }}
+                                                </span>
+                                                <span class="pull-right" *ngIf="!advanceSearchForm.get('cancelledEntries')?.value">
+                                                    {{ commonLocaleData?.app_exclude }}
+                                                </span>
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
@@ -356,15 +333,13 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <mat-accordion class="w-100 m-2" multi>
                         <mat-expansion-panel [expanded]="isExpanded" class="mt-2">
                             <mat-expansion-panel-header>
-                                <mat-panel-title (click)="toggleOtherDetails()">{{
-                                    commonLocaleData?.app_other_details
-                                }}</mat-panel-title>
+                                <mat-panel-title (click)="toggleOtherDetails()">{{ commonLocaleData?.app_other_details }}</mat-panel-title>
                             </mat-expansion-panel-header>
-    
+
                             <div class="clear-both mt-2">
                                 <div class="mb-2 clear-both">
                                     <div class="row mr-0 ml-0">
@@ -382,20 +357,16 @@
                                                         >
                                                             <span
                                                                 class="pull-left"
-                                                                *ngIf="
-                                                                    advanceSearchForm.get('inventory.includeInventory')
-                                                                        ?.value
-                                                                "
-                                                                >{{ commonLocaleData?.app_include }}</span
+                                                                *ngIf="advanceSearchForm.get('inventory.includeInventory')?.value"
                                                             >
+                                                                {{ commonLocaleData?.app_include }}
+                                                            </span>
                                                             <span
                                                                 class="pull-right"
-                                                                *ngIf="
-                                                                    !advanceSearchForm.get('inventory.includeInventory')
-                                                                        ?.value
-                                                                "
-                                                                >{{ commonLocaleData?.app_exclude }}</span
+                                                                *ngIf="!advanceSearchForm.get('inventory.includeInventory')?.value"
                                                             >
+                                                                {{ commonLocaleData?.app_exclude }}
+                                                            </span>
                                                         </mat-slide-toggle>
                                                     </div>
                                                 </div>
@@ -411,10 +382,10 @@
                                                             [label]="commonLocaleData?.app_inventory"
                                                             [placeholder]="commonLocaleData?.app_select_accounts"
                                                             [options]="stockListDropDown$ | async"
+                                                            [showAllOption]="true"
                                                             (scrollEnd)="handleStockScrollEnd()"
                                                             [enableDynamicSearch]="true"
                                                             (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
-                                                            (onClear)="onDDClear('inventory')"
                                                         ></select-multiple-fields>
                                                     </div>
                                                 </div>
@@ -428,8 +399,8 @@
                                                             [placeholder]="commonLocaleData?.app_select_range"
                                                             [formControl]="advanceSearchForm.get('inventory.inventoryQty')"
                                                             [options]="comparisonFilterDropDown$ | async"
-                                                            (selectedOption)="onRangeSelect('inventoryQty', $event)">
-                                                        </reactive-dropdown-field>
+                                                            (selectedOption)="onRangeSelect('inventoryQty', $event)"
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </div>
                                                 <div class="col-6 col-md-6">
@@ -441,8 +412,7 @@
                                                             [customDecimalPlaces]="4"
                                                             [allowDecimalDigitsOnly]="true"
                                                             [placeholder]="commonLocaleData?.app_quantity"
-                                                        >
-                                                        </input-field>
+                                                        ></input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -455,8 +425,8 @@
                                                             [placeholder]="commonLocaleData?.app_select_range"
                                                             [formControl]="advanceSearchForm.get('inventory.inventoryVal')"
                                                             [options]="comparisonFilterDropDown$ | async"
-                                                            (selectedOption)="onRangeSelect('inventoryVal', $event)">
-                                                        </reactive-dropdown-field>
+                                                            (selectedOption)="onRangeSelect('inventoryVal', $event)"
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </div>
                                                 <div class="col-6 col-md-6">
@@ -468,8 +438,7 @@
                                                             [customDecimalPlaces]="3"
                                                             [allowDecimalDigitsOnly]="true"
                                                             [placeholder]="commonLocaleData?.app_value"
-                                                        >
-                                                        </input-field>
+                                                        ></input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -490,8 +459,7 @@
                                                         [name]="'chequeNumber'"
                                                         [formControl]="advanceSearchForm?.controls['chequeNumber']"
                                                         [placeholder]="commonLocaleData?.app_cheque_number"
-                                                    >
-                                                    </input-field>
+                                                    ></input-field>
                                                 </div>
                                             </div>
                                             <div class="col-6 col-md-6 clearance-date">
@@ -521,8 +489,7 @@
                                                 [name]="'description'"
                                                 [formControl]="advanceSearchForm?.controls['description']"
                                                 [placeholder]="commonLocaleData?.app_description"
-                                            >
-                                            </input-field>
+                                            ></input-field>
                                         </div>
                                     </div>
                                 </div>
@@ -533,11 +500,14 @@
             </div>
         </mat-dialog-content>
         <mat-dialog-actions>
-            <div class="text-right my-2 w-100">
-                <button mat-raised-button color="primary" type="button" (click)="onSearch()">
+            <div class="my-2 w-100 d-flex justify-content-end column-gap-1">
+                <button matButton="filled" type="button" (click)="onSearch()">
                     {{ commonLocaleData?.app_search }}
+                </button>
+                <button matButton="outlined" type="button" (click)="onCancel()">
+                    {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>
         </mat-dialog-actions>
     </div>
-</ng-container>
+</div>

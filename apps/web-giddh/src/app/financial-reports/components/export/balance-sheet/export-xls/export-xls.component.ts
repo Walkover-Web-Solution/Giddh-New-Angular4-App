@@ -5,8 +5,9 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
 
 @Component({
-    selector: 'balance-sheet-export-xls',
-    templateUrl: './export-xls.component.html'
+selector: 'balance-sheet-export-xls',
+    templateUrl: './export-xls.component.html',
+    standalone: false
 })
 export class BalanceSheetExportXlsComponent implements OnInit {
     @Input() public fy: number;
@@ -24,7 +25,7 @@ export class BalanceSheetExportXlsComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/xls-icon.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/xls-icon.svg';
+        this.imgPath = this.serviceConfig.IMG_PATH + 'xls-icon.svg';
     }
 
     public downloadBsXls(value: boolean): void {

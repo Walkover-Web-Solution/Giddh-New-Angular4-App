@@ -1,0 +1,98 @@
+// Single invoice detail styling
+
+:host ::ng-deep .single-invoice-detail {
+    &.mat-mdc-list-item.mdc-list-item--with-one-line {
+        min-height: var(--mat-list-list-item-one-line-container-height, 48px) !important;
+        height: auto;
+    }
+}
+
+// Invoice preview wrapper styling
+:host ::ng-deep .invoice-preview-wrapper {
+    .preview-list {
+        overflow-y: auto;
+        .list-viewport {
+            height: calc(100vh - 92px);
+        }
+
+        .single-invoice-detail {
+            &:hover,
+            &.active {
+                background-color: var(--theme-primary-light);
+            }
+        }
+    }
+
+    .preview-content {
+        overflow-y: auto;
+    }
+}
+
+// Contact not found message
+.contact-no-data-message {
+    margin-top: 150px;
+    font-size: var(--font-size-32);
+    color: var(--color-black);
+    height: 200px;
+}
+
+.details {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: stretch;
+    min-height: 100%;
+
+    .details-info {
+        border-right: 1px solid var(--border-color);
+        width: 34%;
+        vertical-align: top;
+        padding: 10px 20px 70px;
+        word-wrap: break-word;
+
+        .group {
+            margin-bottom: 10px;
+            padding: 15px 0 0;
+
+            label {
+                padding-right: 0;
+            }
+        }
+
+        .toggle-header {
+            padding: 10px 0 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+    }
+
+    .prim-info {
+        vertical-align: top;
+
+        .recurringinvoice-arap-details {
+            padding: 10px 0;
+
+            li {
+                border-right: 1px solid var(--border-color);
+            }
+        }
+    }
+
+    .entity-details {
+        width: 66%;
+    }
+}
+
+.noscroll-x {
+    overflow-x: hidden;
+}
+.px-4 {
+    padding-right: 15px !important;
+    padding-left: 15px !important;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.fw-light {
+    font-weight: 300 !important;
+}

@@ -3,10 +3,11 @@ import { TRIAL_BALANCE_VIEWPORT_LIMIT } from 'apps/web-giddh/src/app/financial-r
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 
 @Component({
-    selector: '[balance-sheet-report-grid-row]',
+selector: '[balance-sheet-report-grid-row]',
     templateUrl: './balance-sheet-report-grid-row.component.html',
     styleUrls: [`./balance-sheet-report-grid-row.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class BalanceSheetReportGridRowComponent implements OnChanges {
     /** Holds the details of the group */

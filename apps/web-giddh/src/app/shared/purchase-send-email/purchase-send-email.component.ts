@@ -13,7 +13,8 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 @Component({
     selector: 'purchase-send-email-modal',
     templateUrl: './purchase-send-email.component.html',
-    styleUrls: ['./purchase-send-email.component.scss']
+    styleUrls: ['./purchase-send-email.component.scss'],
+    standalone: false
 })
 
 export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {

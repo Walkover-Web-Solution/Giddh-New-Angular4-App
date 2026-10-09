@@ -3,7 +3,8 @@ import { ClosingBalance } from '../../../../models/api-models/Search';
 
 @Pipe({
     // tslint:disable-next-line:pipe-naming
-    name: 'recType'
+    name: 'recType',
+    standalone: false
 })
 
 export class RecTypePipe implements PipeTransform {

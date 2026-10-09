@@ -6,8 +6,11 @@ import { GiddhErrorHandler } from '../services/catchManager/catchmanger';
 import { GeneralService } from '../services/general.service';
 import { ACCOUNTING_API } from './project-wise-accounting.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
+import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ProjectAccountingService {
 
     constructor(

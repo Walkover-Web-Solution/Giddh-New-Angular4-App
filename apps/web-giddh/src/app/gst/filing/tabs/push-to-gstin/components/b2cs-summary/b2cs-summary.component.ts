@@ -8,6 +8,7 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
     selector: 'b2cs-summary',
     templateUrl: './b2cs-summary.component.html',
     styleUrls: ['./b2cs-summary.component.css'],
+    standalone: false
 })
 export class B2csSummaryComponent implements OnInit, OnDestroy {
     @Input() public brcsSummary: B2CSSummary[] = [];
@@ -22,7 +23,7 @@ export class B2csSummaryComponent implements OnInit, OnDestroy {
     constructor(@Inject(ServiceConfig) private serviceConfig) { }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
     }
 
     public ngOnDestroy() {

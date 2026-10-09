@@ -22,7 +22,8 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 @Component({
     selector: 'app-e-way-bill-create',
     templateUrl: './eWayBill.create.component.html',
-    styleUrls: [`./eWayBill.create.component.scss`]
+    styleUrls: [`./eWayBill.create.component.scss`],
+    standalone:false
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
@@ -33,16 +34,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
     /** Holds generateTransporterForm reference */
     @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
-    /** Holds invoiceRemoveConfirmationTemplate reference */
-    @ViewChild('invoiceRemoveConfirmationTemplate', { static: true }) public invoiceRemoveConfirmationTemplate: TemplateRef<any>;
-    /** Holds subgrp reference */
-    @ViewChild('subgrp', { static: true }) public subgrp: any;
-    /** Holds doctypes reference */
-    @ViewChild('doctypes', { static: true }) public doctype: any;
-    /** Holds trans reference */
-    @ViewChild('trans', { static: true }) public transport: any;
-    /** Holds transSubType reference */
-    @ViewChild('transSubType', { static: true }) public transSubType: any;
     /** Transporter template reference */
     @ViewChild('transporterTemplate', { static: true }) public transporterTemplate: TemplateRef<any>;
     /** Transporter dialog reference */
@@ -182,7 +173,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
         });
-        
+
         this.transporterList$.subscribe(transporters => {
             if (transporters) {
                 this.transporterDataSource.data = transporters;
@@ -246,8 +237,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
             this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
             this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
-            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;     
-            
+            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
+
             if (generateBillform.valid) {
                 this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
             }
@@ -258,8 +249,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public onCancelGenerateBill() {
-        this.transport.clear();
-        this.transSubType.clear();
         this.generateEwayBillform.toPinCode = this.voucherDetails?.account?.billingDetails?.pincode || '';
         this.generateEwayBillform.transDistance = null;
         this.generateEwayBillform.transMode = null;
@@ -288,12 +277,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     /**
      * Opens the transporter dialog
-     * 
+     *
      * @memberof EWayBillCreateComponent
      */
     public openTransporterDialog(): void {
         this.transporterDialogRef = this.dialog.open(this.transporterTemplate, ASIDE_PANE_CONFIG);
-        this.generateNewTransporterForm.reset();
+        if (this.generateNewTransporterForm) {
+            this.generateNewTransporterForm.reset();
+        }
         this.transportEditMode = false;
     }
 
@@ -369,7 +360,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     /**
      * Handles pagination events and updates API parameters
-     * 
+     *
      * @param {PageEvent} event - Contains pagination details
      * @memberof EWayBillCreateComponent
      */
@@ -387,7 +378,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     /**
      * Handles sorting events and updates API parameters
-     * 
+     *
      * @param {any} event - Contains sorting details
      * @memberof EWayBillCreateComponent
      */
@@ -405,7 +396,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
     public subTypeElementSelected(event) {
-        this.doctype.clear();
         this.TransporterDocType = this.ModifiedTransporterDocType;
         if (event) {
             if (event.label === this.localeData?.subsupply_types_list?.supply || event.label === this.localeData?.subsupply_types_list?.export) {

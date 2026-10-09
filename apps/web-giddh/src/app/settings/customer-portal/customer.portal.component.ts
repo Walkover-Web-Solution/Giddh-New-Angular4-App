@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { GeneralService } from '../../services/general.service';
 import { PayPalClass, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
 import { cloneDeep, find } from '../../lodash-optimized';
@@ -18,12 +18,14 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerPortalComponentStore } from './utility/customer-portal.store';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'customer-portal',
     templateUrl: './customer.portal.component.html',
     styleUrls: ['./customer.portal.component.scss'],
-    providers: [CustomerPortalComponentStore]
+    providers: [CustomerPortalComponentStore],
+    standalone: false
 })
 export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /* This will hold local JSON data */
@@ -85,7 +87,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** This will hold portal url */
-    public portalUrl: string = PORTAL_URL;
+    public portalUrl: string = '';
     /** Stores the profile data of an organization (company or profile) */
     public profileData: OrganizationProfile = {
         name: '',
@@ -179,8 +181,10 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         private clipboardService: ClipboardService,
         public dialog: MatDialog,
         private settingsProfileActions: SettingsProfileActions,
-        private componentStore: CustomerPortalComponentStore
+        private componentStore: CustomerPortalComponentStore,
+        @Inject(ServiceConfig) private serviceConfig,
     ) {
+        this.portalUrl = this.serviceConfig.PORTAL_URL;
         this.initProfileForm();
         this.initPayuForm();
         // For GET
@@ -599,13 +603,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
 
     public deleteRazorPayDetails() {
         let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.collection?.delete_credentials_message,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.collection?.delete_credentials_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         confirmModalDialogRef.afterClosed().subscribe(response => {
@@ -675,13 +679,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      */
     public deletePaypalDetails(): void {
         let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.collection?.delete_credentials_message,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.collection?.delete_credentials_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         confirmModalDialogRef.afterClosed().subscribe(response => {
@@ -951,13 +955,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      */
     public deletePayuDetails(): void {
         let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.collection?.delete_credentials_message,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.collection?.delete_credentials_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         confirmModalDialogRef.afterClosed().subscribe(response => {

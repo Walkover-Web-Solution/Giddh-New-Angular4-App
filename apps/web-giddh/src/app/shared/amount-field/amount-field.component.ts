@@ -5,7 +5,8 @@ import { DecimalPipe } from '@angular/common';
 @Component({
     selector: 'amount-field',
     templateUrl: './amount-field.component.html',
-    styleUrls: ['./amount-field.component.scss']
+    styleUrls: ['./amount-field.component.scss'],
+    standalone: false
 })
 
 export class AmountFieldComponent implements OnInit, OnChanges {
@@ -65,7 +66,7 @@ export class AmountFieldComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Format number with comma separated 
+     * Format number with comma separated
      *
      * @param {number} value
      * @returns {(string | null)}

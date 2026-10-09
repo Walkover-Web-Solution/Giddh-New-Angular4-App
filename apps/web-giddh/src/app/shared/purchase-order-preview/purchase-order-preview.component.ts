@@ -8,7 +8,8 @@ import { GeneralService } from '../../services/general.service';
 @Component({
     selector: 'purchase-order-preview-modal',
     templateUrl: './purchase-order-preview.component.html',
-    styleUrls: ['./purchase-order-preview.component.scss']
+    styleUrls: ['./purchase-order-preview.component.scss'],
+    standalone:false
 })
 
 export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {

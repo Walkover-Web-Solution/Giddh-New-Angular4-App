@@ -4,17 +4,19 @@ import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { UpdateLedgerTaxData } from '../update-ledger-tax-control/update-ledger-tax-control.component';
-import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
+import { CommonDiscountComponent } from '../../../shared/common-discount/common-discount.component';
+import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { HIGH_RATE_FIELD_PRECISION, IOption, RATE_FIELD_PRECISION } from '../../../app.constant';
+import { HIGH_RATE_FIELD_PRECISION, IOption, RATE_FIELD_PRECISION, TCS_TDS_TAXES_TYPES } from '../../../app.constant';
 import { take } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { ITaxControlData } from '../../../models/interfaces/tax.interface';
+import { ChangeDetectorRef } from '@angular/core';
 
 export class UpdateLedgerVm {
     public otherAccountList: IFlattenAccountsResultItem[] = [];
@@ -42,9 +44,10 @@ export class UpdateLedgerVm {
     public appliedTaxPerTotal: number = 0;
     public isInvoiceGeneratedAlready: boolean = false;
     public showNewEntryPanel: boolean = true;
-    public selectedTaxes: UpdateLedgerTaxData[] = [];
+    public selectedTaxes: any[] = [];
     public taxRenderData: ITaxControlData[] = [];
-    public discountComponent: UpdateLedgerDiscountComponent;
+    public discountComponent: CommonDiscountComponent;
+    public taxComponent: CommonTaxComponent;
     public ledgerUnderStandingObj = {
         accountType: '',
         text: {
@@ -97,7 +100,8 @@ export class UpdateLedgerVm {
 
     constructor(
         private generalService: GeneralService,
-        private ledgerUtilityService: LedgerUtilityService
+        private ledgerUtilityService: LedgerUtilityService,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
@@ -118,10 +122,31 @@ export class UpdateLedgerVm {
         } as ILedgerTransactionItem;
     }
 
-    public handleDiscountEntry(amount: number) {
+    public setTotalDiscount(amount: number) {
         this.discountTrxTotal = amount;
         this.convertedDiscountTrxTotal = this.calculateConversionRate(amount);
+    }
 
+    /**
+     * Recomputes tax rows, discount rows and totals after a tax/discount change.
+     * Wrapped in setTimeout so it runs after the child components flush their
+     * latest selection state, then triggers change detection.
+     */
+    public handleTaxAndDiscountEntry(): void {
+        setTimeout(() => {
+            this.rebuildTaxTransactions(false);
+            this.handleDiscountEntry(false);
+            this.getEntryTotal();
+            this.generateCompoundTotal();
+            this.changeDetectorRef.detectChanges();
+        }, 200);
+    }
+
+    /**
+     * Rebuilds discount transaction rows from the active discounts.
+     * @param callTotal When true, recomputes entry/compound totals after rebuilding.
+     */
+    public handleDiscountEntry(callTotal = true) {
         if (this.selectedLedger?.transactions) {
             this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
             let incomeExpenseEntryIndex = this.selectedLedger.transactions.findIndex((trx: ILedgerTransactionItem) => {
@@ -141,12 +166,12 @@ export class UpdateLedgerVm {
                 totalAmount = 0;
             }
 
-            this.discountArray?.filter(f => f.isActive && f.amount > 0)?.forEach((dx, index) => {
+            this.discountComponent?.getActiveDiscounts()?.filter(f => f.isActive && f.discountValue > 0)?.forEach((dx, index) => {
                 let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
 
                 trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';
                 trx.particular.name = dx.name ? dx.name : 'discount';
-                trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * totalAmount) / 100), this.giddhBalanceDecimalPlaces);
+                trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.discountValue : giddhRoundOff(((dx.discountValue * totalAmount) / 100), this.giddhBalanceDecimalPlaces);
                 trx.convertedAmount = this.calculateConversionRate(trx.amount);
                 trx.isStock = false;
                 trx.isTax = false;
@@ -154,11 +179,11 @@ export class UpdateLedgerVm {
 
                 this.selectedLedger.transactions.splice(index, 0, trx);
             });
-
-            this.getEntryTotal();
-            this.generateCompoundTotal();
+            if (callTotal) {
+                this.getEntryTotal();
+                this.generateCompoundTotal();
+            }
         }
-        return;
     }
 
     public getAccountCategory(account: any, accountName: string): string {
@@ -231,17 +256,30 @@ export class UpdateLedgerVm {
 
     public getEntryTotal() {
         this.entryTotal.drTotal = giddhRoundOff(sumBy(this.selectedLedger?.transactions, (tr) => {
-            if (tr.type === 'DEBIT') {
+            if (tr.type === 'DEBIT' && tr.particular?.uniqueName !== 'roundoff') {
                 return Number(tr.amount) || 0;
             }
             return 0;
         }), this.giddhBalanceDecimalPlaces);
         this.entryTotal.crTotal = giddhRoundOff(sumBy(this.selectedLedger?.transactions, (tr) => {
-            if (tr.type === 'CREDIT') {
+            if (tr.type === 'CREDIT' && tr.particular?.uniqueName !== 'roundoff') {
                 return Number(tr.amount) || 0;
             }
             return 0;
         }), this.giddhBalanceDecimalPlaces);
+
+        this.selectedLedger?.transactions?.forEach((entry) => {
+            if (entry.particular.uniqueName === 'roundoff') {
+                entry.amount = giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
+                entry.convertedAmount = this.calculateConversionRate(entry.amount);
+            }
+        });
+
+        if (this.entryTotal.drTotal > this.entryTotal.crTotal) {
+            this.entryTotal.drTotal += giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
+        } else {
+            this.entryTotal.crTotal += giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
+        }
 
         this.convertedEntryTotal = {
             drTotal: this.calculateConversionRate(this.entryTotal.drTotal),
@@ -264,10 +302,6 @@ export class UpdateLedgerVm {
             this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, this.ratePrecision);
         }
 
-        if (this.discountComponent) {
-            this.discountComponent.ledgerAmount = this.totalAmount;
-            this.discountComponent.change();
-        }
 
         this.getEntryTotal();
         this.generateGrandTotal();
@@ -373,6 +407,11 @@ export class UpdateLedgerVm {
         this.selectedLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
         this.selectedLedger.otherTaxesSum = giddhRoundOff((this.selectedLedger.tdsTcsTaxesSum), this.giddhBalanceDecimalPlaces);
 
+        if (this.shouldShowTaxDiscountPanel()) {
+            // Refresh the per-row amount of the other-tax (TDS / TCS) transaction
+            this.rebuildOtherTaxTransactions();
+        }
+
         if (this.isPaymentReceipt && this.initialLoad) {
             this.initialLoad = false;
             this.generatePanelAmount();
@@ -382,7 +421,7 @@ export class UpdateLedgerVm {
 
     // FIXME: fix total calculation
     public generateGrandTotal() {
-        let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
+        let taxTotal: number = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
         let total = this.totalAmount - this.discountTrxTotal;
         this.appliedTaxPerTotal = taxTotal;
         this.totalForTax = total;
@@ -446,11 +485,6 @@ export class UpdateLedgerVm {
         this.getEntryTotal();
         this.generatePanelAmount();
 
-        if (this.discountComponent) {
-            this.discountComponent.ledgerAmount = this.totalAmount;
-            this.discountComponent.change();
-        }
-
         this.generateGrandTotal();
         this.generateCompoundTotal();
     }
@@ -466,11 +500,6 @@ export class UpdateLedgerVm {
 
         this.getEntryTotal();
         this.generatePanelAmount();
-
-        if (this.discountComponent) {
-            this.discountComponent.ledgerAmount = this.totalAmount;
-            this.discountComponent.change();
-        }
 
         this.generateGrandTotal();
         this.generateCompoundTotal();
@@ -515,11 +544,6 @@ export class UpdateLedgerVm {
 
         this.getEntryTotal();
 
-        if (this.discountComponent) {
-            this.discountComponent.ledgerAmount = this.totalAmount;
-            this.discountComponent.change();
-        }
-
         this.generateGrandTotal();
         this.generateCompoundTotal();
     }
@@ -527,22 +551,12 @@ export class UpdateLedgerVm {
     public inventoryTotalChanged() {
         let fixDiscount = 0;
         let percentageDiscount = 0;
-
         if (this.discountComponent) {
-            percentageDiscount = this.discountComponent.discountAccountsDetails?.filter(f => f.isActive)
-                ?.filter(s => s.discountType === 'PERCENTAGE')
-                .reduce((pv, cv) => {
-                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-                }, 0) || 0;
-
-            fixDiscount = this.discountComponent.discountAccountsDetails?.filter(f => f.isActive)
-                ?.filter(s => s.discountType === 'FIX_AMOUNT')
-                .reduce((pv, cv) => {
-                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-                }, 0) || 0;
+            percentageDiscount = this.discountComponent.getTotalPercentageDiscount();
+            fixDiscount = this.discountComponent.getTotalFixedDiscount();
         }
 
-        let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
+        let taxTotal: number = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
         const particularAccount = this.getParticularAccount();
         const ledgerAccount = this.getLedgerAccount(particularAccount);
         if (this.isAdvanceReceipt || this.isRcmEntry || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
@@ -564,10 +578,6 @@ export class UpdateLedgerVm {
             this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, this.ratePrecision);
             this.stockTrxEntry.isUpdated = true;
 
-            if (this.discountComponent) {
-                this.discountComponent.ledgerAmount = this.totalAmount;
-                this.discountComponent.change();
-            }
         } else {
             // find account that's from category income || expenses || fixed assets
             let trx: ILedgerTransactionItem = find(this.selectedLedger?.transactions, (t) => {
@@ -580,10 +590,6 @@ export class UpdateLedgerVm {
                 trx.isUpdated = true;
             }
 
-            if (this.discountComponent) {
-                this.discountComponent.ledgerAmount = this.totalAmount;
-                this.discountComponent.change();
-            }
         }
 
         this.getEntryTotal();
@@ -605,8 +611,240 @@ export class UpdateLedgerVm {
 
     public taxTrxUpdated(taxes: UpdateLedgerTaxData[]) {
         this.selectedTaxes = taxes;
-        this.generateGrandTotal();
+        this.getEntryTotal();
         this.generateCompoundTotal();
+    }
+
+    /**
+     * True when the amount / discount / tax panel is shown
+     * (same condition as the update-ledger template).
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof UpdateLedgerVm
+     */
+    private shouldShowTaxDiscountPanel(): boolean {
+        return (this.showNewEntryPanel || this.isAdvanceReceipt) && this.selectedLedger?.voucher?.shortCode !== 'jr';
+    }
+
+    private rebuildOtherTaxTransactions(): void {
+        if (!this.shouldShowTaxDiscountPanel() || !this.selectedLedger?.transactions?.length) {
+            return;
+        }
+
+        const appliedOtherTax = this.selectedLedger.otherTaxModal?.appliedOtherTax;
+        const isApplicable = !!this.selectedLedger.isOtherTaxesApplicable && !!appliedOtherTax?.uniqueName;
+
+        // Resolve the applied other-tax's taxType from the company taxes list
+        // (e.g. tdsrc / tdspay / tcsrc / tcspay) so we can match transaction
+        // rows by their particular.parentGroups[*].uniqueName.
+        let appliedTax: any;
+        if (isApplicable) {
+            let companyTaxes: TaxResponse[] = [];
+            this.companyTaxesList$?.pipe(take(1)).subscribe(taxes => companyTaxes = taxes ?? []);
+            const tax = companyTaxes.find(t => t?.uniqueName === appliedOtherTax.uniqueName);
+            appliedTax = tax;
+        }
+
+        const otherTaxAmount = isApplicable
+            ? giddhRoundOff(Number(this.selectedLedger.tdsTcsTaxesSum) || 0, this.giddhBalanceDecimalPlaces)
+            : 0;
+        // Update existing TCS/TDS row(s) if present; track whether at least one was found.
+        let hasOtherTaxRow = false;
+        this.selectedLedger.transactions.forEach((trx: ILedgerTransactionItem) => {
+            if (trx?.isDiscount || !trx?.isTax || !TCS_TDS_TAXES_TYPES.includes(trx.particular?.taxType || '')) {
+                return;
+            }
+            hasOtherTaxRow = true;
+            trx.amount = otherTaxAmount;
+            trx.convertedAmount = this.calculateConversionRate(otherTaxAmount);
+        });
+
+        // No existing row but a TCS/TDS tax is applied: push a new tax row.
+        if (!hasOtherTaxRow && isApplicable && appliedTax) {
+            // New row side: existing tax row's side, else first non-tax/non-discount row's, else DEBIT.
+            const newRowType = (this.selectedLedger.transactions.find(trx => trx?.isTax && !trx?.isDiscount)
+                || this.selectedLedger.transactions.find(trx => !trx?.isTax && !trx?.isDiscount))?.type || 'DEBIT';
+
+            const trx: ILedgerTransactionItem = this.blankTransactionItem(newRowType);
+            trx.particular.uniqueName = appliedTax?.accounts?.[0]?.uniqueName || '';
+            trx.particular.name = appliedTax?.accounts?.[0]?.name || '';
+            (trx.particular as any).taxType = appliedTax?.taxType;
+            trx.amount = otherTaxAmount;
+            trx.convertedAmount = this.calculateConversionRate(otherTaxAmount);
+            trx.isStock = false;
+            trx.isTax = true;
+            trx.isDiscount = false;
+
+            // Insert position: after last existing tax row; else after first non-tax/non-discount row; else end.
+            let insertIndex = this.selectedLedger.transactions.length;
+            for (let i = this.selectedLedger.transactions.length - 1; i >= 0; i--) {
+                if (this.selectedLedger.transactions[i]?.isTax) {
+                    insertIndex = i + 1;
+                    break;
+                } else if (!this.selectedLedger.transactions[i].particular.uniqueName) {
+                    insertIndex = i;
+                    break;
+                }
+            }
+            this.selectedLedger.transactions.splice(insertIndex, 0, trx);
+        }
+
+        this.getEntryTotal();
+        this.generateCompoundTotal();
+    }
+
+    /**
+     * Rebuilds tax transaction rows for the currently selected taxes:
+     * updates amounts on matching rows (split equally if a taxType repeats),
+     * removes rows for deselected taxes, and inserts rows for newly selected ones.
+     * @param callTotal When true, recomputes entry/compound totals after rebuilding.
+     */
+    public rebuildTaxTransactions(callTotal = true): void {
+        // Source of truth: CommonTaxComponent; fall back to this.selectedTaxes before view init.
+        const selectedTaxes: any[] = this.taxComponent?.selectedTaxes?.() || this.selectedTaxes;
+
+        if (!this.shouldShowTaxDiscountPanel() || !this.selectedLedger?.transactions?.length) {
+            return;
+        }
+
+        // Lookup: taxType -> selected tax data (matches trx.particular.taxType).
+        const selectedTaxByTaxType = new Map<string, any>();
+        const selectedTaxByUniqueName = new Map<string, any>();
+        selectedTaxes.forEach((tax, index) => {
+            if (tax?.uniqueName && (tax.taxType || tax.type)) {
+                selectedTaxByTaxType.set(tax.taxType || tax.type, tax);
+            } else {
+                tax.accounts?.forEach((account: any) => {
+                    selectedTaxByUniqueName.set(account.uniqueName, {tax: tax, index: index});
+                });
+            }
+        });
+
+        // Distribute the total tax proportionally across rows by rate share.
+        const taxTrxTotal = Number(this.taxTrxTotal) || 0;
+        const sumOfRates = selectedTaxes.reduce((sum, tax) => sum + (Number(tax.amount) || 0), 0);
+
+        // Per-taxType row count, so duplicate rows (e.g. two SGST) split the amount equally.
+        const taxTypeRowCount = new Map<string, number>();
+        const taxUniqueNameRowCount = new Map<string, number>();
+        this.selectedLedger.transactions.forEach((trx: ILedgerTransactionItem) => {
+            if (trx?.isTax && !trx?.isDiscount) {
+                if (selectedTaxByTaxType.has(trx.particular?.taxType)) {
+                    const key = trx.particular.taxType;
+                    taxTypeRowCount.set(key, (taxTypeRowCount.get(key) || 0) + 1);
+                } else if (selectedTaxByUniqueName.has(trx.particular?.uniqueName)) {
+                    const key = selectedTaxByUniqueName.get(trx.particular?.uniqueName)?.index;
+                    taxUniqueNameRowCount.set(key, (taxUniqueNameRowCount.get(key) || 0) + 1);
+                }
+            }
+        });
+
+        // Update amounts on existing tax rows (Dr and Cr) whose taxType is still selected.
+        this.selectedLedger.transactions.forEach((trx: ILedgerTransactionItem) => {
+            if (trx?.isDiscount || !trx?.isTax) {
+                return;
+            }
+            const matchedTax = selectedTaxByTaxType.has(trx.particular.taxType) || selectedTaxByUniqueName.has(trx.particular.uniqueName);
+            if (!matchedTax) {
+                return;
+            }
+
+            const ratePercentage = Number(selectedTaxByUniqueName.get(trx.particular.uniqueName)?.tax?.amount) || Number(selectedTaxByTaxType.get(trx.particular.taxType)?.amount) || 0;
+            const rowCount = taxUniqueNameRowCount.get(selectedTaxByUniqueName.get(trx.particular.uniqueName)?.index) || taxTypeRowCount.get(trx.particular.taxType) || 1;
+            const amount = sumOfRates > 0
+                ? giddhRoundOff((taxTrxTotal * ratePercentage) / (sumOfRates * rowCount), this.giddhBalanceDecimalPlaces)
+                : 0;
+            trx.amount = amount;
+            trx.convertedAmount = this.calculateConversionRate(amount);
+        });
+
+        this.selectedLedger.transactions = this.selectedLedger.transactions.filter(trx => !trx.isTax || TCS_TDS_TAXES_TYPES.includes(trx.particular?.taxType || '') || selectedTaxByTaxType.has(trx.particular.taxType) || selectedTaxByUniqueName.has(trx.particular.uniqueName));
+
+        // Drop already-present taxTypes from the lookup; what remains needs new rows.
+        this.selectedLedger.transactions.forEach(trx => {
+            if (trx?.isTax && trx.particular?.taxType) {
+                selectedTaxByTaxType.delete(trx.particular.taxType);
+            }
+            if (trx?.isTax && trx.particular?.uniqueName) {
+                const index = selectedTaxByUniqueName.get(trx.particular.uniqueName)?.index;
+                taxUniqueNameRowCount.delete(index);
+                selectedTaxByUniqueName.forEach((value, key) => {
+                    if (value.index === index) {
+                        selectedTaxByUniqueName.delete(key);
+                    }
+                });
+            }
+        });
+
+        if (selectedTaxByTaxType.size || selectedTaxByUniqueName.size) {
+            // New row side: existing tax row's side, else first non-tax/non-discount row's, else DEBIT.
+            const newRowType = (this.selectedLedger.transactions.find(trx => trx?.isTax && !trx?.isDiscount)
+                || this.selectedLedger.transactions.find(trx => !trx?.isTax && !trx?.isDiscount))?.type || 'DEBIT';
+
+            // Resolve tax account info (name/uniqueName) from the company taxes list.
+            let companyTaxes: TaxResponse[] = [];
+            this.companyTaxesList$?.pipe(take(1)).subscribe(taxes => companyTaxes = taxes ?? []);
+
+            // Insert new tax rows right after the last existing tax row so they stay grouped.
+            let insertIndex = this.selectedLedger.transactions.length;
+            for (let i = this.selectedLedger.transactions.length - 1; i >= 0; i--) {
+                if (this.selectedLedger.transactions[i]?.isTax) {
+                    insertIndex = i + 1;
+                    break;
+                } else if (!this.selectedLedger.transactions[i].particular.uniqueName) {
+                    insertIndex = i;
+                    break;
+                }
+            }
+
+            selectedTaxByTaxType.forEach((tax, taxType) => {
+                let trx: ILedgerTransactionItem = this.blankTransactionItem(newRowType);
+
+                trx.particular.uniqueName = tax?.uniqueName || '';
+                trx.particular.name = tax?.name || '';
+                (trx.particular as any).taxType = taxType;
+                trx.amount = sumOfRates > 0
+                    ? giddhRoundOff((taxTrxTotal * (Number(tax.amount) || 0)) / sumOfRates, this.giddhBalanceDecimalPlaces)
+                    : 0;
+                trx.convertedAmount = this.calculateConversionRate(trx.amount);
+                trx.isStock = false;
+                trx.isTax = true;
+                trx.isDiscount = false;
+
+                this.selectedLedger.transactions.splice(insertIndex++, 0, trx);
+            });
+
+            selectedTaxByUniqueName.forEach((taxData, accountUniqueName) => {
+                if (taxUniqueNameRowCount.get(taxData.index)) {
+                    return;
+                }
+                taxUniqueNameRowCount.set(taxData.index, 1);
+                const currentTax = taxData.tax;
+
+                if (currentTax) {
+                    let trx: ILedgerTransactionItem = this.blankTransactionItem(newRowType);
+
+                    trx.particular.uniqueName = currentTax.uniqueName;
+                    trx.particular.name = currentTax.name || '';
+                    (trx.particular as any).taxType = currentTax.taxType || currentTax.type;
+                    trx.amount = sumOfRates > 0
+                        ? giddhRoundOff((taxTrxTotal * (Number(currentTax.amount) || 0)) / sumOfRates, this.giddhBalanceDecimalPlaces)
+                        : 0;
+                    trx.convertedAmount = this.calculateConversionRate(trx.amount);
+                    trx.isStock = false;
+                    trx.isTax = true;
+                    trx.isDiscount = false;
+
+                    this.selectedLedger.transactions.splice(insertIndex++, 0, trx);
+                }
+            });
+        }
+
+        if (callTotal) {
+            this.getEntryTotal();
+            this.generateCompoundTotal();
+        }
     }
 
     public reInitilizeDiscount(resp: LedgerResponse) {
@@ -653,7 +891,7 @@ export class UpdateLedgerVm {
     public prepare4Submit(): LedgerResponse {
         let requestObj: any = cloneDeep(this.selectedLedger);
         let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
-        let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
+        let taxes: any[] = cloneDeep(this.selectedTaxes);
         requestObj.voucherType = requestObj?.voucher?.shortCode;
         requestObj.transactions = requestObj?.transactions ? requestObj.transactions.filter(p => p.particular?.uniqueName && !p.isDiscount) : [];
         requestObj.generateInvoice = this.selectedLedger?.generateInvoice;
@@ -663,12 +901,12 @@ export class UpdateLedgerVm {
                 trx.particular.uniqueName = trx.particular?.uniqueName.split('#')[0];
             }
         });
-        requestObj.taxes = [...taxes.map(t => t.particular?.uniqueName)];
+        requestObj.taxes = [...taxes.map(t => t?.uniqueName)];
         if (requestObj.isOtherTaxesApplicable) {
             requestObj.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
         }
 
-        requestObj.discounts = discounts?.filter(p => p.amount && p.isActive).map(m => {
+        requestObj.discounts = discounts?.filter(p => p.discountValue && p.isActive).map(m => {
             m.amount = m.discountValue;
             return m;
         });
@@ -682,7 +920,7 @@ export class UpdateLedgerVm {
     public getUnderstandingText(selectedLedgerAccountType, accountName, localeData?: any) {
         let underStandingTextData = localeData?.text_data;
         if (underStandingTextData) {
-            let data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
+            let data = cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
             if (data) {
                 if (data.balanceText && data.balanceText.cr) {
                     data.balanceText.cr = data.balanceText.cr?.replace('<accountName>', accountName);
@@ -697,7 +935,7 @@ export class UpdateLedgerVm {
                 if (data.text && data.text.cr) {
                     data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
-                this.ledgerUnderStandingObj = _.cloneDeep(data);
+                this.ledgerUnderStandingObj = cloneDeep(data);
             }
         }
     }

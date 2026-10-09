@@ -7,7 +7,9 @@ import { map, catchError } from 'rxjs/operators';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class InvoiceBulkUpdateService {
     private _: any;
     

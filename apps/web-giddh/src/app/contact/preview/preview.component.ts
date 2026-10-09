@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, of, ReplaySubject } from "rxjs";
@@ -19,11 +19,14 @@ import { AccountsAction } from "../../actions/accounts.actions";
 import { AccountRequestV2 } from "../../models/api-models/Account";
 import { cloneDeep } from "../../lodash-optimized";
 import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { ServiceConfig } from "../../services/service.config";
 @Component({
     selector: "preview",
     templateUrl: "./preview.component.html",
     styleUrls: ["./preview.component.scss"],
-    providers: [ContactComponentStore]
+    providers: [ContactComponentStore],
+    standalone:false
 })
 export class ContactPreviewComponent implements OnInit, OnDestroy {
     /** Reference to the virtual scroll viewport used for scrolling contact lists */
@@ -175,7 +178,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
-        private accountsAction: AccountsAction
+        private accountsAction: AccountsAction,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
     }
 
@@ -188,7 +192,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.componentStore.currentCompanyBranches$;
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map((branch: any) => ({
@@ -295,7 +299,10 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 }
                 const searchString = queryParams.search;
                 if (searchString) {
-                    this.search.setValue(searchString);
+                    // Update the search input to show the search term
+                    this.search.patchValue(searchString, { emitEvent: false });
+                    // Manually trigger the search since we disabled events
+                    this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 } else {
                     if (!this.isRefreshingAfterDelete) {
                         this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
@@ -578,7 +585,12 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public redirectToGetAllPage(): void {
-        this.router.navigate([`/pages/contact/${this.contactActiveTab}`]);
+        this.router.navigate([`/pages/contact/${this.contactActiveTab}`], {
+            queryParams: {
+                tab: this.contactActiveTab,
+                tabIndex: 1
+            }
+        });
     }
 
     /**

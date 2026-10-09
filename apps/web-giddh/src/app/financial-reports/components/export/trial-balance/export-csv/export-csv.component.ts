@@ -7,6 +7,7 @@ import { ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { TrialBalanceRequest } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { RecTypePipe } from 'apps/web-giddh/src/app/shared/helpers/pipes/recType/recType.pipe';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { saveAs } from 'file-saver';
@@ -15,6 +16,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { DataFormatter, IFormatable } from '../../model/data-formatter';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { forEach, indexOf } from '../../../../../lodash-optimized';
 
 export interface Total {
     ob: number;
@@ -42,21 +44,22 @@ class FormatCsv implements IFormatable {
 
     public setRowData(data: any[], padding: number) {
         this.body += ' '.repeat(padding);
-        data.forEach(value => this.body += `${value},`);
+        (Array.isArray(data) ? data : []).forEach(value => this.body += `${value},`);
         this.body += `\r\n`;
     }
 
     public setFooter(data: any[]) {
-        this.footer += this.localeData?.csv.trial_balance.total;
-        data.forEach(value => this.footer += `${value},`);
+        this.footer += `${this.localeData?.csv.trial_balance.total},`;
+        (Array.isArray(data) ? data : []).forEach(value => this.footer += `${value},`);
         this.footer += `\r\n`;
     }
 }
 
 @Component({
-    selector: 'trial-balance-export-csv',
+selector: 'trial-balance-export-csv',
     templateUrl: './export-csv.component.html',
-    providers: [RecTypePipe]
+    providers: [RecTypePipe],
+    standalone: false
 })
 export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
     @Input() public trialBalanceRequest: TrialBalanceRequest;
@@ -81,15 +84,16 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         private ledgerService: LedgerService,
         private router: Router,
         @Inject(ServiceConfig) private serviceConfig,
-        private toaster: ToasterService) {
+        private toaster: ToasterService,
+        private generalService: GeneralService) {
         this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
             this.exportData = p;
-            this.dataFormatter = new DataFormatter(p, this.selectedCompany, recType);
+            this.dataFormatter = new DataFormatter(p, this.selectedCompany, recType, this.generalService);
         });
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/csv.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/csv.svg';
+        this.imgPath = this.serviceConfig.IMG_PATH + 'csv.svg';
     }
 
     public ngOnDestroy() {

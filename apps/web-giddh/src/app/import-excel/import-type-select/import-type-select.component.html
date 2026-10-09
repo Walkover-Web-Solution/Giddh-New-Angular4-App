@@ -1,11 +1,13 @@
-<ng-container
-    appTranslate
-    [file]="'import-data'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'import-data'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="row width-100">
+    @if (isCompany) {
+        <go-to-branch
+            [title]="commonLocaleData?.app_you_in_company_mode"
+            [message]="localeData?.go_to_branch_information"
+            [buttonLabel]="commonLocaleData?.switch_to_branch"
+        ></go-to-branch>
+    }
+    <div class="row w-100">
         <div class="col-12">
             <div class="pt-4 mt-2">
                 <div class="text-center mt-4 mb-4">
@@ -15,44 +17,71 @@
                         href="javascript:void(0);"
                         class="text-link-2 mt-1 d-block text-center"
                         [routerLink]="['/pages', 'downloads', 'imports']"
-                        >{{ localeData?.previous_imports }}</a
                     >
+                        {{ localeData?.previous_imports }}
+                    </a>
                 </div>
                 <ul class="import-type mb-4 mt-5 pt-5">
                     <li *ngIf="!isBranch">
                         <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'master']" href="javascript:void(0);">
-                            <img src="{{ imgPath }}new/group-import.svg" alt="group import" />
+                            <img [src]="imgPath + 'new/group-import.svg'" alt="group import" />
                             <p>{{ commonLocaleData?.app_import_type?.master }}</p>
                         </a>
                     </li>
                     <li *ngIf="isBranch || branches?.length === 1">
                         <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'entries']" href="javascript:void(0);">
-                            <img src="{{ imgPath }}new/entries-import.svg" alt="entries import" />
+                            <img [src]="imgPath + 'new/entries-import.svg'" alt="entries import" />
                             <p>{{ commonLocaleData?.app_import_type?.entries }}</p>
                         </a>
                     </li>
                     <li *ngIf="!isBranch">
                         <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'stock']" href="javascript:void(0);">
-                            <img src="{{ imgPath }}new/Inventory-13.svg" alt="inventory" />
+                            <img [src]="imgPath + 'new/Inventory-13.svg'" alt="inventory" />
                             <p>{{ commonLocaleData?.app_import_type?.inventory }}</p>
                         </a>
                     </li>
                     <ng-container *ngIf="isBranch || branches?.length === 1">
                         <li>
-                            <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', voucherType.AccountWise]" href="javascript:void(0);">
-                                <img src="{{ imgPath }}new/account.svg" alt="account wise" />
-                                <p>{{ commonLocaleData?.app_import_type?.voucher }} - {{ commonLocaleData?.app_import_type?.account_wise }}</p>
-                            </a> 
+                            <a
+                                class="theme-foreground-color h-100"
+                                [routerLink]="['/pages', 'import', voucherType.AccountWise]"
+                                href="javascript:void(0);"
+                            >
+                                <img [src]="imgPath + 'new/account.svg'" alt="account wise" />
+                                <p>
+                                    {{ commonLocaleData?.app_import_type?.voucher }} -
+                                    {{ commonLocaleData?.app_import_type?.account_wise }}
+                                </p>
+                            </a>
                         </li>
                         <li>
-                            <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', voucherType.VoucherWise]" href="javascript:void(0);">
-                                <img src="{{ imgPath }}new/voucher.svg" alt="voucher wise" />
-                                <p>{{ commonLocaleData?.app_import_type?.voucher }} - {{ commonLocaleData?.app_import_type?.voucher_wise }}</p>
-                            </a> 
+                            <a
+                                class="theme-foreground-color h-100"
+                                [routerLink]="['/pages', 'import', voucherType.VoucherWise]"
+                                href="javascript:void(0);"
+                            >
+                                <img [src]="imgPath + 'new/voucher.svg'" alt="voucher wise" />
+                                <p>
+                                    {{ commonLocaleData?.app_import_type?.voucher }} -
+                                    {{ commonLocaleData?.app_import_type?.voucher_wise }}
+                                </p>
+                            </a>
                         </li>
                     </ng-container>
+                    <li>
+                        <a
+                            class="theme-foreground-color h-100"
+                            [routerLink]="['/pages', 'import', 'banktransactions']"
+                            [queryParams]="{ returnUrl: '/pages/import/select-type' }"
+                        >
+                            <img [src]="imgPath + 'import-bank-statement.png'" alt="bank statement" />
+                            <p>
+                                {{ commonLocaleData?.app_import_type?.bank_statement }}
+                            </p>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
-</ng-container>
+</div>

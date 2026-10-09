@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild, signal } from '@angular/core';
 import { IOption } from '../../app.constant';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -16,7 +16,8 @@ import { GeneralService } from '../../services/general.service';
 @Component({
     selector: 'setting-discount',
     templateUrl: './discount.component.html',
-    styleUrls: ['./discount.component.scss']
+    styleUrls: ['./discount.component.scss'],
+    standalone: false
 })
 
 export class DiscountComponent implements OnInit, OnDestroy {
@@ -34,8 +35,8 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public deleteRequest: string = null;
     /** Holds Discount list */
     public discountList: IDiscountList[] = [];
-    /** Observable for create/update/delete api call in progress */
-    public isLoading$: Observable<boolean>;
+    /** Signal for create/update/delete api call in progress */
+    public isLoading = signal<boolean>(false);
     /** Observable for create account api call is success */
     private createAccountIsSuccess$: Observable<boolean>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -44,8 +45,6 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True if get all discounts api call in progress */
-    public isLoading: boolean = false;
     /** Holds Mat Table Display columns */
     public displayedColumns: string[] = ['number', 'name', 'value', 'type', 'action'];
     /** Holds Discount Confirmation Dialog Ref */
@@ -63,7 +62,8 @@ export class DiscountComponent implements OnInit, OnDestroy {
         private settingsDiscountService: SettingsDiscountService,
         private toaster: ToasterService,
         public dialog: MatDialog,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private cdRef: ChangeDetectorRef
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
@@ -160,11 +160,11 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     public deleteDiscount() {
-        this.isLoading$ = of(true);
+        this.isLoading.set(true);
         this.settingsDiscountService.DeleteDiscount(this.deleteRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.discountConfirmationDialogRef?.close();
             this.showToaster(this.commonLocaleData?.app_messages?.discount_deleted, response);
-            this.isLoading$ = of(false);
+            this.isLoading.set(false);
         });
     }
 
@@ -207,12 +207,13 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     private getDiscounts(): void {
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.discountList = response?.body;     
             }
-            this.isLoading = false;
+            this.isLoading.set(false);
+            this.cdRef.detectChanges();                                                                                                                                                  
         });
     }
 

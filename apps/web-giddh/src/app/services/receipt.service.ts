@@ -31,8 +31,11 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { concat, get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ReceiptService {
     private companyUniqueName: string;
 
@@ -55,12 +58,16 @@ export class ReceiptService {
                 catchError((e) => this.errorHandler.HandleCatch<string, ReciptRequest>(e, model)));
     }
 
-    public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
+    public GetAllReceipt(body: InvoiceReceiptFilter, type: string, vendorCustomerType?: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        const { branchUniqueName, source, ...bodyWithoutQueryParams } = body;
         const requestPayload = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? this.getPurchaseRecordPayload(body) : body;
         const contextPath = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
         const requestParameter = {
-            page: body?.page, count: body?.count, from: body?.from, to: body?.to, q: (body?.q) ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy
+            page: body?.page, count: body?.count, from: body?.from, to: body?.to, q: (body?.q) ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy,
+            ...(branchUniqueName ? { branchUniqueName } : {}),
+            ...(source ? { source } : {}),
+            ...(vendorCustomerType ? { vendorCustomerType } : {})
         };
 
         if (this.generalService.voucherApiVersion === 2) {
@@ -223,7 +230,12 @@ export class ReceiptService {
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
 
-        return this.http.post(url, { accountUniqueNames: request.accountUniqueNames, salesPersonUniqueName: request.salesPersonUniqueName }).pipe(map((res) => {
+        const countryState = {
+            stateCode: request.stateCode,
+            ...(request.countryCode ? { country: { code: request.countryCode } } : {})
+        }
+
+        return this.http.post(url, { accountUniqueNames: request.accountUniqueNames, selectAllFields: request.selectAllFields, salesPersonUniqueName: request.salesPersonUniqueName, ...countryState }).pipe(map((res) => {
             let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
@@ -244,7 +256,12 @@ export class ReceiptService {
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
 
-        return this.http.post(url, { accountUniqueNames: request.accountUniqueNames, salesPersonUniqueName: request.salesPersonUniqueName }).pipe(map((res) => {
+        const countryState = {
+            stateCode: request.stateCode,
+            ...(request.countryCode ? { country: { code: request.countryCode } } : {})
+        }
+
+        return this.http.post(url, { accountUniqueNames: request.accountUniqueNames, selectAllFields: request.selectAllFields, salesPersonUniqueName: request.salesPersonUniqueName, ...countryState }).pipe(map((res) => {
             let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
@@ -276,6 +293,9 @@ export class ReceiptService {
         }
         if ((model.q)) {
             url = url + '&q=' + model.q;
+        }
+         if ((model.branchUniqueName)) {
+            url = url + '&branchUniqueName=' + model.branchUniqueName;
         }
         return url;
     }

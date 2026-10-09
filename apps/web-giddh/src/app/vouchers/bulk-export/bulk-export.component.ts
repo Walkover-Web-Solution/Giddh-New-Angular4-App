@@ -16,6 +16,7 @@ import { VouchersUtilityService } from '../utility/vouchers.utility.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { TributeConfig } from '../../shared/helpers/directives/tributeMention/tributeType';
+import { Router } from '@angular/router';
 
 type ExportType = 'SINGLE_PDF' | 'MULTIPLE_PDF' | 'EXCEL' | 'CSV';
 enum ExportTypeEnum {
@@ -29,7 +30,8 @@ enum ExportTypeEnum {
     selector: 'app-bulk-export',
     templateUrl: './bulk-export.component.html',
     styleUrls: ['./bulk-export.component.scss'],
-    providers: [VoucherComponentStore]
+    providers: [VoucherComponentStore],
+    standalone: false
 })
 export class BulkExportComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -78,6 +80,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private generalService: GeneralService,
         private componentStore: VoucherComponentStore,
+        private router: Router,
         private vouchersUtilityService: VouchersUtilityService
     ) { }
 
@@ -88,7 +91,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.exportForm = this.formBuilder.group({
-            copyTypes: [''],
+            copyTypes: [[]],
             recipients: [''],
             exportType: new FormControl<ExportType>(ExportTypeEnum.multiplePdf),
             mergePdf: new FormControl<boolean>(false, { nonNullable: true }),
@@ -131,6 +134,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                         let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
                         return saveAs(blob, this.inputData?.voucherType + `.zip`);
                     } else {
+                        this.router.navigate(["/pages/downloads/exports"]);
                         this.dialogRef?.close();
                     }
                 } else {
@@ -142,6 +146,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 if (response.message) {
+                    this.router.navigate(["/pages/downloads/exports"]);
                     this.toasterService.showSnackBar("success", response.message);
                 } else {
                     const mimeType = this.exportForm.get('exportType').value === ExportTypeEnum.csv
@@ -212,7 +217,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         };
 
         if (postRequest.fileNameFormat.length) {
-            this.fileFormatList.forEach(format => {
+            (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach(format => {
                 const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
                 postRequest.fileNameFormat = postRequest.fileNameFormat.replace(pattern, `\${${format.key}}`);
             });
@@ -230,13 +235,15 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         delete postRequest.page;
         delete postRequest.q;
 
+        this.generalService.replaceSelectedAllOptions(postRequest);
+
         let validRecipients: boolean = true;
 
         if (sendMail && this.exportForm.value?.recipients) {
             let recipients = this.exportForm.value?.recipients.split(",");
             let validEmails = [];
             if (recipients && recipients.length > 0) {
-                recipients.forEach(email => {
+                (Array.isArray(recipients) ? recipients : []).forEach(email => {
                     if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         let invalidEmail = this.localeData?.invalid_email;
                         invalidEmail = invalidEmail?.replace("[EMAIL]", email);
@@ -279,7 +286,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      */
     public getFileFormat() {
         let fileNameFormat = this.exportForm.get("selectedFormatList").value;
-        this.fileFormatList.forEach((format) => {
+        (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach((format) => {
             if(this.exportForm.get("selectedFormatList").value.includes(`{${format.value}}`)) {
                 fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
             }

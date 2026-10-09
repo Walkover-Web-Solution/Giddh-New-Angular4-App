@@ -4,7 +4,6 @@ import { Observable, Subject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class InvViewService {
     private viewSubject = new Subject<any>();
-    private viewJobworkSubject = new Subject<any>();
     private viewDateSubject = new Subject<any>();
     // Active group unique name
     private activeGroupUniqueName: string;
@@ -14,9 +13,6 @@ export class InvViewService {
     public setActiveView(View: string, StockName: string, StockUniqueName?: string, GroupUniqueName?: string, groupIsOpen?: boolean,) {
         this.viewSubject.next({ view: View, stockName: StockName, stockUniqueName: StockUniqueName, groupUniqueName: GroupUniqueName, isOpen: groupIsOpen });
     }
-    public setJobworkActiveView(View: string, UniqueName?: string, Name?: string) {
-        this.viewJobworkSubject.next({ view: View, uniqueName: UniqueName, name: Name });
-    }
     public setActiveDate(from: string, to: string) {
         this.viewDateSubject.next({ from: from, to: to });
     }
@@ -24,17 +20,12 @@ export class InvViewService {
     public clearMessage(type?: string) {
         if (type === 'stock_group') {
             this.viewSubject.next(false);
-        } else if (type === 'jobwork') {
-            this.viewJobworkSubject.next(false);
         }
     }
 
 
     public getActiveView(): Observable<any> {
         return this.viewSubject.asObservable();
-    }
-    public getJobworkActiveView(): Observable<any> {
-        return this.viewJobworkSubject.asObservable();
     }
     public getActiveDate(): Observable<any> {
         return this.viewDateSubject.asObservable();

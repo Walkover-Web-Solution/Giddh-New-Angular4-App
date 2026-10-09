@@ -1,0 +1,55 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Node version:" && node --version
+      - echo "NPM version:" && npm --version
+      - echo "Available memory:" && free -h || echo "Memory info not available"
+      - echo "Configuring memory settings for Angular 21 build..."
+      - node .codebuild-memory-config.js
+      - echo "Cleaning up to free memory..."
+      - rm -rf node_modules
+      - rm -rf dist
+      - rm -rf .angular
+      - npm cache clean --force
+      - echo "Installing dependencies with memory optimization..."
+      - npm install --force --prefer-offline --no-audit --no-fund
+  build:
+    commands:
+      - echo "Starting build process for branch: $BRANCH"
+      - echo "Memory status before build:"
+      - free -h || echo "Memory info not available"
+      - echo "Setting AWS CodePipeline optimized environment variables..."
+      - export NODE_OPTIONS="--max-old-space-size=12288 --max-semi-space-size=256 --optimize-for-size --gc-interval=100"
+      - export NG_CLI_ANALYTICS=false
+      - export CI=true
+      - export AWS_CODEBUILD=true
+      - export WEBPACK_PARALLELISM=1
+      - export NG_BUILD_CACHE=false
+      - echo "AWS CodeBuild environment detected - applying memory optimizations"
+      - |
+        if [ "${BRANCH}" = "giddh-2.0" ]; then
+          echo "For giddh-2.0 branch";
+          npm run build-test
+        elif [ "${BRANCH}" = "86d0fexwc-test" ]; then
+          echo "For beta-stage branch";
+          npm run build-stage
+        elif [ "${BRANCH}" = "books-production" ]; then
+          echo "For production branch";
+          npm run build-prod
+        fi
+  post_build:
+    commands:
+      - echo "Build process completed successfully."
+      - echo "Checking if dist directory exists:"
+      - ls -la dist/ || echo "dist directory not found"
+      - ls -la dist/apps/ || echo "dist/apps directory not found"
+      - ls -la dist/apps/web-giddh/ || echo "dist/apps/web-giddh directory not found"
+      - echo "Build artifacts summary:"
+      - du -sh dist/apps/web-giddh/ || echo "Could not get directory size"
+
+artifacts:
+  base-directory: dist/apps/web-giddh
+  files:
+    - '**/*'

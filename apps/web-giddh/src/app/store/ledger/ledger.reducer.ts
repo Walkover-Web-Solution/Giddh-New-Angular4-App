@@ -5,8 +5,8 @@ import { LEDGER } from '../../actions/ledger/ledger.const';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { cloneDeep } from '../../lodash-optimized';
 import { UNAUTHORISED } from '../../app.constant';
+import { cloneDeep, forEach, map } from '../../lodash-optimized';
 
 export interface LedgerState {
     account?: AccountResponse;
@@ -317,8 +317,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         case LEDGER.SELECT_GIVEN_ENTRIES: {
             let res = action.payload as string[];
             let debitTrx = state.transactionsResponse.debitTransactions;
-            debitTrx.forEach(f => {
-                res.forEach(c => {
+            (Array.isArray(debitTrx) ? debitTrx : []).forEach(f => {
+                (Array.isArray(res) ? res : []).forEach(c => {
                     if (c === f.entryUniqueName) {
                         f.isChecked = true;
                     }
@@ -326,8 +326,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 return f;
             });
             let creditTrx = state.transactionsResponse.creditTransactions;
-            creditTrx.forEach(f => {
-                res.forEach(c => {
+            (Array.isArray(creditTrx) ? creditTrx : []).forEach(f => {
+                (Array.isArray(res) ? res : []).forEach(c => {
                     if (c === f.entryUniqueName) {
                         f.isChecked = true;
                     }
@@ -336,7 +336,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             });
 
             let debitCreditTransactions = state.transactionsResponse.debitCreditTransactions;
-            debitCreditTransactions.forEach(entry => {
+            (Array.isArray(debitCreditTransactions) ? debitCreditTransactions : []).forEach(entry => {
                 res?.forEach(response => {
                     if (response === entry?.entryUniqueName) {
                         entry.isChecked = true;
@@ -357,7 +357,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             let newState = cloneDeep(state);
             let debitTrx = newState.transactionsResponse.debitTransactions;
             debitTrx = debitTrx.map(f => {
-                res.forEach(c => {
+                (Array.isArray(res) ? res : []).forEach(c => {
                     if (c === f.entryUniqueName) {
                         f.isChecked = false;
                     }
@@ -366,7 +366,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             });
             let creditTrx = newState.transactionsResponse.creditTransactions;
             creditTrx = creditTrx.map(f => {
-                res.forEach(c => {
+                (Array.isArray(res) ? res : []).forEach(c => {
                     if (c === f.entryUniqueName) {
                         f.isChecked = false;
                     }

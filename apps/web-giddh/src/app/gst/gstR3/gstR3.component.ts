@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Inject, ChangeDetectorRef } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     GstOverViewRequest,
@@ -13,6 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../shared/helpers/defaultDateFormat';
+import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport, TaxServiceEnum, TaxServiceType } from '../constants/gst.constant';
 import { GeneralService } from '../../services/general.service';
@@ -21,12 +22,14 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GstComponentStore } from '../gst.store';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'file-gstr3',
     templateUrl: './gstR3.component.html',
     styleUrls: ['gstR3.component.scss'],
-    providers: [GstComponentStore]
+    providers: [GstComponentStore],
+    standalone: false
 })
 export class FileGstR3Component implements OnInit, OnDestroy {
     /** Aside authentication dialog open */
@@ -38,6 +41,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public gstr3BData: Gstr3bOverviewResult2;
     public currentPeriod: GstDatePeriod = null;
     public selectedGstr: string = null;
+    /** Holds the GST report type that should be auto-navigated to (when URL lacks from/to).
+     *  Passed to <tax-sidebar> which uses its own currentPeriod to build the full URL. */
+    public pendingNavigateType: string = null;
     public gstNumber: string = null;
     public activeCompanyGstNumber: string = '';
     public selectedMonth: any = null;
@@ -73,6 +79,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public date: FormControl<string | null> = new FormControl<string | null>('');
     /** Holds displayed columns */
     public gstrUserTableDataDisplayedColumns: string[] = ['number', 'label', 'value'];
+    /** Image path for assets */
+    public imgPath: string = '';
     /** Holds gstr user table data */
     public gstrUserTableData: any[] = []
     /** Holds displayed columns */
@@ -116,7 +124,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private breakPointObservar: BreakpointObserver,
         private dialog: MatDialog,
-        private componentStore: GstComponentStore
+        private componentStore: GstComponentStore,
+        private cdr: ChangeDetectorRef,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(state => state.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
@@ -131,28 +141,37 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.imgPath = this.serviceConfig.IMG_PATH;
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
                 to: params['to']
             };
+            if (params['return_type'] && (!params['from'] || !params['to'])) {
+                this.pendingNavigateType = params['return_type'];
+                return;
+            } else {
+                this.pendingNavigateType = null;
+            }
             if (params['selectedGst']) {
                 this.activeCompanyGstNumber = params['selectedGst'];
                 this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
             this.isCompany = params['isCompany'] === 'true';
             if (!this.selectedMonth) {
-                this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+                const fromDate = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT);
+                this.selectedMonth = fromDate.isValid() ? fromDate.toISOString() : dayjs().startOf('month').toISOString();
                 this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
             }
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
+            this.cdr.detectChanges();
         });
-        
+
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
@@ -167,7 +186,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             request.gstin = this.activeCompanyGstNumber;
 
             this.gstr3BOverviewDataFetchedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(bool => {
-                if (!bool && !this.dateSelected) {
+                if (!bool && !this.dateSelected && this.currentPeriod.from && this.currentPeriod.to) {
                     this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr3b, request));
                 }
             });
@@ -400,7 +419,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.itc_available
             });
 
-            this.gstr3BData.itc_elg.itc_avl.forEach(item => {
+            (Array.isArray(this.gstr3BData.itc_elg.itc_avl) ? this.gstr3BData.itc_elg.itc_avl : []).forEach(item => {
                 switch (item.ty) {
                     case 'IMPG':
                         tableData.push({
@@ -480,7 +499,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.itc_reversed
             });
 
-            this.gstr3BData.itc_elg.itc_rev.forEach(item => {
+            (Array.isArray(this.gstr3BData.itc_elg.itc_rev) ? this.gstr3BData.itc_elg.itc_rev : []).forEach(item => {
                 switch (item.ty) {
                     case 'RUL':
                         tableData.push({
@@ -537,7 +556,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.ineligible_itc
             });
 
-            this.gstr3BData.itc_elg.itc_inelg.forEach(item => {
+            (Array.isArray(this.gstr3BData.itc_elg.itc_inelg) ? this.gstr3BData.itc_elg.itc_inelg : []).forEach(item => {
                 switch (item.ty) {
                     case 'RUL':
                         tableData.push({
@@ -736,7 +755,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      */
     public getGstReturnFieldText(): string {
         let text = this.localeData?.filing?.gst_filed_success;
-        text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
+        text = text?.replace("[PERIOD_FROM]", GiddhDatePipe.formatDate(this.currentPeriod?.from))?.replace("[PERIOD_TO]", GiddhDatePipe.formatDate(this.currentPeriod?.to));
         return text;
     }
 
@@ -811,10 +830,10 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public fileGstr3B(): void {
         const monthYear = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MM-YYYY');
         const currentDateTime = this.generalService.getCurrentDateTime();
-        this.componentStore.fileGstr3B({ 
-            period: this.currentPeriod, 
-            gstNumber: this.activeCompanyGstNumber, 
-            via: TaxServiceEnum.TAXPRO, 
+        this.componentStore.fileGstr3B({
+            period: this.currentPeriod,
+            gstNumber: this.activeCompanyGstNumber,
+            via: TaxServiceEnum.TAXPRO,
             monthYear,
             currentDateTime
         });
@@ -835,7 +854,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
     /**
     * Navigates to the page for buy plan.
-    * 
+    *
     * @param subscriptionId
     * @memberof FileGstR3Component
     */

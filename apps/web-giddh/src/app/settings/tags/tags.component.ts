@@ -1,5 +1,5 @@
 import { take } from 'rxjs/operators';
-import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild, inject, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
@@ -18,12 +18,15 @@ export interface TagInterface {
 
 @Component({
     selector: 'setting-tags',
+    standalone: false,
     templateUrl: './tags.component.html',
     styleUrls: ['./tags.component.scss'],
 })
 export class SettingsTagsComponent implements OnInit {
     /** Create Confirmation Dialog template reference */
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
+    /** Tag Input reference */
+    @ViewChild('tagInput') public tagInput: ElementRef<HTMLInputElement>;
     /** Holds tag form group */
     public tagForm: FormGroup;
     /** Holds tags list */
@@ -31,7 +34,7 @@ export class SettingsTagsComponent implements OnInit {
     /** Holds confirmation message */
     public confirmationMessage: string = '';
     /** True if api call in progress */
-    public isLoading: boolean = false;
+    public isLoading = signal<boolean>(false);
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -72,7 +75,7 @@ export class SettingsTagsComponent implements OnInit {
      */
     public getTags(): void {
         this.tags = [];
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.settingsTagService.GetAllTags().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 map(response?.body, (tag) => {
@@ -80,8 +83,11 @@ export class SettingsTagsComponent implements OnInit {
                 });
                 let tagsData = orderBy(response?.body, 'name');
                 this.tags = cloneDeep(tagsData);
+                setTimeout(() => {
+                    this.tagInput.nativeElement.focus();
+                }, 100);
             }
-            this.isLoading = false;
+            this.isLoading.set(false);
         });
     }
 
@@ -122,13 +128,14 @@ export class SettingsTagsComponent implements OnInit {
         if (this.isApiCallInProgress) {
             return;
         }
-        tag.name = event.value.trim();
-        this.setTagValue(tag);
         if (tag) {
             this.isApiCallInProgress = true;
-            this.settingsTagService.UpdateTag(tag).pipe(take(1)).subscribe(response => {
-                if (response) {
+            this.settingsTagService.UpdateTag({ ...tag, name: event.value.trim() }).pipe(take(1)).subscribe(response => {
+                if (response.status === "error") {
                     this.showToaster(this.commonLocaleData?.app_messages?.tag_updated, response);
+                } else if (response.status === "success") {
+                    tag.name = event.value.trim();
+                    this.setTagValue(tag);
                 }
                 this.isApiCallInProgress = false;
             });
@@ -199,9 +206,9 @@ export class SettingsTagsComponent implements OnInit {
         message = message?.replace("[TAG_NAME]", tag.name);
         this.confirmationMessage = message;
         this.dialog.open(this.confirmationModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                });
     }
 
     /**

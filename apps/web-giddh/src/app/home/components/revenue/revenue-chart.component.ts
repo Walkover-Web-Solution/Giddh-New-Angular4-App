@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation, signal } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { select, Store } from '@ngrx/store';
@@ -7,13 +7,14 @@ import { AppState } from '../../../store/roots';
 import * as dayjs from 'dayjs';
 import { RevenueGraphDataRequest } from "../../../models/api-models/Dashboard";
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { GeneralService } from "../../../services/general.service";
 import { DashboardService } from '../../../services/dashboard.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
 import { TitleCasePipe } from '@angular/common';
+import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
+import { forEach, keys } from '../../../lodash-optimized';
 Chart.register(...registerables);
 
 @Component({
@@ -21,11 +22,13 @@ Chart.register(...registerables);
     templateUrl: 'revenue-chart.component.html',
     styleUrls: ['revenue-chart.component.scss', '../../home.component.scss'],
     providers: [TitleCasePipe],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone:false
 })
 export class RevenueChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
-    public requestInFlight: boolean = false;
+    /** True when an API request or chart render is in progress */
+    public requestInFlight = signal<boolean>(false);
     public revenueGraphTypes: any[] = [];
     public activeGraphType: any;
     public graphParams: any = {
@@ -64,7 +67,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public chartLabelsize = [];
 
 
-    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService, private titlecasePipe: TitleCasePipe) {
+    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhNumberFormatPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService, private titlecasePipe: TitleCasePipe) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
         this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'day'));
 
@@ -94,6 +97,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        if (this.chart) {
+            this.chart.destroy();
+            this.chart = null;
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -120,7 +127,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     }
 
     public getRevenueGraphData(): void {
-        this.requestInFlight = true;
+        this.requestInFlight.set(true);
         let revenueGraphDataRequest = new RevenueGraphDataRequest();
         revenueGraphDataRequest = this.graphParams;
 
@@ -214,7 +221,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                 }
             }
 
-            this.requestInFlight = false;
+            this.requestInFlight.set(false);
         });
     }
 
@@ -330,7 +337,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         let currentData = this.currentData;
         let previousData = this.previousData;
         let label = this.chartLabelsize;
-        this.requestInFlight = true;
+        this.requestInFlight.set(true);
         this.chart?.destroy();
 
         /* For Chart Type Line  */
@@ -554,7 +561,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.requestInFlight = false;
+        this.requestInFlight.set(false);
     }
 }
 

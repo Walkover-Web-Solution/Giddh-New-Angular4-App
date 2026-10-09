@@ -1,17 +1,13 @@
-<ng-container
-    appTranslate
-    [file]="'purchase-order/settings'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'purchase-order/settings'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <section class="setting-tab-data">
         <div class="invoice-control">
-            <mat-tab-group 
+            <mat-tab-group
                 class="tab-integration"
                 mat-stretch-tabs="false"
                 mat-align-tabs="start"
                 [selectedIndex]="selectedTabIndex"
-                (selectedTabChange)="tabChanged($event)">
+                (selectedTabChange)="tabChanged($event)"
+            >
                 <mat-tab>
                     <ng-template mat-tab-label>
                         <i class="icon-mail mr-2"></i>
@@ -19,135 +15,129 @@
                     </ng-template>
                     <div class="pt-3 pb-3">
                         <div class="single-tab-block">
-                        <div class=" p-3 clear-both mb-2">
-                            <p class="clear-both border-bottom mb-3">
-                                {{ localeData?.integration }}<span> {{ localeData?.settings_note }}</span>
-                            </p>
-                            <div class="clear-both">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{ localeData?.from_email }}</label>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-9">
-                                        <div class="row">
-                                            <div class="col-md-5 col-sm-12 col-xs-12">
-                                                <div class="form-group mb-0">
-                                                    <div class="relative" [ngClass]="{ 'input-group': true }">
-                                                        <input
-                                                            type="email"
-                                                            class="form-control"
-                                                            [placeholder]="localeData?.enter_email"
-                                                            name="email"
-                                                            [(ngModel)]="invoiceSettings.purchaseBillSettings.email"
-                                                            [disabled]="
-                                                                invoiceSettings.purchaseBillSettings.emailVerified
-                                                            "
-                                                        />
-                                                        <span
-                                                            class="input-group-addon"
-                                                            *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
-                                                            ><i
-                                                                class="fa fa-exclamation-circle"
-                                                                [matTooltip]="localeData?.unverified"
-                                                            ></i
-                                                        ></span>
-                                                        <span
-                                                            class="input-group-addon verify-tick-icon"
-                                                            *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"
-                                                            ><i class="icon-tick" [matTooltip]="localeData?.verified"></i
-                                                        ></span>
+                            <div class="p-3 clear-both mb-2">
+                                <p class="clear-both border-bottom mb-3">
+                                    {{ localeData?.integration }}
+                                    <span>{{ localeData?.settings_note }}</span>
+                                </p>
+                                <div class="clear-both">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
+                                            <label>{{ localeData?.from_email }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-9">
+                                            <div class="row">
+                                                <div class="col-md-5 col-sm-12 col-xs-12">
+                                                    <div class="form-group mb-0">
+                                                        <div class="relative" [ngClass]="{ 'input-group': true }">
+                                                            <input
+                                                                type="email"
+                                                                class="form-control"
+                                                                [placeholder]="localeData?.enter_email"
+                                                                name="email"
+                                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.email"
+                                                                [disabled]="invoiceSettings.purchaseBillSettings.emailVerified"
+                                                            />
+                                                            <span
+                                                                class="input-group-addon"
+                                                                *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
+                                                            >
+                                                                <i
+                                                                    class="fa fa-exclamation-circle"
+                                                                    [matTooltip]="localeData?.unverified"
+                                                                ></i>
+                                                            </span>
+                                                            <span
+                                                                class="input-group-addon verify-tick-icon"
+                                                                *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"
+                                                            >
+                                                                <i class="icon-tick" [matTooltip]="localeData?.verified"></i>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12 row pl-0">
-                                                <div
-                                                    class="btn-wrapper d-flex align-items-center justify-content-center ml-3"
-                                                >
-                                                    <button
-                                                        mat-raised-button color="primary"
-                                                        class="mr-3"
-                                                        (click)="
-                                                            verifyEmail(invoiceSettings.purchaseBillSettings.email)
-                                                        "
-                                                        [disabled]="
-                                                            !isEmailChanged &&
-                                                            (!invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email?.length <
-                                                                    4 ||
-                                                                invoiceSettings.purchaseBillSettings.emailVerified)
-                                                        "
-                                                        *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
-                                                    >
-                                                        {{ localeData?.verify }}
-                                                    </button>
-                                                    <span
-                                                        *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"
-                                                        class="verified-text"
-                                                        >{{ localeData?.verified }}</span
-                                                    >
-                                                    <span
-                                                        class="delete-verified-icon"
-                                                        [ngClass]="{
-                                                            'opacity-5':
-                                                                !invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email?.length < 4,
-                                                            'cursor-pointer': !(
-                                                                !invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email?.length < 4
-                                                            )
-                                                        }"
-                                                        (click)="
-                                                            !(
-                                                                !invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email?.length < 4
-                                                            )
-                                                                ? deleteEmail(
-                                                                      invoiceSettings.purchaseBillSettings.email
-                                                                  )
-                                                                : ''
-                                                        "
-                                                        ><i class="icon-trash"></i
-                                                    ></span>
+                                                <div class="col-md-6 col-sm-12 row pl-0">
+                                                    <div class="btn-wrapper d-flex align-items-center justify-content-center ml-3">
+                                                        <button
+                                                            matButton="filled"
+                                                            class="mr-3"
+                                                            (click)="verifyEmail(invoiceSettings.purchaseBillSettings.email)"
+                                                            [disabled]="
+                                                                !isEmailChanged &&
+                                                                (!invoiceSettings.purchaseBillSettings.email ||
+                                                                    invoiceSettings.purchaseBillSettings.email?.length < 4 ||
+                                                                    invoiceSettings.purchaseBillSettings.emailVerified)
+                                                            "
+                                                            *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
+                                                        >
+                                                            {{ localeData?.verify }}
+                                                        </button>
+                                                        <span
+                                                            *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"
+                                                            class="verified-text"
+                                                        >
+                                                            {{ localeData?.verified }}
+                                                        </span>
+                                                        <span
+                                                            class="delete-verified-icon"
+                                                            [ngClass]="{
+                                                                'opacity-5':
+                                                                    !invoiceSettings.purchaseBillSettings.email ||
+                                                                    invoiceSettings.purchaseBillSettings.email?.length < 4,
+                                                                'cursor-pointer': !(
+                                                                    !invoiceSettings.purchaseBillSettings.email ||
+                                                                    invoiceSettings.purchaseBillSettings.email?.length < 4
+                                                                ),
+                                                            }"
+                                                            (click)="
+                                                                !(
+                                                                    !invoiceSettings.purchaseBillSettings.email ||
+                                                                    invoiceSettings.purchaseBillSettings.email?.length < 4
+                                                                )
+                                                                    ? deleteEmail(invoiceSettings.purchaseBillSettings.email)
+                                                                    : ''
+                                                            "
+                                                        >
+                                                            <i class="icon-trash"></i>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="clear-both pt-2">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3">
-                                        <mat-slide-toggle
-                                            [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
-                                            class="show-on-mobile"
-                                            name="sendThroughGmail"
-                                            color="primary"
-                                            [disabled]="!isGmailIntegrated"
-                                            aria-label="sendThroughGmail"
-                                        >
-                                        </mat-slide-toggle>
-                                        <label>{{ localeData?.send_email_gmail }}</label>
+                                <div class="clear-both pt-2">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
+                                                class="show-on-mobile"
+                                                name="sendThroughGmail"
+                                                color="primary"
+                                                [disabled]="!isGmailIntegrated"
+                                                aria-label="sendThroughGmail"
+                                            ></mat-slide-toggle>
+                                            <label>{{ localeData?.send_email_gmail }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group d-flex align-items-center">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
+                                                class="hide-on-mobile"
+                                                name="sendThroughGmail"
+                                                color="primary"
+                                                [disabled]="!isGmailIntegrated"
+                                                aria-label="sendThroughGmail"
+                                            ></mat-slide-toggle>
+                                            <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
+                                                <a [href]="gmailAuthCodeUrl$ | async">{{ localeData?.integrate_gmail }}</a>
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-9 form-group d-flex align-items-center">
-                                        <mat-slide-toggle
-                                            [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
-                                            class="hide-on-mobile"
-                                            name="sendThroughGmail"
-                                            color="primary"
-                                            [disabled]="!isGmailIntegrated"
-                                            aria-label="sendThroughGmail"
-                                        >
-                                        </mat-slide-toggle>
-                                        <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
-                                            <a [href]="gmailAuthCodeUrl$ | async">{{ localeData?.integrate_gmail }}</a>
-                                        </span>
-                                    </div>
+                                    <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                                 </div>
-                                <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </mat-tab>
                 <mat-tab>
@@ -157,167 +147,148 @@
                     </ng-template>
                     <div class="pt-3 pb-3">
                         <div class="sales-order-tab single-tab-block">
-                        <div class=" p-3 clear-both mb-2">
-                            <p class="clear-both border-bottom mb-3">{{ localeData?.purchase_order }}</p>
-                            <div class="clear-both">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{ localeData?.default_expiry_days }}</label>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-9">
-                                        <div class="default-expiry row">
-                                            <div class="col-md-5">
-                                                <div class="form-group">
-                                                    <div class="expiry-days">
-                                                        <input
-                                                            type="tel"
-                                                            class="form-control w-100"
-                                                            maxlength="3"
-                                                            placeholder="00"
-                                                            decimalDigitsDirective
-                                                            name="poDuePeriod"
-                                                            [(ngModel)]="
-                                                                invoiceSettings.purchaseBillSettings.poDuePeriod
-                                                            "
-                                                        />
-                                                        <span class="ml-1"> {{ commonLocaleData?.app_days }} </span>
+                            <div class="p-3 clear-both mb-2">
+                                <p class="clear-both border-bottom mb-3">{{ localeData?.purchase_order }}</p>
+                                <div class="clear-both">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
+                                            <label>{{ localeData?.default_expiry_days }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-9">
+                                            <div class="default-expiry row">
+                                                <div class="col-md-5">
+                                                    <div class="form-group">
+                                                        <div class="expiry-days">
+                                                            <input
+                                                                type="tel"
+                                                                class="form-control w-100"
+                                                                maxlength="3"
+                                                                placeholder="00"
+                                                                decimalDigitsDirective
+                                                                name="poDuePeriod"
+                                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.poDuePeriod"
+                                                            />
+                                                            <span class="ml-1">{{ commonLocaleData?.app_days }}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="clear-both pt-2">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="
-                                                    invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry
-                                                "
-                                                class="show-on-mobile"
-                                                name="changePOStatusOnExpiry"
-                                                color="primary"
-                                                aria-label="changePOStatusOnExpiry"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ localeData?.auto_change_status }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="
-                                                    invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry
-                                                "
-                                                class="hide-on-mobile"
-                                                name="changePOStatusOnExpiry"
-                                                color="primary"
-                                                aria-label="changePOStatusOnExpiry"
-                                            >
-                                            </mat-slide-toggle>
+                                    <div class="clear-both pt-2">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry"
+                                                    class="show-on-mobile"
+                                                    name="changePOStatusOnExpiry"
+                                                    color="primary"
+                                                    aria-label="changePOStatusOnExpiry"
+                                                ></mat-slide-toggle>
+                                                <label>{{ localeData?.auto_change_status }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry"
+                                                    class="hide-on-mobile"
+                                                    name="changePOStatusOnExpiry"
+                                                    color="primary"
+                                                    aria-label="changePOStatusOnExpiry"
+                                                ></mat-slide-toggle>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="clear-both pt-2" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="
-                                                    invoiceSettings.purchaseBillSettings.poAutoWhatsApp
-                                                "
-                                                class="show-on-mobile"
-                                                name="poAutoWhatsApp"
-                                                color="primary"
-                                                aria-label="purchase order whatsapp"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ getWhatsappSettingLabel("purchase order") }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="
-                                                    invoiceSettings.purchaseBillSettings.poAutoWhatsApp
-                                                "
-                                                class="hide-on-mobile"
-                                                name="poAutoWhatsApp"
-                                                color="primary"
-                                                aria-label="purchase order whatsapp"
-                                            >
-                                            </mat-slide-toggle>
+                                    <div class="clear-both pt-2" *ngIf="voucherApiVersion === 2">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.poAutoWhatsApp"
+                                                    class="show-on-mobile"
+                                                    name="poAutoWhatsApp"
+                                                    color="primary"
+                                                    aria-label="purchase order whatsapp"
+                                                ></mat-slide-toggle>
+                                                <label>{{ getWhatsappSettingLabel('purchase order') }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.poAutoWhatsApp"
+                                                    class="hide-on-mobile"
+                                                    name="poAutoWhatsApp"
+                                                    color="primary"
+                                                    aria-label="purchase order whatsapp"
+                                                ></mat-slide-toggle>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="clear-both pt-2">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
-                                                class="show-on-mobile"
-                                                name="useCustomPONumber"
-                                                color="primary"
-                                                aria-label="useCustomPONumber"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ localeData?.custom_po_number }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 custom-purchase-order-input-fields">
-                                            <div class="form-group clear-both">
+                                    <div class="clear-both pt-2">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
                                                 <mat-slide-toggle
                                                     [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
-                                                    class="hide-on-mobile"
+                                                    class="show-on-mobile"
                                                     name="useCustomPONumber"
                                                     color="primary"
                                                     aria-label="useCustomPONumber"
-                                                >
-                                                </mat-slide-toggle>
-                                                <div
-                                                    class="d-inline-flex custom-estimation"
-                                                    *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber"
-                                                >
-                                                    <div class="d-inline-flex position-relative ">
-                                                        <label>{{ localeData?.initial_number }}</label>
-                                                        <input
-                                                            type="text"
-                                                            class="form-control text-right initial-number"
-                                                            name="initialNumber"
-                                                            [(ngModel)]="
-                                                                invoiceSettings.purchaseBillSettings.initialPONumber
-                                                            "
-                                                        />
-                                                    </div>
-                                                    <div class="d-inline-flex position-relative ">
-                                                        <label class="r-0">{{ commonLocaleData?.app_prefix }}</label>
-                                                        <input
-                                                            type="text"
-                                                            class="form-control text-right"
-                                                            name="prefixNumber"
-                                                            [(ngModel)]="
-                                                                invoiceSettings.purchaseBillSettings.poNumberPrefix
-                                                            "
-                                                        />
+                                                ></mat-slide-toggle>
+                                                <label>{{ localeData?.custom_po_number }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9 custom-purchase-order-input-fields">
+                                                <div class="form-group clear-both">
+                                                    <mat-slide-toggle
+                                                        [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
+                                                        class="hide-on-mobile"
+                                                        name="useCustomPONumber"
+                                                        color="primary"
+                                                        aria-label="useCustomPONumber"
+                                                    ></mat-slide-toggle>
+                                                    <div
+                                                        class="d-inline-flex custom-estimation"
+                                                        *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber"
+                                                    >
+                                                        <div class="d-inline-flex position-relative">
+                                                            <label>{{ localeData?.initial_number }}</label>
+                                                            <input
+                                                                type="text"
+                                                                class="form-control text-right initial-number"
+                                                                name="initialNumber"
+                                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.initialPONumber"
+                                                            />
+                                                        </div>
+                                                        <div class="d-inline-flex position-relative">
+                                                            <label class="r-0">{{ commonLocaleData?.app_prefix }}</label>
+                                                            <input
+                                                                type="text"
+                                                                class="form-control text-right"
+                                                                name="prefixNumber"
+                                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.poNumberPrefix"
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="clear-both pt-2" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <label>{{ commonLocaleData?.app_custom_email_template }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
-                                            <a
-                                                href="javascript:;"
-                                                class="cursor-pointer"
-                                                (click)="openCustomEmailDialog('purchase order')"
-                                                >{{ commonLocaleData?.app_custom_email }}</a
-                                            >
+                                    <div class="clear-both pt-2" *ngIf="voucherApiVersion === 2">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <label>{{ commonLocaleData?.app_custom_email_template }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <a
+                                                    href="javascript:;"
+                                                    class="cursor-pointer"
+                                                    (click)="openCustomEmailDialog('purchase order')"
+                                                >
+                                                    {{ commonLocaleData?.app_custom_email }}
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
-                            <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                         </div>
-                    </div>
                     </div>
                 </mat-tab>
                 <mat-tab>
@@ -327,187 +298,171 @@
                     </ng-template>
                     <div class="pt-3 pb-3">
                         <div class="single-tab-block">
-                        <div class=" p-3 clear-both mb-2">
-                            <p class="clear-both border-bottom mb-3">{{ localeData?.purchase_bill }}</p>
-                            <div class="clear-both">
+                            <div class="p-3 clear-both mb-2">
+                                <p class="clear-both border-bottom mb-3">{{ localeData?.purchase_bill }}</p>
                                 <div class="clear-both">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <label>{{ localeData?.bill_lock_date }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9">
-                                            <div class="form-group mb-0 bill-lock-date">
-                                                <giddh-datepicker
-                                                    name="lockDate"
-                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.lockDate"
-                                                    [appearance]="'outline'"
-                                                    class="invoice-lock-date"
-                                                ></giddh-datepicker>
+                                    <div class="clear-both">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <label>{{ localeData?.bill_lock_date }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9">
+                                                <div class="form-group mb-0 bill-lock-date">
+                                                    <giddh-datepicker
+                                                        name="lockDate"
+                                                        [(ngModel)]="invoiceSettings.purchaseBillSettings.lockDate"
+                                                        [appearance]="'outline'"
+                                                        class="invoice-lock-date"
+                                                    ></giddh-datepicker>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="clear-both pt-4">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
-                                                class="show-on-mobile"
-                                                name="enableNarration"
-                                                color="primary"
-                                                aria-label="enableNarration"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ localeData?.show_narration_ledger }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
-                                                class="hide-on-mobile"
-                                                name="enableNarration"
-                                                color="primary"
-                                                aria-label="enableNarration"
-                                            >
-                                            </mat-slide-toggle>
+                                    <div class="clear-both pt-4">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
+                                                    class="show-on-mobile"
+                                                    name="enableNarration"
+                                                    color="primary"
+                                                    aria-label="enableNarration"
+                                                ></mat-slide-toggle>
+                                                <label>{{ localeData?.show_narration_ledger }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
+                                                    class="hide-on-mobile"
+                                                    name="enableNarration"
+                                                    color="primary"
+                                                    aria-label="enableNarration"
+                                                ></mat-slide-toggle>
+                                            </div>
                                         </div>
                                     </div>
+                                    <ng-container *ngIf="voucherApiVersion === 2">
+                                        <div class="clear-both pt-2 row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
+                                                    class="show-on-mobile"
+                                                    name="enableVoucherDownload"
+                                                    color="primary"
+                                                    aria-label="enableVoucherDownload"
+                                                ></mat-slide-toggle>
+                                                <label>{{ localeData?.enable_voucher_download }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
+                                                    class="hide-on-mobile"
+                                                    name="enableVoucherDownload"
+                                                    color="primary"
+                                                    aria-label="enableVoucherDownload"
+                                                ></mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                        <div class="clear-both pt-2 row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
+                                                    class="show-on-mobile"
+                                                    name="autoWhatsAppPayment"
+                                                    color="primary"
+                                                    aria-label="autoWhatsAppPayment"
+                                                ></mat-slide-toggle>
+                                                <label>{{ getWhatsappSettingLabel('payment') }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
+                                                    class="hide-on-mobile"
+                                                    name="autoWhatsAppPayment"
+                                                    color="primary"
+                                                    aria-label="autoWhatsAppPayment"
+                                                ></mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                        <div class="clear-both pt-2 row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.autoWhatsApp"
+                                                    class="show-on-mobile"
+                                                    name="autoWhatsAppPurchaseBill"
+                                                    color="primary"
+                                                    aria-label="autoWhatsAppPurchaseBill"
+                                                ></mat-slide-toggle>
+                                                <label>{{ getWhatsappSettingLabel('purchase bill') }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.autoWhatsApp"
+                                                    class="hide-on-mobile"
+                                                    name="autoWhatsAppPurchaseBill"
+                                                    color="primary"
+                                                    aria-label="autoWhatsAppPurchaseBill"
+                                                ></mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                        <div class="clear-both pt-2 row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
+                                                    name="purchaseRoundOff"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                    aria-label="purchaseRoundOff"
+                                                ></mat-slide-toggle>
+                                                <label>{{ localeData?.apply_purchase_round_off }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
+                                                    name="purchaseRoundOff"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                    aria-label="purchaseRoundOff"
+                                                ></mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                        <div class="clear-both pt-2 row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.invoiceSettings.generateAutoPurchaseNumber"
+                                                    name="generatePurchaseNumber"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                    aria-label="generatePurchaseNumber"
+                                                ></mat-slide-toggle>
+                                                <label>{{ localeData?.generate_auto_purchase_number }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.invoiceSettings.generateAutoPurchaseNumber"
+                                                    name="generatePurchaseNumber"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                    aria-label="generatePurchaseNumber"
+                                                ></mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                        <div class="clear-both pt-2 row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <label>{{ commonLocaleData?.app_custom_email_template }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <a href="javascript:;" class="cursor-pointer" (click)="openCustomEmailDialog('purchase')">
+                                                    {{ commonLocaleData?.app_custom_email }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                                 </div>
-                                <ng-container *ngIf="voucherApiVersion === 2">
-                                    <div class="clear-both pt-2 row" >
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
-                                                class="show-on-mobile"
-                                                name="enableVoucherDownload"
-                                                color="primary"
-                                                aria-label="enableVoucherDownload"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ localeData?.enable_voucher_download }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
-                                                class="hide-on-mobile"
-                                                name="enableVoucherDownload"
-                                                color="primary"
-                                                aria-label="enableVoucherDownload"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
-                                    </div>
-                                    <div class="clear-both pt-2 row"> 
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
-                                                class="show-on-mobile"
-                                                name="autoWhatsAppPayment"
-                                                color="primary"
-                                                aria-label="autoWhatsAppPayment"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ getWhatsappSettingLabel("payment") }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
-                                                class="hide-on-mobile"
-                                                name="autoWhatsAppPayment"
-                                                color="primary"
-                                                aria-label="autoWhatsAppPayment"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
-                                    </div>
-                                    <div class="clear-both pt-2 row"> 
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.autoWhatsApp"
-                                                class="show-on-mobile"
-                                                name="autoWhatsAppPurchaseBill"
-                                                color="primary"
-                                                aria-label="autoWhatsAppPurchaseBill"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ getWhatsappSettingLabel("purchase bill") }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.autoWhatsApp"
-                                                class="hide-on-mobile"
-                                                name="autoWhatsAppPurchaseBill"
-                                                color="primary"
-                                                aria-label="autoWhatsAppPurchaseBill"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
-                                    </div>
-                                    <div class="clear-both pt-2 row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
-                                                name="purchaseRoundOff"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                                aria-label="purchaseRoundOff"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ localeData?.apply_purchase_round_off }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
-                                                name="purchaseRoundOff"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                                aria-label="purchaseRoundOff"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
-                                    </div>
-                                    <div class="clear-both pt-2 row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.generateAutoPurchaseNumber"
-                                                name="generatePurchaseNumber"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                                aria-label="generatePurchaseNumber"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ localeData?.generate_auto_purchase_number }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.generateAutoPurchaseNumber"
-                                                name="generatePurchaseNumber"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                                aria-label="generatePurchaseNumber"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="clear-both pt-2 row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <label>{{ commonLocaleData?.app_custom_email_template }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
-                                            <a
-                                                href="javascript:;"
-                                                class="cursor-pointer"
-                                                (click)="openCustomEmailDialog('purchase')"
-                                                >{{ commonLocaleData?.app_custom_email }}</a
-                                            >
-                                        </div>
-                                    </div>
-                                </ng-container>
-                                <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </mat-tab>
             </mat-tab-group>
@@ -515,12 +470,12 @@
     </section>
     <ng-template #buttonsSection>
         <div class="d-flex column-gap-1">
-            <button mat-raised-button color="primary" type="button" (click)="updateForm()">
+            <button matButton="filled" type="button" (click)="updateForm()">
                 {{ commonLocaleData?.app_save }}
             </button>
-            <button mat-stroked-button type="button" (click)="resetForm()">
+            <button matButton="outlined" type="button" (click)="resetForm()">
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>
     </ng-template>
-</ng-container>
+</div>

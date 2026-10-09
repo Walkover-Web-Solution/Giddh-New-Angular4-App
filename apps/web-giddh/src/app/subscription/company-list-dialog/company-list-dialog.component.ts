@@ -24,7 +24,8 @@ export interface CompanyRequest {
     templateUrl: './company-list-dialog.component.html',
     styleUrls: ['./company-list-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [CompanyListDialogComponentStore, SubscriptionComponentStore]
+    providers: [CompanyListDialogComponentStore, SubscriptionComponentStore],
+    standalone: false
 })
 export class CompanyListDialogComponent implements OnInit {
     /** Instance of company list */
@@ -84,7 +85,6 @@ export class CompanyListDialogComponent implements OnInit {
         this.localeData = this.inputData?.localeData;
         this.commonLocaleData = this.inputData?.commonLocaleData;
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
-        document.body?.classList?.add("subscription-sidebar");
         this.initForm();
         this.initCompanyListRequest();
         this.getAllCompaniesList();
@@ -248,13 +248,13 @@ export class CompanyListDialogComponent implements OnInit {
         let text = this.localeData?.confirm_archive_message;
         text = text?.replace("[TYPE]", request.status.archiveStatus === 'UNARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '540px',
-            data: {
+                    width: '540px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: text,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: text,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -266,12 +266,10 @@ export class CompanyListDialogComponent implements OnInit {
 
     /**
      * Lifecycle hook that is called when the component is destroyed.
-     * Removes "subscription-sidebar" class from body, and completes the subject indicating component destruction.
      *
      * @memberof CompanyListDialogComponent
      */
     public ngOnDestroy(): void {
-        document.body?.classList?.remove("subscription-sidebar");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

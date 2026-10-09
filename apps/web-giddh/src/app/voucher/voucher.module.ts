@@ -3,7 +3,6 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { MatCommonModule } from "@angular/material/core";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -22,7 +21,6 @@ import { DigitsOnlyModule } from "../shared/helpers/directives/digitsOnly/digits
 import { HasFocusDirectiveModule } from "../shared/helpers/directives/has-focus/has-focus.module";
 import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
-import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
 import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-invoice.module";
 import { SharedModule } from "../shared/shared.module";
@@ -39,6 +37,8 @@ import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatDividerModule } from "@angular/material/divider";
 import { OnloadDirectiveModule } from "./directive/onload.module";
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
 
 @NgModule({
     imports: [
@@ -48,7 +48,6 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         ReactiveFormsModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        
         DigitsOnlyModule,
         SharedModule,
         AsideMenuRecurringEntryModule,
@@ -60,7 +59,7 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         }),
         SendEmailInvoiceModule,
         VoucherTypeToNamePipeModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         NgxMaskModule.forRoot(),
         AdvanceReceiptAdjustmentModule,
         HasFocusDirectiveModule,
@@ -70,7 +69,6 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         AsideMenuProductServiceModule,
         MatButtonModule,
         MatMenuModule,
-        MatCommonModule,
         MatButtonModule,
         MatCheckboxModule,
         MatDialogModule,
@@ -86,9 +84,10 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         MatExpansionModule,
         MatDividerModule,
         OnloadDirectiveModule,
+        GiddhDatePipe
     ],
     exports: [VoucherComponent],
     declarations: [VoucherRendererComponent, VoucherComponent],
     providers: [TitleCasePipe],
 })
-export class VoucherModule {}
+export class VoucherModule { }

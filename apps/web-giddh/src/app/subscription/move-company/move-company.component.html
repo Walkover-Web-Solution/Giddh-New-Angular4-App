@@ -1,27 +1,22 @@
-<div class="dialog-header">
+<div cdkFocusInitial class="dialog-header">
     <span *ngIf="subscriptionMove">
         {{ localeData?.subscription?.move_company ? localeData?.subscription?.move_company : localeData?.move_company }}
     </span>
     <span *ngIf="!subscriptionMove">{{ localeData?.add_company }}</span>
-    <button mat-icon-button aria-label="close" mat-dialog-close>
-        <i class="icon-cross"></i>
-    </button>
 </div>
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
 <mat-dialog-content class="dialog-body">
     <div *ngIf="!isLoading">
-        <div id="my-frame" class="modal-body move-company-modal-body clear-both">
+        <div id="my-frame">
             <p class="theme-foreground-color mb-2" [innerHTML]="getMovePlanText()"></p>
             <div class="row mb-2">
                 <div class="move-wrapper" [ngClass]="subscriptionMove ? 'col-9' : 'col-6'">
                     <div *ngIf="subscriptionMove" class="position-relative move-select">
                         <reactive-dropdown-field
                             [placeholder]="
-                                localeData?.subscription?.select_plan
-                                    ? localeData?.subscription?.select_plan
-                                    : localeData?.select_plan
+                                localeData?.subscription?.select_plan ? localeData?.subscription?.select_plan : localeData?.select_plan
                             "
                             [enableDynamicSearch]="true"
                             [isPaginationEnabled]="true"
@@ -30,8 +25,7 @@
                             [options]="subscriptions$ | async"
                             [required]="true"
                             (selectedOption)="$event && (selectedPlan = $event.value)"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div *ngIf="!subscriptionMove" class="position-relative move-select">
                         <reactive-dropdown-field
@@ -44,15 +38,13 @@
                             (dynamicSearchedQuery)="searchCompany($event)"
                             [required]="true"
                             (selectedOption)="selectCompany($event)"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
             </div>
-            <div class="clear-both">
+            <div class="d-flex justify-content-end column-gap-1">
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     mat-dialog-close
                     (click)="moveCompanyInNewPlan()"
                     [disabled]="subscriptionMove ? !selectedPlan : companyDetails?.value"
@@ -64,6 +56,9 @@
                                 : localeData?.move
                             : commonLocaleData?.app_add
                     }}
+                </button>
+                <button matButton="outlined" mat-dialog-close type="button">
+                    {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>
         </div>

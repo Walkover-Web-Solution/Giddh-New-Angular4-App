@@ -13,7 +13,8 @@ import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions'
 @Component({
     selector: 'group-add',
     templateUrl: 'group-add.component.html',
-    styleUrls: ['group-add.component.scss']
+    styleUrls: ['group-add.component.scss'],
+    standalone: false
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
@@ -66,7 +67,13 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         this.isCreateGroupSuccess$.subscribe(a => {
             if (a) {
                 this.groupDetailForm?.markAsPristine();
-                this.groupDetailForm.reset();
+                this.groupDetailForm.reset({
+                    name: '',
+                    uniqueName: '',
+                    description: '',
+                    closingBalanceTriggerAmount: 0,
+                    closingBalanceTriggerAmountType: 'CREDIT'
+                });
                 setTimeout(() => {
                     this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 }, 500);

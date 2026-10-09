@@ -47,7 +47,16 @@ export interface OrganizationProfile {
     manageInventory?: boolean;
     portalDomain?: string;
     withPay?: any;
-    ledgerView?: LedgerViewEnum.TView
+    ledgerView?: LedgerViewEnum;
+    showAccountUniqueName?: boolean;
+    autoGenerateNote?: boolean;
+    currencyDisplayFormat?: CurrencyDisplayFormat;
+}
+
+/** PDF currency display format options */
+export enum CurrencyDisplayFormat {
+    Code = 'CODE',
+    Symbol = 'SYMBOL'
 }
 
 /** Form type in setting aside component */

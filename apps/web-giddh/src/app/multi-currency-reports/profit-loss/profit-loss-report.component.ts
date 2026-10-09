@@ -4,15 +4,16 @@ import { takeUntil } from 'rxjs/operators';
 import { GetCogsResponse, ProfitLossData, ProfitLossDateRangeResponse, ProfitLossRequest } from '../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { ProfitLossGridComponent } from '../../financial-reports/components/profit-loss/components/profit-loss-grid/profit-loss-grid.component';
-import { cloneDeep } from '../../lodash-optimized';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
 import { ReportType } from '../multi-currency.const';
 import { prepareProfitLossData } from '../../store/tl-pl/tl-pl.reducer';
+import { cloneDeep, filter, forEach, includes, keys } from '../../lodash-optimized';
 
 @Component({
-    selector: 'profit-loss-report',
+selector: 'profit-loss-report',
     templateUrl: './profit-loss-report.component.html',
-    providers: [MultiCurrencyReportsComponentStore]
+    providers: [MultiCurrencyReportsComponentStore],
+    standalone: false
 })
 export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Reference to the ProfitLossGridComponent */
@@ -114,13 +115,13 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
 
                 if (data && data.expArr) {
                     this.initData(data.expArr, "expenses");
-                    data.expArr.forEach(group => {
+                    (Array.isArray(data.expArr) ? data.expArr : []).forEach(group => {
                         group.category = "expenses";
                         group.isVisible = true;
                         group.isCreated = true;
                         group.isIncludedInSearch = true;
                         group.isOpen = true;
-                        group.childGroups.forEach(childGroups => {
+                        (Array.isArray(group.childGroups) ? group.childGroups : []).forEach(childGroups => {
                             childGroups.category = "expenses";
                             childGroups.isVisible = true;
                             childGroups.isCreated = true;
@@ -130,13 +131,13 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                 }
                 if (data && data.incArr) {
                     this.initData(data.incArr, "income");
-                    data.incArr.forEach(group => {
+                    (Array.isArray(data.incArr) ? data.incArr : []).forEach(group => {
                         group.category = "income";
                         group.isVisible = true;
                         group.isCreated = true;
                         group.isIncludedInSearch = true;
                         group.isOpen = true;
-                        group.childGroups.forEach(childGroups => {
+                        (Array.isArray(group.childGroups) ? group.childGroups : []).forEach(childGroups => {
                             childGroups.category = "income";
                             childGroups.isVisible = true;
                             childGroups.isCreated = true;
@@ -170,12 +171,12 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
      * @memberof ProfitLossReportComponent
      */
     public initData(groupList: ChildGroup[], category: string): void {
-        groupList.forEach((childGroup: ChildGroup) => {
+        (Array.isArray(groupList) ? groupList : []).forEach((childGroup: ChildGroup) => {
             childGroup.category = category;
             childGroup.isVisible = false;
             childGroup.isCreated = false;
             childGroup.isIncludedInSearch = true;
-            childGroup.accounts.forEach((account: Account) => {
+            (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: Account) => {
                 account.isIncludedInSearch = true;
                 account.isCreated = false;
                 account.isVisible = false;
@@ -214,7 +215,7 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
      * @memberof ProfitLossReportComponent
      */
     public filterData(): void {
-        this.componentStore.getMultiCurrencyReport(ReportType.ProfitLoss);
+        this.componentStore.getMultiCurrencyReport(ReportType.PROFIT_LOSS);
     }
 
     /**
@@ -225,7 +226,7 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
      * @memberof ProfitLossReportComponent
      */
     public searchData(event: any): void {
-        this.componentStore.createMultiCurrencyReport({ reportType: ReportType.ProfitLoss, payload: event });
+        this.componentStore.createMultiCurrencyReport({ reportType: ReportType.PROFIT_LOSS, payload: event });
     }
 
     /**

@@ -10,14 +10,15 @@ import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '.
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as dayjs from 'dayjs';
 import { EWayBillComponentStore } from '../eWayBill.store';
-import { ASIDE_PANE_CONFIG, IOption, PAGINATION_LIMIT } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-e-way-bill-create',
     templateUrl: './e-way-bill-create-component.html',
     styleUrls: [`./e-way-bill-create-component.scss`],
-    providers: [EWayBillComponentStore]
+    providers: [EWayBillComponentStore],
+    standalone: false
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
     /** Template reference for invoice removal confirmation dialog */
@@ -60,6 +61,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public get transporterName(): FormControl {
         return this.generateNewTransporterForm.get('transporterName') as FormControl;
     }
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS
 
     constructor(
         private store: Store<AppState>,
@@ -164,7 +167,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public clearTransportForm(): void {
-        this.generateNewTransporterForm.reset();
+        if (this.generateNewTransporterForm) {
+            this.generateNewTransporterForm.reset();
+        }
     }
 
     /**

@@ -24,7 +24,7 @@
     "select_operation": "ऑपरेशन चुनें",
     "enter_value": "मूल्य दर्ज करें",
     "confirm_delete_manufacturing": "क्या आप निर्माण को हटाना चाहते हैं?",
-    "info_message": "डेटा संपादित करने के लिए, शाखा मोड पर जाएँ।",
+    "info_message": "उत्पादन डेटा बनाने या संपादित करने के लिए, शाखा मोड पर जाएं।",
     "add_recipe": "रेसिपी जोड़ें",
     "variant_already_selected": "वैरिएंट पहले से ही चयनित है.",
     "confirm_delete_recipe": "क्या आप नुस्खा हटाना चाहते हैं?",

@@ -2,6 +2,7 @@
     "to": "To",
     "cc": "Cc",
     "bcc": "Bcc",
+    "reply_to": "Reply To",
     "email_content_suggestions": "Type '@' to see suggestions",
     "recipients": "Recipients",
     "subject": "Subject",

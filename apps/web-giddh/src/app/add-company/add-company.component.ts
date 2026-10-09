@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, ELECTRON_OTP_PROVIDER_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, RestrictedModules, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
+import { BusinessTypes, Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL, RestrictedModules } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -28,8 +28,11 @@ import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { CommonService } from "../services/common.service";
 import { ChangeBillingComponentStore } from "../subscription/change-billing/utility/change-billing.store";
+import { PhoneNumberUtil } from 'google-libphonenumber';
 import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store";
 import { ServiceConfig } from "../services/service.config";
+import { environment } from "../../environments/environment.generated";
+import { MobileNumberInputComponent } from "../shared/mobile-number-input";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -39,21 +42,22 @@ declare var window: any;
     templateUrl: './add-company.component.html',
     styleUrls: ['./add-company.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [AddCompanyComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore]
+    providers: [AddCompanyComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore],
+    standalone: false
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('stepper') stepperIcon: any;
     /** Mobile number field instance */
     @ViewChild('mobileNoField', { static: false }) mobileNoField: ElementRef;
+    /** Mobile number field instance */
+    @ViewChild('mobileNumberInput', { static: false }) mobileNumberInput: MobileNumberInputComponent;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if user doesn't have mobile number and we have to provide field to input mobile number */
     public showMobileField: boolean = false;
-    /** This will hold mobile number field input  */
-    public intl: any;
     /** This will hold if mobile number is invalid */
     public isMobileNumberInvalid: boolean = false;
     /** Form Group for company form */
@@ -131,7 +135,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Hold business type list */
     public businessTypeList: IOption[] = [];
     /** Hold business nature list */
-    public businessNatureList: IOption[] = [{ label: "Food", value: "Food" }, { label: "Service", value: "Service" }, { label: "Manufacturing", value: "Manufacturing" }, { label: "Retail", value: "Retail" }, { label: "Other", value: "Other" }];
+    public businessNatureList: IOption[] = [];
     /** Stores the item on boarding store data */
     public itemOnBoardingDetails: ItemOnBoardingState;
     /** Hold state gst code list */
@@ -167,8 +171,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public isOtherCountry: boolean = false;
     /** Constant for business type */
     public businessTypes = BusinessTypes;
-    /** Hold current flag*/
-    public currentFlag: any;
     /** Hold selected tab*/
     public selectedStep: number = 0;
     /** List of counties of country */
@@ -221,8 +223,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public isCreateBySubscription: boolean = false;
     /** Holds list of countries where hide applicable tax input field */
     public hideApplicableTaxCountryList: string[] = ['US'];
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
 
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -234,6 +234,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public viewSubscriptionData$ = this.viewSubscriptionComponentStore.select(state => state.viewSubscription);
     /** Holds user module restriction */
     public remainingUsers: number = 0;
+    /** Hold queryParams */
+    private queryParams: any;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -241,7 +243,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private componentStore: AddCompanyComponentStore,
         private http: HttpClient,
         private store: Store<AppState>,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private commonActions: CommonActions,
         private companyService: CompanyService,
         private changeDetection: ChangeDetectorRef,
@@ -284,6 +286,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
+        this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
+            if (queryParams && Object.keys(queryParams).length > 0) {
+                this.prefillFormFromQueryParams(queryParams);
+                this.queryParams = queryParams;
+            }
+        });
+
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
             if (!this.isNewUserLoggedIn) {
@@ -296,14 +305,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        /** Library to separate phone number and calling code */
-        if (window['libphonenumber'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/libphonenumber-js/1.10.41/libphonenumber-js.min.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-        }
+        /** Library to separate phone number and calling code - Using npm package instead of CDN */
+        // Removed CDN loading as google-libphonenumber package is already available in package.json
         /** Library to separate phone number and calling code */
 
         this.loggedInUser = this.generalService.user;
@@ -336,6 +339,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                             this.formFields[response.fields[key].name] = response.fields[key];
                         }
                     });
+                    this.validateGstNumber();
                     this.changeDetection.detectChanges();
                 }
                 if (response.applicableTaxes) {
@@ -428,6 +432,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                         additional: response?.body[key]
                     });
                 });
+                this.selectCountryFromQueryParams();
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -443,18 +448,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public initMobileNumberField(): void {
-        let interval = setInterval(() => {
-            if (this.mobileNoField) {
-                setTimeout(() => {
-                    this.showPhoneNumberField();
-                }, 100);
-                clearInterval(interval);
-            }
-        }, 500);
-
         let configuration = {
-            widgetId: (this.serviceConfig.OTP_WIDGET_ID_NEW || OTP_WIDGET_ID_NEW) ,
-            tokenAuth: (this.serviceConfig.OTP_WIDGET_TOKEN_NEW || OTP_WIDGET_TOKEN_NEW),
+            widgetId: this.serviceConfig.OTP_WIDGET_ID_WEB,
+            tokenAuth: this.serviceConfig.OTP_WIDGET_TOKEN_WEB,
             exposeMethods: true,
             success: (data: any) => { },
             failure: (error: any) => {
@@ -465,7 +461,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         /* OTP LOGIN */
         if (window['initSendOTP'] === undefined) {
             let scriptTag = document.createElement('script');
-            scriptTag.src = isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
+            scriptTag.src = Configuration.isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             scriptTag.onload = () => {
@@ -485,7 +481,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public sendOtp(): void {
         this.isMobileNumberVerified = false;
-        let mobileNo = this.intl.getNumber();
+        let mobileNo = this.firstStepForm.value.mobile;
         mobileNo = mobileNo?.replace("+", "");
         if (!mobileNo || this.isMobileNumberInvalid) {
             this.toaster.showSnackBar("error", this.localeData?.enter_valid_mobile_number);
@@ -724,7 +720,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public getStepperIcon(): void {
-         setTimeout(() => {
+        setTimeout(() => {
             if (this.stepperIcon) {
                 this.stepperIcon._getIndicatorType = () => 'number';
                 // Force change detection to update the stepper
@@ -859,12 +855,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                             });
                         }
                     });
+                    this.selectStateFromQueryParams();
                 }
 
                 if (response.countyList) {
                     this.countyList = response.countyList?.map(county => {
                         return { label: county.name, value: county.code };
                     });
+                    this.selectStateFromQueryParams();
                 }
             }
         });
@@ -886,6 +884,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                         additional: response[key]
                     });
                 });
+                this.selectCountryFromQueryParams();
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -931,13 +930,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
-        if (this.showMobileField) {
-            setTimeout(() => {
-                let currencyFlag = this.intl?.getSelectedCountryData();
-                this.currentFlag = currencyFlag?.iso2;
-                this.changeDetection.detectChanges();
-            }, 500);
-        }
     }
 
     /**
@@ -970,124 +962,40 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.company.baseCurrency = event?.additional?.currency?.code;
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
 
-            if (this.showMobileField) {
-                this.intl?.setCountry(event.value?.toLowerCase());
-
-                let phoneNumber = this.intl?.getNumber();
-
-                if (phoneNumber?.length) {
-                    let input = document.getElementById('init-contact-proforma');
-                    const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
-                    const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
-                    let reset = () => {
-                        input?.classList?.remove("error");
-                        if (errorMsg && validMsg) {
-                            errorMsg.innerHTML = "";
-                            errorMsg.classList.add("d-none");
-                            validMsg.classList.add("d-none");
-                        }
-                    };
-                    let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-                    if (input) {
-                        reset();
-                        if (this.intl?.isValidNumber()) {
-                            validMsg?.classList?.remove("d-none");
-                            this.setMobileNumberValid(true);
-                        } else {
-                            input?.classList?.add("error");
-                            this.setMobileNumberValid(false);
-                            let errorCode = this.intl?.getValidationError();
-                            if (errorMsg && errorMap[errorCode]) {
-                                this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
-                                errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("d-none");
-                            }
-                        }
-                    } else {
-                        this.setMobileNumberValid(true);
-                    }
-                }
+            if (this.showMobileField && !this.firstStepForm.value.mobile) {
+                this.mobileNumberInput.setDialCode(event?.additional?.callingCode || '');
             }
 
-            let onboardingFormRequest = new OnboardingFormRequest();
-            onboardingFormRequest.formName = 'onboarding';
-            onboardingFormRequest.country = event.value;
-            this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
-
-            let statesRequest = new StatesRequest();
-            statesRequest.country = event.value;
-            this.store.dispatch(this.generalActions.getAllState(statesRequest));
-            this.changeDetection.detectChanges();
+            this.getOnboardingFormByCountry(event);
+            this.getAllStateByCountry(event);
         }
     }
 
     /**
-     * This will use for mobile number
+     * Fetches onboarding form fields for the selected country
      *
+     * @private
+     * @param {*} event - Event containing country value
      * @memberof AddCompanyComponent
      */
-    public showPhoneNumberField(): void {
-        let input = document.getElementById('init-contact-proforma');
-        const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
-        const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
-        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
-        if (intlTelInput && input) {
-            this.intl = intlTelInput(input, {
-                nationalMode: true,
-                utilsScript: MOBILE_NUMBER_UTIL_URL,
-                autoHideDialCode: false,
-                separateDialCode: false,
-                initialCountry: 'auto',
-                geoIpLookup: (success, failure) => {
-                    let countryCode = 'in';
-                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
-                    fetchIPApi.subscribe(
-                        (response) => {
-                            if (response?.ipAddress) {
-                                return success(response.countryCode);
-                            } else {
-                                return success(countryCode);
-                            }
-                        },
-                        (err) => {
-                            return success(countryCode);
-                        }
-                    );
-                },
-            });
-            let reset = () => {
-                input?.classList?.remove("error");
-                if (errorMsg && validMsg) {
-                    errorMsg.innerHTML = "";
-                    errorMsg.classList.add("d-none");
-                    validMsg.classList.add("d-none");
-                }
-            };
-            input.addEventListener('blur', () => {
-                let phoneNumber = this.intl?.getNumber();
-                reset();
-                if (input) {
-                    if (phoneNumber?.length) {
-                        if (this.intl?.isValidNumber()) {
-                            validMsg?.classList?.remove("d-none");
-                            this.setMobileNumberValid(true);
-                        } else {
-                            input?.classList?.add("error");
-                            this.setMobileNumberValid(false);
-                            let errorCode = this.intl?.getValidationError();
-                            if (errorMsg && errorMap[errorCode]) {
-                                this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
-                                errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("d-none");
-                            }
-                        }
-                    } else {
-                        this.setMobileNumberValid(true);
-                    }
-                }
-            });
-        }
+    private getOnboardingFormByCountry(event: any): void {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = 'onboarding';
+        onboardingFormRequest.country = event.value;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+    }
+
+    /**
+     * Fetches all states for the selected country
+     *
+     * @private
+     * @param {*} event - Event containing country value
+     * @memberof AddCompanyComponent
+     */
+    private getAllStateByCountry(event: any): void {
+        let statesRequest = new StatesRequest();
+        statesRequest.country = event.value;
+        this.store.dispatch(this.generalActions.getAllState(statesRequest));
         this.changeDetection.detectChanges();
     }
 
@@ -1111,6 +1019,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
+        this.firstStepForm.get('mobile')?.patchValue(this.firstStepForm.get('mobile')?.value.replace(/\+/g, ''));
         if ((this.selectedStep === 0 && this.firstStepForm.invalid) || (this.showMobileField && !this.isMobileNumberVerified)) {
             this.isFormSubmitted = true;
             if (!this.firstStepForm.invalid && this.showMobileField && !this.isMobileNumberVerified) {
@@ -1131,7 +1040,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.getStepperIcon();
 
-        this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
+        this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.firstStepForm.controls['mobile'].value : this.mobileNo);
         this.selectedStep++;
         this.company.name = this.firstStepForm.controls['name'].value;
         this.company.country = this.firstStepForm.controls['country'].value.value;
@@ -1203,6 +1112,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.socketCompanyRequest.utm_campaign = this.generalService.getUtmParameter('utm_campaign');
         this.socketCompanyRequest.utm_term = this.generalService.getUtmParameter('utm_term');
         this.socketCompanyRequest.utm_content = this.generalService.getUtmParameter('utm_content');
+        this.socketCompanyRequest.ref = this.generalService.getUtmParameter('ref');
+        this.socketCompanyRequest.source = this.generalService.getUtmParameter('source');
         this.socketCompanyRequest.BusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
         this.companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => { });
         this.generalService.removeUtmParameters();
@@ -1223,6 +1134,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             campaign: this.generalService.getUtmParameter('utm_campaign'),
             term: this.generalService.getUtmParameter('utm_term'),
             content: this.generalService.getUtmParameter('utm_content'),
+            ref: this.generalService.getUtmParameter('ref'),
             country: this.company.country
         };
         this.companyService.sendNewUserInfo(newUserInfo).pipe(take(1)).subscribe(response => { });
@@ -1264,11 +1176,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 countryCode = parsedMobileNo?.countryCallingCode;
             }
         } else {
-            const phoneNumber = this.intl.getNumber();
-            countryCode = this.intl.getSelectedCountryData().dialCode;
-            number = phoneNumber.replace(countryCode, '').trim();
-            number = number.substring(1);
+            let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber("+" + this.firstStepForm.value.mobile);
+            number = parsedMobileNo?.nationalNumber ?? this.firstStepForm.value.mobile;
+            countryCode = parsedMobileNo?.countryCallingCode;
         }
+
 
         let taxDetails = this.prepareTaxDetail(this.companyForm);
         this.company.name = this.firstStepForm.value.name;
@@ -1293,15 +1205,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             delete this.company.creatorSuperAdmin;
         }
         this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
-        this.nextStepForm();
-        if (PRODUCTION_ENV && this.companiesList?.length === 0) {
+        if (environment.PRODUCTION_ENV && !this.companiesList?.length) {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
         }
+        this.nextStepForm();
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
                 this.generalService.companyUniqueName = response?.body?.uniqueName;
+                this.generalService.activeCompany = response?.body;
 
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;
@@ -1315,17 +1228,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isLoading = false;
                 this.toaster.showSnackBar("error", response?.message);
                 this.selectedStep = 0;
-                if (this.showMobileField) {
-                    let mobileNo = this.intl?.getNumber();
-
-                    setTimeout(() => {
-                        this.showPhoneNumberField();
-                        setTimeout(() => {
-                            this.intl?.setNumber(mobileNo);
-                        }, 500);
-                    }, 500);
-                }
-
                 this.changeDetection.detectChanges();
             }
         });
@@ -1450,7 +1352,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public logoutUser(): void {
         this.store.dispatch(this.verifyActions.hideVerifyBox());
         this.dialog?.closeAll();
-        if (isElectron) {
+        if (Configuration.isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
@@ -1550,8 +1452,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                     value: "Manufacturing"
                 },
                 {
-                    label: this.localeData?.retails,
+                    label: this.localeData?.retail,
                     value: "Retail"
+                },
+                {
+                    label: this.localeData?.other,
+                    value: "Other"
                 }
             ];
             this.changeDetection.detectChanges();
@@ -1616,6 +1522,78 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public handleAddNewUser(): void {
         if (this.canAddNewUser()) {
             this.addNewUser();
+        }
+    }
+
+    /**
+     * Prefills form fields from URL query parameters
+     *
+     * @private
+     * @param {*} queryParams - Query parameters from URL
+     * @memberof AddCompanyComponent
+     */
+    private prefillFormFromQueryParams(queryParams: any): void {
+        if (queryParams.companyName) {
+            this.firstStepForm.get('name')?.patchValue(queryParams.companyName);
+        }
+
+        if (queryParams.email) {
+            this.secondStepForm.get('email')?.patchValue(queryParams.email);
+        }
+
+        if (queryParams.mobileNumber) {
+            this.firstStepForm.get('mobile')?.patchValue(queryParams.mobileNumber);
+        }
+
+        if (queryParams.address) {
+            this.secondStepForm.get('address')?.patchValue(queryParams.address);
+        }
+
+        if (queryParams.pincode) {
+            this.secondStepForm.get('pincode')?.patchValue(queryParams.pincode);
+        }
+
+        if (queryParams.taxNumber) {
+            this.secondStepForm.get('businessType')?.patchValue(this.businessTypes.Registered);
+            this.secondStepForm.get('gstin')?.patchValue(queryParams.taxNumber);
+        }
+
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Selects country from query parameters if available
+     *
+     * @private
+     * @memberof AddCompanyComponent
+     */
+    private selectCountryFromQueryParams(): void {
+        if (this.queryParams?.country) {
+            const countryObject = this.countries.find((country) => country.value === this.queryParams.country);
+            if (countryObject) {
+                this.selectedCountry = countryObject.label;
+                this.selectedCountryCode = countryObject.value;
+                this.firstStepForm.controls['country'].setValue(countryObject);
+                this.company.baseCurrency = countryObject?.additional?.currency?.code;
+                this.firstStepForm.controls['currency'].setValue({ label: countryObject?.additional?.currency?.code, value: countryObject?.additional?.currency?.code });
+                this.getOnboardingFormByCountry(countryObject);
+                this.getAllStateByCountry(countryObject);
+            }
+        }
+    }
+
+    /**
+     * Selects state from query parameters if available
+     *
+     * @private
+     * @memberof AddCompanyComponent
+     */
+    private selectStateFromQueryParams(): void {
+        if (this.queryParams?.state) {
+            const stateObject = this.states.find((state) => state.value === this.queryParams.state);
+            if (stateObject) {
+                this.selectState(stateObject);
+            }
         }
     }
 

@@ -65,6 +65,12 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { MatDividerModule } from '@angular/material/divider';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { CommonTaxComponent } from '../shared/common-tax/common-tax.component';
+import { CommonDiscountComponent } from '../shared/common-discount/common-discount.component';
+import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
 
 @NgModule({
     declarations: [
@@ -91,6 +97,8 @@ import { MatDividerModule } from '@angular/material/divider';
         FormsModule,
         ReactiveFormsModule,
         TaxControlModule,
+        CommonTaxComponent,
+        CommonDiscountComponent,
         LedgerRoutingModule,
         MatPaginatorModule,
         ClipboardModule,
@@ -148,7 +156,10 @@ import { MatDividerModule } from '@angular/material/divider';
         NgxMatSelectSearchModule,
         TributeMentionModule,
         MatDividerModule,
-        NgxMatSelectSearchModule
+        GiddhNumberFormatModule,
+        KeyboardShortutModule,
+        GiddhDatePipe,
+        GoToBranchComponent
     ]
 })
 export class LedgerModule {

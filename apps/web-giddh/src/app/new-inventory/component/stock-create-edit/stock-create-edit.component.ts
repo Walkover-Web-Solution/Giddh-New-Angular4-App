@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
@@ -31,18 +31,22 @@ import { PreviewVariantImageComponent } from "../preview-variant-image/preview-v
 import { ServiceConfig } from "../../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
+import { DataOperationEnum } from "../../../shared/Enums/common.enum";
 
 @Component({
     selector: "stock-create-edit",
     templateUrl: "./stock-create-edit.component.html",
     styleUrls: ["./stock-create-edit.component.scss"],
-    providers: [InventoryComponentStore, VoucherComponentStore]
+    providers: [InventoryComponentStore, VoucherComponentStore],
+    standalone:false
 })
 export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Instance of stock create/edit form */
     @ViewChild('stockCreateEditForm', { static: false }) public stockCreateEditForm: NgForm;
     /** Instance of recipe create/update component */
     @ViewChild('createRecipe', { static: false }) public createRecipe: CreateRecipeComponent;
+    /** Instance of fileInput */
+    @ViewChild('fileInput', { static: false }) fileInput?: ElementRef<HTMLInputElement>;
     /* This will hold add stock value from aside menu */
     @Input() public addStock: boolean = false;
     /* This will hold stock type from aside menu */
@@ -284,6 +288,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     /** Unregister functions for GeneralService callbacks */
     private unregisterUnsavedChangesCallback: () => void;
     private unregisterMarkFormsAsPristineCallback: () => void;
+    /** Holds discount value */
+    public discountValue: any;
 
     constructor(
         private inventoryService: InventoryService,
@@ -330,7 +336,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         // and the parent will handle the page leave confirmation via ViewChild
 
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         /** added parent class to body after entering new-inventory page */
         document.querySelector("body").classList.add("stock-create-edit");
 
@@ -673,14 +679,14 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public deleteVariantOption(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_option,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_option,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -1082,7 +1088,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     isMandatory: obj.isMandatory
                 }
             });
-            updatedCustomFieldArray.forEach(field => {
+            (Array.isArray(updatedCustomFieldArray) ? updatedCustomFieldArray : []).forEach(field => {
                 if (field.isMandatory && (field.value === undefined || field.value === null)) {
                     this.isFormSubmitted = true;
                 }
@@ -1171,9 +1177,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     if (!this.stockGroups?.length) {
                         this.getStockGroups();
                     }
-                    this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
+                    this.toaster.showSnackBar("success", this.localeData?.stock_create_successfully);
                     if (this.addStock) {
-                        this.closeAsideEvent.emit(false);
+                        this.closeAsideEvent.emit(DataOperationEnum.CREATE);
                     } else {
                         this.getVariantCustomFields();
                         if (this.groupList?.length) {
@@ -1211,6 +1217,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         delete stockForm.discountLabel;
         stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
         stockForm.discounts = stockForm.discounts?.[0]?.length ? stockForm.discounts : [];
+        this.discountValue = stockForm.discounts?.[0]?.length ? stockForm.discounts : [];
         stockForm.customFields = stockForm.customFields?.map(customField => {
             return {
                 uniqueName: customField?.uniqueName,
@@ -1502,7 +1509,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.clearPageLeaveConfirmation();
-                this.toaster.showSnackBar("success", this.localeData?.stock_update_succesfully);
+                this.toaster.showSnackBar("success", this.localeData?.stock_update_successfully);
                 if (this.createRecipe && this.createRecipe.hasRecipeForStock()) {
                     this.createRecipe.saveRecipeFromStock();
                 }
@@ -1653,7 +1660,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             if (response && response.status === 'success') {
                 this.companyCustomFields = response.body?.results;
                 if (!this.queryParams?.stockUniqueName) {
-                    this.stockForm.variants.forEach(variant => {
+                    (Array.isArray(this.stockForm.variants) ? this.stockForm.variants : []).forEach(variant => {
                         if (this.companyCustomFields?.length > 0) {
                             variant.customFields = cloneDeep(this.companyCustomFields);
                         }
@@ -1876,6 +1883,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         };
         this.isFormSubmitted = false;
         this.stockGroupUniqueName = this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : this.stockGroups?.length ? this.stockGroups[0]?.value : '';
+        this.stockForm.stockUnitGroup.uniqueName = this.groupList?.length ? this.groupList[0]?.value : '';
+        this.stockForm.stockUnitGroup.name = this.groupList?.length ? this.groupList[0]?.label : '';
         this.isVariantAvailable = false;
         this.stockUnitName = "";
         this.stockGroupName = this.activeGroup?.name ? this.activeGroup?.name : "";
@@ -1913,16 +1922,16 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public deleteStock(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            role: 'alertdialog',
-            ariaLabel: 'Confirm Delete Dialog',
-            data: {
+                    width: '40%',
+                    role: 'alertdialog',
+                    ariaLabel: 'Confirm Delete Dialog',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.delete_stock,
-                permanentlyDeleteMessage: this.localeData?.permanently_delete,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.delete_stock,
+                    permanentlyDeleteMessage: this.localeData?.permanently_delete,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -1932,9 +1941,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     this.toggleLoader(false);
                     if (response?.status === "success") {
                         this.clearPageLeaveConfirmation();
-                        this.toaster.showSnackBar("success", this.localeData?.stock_delete_succesfully);
+                        this.toaster.showSnackBar("success", this.localeData?.stock_delete_successfully);
                         if (this.addStock) {
-                            this.closeAsideEvent.emit();
+                            this.closeAsideEvent.emit(DataOperationEnum.DELETE);
                         } else {
                             this.backClicked();
                         }
@@ -2542,5 +2551,14 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (!formValues) return true;
         this.changeDetection.detectChanges();
         return this.stockCreateEditForm.form.pristine;
+    }
+
+    /**
+     * Programmatically click to file input
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public triggerFileInput(): void {
+        this.fileInput?.nativeElement.click();
     }
 }

@@ -1,25 +1,20 @@
-<ng-container
+<div
+    class="d-flex flex-column h-100"
     appTranslate
     [file]="'invoice/download-or-send-mail'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>
             <ng-container *ngIf="showPdfWrap">
-                <button
-                    type="button"
-                    mat-raised-button
-                    class="mr-2"
-                    *ngIf="showEditButton"
-                    (click)="editVoucher()"
-                >
+                <button type="button" matButton="filled" class="mr-2 bg-white text-black" *ngIf="showEditButton" (click)="editVoucher()">
                     {{ commonLocaleData?.app_edit }}
                 </button>
                 <button
                     type="button"
-                    mat-raised-button
-                    class="mr-2"
+                    matButton="filled"
+                    class="mr-2 bg-white text-black"
                     [matMenuTriggerFor]="showMoreOptions"
                     (click)="showEsign = false"
                 >
@@ -28,7 +23,9 @@
                 </button>
             </ng-container>
         </span>
-        <i class="icon-cross cursor-pointer" aria-hidden="true" (click)="onCancel('closed')"></i>
+        <button matIconButton aria-label="Close" (click)="onCancel('closed')">
+            <i class="icon-cross"></i>
+        </button>
 
         <!-- drop down for Esignature area -->
         <div class="dropdown-menu ml-5" [ngClass]="{ open: showEsign }">
@@ -48,21 +45,12 @@
                 >
                     <mat-tab [label]="commonLocaleData?.app_send_email">
                         <div class="p-2">
-                            <textarea
-                                matInput
-                                class="form-control"
-                                #emailList
-                                [placeholder]="localeData?.enter_email_addresses"
-                            ></textarea>
+                            <textarea matInput class="form-control" #emailList [placeholder]="localeData?.enter_email_addresses"></textarea>
                             <div class="mt-3">
                                 <button
-                                    [disabled]="
-                                        !emailList?.value ||
-                                        (currentVoucherFilter === invoicesEnum && !invoiceType?.length)
-                                    "
+                                    [disabled]="!emailList?.value || (currentVoucherFilter === invoicesEnum && !invoiceType?.length)"
                                     type="button"
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     (click)="onSendInvoiceOnMail(emailList?.value)"
                                 >
                                     {{ commonLocaleData?.app_send }}
@@ -75,15 +63,12 @@
                             <ng-template [ngIf]="currentVoucherFilter === invoicesEnum && voucherApiVersion === 2">
                                 <ng-container *ngTemplateOutlet="invoiceCopyOptions"></ng-container>
                             </ng-template>
-                            <div [ngClass]="{'mt-3': (currentVoucherFilter === invoicesEnum && voucherApiVersion === 2)}">
+                            <div [ngClass]="{ 'mt-3': currentVoucherFilter === invoicesEnum && voucherApiVersion === 2 }">
                                 <button
                                     type="button"
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     (click)="downloadInvoice()"
-                                    [disabled]="
-                                        !invoiceType?.length && !isAttachment && currentVoucherFilter === invoicesEnum
-                                    "
+                                    [disabled]="!invoiceType?.length && !isAttachment && currentVoucherFilter === invoicesEnum"
                                 >
                                     {{ localeData?.download_invoice }}
                                 </button>
@@ -92,20 +77,10 @@
                     </mat-tab>
                     <mat-tab [label]="commonLocaleData?.app_send_sms" *ngIf="isSendSmsEnabled">
                         <div class="p-2 text-right">
-                            <textarea
-                                matInput
-                                class="form-control"
-                                #smsList
-                                [placeholder]="localeData?.enter_mobile_no"
-                            ></textarea>
+                            <textarea matInput class="form-control" #smsList [placeholder]="localeData?.enter_mobile_no"></textarea>
 
                             <div class="mt-3">
-                                <button
-                                    type="button"
-                                    mat-raised-button
-                                    color="primary"
-                                    (click)="onSendInvoiceOnSms(smsList?.value)"
-                                >
+                                <button type="button" matButton="filled" (click)="onSendInvoiceOnSms(smsList?.value)">
                                     {{ commonLocaleData?.app_send }}
                                 </button>
                             </div>
@@ -115,7 +90,7 @@
             </div>
         </mat-menu>
     </div>
-    <mat-dialog-content class="dialog-body">
+    <mat-dialog-content class="dialog-body flex-grow-1">
         <div *ngIf="isErrOccured$ | async">
             <p class="lead text-center">{{ commonLocaleData?.app_oops_something_went_wrong }}</p>
         </div>
@@ -133,7 +108,7 @@
             ></iframe>
         </div>
     </mat-dialog-content>
-</ng-container>
+</div>
 
 <!-- Invoice Copy Options (checkbox) -->
 <ng-template #invoiceCopyOptions>
@@ -141,19 +116,19 @@
         <p class="font-size-15 mb-3">{{ localeData?.invoice_copy }}</p>
         <mat-divider></mat-divider>
         <div>
-            <mat-checkbox color="primary" value="Original" checked (change)="onSelectInvoiceCopy($event)">{{
-                localeData?.original
-            }}</mat-checkbox>
+            <mat-checkbox color="primary" value="Original" checked (change)="onSelectInvoiceCopy($event)">
+                {{ localeData?.original }}
+            </mat-checkbox>
         </div>
         <div>
-            <mat-checkbox color="primary" value="Transport" (change)="onSelectInvoiceCopy($event)">{{
-                localeData?.transport
-            }}</mat-checkbox>
+            <mat-checkbox color="primary" value="Transport" (change)="onSelectInvoiceCopy($event)">
+                {{ localeData?.transport }}
+            </mat-checkbox>
         </div>
         <div>
-            <mat-checkbox color="primary" value="Customer" (change)="onSelectInvoiceCopy($event)">{{
-                commonLocaleData?.app_customer
-            }}</mat-checkbox>
+            <mat-checkbox color="primary" value="Customer" (change)="onSelectInvoiceCopy($event)">
+                {{ commonLocaleData?.app_customer }}
+            </mat-checkbox>
         </div>
         <div *ngIf="voucherHasAttachments && selectedTabIndex === 1">
             <mat-checkbox color="primary" name="attachment" value="Attachment" [(ngModel)]="isAttachment">

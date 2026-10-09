@@ -9,8 +9,11 @@ import { GeneralService } from './general.service';
 import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { PurchaseRecordAttachmentResponse } from '../models/api-models/PurchaseRecord';
+import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class PurchaseRecordService {
 
     /** @ignore */

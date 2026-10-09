@@ -1,0 +1,195 @@
+<div
+    class="all-reports-page full-viewport-height bg-light-gray min-vh-100"
+    appTranslate
+    [file]="'all-reports'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu class="position-absolute"></hamburger-menu>
+    <div class="container-lg py-4">
+        @if (isLoading()) {
+            <giddh-page-loader></giddh-page-loader>
+        } @else if (!allReports() || allReports().length === 0) {
+            <no-data
+                [primaryMessageClass]="'no-data'"
+                [primaryMessage]="localeData?.no_reports_available"
+                [secondaryMessage]="' '"
+            ></no-data>
+        } @else {
+            <div class="d-flex align-items-center mb-3">
+                <p class="font-size-20 font-weight-semibold mb-0">{{ localeData?.page_heading }}</p>
+            </div>
+
+            <!-- Category filter chips -->
+            <div class="d-flex flex-wrap align-items-center mb-4 column-gap-1 row-gap-1">
+                @for (cat of categories(); track cat.key) {
+                    <button
+                        mat-stroked-button
+                        class="bg-table-background-color"
+                        [class.active]="activeCategory() === cat.key"
+                        [style.background]="activeCategory() === cat.key ? cat.bgColor : null"
+                        [style.color]="activeCategory() === cat.key ? cat.color : null"
+                        [style.border-color]="activeCategory() === cat.key ? cat.color : null"
+                        (click)="selectCategory(cat.key)"
+                        type="button"
+                    >
+                        {{ cat.label }}
+                    </button>
+                }
+            </div>
+
+            <!-- Favorites section -->
+            @if (favorites().length > 0) {
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h3 class="font-size-16 font-weight-semibold mb-0">{{ localeData?.favorites }}</h3>
+                </div>
+                <div class="reports-grid d-grid row-gap-3 column-gap-3 mb-4">
+                    @for (report of favorites(); track report.uniqueName) {
+                        <mat-card
+                            appearance="outlined"
+                            class="report-card bg-table-background-color border-radius-8 p-4 cursor-pointer position-relative d-flex flex-row align-items-center column-gap-1"
+                            (click)="openReport(report)"
+                            (keydown.enter)="openReport(report)"
+                            (keydown.space)="openReport(report)"
+                            [matTooltip]="categoryLabel(report)"
+                            [matTooltipPosition]="'right'"
+                            tabindex="0"
+                            role="button"
+                        >
+                            <div
+                                class="report-icon border-radius-8 d-flex align-items-center justify-content-center flex-shrink-0"
+                                [style.background]="reportCategory(activeCategory())?.bgColor"
+                                [style.color]="reportCategory(activeCategory())?.color"
+                            >
+                                @if (isSvgIcon(categoryIcon(report))) {
+                                    <img [src]="'assets/images/' + categoryIcon(report)" alt="" width="20" height="20" />
+                                } @else {
+                                    <i [ngClass]="categoryIcon(report)" class="lh-1 font-size-20"></i>
+                                }
+                            </div>
+                            <div class="flex-grow-1 min-width-0">
+                                <p class="mb-0 font-size-14 font-weight-semibold">{{ displayName(report.name) }}</p>
+                                <p class="mb-0 font-size-12 light-gray mt-1">{{ reportDescription(report) }}</p>
+                            </div>
+                            <button
+                                mat-icon-button
+                                [matTooltip]="localeData?.remove_from_favorites"
+                                (click)="toggleFavorite($event, report)"
+                            >
+                                <i class="fa fa-star star-icon filled text-primary"></i>
+                            </button>
+                        </mat-card>
+                    }
+                </div>
+            }
+
+            <!-- All reports section -->
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <h3 class="font-size-16 font-weight-semibold mb-0">{{ this.currentCategoryLabel() }} Reports</h3>
+            </div>
+
+            @if (activeCategory() === 'all') {
+                <!-- Category grouped cards -->
+                <div class="category-grid d-grid row-gap-3 column-gap-3">
+                    @for (group of categoryGroups(); track group.category.key) {
+                        <mat-card
+                            appearance="outlined"
+                            class="category-card bg-table-background-color border-radius-8 p-4 position-relative d-flex flex-column"
+                        >
+                            <div class="category-card-header d-flex align-items-center mb-3">
+                                <div
+                                    class="font-size-20 border-radius-8 d-flex align-items-center justify-content-center category-icon"
+                                    [style.background]="group.category.bgColor"
+                                    [style.color]="group.category.color"
+                                >
+                                    @if (isSvgIcon(group.category.icon)) {
+                                        <img [src]="'assets/images/' + group.category.icon" alt="" width="20" height="20" />
+                                    } @else {
+                                        <i [ngClass]="group.category.icon" class="lh-1"></i>
+                                    }
+                                </div>
+                                <div class="ml-2">
+                                    <p class="font-weight-semibold font-size-16 mb-0">{{ group.category.label }} Reports</p>
+                                    <p class="mb-0 font-size-12 light-gray mt-1">
+                                        {{ group.reports.length }} {{ group.reports.length === 1 ? 'Report' : 'Reports' }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            @if (group.reports.length > 0) {
+                                <ul class="category-report-list p-0 mb-2">
+                                    @for (report of group.reports.slice(0, 4); track report.uniqueName) {
+                                        <li
+                                            class="cursor-pointer font-size-14"
+                                            (click)="openReport(report)"
+                                            [matTooltip]="reportDescription(report)"
+                                            [matTooltipPosition]="'right'"
+                                        >
+                                            {{ displayName(report.name) }}
+                                        </li>
+                                    }
+                                    @if (group.reports.length > 4) {
+                                        <li class="more-count light-gray cursor-default">
+                                            +{{ group.reports.length - 4 }} {{ commonLocaleData?.app_more }}
+                                        </li>
+                                    }
+                                </ul>
+                                <a mat-button class="mt-auto" (click)="selectCategory(group.category.key)">{{ localeData?.view_all }}</a>
+                            } @else {
+                                <p class="empty-hint mb-0 font-size-14 light-gray">{{ localeData?.no_reports_available }}</p>
+                            }
+                        </mat-card>
+                    }
+                </div>
+            } @else if (filteredReports().length > 0) {
+                <!-- Individual report cards when a specific category is selected -->
+                <div class="reports-grid d-grid row-gap-3 column-gap-3">
+                    @for (report of filteredReports(); track report.uniqueName) {
+                        <mat-card
+                            appearance="outlined"
+                            class="report-card cursor-pointer bg-table-background-color border-radius-8 p-4 position-relative d-flex flex-row align-items-center column-gap-1"
+                            (click)="openReport(report)"
+                            (keydown.enter)="openReport(report)"
+                            (keydown.space)="openReport(report)"
+                            tabindex="0"
+                            role="button"
+                        >
+                            <div
+                                class="report-icon border-radius-8 d-flex align-items-center justify-content-center flex-shrink-0"
+                                [style.background]="reportCategory(activeCategory())?.bgColor"
+                                [style.color]="reportCategory(activeCategory())?.color"
+                            >
+                                @if (isSvgIcon(categoryIcon(report))) {
+                                    <img [src]="'assets/images/' + categoryIcon(report)" alt="" width="20" height="20" />
+                                } @else {
+                                    <i [ngClass]="categoryIcon(report)" class="lh-1 font-size-20"></i>
+                                }
+                            </div>
+                            <div class="flex-grow-1 min-width-0">
+                                <p class="mb-0 font-size-14 font-weight-semibold">{{ displayName(report.name) }}</p>
+                                <p class="mb-0 font-size-14 light-gray mt-1 cursor-default" (click)="$event.stopPropagation()">
+                                    {{ reportDescription(report) }}
+                                </p>
+                            </div>
+                            <button
+                                mat-icon-button
+                                [matTooltip]="isFavorite(report) ? localeData?.remove_from_favorites : localeData?.add_to_favorites"
+                                (click)="toggleFavorite($event, report)"
+                            >
+                                <i
+                                    class="fa star-icon text-light"
+                                    [class.fa-star]="isFavorite(report)"
+                                    [class.fa-star-o]="!isFavorite(report)"
+                                    [class.filled]="isFavorite(report)"
+                                    [class.text-orange]="isFavorite(report)"
+                                ></i>
+                            </button>
+                        </mat-card>
+                    }
+                </div>
+            } @else {
+                <div class="text-center text-muted py-4">{{ localeData?.no_reports_found }}</div>
+            }
+        }
+    </div>
+</div>

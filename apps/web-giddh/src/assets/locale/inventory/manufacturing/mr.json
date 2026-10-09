@@ -24,7 +24,7 @@
     "select_operation": "ऑपरेशन निवडा",
     "enter_value": "मूल्य प्रविष्ट करा",
     "confirm_delete_manufacturing": "तुम्हाला उत्पादन हटवायचे आहे का?",
-    "info_message": "डेटा संपादित करण्यासाठी, शाखा मोडवर जा.",
+    "info_message": "उत्पादन डेटा तयार करण्यासाठी किंवा संपादित करण्यासाठी, शाखा मोडवर जा।",
     "add_recipe": "कृती जोडा",
     "variant_already_selected": "प्रकार आधीच निवडलेला आहे.",
     "confirm_delete_recipe": "तुम्हाला रेसिपी हटवायची आहे का?",

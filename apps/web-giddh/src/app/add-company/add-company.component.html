@@ -1,15 +1,16 @@
-<div class="add-company-wrapper">
-    <ng-container
+<div class="add-company-wrapper max-w-1000">
+    <div
         appTranslate
         [file]="'create-company'"
         (localeData)="localeData = $event"
         (commonLocaleData)="commonLocaleData = $event"
+        (translationComplete)="translationComplete($event)"
     >
         <hamburger-menu *ngIf="companiesList?.length"></hamburger-menu>
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <ng-container *ngIf="!isLoading">
+        <div *ngIf="!isLoading">
             <div>
                 <p class="text-center p-3">{{ localeData?.create_company_note }}</p>
             </div>
@@ -25,6 +26,7 @@
             >
                 <mat-step [stepControl]="firstStepForm" role="tabpanel">
                     <form
+                        class="max-w-600 mx-auto mt-5"
                         [formGroup]="firstStepForm"
                         name="firstStepForm"
                         [autocomplete]="'disabled'"
@@ -42,8 +44,7 @@
                                     formControlName="name"
                                     [showError]="isFormSubmitted && !firstStepForm.get('name')?.value"
                                     [maxlength]="100"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                             <div class="col-6 country-space">
                                 <reactive-dropdown-field
@@ -53,10 +54,10 @@
                                     [placeholder]="localeData?.enter_country_name"
                                     [options]="countries"
                                     (selectedOption)="selectCountry($event)"
+                                    formControlName="country"
                                     [labelValue]="selectedCountry"
                                     [showError]="isFormSubmitted && !firstStepForm.get('country')?.value"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-6 currency-space">
                                 <reactive-dropdown-field
@@ -67,34 +68,21 @@
                                     [showError]="isFormSubmitted && !firstStepForm.get('currency')?.value"
                                     [labelValue]="company.baseCurrency"
                                     (selectedOption)="selectCurrency($event)"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-6 mobile-number mobile-number-wrapper" *ngIf="showMobileField">
-                                <input-field
-                                    [name]="'mobile'"
-                                    [type]="'tel'"
-                                    #mobileNoField
-                                    class="flag-input"
-                                    [id]="'init-contact-proforma'"
-                                    (keydown.enter)="$event.preventDefault()"
-                                    [label]="commonLocaleData?.app_mobile_number + '*'"
-                                    [placeholder]="localeData?.enter_mobile_number"
-                                    [floatLabel]="'always'"
-                                    (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
-                                    [showError]="
-                                        (isFormSubmitted && !firstStepForm.get('mobile')?.value) ||
-                                        isMobileNumberInvalid
-                                    "
-                                    [readonly]="isMobileNumberVerified || showOtpField"
-                                >
-                                </input-field>
-                                <span id="init-contact-proforma-valid-msg" class="d-none"></span>
-                                <span id="init-contact-proforma-error-msg" class="d-none"></span>
+                                <mobile-number-input
+                                    #mobileNumberInput
+                                    formControlName="mobile"
+                                    [label]="commonLocaleData?.app_mobile_number"
+                                    [required]="true"
+                                    [disabled]="isMobileNumberVerified"
+                                    [useImageFlags]="true"
+                                ></mobile-number-input>
                             </div>
                             <div class="col-6 mobile-no-action-buttons" *ngIf="showMobileField">
                                 <button
-                                    mat-stroked-button
+                                    matButton="outlined"
                                     (click)="reVerifyNumber()"
                                     *ngIf="isMobileNumberVerified || showOtpField"
                                     class="btn-min-width"
@@ -103,8 +91,7 @@
                                 </button>
 
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     (click)="sendOtp()"
                                     [disabled]="sendOtpInProgress"
                                     *ngIf="!showOtpField && !isMobileNumberVerified"
@@ -116,8 +103,7 @@
                                         color="primary"
                                         mode="indeterminate"
                                         value="50"
-                                    >
-                                    </mat-progress-spinner>
+                                    ></mat-progress-spinner>
                                     <span *ngIf="!sendOtpInProgress">{{ localeData?.send_otp }}</span>
                                 </button>
                             </div>
@@ -132,14 +118,12 @@
                                         [floatLabel]="showFocusInOtpField ? 'always' : 'auto'"
                                         formControlName="mobileOtp"
                                         [autoFocus]="true"
-                                    >
-                                    </input-field>
+                                    ></input-field>
                                 </div>
                                 <div class="col-6 mobile-no-action-buttons">
                                     <div class="d-flex align-items-center">
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             (click)="verifyOtp()"
                                             [disabled]="verifyOtpInProgress || resendOtpInProgress"
                                             class="btn-min-width"
@@ -150,12 +134,11 @@
                                                 color="primary"
                                                 mode="indeterminate"
                                                 value="50"
-                                            >
-                                            </mat-progress-spinner>
+                                            ></mat-progress-spinner>
                                             <span *ngIf="!verifyOtpInProgress">{{ localeData?.verify }}</span>
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="outlined"
                                             (click)="resendOtp()"
                                             [disabled]="resendOtpInProgress || verifyOtpInProgress"
                                             class="ml-auto send-otp-btn"
@@ -166,8 +149,7 @@
                                                 color="primary"
                                                 mode="indeterminate"
                                                 value="50"
-                                            >
-                                            </mat-progress-spinner>
+                                            ></mat-progress-spinner>
                                             <span *ngIf="!resendOtpInProgress">{{ localeData?.resend_otp }}</span>
                                         </button>
                                     </div>
@@ -175,30 +157,25 @@
                             </ng-container>
                         </div>
                         <div class="d-flex justify-content-between mt-3">
-                            <button
-                                mat-stroked-button
-                                *ngIf="isCreateBySubscription"
-                                (click)="back()"
-                                aria-label="back"
-                            >
+                            <button matButton="outlined" *ngIf="isCreateBySubscription" (click)="back()" aria-label="back">
                                 {{ localeData?.back_to_subscription }}
                             </button>
                             <button
                                 *ngIf="companiesList?.length === 0"
-                                mat-stroked-button
+                                matButton="outlined"
                                 aria-label="cancel"
                                 (click)="openLogoutConfirmationDialog()"
                             >
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
-                            <button mat-raised-button color="primary" (click)="nextStepForm()" aria-label="next">
+                            <button matButton="filled" (click)="nextStepForm()" aria-label="next">
                                 {{ commonLocaleData?.app_next }}
                             </button>
                         </div>
                     </form>
                 </mat-step>
                 <mat-step [stepControl]="secondStepForm" name="secondStepForm" role="tabpanel">
-                    <form [formGroup]="secondStepForm" autocomplete="off" novalidate>
+                    <form class="max-w-600 mx-auto mt-5" [formGroup]="secondStepForm" autocomplete="off" novalidate>
                         <ng-template matStepLabel>{{ localeData?.company_address }}</ng-template>
                         <div class="row row-gap-15">
                             <div class="col-lg-12 fill-form">
@@ -209,8 +186,7 @@
                                     [readonly]="true"
                                     [floatLabel]="'always'"
                                     [ngClass]="{ 'readonly-field': firstStepForm.get('name')?.value }"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                             <div class="col-lg-6 country-space">
                                 <reactive-dropdown-field
@@ -218,8 +194,7 @@
                                     [label]="commonLocaleData?.app_country + '*'"
                                     [labelValue]="firstStepForm.get('country')?.value?.label"
                                     [ngClass]="{ 'readonly-field': firstStepForm.get('country')?.value?.label }"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-lg-6 currency-space">
                                 <reactive-dropdown-field
@@ -227,30 +202,16 @@
                                     [label]="commonLocaleData?.app_currency + '*'"
                                     [labelValue]="firstStepForm.get('currency')?.value?.value"
                                     [ngClass]="{ 'readonly-field': firstStepForm.get('currency')?.value?.value }"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-lg-12 mobile-number fill-form" *ngIf="showMobileField">
-                                <span class="country-flag">
-                                    <img
-                                        *ngIf="currentFlag"
-                                        src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
-                                            currentFlag
-                                        }}.svg"
-                                        width="27"
-                                    />
-                                </span>
-                                <input-field
-                                    [name]="'mobile'"
-                                    [type]="'tel'"
-                                    [label]="commonLocaleData?.app_mobile_number + '*'"
-                                    [placeholder]="firstStepForm.controls['mobile'].value"
-                                    [floatLabel]="'always'"
-                                    [readonly]="true"
-                                    [ngClass]="{ 'readonly-field': firstStepForm.get('mobile')?.value }"
-                                    class="readflag"
-                                >
-                                </input-field>
+                                <mobile-number-input
+                                    [label]="commonLocaleData?.app_mobile_number"
+                                    [formControl]="firstStepForm.get('mobile')"
+                                    [required]="false"
+                                    [disabled]="isMobileNumberVerified"
+                                    [useImageFlags]="true"
+                                ></mobile-number-input>
                             </div>
                             <div class="col-lg-12">
                                 <reactive-dropdown-field
@@ -258,10 +219,10 @@
                                     [label]="localeData?.business_type"
                                     [placeholder]="localeData?.select_business_type"
                                     [options]="businessTypeList"
+                                    formControlName="businessType"
                                     (selectedOption)="selectBusinessType($event.value)"
                                     [labelValue]="isOtherCountry ? businessTypeList[0].label : ''"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-lg-12">
                                 <reactive-dropdown-field
@@ -270,43 +231,32 @@
                                     [placeholder]="localeData?.select_business_nature"
                                     [options]="businessNatureList"
                                     (selectedOption)="selectBusinessNature($event)"
-                                >
-                                </reactive-dropdown-field>
-                                <div
-                                    class="mt-3"
-                                    *ngIf="secondStepForm.controls['businessNature']?.value === 'Other'"
-                                >
-                                <mat-form-field appearance="outline" class="initial-height w-100">
-                                    <mat-label>{{
-                                         localeData?.other_business_nature
-                                    }}</mat-label>
-                                    <textarea
-                                        matInput
-                                        rows="3"
-                                        [name]="'other'"
-                                        formControlName="otherBusinessNature"
-                                        [placeholder]="localeData?.enter_business_nature"
-                                    ></textarea>
-                                </mat-form-field>
+                                ></reactive-dropdown-field>
+                                <div class="mt-3" *ngIf="secondStepForm.controls['businessNature']?.value === 'Other'">
+                                    <mat-form-field appearance="outline" class="initial-height w-100">
+                                        <mat-label>{{ localeData?.other_business_nature }}</mat-label>
+                                        <textarea
+                                            matInput
+                                            rows="3"
+                                            [name]="'other'"
+                                            formControlName="otherBusinessNature"
+                                            [placeholder]="localeData?.enter_business_nature"
+                                        ></textarea>
+                                    </mat-form-field>
                                 </div>
                             </div>
-                            <ng-container
-                                *ngIf="secondStepForm.controls['businessType']?.value === businessTypes.Registered"
-                            >
+                            <ng-container *ngIf="secondStepForm.controls['businessType']?.value === businessTypes.Registered">
                                 <div class="col-lg-12">
                                     <input-field
                                         [name]="'gstin'"
                                         [placeholder]="getEnterTaxText()"
                                         [type]="'text'"
                                         formControlName="gstin"
-                                        [showError]="
-                                            isFormSubmitted && (!secondStepForm.get('gstin')?.value || !isGstinValid)
-                                        "
+                                        [showError]="isFormSubmitted && (!secondStepForm.get('gstin')?.value || !isGstinValid)"
                                         [label]="formFields['taxName']?.label + '*'"
                                         [maxlength]="15"
                                         (change)="validateGstNumber()"
-                                    >
-                                    </input-field>
+                                    ></input-field>
                                 </div>
                             </ng-container>
                             <div class="col-lg-12" *ngIf="!countyList?.length">
@@ -314,28 +264,21 @@
                                     [name]="'state'"
                                     [label]="
                                         selectedCountryCode === 'EE'
-                                            ? secondStepForm.controls['businessType']?.value ===
-                                              businessTypes.Registered
+                                            ? secondStepForm.controls['businessType']?.value === businessTypes.Registered
                                                 ? localeData?.county + '*'
                                                 : localeData?.county
-                                            : secondStepForm.controls['businessType']?.value ===
-                                              businessTypes.Registered
-                                            ? commonLocaleData?.app_state + '*'
-                                            : commonLocaleData?.app_state
+                                            : secondStepForm.controls['businessType']?.value === businessTypes.Registered
+                                              ? commonLocaleData?.app_state + '*'
+                                              : commonLocaleData?.app_state
                                     "
-                                    [placeholder]="
-                                        selectedCountryCode === 'EE'
-                                            ? localeData?.select_county
-                                            : localeData?.select_state
-                                    "
+                                    [placeholder]="selectedCountryCode === 'EE' ? localeData?.select_county : localeData?.select_state"
                                     [options]="states"
                                     [showError]="isFormSubmitted && secondStepForm.get('state')?.invalid"
                                     [readonly]="disabledState"
                                     [labelValue]="selectedState"
                                     (selectedOption)="selectState($event)"
                                     [ngClass]="{ 'readonly-field': disabledState }"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-lg-12" *ngIf="countyList?.length">
                                 <reactive-dropdown-field
@@ -350,8 +293,7 @@
                                     [showError]="isFormSubmitted && !secondStepForm.get('county')?.value"
                                     [labelValue]="secondStepForm.get('county')?.value?.label"
                                     (selectedOption)="secondStepForm.get('county')?.patchValue($event)"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <ng-container
                                 *ngIf="
@@ -362,20 +304,11 @@
                                 <div class="col-lg-12">
                                     <mat-form-field class="w-100" appearance="outline">
                                         <mat-label>{{ localeData?.applicable_tax }}</mat-label>
-                                        <mat-select
-                                            [placeholder]="commonLocaleData?.app_select_tax"
-                                            [formControlName]="'taxes'"
-                                            multiple
-                                        >
-                                            <mat-option *ngFor="let tax of taxesList" [value]="tax?.value">{{
-                                                tax?.label
-                                            }}</mat-option>
-                                            <mat-option
-                                                class="create-update-no-data"
-                                                [disabled]="true"
-                                                *ngIf="!taxesList?.length"
-                                                >{{ commonLocaleData?.app_no_result_found }}</mat-option
-                                            >
+                                        <mat-select [placeholder]="commonLocaleData?.app_select_tax" [formControlName]="'taxes'" multiple>
+                                            <mat-option *ngFor="let tax of taxesList" [value]="tax?.value">{{ tax?.label }}</mat-option>
+                                            <mat-option class="create-update-no-data" [disabled]="true" *ngIf="!taxesList?.length">
+                                                {{ commonLocaleData?.app_no_result_found }}
+                                            </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -383,52 +316,39 @@
                             <div class="col-lg-12">
                                 <input-field
                                     [name]="'pincode'"
-                                    [label]="
-                                        zipCodeSupportedCountryList.includes(selectedCountryCode)
-                                            ? commonLocaleData?.app_zip_code
-                                            : commonLocaleData?.app_pin_code
-                                    "
-                                    [placeholder]="
-                                        zipCodeSupportedCountryList.includes(selectedCountryCode)
-                                            ? commonLocaleData?.app_enter_zip_code
-                                            : commonLocaleData?.app_enter_pin_code
-                                    "
+                                    [label]="generalService.getPostalCodeLabel(selectedCountryCode)"
+                                    [placeholder]="generalService.getPostalCodePlaceholder(selectedCountryCode)"
                                     [type]="'text'"
                                     formControlName="pincode"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                             <div class="col-lg-12">
                                 <mat-form-field appearance="outline" class="initial-height w-100">
-                                    <mat-label>{{
-                                        secondStepForm.controls["businessType"]?.value === businessTypes.Registered
-                                            ? localeData?.company_address
-                                            : localeData?.company_address
-                                    }}</mat-label>
+                                    <mat-label>
+                                        {{
+                                            secondStepForm.controls['businessType']?.value === businessTypes.Registered
+                                                ? localeData?.company_address
+                                                : localeData?.company_address
+                                        }}
+                                    </mat-label>
                                     <textarea
                                         matInput
                                         rows="3"
                                         [name]="'address'"
                                         formControlName="address"
                                         [placeholder]="localeData?.type_your_address"
-                                        [required]="
-                                            secondStepForm.controls['businessType']?.value === businessTypes.Registered
-                                        "
+                                        [required]="secondStepForm.controls['businessType']?.value === businessTypes.Registered"
                                     ></textarea>
                                 </mat-form-field>
                             </div>
                             <div class="col-lg-12">
                                 <p class="pb-2">{{ localeData?.onboarding_note }}</p>
-                                <p
-                                    class="taxation-not-supported"
-                                    [innerHTML]="localeData?.tax_reports_note"
-                                    *ngIf="isOtherCountry"
-                                ></p>
+                                <p class="taxation-not-supported" [innerHTML]="localeData?.tax_reports_note" *ngIf="isOtherCountry"></p>
                             </div>
                         </div>
                         <ng-container *ngIf="isNewUserLoggedIn">
                             <div class="d-flex column-gap-15 mt-3">
-                                <button mat-raised-button color="primary" (click)="nextStepForm()">
+                                <button matButton="filled" (click)="nextStepForm()">
                                     {{ commonLocaleData?.app_next }}
                                 </button>
                             </div>
@@ -436,45 +356,38 @@
                         <ng-container *ngIf="!isNewUserLoggedIn">
                             <div class="d-flex justify-content-between mt-3">
                                 <div class="d-flex column-gap-15">
-                                    <button mat-stroked-button matStepperPrevious>
+                                    <button matButton="outlined" matStepperPrevious>
                                         {{ commonLocaleData?.app_back }}
                                     </button>
                                     <button
                                         *ngIf="companiesList?.length === 0"
-                                        mat-stroked-button
+                                        matButton="outlined"
                                         (click)="openLogoutConfirmationDialog()"
                                     >
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
                                 </div>
-                                <button mat-raised-button color="primary" (click)="onSubmit()">
+                                <button matButton="filled" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
                                 </button>
                             </div>
                         </ng-container>
                     </form>
                 </mat-step>
-                <ng-container  *ngIf="isNewUserLoggedIn">
+                <ng-container *ngIf="isNewUserLoggedIn">
                     <mat-step [stepControl]="thirdStepForm">
-                        <form [formGroup]="thirdStepForm" name="thirdStepForm" autocomplete="off" novalidate>
+                        <form class="max-w-600 mx-auto mt-5" [formGroup]="thirdStepForm" name="thirdStepForm" autocomplete="off" novalidate>
                             <ng-template matStepLabel>{{ commonLocaleData?.app_share }}</ng-template>
                             <div class="row-gap-15">
                                 <div class="d-flex col-lg-12 pad0">
                                     <div class="pr-4 pl-0">
-                                        <label>{{ localeData?.make_yourself }} : </label>
+                                        <label>{{ localeData?.make_yourself }} :</label>
                                     </div>
                                     <mat-radio-group name="ownerPermission" formControlName="creatorSuperAdmin">
-                                        <mat-radio-button
-                                            color="primary"
-                                            [value]="true"
-                                            (change)="setOwnerPermission($event)"
-                                            >{{ commonLocaleData?.app_yes }}
+                                        <mat-radio-button color="primary" [value]="true" (change)="setOwnerPermission($event)">
+                                            {{ commonLocaleData?.app_yes }}
                                         </mat-radio-button>
-                                        <mat-radio-button
-                                            color="primary"
-                                            [value]="false"
-                                            (change)="setOwnerPermission($event)"
-                                        >
+                                        <mat-radio-button color="primary" [value]="false" (change)="setOwnerPermission($event)">
                                             {{ commonLocaleData?.app_no }}
                                         </mat-radio-button>
                                     </mat-radio-group>
@@ -482,10 +395,7 @@
                                 <div formArrayName="permissionRoles" class="mt-3">
                                     <div
                                         class="row align-items-center permission-wrapper mb-4"
-                                        *ngFor="
-                                            let permission of thirdStepForm?.get('permissionRoles')['controls'];
-                                            let i = index
-                                        "
+                                        *ngFor="let permission of thirdStepForm?.get('permissionRoles')['controls']; let i = index"
                                         [formGroupName]="i"
                                     >
                                         <div class="col-5 country-space">
@@ -496,49 +406,35 @@
                                                 [type]="'text'"
                                                 formControlName="emailId"
                                                 (input)="permissionRoleIndex = i"
-                                                [showError]="
-                                                    permission.get('emailId').dirty && permission.get('emailId').invalid
-                                                "
-                                            >
-                                            </input-field>
+                                                [showError]="permission.get('emailId').dirty && permission.get('emailId').invalid"
+                                            ></input-field>
                                             <span
                                                 class="error-msg"
-                                                *ngIf="
-                                                    permission.get('emailId').dirty && permission.get('emailId').invalid
-                                                "
+                                                *ngIf="permission.get('emailId').dirty && permission.get('emailId').invalid"
                                                 id="emailError_{{ i }}"
                                             >
                                                 {{ localeData?.invalid_email_error }}
                                             </span>
                                         </div>
                                         <div class="col-6 currency-space">
-                                            <mat-form-field
-                                                id="roles_{{ i }}"
-                                                appearance="outline"
-                                                [ngClass]="{ 'error-border': isFormSubmitted && isUserSuperAdmin }"
-                                            >
-                                                <mat-label>{{ localeData?.roles }}</mat-label>
-                                                <mat-select
-                                                    formControlName="roleUniqueName"
-                                                    (selectionChange)="selectRole($event, i); permissionRoleIndex = i"
-                                                >
-                                                    <mat-option
-                                                        *ngFor="let option of permissionRoles"
-                                                        [value]="option.value"
-                                                    >
-                                                        {{ option?.label }}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
+                                            <reactive-dropdown-field
+                                                [options]="permissionRoles"
+                                                [label]="localeData?.roles"
+                                                [placeholder]="localeData?.roles"
+                                                formControlName="roleUniqueName"
+                                                [appearance]="'outline'"
+                                                [showError]="isFormSubmitted && isUserSuperAdmin"
+                                                (selectedOption)="selectRole($event, i); permissionRoleIndex = i"
+                                            ></reactive-dropdown-field>
                                         </div>
                                         <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0 remove-user">
                                             <div class="inc-dec">
                                                 <div class="plus-minus w-100">
                                                     <button
                                                         aria-label="delete icon"
-                                                        class="btn mr-0"
+                                                        class="mr-0"
                                                         (click)="removeUser(i)"
-                                                        mat-stroked-button
+                                                        matButton="outlined"
                                                     >
                                                         <i class="icon-trash text-red"></i>
                                                     </button>
@@ -548,33 +444,44 @@
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col-lg-12">
-                                            <a href="javascript:void(0);" (click)="handleAddNewUser()"
-                                                [class.cursor-disable]="!canAddNewUser()">
-                                                <i class="icon-plus"></i> {{ localeData?.add_user }}
+                                            <a
+                                                href="javascript:void(0);"
+                                                (click)="handleAddNewUser()"
+                                                [class.cursor-disable]="!canAddNewUser()"
+                                            >
+                                                <i class="icon-plus"></i>
+                                                {{ localeData?.add_user }}
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex column-gap-15 mt-3">
-                                <button mat-stroked-button matStepperPrevious>
+                                <button matButton="outlined" matStepperPrevious>
                                     {{ commonLocaleData?.app_back }}
                                 </button>
-                                <button mat-raised-button color="primary" (click)="onSubmit()">
+                                <button matButton="filled" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
                                 </button>
-                                <button
-                                    *ngIf="companiesList?.length === 0"
-                                    mat-stroked-button
-                                    (click)="openLogoutConfirmationDialog()"
-                                >
+                                <button *ngIf="companiesList?.length === 0" matButton="outlined" (click)="openLogoutConfirmationDialog()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
                             </div>
                         </form>
                     </mat-step>
                 </ng-container>
+
+                <!-- Custom step icons to display numbers instead of Material icons -->
+                <ng-template matStepperIcon="edit" let-index="index">
+                    <span>{{ index + 1 }}</span>
+                </ng-template>
+                <ng-template matStepperIcon="done" let-index="index">
+                    <span>{{ index + 1 }}</span>
+                </ng-template>
+                <ng-template matStepperIcon="number" let-index="index">
+                    <span>{{ index + 1 }}</span>
+                </ng-template>
             </mat-stepper>
-        </ng-container>
-    </ng-container>
+        </div>
+    </div>
 </div>

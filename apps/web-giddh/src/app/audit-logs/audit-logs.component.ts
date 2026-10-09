@@ -11,10 +11,12 @@ import { GeneralService } from '../services/general.service';
 import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
 import { GetAuditLogsRequest } from '../models/api-models/Logs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { cloneDeep } from '../lodash-optimized';
 @Component({
     selector: 'audit-logs',
     templateUrl: './audit-logs.component.html',
     styleUrls: [`./audit-logs.component.scss`],
+    standalone:false
 })
 export class AuditLogsComponent implements OnInit, OnDestroy {
     /** To check module for new version  */
@@ -74,7 +76,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);

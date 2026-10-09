@@ -16,8 +16,6 @@
         [readonly]="readonly"
         [cssClass]="'text-right'"
         (onFocus)="!readonly ? handleInputFocus() : ''"
-        [autocomplete]="'off'"
-        [readonly]="readonly"
     ></input-field>
     <mat-menu #taxControlMenu="matMenu">
         <div class="px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">
@@ -25,7 +23,7 @@
                 <ng-container *ngFor="let tax of taxRenderData; trackBy: trackByFn; let i = index">
                     <p
                         (click)="$event.stopPropagation()"
-                        class="d-flex align-items-center width-100 m-0 p-0"
+                        class="d-flex align-items-center w-100 m-0 p-0"
                         [ngClass]="{ 'disabled-label': tax.isDisabled }"
                         #taxLabel
                     >

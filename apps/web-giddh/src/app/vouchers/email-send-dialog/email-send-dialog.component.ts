@@ -9,7 +9,8 @@ import { ToasterService } from '../../services/toaster.service';
     selector: 'app-email-send-dialog',
     templateUrl: './email-send-dialog.component.html',
     styleUrls: ['./email-send-dialog.component.scss'],
-    providers: [VoucherComponentStore]
+    providers: [VoucherComponentStore],
+    standalone: false
 })
 export class EmailSendDialogComponent implements OnInit, OnDestroy {
     /** Holds invoice type */
@@ -113,7 +114,7 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
             return;
         }
         const emailsArray = this.sendEmailForm.get('email.to').value?.split(',').map(email => email.trim());
-        if (this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
+        if (this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice || this.invoiceType.isCashInvoice) {
             this.successEvent.emit({
                 email: emailsArray,
                 invoiceType: this.copyTypes.value,

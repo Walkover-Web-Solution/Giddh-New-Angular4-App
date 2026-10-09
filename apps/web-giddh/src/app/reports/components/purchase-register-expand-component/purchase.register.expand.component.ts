@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject, signal, computed } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -8,7 +8,7 @@ import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
 import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,11 +19,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
+import { forEach, includes, map, set } from '../../../lodash-optimized';
+import { GroupBy } from '../../constants/reports.constant';
 
 @Component({
     selector: "purchase-register-expand",
     templateUrl: "./purchase.register.expand.component.html",
     styleUrls: ["./purchase.register.expand.component.scss"],
+    standalone: false
 })
 export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public PurchaseRegisteDetailedItems: PurchaseRegisteDetailedResponse;
@@ -85,12 +88,19 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public isDefaultLoaded: boolean = false;
     /** Hold active company country code */
     public activeCompanyCountryCode: string = '';
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Datasource of Purchase Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Supported groupBy values for export functionality */
+    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration, GroupBy.SalesPerson, GroupBy.Country, GroupBy.State]);
+    /** Current groupBy value selected in the report form */
+    public currentGroupBy = signal<GroupBy | null>(null);
+    /** Computed signal that determines if export button should be visible based on current groupBy */
+    public showExport = computed(() => {
+        const currentGroupBy = this.currentGroupBy();
+        return this.supportedExportGroupBy().includes(currentGroupBy);
+    });
 
     constructor(
         private store: Store<AppState>,
@@ -99,7 +109,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private router: Router,
         private _cd: ChangeDetectorRef,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private dialog: MatDialog,
         private companyActions: CompanyActions
     ) {
@@ -120,7 +130,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? "assets/icon/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/icon/";
+        this.imgPath = this.serviceConfig.IMG_PATH + 'icon/';
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedPurchaseRequestFilter.q = "";
@@ -140,7 +150,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.isDefaultLoaded = true;
             }
         });
-        
+
         combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
             if (params.from && params.to) {
                 this.from = params.from;
@@ -149,7 +159,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.getDetailedPurchaseRequestFilter.to = this.to;
                 this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.getDetailedPurchaseRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedPurchaseRequestFilter.stateCode = params.stateCode;
+                this.getDetailedPurchaseRequestFilter.countryCode = params.countryCode;
                 this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
+                this.getDetailedPurchaseRequestFilter = this.generalService.replaceSelectedAllOptions(this.getDetailedPurchaseRequestFilter, true);
+                this.currentGroupBy.set(params.groupBy);
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
@@ -174,13 +188,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             .subscribe((res: PurchaseRegisteDetailedResponse) => {
                 if (res) {
                     this.PurchaseRegisteDetailedItems = res;
-                    this.dataSource.data = this.PurchaseRegisteDetailedItems.items.map((obj: any) => {
-                        obj.date = this.getDateToDMY(obj.date);
-                        return obj;
-                    });
+                    this.dataSource.data = this.PurchaseRegisteDetailedItems.items;
                     if (this.voucherNumberInput?.value) {
                         setTimeout(() => {
-                            this.invoiceSearch?.nativeElement.focus();
+                            if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                                this.invoiceSearch.nativeElement.focus();
+                            }
                         }, 200);
                     }
                 }
@@ -290,10 +303,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true,
             },
             {
+                "value": "app_round_off",
+                "label": "Round Off",
+                "checked": true,
+                "isCommonLocaleData": true
+            },
+            {
                 "value": "net_purchase",
                 "label": "Net Purchase",
                 "checked": true,
-            },
+            }
         ];
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -337,6 +356,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                     branchUniqueName: params.branchUniqueName,
                     interval: params.interval,
                     selectedMonth: params.selectedMonth,
+                    groupBy: this.currentGroupBy()
                 },
             });
         });
@@ -368,7 +388,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             let idx = this.from.split("-");
             this.monthYear = [];
             if (currentYearFrom === currentYearTo) {
-                this.monthNames.forEach((element) => {
+                (Array.isArray(this.monthNames) ? this.monthNames : []).forEach((element) => {
                     this.monthYear.push(element + " " + currentYearFrom);
                 });
             }
@@ -407,7 +427,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         if (fieldName === "invoiceNumber") {
             this.showSearchInvoiceNo = true;
             setTimeout(() => {
-                this.invoiceSearch?.nativeElement.focus();
+                if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                    this.invoiceSearch.nativeElement.focus();
+                }
             }, 200);
         } else {
             this.showSearchInvoiceNo = false;
@@ -495,22 +517,35 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public export(): void {
-        let exportData = {
+        const groupBy = this.currentGroupBy();
+        const salesPersonUniqueName = this.getDetailedPurchaseRequestFilter?.salesPersonUniqueName;
+        const countryCode = this.getDetailedPurchaseRequestFilter?.countryCode;
+        const stateCode = this.getDetailedPurchaseRequestFilter?.stateCode;
+        const accountUniqueNames = this.getDetailedPurchaseRequestFilter?.accountUniqueNames ?? [];
+
+        let exportData: any = {
             from: this.from,
             to: this.to,
             exportType: "PURCHASE_REGISTER_DETAILED_EXPORT",
-            fileType: "CSV",
+            fileType: "XLSX",
             isExpanded: this.expand,
             q: this.voucherNumberInput?.value,
             branchUniqueName: this.getDetailedPurchaseRequestFilter?.branchUniqueName,
             commonLocaleData: this.commonLocaleData,
             localeData: this.localeData,
+            activeCompanyCountryCode: this.activeCompanyCountryCode,
+            groupBy: groupBy,
+            accountUniqueNames: accountUniqueNames,
+            selectAllFields: this.getDetailedPurchaseRequestFilter?.selectAllFields,
+            salesPersonUniqueNames: groupBy === GroupBy.SalesPerson && salesPersonUniqueName ? [salesPersonUniqueName] : [],
+            countryCodes: (groupBy === GroupBy.Country || groupBy === GroupBy.State) && countryCode ? [countryCode] : [],
+            stateCodes: groupBy === GroupBy.State && stateCode ? [stateCode] : []
         };
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
-            width: "630px",
-            panelClass: 'export-container',
-            data: exportData,
-        });
+                    width: "630px",
+                    panelClass: 'export-container',
+                    data: exportData
+                });
     }
 
     /**

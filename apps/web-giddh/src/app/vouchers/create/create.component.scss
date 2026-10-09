@@ -33,7 +33,6 @@
         .vouchers-form-fields {
             max-width: 415px;
             min-width: 230px;
-
         }
 
         .vouchers-form-fields-detail {
@@ -48,7 +47,7 @@
     .vouchers-secondary-form {
         &.vouchers-form-disable {
             &::before {
-                content: "";
+                content: '';
                 display: block;
                 position: absolute;
                 top: 0;
@@ -95,7 +94,6 @@
                     }
                 }
             }
-
         }
 
         .vouchers-large-container {
@@ -110,7 +108,6 @@
             .vouchers-entry-table {
                 table {
                     tr {
-
                         th,
                         td {
                             padding: 16px 8px;
@@ -119,7 +116,6 @@
                             &.total-column {
                                 min-width: 120px;
                                 padding-bottom: 36px !important;
-
                             }
 
                             &.product-column {
@@ -134,7 +130,6 @@
                         }
 
                         th {
-
                             &:not(:first-child, :nth-child(2)) {
                                 padding-right: 14px !important;
                             }
@@ -143,12 +138,17 @@
                         td {
                             vertical-align: top;
 
+                            &.error-box {
+                                border: 2px solid var(--color-red) !important;
+                            }
+
                             .delete-btn {
                                 right: 12px;
                                 bottom: 18px;
                                 transition: all 200ms;
 
-                                &:hover {
+                                &:hover,
+                                &:focus {
                                     transform: scale(1.2);
                                 }
                             }
@@ -234,10 +234,12 @@
                     }
 
                     .remove-attachment {
-                        height: 25px;
-                        width: 25px;
+                        $size: 25px;
+                        height: $size;
+                        width: $size;
+                        line-height: $size;
                         padding: 2px;
-                        color: black;
+                        color: var(--theme-foreground-color);
                     }
                 }
 
@@ -272,7 +274,8 @@
     }
 }
 
-.option-value, .option-value-stock {
+.option-value,
+.option-value-stock {
     color: var(--color-medium-gray);
 }
 .option-label {
@@ -281,4 +284,26 @@
 
 .single-toggle-button {
     min-width: 100px;
+}
+
+.vouchers-recent-grid {
+    grid-template-columns: 2fr 2fr 1.5fr 2fr 40px;
+}
+.copy-particular-search-btn {
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    flex-shrink: 0;
+}
+.annexure-charges-wrapper {
+    max-height: 194px;
+
+    .annexure-datepicker-fixed {
+        width: 150px;
+        min-width: 150px;
+    }
+
+    .annexure-field-dynamic {
+        min-width: 0;
+    }
 }

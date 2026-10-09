@@ -20,7 +20,8 @@ import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../services/service.config';
 @Component({
     templateUrl: './gst.component.html',
-    styleUrls: ['./gst.component.scss']
+    styleUrls: ['./gst.component.scss'],
+    standalone:false
 })
 export class GstComponent implements OnInit, OnDestroy {
     /** This will hold the boolean value to open/close setting sidebar popup */
@@ -92,6 +93,7 @@ export class GstComponent implements OnInit, OnDestroy {
         private gstReconcileService: GstReconcileService,
         private generalService: GeneralService
     ) {
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
         this.gstr2TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr2OverViewData.count), takeUntil(this.destroyed$));
@@ -126,7 +128,8 @@ export class GstComponent implements OnInit, OnDestroy {
                     endDate: dayjs(a.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 if (date.startDate === a.from && date.endDate === a.to) {
-                    this.selectedMonth = dayjs(a.from, GIDDH_DATE_FORMAT).toISOString();
+                    const fromDate = dayjs(a.from, GIDDH_DATE_FORMAT);
+                    this.selectedMonth = fromDate.isValid() ? fromDate.toISOString() : dayjs().startOf('month').toISOString();
                     this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
                     this.isMonthSelected = true;
                 } else {
@@ -141,12 +144,12 @@ export class GstComponent implements OnInit, OnDestroy {
                     from: dayjs().startOf('month').format(GIDDH_DATE_FORMAT),
                     to: dayjs().endOf('month').format(GIDDH_DATE_FORMAT)
                 };
-                this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+                const fromDate = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT);
+                this.selectedMonth = fromDate.isValid() ? fromDate.toISOString() : dayjs().startOf('month').toISOString();
                 this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
                 this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
     }
     /**
      * Unsubscribes from subscription

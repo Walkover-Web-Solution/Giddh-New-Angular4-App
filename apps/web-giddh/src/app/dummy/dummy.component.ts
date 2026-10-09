@@ -3,9 +3,8 @@ import {Router } from '@angular/router';
 
 @Component({
     selector: 'dummy',
-    template: `
-        <giddh-page-loader></giddh-page-loader>
-  `
+    templateUrl: './dummy.component.html',
+    standalone: false
 })
 export class DummyComponent implements OnInit {
     constructor(private router: Router) { }

@@ -15,7 +15,7 @@
         [label]="commonLocaleData?.app_discount"
         [matMenuTriggerFor]="discountMenu"
     ></input-field>
-    
+
     <mat-menu #discountMenu="matMenu" [hasBackdrop]="false">
         <div (click)="$event.stopPropagation()" class="discount-wrapper p-2">
             <div class="value-wrapper">
@@ -58,7 +58,7 @@
                 <ul class="discount-list">
                     <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
                         <li *ngIf="idx > 0" class="discount-item cursor-pointer">
-                            <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
+                            <label class="checkbox overflow-hidden w-100 p-0 m-0" (click)="$event.stopPropagation()">
                                 <mat-checkbox
                                     color="primary"
                                     [id]="'discount-checkbox-' + idx"
@@ -68,9 +68,9 @@
                                     [(ngModel)]="discount.isActive"
                                     (change)="change($event, discount)"
                                     (click)="$event.stopPropagation()"
-                                >                        
-                                {{ discount?.name }}
-                            </mat-checkbox>
+                                >
+                                    {{ discount?.name }}
+                                </mat-checkbox>
                             </label>
                         </li>
                     </ng-container>

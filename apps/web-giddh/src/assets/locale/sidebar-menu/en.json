@@ -7,12 +7,12 @@
             "items": [
                 {
                     "label": "Aging Report",
-                    "link": "/pages/contact/aging-report",
+                    "link": "/pages/contact/sales",
                     "icon": "icon-aging-report-new",
                     "description": "Amount Due in previous days & upcoming",
                     "additional": {
                         "queryParams": {
-                            "tab": "aging-report",
+                            "tab": "sales-aging-report",
                             "tabIndex": 1
                         }
                     }
@@ -23,10 +23,16 @@
                     "icon": "icon-customer",
                     "description": "Manage customers, send reminders via SMS/Email",
                     "additional": {
+                        "queryParams": {
+                            "tab": "customer",
+                            "tabIndex": 1
+                        },
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/customer",
-                            "queryParams": { "addCustomer" : true }
+                            "queryParams": {
+                                "addCustomer": true
+                            }
                         }
                     }
                 },
@@ -143,7 +149,59 @@
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
                     "description": "Net & cumulative sales",
-                    "additionalRoutes": ["/pages/reports/sales-detailed-expand"]
+                    "additionalRoutes": [
+                        "/pages/reports/sales-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "By Duration",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration",
+                                    "required": "groupBy"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By Sales Person",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson",
+                                    "required": "groupBy"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By State",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state",
+                                    "required": "groupBy"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By Country",
+                            "link": "/pages/reports/sales-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country",
+                                    "required": "groupBy"
+                                },
+                                "matchQueryParams": true
+                            }
+                        }
+                    ]
                 },
                 {
                     "label": "Template",
@@ -166,6 +224,21 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "Recurring Invoice",
+                    "link": "/pages/vouchers/preview/sales/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "Make invoice recurring",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/sales/create?isRecurringVoucher=true"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -173,6 +246,18 @@
             "label": "Vendor",
             "icon": "icon-vendor",
             "items": [
+                {
+                    "label": "Aging Report",
+                    "link": "/pages/contact/purchase",
+                    "icon": "icon-aging-report-new",
+                    "description": "Amount Due in previous days & upcoming",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "purchase-aging-report",
+                            "tabIndex": 1
+                        }
+                    }
+                },
                 {
                     "label": "Bill",
                     "link": "/pages/purchase-management/purchase/bill",
@@ -316,7 +401,55 @@
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
                     "description": "Net & cumulative purchases",
-                    "additionalRoutes": ["/pages/reports/purchase-detailed-expand"]
+                    "additionalRoutes": [
+                        "/pages/reports/purchase-detailed-expand"
+                    ],
+                    "options": [
+                        {
+                            "label": "By Duration",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "duration"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By Sales Person",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "salesPerson"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By State",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "state"
+                                },
+                                "matchQueryParams": true
+                            }
+                        },
+                        {
+                            "label": "By Country",
+                            "link": "/pages/reports/purchase-register",
+                            "icon": "icon-advance-search",
+                            "additional": {
+                                "queryParams": {
+                                    "groupBy": "country"
+                                },
+                                "matchQueryParams": true
+                            }
+                        }
+                    ]
                 },
                 {
                     "label": "Vendor",
@@ -325,12 +458,16 @@
                     "description": "Send Bulk SMS/Emails, Set reminders",
                     "additional": {
                         "queryParams": {
-                            "voucherVersion": 2
+                            "voucherVersion": 2,
+                            "tab": "vendor",
+                            "tabIndex": 1
                         },
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/vendor",
-                            "queryParams": { "addVendor" : true }
+                            "queryParams": {
+                                "addVendor": true
+                            }
                         }
                     }
                 },
@@ -340,6 +477,21 @@
                     "icon": "icon-template",
                     "description": "Edit design & content of the template",
                     "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Recurring Bill",
+                    "link": "/pages/vouchers/preview/purchase/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "Make purchase bill recurring",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/purchase/create?isRecurringVoucher=true"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -356,11 +508,13 @@
                     "label": "E-way bill",
                     "link": "/pages/invoice/ewaybill",
                     "icon": "icon-eway-bill-new",
-                    "description": "Generate directly from Giddh after",
+                    "description": "Generate directly from [BRAND_NAME] after",
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
-                            "countrySpecific": ["IN"]
+                            "countrySpecific": [
+                                "IN"
+                            ]
                         }
                     }
                 },
@@ -374,7 +528,9 @@
                         "queryParams": {
                             "isGstMenu": true,
                             "type": "gstr1",
-                            "countrySpecific": ["IN"]
+                            "countrySpecific": [
+                                "IN"
+                            ]
                         }
                     }
                 },
@@ -388,7 +544,9 @@
                         "queryParams": {
                             "isGstMenu": true,
                             "type": "gstr2",
-                            "countrySpecific": ["IN"]
+                            "countrySpecific": [
+                                "IN"
+                            ]
                         }
                     }
                 },
@@ -402,7 +560,9 @@
                         "queryParams": {
                             "isGstMenu": true,
                             "type": "gstr3b",
-                            "countrySpecific": ["IN"]
+                            "countrySpecific": [
+                                "IN"
+                            ]
                         }
                     }
                 },
@@ -422,7 +582,12 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
-                            "countrySpecific": ["AE", "GB", "ZW", "KE"]
+                            "countrySpecific": [
+                                "AE",
+                                "GB",
+                                "ZW",
+                                "KE"
+                            ]
                         }
                     }
                 },
@@ -442,7 +607,9 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
-                            "countrySpecific": ["IN"]
+                            "countrySpecific": [
+                                "IN"
+                            ]
                         }
                     }
                 }
@@ -451,6 +618,7 @@
         {
             "label": "Reports",
             "icon": "icon-reports",
+            "route": "/pages/all-reports",
             "items": [
                 {
                     "label": "Balance Sheet",
@@ -458,6 +626,7 @@
                     "icon": "icon-balance-sheet-new",
                     "description": "Download BS in Excel, multiple type of exports",
                     "additional": {
+                        "matchQueryParams": true,
                         "queryParams": {
                             "tab": "balance-sheet",
                             "tabIndex": 2
@@ -476,6 +645,7 @@
                     "icon": "icon-proft-loss-new",
                     "description": "Download data in Excel, project wise report",
                     "additional": {
+                        "matchQueryParams": true,
                         "queryParams": {
                             "tab": "profit-loss",
                             "tabIndex": 1
@@ -494,6 +664,7 @@
                     "icon": "icon-trial-balance-new",
                     "description": "Download of all credit & debit balances",
                     "additional": {
+                        "matchQueryParams": true,
                         "queryParams": {
                             "tab": "trial-balance",
                             "tabIndex": 0
@@ -613,7 +784,7 @@
                     "description": "Overdues, P&L, Bank account, Ratio Analysis"
                 },
                 {
-                    "label": "Journal Entries *",
+                    "label": "Journal Entries",
                     "link": "/pages/journal-voucher",
                     "icon": "icon-journal-voucher-new",
                     "description": "Entries of Journal Voucher"
@@ -663,18 +834,42 @@
                     "icon": "icon-balance-sheet-new"
                 }
             ]
-        }, 
-        {
-            "label": "AI OCR for Income",
-            "link": "/pages/ai-ocr/income",
-            "icon": "icon-audit-log",
-            "description": "Upload images, pdf, jpeg, zip"
         },
         {
-            "label": "AI OCR for Expense",
-            "link": "/pages/ai-ocr/expense",
-            "icon": "icon-audit-log",
-            "description": "Upload images, pdf, jpeg, zip"
+            "label": "Automation",
+            "icon": "icon-manage-group-acc",
+            "items": [
+                {
+                    "label": "Scan2Invoice",
+                    "link": "/pages/ai-ocr/income",
+                    "icon": "icon-audit-log",
+                    "description": "Upload images, pdf, jpeg, zip"
+                },
+                {
+                    "label": "Scan2Bill",
+                    "link": "/pages/ai-ocr/expense",
+                    "icon": "icon-audit-log",
+                    "description": "Upload images, pdf, jpeg, zip"
+                },
+                {
+                    "label": "Email-to-Bank Sync",
+                    "link": "/pages/email-forwarding",
+                    "icon": "icon-mail",
+                    "description": "Auto-create vouchers from bank statement emails."
+                },
+                {
+                    "label": "Budget Forecasting",
+                    "link": "/pages/budget-forecasting",
+                    "icon": "icon-audit-log",
+                    "description": "AI-powered cashflow forecasting and predictions"
+                },
+                {
+                    "label": "Bank Reconciliation",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "Reconcile your books with bank statements"
+                }
+            ]
         }
     ],
     "switch_branch": "Switch Branch",

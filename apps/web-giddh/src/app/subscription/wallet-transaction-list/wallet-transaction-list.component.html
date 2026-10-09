@@ -1,0 +1,57 @@
+<div appTranslate [file]="'wallet'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
+    <div class="aside-dialog-wrapper">
+        <div class="dialog-header d-flex align-items-center justify-content-between p-4 border-bottom">
+            <h2 class="font-weight-semibold font-size-18 m-0">{{ localeData?.wallet_transactions }}</h2>
+            <button matIconButton aria-label="close" (click)="closeDialog()">
+                <i aria-label="close icon" class="icon-cross"></i>
+            </button>
+        </div>
+
+        <mat-dialog-content class="dialog-body">
+            @if (isLoading()) {
+                <giddh-page-loader></giddh-page-loader>
+            }
+
+            @if (!isLoading() && dataSource.data.length > 0) {
+                <div class="table-responsive mt-3">
+                    <table mat-table [dataSource]="dataSource" class="giddh-table table border">
+                        <!-- Created At Column -->
+                        <ng-container matColumnDef="createdAt">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
+                            <td mat-cell *matCellDef="let log">{{ log.createdAt }}</td>
+                        </ng-container>
+
+                        <!-- Amount Column -->
+                        <ng-container matColumnDef="amount">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_amount }}</th>
+                            <td mat-cell *matCellDef="let log">
+                                {{ log.currency?.symbol }} {{ log.walletAmountPurchased | number: '1.2-2' }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                </div>
+            }
+
+            @if (!isLoading() && dataSource.data.length === 0) {
+                <div class="text-center py-4">
+                    <p class="text-light">{{ localeData?.no_transactions }}</p>
+                </div>
+            }
+
+            @if (!isLoading() && totalTransactions() > pageSizeOptions[0]) {
+                <mat-paginator
+                    (page)="onPageChange($event)"
+                    [length]="totalTransactions()"
+                    [pageSize]="pageSize()"
+                    [showFirstLastButtons]="true"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [hidePageSize]="false"
+                    [pageIndex]="currentPage()"
+                ></mat-paginator>
+            }
+        </mat-dialog-content>
+    </div>
+</div>

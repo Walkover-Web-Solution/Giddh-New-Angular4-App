@@ -1,0 +1,26 @@
+@if (variant() === GoToBranchVariant.Banner) {
+    <div class="bg-warning p-3 w-100 d-flex align-items-center justify-content-between" [class]="cssClass()">
+        <div class="d-flex align-items-center column-gap-2 pr-2">
+            <div class="d-flex flex-row">
+                <i class="go-to-branch-banner-icon d-flex font-size-24 align-items-center">&#9888;</i>
+                <div class="column-gap-1 d-flex flex-column ml-2 text-left">
+                    <span class="font-size-16 font-weight-bold text-black">{{ title() }}</span>
+                    @if (message()) {
+                        <span class="font-size-16 text-black" [class]="messageClass()">{{ message() }}</span>
+                    }
+                </div>
+            </div>
+        </div>
+        <button matButton="filled" class="nowrap" (click)="goToBranch()">
+            {{ buttonLabel() }}
+            <span>&gt;</span>
+        </button>
+    </div>
+} @else {
+    <div class="d-flex align-items-center justify-content-center column-gap-1" [class]="cssClass()">
+        <span [class]="messageClass()">{{ message() }}</span>
+        <button matButton="filled" class="nowrap" (click)="goToBranch()">
+            {{ buttonLabel() }}
+        </button>
+    </div>
+}

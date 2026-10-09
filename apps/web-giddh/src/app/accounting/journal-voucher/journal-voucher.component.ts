@@ -16,7 +16,10 @@ const FUNCTIONAL_KEYS = {
     F6: 'F6',
     F7: 'F7',
     F8: 'F8',
-    F9: 'F9'
+    F9: 'F9',
+    F10: 'F10',
+    F11: 'F11',
+    F12: 'F12'
 };
 
 /** Key codes for combination of shortcut with Alt+V, Alt+I and other shortcuts */
@@ -36,8 +39,9 @@ export const KEYS = {
 /** Voucher page shortcut mapping */
 export const PAGE_SHORTCUT_MAPPING = [
     {
-        keyCode: 115, // 'F4',
-        key: FUNCTIONAL_KEYS.F4,
+        keyCode: 116, // 'F5',
+        key: FUNCTIONAL_KEYS.F5,
+        altKey: true,
         inputForFn: {
             page: 'Contra',
             uniqueName: 'purchases',
@@ -45,8 +49,9 @@ export const PAGE_SHORTCUT_MAPPING = [
         }
     },
     {
-        keyCode: 116, // 'F5',
-        key: FUNCTIONAL_KEYS.F5,
+        keyCode: 117, // 'F6',
+        key: FUNCTIONAL_KEYS.F6,
+        altKey: true,
         inputForFn: {
             page: 'Payment',
             uniqueName: 'purchases',
@@ -54,8 +59,9 @@ export const PAGE_SHORTCUT_MAPPING = [
         }
     },
     {
-        keyCode: 117, // 'F6',
-        key: FUNCTIONAL_KEYS.F6,
+        keyCode: 118, // 'F7',
+        key: FUNCTIONAL_KEYS.F7,
+        altKey: true,
         inputForFn: {
             page: 'Receipt',
             uniqueName: 'null',
@@ -63,8 +69,9 @@ export const PAGE_SHORTCUT_MAPPING = [
         }
     },
     {
-        keyCode: 118, // 'F7',
-        key: FUNCTIONAL_KEYS.F7,
+        keyCode: 119, // 'F8',
+        key: FUNCTIONAL_KEYS.F8,
+        altKey: true,
         inputForFn: {
             page: 'Journal',
             uniqueName: 'purchases',
@@ -72,14 +79,45 @@ export const PAGE_SHORTCUT_MAPPING = [
         }
     },
     {
-        keyCode: 119, // 'F8',
-        key: FUNCTIONAL_KEYS.F8,
+        keyCode: 120, // 'F9',
+        key: FUNCTIONAL_KEYS.F9,
+        altKey: true,
         inputForFn: {
             page: 'Sales',
             uniqueName: 'purchases',
             gridType: 'voucher'
         }
     },
+    {
+        keyCode: 121, // 'F10',
+        key: FUNCTIONAL_KEYS.F10,
+        altKey: true,
+        inputForFn: {
+            page: 'Purchase',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
+    {
+        keyCode: 122, // 'F11',
+        key: FUNCTIONAL_KEYS.F11,
+        altKey: true,
+        inputForFn: {
+            page: 'Debit note',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
+    {
+        keyCode: 123, // 'F12',
+        key: FUNCTIONAL_KEYS.F12,
+        altKey: true,
+        inputForFn: {
+            page: 'Credit note',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    }
     //{
     //     keyCode: 119, // 'F8',
     //     key: FUNCTIONAL_KEYS.F8,
@@ -114,7 +152,8 @@ export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note
 
 @Component({
     templateUrl: './journal-voucher.component.html',
-    styleUrls: ['./journal-voucher.component.scss']
+    styleUrls: ['./journal-voucher.component.scss'],
+    standalone:false
 })
 export class JournalVoucherComponent implements OnInit, OnDestroy {
 
@@ -144,8 +183,8 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public showDiscountEvent: boolean;
     /** Hold show tax event  */
     public showTaxEvent: boolean;
-    /** Hold sales entry event  */
-    public salesEntry: boolean;
+    /** Hold show discount and tax event  */
+    public showDiscountAndTax: boolean;
 
     /** @ignore */
     constructor(
@@ -160,11 +199,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
                 this.selectedPage = data.page;
             }
         });
-    }
-
-    @HostListener('document:keydown', ['$event'])
-    public beforeunloadHandler(event: KeyboardEvent) {
-        return event.key !== FUNCTIONAL_KEYS.F5;
     }
 
     @HostListener('document:keyup', ['$event'])
@@ -223,7 +257,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
                 if (event.altKey) {
                     return page.key === event.key && page.altKey;
                 } else {
-                    return page.key === event.key;
+                    return page.key === event.key && !page.altKey;
                 }
             });
             if (selectedPageIndx > -1) {
@@ -262,7 +296,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
      * @memberof JournalVoucherComponent
      */
     public getSalesEntryEvent(event: any): void {
-        this.salesEntry = event;
+        this.showDiscountAndTax = event;
     }
 
     /**

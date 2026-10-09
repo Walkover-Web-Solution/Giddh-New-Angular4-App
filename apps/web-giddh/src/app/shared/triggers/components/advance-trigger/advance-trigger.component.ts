@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, QueryList, signal, ViewChildren } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -9,8 +9,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integration.service';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep } from '../../../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 export interface ActiveTriggers {
     title: string;
@@ -23,7 +24,8 @@ export interface ActiveTriggers {
 @Component({
     selector: 'app-advance-trigger',
     templateUrl: './advance-trigger.component.html',
-    styleUrls: ['./advance-trigger.component.scss']
+    styleUrls: ['./advance-trigger.component.scss'],
+    standalone: false
 })
 export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     /* Selector for variableComponent type field */
@@ -49,7 +51,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
         }]
     };
     /** True if communication platform get api in progress */
-    public isCommunicationPlatformsLoading: boolean = true;
+    public isCommunicationPlatformsLoading = signal<boolean>(true);
     /** True if show integrated wrapper */
     public isShowIntegrated: boolean = false;
     /** True if communication platform verification api in progress */
@@ -98,7 +100,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
         totalPages: 0
     }
     /** True if  the variables showing   */
-    public showVariableMapping: boolean = false;
+    public showVariableMapping = signal<boolean>(false);
     /** Hold instance of destroyed   */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds available page size options */
@@ -120,7 +122,9 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private changeDetectorRef: ChangeDetectorRef,
+        @Inject(ServiceConfig) private serviceConfig,
     ) {
         this.resetCommunicationForm();
     }
@@ -131,7 +135,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
      * @memberof AdvanceTriggerComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.getCommunicationPlatforms();
     }
 
@@ -142,7 +146,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     * @memberof AdvanceTriggerComponent
     */
     private getCommunicationPlatforms(): void {
-        this.isCommunicationPlatformsLoading = true;
+        this.isCommunicationPlatformsLoading.set(true);
         this.editCommunicationPlatform = "";
         this.campaignIntegrationService.getCommunicationPlatforms().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
@@ -167,10 +171,10 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                     this.platform = response?.body?.platforms[0]?.name;
                     this.createTrigger.communicationPlatform = this.platform;
                 }
-                this.isCommunicationPlatformsLoading = false;
+                this.isCommunicationPlatformsLoading.set(false);
             } else {
                 this.toasty.showSnackBar("error", response?.message);
-                this.isCommunicationPlatformsLoading = false;
+                this.isCommunicationPlatformsLoading.set(false);
             }
         });
     }
@@ -209,6 +213,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
      */
     public deleteCommunicationPlatform(platformUniqueName: string): void {
         let dialogRef = this.dialog?.open(ConfirmModalComponent, {
+            panelClass: "mat-dialog-sm",
             data: {
                 title: this.commonLocaleData?.app_delete,
                 body: this.localeData?.communication?.delete_platform,
@@ -272,6 +277,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                 this.isActiveTriggersLoading = false;
                 this.triggerObj.totalItems = 0;
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -357,6 +363,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
                         if (mappedValue) {
                             arg.value = mappedValue?.value;
                         }
+                        this.changeDetectorRef.detectChanges();
                     });
                 });
                 this.createTrigger.condition.action = response?.body?.condition?.action;
@@ -392,6 +399,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
             } else {
                 this.toasty.showSnackBar("error", response?.message);
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -472,7 +480,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     public backToListPage(event: any): void {
         if (event) {
             this.showTriggerForm = false;
-            this.showVariableMapping = false;
+            this.showVariableMapping.set(false);
             this.editCommunicationPlatform = "";
             this.resetCommunicationForm();
             this.triggerMode = 'create';
@@ -502,7 +510,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     public selectCampaign(campaign: any, getCampaignFields: boolean = false): void {
         this.createTrigger.campaignDetails.campaignSlug = campaign?.value;
         this.createTrigger.campaignDetails.campaignName = campaign?.label;
-        this.showVariableMapping = true;
+        this.showVariableMapping.set(true);
         if (getCampaignFields) {
             this.getCampaignFields(campaign?.value);
         }
@@ -779,7 +787,7 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
         }
         this.resetValidationErrors();
         this.showTriggerForm = true;
-        this.showVariableMapping = false;
+        this.showVariableMapping.set(false);
         this.getCampaignList();
         this.getFieldsSuggestion(this.platform, "VOUCHER");
     }

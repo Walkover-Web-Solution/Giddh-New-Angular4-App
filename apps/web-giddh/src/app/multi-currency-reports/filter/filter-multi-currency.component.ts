@@ -8,14 +8,15 @@ import { TagRequest } from '../../models/api-models/settingsTags';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
-import { cloneDeep, orderBy } from '../../lodash-optimized';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
+import { cloneDeep, forEach, get, has, map, orderBy } from '../../lodash-optimized';
 
 @Component({
-    selector: 'filter-multi-currency',
+selector: 'filter-multi-currency',
     templateUrl: './filter-multi-currency.component.html',
     styleUrls: [`./filter-multi-currency.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /** Instance of universal datepicker menu trigger */

@@ -29,7 +29,7 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/uniqueName.module';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { TrimPipeModule } from '../shared/helpers/pipes/trim/trim.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { PurchaseSendEmailModule } from '../shared/purchase-send-email/purchase-send-email.module';
@@ -48,9 +48,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
-import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { MatDividerModule } from '@angular/material/divider';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -68,13 +68,13 @@ import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
     declarations: [
-        DownloadOrSendInvoiceOnMailComponent,	
-        EsignModalComponent,	
+        DownloadOrSendInvoiceOnMailComponent,
+        EsignModalComponent,
         WebviewDirective,
-        InvoiceRendererComponent,	
-        InvoiceBulkUpdateModalComponent,	
-        EWayBillCreateComponent,	
-        EWayBillComponent,	
+        InvoiceRendererComponent,
+        InvoiceBulkUpdateModalComponent,
+        EWayBillCreateComponent,
+        EWayBillComponent,
         EWayBillCredentialsComponent
     ],
     imports: [
@@ -97,7 +97,7 @@ import { MatCardModule } from '@angular/material/card';
         AsideMenuRecurringEntryModule,
         Daterangepicker,
         AccountDetailModalModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         ScrollingModule,
         UniqueNameModule,
         ConfirmModalModule,
@@ -131,7 +131,6 @@ import { MatCardModule } from '@angular/material/card';
         MatInputModule,
         MatRadioModule,
         MatButtonModule,
-        GenerateEWayBillModule,
         InvoiceSettingModule,
         MatMenuModule,
         MatTooltipModule,
@@ -140,7 +139,8 @@ import { MatCardModule } from '@angular/material/card';
         MatSortModule,
         NewConfirmationModalModule,
         MatCardModule,
-        MatDividerModule
+        MatDividerModule,
+        GiddhDatePipe
     ],
     exports: [
         InvoiceRoutingModule,

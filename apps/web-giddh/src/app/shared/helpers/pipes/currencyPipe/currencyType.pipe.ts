@@ -7,7 +7,7 @@ import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
 import { REMOVE_TRAILING_ZERO_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { giddhRoundOff } from '../../helperFunctions';
 
-@Pipe({ name: 'giddhCurrency', pure: true })
+@Pipe({ name: 'giddhCurrency', pure: true, standalone: false })
 
 export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -71,6 +71,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                     if (digitAfterDecimal === 2) {
                         op += '.' + '00';
                     }
+                    if (digitAfterDecimal === 3) {
+                        op += '.' + '000';
+                    }
                     if (digitAfterDecimal === 4) {
                         op += '.' + '0000';
                     }
@@ -88,6 +91,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 } else {
                     if (digitAfterDecimal === 2) {
                         op += '.' + '00';
+                    }
+                    if (digitAfterDecimal === 3) {
+                        op += '.' + '000';
                     }
                     if (digitAfterDecimal === 4) {
                         op += '.' + '0000';
@@ -109,6 +115,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
             } else {
                 if (digitAfterDecimal === 2) {
                     afterdecDigit = '00';
+                }
+                if (digitAfterDecimal === 3) {
+                    afterdecDigit = '000';
                 }
                 if (digitAfterDecimal === 4) {
                     afterdecDigit = '0000';

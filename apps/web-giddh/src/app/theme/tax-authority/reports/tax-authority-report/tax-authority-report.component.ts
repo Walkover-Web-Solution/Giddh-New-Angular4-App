@@ -14,7 +14,8 @@ import { PageEvent } from '@angular/material/paginator';
     selector: 'tax-authority-report',
     templateUrl: './tax-authority-report.component.html',
     styleUrls: ['./tax-authority-report.component.scss'],
-    providers: [TaxAuthorityComponentStore]
+    providers: [TaxAuthorityComponentStore],
+    standalone: false
 })
 export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */

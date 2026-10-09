@@ -14,7 +14,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     /* Base Variables */
     :root {
-     
+
          /* Neutral colors */
          --mat-background-color: #424242;
          --mat-background-color-rgb: 66, 66, 66;
@@ -25,7 +25,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
          --mat-disabled-background-color: #6e6e6e;
          --mat-transparent-color: transparent;
          --mat-divider-color: rgba(255, 255, 255, 0.12);
-     
+
          /* Elevation */
          --mat-elevation-1: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
              0px 1px 3px 0px rgba(0, 0, 0, 0.12);
@@ -33,13 +33,13 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
              0px 1px 5px 0px rgba(0, 0, 0, 0.12);
          --mat-elevation-3: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14),
              0px 9px 46px 8px rgba(0, 0, 0, 0.12);
-     
+
          /* State opacities */
          --mat-hover-opacity: 0.08;
          --mat-focus-opacity: 0.24;
          --mat-pressed-opacity: 0.24;
          --mat-dragged-opacity: 0.16;
-     
+
          /* Border radius */
          /*  THIS CODE IS COMMENT FROM HERE AND MOVE TO @include border-radius-utilities();
          --mat-border-radius-4: 4px;
@@ -387,25 +387,25 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     }
 
     html {
-        /* size */
-        --mat-legacy-button-toggle-height: 36px;
+        /* size - Updated for Angular 21 Material Design 3 */
+        --mat-button-toggle-height: 48px;
         --mat-standard-button-toggle-height: 48px;
-        /* border-radius */
-        --mat-legacy-button-toggle-shape: 2px;
+        /* border-radius - Updated for Angular 21 Material Design 3 */
+        --mat-button-toggle-shape: 4px;
         --mat-standard-button-toggle-shape: 4px;
 
-        /* opacity */
-        --mat-legacy-button-toggle-focus-state-layer-opacity: 1;
+        /* opacity - Updated for Angular 21 Material Design 3 */
+        --mat-button-toggle-focus-state-layer-opacity: 0.12;
         --mat-standard-button-toggle-hover-state-layer-opacity: 0.04;
         --mat-standard-button-toggle-focus-state-layer-opacity: 0.12;
-        /* color */
-        --mat-legacy-button-toggle-text-color: rgba(var(--mat-text-color-rgb), 0.5);
-        --mat-legacy-button-toggle-state-layer-color: rgba(var(--mat-text-color-rgb), 0.12);
-        --mat-legacy-button-toggle-selected-state-text-color: rgba(var(--mat-text-color-rgb), 0.7);
-        --mat-legacy-button-toggle-selected-state-background-color: var(--mat-surface-color);
-        --mat-legacy-button-toggle-disabled-state-text-color: var(--mat-disabled-color);
-        --mat-legacy-button-toggle-disabled-state-background-color: var(--mat-background-color);
-        --mat-legacy-button-toggle-disabled-selected-state-background-color: var(--mat-background-color);
+        /* color - Updated for Angular 21 Material Design 3 */
+        --mat-button-toggle-text-color: var(--mat-text-color);
+        --mat-button-toggle-state-layer-color: var(--mat-text-color);
+        --mat-button-toggle-selected-state-text-color: var(--mat-text-color);
+        --mat-button-toggle-selected-state-background-color: var(--mat-surface-color);
+        --mat-button-toggle-disabled-state-text-color: var(--mat-disabled-color);
+        --mat-button-toggle-disabled-state-background-color: var(--mat-background-color);
+        --mat-button-toggle-disabled-selected-state-background-color: var(--mat-background-color);
         --mat-standard-button-toggle-text-color: var(--mat-text-color);
         --mat-standard-button-toggle-background-color: var(--mat-background-color);
         --mat-standard-button-toggle-state-layer-color: var(--mat-text-color);
@@ -416,8 +416,8 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mat-standard-button-toggle-disabled-selected-state-text-color: var(--mat-text-color);
         --mat-standard-button-toggle-disabled-selected-state-background-color: var(--mat-background-color);
         --mat-standard-button-toggle-divider-color: rgba(var(--mat-text-color-rgb), 0.12);
-        /* typography */
-        --mat-legacy-button-toggle-text-font: var(--font-family);
+        /* typography - Updated for Angular 21 Material Design 3 */
+        --mat-button-toggle-text-font: var(--font-family);
         --mat-standard-button-toggle-text-font: var(--font-family);
     }
 

@@ -8,16 +8,20 @@ import { SettingsProfileActions } from '../actions/settings/profile/settings.pro
 import { Observable, ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
 import { OnboardingComponentStore } from './utility/onboarding.store';
-import { ASIDE_PANE_CONFIG, SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
+import { ASIDE_PANE_CONFIG } from '../app.constant';
 import { ServiceConfig } from '../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Configuration } from '../app.constant';
+import { environment } from '../../environments/environment.generated';
+import { cloneDeep } from '../lodash-optimized';
 
 
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
     styleUrls: ['./onboarding.component.scss'],
-    providers: [OnboardingComponentStore]
+    providers: [OnboardingComponentStore],
+    standalone: false
 })
 
 export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -49,26 +53,27 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public voucherApiVersion: number;
     /** Holds help documentation url for syncing with Tally */
     public syncWithTallyHelpDocUrl: string = "";
+    /** Holds Giddh help documentation url */
+    public helpDocUrl: string = "";
 
     constructor(
         private router: Router,
-        private generalService: GeneralService,
+        public generalService: GeneralService,
         private store: Store<AppState>,
-        @Inject(ServiceConfig) private serviceConfig,
+        @Inject(ServiceConfig) public serviceConfig,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
         private componentStore: OnboardingComponentStore,
         private dialog: MatDialog
     ) {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        const whiteLabelDomain = `${whiteLabel?.giddhWhiteLabel?.domainName}/help/sync-with-tally-1591360375828781`;
-        this.syncWithTallyHelpDocUrl = whiteLabelDomain ? whiteLabelDomain : SYNC_TALLY_HELP_DOC_URL;
+        this.syncWithTallyHelpDocUrl = this.serviceConfig.SYNC_TALLY_HELP_DOC_URL;
+        this.helpDocUrl = this.serviceConfig.HELP_DOC_URL;
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -135,7 +140,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
-                let inventorySetting = _.cloneDeep(o);
+                let inventorySetting = cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;
             }
         });

@@ -23,7 +23,9 @@ import { VoucherTypeEnum } from "../vouchers/utility/vouchers.const";
 import { LEDGER_API } from "./apiurls/ledger.api";
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class VoucherService {
     private companyUniqueName: string;
 
@@ -119,6 +121,28 @@ export class VoucherService {
     }
 
     /**
+     * Fetch stock history for copy particular dialog
+     *
+     * @param {*} body
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getStockHistory(body: any): Observable<BaseResponse<any, any>> {
+        const url = this.config.apiUrl + RECEIPT_API.STOCK_HISTORY
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':branchUniqueName', encodeURIComponent(this.generalService.currentBranchUniqueName || ''))
+
+        return this.http.post(url, body).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = body;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, body))
+        );
+    }
+
+    /**
      * Get list of all templates
      *
      * @param {*} voucherType
@@ -182,6 +206,14 @@ export class VoucherService {
         let url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
+        // Add isRecurringVoucher flag to model
+        model.isRecurringVoucher = model.isRecurringVoucher || false;
+
+        // Add isRecurringVoucher as query parameter after voucherVersion
+        if (model.isRecurringVoucher) {
+            url = this.generalService.appendQueryParam(url, 'isRecurringVoucher', model.isRecurringVoucher);
+        }
+        delete model.isRecurringVoucher;
         return this.http.post(url
             ?.replace(':companyUniqueName', companyUniqueName)
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
@@ -196,7 +228,7 @@ export class VoucherService {
     }
 
     /**
-     * Get voucher details
+     * Gets voucher details
      *
      * @param {string} accountUniqueName
      * @param {ReceiptVoucherDetailsRequest} model
@@ -209,9 +241,13 @@ export class VoucherService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         let requestObj: VoucherRequest | ReceiptVoucherDetailsRequest = Object.assign({}, model);
-        requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model?.uniqueName);
+        requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model?.uniqueName, model?.recurringVoucherUniqueName);
 
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        if (model.isRecurringVoucher) {
+            url += `&isRecurringVoucher=true`;
+            delete model.isRecurringVoucher;
+        }
         return this.http.post(url, requestObj
         ).pipe(
             map((res) => {
@@ -331,9 +367,9 @@ export class VoucherService {
         url = url?.replace(':sort', model.sort ?? '');
         url = url?.replace(':sortBy', model.sortBy ?? 'purchaseDate');
 
-        const { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo } = model;
+        const { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo, salesPersonUniqueNames, selectAllFields = [], balanceEqual, balanceLessThan , balanceMoreThan } = model;
 
-        return this.http.post(url, { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo }).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        return this.http.post(url, { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo, salesPersonUniqueNames, selectAllFields, balanceEqual, balanceLessThan, balanceMoreThan }).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
     /**
@@ -386,7 +422,16 @@ export class VoucherService {
         let accountUniqueName = model.account?.uniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        // Add isRecurringVoucher flag to model
+        model.isRecurringVoucher = model.isRecurringVoucher || false;
 
+        // Add isRecurringVoucher as query parameter after voucherVersion
+        if (model.isRecurringVoucher) {
+            url = this.generalService.appendQueryParam(url, 'isRecurringVoucher', model.isRecurringVoucher);
+            model['recurringVoucherUniqueName'] = model.uniqueName;
+            delete model.uniqueName;
+        }
+        delete model.isRecurringVoucher;
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.put(url, model)
             .pipe(
@@ -738,7 +783,7 @@ export class VoucherService {
      */
     public bulkExport(getRequest: any, postRequest: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + (getRequest.accountUniqueName ? LEDGER_API.BULK_EXPORT_LEDGER : BULK_VOUCHER_EXPORT_API.BULK_EXPORT);
+        let url = this.config.apiUrl + ((!getRequest.accountUniqueName?.trim()?.length || this.generalService.voucherApiVersion === 1) ? BULK_VOUCHER_EXPORT_API.BULK_EXPORT : LEDGER_API.BULK_EXPORT_LEDGER);
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', getRequest.from);
         url = url?.replace(':to', getRequest.to);
@@ -747,6 +792,10 @@ export class VoucherService {
         url = url?.replace(':q', getRequest.q);
         url = url?.replace(':accountUniqueName', getRequest.accountUniqueName);
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+
+        if (this.generalService.voucherApiVersion === 1 && getRequest.accountUniqueName) {
+            url = url + '?accountUniqueName=' + getRequest.accountUniqueName;
+        }
         delete postRequest.from;
         delete postRequest.to;
 

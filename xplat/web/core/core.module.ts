@@ -1,6 +1,6 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
 
 // libs
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -32,7 +32,7 @@ export function createTranslateLoader(http: HttpClient) {
 @NgModule({
     imports: [
         BrowserModule,
-        HttpClientModule,
+        // HttpClientModule, // Replaced with provideHttpClient() for Angular 21
         CoreModule.forRoot([
             {
                 provide: PlatformLanguageToken,
@@ -50,6 +50,9 @@ export function createTranslateLoader(http: HttpClient) {
                 deps: [HttpClient]
             }
         })
+    ],
+    providers: [
+        provideHttpClient()
     ]
 })
 export class FooCoreModule {

@@ -45,5 +45,6 @@
     "exclusive": "अनन्य",
     "received_date":"प्राप्त तारीख",
     "original_amount":"मूल राशि",
-    "outstanding_amount":"बकाया राशि"
+    "outstanding_amount":"बकाया राशि",
+    "pay_now":"अभी भुगतान करें"
 }

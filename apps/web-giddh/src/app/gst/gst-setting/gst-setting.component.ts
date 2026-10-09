@@ -18,7 +18,8 @@ import { IOption } from "../../app.constant";
     selector: 'gst-setting',
     templateUrl: './gst-setting.component.html',
     styleUrls: ['./gst-setting.component.scss'],
-    providers: [GstSettingComponentStore]
+    providers: [GstSettingComponentStore],
+    standalone: false
 })
 
 export class GstSettingComponent implements OnInit, OnDestroy {
@@ -33,7 +34,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     /** List of export types list */
     public exportTypes: IOption[] = [];
     /** Holds request export type */
-    public exportType: string = '';
+    public exportTypeLabel: string = '';
+     /** Holds export type value */
+    public exportTypeValue: string = '';
     /** Hold active company */
     public activeCompany: any;
     /** Holds gst setting form group */
@@ -104,7 +107,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 let mappings = this.gstSettingForm.get('gstData') as FormArray;
                 mappings.clear();
                 this.lutItemList = response;
-                response.forEach((item) => {
+                (Array.isArray(response) ? response : []).forEach((item) => {
                     this.addNewLutItem(item);
                 });
             }
@@ -163,7 +166,8 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             let value = this.activeCompany.withPay ? 'yes' : 'no';
             if (this.exportTypes?.length) {
                 const exportType = this.exportTypes.filter(item => item?.value === value);
-                this.exportType = exportType ? exportType[0]?.label : '';
+                this.exportTypeLabel = exportType ? exportType[0]?.label : '';
+                this.exportTypeValue = exportType ? exportType[0]?.value : '';
             }
         }
     }
@@ -174,7 +178,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     * @memberof GstSettingComponent
     */
     public setExportType(event?: any): void {
-        if (event && event.value && this.exportType !== event.value) {
+        if (event && event.value && this.exportTypeLabel !== event.value) {
             this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === 'yes' ? 'yes' : 'no');
             this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: event.value === 'yes' }));
         }
@@ -258,16 +262,16 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             mappings.removeAt(index);
         } else {
             const dialogRef = this.dialog.open(ConfirmModalComponent, {
-                width: '540px',
-                data: {
+                        width: '540px',
+                        data: {
                     title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.confirm_delete_message,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                },
+                        body: this.localeData?.confirm_delete_message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    },
                 disableClose: true
             });
-            
+
             dialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     if (index === 0) {

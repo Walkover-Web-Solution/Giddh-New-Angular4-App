@@ -1,14 +1,60 @@
 import * as dayjs from 'dayjs';
 import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
-import { CountryCodeService } from './services/country-code.service';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { environment } from '../environments/environment.generated';
+
+// ENVIRONMENT AND CORE CONSTANTS - Now using webpack DefinePlugin and environment variables
+// These are injected at build time via webpack.partial.js
+
+/** Giddh UI domains */
+export enum GiddhUiDomain {
+    LOCAL = 'http://localhost:3000/',
+    TEST = 'https://test.giddh.com/',
+    PRODUCTION = 'https://books.giddh.com/',
+    WEBSITE = 'https://giddh.com/'
+}
+
+export const GIDDH_API_DOC_URL = `${GiddhUiDomain.WEBSITE}api`;
+export const GIDDH_HELP_DOC_URL = `${GiddhUiDomain.WEBSITE}help`;
+export const GIDDH_SUPPORT_PHONE_NUMBER = '+918818888768';
+export const GIDDH_SUPPORT_EMAIL = 'support@giddh.com';
+export const GIDDH_ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en_IN&gl=US';
+export const GIDDH_IOS_APP_URL = 'https://apps.apple.com/in/app/giddh-books-that-make-sense/id1491003438';
+export const GIDDH_CALENDLY_URL = "https://calendly.com/sales-accounting-software/talk-to-sale";
+export const GIDDH_INTERNAL_DOMAINS = [
+    'giddh.com',
+    'walkover.in',
+    'muneem.co',
+    'msg91.com',
+    'whozzat.com',
+];
+
+export const INTERNAL_EMAILS_DOMAINS = ['msg91.com', 'giddh.com', 'walkover.in', 'whozzat.com'];
+/** Maps locale placeholder tokens to their corresponding service config keys.
+ * To add a new substitution, add an entry: { token: '[TOKEN]', configKey: 'CONFIG_KEY' } */
+export const LOCALE_PLACEHOLDER_MAP: { token: string; configKey: string }[] = [
+    { token: '[BRAND_NAME]', configKey: 'BRAND_NAME' },
+    { token: '[SUPPORT_EMAIL]', configKey: 'SUPPORT_EMAIL' },
+    { token: '[SUPPORT_PHONE]', configKey: 'SUPPORT_PHONE' }
+];
+/** Routes that are only available on the Giddh domain and must be hidden for white-label tenants. Add new Giddh-only routes here. */
+export const GIDDH_ONLY_ROUTES: string[] = [
+    '/pages/expenses-manager'
+];
 
 /** Add Company business type*/
 export enum BusinessTypes {
     Registered = 'Registered',
     Unregistered = 'Unregistered'
 };
+
+/** Supported regions for session cookie naming */
+export enum GiddhRegion {
+    UK = 'UK',
+    IN = 'IN',
+    GB = 'GB'
+}
 
 /** Branch Hierarchy Type */
 export enum BranchHierarchyType {
@@ -35,25 +81,15 @@ export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
 export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
-export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
-export const INTL_INPUT_OPTION = {
-    nationalMode: true,
-    utilsScript: MOBILE_NUMBER_UTIL_URL,
-    autoHideDialCode: false,
-    separateDialCode: false,
-    initialCountry: 'auto',
-    geoIpLookup: (success: any, failure: any) => {
-        const countryCodeService = new CountryCodeService();
-        countryCodeService.getCountryCode().subscribe({
-            next: (countryCode: string) => success(countryCode),
-            error: () => success('in')
-        });
-    },
-};
+export const STRIPE_JS_CDN_URL = 'https://js.stripe.com/v3/';
+
+/** Regex for IPv4 address validation */
+export const IPV4_REGEX = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
 
 export const APP_DEFAULT_TITLE = '';
-export const SYNC_TALLY_HELP_DOC_URL = 'https://giddh.com/help/sync-with-tally-1591360375828781';
+export const SYNC_TALLY_HELP_DOC_URL = `${GIDDH_HELP_DOC_URL}/sync-with-tally-1591360375828781`;
+export const BANK_STATEMENT_HELP_DOC_URL = `${GIDDH_HELP_DOC_URL}/how-to-integrate-icici-bank-account-with-giddh`;
 
 /** Restricted modules */
 export enum RestrictedModules {
@@ -61,6 +97,12 @@ export enum RestrictedModules {
     EInvoice = 'E-invoice',
     Users = 'Users'
 };
+
+/** Enum for application theme class names applied on body element */
+export enum AppThemeClassEnum {
+    Default = 'default-theme',
+    Dark = 'dark-theme'
+}
 
 export const DEFAULT_TOASTER_OPTIONS = {
     closeButton: true, // show close button
@@ -91,14 +133,11 @@ export const DEFAULT_TOASTER_OPTIONS_WITH_HTML = {
 };
 
 export const DEFAULT_SERVER_ERROR_MSG = 'Something went wrong! Please try again.';
-export let IS_ELECTRON_WA = isElectron;
-export let APP_URL_WA = AppUrl;
-export let APP_FOLDER_WA = APP_FOLDER;
-if (typeof isElectron === 'undefined') {
-    IS_ELECTRON_WA = true;
-    APP_URL_WA = './';
-    APP_FOLDER_WA = '';
-}
+
+// Use Angular 21 standard environment approach
+export let IS_ELECTRON_WA = environment.isElectron;
+export let APP_URL_WA = environment.AppUrl;
+export let APP_FOLDER_WA = environment.APP_FOLDER;
 
 /**
  * Enum for type of on boarding
@@ -308,8 +347,6 @@ export const SALES_TAX_SUPPORTED_COUNTRIES = ['US'];
 /** ZIP Code supported country codes */
 export const ZIP_CODE_SUPPORTED_COUNTRIES = ['US', 'GB'];
 
-export const API_POSTMAN_DOC_URL = 'https://giddh.com/api';
-
 /** Decimal point for rate field, irrespective of user profile preference
  * will be displayed up to 4 decimal places
  */
@@ -375,8 +412,8 @@ export const SETTING_INTEGRATION_TABS_V1 = {
     PAYMENT: { LABEL: 'payment', VALUE: 3 },
     TALLY: { LABEL: 'tally', VALUE: 4 }
 };
-/** Email Validation Regex */
-export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+/** Email Validation Regex - Electron compatible version */
+export const EMAIL_VALIDATION_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 /** Mobile  Validation Regex */
 export const MOBILE_REGEX_PATTERN = /^([0|\+[0-9]{1,5})?([6-9][0-9]{9})$/;
@@ -398,6 +435,8 @@ export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
 export const SELECT_ALL_RECORDS = "selectallrecords";
+/** Sentinel written by multi-select-dropdown when the All option is selected */
+export const SELECTED_ALL_OPTION = "SELECTED_ALL_OPTION";
 /** Stores the voucher wise form values to toggle fields in voucher module */
 export const GIDDH_VOUCHER_FORM = [
     {
@@ -583,22 +622,10 @@ export const GIDDH_VOUCHER_FORM = [
         attachmentAllowed: false
     }
 ];
-export const CALENDLY_URL = "https://calendly.com/sales-accounting-software/talk-to-sale";
-export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
-    'giddh.com',
-    'walkover.in',
-    'muneem.co',
-    'whozzat.com',
-];
-
 export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=${new Date().getTime()}`;
 export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
-export const OTP_WIDGET_ID = '326a63733354393830313330';
-export const OTP_WIDGET_TOKEN = '205968TmXguUAwoD633af103P1';
-export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
-export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
 export enum BROADCAST_CHANNELS {
     REAUTH_PLAID_SUCCESS = 'REAUTH_PLAID_SUCCESS'
 };
@@ -608,9 +635,15 @@ export enum QZ_FILES {
     MacOS = 'https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/qz-tray.pkg',
     Windows = 'https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/qz-tray.exe'
 };
+export const GIDDH_DSC_WINDOWS_APP_URL = 'https://s3-ap-south-1.amazonaws.com/hello-electron-app/prod/windows/latest/GiddhDSCBridge-Setup.exe';
+export const GIDDH_DSC_MAC_APP_URL = 'https://s3-ap-south-1.amazonaws.com/hello-electron-app/prod/macos/latest/GiddhDSCBridge.dmg';
+export const GIDDH_DSC_LINUX_APP_URL = 'https://s3-ap-south-1.amazonaws.com/hello-electron-app/prod/linux/latest/giddh-dsc-bridge.deb';
+export const GIDDH_DSC_EXTENSION_URL = 'https://chromewebstore.google.com/detail/giddh-dsc-bridge/pbnmboohmdoknhpflpmeocccojkkjgng';
+
 export enum SUPPORTED_OPERATING_SYSTEMS {
     MacOS = 'MacOS',
-    Windows = 'Windows'
+    Windows = 'Windows',
+    Linux = 'Linux'
 };
 
 export const ICICI_ALLOWED_COMPANIES = [
@@ -698,6 +731,7 @@ export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
     height: 'calc(100vh - var(--top-distance, 0px))',
     width: 'var(--aside-pane-width)',
+    maxWidth: 'var(--aside-pane-width)',
     position: {
         right: '0',
         bottom: '0',
@@ -711,8 +745,33 @@ export const PaymentProvider = {
     RAZORPAY: 'RAZORPAY',
     GOCARDLESS: 'GOCARDLESS',
     PAYPAL: 'PAYPAL',
-    PAYU: 'PAYU'
+    PAYU: 'PAYU',
+    STRIPE: 'STRIPE'
 };
+
+/** Payment method IDs (used for default selection and API mapping) */
+export const PaymentMethod = {
+    UPI: 'UPI',
+    CARD: 'CARD',
+    NET_BANKING: 'NET_BANKING',
+    WALLET: 'WALLET',
+    EMI: 'EMI',
+    BANK_TRANSFER: 'BANK_TRANSFER',
+    DIRECT_DEBIT: 'DIRECT_DEBIT'
+};
+
+/** Plan duration */
+export const PlanDuration = {
+    MONTHLY: 'MONTHLY',
+    YEARLY: 'YEARLY',
+    DAILY: 'DAILY'
+} as const;
+
+/** Entity/region codes used in subscription and plan logic */
+export const EntityCode = {
+    IND: 'IND',
+    GBR: 'GBR'
+} as const;
 
 /** Weekdays enum */
 export enum WeekdaysEnum {
@@ -729,22 +788,21 @@ export enum WeekdaysEnum {
 /** Get Bifurcation Type */
 export enum GetBifurcationType {
     MONTH = 'month',
-    QUATER = 'quater',
     QUARTER = 'quarter'
 }
+
 /** Configuration */
 export const Configuration = {
-    'AppUrl': AppUrl,
-    'ApiUrl': ApiUrl,
-    'PORTAL_URL': PORTAL_URL,
-    'OTP_WIDGET_ID': OTP_WIDGET_ID,
-    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
-    'UkApiUrl': UkApiUrl,
-    'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER,
-    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
-    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
-    'RAZORPAY_KEY': RAZORPAY_KEY
+    'AppUrl': environment.AppUrl,
+    'ApiUrl': environment.ApiUrl,
+    'PORTAL_URL': environment.PORTAL_URL,
+    'OTP_WIDGET_ID': environment.OTP_WIDGET_ID,
+    'OTP_TOKEN_AUTH': environment.OTP_TOKEN_AUTH,
+    'UkApiUrl': environment.UkApiUrl,
+    'isElectron': (typeof window !== 'undefined' && (window as any).isElectron) || environment.isElectron,
+    'GOOGLE_CLIENT_ID': environment.GOOGLE_CLIENT_ID,
+    'GOOGLE_CLIENT_SECRET': environment.GOOGLE_CLIENT_SECRET,
+    'RAZORPAY_KEY': environment.RAZORPAY_KEY
 };
 
 /** Holds Dropdown label value interface */
@@ -755,4 +813,343 @@ export interface IOption {
     isHilighted?: boolean;
     additional?: any;
     subVoucher?: string;
+    tooltip?: string;
 }
+
+/**
+ * Returns true when the multi-select value represents the All option.
+ *
+ * @param {Array<string | number>} selected Form control value
+ * @returns {boolean}
+ */
+export function isSelectedAllOption(selected: Array<string | number> | null | undefined): boolean {
+    return Array.isArray(selected) && selected.length === 1 && selected[0] === SELECTED_ALL_OPTION;
+}
+
+/** Number Format Locale Mapping for GiddhNumberFormatPipe */
+export const NUMBER_FORMAT_LOCALE_MAP: { [key: string]: string } = {
+    'IND_COMMA_SEPARATED': 'en-IN',        // Indian format: 12,34,567.89 (India, Bangladesh, Pakistan, Sri Lanka, Nepal)
+    'INT_COMMA_SEPARATED': 'en-US',        // International comma: 1,234,567.89 (US, UK, Canada, Australia, etc.)
+    'EUR_SPACE_SEPARATED': 'fr-FR',        // European space: 1 234 567,89 (France, Germany, Nordic countries, Russia)
+    'CHE_APOSTROPHE_SEPARATED': 'de-CH',   // Swiss apostrophe: 1'234'567.89 (Switzerland, Liechtenstein)
+    'INT_SPACE_SEPARATED': 'fr-FR',        // Alternative space format
+    'INT_APOSTROPHE_SEPARATED': 'de-CH',   // Alternative apostrophe format
+    'GER_DOT_SEPARATED': 'de-DE',          // German dot: 1.234.567,89 (Germany, Austria)
+    'FRA_SPACE_SEPARATED': 'fr-FR',        // French space: 1 234 567,89 (France, Belgium)
+    'RUS_SPACE_SEPARATED': 'ru-RU',        // Russian space: 1 234 567,89 (Russia, Belarus, Ukraine)
+    'NOR_SPACE_SEPARATED': 'nb-NO',        // Nordic space: 1 234 567,89 (Norway, Sweden, Denmark, Finland)
+    'BRA_DOT_SEPARATED': 'pt-BR',          // Brazilian dot: 1.234.567,89 (Brazil)
+    'ARG_DOT_SEPARATED': 'es-AR',          // Argentine dot: 1.234.567,89 (Argentina)
+    'ESP_DOT_SEPARATED': 'es-ES',          // Spanish dot: 1.234.567,89 (Spain)
+    'ITA_DOT_SEPARATED': 'it-IT',          // Italian dot: 1.234.567,89 (Italy)
+    'POR_SPACE_SEPARATED': 'pt-PT',        // Portuguese space: 1 234 567,89 (Portugal)
+    'POL_SPACE_SEPARATED': 'pl-PL',        // Polish space: 1 234 567,89 (Poland)
+    'CZE_SPACE_SEPARATED': 'cs-CZ',        // Czech space: 1 234 567,89 (Czech Republic)
+    'HUN_SPACE_SEPARATED': 'hu-HU',        // Hungarian space: 1 234 567,89 (Hungary)
+    'ROM_DOT_SEPARATED': 'ro-RO',          // Romanian dot: 1.234.567,89 (Romania)
+    'BUL_SPACE_SEPARATED': 'bg-BG',        // Bulgarian space: 1 234 567,89 (Bulgaria)
+    'CRO_DOT_SEPARATED': 'hr-HR',          // Croatian dot: 1.234.567,89 (Croatia)
+    'SLO_DOT_SEPARATED': 'sl-SI',          // Slovenian dot: 1.234.567,89 (Slovenia)
+    'EST_SPACE_SEPARATED': 'et-EE',        // Estonian space: 1 234 567,89 (Estonia)
+    'LAT_SPACE_SEPARATED': 'lv-LV',        // Latvian space: 1 234 567,89 (Latvia)
+    'LIT_SPACE_SEPARATED': 'lt-LT',        // Lithuanian space: 1 234 567,89 (Lithuania)
+    'UKR_SPACE_SEPARATED': 'uk-UA',        // Ukrainian space: 1 234 567,89 (Ukraine)
+    'BEL_SPACE_SEPARATED': 'be-BY',        // Belarusian space: 1 234 567,89 (Belarus)
+    'GRE_DOT_SEPARATED': 'el-GR',          // Greek dot: 1.234.567,89 (Greece)
+    'NLD_DOT_SEPARATED': 'nl-NL',          // Dutch dot: 1.234.567,89 (Netherlands)
+    'BEL_SPACE_SEPARATED_FR': 'fr-BE',     // Belgian French space: 1 234 567,89 (Belgium French)
+    'AUT_DOT_SEPARATED': 'de-AT',          // Austrian dot: 1.234.567,89 (Austria)
+    'JPN_COMMA_SEPARATED': 'ja-JP',        // Japanese comma: 1,234,567.89 (Japan)
+    'KOR_COMMA_SEPARATED': 'ko-KR',        // Korean comma: 1,234,567.89 (South Korea)
+    'CHN_COMMA_SEPARATED': 'zh-CN',        // Chinese comma: 1,234,567.89 (China)
+    'TWN_COMMA_SEPARATED': 'zh-TW',        // Taiwanese comma: 1,234,567.89 (Taiwan)
+    'THA_COMMA_SEPARATED': 'th-TH',        // Thai comma: 1,234,567.89 (Thailand)
+    'VIE_COMMA_SEPARATED': 'vi-VN',        // Vietnamese comma: 1,234,567.89 (Vietnam)
+    'IDN_COMMA_SEPARATED': 'id-ID',        // Indonesian comma: 1,234,567.89 (Indonesia)
+    'MYS_COMMA_SEPARATED': 'ms-MY',        // Malaysian comma: 1,234,567.89 (Malaysia)
+    'ARE_COMMA_SEPARATED': 'ar-AE',        // UAE comma: 1,234,567.89 (UAE)
+    'SAU_COMMA_SEPARATED': 'ar-SA',        // Saudi comma: 1,234,567.89 (Saudi Arabia)
+    'QAT_COMMA_SEPARATED': 'ar-QA',        // Qatari comma: 1,234,567.89 (Qatar)
+    'KWT_COMMA_SEPARATED': 'ar-KW',        // Kuwaiti comma: 1,234,567.89 (Kuwait)
+    'BHR_COMMA_SEPARATED': 'ar-BH',        // Bahraini comma: 1,234,567.89 (Bahrain)
+    'OMN_COMMA_SEPARATED': 'ar-OM',        // Omani comma: 1,234,567.89 (Oman)
+    'JOR_COMMA_SEPARATED': 'ar-JO',        // Jordanian comma: 1,234,567.89 (Jordan)
+    'LBN_COMMA_SEPARATED': 'ar-LB',        // Lebanese comma: 1,234,567.89 (Lebanon)
+    'EGY_COMMA_SEPARATED': 'ar-EG',        // Egyptian comma: 1,234,567.89 (Egypt)
+    'MAR_COMMA_SEPARATED': 'ar-MA',        // Moroccan comma: 1,234,567.89 (Morocco)
+    'TUN_COMMA_SEPARATED': 'ar-TN',        // Tunisian comma: 1,234,567.89 (Tunisia)
+    'DZA_COMMA_SEPARATED': 'ar-DZ',        // Algerian comma: 1,234,567.89 (Algeria)
+    'TUR_COMMA_SEPARATED': 'tr-TR',        // Turkish comma: 1,234,567.89 (Turkey)
+    'ISR_COMMA_SEPARATED': 'he-IL',        // Israeli comma: 1,234,567.89 (Israel)
+    'MEX_COMMA_SEPARATED': 'es-MX',        // Mexican comma: 1,234,567.89 (Mexico)
+    'COL_COMMA_SEPARATED': 'es-CO',        // Colombian comma: 1,234,567.89 (Colombia)
+    'PER_COMMA_SEPARATED': 'es-PE',        // Peruvian comma: 1,234,567.89 (Peru)
+    'VEN_COMMA_SEPARATED': 'es-VE',        // Venezuelan comma: 1,234,567.89 (Venezuela)
+    'ECU_COMMA_SEPARATED': 'es-EC',        // Ecuadorian comma: 1,234,567.89 (Ecuador)
+    'URY_COMMA_SEPARATED': 'es-UY',        // Uruguayan comma: 1,234,567.89 (Uruguay)
+    'PRY_COMMA_SEPARATED': 'es-PY',        // Paraguayan comma: 1,234,567.89 (Paraguay)
+    'BOL_COMMA_SEPARATED': 'es-BO',        // Bolivian comma: 1,234,567.89 (Bolivia)
+    'CHL_COMMA_SEPARATED': 'es-CL',        // Chilean comma: 1,234,567.89 (Chile)
+    'CRI_COMMA_SEPARATED': 'es-CR',        // Costa Rican comma: 1,234,567.89 (Costa Rica)
+    'PAN_COMMA_SEPARATED': 'es-PA',        // Panamanian comma: 1,234,567.89 (Panama)
+    'GTM_COMMA_SEPARATED': 'es-GT',        // Guatemalan comma: 1,234,567.89 (Guatemala)
+    'HND_COMMA_SEPARATED': 'es-HN',        // Honduran comma: 1,234,567.89 (Honduras)
+    'SLV_COMMA_SEPARATED': 'es-SV',        // Salvadoran comma: 1,234,567.89 (El Salvador)
+    'NIC_COMMA_SEPARATED': 'es-NI',        // Nicaraguan comma: 1,234,567.89 (Nicaragua)
+    'DOM_COMMA_SEPARATED': 'es-DO',        // Dominican comma: 1,234,567.89 (Dominican Republic)
+    'CUB_COMMA_SEPARATED': 'es-CU',        // Cuban comma: 1,234,567.89 (Cuba)
+    'PRI_COMMA_SEPARATED': 'es-PR',        // Puerto Rican comma: 1,234,567.89 (Puerto Rico)
+    'BGD_COMMA_SEPARATED': 'bn-BD',        // Bangladeshi comma: 12,34,567.89 (Bangladesh - Indian style)
+    'PAK_COMMA_SEPARATED': 'ur-PK',        // Pakistani comma: 12,34,567.89 (Pakistan - Indian style)
+    'LKA_COMMA_SEPARATED': 'si-LK',        // Sri Lankan comma: 12,34,567.89 (Sri Lanka - Indian style)
+    'NPL_COMMA_SEPARATED': 'ne-NP',        // Nepalese comma: 12,34,567.89 (Nepal - Indian style)
+    'USA_COMMA_SEPARATED': 'en-US',        // US comma: 1,234,567.89 (United States)
+    'GBR_COMMA_SEPARATED': 'en-GB',        // UK comma: 1,234,567.89 (United Kingdom)
+    'AUS_COMMA_SEPARATED': 'en-AU',        // Australian comma: 1,234,567.89 (Australia)
+    'CAN_COMMA_SEPARATED': 'en-CA',        // Canadian comma: 1,234,567.89 (Canada)
+    'NZL_COMMA_SEPARATED': 'en-NZ',        // New Zealand comma: 1,234,567.89 (New Zealand)
+    'IRL_COMMA_SEPARATED': 'en-IE',        // Irish comma: 1,234,567.89 (Ireland)
+    'ZAF_COMMA_SEPARATED': 'en-ZA',        // South African comma: 1,234,567.89 (South Africa)
+    'SGP_COMMA_SEPARATED': 'en-SG',        // Singaporean comma: 1,234,567.89 (Singapore)
+    'PHL_COMMA_SEPARATED': 'en-PH',        // Philippine comma: 1,234,567.89 (Philippines)
+    'HKG_COMMA_SEPARATED': 'en-HK',        // Hong Kong comma: 1,234,567.89 (Hong Kong)
+    'LIE_APOSTROPHE_SEPARATED': 'de-LI',   // Liechtenstein apostrophe: 1'234'567.89 (Liechtenstein)
+
+    // Additional African Countries
+    'ZAR_SPACE_SEPARATED': 'en-ZA',        // South African space: 1 234 567,89 (South Africa)
+    'NGN_COMMA_SEPARATED': 'en-NG',        // Nigerian comma: 1,234,567.89 (Nigeria)
+    'KES_COMMA_SEPARATED': 'en-KE',        // Kenyan comma: 1,234,567.89 (Kenya)
+    'GHS_COMMA_SEPARATED': 'en-GH',        // Ghanaian comma: 1,234,567.89 (Ghana)
+    'ETB_COMMA_SEPARATED': 'am-ET',        // Ethiopian comma: 1,234,567.89 (Ethiopia)
+
+    // Additional Asian Countries
+    'INR_LAKH_SEPARATED': 'hi-IN',         // Hindi lakh format: 12,34,567.89 (India - Hindi)
+    'MMK_COMMA_SEPARATED': 'my-MM',        // Myanmar comma: 1,234,567.89 (Myanmar)
+    'KHR_COMMA_SEPARATED': 'km-KH',        // Cambodian comma: 1,234,567.89 (Cambodia)
+    'LAK_COMMA_SEPARATED': 'lo-LA',        // Laotian comma: 1,234,567.89 (Laos)
+
+    // Currency-Specific European Formats
+    'CHF_APOSTROPHE_SEPARATED': 'de-CH',   // Swiss Franc apostrophe: 1'234'567.89 (Switzerland)
+    'EUR_DOT_SEPARATED': 'de-DE',          // Euro dot format: 1.234.567,89 (Germany, Austria)
+    'GBP_COMMA_SEPARATED': 'en-GB',        // British Pound comma: 1,234,567.89 (UK)
+    'SEK_SPACE_SEPARATED': 'sv-SE',        // Swedish Krona space: 1 234 567,89 (Sweden)
+    'NOK_SPACE_SEPARATED': 'nb-NO',        // Norwegian Krone space: 1 234 567,89 (Norway)
+    'DKK_DOT_SEPARATED': 'da-DK',          // Danish Krone dot: 1.234.567,89 (Denmark)
+
+    // Major Currency Formats
+    'USD_COMMA_SEPARATED': 'en-US',        // US Dollar comma: 1,234,567.89 (United States)
+    'EUR_SPACE_SEPARATED_FR': 'fr-FR',     // Euro space format: 1 234 567,89 (France)
+    'JPY_COMMA_SEPARATED': 'ja-JP',        // Japanese Yen comma: 1,234,567 (Japan - no decimals)
+    'CNY_COMMA_SEPARATED': 'zh-CN',        // Chinese Yuan comma: 1,234,567.89 (China)
+    'KRW_COMMA_SEPARATED': 'ko-KR',        // Korean Won comma: 1,234,567 (South Korea - no decimals)
+    'RUB_SPACE_SEPARATED': 'ru-RU',        // Russian Ruble space: 1 234 567,89 (Russia)
+
+    // Regional Script Formats
+    'ARAB_RTL_SEPARATED': 'ar-SA',         // Arabic RTL format: ٨٩.٥٦٧,٢٣٤,١ (Arabic numerals)
+    'PERSIAN_SEPARATED': 'fa-IR',          // Persian format: ۱,۲۳۴,۵۶۷.۸۹ (Persian numerals)
+    'HINDI_DEVANAGARI': 'hi-IN',           // Hindi Devanagari: १,२३,४५,६७८.८९ (Devanagari numerals)
+    'BENGALI_SEPARATED': 'bn-BD',          // Bengali format: ১,২৩,৪৫,৬৭৮.৮৯ (Bengali numerals)
+
+    // Special Business Formats
+    'ACCOUNTING_PARENTHESES': 'en-US',     // Accounting format: (1,234,567.89) for negatives
+    'SCIENTIFIC_NOTATION': 'en-US',        // Scientific: 1.23E+06
+    'PERCENTAGE_FORMAT': 'en-US',          // Percentage: 123,456.78%
+    'CURRENCY_SYMBOL_PREFIX': 'en-US',     // With symbol: $1,234,567.89
+    'CURRENCY_SYMBOL_SUFFIX': 'en-IN'      // With symbol: 12,34,567.89₹
+};
+
+/** Country to Locale Mapping for GiddhNumberFormatPipe */
+export const COUNTRY_LOCALE_MAP: { [key: string]: string } = {
+    // Indian subcontinent - uses Indian comma format
+    'IN': 'en-IN',    // India
+    'BD': 'bn-BD',    // Bangladesh
+    'PK': 'ur-PK',    // Pakistan
+    'LK': 'si-LK',    // Sri Lanka
+    'NP': 'ne-NP',    // Nepal
+
+    // English-speaking countries - uses international comma format
+    'US': 'en-US',    // United States
+    'GB': 'en-GB',    // United Kingdom
+    'AU': 'en-AU',    // Australia
+    'CA': 'en-CA',    // Canada
+    'NZ': 'en-NZ',    // New Zealand
+    'IE': 'en-IE',    // Ireland
+    'ZA': 'en-ZA',    // South Africa
+    'SG': 'en-SG',    // Singapore
+    'PH': 'en-PH',    // Philippines
+    'HK': 'en-HK',    // Hong Kong
+
+    // European countries - uses space format
+    'FR': 'fr-FR',    // France
+    'DE': 'de-DE',    // Germany
+    'ES': 'es-ES',    // Spain
+    'IT': 'it-IT',    // Italy
+    'SE': 'sv-SE',    // Sweden
+    'NO': 'nb-NO',    // Norway
+    'DK': 'da-DK',    // Denmark
+    'FI': 'fi-FI',    // Finland
+    'NL': 'nl-NL',    // Netherlands
+    'BE': 'fr-BE',    // Belgium
+    'AT': 'de-AT',    // Austria
+    'PL': 'pl-PL',    // Poland
+    'CZ': 'cs-CZ',    // Czech Republic
+    'SK': 'sk-SK',    // Slovakia
+    'HU': 'hu-HU',    // Hungary
+    'RO': 'ro-RO',    // Romania
+    'BG': 'bg-BG',    // Bulgaria
+    'HR': 'hr-HR',    // Croatia
+    'SI': 'sl-SI',    // Slovenia
+    'EE': 'et-EE',    // Estonia
+    'LV': 'lv-LV',    // Latvia
+    'LT': 'lt-LT',    // Lithuania
+    'RU': 'ru-RU',    // Russia
+    'UA': 'uk-UA',    // Ukraine
+    'BY': 'be-BY',    // Belarus
+    'PT': 'pt-PT',    // Portugal
+    'GR': 'el-GR',    // Greece
+
+    // Swiss - uses apostrophe format
+    'CH': 'de-CH',    // Switzerland
+    'LI': 'de-LI',    // Liechtenstein
+
+    // Asian countries - mixed formats
+    'JP': 'ja-JP',    // Japan - comma format
+    'KR': 'ko-KR',    // South Korea - comma format
+    'CN': 'zh-CN',    // China - comma format
+    'TW': 'zh-TW',    // Taiwan - comma format
+    'TH': 'th-TH',    // Thailand - comma format
+    'VN': 'vi-VN',    // Vietnam - comma format
+    'ID': 'id-ID',    // Indonesia - comma format
+    'MY': 'ms-MY',    // Malaysia - comma format
+    'MM': 'my-MM',    // Myanmar - comma format
+    'KH': 'km-KH',    // Cambodia - comma format
+    'LA': 'lo-LA',    // Laos - comma format
+
+    // Middle East & Africa
+    'AE': 'ar-AE',    // UAE - comma format
+    'SA': 'ar-SA',    // Saudi Arabia - comma format
+    'QA': 'ar-QA',    // Qatar - comma format
+    'KW': 'ar-KW',    // Kuwait - comma format
+    'BH': 'ar-BH',    // Bahrain - comma format
+    'OM': 'ar-OM',    // Oman - comma format
+    'JO': 'ar-JO',    // Jordan - comma format
+    'LB': 'ar-LB',    // Lebanon - comma format
+    'EG': 'ar-EG',    // Egypt - comma format
+    'MA': 'ar-MA',    // Morocco - comma format
+    'TN': 'ar-TN',    // Tunisia - comma format
+    'DZ': 'ar-DZ',    // Algeria - comma format
+    'TR': 'tr-TR',    // Turkey - comma format
+    'IL': 'he-IL',    // Israel - comma format
+    'IR': 'fa-IR',    // Iran - comma format
+    'NG': 'en-NG',    // Nigeria - comma format
+    'KE': 'en-KE',    // Kenya - comma format
+    'GH': 'en-GH',    // Ghana - comma format
+    'ET': 'am-ET',    // Ethiopia - comma format
+
+    // Latin America
+    'BR': 'pt-BR',    // Brazil - comma format
+    'MX': 'es-MX',    // Mexico - comma format
+    'AR': 'es-AR',    // Argentina - comma format
+    'CL': 'es-CL',    // Chile - comma format
+    'CO': 'es-CO',    // Colombia - comma format
+    'PE': 'es-PE',    // Peru - comma format
+    'VE': 'es-VE',    // Venezuela - comma format
+    'EC': 'es-EC',    // Ecuador - comma format
+    'UY': 'es-UY',    // Uruguay - comma format
+    'PY': 'es-PY',    // Paraguay - comma format
+    'BO': 'es-BO',    // Bolivia - comma format
+    'CR': 'es-CR',    // Costa Rica - comma format
+    'PA': 'es-PA',    // Panama - comma format
+    'GT': 'es-GT',    // Guatemala - comma format
+    'HN': 'es-HN',    // Honduras - comma format
+    'SV': 'es-SV',    // El Salvador - comma format
+    'NI': 'es-NI',    // Nicaragua - comma format
+    'DO': 'es-DO',    // Dominican Republic - comma format
+    'CU': 'es-CU',    // Cuba - comma format
+    'PR': 'es-PR',    // Puerto Rico - comma format
+};
+
+/** Text direction values for RTL/LTR aware fields */
+export enum TextDirection {
+    LTR = 'ltr',
+    RTL = 'rtl'
+}
+
+/** Language codes (ISO 639-1 / BCP-47 base) that are written right-to-left */
+export const RTL_LANGUAGE_CODES: string[] = [
+    'ar',   // Arabic
+    'arc',  // Aramaic
+    'bal',  // Baluchi
+    'bgn',  // Western Balochi
+    'brh',  // Brahui
+    'ckb',  // Kurdish (Sorani)
+    'dv',   // Divehi / Maldivian
+    'fa',   // Persian (Farsi)
+    'glk',  // Gilaki
+    'he',   // Hebrew
+    'iw',   // Hebrew (legacy code)
+    'ji',   // Yiddish (legacy code)
+    'ks',   // Kashmiri
+    'ku',   // Kurdish
+    'lrc',  // Northern Luri
+    'mzn',  // Mazanderani
+    'nqo',  // N'Ko
+    'prs',  // Dari
+    'ps',   // Pashto
+    'rhg',  // Rohingya
+    'sd',   // Sindhi
+    'sdh',  // Southern Kurdish
+    'syr',  // Syriac
+    'ug',   // Uyghur
+    'ur',   // Urdu
+    'yi'    // Yiddish
+];
+
+/** Script subtags that force RTL regardless of base language (e.g. 'pa-Arab', 'az-Arab') */
+export const RTL_SCRIPT_SUBTAGS: string[] = ['arab', 'hebr', 'syrc', 'thaa', 'nkoo', 'adlm'];
+
+/** Country (alpha-2) codes whose primary script is right-to-left */
+export const RTL_COUNTRY_CODES: string[] = [
+    'AE', 'AF', 'BH', 'DJ', 'DZ', 'EG', 'EH', 'ER', 'IL', 'IQ', 'IR', 'JO', 'KM',
+    'KW', 'LB', 'LY', 'MA', 'MR', 'MV', 'OM', 'PK', 'PS', 'QA', 'SA', 'SD', 'SO',
+    'SY', 'TD', 'TN', 'YE'
+];
+
+/** Currency codes rendered right-to-left */
+export const RTL_CURRENCY_CODES: string[] = ['AED'];
+
+/** Default locale for number formatting */
+export const DEFAULT_NUMBER_FORMAT_LOCALE = 'en-IN';
+
+/** Default display format for number formatting */
+export const DEFAULT_NUMBER_DISPLAY_FORMAT = 'IND_COMMA_SEPARATED';
+
+/** Global localStorage key for storing UI preferences and settings */
+export const UI_SETTINGS_STORAGE_KEY = 'ui-settings';
+
+/** Cache duration constants in milliseconds */
+export const CACHE_DURATION = {
+    ONE_DAY: 24 * 60 * 60 * 1000,
+    SEVEN_DAYS: 7 * 24 * 60 * 60 * 1000,
+    THIRTY_DAYS: 30 * 24 * 60 * 60 * 1000,
+    ONE_YEAR: 365 * 24 * 60 * 60 * 1000
+};
+
+/** Holds all possible field types for form fields */
+export enum FormFieldsType {
+    BOOLEAN = 'BOOLEAN',
+    STRING = 'STRING',
+    NUMBER = 'NUMBER',
+    BARCODE = 'BARCODE'
+}
+
+/** Round off threshold for standard mathematical rounding */
+export const ROUND_OFF_THRESHOLD = 0.5; 
+
+/** Currencies supported by PayPal */
+export const PAYPAL_SUPPORTED_CURRENCIES: string[] = [
+    'AUD', 'BRL', 'CAD', 'CNY', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'ILS',
+    'JPY', 'MYR', 'MXN', 'TWD', 'NZD', 'NOK', 'PHP', 'PLN', 'GBP', 'SGD',
+    'SEK', 'CHF', 'THB', 'USD'
+];
+

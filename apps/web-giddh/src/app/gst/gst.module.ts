@@ -11,7 +11,7 @@ import { NilSummaryComponent } from './filing/tabs/push-to-gstin/components/nil-
 import { FilingHeaderComponent } from './filing/header/filing-header.component';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { HsnSummaryComponent } from './filing/tabs/push-to-gstin/components/hsn-summary/hsn-summary.component';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ViewTransactionsComponent } from './filing/tabs/overview/view-transactions/view-transactions.component';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -51,6 +51,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -58,7 +59,7 @@ import { MatListModule } from '@angular/material/list';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent, GstSettingComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent, FilingStatusComponent, GstSettingComponent],
     imports: [
         GstRoutingModule,
         Daterangepicker,
@@ -73,7 +74,7 @@ import { MatListModule } from '@angular/material/list';
         TranslateDirectiveModule,
         PurchaseModule,
         InvoiceModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         ConfirmModalModule,
         SharedModule,
         TaxSidebarModule,
@@ -94,7 +95,8 @@ import { MatListModule } from '@angular/material/list';
         MatCheckboxModule,
         MatPaginatorModule,
         MatMenuModule,
-        MatListModule
+        MatListModule,
+        GiddhDatePipe
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { ComponentStore } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
 import { PurchaseInvoiceService } from "../services/purchase-invoice.service";
 import { ToasterService } from "../services/toaster.service";
 import { TaxServiceType } from "./constants/gst.constant";
@@ -35,7 +35,7 @@ export class GstComponentStore extends ComponentStore<GstState> {
         return data.pipe(
             switchMap((req) => {
                 return this.purchaseInvoiceService.FileGstr3B(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === 'success') {
                                 this.toaster.showSnackBar("success", res?.body);

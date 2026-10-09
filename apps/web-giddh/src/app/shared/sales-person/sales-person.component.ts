@@ -1,6 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { filter, Observable, ReplaySubject, take, takeUntil, tap } from 'rxjs';
+import { filter, Observable, ReplaySubject, takeUntil, tap } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { SalesPersonComponentStore } from './utility/sales-person.store';
 import { SalesPersonService } from './utility/sales-person.service';
@@ -9,7 +9,6 @@ import { TranslateDirectiveModule } from '../../theme/translate/translate.direct
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
-import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.class';
 import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
 import { ElementViewChildModule } from '../helpers/directives/elementViewChild/elementViewChild.module';
 import { MatTableModule } from '@angular/material/table';
@@ -22,6 +21,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { MatMenuModule } from '@angular/material/menu';
 import { ArchiveSalesPersonComponent } from './archive/archive.component';
+import { MobileNumberInputComponent } from '../mobile-number-input';
+import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keyboard-navigation.module';
 
 @Component({
     selector: 'app-sales-person',
@@ -39,14 +40,16 @@ import { ArchiveSalesPersonComponent } from './archive/archive.component';
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
         ElementViewChildModule,
-        MatMenuModule
+        MatMenuModule,
+        MobileNumberInputComponent,
+        KeyboardNavigationModule
     ],
     templateUrl: './sales-person.component.html',
     styleUrls: ['./sales-person.component.scss'],
     providers: [SalesPersonService, SalesPersonComponentStore]
 })
 
-export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
     /** ViewChild reference for name field */
     @ViewChild('nameField') nameField: InputFieldComponent;
     /** Subject to release subscription memory */
@@ -55,8 +58,6 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This will hold locale JSON data */
     public localeData: any = {};
-    /** Mobile number library instance */
-    public intlClass: any;
     /** Form submission flag */
     public isFormSubmitted: boolean = false;
     /** Sales Person List is modified */
@@ -112,8 +113,6 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
         @Inject(MAT_DIALOG_DATA) public salesPersonData: any,
         public dialogRef: MatDialogRef<any>,
         private componentStore: SalesPersonComponentStore,
-        private changeDetection: ChangeDetectorRef,
-        private elementRef: ElementRef,
         private generalService: GeneralService,
         private dialog: MatDialog
     ) { }
@@ -149,13 +148,13 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        // Delete which liked with Account Only 
+        // Delete which liked with Account Only
         this.componentStore.openTransferAndDeleteDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_delete, this.localeData?.delete_confirmation_message, this.localeData?.transfer_and_delete);
             this.componentStore.patchState({ openTransferAndDeleteDialog: false });
         })).subscribe();
 
-        // Delete which liked with Voucher/ Entry 
+        // Delete which liked with Voucher/ Entry
         this.componentStore.openTransferAndArchiveDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                 panelClass: ['mat-dialog-sm'],
@@ -173,6 +172,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 } else {
                     this.salesPersonUniqueName = null;
                 }
+                this.focusInputField();
             });
             this.componentStore.patchState({ openTransferAndArchiveDialog: false });
         })).subscribe();
@@ -194,7 +194,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof SalesPersonComponent
      */
     public ngAfterViewInit(): void {
-        this.initIntl(this.salesPersonUniqueName ? this.salesPersonData?.mobileNumber : undefined);
+        this.focusInputField();
     }
 
     /**
@@ -234,13 +234,9 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
         const salesPersonForm = this.salesPersonForm?.value;
         switch (action) {
             case SalesPersonActionEnum.CREATE:
-                salesPersonForm.mobileNumber = salesPersonForm.mobileNumber ? (this.intlClass.selectedCountryData.dialCode + salesPersonForm.mobileNumber) : null;
                 this.componentStore.createUpdateSalesPerson({ model: salesPersonForm, uniqueName: null });
                 break;
             case SalesPersonActionEnum.UPDATE:
-                if (salesPersonForm.mobileNumber != this.currentSalesPerson?.mobileNumber) {
-                    salesPersonForm.mobileNumber = salesPersonForm.mobileNumber ? (this.intlClass.selectedCountryData.dialCode + salesPersonForm.mobileNumber) : null;
-                }
                 this.componentStore.createUpdateSalesPerson({ model: salesPersonForm, uniqueName: this.salesPersonUniqueName });
                 break;
             case SalesPersonActionEnum.DELETE:
@@ -261,8 +257,9 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                             this.salesPersonUniqueName = element?.uniqueName;
                             this.componentStore.deleteSalesPerson(element?.uniqueName);
                         }
+                        this.focusInputField();
                     });
-                } else {    
+                } else {
                      if (element?.linkedEntities && element?.linkedEntities.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
                         this.salesPersonUniqueName = element?.uniqueName;
                         this.componentStore.patchState({
@@ -281,11 +278,6 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.salesPersonUniqueName = element?.uniqueName;
                 this.currentSalesPerson = element;
                 this.initForm(element);
-                if (element?.mobileNumber) {
-                    this.initIntl(element?.mobileNumber);
-                } else {
-                    this.initIntl();
-                }
                 this.openMatExpansionPanel = false;
                 setTimeout(() => {
                     this.openMatExpansionPanel = true;
@@ -308,6 +300,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                         if (response === this.commonLocaleData?.app_yes) {
                             this.componentStore.archiveUnarchiveSalesPerson({ model: { action: ActionTypeEnum.UNARCHIVED }, uniqueName: element?.uniqueName });
                         }
+                        this.focusInputField();
                     });
                 } else {
                     this.salesPersonUniqueName = element?.uniqueName;
@@ -321,58 +314,17 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
-     * Focus on Name input field
+     * Focus on input field
      *
      * @private
      * @memberof SalesPersonComponent
      */
     private focusInputField(): void {
-        this.nameField?.inputFocus();
-    }
-
-    /**
-     * Initializes the int-tel input
-     *
-     * @memberof SalesPersonComponent
- */
-    public initIntl(inputValue?: string): void {
-        let times = 0;
-        const parentDom = this.elementRef?.nativeElement;
-        const input = document.getElementById('init-sales-person-contact');
-        const interval = setInterval(() => {
-            times += 1;
-            if (input) {
-                clearInterval(interval);
-                this.intlClass = new IntlPhoneLib(
-                    input,
-                    parentDom,
-                    false
-                );
-                if (inputValue) {
-                    input.setAttribute('value', `+${inputValue}`);
-                } else {
-                    input.setAttribute('value', '');
-                }
-                this.changeDetection.detectChanges();
+        setTimeout(() => {
+            if (this.nameField && typeof this.nameField.inputFocus === 'function') {
+                this.nameField.inputFocus();
             }
-            if (times > 25) {
-                clearInterval(interval);
-            }
-        }, 50);
-    }
-
-
-    /**
-     * Validate the mobile number
-     *
-     * @memberof SalesPersonComponent
- */
-    public validateMobileField(): void {
-        if (!this.intlClass?.isRequiredValidNumber) {
-            this.salesPersonForm.get("mobileNumber")?.setErrors({ invalidNumber: true });
-        } else {
-            this.salesPersonForm.get("mobileNumber")?.setErrors(null);
-        }
+        }, 0);
     }
 
     /**
@@ -383,7 +335,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     public closeDialog(): void {
         let response = null;
         if (this.salesPersonListIsModified) {
-            response = { 
+            response = {
                 isTransfer: this.activeSalePersonIsTransfer
             };
         }
@@ -434,6 +386,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             if (model) {
                 this.componentStore.archiveUnarchiveSalesPerson({ model: model, uniqueName: this.salesPersonUniqueName });
             }
+            this.focusInputField();
         });
     }
 

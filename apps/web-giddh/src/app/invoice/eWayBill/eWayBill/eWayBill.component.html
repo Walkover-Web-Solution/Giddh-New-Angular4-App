@@ -5,22 +5,15 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div
-        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState"
-    >
-        <tax-sidebar
-            (navigateEvent)="handleNavigation()"
-            [exclude]="'#primary-new-header'"
-            class="gst-sidebar"
-        ></tax-sidebar>
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+        <tax-sidebar (navigateEvent)="handleNavigation()" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
     </div>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="clear-both p-3">
         <div class="input-group flex-nowrap column-gap-15 align-items-center mx-0">
             <div
                 class="form-group linked-entities mr-3 mb-0"
-                *ngIf="(currentCompanyBranches?.length > 2) && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
             >
                 <reactive-dropdown-field
                     [label]="commonLocaleData?.app_entity"
@@ -40,8 +33,8 @@
                 [required]="true"
             ></reactive-dropdown-field>
             <div class="custom-datepicker-wrapper">
-                <div 
-                    class="custom-datepicker" 
+                <div
+                    class="custom-datepicker"
                     [matMenuTriggerFor]="universalDatepicker"
                     #universalDatepickerTrigger="matMenuTrigger"
                     role="button"
@@ -80,16 +73,14 @@
 
     <!-- Not In Use -->
     <ng-template #consolidateModal>
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.consolidated_details_heading }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
+            <button matIconButton aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
         <mat-dialog-content class="dialog-body">
-            <p class="font-size-24 mb-2">
-                {{ commonLocaleData?.app_numbers?.one }}. {{ localeData?.consolidated_ewaybill_details }}
-            </p>
+            <p class="font-size-24 mb-2">{{ commonLocaleData?.app_numbers?.one }}. {{ localeData?.consolidated_ewaybill_details }}</p>
             <div class="table-responsive">
                 <table class="table custom basic">
                     <tbody>
@@ -139,23 +130,24 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of ewaybillLists?.results">
-                            <td>{{ item?.invoiceDate }}</td>
+                            <td>{{ item?.invoiceDate | giddhDate }}</td>
                             <td>{{ item?.docNumber }}</td>
                             <td>{{ item?.customerName }}</td>
                             <td>{{ item?.customerGstin }}</td>
                             <td>
                                 {{ item?.ewbNo }}
                                 <br />
-                                <small href=".." class="cursor-pointer btn-link text-green">{{
-                                    localeData?.manually_generated
-                                }}</small>
+                                <small href=".." class="cursor-pointer btn-link text-green">{{ localeData?.manually_generated }}</small>
                             </td>
-                            <td>{{ item?.ewayBillDate }}</td>
-                            <td><i class="icon-rupees icon-font-11"></i> {{ item?.totalValue }}</td>
+                            <td>{{ item?.ewayBillDate | giddhDate }}</td>
                             <td>
-                                <a href="../../../../../../../src/app/invoice/eWayBill" class="btn-link">{{
-                                    commonLocaleData?.app_action
-                                }}</a>
+                                <i class="icon-rupees icon-font-11"></i>
+                                {{ item?.totalValue }}
+                            </td>
+                            <td>
+                                <a href="../../../../../../../src/app/invoice/eWayBill" class="btn-link">
+                                    {{ commonLocaleData?.app_action }}
+                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -189,11 +181,8 @@
 
     <!-- Add Vehicle Dialog -->
     <ng-template #addVehicle>
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.add_vehicle }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
-                <i class="icon-cross"></i>
-            </button>
         </div>
         <mat-dialog-content class="dialog-body">
             <form #updateVehicleForm="ngForm" autocomplete="off" name="updateEwayVehicleform">
@@ -204,25 +193,25 @@
                         <mat-radio-group name="transMode" [(ngModel)]="updateEwayVehicleform.transMode" class="d-flex flex-wrap">
                             <mat-radio-button color="primary" value="1" class="mr-3 mb-2">
                                 <div class="d-inline-flex column-gap-05">
-                                    <img src="assets/icon/4.svg" /> 
+                                    <img src="assets/images/icon/4.svg" class="img" class="image-as-icon-color" />
                                     <span>{{ commonLocaleData?.app_road }}</span>
                                 </div>
                             </mat-radio-button>
                             <mat-radio-button color="primary" value="2" class="mr-3 mb-2">
                                 <div class="d-inline-flex column-gap-05">
-                                    <img src="assets/icon/3.svg" /> 
+                                    <img src="assets/images/icon/3.svg" class="img" class="image-as-icon-color" />
                                     <span>{{ commonLocaleData?.app_rail }}</span>
                                 </div>
                             </mat-radio-button>
                             <mat-radio-button color="primary" value="3" class="mr-3 mb-2">
                                 <div class="d-inline-flex column-gap-05">
-                                    <img src="assets/icon/1.svg" /> 
+                                    <img src="assets/images/icon/1.svg" class="img" class="image-as-icon-color" />
                                     <span>{{ commonLocaleData?.app_air }}</span>
                                 </div>
                             </mat-radio-button>
                             <mat-radio-button color="primary" value="4" class="mb-2">
                                 <div class="d-inline-flex column-gap-05">
-                                    <img src="assets/icon/2.svg" /> 
+                                    <img src="assets/images/icon/2.svg" class="img" class="image-as-icon-color" />
                                     <span>{{ commonLocaleData?.app_ship }}</span>
                                 </div>
                             </mat-radio-button>
@@ -319,17 +308,11 @@
                             [(ngModel)]="updateEwayVehicleform.transDocDate"
                         ></giddh-datepicker>
 
-                        <div class="d-flex column-gap-15">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                type="submit"
-                                (click)="updateEwayTransport(updateEwayVehicleform)"
-                                aria-label="save"
-                            >
+                        <div class="d-flex column-gap-1">
+                            <button matButton="filled" type="submit" (click)="updateEwayTransport(updateEwayVehicleform)" aria-label="save">
                                 {{ commonLocaleData?.app_save }}
                             </button>
-                            <button mat-stroked-button mat-dialog-close type="button" aria-label="cancel">
+                            <button matButton="outlined" mat-dialog-close type="button" aria-label="cancel">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -342,11 +325,8 @@
     <!-- Cancel Dialog -->
     <ng-template #cancellation>
         <!-- Reasons for cancellation -->
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.reasons_for_cancellation }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
-                <i class="icon-cross"></i>
-            </button>
         </div>
         <mat-dialog-content class="dialog-body">
             <form #cancelEwayForm="ngForm" autocomplete="off" class="p-3">
@@ -359,8 +339,7 @@
                         [name]="'cancelRsnCode'"
                         [required]="true"
                         (selectedOption)="cancelEwayRequest.cancelRsnCode = $event.value"
-                    >
-                    </reactive-dropdown-field>
+                    ></reactive-dropdown-field>
 
                     <!-- Remark -->
                     <mat-form-field appearance="outline" class="initial-height w-100">
@@ -374,17 +353,11 @@
                         ></textarea>
                     </mat-form-field>
 
-                    <div class="d-flex column-gap-15">
-                        <button
-                            mat-raised-button
-                            color="primary"
-                            type="submit"
-                            (click)="cancelEwayBill(cancelEwayRequest)"
-                            aria-label="confirm"
-                        >
+                    <div class="d-flex column-gap-1">
+                        <button matButton="filled" type="submit" (click)="cancelEwayBill(cancelEwayRequest)" aria-label="confirm">
                             {{ commonLocaleData?.app_confirm }}
                         </button>
-                        <button mat-stroked-button mat-dialog-close type="submit" aria-label="cancel">
+                        <button matButton="outlined" mat-dialog-close type="button" aria-label="cancel">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -409,21 +382,21 @@
 
             <ng-container matColumnDef="invoiceDate">
                 <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
-                <td mat-cell *matCellDef="let item">{{ item?.invoiceDate }}</td>
+                <td mat-cell *matCellDef="let item">{{ item?.invoiceDate | giddhDate }}</td>
             </ng-container>
 
             <ng-container matColumnDef="docNumber">
                 <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_invoice_no }}</th>
                 <td mat-cell *matCellDef="let item" class="download-arrow">
-                    <span 
-                        *ngIf="activeTabIndex === 0" 
+                    <span
+                        *ngIf="activeTabIndex === 0"
                         [matTooltip]="localeData?.download_eway_bill"
                         matTooltipPosition="above"
-                        (click)="onSelectEwayDownload(item)" 
-                        class="d-inline-flex flex-nowrap align-items-center column-gap-1" 
+                        (click)="onSelectEwayDownload(item)"
+                        class="d-inline-flex flex-nowrap align-items-center column-gap-1"
                     >
                         <a href="javascript:;" class="d-inline-block text-primary">
-                            {{ item?.docNumber }} 
+                            {{ item?.docNumber }}
                             <i class="icon-download1"></i>
                         </a>
                     </span>
@@ -438,7 +411,9 @@
 
             <ng-container matColumnDef="customerGstin">
                 <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_customer_gstin }}</th>
-                <td mat-cell *matCellDef="let item">{{ activeTabIndex === 0 ? item?.customerGstin : item?.billingGstNumber }}</td>
+                <td mat-cell *matCellDef="let item">
+                    {{ activeTabIndex === 0 ? item?.customerGstin : item?.billingGstNumber }}
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="ewbNo">
@@ -446,9 +421,9 @@
                 <td mat-cell *matCellDef="let item">
                     {{ item?.ewbNo }}
                     <br />
-                    <small *ngIf="item?.isManuallyGenerated" class="cursor-pointer btn-link text-green">{{
-                        localeData?.manually_generated
-                    }}</small>
+                    <small *ngIf="item?.isManuallyGenerated" class="cursor-pointer btn-link text-green">
+                        {{ localeData?.manually_generated }}
+                    </small>
                 </td>
             </ng-container>
 
@@ -459,7 +434,7 @@
 
             <ng-container matColumnDef="reason">
                 <th mat-header-cell *matHeaderCellDef>{{ localeData?.reason }}</th>
-                <td mat-cell *matCellDef="let item"  matTooltip="{{ item?.errors[0] }}">{{ item?.errors[0] }}</td>
+                <td mat-cell *matCellDef="let item" matTooltip="{{ item?.errors[0] }}">{{ item?.errors[0] }}</td>
             </ng-container>
 
             <ng-container matColumnDef="status">
@@ -474,11 +449,7 @@
                 <td mat-cell *matCellDef="let item" class="text-right">
                     <i class="icon-rupees icon-font-11"></i>
                     <span class="d-inline-flex">
-                        <amount-field
-                            [amount]="item?.totalValue"
-                            [currencySymbol]="false"
-                            [currencyCode]="false"
-                        ></amount-field>
+                        <amount-field [amount]="item?.totalValue" [currencySymbol]="false" [currencyCode]="false"></amount-field>
                     </span>
                 </td>
             </ng-container>
@@ -489,7 +460,7 @@
                 </th>
                 <td mat-cell *matCellDef="let item" class="text-center">
                     <ng-container *ngIf="activeTabIndex === 0">
-                        <button mat-button [matMenuTriggerFor]="downloadCsvEmail">
+                        <button matButton="outlined" [matMenuTriggerFor]="downloadCsvEmail">
                             {{ commonLocaleData?.app_actions }}
                             <i class="caret"></i>
                         </button>
@@ -506,8 +477,8 @@
                         </mat-menu>
                     </ng-container>
                     <ng-container *ngIf="activeTabIndex === 1 && voucherApiVersion === 2">
-                        <button mat-raised-button color="primary" (click)="onGenerateEwayBill(item)">
-                                {{ localeData?.generate_eway_bill }}
+                        <button matButton="filled" (click)="onGenerateEwayBill(item)">
+                            {{ localeData?.generate_eway_bill }}
                         </button>
                     </ng-container>
                 </td>
@@ -529,10 +500,7 @@
         ></mat-paginator>
         <section class="mb-custom-80"></section>
 
-        <div
-            class="no-data"
-            *ngIf="!isLoading && ewaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)"
-        >
+        <div class="no-data" *ngIf="!isLoading && ewaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
             <no-data></no-data>
         </div>
         <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>

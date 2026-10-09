@@ -39,7 +39,6 @@
         }
     }
     .branch-form {
-
         .branch-form-field {
             font-size: var(--font-size-15);
             display: flex;
@@ -56,7 +55,6 @@
             }
             .address-dropdown {
                 .list-item {
-
                     .default-entity {
                         align-items: center;
                         display: flex;
@@ -69,7 +67,7 @@
                     }
                 }
             }
-            input[type="checkbox"] {
+            input[type='checkbox'] {
                 width: auto;
                 max-width: auto;
                 margin-right: 15px;
@@ -81,7 +79,6 @@
                     i {
                         padding: 5px;
                         cursor: pointer;
-
                     }
                 }
             }

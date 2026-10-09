@@ -1,12 +1,9 @@
 <div>
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.share_group }}</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close (click)="closeModal()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
-        <div class="pb-5">
+        <div>
             <p class="pb-2">{{ localeData?.share_with }}</p>
             <!--share group from-->
             <form [formGroup]="shareGroupForm" novalidate autocomplete="off">
@@ -18,12 +15,11 @@
                             [name]="'userEmail'"
                             [required]="true"
                             [disabled]="isUserRestricted"
-                            [pattern]="giddhEmailRegex"
                         ></input-field>
                     </div>
-                    <div class="col-md-6 d-flex align-items-center justify-content-between">
+                    <div class="col-md-6">
                         <reactive-dropdown-field
-                            class="pull-left w-75"
+                            class="w-100"
                             [label]="localeData?.permission_role_name"
                             [placeholder]="commonLocaleData?.app_select"
                             [disabled]="isUserRestricted"
@@ -34,22 +30,28 @@
                             [required]="true"
                             (selectedOption)="$event && (selectedPermission = $event.label)"
                             [labelValue]="selectedPermission"
-                        >
-                        </reactive-dropdown-field>
-                        <button
-                            mat-raised-button
-                            color="primary"
-                            [disabled]="shareGroupForm.invalid || isUserRestricted" 
-                            (click)="shareGroup()">
-                            {{ commonLocaleData?.app_share }}
-                        </button>
+                        ></reactive-dropdown-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-end column-gap-1">
+                            <button matButton="filled" [disabled]="shareGroupForm.invalid || isUserRestricted" (click)="shareGroup()">
+                                {{ commonLocaleData?.app_share }}
+                            </button>
+                            <button matButton="outlined" type="button" mat-dialog-close (click)="closeModal()">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
-        <restricted-module-message [restrictedModule]="restrictedModules.Users"
-            [isUserRestricted]="isUserRestricted" (onUpgradePlan)="buyPlan($event)">
-        </restricted-module-message>
+        <restricted-module-message
+            [restrictedModule]="restrictedModules.Users"
+            [isUserRestricted]="isUserRestricted"
+            (onUpgradePlan)="buyPlan($event)"
+        ></restricted-module-message>
         <!--shared with array-->
         <div class="pt-2" *ngIf="(activeGroupSharedWith$ | async)?.length">
             <mat-list role="list" class="shared-list group-shared-list">
@@ -72,10 +74,9 @@
                                     [name]="'selectedPermission' + i"
                                     [labelValue]="val?.roleName"
                                     (selectedOption)="$event && updatePermission(val, $event)"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                                 <button
-                                    mat-stroked-button
+                                    matButton="outlined"
                                     color="primary"
                                     (click)="unShareGroup(val?.uniqueName, val?.entityUniqueName)"
                                     aria-label="delete icon"
@@ -89,4 +90,4 @@
             </mat-list>
         </div>
     </mat-dialog-content>
-</div> 
+</div>

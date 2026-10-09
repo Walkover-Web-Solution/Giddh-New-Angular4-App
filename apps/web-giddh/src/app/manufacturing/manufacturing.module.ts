@@ -9,6 +9,7 @@ import { ManufacturingRoutingModule } from './manufacturing.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         RouterModule,
         MatTableModule,
         MatDialogModule,
-        FormFieldsModule
+        FormFieldsModule,
+        GiddhDatePipe
     ],
 })
 export class ManufacturingModule {

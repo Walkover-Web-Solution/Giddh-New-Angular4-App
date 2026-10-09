@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'delete-tax-confirmation-model',
-    templateUrl: './confirmation.model.component.html'
+    templateUrl: './confirmation.model.component.html',
+    standalone: false
 })
 
 export class DeleteTaxConfirmationModelComponent {

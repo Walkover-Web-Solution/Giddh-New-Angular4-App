@@ -2,7 +2,7 @@ import { PAGINATION_LIMIT } from '../../app.constant';
 
 export class DaybookQueryRequest {
     public q: string = '';
-    public page: number = 0;
+    public page: number = 1;
     public count: number = PAGINATION_LIMIT;
     public from: string = '';
     public to: string = '';
@@ -14,6 +14,7 @@ export class DaybookQueryRequest {
 
 export class ExportBodyRequest {
     from?: string;
+    haveToShowTaxBifurcation?: boolean;
     to?: string;
     sort?: string;
     showVoucherNumber?: boolean;
@@ -42,6 +43,14 @@ export class ExportBodyRequest {
     mergePdf?: boolean;
     copyTypes?: any[];
     showInAccountCurrency?: boolean;
+    ledgerAdvanceFilter?: any;
+    type?: string;
+    groupBy?: string;
+    selectAllFields?: string[];
+    accountUniqueNames?: string[];
+    salesPersonUniqueNames?: string[];
+    countryCodes?: string[];
+    stateCodes?: string[];
 }
 
 export interface DayBookRequestModel {
@@ -61,12 +70,16 @@ export interface DayBookRequestModel {
     defaultVouchersLabel?: string;
     defaultTagsLabel?: string;
     defaultParticularsLabel?: string;
+    includeTag?: boolean;
+    salesPersonUniqueNames?: string[];
+    selectAllFields?: string[];
 }
 
 export interface Inventory {
     includeInventory: boolean;
     inventories: any[];
     defaultInventoriesLabel?: any[];
+    selectAllFields?: string[];
     quantity?: any;
     includeQuantity: boolean;
     quantityLessThan: boolean;

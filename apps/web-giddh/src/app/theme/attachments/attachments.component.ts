@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inje
 import { DomSanitizer } from "@angular/platform-browser";
 import { select, Store } from "@ngrx/store";
 import { ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { take, takeUntil, finalize } from "rxjs/operators";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { BranchHierarchyType, FILE_ATTACHMENT_TYPE } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
@@ -17,7 +17,9 @@ import { ConfirmModalComponent } from "../new-confirm-modal/confirm-modal.compon
 import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interface";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
-import * as printJS from 'print-js';
+import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
+import { DscService } from "../../services/dsc.service";
+import printJS from 'print-js';
 import { OrganizationType } from "../../models/user-login-state";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ServiceConfig } from "../../services/service.config";
@@ -26,7 +28,8 @@ import { ServiceConfig } from "../../services/service.config";
     selector: "attachments",
     templateUrl: "./attachments.component.html",
     styleUrls: ["./attachments.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AttachmentsComponent implements OnInit, OnDestroy {
     /** Taking selected entry as input */
@@ -63,6 +66,10 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public isCompany: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True while DSC certificates are being preloaded; disables signed-PDF download button. */
+    public isDscPreloading: boolean = true;
+    /** Holds VoucherType Enum */
+    public voucherTypeEnum:any = VoucherTypeEnum;
 
     constructor(
         private commonService: CommonService,
@@ -77,7 +84,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         private ledgerService: LedgerService,
         private invoiceAction: InvoiceActions,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private dialogRef: MatDialogRef<AttachmentsComponent>
+        private dialogRef: MatDialogRef<AttachmentsComponent>,
+        private dscSignDialogService: DscSignDialogService,
+        private dscService: DscService
     ) {
 
     }
@@ -93,7 +102,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -121,6 +130,30 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
 
         this.getFiles();
         document.querySelector('body')?.classList?.add('ledger-attachments-popup');
+        
+        if (this.shouldShowDownloadSignedPdf(this.selectedItem?.voucherGeneratedType)) {
+            this.isDscPreloading = !this.dscService.hasCachedCertificates();
+            this.dscService.preloadCertificates().pipe(
+                takeUntil(this.destroyed$),
+                finalize(() => {
+                    this.isDscPreloading = false;
+                    this.changeDetectionRef.detectChanges();
+                })
+            ).subscribe();
+        }
+    }
+
+    /** */
+    /**
+     * True when Download Signed PDF is allowed for the current voucher type.
+     *
+     * @protected
+     * @param {string} voucherType - Voucher type
+     * @returns {boolean} True if signed PDF action should be displayed
+     * @memberof AttachmentsComponent
+     */
+    protected shouldShowDownloadSignedPdf(voucherType: string): boolean {
+        return voucherType !== VoucherTypeEnum.purchaseOrder && voucherType !== VoucherTypeEnum.estimate && voucherType !== VoucherTypeEnum.proforma && voucherType !== VoucherTypeEnum.receipt && voucherType !== VoucherTypeEnum.payment;
     }
 
     /**
@@ -272,6 +305,21 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Downloads the digitally signed invoice PDF for the selected voucher.
+     *
+     * @memberof AttachmentsComponent
+     */
+    public downloadSignedInvoicePdf(): void {
+        if (!this.selectedItem) {
+            return;
+        }
+        this.dscSignDialogService.openDownloadSignedInvoiceDialog({
+            voucher: {...this.selectedItem, uniqueName: this.selectedItem.voucherUniqueName},
+            voucherType: this.selectedItem.voucherGeneratedType
+        });
+    }
+
+    /**
      * Files bulk download
      *
      * @memberof AttachmentsComponent
@@ -317,13 +365,13 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public showDeleteAttachedFileModal(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            data: {
+                    width: '40%',
+                    data: {
                 title: this.commonLocaleData?.app_delete,
-                body: this.localeData?.confirm_delete_file,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.confirm_delete_file,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -361,14 +409,14 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         }
 
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            data: {
+                    width: '40%',
+                    data: {
                 title: this.commonLocaleData?.app_delete,
-                body: messageBody,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: this.localeData?.delete_entries_content
-            }
+                    body: messageBody,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: this.localeData?.delete_entries_content
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -436,7 +484,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         }
 
         if (isAttachmentSelected?.length > 0) {
-            isAttachmentSelected.forEach(attachment => {
+            (Array.isArray(isAttachmentSelected) ? isAttachmentSelected : []).forEach(attachment => {
                 if (attachment?.type !== "unsupported") {
                     if (attachment?.type === "image") {
                         filesToPrint.push({ file: `data:image/${attachment?.type};base64,` + attachment?.encodedData, type: attachment?.type });

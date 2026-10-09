@@ -1,5 +1,6 @@
-.discount-wrapper{
+.discount-wrapper {
     width: 254px;
+    height: 350px;
 
     .discount-separator {
         color: var(--color-dark-gray);
@@ -22,11 +23,11 @@
             z-index: 0;
         }
     }
-    .discount-checkbox-wrapper{
+    .discount-checkbox-wrapper {
         max-height: 156px;
         overflow-y: auto;
     }
-    .create-new{
+    .create-new {
         border-top: 1px solid var(--border-color);
     }
 }

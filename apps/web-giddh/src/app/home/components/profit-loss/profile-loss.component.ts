@@ -14,20 +14,22 @@ import {
     GetIncomeBeforeTaxes
 } from "../../../models/api-models/tb-pl-bs";
 import { TBPlBsActions } from "../../../actions/tl-pl.actions";
-import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { TlPlService } from '../../../services/tl-pl.service';
-import { cloneDeep } from '../../../lodash-optimized';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
 import { ServiceConfig } from '../../../services/service.config';
+import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
+import { cloneDeep } from '../../../lodash-optimized';
 Chart.register(...registerables);
 
 @Component({
     selector: 'profit-loss',
     templateUrl: 'profit-loss.component.html',
     styleUrls: ['../../home.component.scss', './profit-loss.component.scss'],
+    standalone:false
 })
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
@@ -70,7 +72,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     /** Chart object */
     public chart: any;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private tlPlService: TlPlService) {
+    constructor(@Inject(ServiceConfig) private serviceConfig, private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhNumberFormatPipe, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private tlPlService: TlPlService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -82,7 +84,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         // img path
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -118,6 +120,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        if (this.chart) {
+            this.chart.destroy();
+            this.chart = null;
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

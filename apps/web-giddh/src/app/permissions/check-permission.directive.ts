@@ -1,7 +1,11 @@
 import { IScope, PermissionDataService } from './permission-data.service';
 import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { findIndex } from '../lodash-optimized';
 
-@Directive({ selector: '[checkPermission]' })
+@Directive({
+    selector: '[checkPermission]',
+    standalone: false
+})
 
 export class CheckPermissionDirective implements OnInit {
     @Input() public checkPermission: string[];

@@ -5,7 +5,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
@@ -38,6 +37,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { PurchaseSettingModule } from './purchase-setting/purchase-setting.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 
 @NgModule({
     declarations: [
@@ -48,7 +48,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         PurchaseRoutingModule,
         InvoiceModule,
         MatPaginatorModule,
-        
+
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
@@ -56,7 +56,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         ClickOutsideModule,
         ElementViewChildModule,
         ScrollingModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         NgxMaskModule.forRoot(),
         TaxControlModule,
         DiscountControlModule,

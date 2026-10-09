@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, OnDestroy, Inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, OnDestroy, Inject, HostListener, ChangeDetectorRef, NgZone } from '@angular/core';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -9,12 +9,18 @@ import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state
 import { Observable, ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
+
+/** Settings tab links that are only available on Giddh-owned domains */
+const GIDDH_DOMAIN_ONLY_SETTINGS_LINKS: readonly string[] = [
+    '/pages/settings/tally',
+    '/pages/settings/shopify'
+];
 
 @Component({
     selector: 'aside-setting',
     templateUrl: './aside-setting.component.html',
     styleUrls: [`./aside-setting.component.scss`],
+    standalone: false
 })
 
 export class AsideSettingComponent implements OnInit, OnDestroy {
@@ -43,7 +49,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Holds array of company uniqueNames which ICICI allowed companies */
-    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    public iciciAllowedCompanies: any[] = [];
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Holds true if current company country is gocardless supported country */
@@ -55,7 +61,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     /** Observable for branch list */
     public branchList$: Observable<any>;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
+    constructor(@Inject(ServiceConfig) private serviceConfig, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService, private changeDetectorRef: ChangeDetectorRef, private ngZone: NgZone) {
     }
 
     /**
@@ -64,14 +70,14 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public ngOnInit(): void {
+        this.iciciAllowedCompanies = this.serviceConfig.ICICI_SUPPORTED_COMPANIES;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
@@ -121,7 +127,71 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public closeAsidePane(event?): void {
-        this.closeAsideEvent.emit(event);
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        setTimeout(() => {
+            this.closeAsideEvent.emit(true);
+        }, 0);
+    }
+
+    /**
+     * Handles navigation and ensures aside panel closes immediately
+     *
+     * @param {*} event
+     * @param {string} link
+     * @memberof AsideSettingComponent
+     */
+    public handleNavigation(event: any, link: string): void {
+        // Prevent event bubbling and default behavior
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+
+        // Immediately close the aside panel
+        this.closeAsideEvent.emit(true);
+
+        // Navigate immediately without delay
+        this.router.navigate([link]);
+    }
+
+    /**
+     * HostListener to handle clicks on navigation items
+     *
+     * @param {*} event
+     * @memberof AsideSettingComponent
+     */
+    @HostListener('click', ['$event'])
+    public onHostClick(event: any): void {
+        // Handle regular navigation items with data-link attribute
+        const navigationTarget = event.target.closest('.navigation-item');
+        if (navigationTarget && navigationTarget.dataset.link) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            // Immediately close the aside panel
+            this.closeAsideEvent.emit(true);
+
+            // Navigate within NgZone to ensure proper change detection
+            this.ngZone.run(() => {
+                this.router.navigate([navigationTarget.dataset.link]).then(() => {
+                    // Force change detection after navigation completes
+                    setTimeout(() => {
+                        this.changeDetectorRef.detectChanges();
+                    }, 50);
+                });
+            });
+            return;
+        }
+
+        // Don't interfere with mat-menu triggers (tags menu)
+        if (event.target.closest('[matMenuTriggerFor]')) {
+            return;
+        }
     }
 
     /**
@@ -179,9 +249,13 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                             organizationIndex = 0;
                         }
                     }
+                    const isGiddhDomain = this.generalService.isGiddhDomain();
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
                         this.settingsPageTabs[loop] = [];
-                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
+                        const items = [...settingsPageTabs[organizationIndex][key]];
+                        this.settingsPageTabs[loop] = isGiddhDomain
+                            ? items
+                            : items.filter((item: any) => !GIDDH_DOMAIN_ONLY_SETTINGS_LINKS.includes(item?.link));
                         loop++;
                     });
                 });

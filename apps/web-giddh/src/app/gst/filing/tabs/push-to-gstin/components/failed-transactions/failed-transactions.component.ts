@@ -11,6 +11,7 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
     selector: 'failed-transactions',
     templateUrl: './failed-transactions.component.html',
     styleUrls: ['failed-transactions.component.scss'],
+    standalone: false
 })
 export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public failedTransactions: Gstr1SummaryErrors[] = [];
@@ -31,7 +32,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
     }
 
     /**

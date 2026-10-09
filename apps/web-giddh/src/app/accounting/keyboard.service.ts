@@ -1,7 +1,9 @@
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class KeyboardService {
 
     public keyInformation: Subject<KeyboardEvent> = new Subject();

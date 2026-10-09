@@ -29,7 +29,8 @@ import { AppState } from '../store';
     selector: 'all-giddh-item',
     templateUrl: './all-item.component.html',
     styleUrls: ['./all-item.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 
 export class AllGiddhItemComponent implements OnInit, OnDestroy {
@@ -239,7 +240,8 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                 this.createNewModalTitle = subitem.label
                 this.subMenuItems = subitem.submenu;
                 this.dialog.open(this.dialogBox, {
-                    width: '630px'
+                    width: '630px',
+                    autoFocus: false
                 });
             } else {
                 if ((subitem?.additional?.queryParams?.tabIndex >= 0) && subitem?.additional?.queryParams?.tab) {

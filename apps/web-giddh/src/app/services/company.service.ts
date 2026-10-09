@@ -25,7 +25,9 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { IRegistration, GetOTPRequest, BulkPaymentResponse, BulkPaymentConfirmRequest } from "../models/interfaces/registration.interface";
 import { ReportsRequestModel, ReportsResponseModel } from "../models/api-models/Reports";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CompanyService {
     private companyUniqueName: string;
 
@@ -51,7 +53,7 @@ export class CompanyService {
      * CreateCompany
      */
     public SocketCreateCompany(company: SocketNewCompanyRequest): Observable<BaseResponse<any, SocketNewCompanyRequest>> {
-        return this.http.post('https://ebl-api-h7duexlbuq-el.a.run.app/func/CMEQnVPyk2a8', company).pipe(
+        return this.http.post(this.config.apiUrl + COMPANY_API.SEND_DATA, company).pipe(
             map((res) => {
                 let data: BaseResponse<any, SocketNewCompanyRequest> = res;
                 data.request = company;
@@ -173,6 +175,24 @@ export class CompanyService {
     }
 
     /**
+     * Get account countries for company
+     *
+     * @return {*}  {Observable<BaseResponse<any[], string>>}
+     * @memberof CompanyService
+     */
+    public getAccountCountries(): Observable<BaseResponse<any[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        if (this.companyUniqueName) {
+            return this.http.get(this.config.apiUrl + COMPANY_API.GET_ACCOUNT_COUNTRIES?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+                let data: BaseResponse<any[], string> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '')));
+        } else {
+            return observableEmpty();
+        }
+    }
+
+    /**
      * Makes API call to set the application date (universal date)
      *
      * @param {{ fromDate?: string, toDate?: string, duration?: number, period?: string, chosenLabel?: string }} dateObj Request object for the API
@@ -222,9 +242,9 @@ export class CompanyService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
     }
 
-    public downloadCSV(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
+    public downloadXlsx(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + COMPANY_API.DOWNLOAD_CSV
+        let url = this.config.apiUrl + COMPANY_API.DOWNLOAD_XLSX
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':groupUniqueName', encodeURIComponent(request.params?.groupUniqueName))
             ?.replace(':from', encodeURIComponent(request.params.from))

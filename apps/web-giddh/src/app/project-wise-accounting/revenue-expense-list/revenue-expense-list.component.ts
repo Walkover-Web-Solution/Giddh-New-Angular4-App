@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from '../../services/general.service';
 import { API_BULK_FETCH_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject, takeUntil, filter, tap, debounceTime, Observable, take } from 'rxjs';
 import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.store';
 import { DefaultParamType, ProjectWiseAccountingType } from '../project-wise-accounting';
-import { cloneDeep } from '../../lodash-optimized';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { MatTabChangeEvent } from "@angular/material/tabs";
@@ -17,12 +16,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { OrganizationType } from '../../models/user-login-state';
 import { AccountingGroupEnum } from '../../shared/Enums/common.enum';
+import { cloneDeep, forEach, get, set } from '../../lodash-optimized';
 
 @Component({
     selector: 'revenue-expense-list',
-    styleUrls: ['./revenue-expense-list.component.scss'],
     templateUrl: './revenue-expense-list.component.html',
-    providers: [ProjectWiseAccountingComponentStore]
+    styleUrls: ['./revenue-expense-list.component.scss'],
+    providers: [ProjectWiseAccountingComponentStore],
+    standalone: false
 })
 export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -61,7 +62,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** Form for managing the account entry list */
     public accountEntryListForm: FormGroup;
     /** Stores the search results for accounts */
-    public accountSearchResponse: any[] = [];
+    public accountSearchResponse = signal<any[]>([]);
     /** Stores the search results for entries */
     public accountAndEntryList: any = {};
     /** Pagination options for the table */
@@ -103,6 +104,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public projectWiseAccountingType: typeof ProjectWiseAccountingType = ProjectWiseAccountingType;
     /** True if is company */
     public isCompany: boolean = false;
+    /** Counter signal bound to the account dropdown's `refreshList` input; bumping it triggers the dropdown to clear and re-fetch */
+    public accountListRefreshTrigger = signal<any>(0);
 
     constructor(
         private generalService: GeneralService,
@@ -110,7 +113,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         private componentStore: ProjectWiseAccountingComponentStore,
         private formBuilder: FormBuilder,
         private router: Router,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        public changeDetectorRef: ChangeDetectorRef
     ) { }
 
     /**
@@ -142,7 +146,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     this.defaultParamsValue.projectUniqueName = params.uniqueName;
                     this.defaultParamsValue.companyUniqueName = activeCompany.uniqueName;
                     this.defaultParamsValue.branchUniqueName = this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
-                    this.accountSearchResponse = [];
+                    this.accountSearchResponse.set([]);
                     this.defaultParamsValue.category = params.module;
                     this.accountSearchRequest.group = this.defaultParamsValue.category === this.projectWiseAccountingType.Income ? this.incomeGroup : this.expenseGroup;
                     this.activeCompany = activeCompany;
@@ -165,9 +169,10 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.componentStore.accountSearch$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
+                const newItems: any[] = [];
                 accountSearchResponse.results?.forEach(result => {
                     if (result?.uniqueName) {
-                        this.accountSearchResponse.push({
+                        newItems.push({
                             value: result.uniqueName,
                             label: result.name,
                             additional: result
@@ -178,6 +183,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                         this.accountAndEntryList[result.uniqueName]['page'] = 1;
                     }
                 });
+                this.accountSearchResponse.update(prev => [...prev, ...newItems]);
                 this.accountSearchRequest.isLoading = false;
             }
         });
@@ -194,6 +200,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.entrySearchRequest.isLoading = false;
+                this.changeDetectorRef.detectChanges();
             }
         });
 
@@ -203,6 +210,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                 this.totalResults += 1;
                 this.createAccountEntryForm.reset();
                 this.getRevenueExpense();
+                this.accountListRefreshTrigger.update(value => value + 1);
             }
         });
 
@@ -251,7 +259,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Get total revenue and expense 
+     * Get total revenue and expense
      *
      * @memberof ActivityLogsComponent
      */
@@ -402,7 +410,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      */
     public searchAccount(query: string = '', page: number = 1): void {
         if (page === 1) {
-            this.accountSearchResponse = [];
+            this.accountSearchResponse.set([]);
         }
         this.accountSearchRequest.q = query;
         this.accountSearchRequest.page = page;
@@ -436,9 +444,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This method retrieves the entry list for a given account unique name if it does not already exist. 
+     * This method retrieves the entry list for a given account unique name if it does not already exist.
      *
-     * @param {string} accountUniqueName 
+     * @param {string} accountUniqueName
      * @memberof RevenueExpenseListComponent
      */
     public currentEntry(accountUniqueName: string): void {
@@ -540,10 +548,10 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public openDeleteEntryDialog(index: number): void {
         const entryName = this.entryList.at(index).value.entry;
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
-                configuration: this.generalService.deleteConfiguration(this.localeData?.entry_delete_confirmation_message?.replace('[ENTRY_NAME]', entryName), this.commonLocaleData)
-            }
+                    width: '630px',
+                    data: {
+                        configuration: this.generalService.deleteConfiguration(this.localeData?.entry_delete_confirmation_message?.replace('[ENTRY_NAME]', entryName), this.commonLocaleData)
+                    }
         });
 
         dialogRef.afterClosed().subscribe((response) => {
@@ -601,7 +609,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public tabChanged(event: MatTabChangeEvent): void {
         this.totalResults = 0;
         this.createAccountEntryForm.reset();
-        this.accountSearchResponse = [];
+        this.accountSearchResponse.set([]);
         const tab = event.tab.textLabel === this.localeData?.revenue ? this.projectWiseAccountingType.Income : event.tab.textLabel === this.localeData?.expense ? this.projectWiseAccountingType.Expenses : this.projectWiseAccountingType.ProfitLoss;
         this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }

@@ -4,7 +4,6 @@
     justify-content: center;
     align-items: center;
     height: calc(100vh - 250px);
-
 }
 .create-warehouse h2 {
     font-size: var(--font-size-16);
@@ -121,7 +120,6 @@
     margin: 0 0 15px;
     display: flex;
     flex-direction: column;
-
 }
 
 .set-as-default i.icon-favorite-selected {
@@ -137,7 +135,7 @@
     max-width: 200px;
     width: 100%;
     input {
-        background-image: url("../../../assets/images/searchIcon.svg") !important;
+        background-image: url('../../../assets/images/searchIcon.svg') !important;
         background-repeat: no-repeat !important;
         padding-left: 30px !important;
         background-position: 7px 9px !important;

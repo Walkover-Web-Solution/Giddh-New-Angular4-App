@@ -9,9 +9,11 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    Renderer2,
     TemplateRef,
     ViewChild,
 } from '@angular/core';
+import { ConnectedPosition } from '@angular/cdk/overlay';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { createSelector, select, Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
@@ -43,11 +45,11 @@ import { AppState } from '../../../../store';
 import { digitsOnly } from '../../../helpers';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, TCS_TDS_TAXES_TYPES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { clone, cloneDeep, differenceBy, flattenDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
+import { clone, cloneDeep, differenceBy, flattenDeep, isEqual } from '../../../../lodash-optimized';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
@@ -68,7 +70,8 @@ import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.const
     selector: 'account-update-new-details',
     templateUrl: './account-update-new-details.component.html',
     styleUrls: ['./account-update-new-details.component.scss'],
-    providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore]
+    providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore],
+    standalone: false
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -238,8 +241,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public voucherApiVersion: number;
     /** This will hold is portal default */
     public isPortalDefault: boolean;
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current currency is not company currency */
     public isForeignCurrency: boolean = false;
     /** Hold all temporary save bulk balance data */
@@ -276,6 +277,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isParentSundryCreditors: boolean = false;
     /** Flag to determine if the parent group is "bank accounts". */
     public isParentBankAccounts: boolean = false;
+    /** CDK overlay positions for discount and tax tooltips */
+    public overlayPositions: ConnectedPosition[] = [
+        {
+            originX: 'end',
+            originY: 'center',
+            overlayX: 'start',
+            overlayY: 'center',
+            offsetX: 8
+        }
+    ];
     /** Enum representing the types of accounting group type */
     public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
     /** Stores the list of selected tax labels to display in the UI. */
@@ -298,6 +309,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public currentTax: any;
     /** Stores the current discount to display in the UI. */
     public currentDiscount: any;
+    /** Holds active portal index */
+    public activePortalIndex: number | null = null;
 
     constructor(
         private _fb: FormBuilder,
@@ -310,19 +323,32 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private groupService: GroupService,
         private invoiceService: InvoiceService,
         private changeDetectorRef: ChangeDetectorRef,
+        private elementRef: ElementRef,
         private settingsDiscountService: SettingsDiscountService,
         private customFieldsService: CustomFieldsService,
         private http: HttpClient,
         public dialog: MatDialog,
         private settingsBranchAction: SettingsBranchActions,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
-        private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore,
+        private renderer: Renderer2
     ) {
 
+    }
+
+    /**
+     * Getter for portal domain controls
+     *
+     * @readonly
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public get portalDomainControls(): AbstractControl[] {
+        const portalDomainFormArray = this.addAccountForm?.get('portalDomain') as FormArray;
+        return portalDomainFormArray ? portalDomainFormArray.controls : [];
     }
 
     public ngOnInit() {
@@ -341,7 +367,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.moveAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$));
-        this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -397,10 +422,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             const index = this.portalIndex;
             let change = mappings.at(index);
-            // let mobileNo = '';
-            // if (this.intl) {
-            //     mobileNo = this.intl['init-contact-portal_' + (index)]?.getNumber();
-            // }
             let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
             if (defaultUser) {
                 defaultUser.get('default').patchValue(false);
@@ -423,13 +444,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     change.get('email')?.updateValueAndValidity();
                 }
                 // change.get('contactNo')?.setValue(mobileNo);
-                
+
                 // Email validation
                 let lastEmailOccurrenceIndex = -1;
                 let currentEmail = change.get('email')?.value;
                 let emailDuplicateFound = false;
                 if (currentEmail !== "" && currentEmail) {
-                    mappings.controls.forEach((control, i) => {
+                    (Array.isArray(mappings.controls) ? mappings.controls : []).forEach((control, i) => {
                         if (lastEmailOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
                             lastEmailOccurrenceIndex = index;
                             change.get('email').setErrors({ duplicate: true });
@@ -449,7 +470,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let currentContactNo = change.get('contactNo')?.value;
                 let contactDuplicateFound = false;
                 if (currentContactNo !== "" && currentContactNo) {
-                    mappings.controls.forEach((control, i) => {
+                    (Array.isArray(mappings.controls) ? mappings.controls : []).forEach((control, i) => {
                         if (lastContactOccurrenceIndex === -1 && index !== i && control.get('contactNo')?.value === currentContactNo) {
                             lastContactOccurrenceIndex = index;
                             change.get('contactNo').setErrors({ duplicate: true });
@@ -468,7 +489,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                 this.lastDuplicateEmailIndex = lastEmailOccurrenceIndex;
                 this.lastDuplicateContactIndex = lastContactOccurrenceIndex;
-                
+
                 // Update duplicate contact errors flag
                 this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
                 if (this.lastDuplicateEmailIndex === -1 && this.lastDuplicateContactIndex === -1) {
@@ -492,10 +513,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 const users = this.addAccountForm.get('portalDomain') as FormArray;
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
-                    // let mobileNo = '';
-                    // if (response?.mobileNo && this.intl) {
-                    //     mobileNo = this.intl['init-contact-update']?.getNumber();
-                    // }
                     if (user) {
                         if (!this.isPortalDefault) {
                             user?.get('name').setValue(response?.attentionTo);
@@ -724,22 +741,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /**
      * Handles tab change
      *
-     * @param {any} event 
+     * @param {any} event
      * @memberof AccountUpdateNewDetailsComponent
      */
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
-            this.selectedTabLabel = event.tab.textLabel;
+            const tabLabel = event.tab.textLabel || event.tab.ariaLabel;
+            this.selectedTabLabel = tabLabel;
             this.selectedTabIndex = event.index;
-            this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
-            if (event.tab.textLabel === this.localeData?.tabs?.others) {
+            this.isCustomSelectedTab = tabLabel === this.localeData?.tabs?.custom;
+            if (tabLabel === this.localeData?.tabs?.others) {
                 this.isOtherSelectedTab = true;
             } else {
                 this.isOtherSelectedTab = false;
             }
-            
+
             // Mark this tab as activated
-            this.activatedTabs.add(event.tab.textLabel);
+            this.activatedTabs.add(tabLabel);
             this.changeDetectorRef.detectChanges();
         }
     }
@@ -792,7 +810,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 name: [''],
                 virtualAccountNumber: ['']
             }),
-            closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: ["", Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([]),
             portalDomain: this._fb.array([
@@ -821,7 +839,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Initializes the GST details form with default values and validators.
-     * 
+     *
      * @returns FormGroup
      * @memberof AccountUpdateNewDetailsComponent
      */
@@ -881,14 +899,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-
     /**
      * This will be use for add new portal user
      *
      * @param {*} [user]
+     * @param {boolean} [highLightInput]
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public addNewPortalUser(user?: any): void {
+    public addNewPortalUser(user?: any, highLightInput?: boolean): void {
         const mobileStartWithPlus = user?.contactNo?.startsWith('+');
         let mobileNo = '';
         if (user?.contactNo && mobileStartWithPlus) {
@@ -906,7 +924,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
         mappings.push(mappingForm);
         if (user) {
-            mappings.controls.forEach(control => {
+            (Array.isArray(mappings.controls) ? mappings.controls : []).forEach(control => {
                 if (!control?.get('name').value && !control?.get('email').value && !control?.get('contactNo').value) {
                     control?.get('name')?.patchValue(user.name ?? '');
                     control?.get('email')?.patchValue(user.email ?? '');
@@ -916,8 +934,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         }
-        const lastIndex = mappings.controls.length - 1;
-        // Removed interval and fallback timeout
+        if (highLightInput) {
+            const lastIndex = mappings.controls.length - 1;
+            this.activePortalIndex = lastIndex;
+        }
     }
 
     /**
@@ -965,9 +985,36 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         return;
     }
 
-    public removeGstDetailsForm(i: number) {
+    /**
+     * Removes GST details form at specified index and focuses on submit button
+     * @param i - Index of the form to remove
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public removeGstDetailsForm(i: number): void {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
+        if (i > 0) {
+             this.focusSubmitButton();
+         }
+    }
+
+    /**
+     * Focuses on the submit button after a delay
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private focusSubmitButton(): void {
+        setTimeout(() => {
+            try {
+                const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[ aria-label="update"]', true);
+                if (submitBtn) {
+                    submitBtn.focus();
+                }
+            } catch (error) {
+                // Silently handle case where submit button doesn't exist
+
+            }
+        }, 100);
     }
 
     public addBlankGstForm() {
@@ -996,7 +1043,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Validates and extracts the state code from the GST number entered in the given form.
-     * 
+     *
      * @param gstForm The `FormGroup` containing the GST-related form controls.
      * @memberof AccountUpdateNewDetailsComponent
      */
@@ -1044,7 +1091,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public openingBalanceTypeChanged(type: string) {
-        if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
+        if (this.company?.isActive) {
+            return;
+        }
+        if (Number(this.addAccountForm.get('openingBalance')?.value) > 0 || Number(this.addAccountForm.get('foreignOpeningBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
     }
@@ -1066,14 +1116,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public submit() {
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
-        
+        this.checkNameFieldValidation();
+
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
-            
-            // If duplicate contact errors exist, navigate to portal tab
-            if (this.hasDuplicateContactErrors) {
-                this.goToPortalTab();
-            }
+            this.navigateToFirstErrorTab();
             return;
         }
 
@@ -1168,17 +1215,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency, { onlySelf: true });
             accountRequest.currency = this.selectedCurrency;
         }
-        // if (this.intl) {
-        //     let mobileNo = this.intl['init-contact-update']?.getNumber();
-        //     if (mobileNo) {
-        //         accountRequest['mobileNo'] = mobileNo;
-        //     }
-        // }
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
         if (accountRequest.addresses && accountRequest.addresses.length > 0) {
-            accountRequest.addresses.forEach(address => {
+            (Array.isArray(accountRequest.addresses) ? accountRequest.addresses : []).forEach(address => {
                 if (this.countyList?.length) {
                     delete address['state'];
                     delete address['stateCode'];
@@ -1270,7 +1311,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Handles the selection of a state from a dropdown or similar UI component.
-     * 
+     *
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected state's label and value.
      * @memberof AccountUpdateNewDetailsComponent
@@ -1286,7 +1327,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Updates the county information in the GST form based on the selected county event.
-     * 
+     *
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected county's label and value.
      * @memberof AccountUpdateNewDetailsComponent
@@ -1493,7 +1534,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         break;
                     default: this.partyTypeSource = res;
                 }
-                this.partyTypeSource.forEach(item => {
+                (Array.isArray(this.partyTypeSource) ? this.partyTypeSource : []).forEach(item => {
                     item.value = item.label;
                 });
             } else {
@@ -1509,6 +1550,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, this.activeGroupUniqueName));
         this.moveAccountForm.reset();
+        this.focusSubmitButton();
     }
 
     /**
@@ -1582,7 +1624,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeAccount$.pipe(take(1)).subscribe(p => {
             if (!this.showBankDetail) {
                 if (p && p.parentGroups) {
-                    p.parentGroups.forEach(grp => {
+                    (Array.isArray(p.parentGroups) ? p.parentGroups : []).forEach(grp => {
                         this.showBankDetail = grp?.uniqueName === "sundrycreditors" ? true : false;
                         return;
                     });
@@ -1595,22 +1637,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public taxHierarchy() {
         let activeAccount: AccountResponseV2 = null;
         let activeGroup: GroupResponse = null;
-        this.store.pipe(take(1)).subscribe(s => {
-            if (s.groupwithaccounts) {
-                activeAccount = s.groupwithaccounts.activeAccount;
-                activeGroup = s.groupwithaccounts.activeGroup;
+        this.store.pipe(filter(group => !!group.groupwithaccounts.activeAccount || !!group.groupwithaccounts.activeGroup), take(1)).subscribe(group => {
+            if (group.groupwithaccounts) {
+                activeAccount = group.groupwithaccounts.activeAccount;
+                activeGroup = group.groupwithaccounts.activeGroup;
+            }
+            if (activeAccount) {
+                this.store.dispatch(this.companyActions.getTax());
+                this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount?.uniqueName));
+                this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
+            } else {
+                this.store.dispatch(this.companyActions.getTax());
+                if (activeGroup) {
+                    this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
+                    this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupTaxHierarchy), takeUntil(this.destroyed$));
+                }
             }
         });
-        if (activeAccount) {
-            this.store.dispatch(this.companyActions.getTax());
-            this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount?.uniqueName));
-        } else {
-            this.store.dispatch(this.companyActions.getTax());
-            if (activeGroup) {
-                this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
-            }
-        }
-
     }
 
     public applyTax() {
@@ -1628,8 +1671,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             data.taxes = [];
             this.activeAccountTaxHierarchy$.pipe(take(1)).subscribe((t) => {
                 if (t) {
-                    t.inheritedTaxes.forEach(tt => {
-                        tt.applicableTaxes.forEach(ttt => {
+                    (Array.isArray(t.inheritedTaxes) ? t.inheritedTaxes : []).forEach(tt => {
+                        (Array.isArray(tt.applicableTaxes) ? tt.applicableTaxes : []).forEach(ttt => {
                             data.taxes.push(ttt?.uniqueName);
                         });
                     });
@@ -1821,15 +1864,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * To render custom field form
+     * Renders custom field form controls with enhanced type safety validation
      *
-     * @param {*} obj
-     * @param {*} customFieldLength
+     * @param {any} obj - Custom field object containing field configuration
+     * @param {number} customFieldLength - Expected number of custom fields
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
+    public renderCustomFieldDetails(obj: any, customFieldLength: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField?.length < customFieldLength) {
+        if (Array.isArray(customField?.value) && customField?.value.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
@@ -1862,21 +1905,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public createDynamicCustomFieldForm(customFieldForm: any): void {
-        customFieldForm.forEach(item => {
+        (Array.isArray(customFieldForm) ? customFieldForm : []).forEach(item => {
             this.renderCustomFieldDetails(item, customFieldForm?.length);
         });
-    }
-
-    /**
-     * To set boolean type custom field value
-     *
-     * @param {string} isChecked to check boolean custom field true or false
-     * @param {number} index index number
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public selectedBooleanCustomField(isChecked: string, index: number): void {
-        const customField = this.addAccountForm.get('customFields') as FormArray;
-        customField.controls[index].get('value')?.setValue(isChecked);
     }
 
     /**
@@ -2191,7 +2222,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Checks whether a given unique group name exists within the list of parent groups.
-     * 
+     *
      * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
      * @param uniqueName - The unique name to search for in the parent groups.
      * @returns `true` if any parent group matches the given unique name, otherwise `false`.
@@ -2277,7 +2308,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (accountDetails?.uniqueName) {
                     this.accountInheritedDiscounts = [];
                     if (accountDetails && accountDetails.inheritedDiscounts) {
-                        accountDetails.inheritedDiscounts.forEach(item => {
+                        (Array.isArray(accountDetails.inheritedDiscounts) ? accountDetails.inheritedDiscounts : []).forEach(item => {
                             this.accountInheritedDiscounts.push(...item.applicableDiscounts);
                         });
                     }
@@ -2320,7 +2351,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         });
                 }
 
-                accountDetails.addresses.forEach(address => {
+                (Array.isArray(accountDetails.addresses) ? accountDetails.addresses : []).forEach(address => {
                     address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
                     address.stateCodeName = address.state.code + " - " + address.state.name;
 
@@ -2373,9 +2404,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (accountDetails.customFields?.length) {
                     const customField = this.addAccountForm.get('customFields') as FormArray;
                     if (customField.controls?.length) {
-                        accountDetails.customFields.forEach(item => {
+                        (Array.isArray(accountDetails.customFields) ? accountDetails.customFields : []).forEach(item => {
                             const fieldIndex = customField.controls?.findIndex(control => control?.value?.uniqueName === item?.uniqueName);
-                            customField?.at(fieldIndex).get('value').patchValue(item?.value);
+                            if (fieldIndex !== -1) {
+                                const customFieldDef = this.companyCustomFields?.find(field => field.uniqueName === item?.uniqueName);
+                                let value: any = item?.value;
+                                
+                                // Convert string boolean values to actual booleans for Boolean type fields
+                                if (customFieldDef?.fieldType?.type === this.availableFieldTypes.Boolean) {
+                                    if (value === 'true' || value === true) {
+                                        value = true;
+                                    } else if (value === 'false' || value === false) {
+                                        value = false;
+                                    }
+                                }
+                                
+                                customField?.at(fieldIndex).get('value').patchValue(value);
+                            }
                         });
                     }
                 }
@@ -2385,7 +2430,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 } else if (acc.sacNumber) {
                     this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
-                this.openingBalanceTypeChanged(accountDetails.openingBalanceType);
+                const accountData = acc.accountOpeningBalance?.[0]?.openingBalanceType;
+                this.addAccountForm.get('openingBalanceType')?.patchValue(this.company.isActive ? accountDetails.openingBalanceType : (accountData || accountDetails.openingBalanceType));
                 if (accountDetails.mobileNo) {
 
                     if (accountDetails.mobileNo.indexOf('-') > -1) {
@@ -2419,7 +2465,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         document.querySelector('body')?.classList?.remove('master-page');
     }
-
 
     /**
     * Get company branches
@@ -2543,7 +2588,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Handles toggling the archive status of an account
-     * 
+     *
      * @memberof AccountUpdateNewDetailsComponent
      */
     public accountArchiveUnarchive(): void {
@@ -2639,6 +2684,60 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
+     * Checks whether the given form control names contain at least one invalid control
+     *
+     * @param {string[]} controlNames - List of top-level form control names belonging to a tab
+     * @returns {boolean} True if any control in the list is invalid
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public tabHasError(controlNames: string[]): boolean {
+        if (!this.isValidForm) {
+            return controlNames.some(name => this.addAccountForm.get(name)?.invalid);
+        }
+        return false;
+    }
+
+    /**
+     * Navigates to the first tab that contains validation errors
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private navigateToFirstErrorTab(): void {
+        const tabControlMap: { controlNames: string[]; index: number }[] = [
+            { controlNames: ['addresses'], index: 0 },
+            { controlNames: ['attentionTo', 'mobileNo', 'email'], index: 1 },
+            { controlNames: ['portalDomain'], index: 2 },
+            { controlNames: ['accountBankDetails'], index: 3 },
+            { controlNames: ['uniqueName', 'closingBalanceTriggerAmount', 'hsnOrSac', 'hsnNumber', 'sacNumber'], index: 4 },
+            { controlNames: ['customFields'], index: 5 },
+        ];
+        const firstErrorTab = tabControlMap.find(tab =>
+            tab.controlNames.some(name => this.addAccountForm.get(name)?.invalid)
+        );
+        if (firstErrorTab) {
+            this.goToTab(firstErrorTab.index);
+        }
+        this.scrollToFirstInvalidField();
+    }
+
+    /**
+     * Scrolls the sidebar panel to the first invalid form field
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private scrollToFirstInvalidField(): void {
+        setTimeout(() => {
+            const hostEl: HTMLElement = this.elementRef.nativeElement;
+            const firstInvalid = hostEl.querySelector<HTMLElement>(
+                'input.ng-invalid, mat-select.ng-invalid, reactive-dropdown-field.ng-invalid, input-field.ng-invalid, select-field.ng-invalid, textarea.ng-invalid'
+            );
+            firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+    }
+
+    /**
      * Checks if a tab has been activated at least once
      *
      * @param {string} textLabel - Label of the tab to check
@@ -2647,5 +2746,24 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public isTabActivated(textLabel: string): boolean {
         return this.activatedTabs.has(textLabel);
+    }
+
+    /**
+     * Checks name field validation using dynamic validation service
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private checkNameFieldValidation(): void {
+        const nameControl = this.addAccountForm.get('name');
+
+        // Use the dynamic validation service from GeneralService with localized message
+        this.generalService.validateFieldSimple(
+            nameControl,
+            this.localeData?.account_name || 'Account name',
+            100,
+            this.commonLocaleData?.app_field_validation_error,
+            'warning'
+        );
     }
 }

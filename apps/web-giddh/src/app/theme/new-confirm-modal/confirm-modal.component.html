@@ -1,9 +1,6 @@
 <div>
-    <div class="dialog-header">
+    <div cdkFocusInitial class="dialog-header">
         <span>{{ inputData?.title }}</span>
-        <button mat-icon-button aria-label="close" (click)="sendResponse(null)">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <p [innerHTML]="inputData?.body"></p>
@@ -11,8 +8,8 @@
             {{ inputData?.permanentlyDeleteMessage }}
         </p>
         <div class="d-flex column-gap-1 mt-3 justify-content-end">
-            <button mat-raised-button color="primary" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
-            <button mat-stroked-button (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
+            <button matButton="filled" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
+            <button matButton="outlined" (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
         </div>
     </mat-dialog-content>
 </div>

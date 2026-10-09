@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { ComponentStore } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
 import { ToasterService } from "../../../services/toaster.service";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SalesService } from "../../../services/sales.service";
@@ -40,10 +40,10 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
         return data.pipe(
             switchMap(() => {
                 return this.salesService.getAccountsWithCurrency('discount').pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                discountsAccountList: res?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) ?? []
+                                discountsAccountList: Array.isArray(res?.body?.results) ? res.body.results.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) : []
                             });
                         },
                         (error: any) => {
@@ -63,24 +63,25 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
+
                 return this.settingsDiscountService.CreateDiscount(req as any).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
+                    tap({
+                        next: (res: BaseResponse<any, CreateDiscountRequest>) => {
                             this.toaster.showSnackBar('success', res.body);
-                            return this.patchState({
+                            this.patchState({
                                 createDiscountInProgress: false,
                                 createDiscountSuccess: true
                             });
                         },
-                        (error: any) => {
+                        error: (error: any) => {
                             this.toaster.showSnackBar('error', error);
-                            return this.patchState({
+                            this.patchState({
                                 createDiscountInProgress: false,
                                 createDiscountSuccess: false
                             });
                         }
-                    ),
-                    catchError((err) => EMPTY)
+                    }),
+                    catchError(() => EMPTY)
                 );
             })
         );
@@ -91,7 +92,7 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
             switchMap((req) => {
                 this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
                 return this.settingsDiscountService.UpdateDiscount(req as any).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             this.toaster.showSnackBar('success', this.localeService.translate("app_messages.discount_updated"));
                             return this.patchState({
@@ -104,7 +105,8 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
                             return this.patchState({
                                 createDiscountInProgress: false,
                                 createDiscountSuccess: false
-                            });
+
+                           });
                         }
                     ),
                     catchError((err) => EMPTY)

@@ -1,7 +1,10 @@
-@use "../abstracts/mixins" as *;
+@use '../abstracts/mixins' as *;
 
 .border {
     border: 1px solid var(--border-color) !important;
+}
+.border-dashed {
+    border-style: dashed !important;
 }
 .border-color-transparent {
     border-color: var(--color-transparent) !important;
@@ -51,7 +54,9 @@
 .only-bottom-radius {
     @include border-radius(0, 0, var(--mat-border-radius-4), var(--mat-border-radius-4));
 }
-
+.text-color-inherit {
+    color: inherit !important;
+}
 .text-primary {
     color: var(--text-primary-color) !important;
 }
@@ -69,10 +74,16 @@
 }
 
 .text-green {
-    color: var(--color-green);
+    color: var(--color-green) !important;
+}
+.text-orange {
+    color: var(--color-orange) !important;
 }
 .text-red {
     color: var(--color-red) !important;
+}
+.text-blue {
+    color: var(--color-blue) !important;
 }
 .text-saffron {
     color: var(--color-deep-orange) !important;
@@ -107,11 +118,13 @@
 @include theme(default) {
     .bg-grey {
         background-color: var(--color-light-gray) !important;
+        color: var(--color-black);
     }
 }
 @include theme(dark) {
     .bg-grey {
         background-color: var(--theme-primary-light) !important;
+        color: var(--color-black);
     }
 }
 .bg-transparent {
@@ -120,6 +133,15 @@
 }
 .bg-white {
     background: var(--color-white) !important;
+}
+.bg-black {
+    background: var(--color-black) !important;
+}
+.bg-warning {
+    background: var(--color-warm-orange-light) !important;
+}
+.bg-table-background-color {
+    background: var(--table-background-color) !important;
 }
 .custom-keyboard-dropdown-list-focus {
     background-color: var(--theme-primary-light);
@@ -160,6 +182,12 @@
     overflow: hidden;
     white-space: nowrap;
 }
+
+.word-wrap {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+}
+
 .text-wrap {
     text-wrap: wrap;
 }
@@ -240,12 +268,12 @@
     &::after {
         display: block;
         clear: both;
-        content: "";
+        content: '';
     }
 }
 
 .width-100 {
-    width: 100% !important;
+    width: 100px !important;
 }
 .width-60 {
     width: 60px !important;
@@ -308,6 +336,10 @@
 }
 .full-viewport-height {
     height: calc(100vh - var(--header-height));
+}
+
+.custom-mat-form-field-height {
+    height: var(--custom-mat-form-field-height) !important;
 }
 
 .d-inline-grid {
@@ -387,7 +419,8 @@
         visibility: hidden;
     }
     &.hover-trigger--active,
-    &:hover {
+    &:hover,
+    &:focus-within {
         .hover-target {
             visibility: visible;
         }
@@ -426,4 +459,13 @@
 }
 .table-layout-fixed {
     table-layout: fixed !important;
+}
+.table-border-collapse {
+    border-collapse: collapse !important;
+}
+.table-border-separate {
+    border-collapse: separate !important;
+}
+.box-shadow {
+    box-shadow: var(--mat-menu-box-shadow) !important;
 }

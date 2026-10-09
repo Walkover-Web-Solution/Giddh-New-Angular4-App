@@ -1,8 +1,9 @@
 import { CompanyResponse } from "apps/web-giddh/src/app/models/api-models/Company";
-import { Account, ChildGroup } from "apps/web-giddh/src/app/models/api-models/Search";
-import { giddhRoundOff } from "apps/web-giddh/src/app/shared/helpers/helperFunctions";
+import { Account, ChildGroup, ClosingBalance } from "apps/web-giddh/src/app/models/api-models/Search";
 import { RecTypePipe } from "apps/web-giddh/src/app/shared/helpers/pipes/recType/recType.pipe";
 import { Total } from "../trial-balance/export-csv/export-csv.component";
+import { forEach, keys, slice } from '../../../../lodash-optimized';
+import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 
 
 export interface IFormatable {
@@ -34,8 +35,8 @@ export class DataFormatter {
         header = `${this.selectedCompany?.name ?? ''}\r\n"${this.selectedCompany?.address ?? ''}"\r\n${this.selectedCompany?.city ?? ''}${this.selectedCompany?.pincode ? '-' : ''}${this.selectedCompany?.pincode ?? ''}\r\n${localeData?.csv.trial_balance.trial_balance} ${fromDate ?? ''} ${localeData?.csv.trial_balance.to} ${toDate ?? ''}\r\n`;
         csv += `${header}\r\n${title}`;
 
-        this.exportData.forEach(obj => {
-            const balanceObj = obj.closingBalance[Object.keys(obj.closingBalance)[0]];
+        (Array.isArray(this.exportData) ? this.exportData : []).forEach(obj => {
+            const balanceObj = obj.closingBalance as ClosingBalance;
             row += `${obj.groupName} (${obj?.uniqueName}),${obj.forwardedBalance?.amount} ${this.recType.transform(obj.forwardedBalance)}, ${obj.debitTotal},${obj.creditTotal}, ${balanceObj?.amount} ${this.recType.transform(balanceObj)}\r\n`;
             total = this.calculateTotal(obj, total);
         });
@@ -56,7 +57,7 @@ export class DataFormatter {
         createCsv = (groups: ChildGroup[]) => {
             const addRow = (group: ChildGroup) => {
                 if (group.accounts?.length > 0) {
-                    group.accounts.forEach(account => {
+                    (Array.isArray(group.accounts) ? group.accounts : []).forEach(account => {
                         if (account) {
                             let data1 = [];
                             let name = `${this.firstCapital(account.name)} (${this.firstCapital(group.groupName)})`;
@@ -70,11 +71,11 @@ export class DataFormatter {
                     });
                 }
             };
-            groups.forEach(group => {
+            (Array.isArray(groups) ? groups : []).forEach(group => {
                 if (group.accounts?.length > 0) {
                     addRow(group);
                 }
-                group.childGroups.forEach(childGroup => {
+                (Array.isArray(group.childGroups) ? group.childGroups : []).forEach(childGroup => {
                     if (childGroup.accounts?.length > 0) {
                         addRow(childGroup);
                     }
@@ -105,7 +106,7 @@ export class DataFormatter {
         };
         formatable.setHeader(this.selectedCompany);
         const createCsv = (groupDetails: ChildGroup[], index) => {
-            groupDetails.forEach(group => {
+            (Array.isArray(groupDetails) ? groupDetails : []).forEach(group => {
                 let i;
                 let j;
                 let ref;
@@ -115,23 +116,23 @@ export class DataFormatter {
                     strIndex += 3;
                 }
                 const key = Object.keys(group.closingBalance)[0];
-                if (group.closingBalance[key].amount !== 0) {
+                if (group.closingBalance[key] !== 0) {
                     let data1: any[] = [];
                     data1.push(group.groupName?.toUpperCase());
                     data1.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
                     data1.push(group.debitTotal);
                     data1.push(group.creditTotal);
-                    data1.push(`${group.closingBalance[key].amount} ${this.recType.transform(group.closingBalance[key])}`);
+                    data1.push(`${group.closingBalance[key]} ${this.recType.transform(group.closingBalance[key])}`);
                     formatable.setRowData(data1, strIndex);
                     data1 = [];
                     if (group.accounts?.length > 0) {
-                        group.accounts.forEach(acc => {
+                        (Array.isArray(group.accounts) ? group.accounts : []).forEach(acc => {
                             if (acc) {
                                 data1.push(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`);
                                 data1.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
                                 data1.push(acc.debitTotal);
                                 data1.push(acc.creditTotal);
-                                data1.push(`${acc.closingBalance[key].amount}${this.recType.transform(acc.closingBalance[key])}`);
+                                data1.push(`${acc.closingBalance[key]}${this.recType.transform(acc.closingBalance[key])}`);
                                 formatable.setRowData(data1, strIndex);
                                 data1 = [];
                             }
@@ -156,26 +157,25 @@ export class DataFormatter {
     }
 
     public calculateTotal = (group: ChildGroup, total: Total, decimalPlaces?: number): Total => {
-        const key = Object.keys(group.closingBalance)[0];
 
         if (group.forwardedBalance.type === 'DEBIT') {
             total.ob = total.ob + group.forwardedBalance.amount;
         } else {
             total.ob = total.ob - group.forwardedBalance.amount;
         }
-        if (group.closingBalance[key].type === 'DEBIT') {
-            total.cb = total.cb + group.closingBalance[key].amount;
+        if (group.closingBalance.type === 'DEBIT') {
+            total.cb = total.cb + (group.closingBalance as ClosingBalance).amount;
         } else {
-            total.cb = total.cb - group.closingBalance[key].amount;
+            total.cb = total.cb - (group.closingBalance as ClosingBalance).amount;
         }
 
         total.cr += group.creditTotal;
         total.dr += group.debitTotal;
         if (decimalPlaces) {
-            total.cr = giddhRoundOff(total.cr, decimalPlaces);
-            total.dr = giddhRoundOff(total.dr, decimalPlaces);
-            total.ob = giddhRoundOff(total.ob, decimalPlaces);
-            total.cb = giddhRoundOff(total.cb, decimalPlaces);
+            total.cr = this.generalService.roundOffValueByCompanyDecimalPlace(total.cr, decimalPlaces);
+            total.dr = this.generalService.roundOffValueByCompanyDecimalPlace(total.dr, decimalPlaces);
+            total.ob = this.generalService.roundOffValueByCompanyDecimalPlace(total.ob, decimalPlaces);
+            total.cb = this.generalService.roundOffValueByCompanyDecimalPlace(total.cb, decimalPlaces);
         }
 
         return total;
@@ -189,14 +189,14 @@ export class DataFormatter {
      * @memberof DataFormatter
      */
     public calculateGrandTotal(total): Total {
-        this.exportData.forEach(group => {
+        (Array.isArray(this.exportData) ? this.exportData : []).forEach(group => {
             total = this.calculateTotal(group, total);
         });
 
-        total.cr = giddhRoundOff(total.cr, 2);
-        total.dr = giddhRoundOff(total.dr, 2);
-        total.ob = giddhRoundOff(total.ob, 2);
-        total.cb = giddhRoundOff(total.cb, 2);
+        total.cr = this.generalService.roundOffValueByCompanyDecimalPlace(total.cr, 2);
+        total.dr = this.generalService.roundOffValueByCompanyDecimalPlace(total.dr, 2);
+        total.ob = this.generalService.roundOffValueByCompanyDecimalPlace(total.ob, 2);
+        total.cb = this.generalService.roundOffValueByCompanyDecimalPlace(total.cb, 2);
 
         return total;
     }
@@ -213,7 +213,8 @@ export class DataFormatter {
 
     constructor(private exportData: ChildGroup[],
         private selectedCompany: CompanyResponse,
-        private recType: RecTypePipe) {
+        private recType: RecTypePipe,
+        private generalService: GeneralService) {
 
     }
 

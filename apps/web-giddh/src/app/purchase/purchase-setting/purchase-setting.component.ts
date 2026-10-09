@@ -17,11 +17,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { ServiceConfig } from '../../services/service.config';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'purchase-setting',
     templateUrl: './purchase-setting.component.html',
-    styleUrls: ['./purchase-setting.component.scss']
+    styleUrls: ['./purchase-setting.component.scss'],
+    standalone: false
 })
 
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
@@ -56,10 +58,10 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /** Stores the voucher API version of company */
     public voucherApiVersion: number;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private dialog: MatDialog, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
+    constructor(@Inject(ServiceConfig) private serviceConfig, private store: Store<AppState>, private dialog: MatDialog, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
 
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID));
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
 
@@ -103,7 +105,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public initSettings(): void {
         this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
-                this.invoiceSettings = _.cloneDeep(response.body);
+                this.invoiceSettings = cloneDeep(response.body);
 
                 if (!this.invoiceSettings.purchaseBillSettings.enableVoucherDownload) {
                     this.invoiceSettings.purchaseBillSettings.enableVoucherDownload = false;
@@ -117,7 +119,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
                     this.invoiceSettings.invoiceSettings.generateAutoPurchaseNumber = false;
                 }
 
-                this.originalEmail = _.cloneDeep(this.invoiceSettings.purchaseBillSettings.email);
+                this.originalEmail = cloneDeep(this.invoiceSettings.purchaseBillSettings.email);
 
                 if (this.invoiceSettings.purchaseBillSettings.lockDate) {
                     this.lockDate = dayjs(this.invoiceSettings.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
@@ -145,7 +147,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public updateForm(): void {
-        let formToSave = _.cloneDeep(this.invoiceSettings);
+        let formToSave = cloneDeep(this.invoiceSettings);
 
         if (formToSave.purchaseBillSettings.lockDate instanceof Date) {
             formToSave.purchaseBillSettings.lockDate = dayjs(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
@@ -239,8 +241,8 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string): void {
         const dataToSave = {
             code: authCode,
-            client_secret: GOOGLE_CLIENT_SECRET,
-            client_id: GOOGLE_CLIENT_ID,
+            client_secret: (this.serviceConfig.GOOGLE_CLIENT_SECRET || GOOGLE_CLIENT_SECRET),
+            client_id: (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID),
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl()
         };
@@ -264,7 +266,9 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public getRedirectUrl(): string {
-        return (this.serviceConfig.AppUrl || AppUrl) + 'pages/purchase-management/purchase/settings';
+        const baseUrl = (this.serviceConfig.AppUrl || AppUrl);
+        const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
+        return normalizedBaseUrl + 'pages/purchase-management/purchase/settings';
     }
 
     /**

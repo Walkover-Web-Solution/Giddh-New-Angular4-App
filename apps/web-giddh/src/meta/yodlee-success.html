@@ -34,70 +34,77 @@
     </div>
 
     <div class="copy-right">
-        <p>
-            All right are reserved &copy; 2020 Walkover <a [href]="giddhDomainUrl" target="_Blank">{{ domainName }}</a>
+        <p id="copyright-text">
+            All right are reserved &copy;
+            <span id="year"></span>
+            <span id="legal-name"></span>
+            <a href="/" target="_blank"></a>
         </p>
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="../assets/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-    var companyUniqueName = getQueryStringValue("companyUniqueName");
-    const whiteLabel = this.generalService.getDecodedWhiteLabel();
-    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
-    var domainName = whiteLabel?.giddhWhiteLabel?.domainName || "Giddh.com";
-    var search = "";
-    var status = getQueryStringValue("status");
-    var JSONcallBackStatus = getQueryStringValue("JSONcallBackStatus");
+    function getWhiteLabelData() {
+        try {
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    var companyUniqueName = getQueryStringValue('companyUniqueName');
+    const whiteLabel = getWhiteLabelData();
+    const GIDDH_DOMAINS = ['localhost', 'test.giddh.com', 'books.giddh.com'];
+    const isGiddhDomain = GIDDH_DOMAINS.includes(window.location.hostname);
+    const legalName = whiteLabel?.legalName || (isGiddhDomain ? 'Walkover Web Solutions Private Limited' : '');
+    var domainName = whiteLabel?.giddhWhiteLabel?.domainName || (isGiddhDomain ? 'Giddh.com' : '');
+    const currentYear = new Date().getFullYear();
+    var search = '';
+    var status = getQueryStringValue('status');
+    var JSONcallBackStatus = getQueryStringValue('JSONcallBackStatus');
     if (JSONcallBackStatus) {
         var response = JSON.parse(JSONcallBackStatus);
     }
 
     function getApi() {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
+        const whiteLabel = getWhiteLabelData();
         if (whiteLabel) {
             apiBaseUrl = `${whiteLabel?.giddhWhiteLabel?.apiDomain}/`;
         } else {
             switch (window.location.hostname) {
-                case "localhost":
-                case "dev.giddh.com":
-                    apiBaseUrl = "https://apidev.giddh.com/";
+                case 'localhost':
+                    apiBaseUrl = 'https://apitest.giddh.com/';
                     break;
-                case "test.giddh.com":
-                    apiBaseUrl = "https://apitest.giddh.com/";
+                case 'test.giddh.com':
+                    apiBaseUrl = 'https://apitest.giddh.com/';
                     break;
-                case "stage.giddh.com":
-                    apiBaseUrl = "https://apitest.giddh.com/";
+                case 'stage.giddh.com':
+                    apiBaseUrl = 'https://apitest.giddh.com/';
                     break;
-                case "books.giddh.com":
-                    apiBaseUrl = "https://api.giddh.com/";
+                case 'books.giddh.com':
+                    apiBaseUrl = 'https://api.giddh.com/';
                     break;
                 default:
-                    apiBaseUrl = "https://api.giddh.com/";
+                    apiBaseUrl = 'https://api.giddh.com/';
             }
         }
         return apiBaseUrl;
     }
 
     function postCallBackData() {
-        var paramToSend = "JSONcallBackStatus" + window.location.search.split("JSONcallBackStatus")[1];
-        $.get(
-            apiBaseUrl + "company/" + companyUniqueName + "/yodlee/call-back?" + paramToSend,
-            function (data, status) {
-                console.log("Account Added Successfully");
-            }
-        );
+        var paramToSend = 'JSONcallBackStatus' + window.location.search.split('JSONcallBackStatus')[1];
+        $.get(apiBaseUrl + 'company/' + companyUniqueName + '/yodlee/call-back?' + paramToSend, function (data, status) {
+            console.log('Account Added Successfully');
+        });
     }
 
     function getQueryStringValue(key) {
         return decodeURIComponent(
             window.location.search.replace(
-                new RegExp(
-                    "^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$",
-                    "i"
-                ),
-                "$1"
+                new RegExp('^(?:.*[&\\?]' + encodeURIComponent(key).replace(/[\.\+\*]/g, '\\$&') + '(?:\\=([^&]*))?)?.*$', 'i'),
+                '$1'
             )
         );
     }
@@ -105,19 +112,23 @@
     getApi();
 
     $(document).ready(function () {
-        var apiBaseUrl = "";
-        $("#failed").hide();
-        $("#success").hide();
-        // Would write the value of the QueryString-variable called name to the console
+        var apiBaseUrl = '';
+
+        // Update DOM elements with white-label data
+        document.getElementById('year').textContent = currentYear;
+        document.getElementById('legal-name').textContent = legalName;
+        document.getElementById('domain-link').textContent = domainName;
+
+        $('#failed').hide();
+        $('#success').hide();
 
         if (!JSONcallBackStatus) {
-            $("#failed").show();
-            $("#success").hide();
+            $('#failed').show();
+            $('#success').hide();
         } else {
             postCallBackData();
-            $("#success").show();
-            $("#failed").hide();
+            $('#success').show();
+            $('#failed').hide();
         }
-        // status.find()
     });
 </script>

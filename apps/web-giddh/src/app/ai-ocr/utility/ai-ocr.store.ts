@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { ComponentStore } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { AppState } from "../../store";
@@ -37,7 +37,9 @@ export const DEFAULT_AI_OCR_VOUCHER_STATE: AiOcrState = {
     ocrExtractDocumentsInProgress: null,
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy {
     constructor(
         private toasterService: ToasterService,
@@ -99,7 +101,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
             switchMap((req) => {
                 this.patchState({ ocrList: [], ocrListInProgress: true });
                 return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model, req?.ocrType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
                                 return this.patchState({
@@ -138,7 +140,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
             switchMap((req) => {
                 this.patchState({ ocrMainList: [], ocrMainListInProgress: true });
                 return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model, req?.ocrType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
                                 return this.patchState({
@@ -177,7 +179,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
             switchMap((req) => {
                 this.patchState({ ocrUploadInProgress: true, ocrUploadSuccess: null });
                 return this.aiOcrService.uploadOcrDocument(req?.fileName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
                                 return this.patchState({
@@ -216,7 +218,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
             switchMap((req) => {
                 this.patchState({ ocrImportInProgress: true, ocrImportSuccess: null });
                 return this.aiOcrService.importOcrDocument(req?.signedUrlResponse, req?.ocrType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
                                 this.toasterService.showSnackBar("success", res?.body?.message);
@@ -256,7 +258,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
             switchMap((ocrType) => {
                 this.patchState({ ocrCompletedCount: null, ocrCompletedCountInProgress: true });
                 return this.aiOcrService.getCompletedCount(ocrType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
                                 return this.patchState({
@@ -295,7 +297,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
             switchMap((req) => {
                 this.patchState({ ocrExtractDocumentsInProgress: true, ocrExtractDocuments: undefined });
                 return this.aiOcrService.getExtractDocuments(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
                                 return this.patchState({

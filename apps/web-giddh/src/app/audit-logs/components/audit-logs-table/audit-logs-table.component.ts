@@ -3,14 +3,15 @@ import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
-import { cloneDeep } from '../../../lodash-optimized';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { AppState } from '../../../store/roots';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'audit-logs-table',
     templateUrl: './audit-logs-table.component.html',
-    styleUrls: ['audit-logs-table.component.scss']
+    styleUrls: ['audit-logs-table.component.scss'],
+    standalone: false
 })
 export class AuditLogsTableComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */

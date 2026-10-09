@@ -1,0 +1,22 @@
+// App Component Styles
+.app-wrapper {
+    height: 100vh;
+    width: 100%;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+// Placeholder styles for app component
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+}

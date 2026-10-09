@@ -19,6 +19,7 @@ export class ITaxControlData {
     public amount?: number;
     public isChecked?: boolean;
     public isDisabled?: boolean;
+    public taxType?: string;
     public type?: string;
     public calculationMethod?: string;
 }

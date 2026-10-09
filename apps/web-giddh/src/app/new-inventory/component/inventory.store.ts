@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { AppState } from "../../store";
 import { InventoryService } from "../../services/inventory.service";
 import { catchError, EMPTY, mergeMap, Observable, of, switchMap } from "rxjs";
@@ -12,6 +13,7 @@ import { SettingsDiscountService } from "../../services/settings.discount.servic
 import { CommonService } from '../../services/common.service';
 import { LedgerService } from "../../services/ledger.service";
 import { CustomFieldsService } from "../../services/custom-fields.service";
+import { map } from '../../lodash-optimized';
 
 export interface InventoryState {
     isLoading: boolean;
@@ -35,7 +37,9 @@ const DEFAULT_STATE: InventoryState = {
     updateInventoryVariantSuccess:null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class InventoryComponentStore extends ComponentStore<any> {
     constructor(
         private store: Store<AppState>,
@@ -69,7 +73,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
             switchMap((req) => {
                 this.patchState({ isLoading: true });
                 return this.inventoryService.getItemWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success" && typeof res?.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -105,7 +109,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
             switchMap((req) => {
                 this.patchState({ isLoading: true });
                 return this.inventoryService.getVariantWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success" && typeof res?.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -142,7 +146,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
             switchMap((req) => {
                 this.patchState({ isLoading: true });
                 return this.inventoryService.getGroupWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success" && typeof res?.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -179,7 +183,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
             switchMap((req) => {
                 this.patchState({ isLoading: true });
                 return this.inventoryService.getTransactionReportExport(req.queryParams, req.stockReportRequest).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success" && typeof res?.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -215,7 +219,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
         return data.pipe(
             switchMap(() => {
                 return this.settingsDiscountService.GetDiscounts().pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             const discounts = res?.body?.map(discount => {
                                 discount['label'] = discount?.name;
@@ -248,7 +252,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
             switchMap((req) => {
                 this.patchState({ uploadAttachmentInProgress: true, uploadAttachmentIsSuccess: null });
                 return this.commonService.uploadFile(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({ uploadAttachmentInProgress: false, uploadAttachmentIsSuccess: res?.body });
@@ -281,7 +285,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
             switchMap((req) => {
                 this.patchState({ downloadAttachmentInProgress: true, previewAttachmentIsSuccess: null });
                 return this.ledgerService.downloadAttachement(req?.uniqueName, req?.type).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({ downloadAttachmentInProgress: false, previewAttachmentIsSuccess: res?.body });
@@ -330,7 +334,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
             switchMap((req) => {
                 this.patchState({ customFieldsSuccess: null });
                 return this.customFieldsService.list(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res && res.status === "success") {
                                 return this.patchState({ customFieldsSuccess: res.body?.results });
@@ -362,7 +366,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
             mergeMap((req) => {
                 this.patchState({ updateInventoryVariantSuccess: null });
                 return this.inventoryService.updateInventoryVariant(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res && res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);

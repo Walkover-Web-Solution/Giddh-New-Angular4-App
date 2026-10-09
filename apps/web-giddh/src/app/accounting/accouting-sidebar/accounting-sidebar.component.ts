@@ -2,13 +2,14 @@ import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { IPageInfo, TallyModuleService } from './../tally-service';
 import { ReplaySubject } from 'rxjs';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
-import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
+import { isEqual } from '../../lodash-optimized';
 import { VOUCHERS } from '../constants/accounting.constant';
 
 @Component({
     selector: 'accounting-sidebar',
     templateUrl: './accounting-sidebar.component.html',
-    styleUrls: ['./accounting-sidebar.component.scss']
+    styleUrls: ['./accounting-sidebar.component.scss'],
+    standalone:false
 })
 
 export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy {
@@ -31,11 +32,11 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     @Output() public showDiscountEvent: EventEmitter<boolean> = new EventEmitter();
     /** Emits the show tax event  */
     @Output() public showTaxEvent: EventEmitter<boolean> = new EventEmitter();
-    /** Hold sales entry event  */
-    @Input() public salesEntry: boolean;
+    /** Hold show discount and tax event  */
+    @Input() public showDiscountAndTax: boolean;
 
     constructor(private _tallyModuleService: TallyModuleService) {
-        //
+        this.setSelectedPage('Contra', 'voucher', 'purchases');
     }
 
     public ngOnInit() {

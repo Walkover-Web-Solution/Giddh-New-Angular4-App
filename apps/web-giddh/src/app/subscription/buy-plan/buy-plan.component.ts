@@ -1,14 +1,14 @@
 import { ViewSubscriptionComponentStore } from './../view-subscription/utility/view-subscription.store';
-import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild, computed, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
+import { StripePaymentDialogComponent, StripePaymentDialogData } from './stripe-payment-dialog/stripe-payment-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, delay, take } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, delay, take, filter, Subject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SubscriptionsService } from '../../services/subscriptions.service';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -23,25 +23,41 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { Configuration, IOption, PaymentProvider } from '../../app.constant';
+import { EntityCode, IOption, PaymentProvider, PlanDuration, STRIPE_JS_CDN_URL } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { SessionState } from '../../store/authentication/authentication.reducer';
+
+/** Enum for advance payment dialog actions */
+enum AdvancePaymentDialogAction {
+    BuyNextCycle = 'buy_next_cycle',
+    BuyCurrentCycle = 'buy_current_cycle',
+    Close = 'close'
+}
 
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
     styleUrls: ['./buy-plan.component.scss'],
-    providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore, SubscriptionComponentStore]
+    providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore, SubscriptionComponentStore],
+    standalone:false
 })
 
 export class BuyPlanComponent implements OnInit, OnDestroy {
+    /** Enum for advance payment dialog actions */
+    public readonly AdvancePaymentDialogAction = AdvancePaymentDialogAction;
     /** Stepper Form instance */
     @ViewChild('stepper') stepperIcon: any;
     /** This will use for table content scroll in mobile */
     @ViewChild('tableContent', { read: ElementRef }) public tableContent: ElementRef<any>;
     /** Holds Country list Mat Trigger Reference  */
     @ViewChild('countryList', { static: false }) public countryList: MatSelect;
+    /** Stripe Payment Element container reference */
+    @ViewChild('stripePaymentElement') public stripePaymentElementRef: ElementRef;
+    /** Advance payment dialog template reference */
+    @ViewChild('advancePaymentDialog') advancePaymentDialogTemplate: any;
     /** This will use for hold table data */
-    public inputData: any[] = [];
+    public inputData: any[] | null = null;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -50,8 +66,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public subscriptionForm: FormGroup;
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True when a Stripe failure redirect is awaiting translation data before showing the toast */
+    private pendingStripeFailureToast: boolean = false;
     /** Hold selected tab */
-    public selectedStep: number = 0;
+    public selectedStep = signal<number>(0);
     /** Form Group for subscription first step form form */
     public firstStepForm: FormGroup;
     /** Form Group for subscription second step form */
@@ -90,8 +108,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public createSubscriptionResponse$: Observable<any> = this.componentStore.select(state => state.createSubscriptionResponse);
     /** Holds Store Change plan API response state as observable*/
     public updatePlanSuccess$: Observable<any> = this.componentStore.select(state => state.updatePlanSuccess);
-    /** Mobile number library instance */
-    public intlClass: any;
     /** This will hold onboarding api form request */
     public onboardingFormRequest: OnboardingFormRequest = { formName: '', country: '' };
     /** Holds company specific data */
@@ -108,12 +124,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         addresses: null,
         giddhBalanceDecimalPlaces: 2
     };
-    /** True if form is submitted to show error if available */
-    public isFormSubmitted: boolean = false;
+    /** Signal to track if form is submitted to show error if available */
+    public isFormSubmitted = signal<boolean>(false);
     /** Hold selected plan*/
-    public selectedPlan: any;
+    public selectedPlan = signal<any>(null);
+    /** Signal to track advance payment dialog step */
+    public advancePaymentDialogStep = signal<number>(0);
+    /** Dialog reference for advance payment confirmation */
+    private advancePaymentDialogRef: MatDialogRef<any> | null = null;
     /** Hold session source observable*/
-    public session$: Observable<userLoginStateEnum>;
+    public session$: Observable<SessionState>;
     /** Hold state source observable*/
     public stateSource$: Observable<IOption[]> = observableOf([]);
     /** Hold country source*/
@@ -156,6 +176,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** True if it is change plan */
     public isChangePlan: boolean = false;
+    /** Holds subscription type from route (change-plan, activate-subscription, advance-payment) */
+    public subscriptionType: string = '';
     /** Holds Store Get Billing Details observable*/
     public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
     /** True if it have billing details */
@@ -216,12 +238,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public paypalCaptureOrderId: any = '';
     /** Holds Store Paypal Order Id Success observable*/
     public paypalCaptureOrderIdSuccess$: Observable<boolean> = this.componentStore.select(state => state.paypalCaptureOrderIdSuccess);
-    /** Hold filtered payment providers */
-    public filteredPaymentProviders: any[] = [];
-    /** Hold all payment providers */
-    public allPaymentProviders: any[] = [];
+    /** Hold filtered payment provider IDs */
+    public filteredPaymentProviders: string[] = [];
+    /** Hold all payment provider IDs */
+    public allPaymentProviders: string[] = [];
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
+    /** Broadcast channel to sync stripe payment success across multiple open tabs */
+    private stripePaymentSuccessBroadcast: BroadcastChannel | null = null;
     /** Hold callback event */
     public callBackEvent: boolean = false;
     /** Hold create subscription success event */
@@ -233,14 +257,66 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public maxRazorpayRetryCount: number = 3;
     /** Hold payment provider */
     public paymentProvider: typeof PaymentProvider = PaymentProvider;
+    /** Hold plan duration constant reference for template usage */
+    public readonly planDuration: typeof PlanDuration = PlanDuration;
+    /** Signal holding the currently selected plan duration value */
+    protected readonly selectedDuration = signal<string>('');
+    /** Computed signal: true when selected duration is MONTHLY */
+    protected readonly isMonthly = computed(() => this.selectedDuration() === PlanDuration.MONTHLY);
+    /** Computed signal: true when selected duration is YEARLY */
+    protected readonly isYearly = computed(() => this.selectedDuration() === PlanDuration.YEARLY);
+    /** Computed signal: true when selected duration is DAILY */
+    protected readonly isDaily = computed(() => this.selectedDuration() === PlanDuration.DAILY);
+    /** Computed signal: true when selected plan entity code is IND */
+    protected readonly isIndian = computed(() => this.selectedPlan()?.entityCode === EntityCode.IND);
+    /** Hold entity code constant reference for template usage */
+    public readonly entityCode: typeof EntityCode = EntityCode;
     /** This will hold razorpay key */
     public razorpayKey: string = '';
+    /** This will hold stripe key */
+    public stripeKey: string = '';
+    /** Stripe instance */
+    public stripe: any;
+    /** Stripe elements instance */
+    public stripeElements: any;
+    /** Holds stripe client secret */
+    public stripeClientSecret: string = '';
+    /** True if stripe payment dialog is open */
+    public showStripePaymentElement: boolean = false;
+    /** True if stripe payment is in progress */
+    public stripePaymentInProgress: boolean = false;
+    /** Stripe error message */
+    public stripeError: string = '';
+    /** Reference to the open Stripe payment dialog */
+    private stripeDialogRef: MatDialogRef<StripePaymentDialogComponent> | null = null;
+    /** Holds store save stripe payment success observable */
+    public saveStripePaymentSuccess$: Observable<any> = this.componentStore.select(state => state.saveStripePaymentSuccess);
+    /** Holds store save stripe payment success observable */
+    public saveStripePaymentInProgress$: Observable<any> = this.componentStore.select(state => state.saveStripePaymentInProgress);
     /** True if promo code is removed */
     public removePromoCode: boolean = false;
+    /** True when page was loaded after a Stripe payment failure redirect */
+    private restoringFromStripeFailure: boolean = false;
+    /** Holds the duration value restored from sessionStorage during Stripe failure recovery */
+    private restoredDuration: string = '';
     /** Hold true in production environment */
-    public isProdMode: boolean = PRODUCTION_ENV;
+    public isProdMode: boolean = environment.PRODUCTION_ENV;
     /** This will hold option selected state */
     public optionSelected: boolean = false;
+    /** Holds user information  by user ip */
+    private detectUserInfoByIp: any = {}
+    /** true if cancel subscription reactivate. */
+    public activateSubscription: boolean = false;
+    /** true if advance payment. */
+    public isAdvancePayment: boolean = false;
+    /** true if . */
+    public activateAdvancePaymentSuccess$: Observable<boolean> = this.componentStore.select(state => state.activateAdvancePaymentSuccess);
+    /** true if user have at leate one Company. */
+    public atLeatOneCompany: boolean = false;
+    /** after success redirection url for advance payment */
+    public afterSuccessRedirectionUrl: string = '';
+    /** True if plan should be purchased for next billing cycle */
+    public includeNextBill: boolean | null = null;
 
     constructor(
         public dialog: MatDialog,
@@ -260,12 +336,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private location: Location,
         private elementRef: ElementRef,
         private viewSubscriptionComponentStore: ViewSubscriptionComponentStore,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig
     ) {
-        this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
+        this.session$ = this.store.pipe(select(p => p.session), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
-        this.razorpayKey = this.serviceConfig.RAZORPAY_KEY || Configuration.RAZORPAY_KEY;
+        this.razorpayKey = this.serviceConfig.RAZORPAY_KEY;
+        this.stripeKey = this.serviceConfig.STRIPE_PUBLISHABLE_KEY;
     }
 
     /**
@@ -283,12 +360,45 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.getCompanyProfile();
         this.getOnboardingFormData();
         this.getActiveCompany();
+        this.setUserCountry();
+
+        // Handle Stripe redirect return
+
+        const queryParamMap = this.route.snapshot.queryParamMap;
+        const redirectSecret = queryParamMap.get('payment_intent_client_secret') || queryParamMap.get('setup_intent_client_secret');
+        const redirectIntentId = queryParamMap.get('payment_intent') || queryParamMap.get('setup_intent');
+        const redirectStatus = queryParamMap.get('redirect_status');
+
+        // Listen for stripe payment completion (success or failure) from any other open tab
+        // so the loader does not get stuck on this tab when the flow finished elsewhere.
+        // Initialize before redirect handlers so they can post messages on this channel.
+        this.stripePaymentSuccessBroadcast = new BroadcastChannel('stripe-payment-success');
+        this.stripePaymentSuccessBroadcast.onmessage = (event) => {
+            if (event?.data) {
+                this.isLoading = false;
+                this.componentStore.patchState({ saveStripePaymentInProgress: false });
+                this.changeDetection.detectChanges();
+            }
+        };
+
+        if (redirectStatus === 'failed') {
+            this.handleStripeRedirectFailure();
+        } else if (redirectSecret && redirectIntentId) {
+            this.handleStripeRedirectReturn(redirectSecret, redirectIntentId);
+        }
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params?.id) {
                 this.subscriptionId = params.id;
+                this.subscriptionType = params?.type || '';
+                if (params?.type === 'advance-payment') {
+                    this.isAdvancePayment = true;
+                } else if (params?.type === 'buy-plan') {
+                    this.isChangePlan = true;
+                } else if (params?.type === 'activate-subscription') {
+                    this.activateSubscription = true;
+                }
                 this.viewSubscriptionComponentStore.viewSubscriptionsById(this.subscriptionId);
-                this.isChangePlan = true;
             }
         });
 
@@ -298,29 +408,80 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             } else if (queryParams?.trial) {
                 this.isTrialPlan = true;
             }
+            if (queryParams?.redirectUrl) {
+                this.afterSuccessRedirectionUrl = queryParams?.redirectUrl;
+            }
         });
 
         this.razorpaySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.subscriptionId && this.isChangePlan) {
-                    this.router.navigate(['/pages/user-details/subscription']);
+                if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
+                    this.navigateToRoute('/pages/user-details/subscription');
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
-                };
+                    this.navigateToNewCompany(this.subscriptionId);
+                }
+            }
+        });
+
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.atLeatOneCompany = response?.length >= 1;
+            }
+        });
+
+        this.activateAdvancePaymentSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                // Refresh profile only when the advance payment applies to the
+                // company's currently active subscription.
+                if (this.activeCompany?.subscription?.subscriptionId && this.activeCompany.subscription.subscriptionId === this.subscriptionId) {
+                    this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                }
+                if (this.afterSuccessRedirectionUrl) {
+                    this.router.navigate([this.afterSuccessRedirectionUrl]);
+                } else {
+                    this.router.navigate(['/pages/user-details/subscription']);
+                }
+            }
+        });
+
+        this.saveStripePaymentSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
+                const isChangePlanSession = sessionStorage.getItem('stripe_is_change_plan') === 'true';
+                sessionStorage.removeItem('stripe_subscription_id');
+                sessionStorage.removeItem('stripe_payment_intent_id');
+                sessionStorage.removeItem('stripe_is_change_plan');
+                sessionStorage.removeItem('stripe_subscription_request');
+                sessionStorage.removeItem('stripe_duration');
+                sessionStorage.removeItem('stripe_plan_unique_name');
+                sessionStorage.removeItem('stripe_amount_paid');
+                sessionStorage.removeItem('stripe_subscription_form');
+                sessionStorage.removeItem('stripe_selected_plan');
+                sessionStorage.removeItem('stripe_region_value');
+                sessionStorage.removeItem('stripe_region_label');
+                if (isChangePlanSession || this.isChangePlan || this.isRenewPlan || (this.activateSubscription && this.atLeatOneCompany)) {
+                    this.navigateToRoute('/pages/user-details/subscription');
+                } else {
+                    this.navigateToNewCompany(subscriptionId);
+                }
             }
         });
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                if (this.getStripeClientSecret(response)) {
+                    this.initializeStripePayment(response);
+                    return;
+                }
                 this.setBroadcastEvent();
-                const value = response?.region?.code !== 'IND' ? 1 : response?.duration === 'MONTHLY' ? 1 : 10;
+                const value = response?.region?.code !== EntityCode.IND ? 1 : response?.duration === PlanDuration.MONTHLY ? 1 : 10;
                 if (response.dueAmount >= value) {
                     this.initializePayment(response, 'generateOrderId');
                 } else {
-                    if (this.subscriptionId && this.isChangePlan) {
-                        this.router.navigate(['/pages/user-details/subscription']);
+                    if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
+                        this.navigateToRoute('/pages/user-details/subscription');
                     } else {
-                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                        this.navigateToNewCompany(this.responseSubscriptionId);
                     };
                 }
             }
@@ -339,20 +500,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.firstStepForm?.get('promoCode')?.patchValue(null);
                 }
                 this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
-                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                this.planList$.pipe(filter(Boolean), take(1)).subscribe(result => {
                     if (result) {
-                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                        this.selectedPlan = { ...this.selectedPlan, ...response };
+                        this.selectedPlan.set(result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value));
+                        this.selectedPlan.set({ ...this.selectedPlan(), ...response });
                     }
                 });
             } else {
-                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                this.planList$.pipe(filter(Boolean), take(1)).subscribe(result => {
                     if (result) {
-                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                        this.selectedPlan = { ...this.selectedPlan, ...this.calculationResponse };
+                        this.selectedPlan.set(result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value));
+                        this.selectedPlan.set({ ...this.selectedPlan(), ...this.calculationResponse });
                     }
                 });
             }
+            this.changeDetection.detectChanges();
         });
 
         this.getCountryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -366,10 +528,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.countrySource$ = observableOf(this.countrySource);
-                if (!this.isSubscriptionRegion) {
-                    if (this.countrySource?.length) {
-                        this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
-                    }
+                this.patchCurrentCountryFromSelection();
+                if (this.countrySource.length === 1 && !this.newUserSelectedCountryValue) {
+                    this.selectFirstPlanFromList();
+                } else {
+                    this.getDefaultPlan();
+                    setTimeout(() => {
+                        this.countryList?.open();
+                    }, 400);
                 }
             } else {
                 let countryRequest = new CountryRequest();
@@ -388,6 +554,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.commonCountrySource$ = observableOf(this.commonCountrySource);
+                this.patchCurrentCountryFromSelection();
+                if (this.detectUserInfoByIp?.alpha2CountryCode) {
+                    const countryObject = this.commonCountrySource.find(item => item.label.includes(this.detectUserInfoByIp.alpha2CountryCode));
+                    if (countryObject) {
+                        this.selectCountry(countryObject);
+                        this.selectedCountry = countryObject.label;
+                    }
+                }
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -395,8 +569,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
+        this.secondStepForm.get('country.code').valueChanges.pipe(debounceTime(500), filter(Boolean), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                let statesRequest = new StatesRequest();
+                statesRequest.country = response;
+                this.store.dispatch(this.generalActions.getAllState(statesRequest));
+            }
+        });
+
+        this.session$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isNewUserLoggedIn = response.userLoginState === userLoginStateEnum.newUserLoggedIn;
             if (!this.isNewUserLoggedIn) {
                 this.getBillingDetails();
                 this.getBillingDetails$.pipe(delay(1000), takeUntil(this.destroyed$)).subscribe(data => {
@@ -413,16 +595,29 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     }
                 });
             }
+            const userInfo = response?.user?.user;
+            if (userInfo && !userInfo.hasSubscriptionPermission) {
+                if (userInfo?.name !== userInfo?.email) {
+                    this.secondStepForm.get("billingName").patchValue(userInfo.name);
+                }
+                this.secondStepForm.get("email").patchValue(userInfo.email || "");
+                this.secondStepForm.get("mobileNumber").patchValue(userInfo.contactNo || "");
+            }
+
         });
 
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
-                const model = {
-                    orderId: this.paypalCaptureOrderId,
-                    subscriptionId: this.subscriptionId
+                if (this.isAdvancePayment) {
+                    this.saveAdvancePayment({ paypalOrderId: this.paypalCaptureOrderId });
+                } else {
+                    const model = {
+                        orderId: this.paypalCaptureOrderId,
+                        subscriptionId: this.subscriptionId
+                    }
+                    this.componentStore.paypalCaptureOrderId(model);
                 }
-                this.componentStore.paypalCaptureOrderId(model);
             }
         };
 
@@ -447,12 +642,25 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
                 this.subscriptionId = response.subscriptionId;
+
+                if (response.dueAmount < 1 && this.isAdvancePayment) {
+                    this.navigateToRoute('/pages/user-details/subscription');
+                    return;
+                }
+                if (this.getStripeClientSecret(response)) {
+                    if (this.payType === 'trial') {
+                        this.navigateToNewCompany(response.subscriptionId);
+                    } else {
+                        this.initializeStripePayment(response);
+                    }
+                    return;
+                }
                 if (response?.paypalOrderId) {
-                    if ((response?.duration === 'MONTHLY' || response?.duration === 'DAILY')) {
+                    if ((response?.duration === PlanDuration.MONTHLY || response?.duration === PlanDuration.DAILY)) {
                         if (response?.paypalOrderId && this.payType === 'buy') {
                             this.openWindow(response.paypalApprovalLink);
                         } else {
-                            this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+                            this.navigateToNewCompany(response.subscriptionId);
                         }
                         return;
                     }
@@ -462,26 +670,30 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     if (response?.paypalOrderId && this.payType === 'buy') {
                         this.openWindow(response.paypalApprovalLink);
                     } else {
-                        if ((response?.duration === 'MONTHLY' || response?.duration === 'DAILY') && response?.region?.code !== 'GBR') {
+                        if (this.isAdvancePayment) {
+                            this.initializePayment(response, 'createSubscription');
+                            return;
+                        }
+                        if ((response?.duration === PlanDuration.MONTHLY || response?.duration === PlanDuration.DAILY) && response?.region?.code !== EntityCode.GBR) {
                             if (response.razorpayCustomerId && this.payType === 'buy') {
                                 this.initializePayment(response, 'createSubscription');
                             } else {
-                                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+                                this.navigateToNewCompany(response.subscriptionId);
                             }
                             return;
                         }
                         if (this.subscriptionId && this.isChangePlan) {
-                            this.router.navigate(['/pages/user-details/subscription']);
+                            this.navigateToRoute('/pages/user-details/subscription');
                         } else {
                             if (this.payType === 'trial') {
-                                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+                                this.navigateToNewCompany(response.subscriptionId);
                             } else {
-                                if (((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && response?.region?.code !== 'IND')) {
+                                if (((this.isMonthly() || this.isDaily()) && response?.region?.code !== EntityCode.IND)) {
                                     if (response?.status?.toLowerCase() === 'active') {
-                                        this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
+                                        this.navigateToNewCompany(response?.subscriptionId);
                                     } else {
                                         const model = {
-                                            planUniqueName: response?.planDetails?.uniqueName,
+                                            planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
                                             paymentProvider: this.thirdStepForm.value.paymentProvider,
                                             subscriptionId: response.subscriptionId,
                                             duration: this.firstStepForm.get('duration')?.value,
@@ -489,8 +701,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                         };
                                         this.subscriptionComponentStore.buyPlan(model);
                                     }
-                                } else if (this.firstStepForm.get('duration')?.value === 'YEARLY' && response?.region?.code === 'IND' && response?.status?.toLowerCase() === 'active') {
-                                    this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
+                                } else if (this.isYearly() && response?.region?.code === EntityCode.IND && response?.status?.toLowerCase() === 'active') {
+                                        this.navigateToNewCompany(response?.subscriptionId);
                                 } else {
                                     const reqObj = {
                                         subscriptionId: response?.subscriptionId,
@@ -507,14 +719,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.paypalApprovalLink) {
+            if (this.getStripeClientSecret(response)) {
+                this.initializeStripePayment(response);
+            } else if (response?.paypalApprovalLink) {
                 this.paypalCaptureOrderId = response.paypalOrderId;
                 this.openWindow(response.paypalApprovalLink);
             } else if (response?.redirectLink) {
                 this.goCardLessBillingRequestId = response.goCardLessBillingRequestId;
                 this.openWindow(response.redirectLink);
             } else if (response?.subscriptionId) {
-                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+                this.navigateToNewCompany(response.subscriptionId);
             }
         });
 
@@ -529,10 +743,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // } else {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
-                if (this.subscriptionId && this.isChangePlan) {
-                    this.router.navigate(['/pages/user-details/subscription']);
+                if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
+                    this.navigateToRoute('/pages/user-details/subscription');
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                    this.navigateToNewCompany(this.responseSubscriptionId);
                 };
             }
         });
@@ -541,18 +755,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response) {
                 this.setBroadcastEvent();
                 this.isLoading = false;
-                if (this.subscriptionId && this.isChangePlan) {
-                    this.router.navigate(['/pages/user-details/subscription']);
+                if (this.subscriptionId && (this.isChangePlan || this.activateSubscription&& this.atLeatOneCompany)) {
+                    this.navigateToRoute('/pages/user-details/subscription');
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                    this.navigateToNewCompany(this.subscriptionId);
                 };
             }
         });
 
         window.addEventListener('message', event => {
-            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
+            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan' || this.router.url.startsWith('/pages/user-details/subscription/activate-subscription/' + this.subscriptionId) || this.router.url.startsWith('/pages/user-details/subscription/advance-payment/' + this.subscriptionId)))) {
                 if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
-                    if (this.upgradePlan && this.upgradeRegion === 'GBR') {
+                    if (this.upgradePlan && this.upgradeRegion === EntityCode.GBR) {
                         const reqObj = {
                             subscriptionId: this.upgradeSubscriptionId,
                             billingRequestId: this.goCardLessBillingRequestId
@@ -561,18 +775,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                             if (response) {
                                 if (this.subscriptionId && this.isChangePlan) {
-                                    this.router.navigate(['/pages/user-details/subscription']);
+                                    this.navigateToRoute('/pages/user-details/subscription');
                                 } else {
-                                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                                    this.navigateToNewCompany(this.subscriptionId);
                                 };
                             }
                         });
                     } else {
                         setTimeout(() => {
-                            if (this.subscriptionId && this.isChangePlan) {
-                                this.router.navigate(['/pages/user-details/subscription']);
+                            if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
+                                this.navigateToRoute('/pages/user-details/subscription');
                             } else {
-                                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                                this.navigateToNewCompany(this.subscriptionId);
                             }
                         }, 100);
                     }
@@ -600,13 +814,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeRegion = response?.region?.code;
 
             }
-            const value = response?.region?.code !== 'IND' ? 1 : this.firstStepForm.get('duration')?.value === 'MONTHLY' ? 1 : 10;
+            if (this.getStripeClientSecret(response)) {
+                this.initializeStripePayment(response);
+                return;
+            }
+            const value = response?.region?.code !== EntityCode.IND ? 1 : (this.isMonthly() || this.isDaily()) ? 1 : 10;
             if (response?.payuHtml) {
                 this.openPayUPayment(response.payuHtml);
             } else if (response && response.dueAmount >= value) {
-                if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && response?.region?.code !== 'IND') {
+                if (((this.isMonthly() || this.isDaily() || this.isYearly()) && response?.region?.code !== EntityCode.IND && this.thirdStepForm.value.paymentProvider !== PaymentProvider.RAZORPAY)) {
                     let model = {
-                        planUniqueName: response?.planDetails?.uniqueName,
+                        planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
                         paymentProvider: this.thirdStepForm.value.paymentProvider,
                         subscriptionId: response.subscriptionId,
                         duration: this.firstStepForm.get('duration')?.value,
@@ -618,18 +836,34 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
             } else {
                 if (response) {
-                    if (response.region?.code !== 'IND') {
-                        this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                        this.router.navigate(['/pages/user-details/subscription']);
-                    } else {
-                        this.updateSubscriptionPayment(response, true);
-                    }
+                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
+                    this.navigateToRoute('/pages/user-details/subscription');
                 }
             }
         });
 
-        this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.viewSubscriptionData$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
+            this.thirdStepForm?.get('autoPay')?.patchValue(response?.autoPay ?? true);
+            this.activateSubscription = response.status.toLowerCase() === 'cancelled' && this.activateSubscription;
+            if (this.activateSubscription || this.isAdvancePayment) {
+                this.selectedStep.set(1);
+                // Force the stepper to the second step. Linear is disabled
+                // when activateSubscription is true so navigation is allowed.
+                // Retry until the stepper view is available, then stop.
+                const intervalId = setInterval(() => {
+                    if (this.stepperIcon) {
+                        this.stepperIcon.selectedIndex = 1;
+                        this.selectedStep.set(1);
+                        this.changeDetection.detectChanges();
+                        if (this.stepperIcon.selectedIndex === 1) {
+                            clearInterval(intervalId);
+                        }
+                    }
+                }, 50);
+                // Safety stop after 5s to avoid running forever.
+                setTimeout(() => clearInterval(intervalId), 5000);
+            }
             if (this.subscriptionId && response?.region) {
                 this.newUserSelectCountry({
                     "label": response.region?.code + " - " + response.region?.name,
@@ -687,7 +921,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 });
             } else {
                 this.isSubscriptionRegion = true;
-                this.setUserCountry();
             }
         });
 
@@ -715,29 +948,29 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public paypalCallBackEvent(response: any): void {
-        if (this.subscriptionId && this.isChangePlan) {
-            this.router.navigate(['/pages/user-details/subscription']);
+        if (this.subscriptionId && (this.isChangePlan || (this.activateSubscription && this.atLeatOneCompany))) {
+            this.navigateToRoute('/pages/user-details/subscription');
         } else {
             if (this.payType === 'trial') {
-                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+                this.navigateToNewCompany(response.subscriptionId);
             } else {
-                if (response?.region?.code === 'GBR') {
+                if (response?.region?.code === EntityCode.GBR) {
                     let model = {
-                        planUniqueName: response?.planDetails?.uniqueName,
+                        planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
                         paymentProvider: this.thirdStepForm.value.paymentProvider,
                         subscriptionId: response.subscriptionId,
                         duration: response?.duration,
                         promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                     };
                     if (this.callBackEvent) {
-                        this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
+                        this.navigateToNewCompany(response?.subscriptionId);
                     } else {
                         this.subscriptionComponentStore.buyPlan(model);
                     }
                 }
             }
         }
-        if (this.upgradePlan && this.upgradeRegion === 'GBR') {
+        if (this.upgradePlan && this.upgradeRegion === EntityCode.GBR) {
             const reqObj = {
                 subscriptionId: this.upgradeSubscriptionId,
                 goCardLessBillingRequestId : this.goCardLessBillingRequestId
@@ -746,18 +979,34 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
                     if (this.subscriptionId && this.isChangePlan) {
-                        this.router.navigate(['/pages/user-details/subscription']);
+                        this.navigateToRoute('/pages/user-details/subscription');
                     } else {
-                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                        this.navigateToNewCompany(this.subscriptionId);
                     };
                 }
             });
         } else {
             if (this.subscriptionId && this.isChangePlan) {
-                this.router.navigate(['/pages/user-details/subscription']);
+                this.navigateToRoute('/pages/user-details/subscription');
             } else {
-                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                this.navigateToNewCompany(this.subscriptionId);
             }
+        }
+    }
+
+    /**
+     * Navigates to the specified route with optional query parameters
+     *
+     * @private
+     * @param {string} route - The route path to navigate to
+     * @param {any} [queryParams] - Optional query parameters to include in navigation
+     * @memberof BuyPlanComponent
+     */
+    private navigateToRoute(route: string, queryParams?: any): void {
+        if (queryParams) {
+            this.router.navigate([route], { queryParams });
+        } else {
+            this.router.navigate([route]);
         }
     }
 
@@ -772,30 +1021,69 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(result => {
                 if (result) {
-                    const { alpha3CountryCode, alpha2CountryCode, countryName } = this.determineCountryCodes(result);
-                    const isRegionCode = this.isRegionCountryCode(alpha3CountryCode);
-                    this.newUserSelectCountry({
-                        label: `${!isRegionCode ? alpha3CountryCode : alpha2CountryCode} - ${countryName}`,
-                        value: !isRegionCode ? alpha3CountryCode : alpha2CountryCode,
-                        additional: {
-                            value: !isRegionCode ? alpha3CountryCode : alpha2CountryCode,
-                            label: `${!isRegionCode ? alpha3CountryCode : alpha2CountryCode}  - ${countryName}`,
-                            alpha2CountryCode: alpha2CountryCode,
-                            alpha3CountryCode: alpha3CountryCode
-                        }
-                    });
+                    const { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse } = this.determineCountryCodes(result);
+                    this.detectUserInfoByIp = { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse };
+                    this.getDefaultPlan();
+                    this.secondStepForm.get("country")?.patchValue({code: alpha2CountryCode, name: countryName, additional: ''});
                 } else {
-                    this.newUserSelectCountry({
-                        "label": "GLB - Global",
-                        "value": "GLB",
-                        "additional": {
-                            "value": "GLB",
-                            "label": "GLB - Global",
-                            "alpha3CountryCode": "GLB"
-                        }
-                    });
+                    const { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse } = this.determineCountryCodes(null);
+                    this.detectUserInfoByIp = { alpha3CountryCode, alpha2CountryCode, countryName, stateName, completeResponse };
+                    this.getDefaultPlan();
                 }
             });
+    }
+
+    /**
+     * Selects the first available region from the country list.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private selectFirstPlanFromList(): void {
+        if (!this.countrySource?.length) {
+            return;
+        }
+        this.newUserSelectCountry(this.countrySource[0], true);
+    }
+
+    /**
+     * Selects a default region using detected IP information when available.
+     * Falls back to the first available region if no matching region exists.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private getDefaultPlan(): void {
+        // While restoring from a Stripe failure redirect, the correct region's plans are
+        // being loaded via newUserSelectCountry(). Skip IP-based country detection so it
+        // cannot override the saved region (e.g. switch GLB → IND).
+        if (this.restoringFromStripeFailure) {
+            return;
+        }
+        if (!this.countrySource?.length || this.inputData?.length || !this.detectUserInfoByIp?.alpha3CountryCode) {
+            return;
+        }
+
+        let isPlanListInProgress = false;
+        this.planListInProgress$.pipe(take(1)).subscribe(planListInProgress => {
+            isPlanListInProgress = !!planListInProgress;
+        });
+        if (isPlanListInProgress) {
+            return;
+        }
+
+        const isRegionCode = this.isRegionCountryCode(this.detectUserInfoByIp.alpha3CountryCode);
+        const selectionCode = !isRegionCode ? this.detectUserInfoByIp.alpha3CountryCode : this.detectUserInfoByIp.alpha2CountryCode;
+        const matchedCountry = this.countrySource?.find(country => country.value === this.detectUserInfoByIp.alpha3CountryCode);
+        if (matchedCountry) {
+            this.newUserSelectCountry({
+                ...matchedCountry,
+                label: `${selectionCode} - ${this.detectUserInfoByIp.countryName}`,
+                value: this.detectUserInfoByIp.alpha3CountryCode
+            });
+        } else {
+            this.selectFirstPlanFromList();
+        }
     }
 
     /**
@@ -814,7 +1102,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @param {any} result - The result object containing the country code, country name, and other relevant information.
      * @returns {{ alpha3CountryCode: string, alpha2CountryCode: string, countryName: string }} - An object containing the determined alpha-3 country code, alpha-2 country code, and country name.
      */
-    private determineCountryCodes(result: any): { alpha3CountryCode: string, alpha2CountryCode: string, countryName: string } {
+    private determineCountryCodes(result: any): { alpha3CountryCode: string, alpha2CountryCode: string, countryName: string, stateName: string, completeResponse } {
         let alpha3CountryCode = 'GLB';
         let alpha2CountryCode = '';
         let countryName = 'Global';
@@ -850,7 +1138,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         }
 
-        return { alpha3CountryCode, alpha2CountryCode, countryName };
+        return { alpha3CountryCode, alpha2CountryCode, countryName, stateName: result?.stateProv || '', completeResponse: result };
     }
 
     /**
@@ -907,7 +1195,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     * @memberof BuyPlanComponent
     */
     public ngAfterViewInit(): void {
-        this.stepperIcon._getIndicatorType = () => 'number';
+        if (this.stepperIcon) {
+            this.stepperIcon._getIndicatorType = () => 'number';
+        }
     }
 
     /**
@@ -930,21 +1220,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             pincode: [''],
             mobileNumber: ['', Validators.required],
             taxNumber: null,
-            country: ['', Validators.required],
-            state: ['', Validators.required],
+            country: this.formBuilder.group({name: [''], code: ['', Validators.required], additional: ''}),
+            state: this.formBuilder.group({name: [''], code: ['', Validators.required], additional: ''}),
             address: ['']
         });
 
         this.thirdStepForm = this.formBuilder.group({
             userUniqueName: [''],
             paymentProvider: [''],
-            razorpayAuthType: ['']
+            razorpayAuthType: [''],
+            autoPay: [true]
         });
 
         this.subscriptionForm = this.formBuilder.group({
             firstStepForm: this.firstStepForm,
             secondStepForm: this.secondStepForm,
             thirdStepForm: this.thirdStepForm
+        });
+
+        this.firstStepForm.get('duration').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            this.selectedDuration.set(value ?? '');
         });
     }
 
@@ -1085,49 +1380,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Initializes the int-tel input
-     *
-     * @memberof BuyPlanComponent
-     */
-    public initIntl(inputValue?: string): void {
-        let times = 0;
-        const parentDom = this.elementRef?.nativeElement;
-        const input = document.getElementById('init-contact');
-        const interval = setInterval(() => {
-            times += 1;
-            if (input) {
-                clearInterval(interval);
-                this.intlClass = new IntlPhoneLib(
-                    input,
-                    parentDom,
-                    false
-                );
-                if (inputValue) {
-                    input.setAttribute('value', `+${inputValue}`);
-                    this.changeDetection.detectChanges();
-                }
-            }
-            if (times > 25) {
-                clearInterval(interval);
-            }
-        }, 50);
-    }
-
-
-    /**
-     * Validate the mobile number
-     *
-     * @memberof BuyPlanComponent
-     */
-    public validateMobileField(): void {
-        if (!this.intlClass?.isRequiredValidNumber) {
-            this.secondStepForm.get("mobileNumber")?.setErrors({ invalidNumber: true });
-        } else {
-            this.secondStepForm.get("mobileNumber")?.setErrors(null);
-        }
-    }
-
-    /**
      * This will be use for get countries
      *
      * @memberof BuyPlanComponent
@@ -1143,7 +1395,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getStates(): void {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
             if (response) {
                 this.states = [];
                 this.countyList = [];
@@ -1168,6 +1419,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.countyList = response.countyList?.map(county => {
                         return { label: county.name, value: county.code };
                     });
+                }
+
+                const useStateList = response.stateList && Object.keys(response.stateList).length > 0;
+                const stateCountyObj = useStateList
+                    ? Object.values(response.stateList).find((state: any) => state.name === this.detectUserInfoByIp.stateName)
+                    : response.countyList?.find((county: any) => county.name === this.detectUserInfoByIp.stateName);
+                if (stateCountyObj) {
+                    const label = useStateList
+                        ? (stateCountyObj as any).code + ' - ' + (stateCountyObj as any).name
+                        : (stateCountyObj as any).name;
+                    this.secondStepForm.get("state").patchValue({
+                        name: label,
+                        code: (stateCountyObj as any).code,
+                    });
+                    this.selectedState = label;
                 }
             }
         });
@@ -1215,7 +1481,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.disabledState = true;
                     this.selectedState = state.label;
                     this.selectedStateCode = state.value;
-                    this.secondStepForm.controls['state'].setValue({ label: state?.label, value: state?.value });
+                    this.secondStepForm.controls['state'].patchValue({ name: state?.label, code: state?.value, additional: '' });
                     return true;
                 }
             });
@@ -1226,7 +1492,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.selectedState = '';
             this.selectedStateCode = '';
             if (!this.optionSelected) {
-                this.secondStepForm.controls['state'].setValue(null);
+                this.secondStepForm.controls['state'].patchValue({ name: '', code: '', additional: '' });
             }
             this.changeDetection.detectChanges();
         }
@@ -1255,10 +1521,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.firstStepForm?.get('promoCode')?.value) {
             this.applyPromoCode('add');
         }
-        this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        this.planList$.pipe(filter(Boolean), take(1)).subscribe(result => {
             if (result) {
-                this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                this.isUserManualChangePlan = this.selectedPlan?.uniqueName !== this.viewSubscriptionData?.planUniqueName;
+                this.selectedPlan.set(result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value));
+                this.isUserManualChangePlan = this.selectedPlan()?.uniqueName !== this.viewSubscriptionData?.planUniqueName;
                 this.setFinalAmount();
                 this.changeDetection.detectChanges();
             }
@@ -1272,30 +1538,30 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public nextStepForm(): void {
-        this.isFormSubmitted = false;
-        if (this.selectedStep === 0 && this.firstStepForm.invalid) {
-            this.isFormSubmitted = true;
+        this.isFormSubmitted.set(false);
+        if (this.selectedStep() === 0 && this.firstStepForm.invalid) {
+            this.isFormSubmitted.set(true);
             return;
         }
-        if (this.selectedStep === 1 && this.secondStepForm.invalid) {
-            this.isFormSubmitted = true;
+        if (this.selectedStep() === 1 && this.secondStepForm.invalid) {
+            this.isFormSubmitted.set(true);
             return;
         }
-        if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
-            this.isFormSubmitted = true;
+        if (this.selectedStep() === 2 && this.thirdStepForm.invalid) {
+            this.isFormSubmitted.set(true);
             return;
         }
 
-        this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        this.planList$.pipe(filter(Boolean), take(1)).subscribe(result => {
             if (result) {
-                this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                this.selectedPlan.set(result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value));
             }
         });
         if (this.firstStepForm?.get('promoCode')?.value) {
             this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
         }
 
-        this.selectedStep++;
+        this.selectedStep.update(v => v + 1);
     }
 
 
@@ -1306,11 +1572,23 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public onSelectedTab(event: any): void {
-        this.selectedStep = event?.selectedIndex;
-        if (!this.intlClass) {
-            this.initIntl();
-        }
+        this.selectedStep.set(event?.selectedIndex);
         this.setFinalAmount();
+        if (this.selectedStep() !== 2) {
+            this.resetStripeState();
+        }
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Called when payment provider selection changes inside the shared component.
+     * Triggers change detection so parent template re-evaluates dependent *ngIf blocks.
+     *
+     * @protected
+     * @memberof BuyPlanComponent
+     */
+    protected onPaymentProviderChange(): void {
+        this.resetStripeState();
         this.changeDetection.detectChanges();
     }
 
@@ -1320,7 +1598,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public getAllPlans(): void {
-        this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.planList$.pipe(filter(Boolean), take(1)).subscribe(response => {
+            // If we just finished restoring from a Stripe failure, do NOT re-run the default
+            // plan selection logic — the restoration already set the correct plan and duration.
+            if (!this.restoringFromStripeFailure && this.restoredDuration) {
+                this.restoredDuration = '';
+                return;
+            }
             if (response?.length) {
                 this.allPlans = response;
                 this.monthlyPlans = response?.filter(plan =>
@@ -1333,27 +1617,29 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (!this.subscriptionId) {
-                    if (this.yearlyPlans?.length) {
-                        this.firstStepForm.get('duration').patchValue('YEARLY');
-                    } else {
-                        this.firstStepForm.get('duration').patchValue('MONTHLY');
+                    // When restoring from a Stripe failure, the duration was already restored
+                    // from sessionStorage; do NOT overwrite it with the default yearly fallback.
+                    if (!this.restoringFromStripeFailure) {
+                        if (this.yearlyPlans?.length) {
+                            this.firstStepForm.get('duration').patchValue(PlanDuration.YEARLY);
+                        } else {
+                            this.firstStepForm.get('duration').patchValue(PlanDuration.MONTHLY);
+                        }
                     }
                 } else if (this.viewSubscriptionData?.period) {
                     this.firstStepForm.get('duration').patchValue(this.viewSubscriptionData?.period);
                 } else {
                     if (this.yearlyPlans?.length) {
-                        this.firstStepForm.get('duration').patchValue('YEARLY');
+                        this.firstStepForm.get('duration').patchValue(PlanDuration.YEARLY);
                     } else {
-                        this.firstStepForm.get('duration').patchValue('MONTHLY');
+                        this.firstStepForm.get('duration').patchValue(PlanDuration.MONTHLY);
                     }
                 }
                 this.setPlans();
             } else {
                 this.inputData = [];
-                setTimeout(() => {
-                    this.countryList?.open();
-                }, 100);
             }
+            this.changeDetection.detectChanges();
         });
     }
 
@@ -1365,25 +1651,55 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private setPlans(isToggle: boolean = false): void {
         this.inputData = [];
+
+        // When restoring from a Stripe failure redirect, handleStripeRedirectFailure has
+        // already set the correct selectedPlan and firstStepForm.planUniqueName via the
+        // planList$ filtered subscription.  Just refresh inputData from the newly arrived
+        // plans so the plan-selection step (step 0) shows the right list, then exit –
+        // do NOT reset selectedPlan, planUniqueName, or the payment provider.
+        if (this.restoringFromStripeFailure) {
+            // Use the restored duration directly instead of isYearly() signal which may
+            // have been overwritten by earlier getAllPlans() calls before restoration.
+            const useYearly = this.restoredDuration === PlanDuration.YEARLY;
+            const filteredPlans = !this.subscriptionId
+                ? (useYearly ? this.yearlyPlans : this.monthlyPlans)
+                : (this.viewSubscriptionData?.period === PlanDuration.YEARLY ? this.yearlyPlans : this.monthlyPlans);
+            filteredPlans?.forEach(plan => { this.inputData.push(plan); });
+            // Re-select the previously selected plan from the restored form value
+            // instead of leaving it as whatever was set by an earlier getAllPlans() call.
+            const restoredPlanUniqueName = this.firstStepForm.get('planUniqueName')?.value;
+            if (restoredPlanUniqueName) {
+                const restoredPlan = this.allPlans?.find((p: any) => p.uniqueName === restoredPlanUniqueName);
+                if (restoredPlan) {
+                    this.selectedPlan.set(restoredPlan);
+                }
+            }
+            this.restoringFromStripeFailure = false;
+            // Do NOT clear restoredDuration here; the planList$ subscription in
+            // handleStripeRedirectFailure may fire after setPlans and still needs it.
+            this.changeDetection.detectChanges();
+            return;
+        }
+
         if (!this.subscriptionId) {
-            const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
-            this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+            const filteredPlans = this.isYearly() ? this.yearlyPlans : this.monthlyPlans;
+            this.selectedPlan.set(filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1]);
             filteredPlans?.forEach(plan => {
                 this.inputData.push(plan);
             });
         } else if (isToggle) {
-            const filteredPlans = this.firstStepForm.get('duration')?.value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
-            this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+            const filteredPlans = this.isYearly() ? this.yearlyPlans : this.monthlyPlans;
+            this.selectedPlan.set(filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1]);
             this.inputData.push(...filteredPlans);
         } else {
             let subscriptionPlan = this.allPlans?.filter(plan => plan?.uniqueName === this.viewSubscriptionData?.planUniqueName);
-            this.selectedPlan = subscriptionPlan[0];
-            const filteredPlans = this.viewSubscriptionData?.period === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+            this.selectedPlan.set(subscriptionPlan[0]);
+            const filteredPlans = this.viewSubscriptionData?.period === PlanDuration.YEARLY ? this.yearlyPlans : this.monthlyPlans;
             filteredPlans?.forEach(plan => {
                 this.inputData.push(plan);
             });
         }
-        this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
+        this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan()?.uniqueName);
         this.thirdStepForm.get('paymentProvider')?.patchValue(null);
         this.setFinalAmount();
         this.changeDetection.detectChanges();
@@ -1399,75 +1715,124 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.calculateDataInProgress$.pipe(take(1)).subscribe(inProgress => {
             isCalculating = inProgress;
         });
-        
+
         if (isCalculating) {
             return;
         }
         const reqObj = {
-            planUniqueName: this.selectedPlan?.uniqueName,
+            planUniqueName: this.selectedPlan()?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
             duration: this.firstStepForm.get('duration').value,
-            countryCode: this.isNewUserLoggedIn ? this.selectedPlan?.entityCode : this.secondStepForm.get('country').value?.value
+            countryCode: this.isNewUserLoggedIn ? this.selectedPlan()?.entityCode : (this.secondStepForm.get('country').value?.code || this.viewSubscriptionData?.region?.code)
         }
-
+        if (this.isAdvancePayment) {
+            reqObj['prePaid'] = true;
+        }
         if (this.isChangePlan || this.isRenewPlan) {
             reqObj['subscriptionId'] = this.subscriptionId;
         }
-        if (this.selectedPlan?.uniqueName && reqObj?.countryCode) {
+        if (this.isChangePlan && this.advancePaymentDialogRef) {
+            reqObj['includeNextBill'] = this.includeNextBill;
+        }
+        if (this.selectedPlan()?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
-        if (!this.removePromoCode && !this.thirdStepForm.get('paymentProvider')?.value) {
-            // Clear the payment provider initially
-            this.thirdStepForm.get('paymentProvider')?.patchValue(null);
-        }
 
-        // Get the selected plan entity code and duration once
-        const entityCode = this.selectedPlan?.entityCode;
-        const duration = this.firstStepForm.get('duration')?.value;
+        this.updatePaymentProviders();
+    }
+
+    /**
+     * Updates the list of payment providers based on entity code, duration,
+     * advance payment and auto-pay state.
+     *
+     * @memberof BuyPlanComponent
+     */
+    public updatePaymentProviders(): void {
+        const entityCode = this.selectedPlan()?.entityCode;
 
         const filterProviders = (providers: string[]) => {
-            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider.value));
+            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider));
             if (this.filteredPaymentProviders?.length === 1) {
                 this.thirdStepForm.get('paymentProvider')?.patchValue(providers[0]);
             }
         };
 
-        if (entityCode === 'GBR') {
-            if (duration === 'MONTHLY' || duration === 'DAILY') {
-                // Exclude Razorpay for monthly GBR
-                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
-            } else if (duration === 'YEARLY') {
-                // Only Razorpay for yearly GBR
-                filterProviders([PaymentProvider.RAZORPAY]);
+        if (entityCode === EntityCode.GBR) {
+            // GBR: Stripe shown for all durations; GoCardless/PayPal added for monthly & daily
+            if (this.isMonthly() || this.isDaily()) {
+                const autoPay = this.thirdStepForm.get('autoPay')?.value;
+                const currentProvider = this.thirdStepForm.get('paymentProvider')?.value;
+                if (!autoPay && currentProvider === PaymentProvider.GOCARDLESS) {
+                    this.thirdStepForm.get('paymentProvider')?.patchValue(null);
+                }
+                const providers = this.isAdvancePayment || !autoPay
+                    ? [PaymentProvider.STRIPE, PaymentProvider.PAYPAL]
+                    : [PaymentProvider.STRIPE, PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL];
+                filterProviders(providers);
+            } else if (this.isYearly()) {
+                filterProviders([PaymentProvider.STRIPE, PaymentProvider.RAZORPAY]);
             }
-        } else if (entityCode !== 'IND') {
-            if (duration === 'MONTHLY' || duration === 'DAILY') {
-                // Only PayPal for non-IND countries with monthly duration
-                filterProviders([PaymentProvider.PAYPAL]);
-            } else if (duration === 'YEARLY') {
-                // Only Razorpay for non-IND countries with yearly duration
-                filterProviders([PaymentProvider.RAZORPAY]);
+        } else if (entityCode !== EntityCode.IND) {
+            // Non-IND: Stripe available for all durations; PayPal added for monthly & daily
+            if (this.isMonthly()) {
+                filterProviders([PaymentProvider.STRIPE, PaymentProvider.PAYPAL]);
+            } else if (this.isYearly()) {
+                filterProviders([PaymentProvider.STRIPE, PaymentProvider.RAZORPAY]);
+            } else if (this.isDaily()) {
+                filterProviders([PaymentProvider.STRIPE, PaymentProvider.PAYPAL]);
             }
-        } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
-            // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration
-            filterProviders((duration === 'YEARLY' || duration === 'MONTHLY' || duration === 'DAILY') ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
+        } else {
+            // IND: Razorpay for all durations (no Stripe)
+            filterProviders([PaymentProvider.RAZORPAY]);
         }
 
-        if (this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY && (duration === 'MONTHLY' || duration === 'DAILY')) {
-            this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD');
-        } else {
-            this.thirdStepForm.get('razorpayAuthType')?.patchValue(null);
-        }
+        // Auto-select CARD auth type when Razorpay is chosen for recurring plans
+        const isRazorpay = this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY;
+        this.thirdStepForm.get('razorpayAuthType')?.patchValue(isRazorpay && (this.isMonthly() || this.isDaily()) ? 'CARD' : null);
         this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Handles per-method selection inside the Razorpay provider card and maps it
+     * to the `razorpayAuthType` form control. Only Cards and UPI methods are
+     * applicable as auth types for Razorpay.
+     *
+     * @param event Event emitted by payment-provider-cards (methodChange)
+     * @memberof BuyPlanComponent
+     */
+    public onRazorpayMethodChange(event: { providerId: string; methodId: string }): void {
+        this.thirdStepForm.get('razorpayAuthType')?.patchValue(event.methodId);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Returns true if the given plan is free for the specified duration.
+     * A plan is considered free when its amount is 0 and no discount is applied.
+     *
+     * @param {*} plan - The plan object to check
+     * @param {string} duration - The duration to check against (use PlanDuration constant)
+     * @returns {boolean}
+     * @memberof BuyPlanComponent
+     */
+    protected isFreePlan(plan: any, duration: string): boolean {
+        if (duration === PlanDuration.YEARLY) {
+            return plan?.yearlyAmount === 0 && !plan?.yearlyDiscount;
+        } else if (duration === PlanDuration.MONTHLY) {
+            return plan?.monthlyAmount === 0 && !plan?.monthlyDiscount;
+        } else if (duration === PlanDuration.DAILY) {
+            return plan?.monthlyAmount === 0 && !plan?.monthlyDiscount;
+        }
+        return false;
     }
 
     /**
      * This will be use for new user select country
      *
-     * @param {*} event
+     * @param {*} event Country option selected
+     * @param {boolean} [isAutoSelect=false] True when triggered programmatically (e.g. single-region auto-select)
      * @memberof BuyPlanComponent
      */
-    public newUserSelectCountry(event: any): void {
+    public newUserSelectCountry(event: any, isAutoSelect: boolean = false): void {
         if (event?.value) {
             this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
             this.newUserSelectedCountry = event.label;
@@ -1475,10 +1840,31 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
             setTimeout(() => {
                 this.getAllPlans();
-                if (this.isSubscriptionRegion) {
-                    this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
-                }
+                this.patchCurrentCountryFromSelection();
             }, 200);
+        }
+    }
+
+    /**
+     * Patches currentCountry control from countrySource using a stable code match.
+     * Safe to call multiple times; no-ops until both selection and source are ready.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private patchCurrentCountryFromSelection(): void {
+        if (!this.countrySource?.length || !this.newUserSelectedCountryValue) {
+            return;
+        }
+        const selectionValue = this.newUserSelectedCountryValue;
+        const match = this.countrySource.find(country =>
+            country.value === selectionValue ||
+            country.label === this.newUserSelectedCountry ||
+            country.additional?.alpha2CountryCode === selectionValue ||
+            country.additional?.alpha3CountryCode === selectionValue
+        );
+        if (match) {
+            this.currentCountry.patchValue(match);
         }
     }
 
@@ -1491,9 +1877,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public selectCountry(event: any): void {
         if (event?.value) {
             this.selectedCountry = event.label;
-            this.secondStepForm.controls['country'].setValue(event);
+            this.secondStepForm.controls['country'].patchValue({ name: event.label, code: event.value, additional: event.additional });
             this.secondStepForm.get('taxNumber')?.setValue('');
-            this.secondStepForm.get('state')?.setValue('');
+            this.secondStepForm.get('state')?.patchValue({name: '', code: '', additional: ''});
             this.selectedState = "";
             this.selectedStateCode = "";
             this.disabledState = false;
@@ -1502,10 +1888,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             onboardingFormRequest.formName = 'onboarding';
             onboardingFormRequest.country = event.value;
             this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
-
-            let statesRequest = new StatesRequest();
-            statesRequest.country = event.value;
-            this.store.dispatch(this.generalActions.getAllState(statesRequest));
             this.changeDetection.detectChanges();
         }
     }
@@ -1513,62 +1895,187 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /**
      * This will use for on submit company form
      *
+     * @param {('buy' | 'trial')} type
      * @return {*}  {void}
      * @memberof BuyPlanComponent
      */
-    public onSubmit(type: string): void {
+    public onSubmit(type: 'buy' | 'trial'): void {
+        const isTrial = type === 'trial';
         this.payType = type;
-        this.isFormSubmitted = false;
-        if (this.subscriptionForm.invalid) {
-            this.isFormSubmitted = true;
-            return;
+        this.isFormSubmitted.set(false);
+        
+        // If the plan is free else payment provider not selected, payment provider is not required
+        const isPaymentProviderRequired = !this.isFreePlan(this.selectedPlan(), this.selectedDuration()) && (this.payType === 'buy' && !this.subscriptionForm.value.thirdStepForm?.paymentProvider);
+        
+        if (isPaymentProviderRequired) {
+            this.thirdStepForm.get('paymentProvider')?.setErrors({ required: true });
+            this.thirdStepForm.get('paymentProvider')?.markAsTouched();
+        } else {
+            this.thirdStepForm.get('paymentProvider')?.setErrors(null);
+            this.thirdStepForm.get('paymentProvider')?.updateValueAndValidity();
         }
-        let mobileNumber = this.subscriptionForm.value.secondStepForm.mobileNumber?.replace(/\+/g, '');
-        let request = {
-            planUniqueName: this.subscriptionForm.value.firstStepForm.planUniqueName,
-            duration: this.subscriptionForm.value.firstStepForm.duration,
-            userUniqueName: null,
-            billingAccount: {
-                billingName: this.subscriptionForm.value.secondStepForm.billingName,
-                companyName: this.subscriptionForm.value.secondStepForm.companyName,
-                taxNumber: this.subscriptionForm.value.secondStepForm.taxNumber,
-                email: this.subscriptionForm.value.secondStepForm.email,
-                pincode: this.subscriptionForm.value.secondStepForm.pincode,
-                mobileNumber: mobileNumber,
-                country: {
-                    name: this.subscriptionForm.value.secondStepForm.country.label ? this.subscriptionForm.value.secondStepForm.country.label : this.subscriptionForm.value.secondStepForm.country.name,
-                    code: this.subscriptionForm.value.secondStepForm.country.value ? this.subscriptionForm.value.secondStepForm.country.value : this.subscriptionForm.value.secondStepForm.country.code
+       setTimeout(() => {
+            if (this.subscriptionForm.invalid) {
+                this.isFormSubmitted.set(true);
+                return;
+            }
+            let mobileNumber = this.subscriptionForm.value.secondStepForm.mobileNumber?.replace(/\+/g, '');
+            let request: any = {
+                planUniqueName: this.subscriptionForm.value.firstStepForm.planUniqueName,
+                duration: this.subscriptionForm.value.firstStepForm.duration,
+                userUniqueName: null,
+                billingAccount: {
+                    billingName: this.subscriptionForm.value.secondStepForm.billingName,
+                    companyName: this.subscriptionForm.value.secondStepForm.companyName,
+                    taxNumber: this.subscriptionForm.value.secondStepForm.taxNumber,
+                    email: this.subscriptionForm.value.secondStepForm.email,
+                    pincode: this.subscriptionForm.value.secondStepForm.pincode,
+                    mobileNumber: mobileNumber,
+                    country: {
+                        name: this.subscriptionForm.value.secondStepForm.country.name,
+                        code: this.subscriptionForm.value.secondStepForm.country.code
+                    },
+                    address: this.subscriptionForm.value.secondStepForm.address
                 },
-                address: this.subscriptionForm.value.secondStepForm.address
-            },
-            promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
-            paymentProvider: this.thirdStepForm.value.paymentProvider,
-            subscriptionId: null
-        }
+                promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
+                paymentProvider: this.thirdStepForm.value.paymentProvider,
+                subscriptionId: null
+            }
 
-        if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && this.selectedPlan?.entityCode !== 'GBR') {
-            request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
-        }
+           if (!isTrial && !this.isAdvancePayment) {
+               if (this.isMonthly() || this.isDaily()) {
+                   request['autoPay'] = this.subscriptionForm.value.thirdStepForm.autoPay;
+               } else {
+                   request['autoPay'] = false;
+               }
+           }
 
-        if (this.subscriptionForm.value.secondStepForm.country.value === 'GB') {
-            request.billingAccount['county'] = {
-                name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
-                code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
-            };
+            if ((this.isMonthly() || this.isDaily()) && this.selectedPlan()?.entityCode !== EntityCode.GBR) {
+                request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
+            }
+
+            if (this.subscriptionForm.value.secondStepForm.country.code === 'GB') {
+                request.billingAccount['county'] = {
+                    name: this.subscriptionForm.value.secondStepForm.state.name,
+                    code: this.subscriptionForm.value.secondStepForm.state.code
+                };
+            } else {
+                request.billingAccount['state'] = {
+                    name: this.subscriptionForm.value.secondStepForm.state.name,
+                    code: this.subscriptionForm.value.secondStepForm.state.code
+                };
+            }
+
+            request['payNow'] = !isTrial;
+            if (this.activateSubscription) {
+                request['reactivateFromSubscriptionId'] = this.subscriptionId;
+            }
+            // if (isTrial) {
+            //     delete request.razorpayAuthType;
+            //     delete request.subscriptionId;
+            //     delete request.userUniqueName;
+            //     delete request.paymentProvider;
+            //     delete request.promoCode;
+            // }
+            if (this.subscriptionId && this.isAdvancePayment) {
+                this.componentStore.advancePayment({ request, subscriptionId: this.subscriptionId });
+            } else if (this.subscriptionId && this.isChangePlan && !this.activateSubscription) {
+                request.subscriptionId = this.subscriptionId;
+                request.includeNextBill = this.includeNextBill;
+                this.subscriptionRequest = request;
+                this.componentStore.getChangePlanDetails(request);
+            } else {
+                this.componentStore.createSubscription(request);
+            }
+        }, 100);
+    }
+
+    /**
+     * Handles Buy Plan button click. Shows advance payment confirmation dialog
+     * for active change-plan flows without prepaid/autoPay, otherwise proceeds to buy.
+     *
+     * @memberof BuyPlanComponent
+     */
+    public initiateBuyPlan(): void {
+        if (this.advancePaymentInChangePlan) {
+            this.confirmationForAdvancePayment();
         } else {
-            request.billingAccount['state'] = {
-                name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
-                code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
-            };
+            this.onSubmit('buy');
         }
-        request['payNow'] = (type === 'trial') ? false : true;
-        if (this.subscriptionId && this.isChangePlan) {
-            request.subscriptionId = this.subscriptionId;
-            this.subscriptionRequest = request;
-            this.componentStore.getChangePlanDetails(request);
-        } else {
-            this.componentStore.createSubscription(request);
-        }
+    }
+
+    /**
+     * Whether advance payment confirmation is required in the change-plan flow
+     * (active subscription without prepaid and without autoPay).
+     *
+     * @readonly
+     * @memberof BuyPlanComponent
+     */
+    public get advancePaymentInChangePlan(): boolean {
+        const status = this.viewSubscriptionData?.status?.toLowerCase();
+        return (
+            this.isChangePlan &&
+            status === 'active' &&
+            !this.viewSubscriptionData?.isPrepaidExist &&
+            !this.viewSubscriptionData?.autoPay
+        );
+    }
+
+    /**
+     * Whether advance payment confirmation is required in the upgrade-plan flow
+     * (active subscription with prepaid existing and without autoPay).
+     *
+     * @readonly
+     * @memberof BuyPlanComponent
+     */
+    public get advancePaymentInUpgradePlan(): boolean {
+        const status = this.viewSubscriptionData?.status?.toLowerCase();
+        return (
+            this.isChangePlan &&
+            status === 'active' &&
+            this.viewSubscriptionData?.isPrepaidExist &&
+            !this.viewSubscriptionData?.autoPay
+        );
+    }
+
+    /**
+     * This will use for advance payment confirmation dialog
+     *
+     * @memberof BuyPlanComponent
+     */
+    public confirmationForAdvancePayment(): void {
+        this.advancePaymentDialogStep.set(0);
+        const dialogConfig: MatDialogConfig = {
+            panelClass: ['advance-payment-dialog', 'mat-dialog-md'],
+            role: 'alertdialog',
+            ariaLabel: 'advancePaymentDialog',
+            disableClose: true
+        };
+        this.advancePaymentDialogRef = this.dialog.open(this.advancePaymentDialogTemplate, dialogConfig);
+
+        this.advancePaymentDialogRef.afterClosed().subscribe(result => {
+            this.advancePaymentDialogRef = null;
+            if (result === AdvancePaymentDialogAction.BuyNextCycle) {
+                this.includeNextBill = true;
+                this.onSubmit('buy');
+            } else if (result === AdvancePaymentDialogAction.BuyCurrentCycle) {
+                this.includeNextBill = false;
+                this.onSubmit('buy');
+            } else if (result === AdvancePaymentDialogAction.Close) {
+                this.setFinalAmount();
+            }
+        });
+    }
+
+    /**
+     * Handle Yes button click in advance payment dialog
+     *
+     * @memberof BuyPlanComponent
+     */
+    public onAdvancePaymentYes(): void {
+        this.includeNextBill = true;
+        this.setFinalAmount();
+        this.advancePaymentDialogStep.set(1);
     }
 
     /**
@@ -1636,6 +2143,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         document.body?.classList?.remove("plan-page");
         this.broadcast?.close();
         this.callBackBroadcast?.close();
+        if (this.stripePaymentSuccessBroadcast) {
+            this.stripePaymentSuccessBroadcast.onmessage = null;
+            this.stripePaymentSuccessBroadcast.close();
+            this.stripePaymentSuccessBroadcast = null;
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1664,7 +2176,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
         let options = {
             key: this.razorpayKey,
-            image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAakAAABQCAMAAACUGHoMAAAC6FBMVEUAAAAAAAAAAIAAAFVAQIAzM2YrK1UkJG0gIGAcHHEaM2YXLnQrK2onJ2IkJG0iImYgIHAeLWkcK2MbKGsmJmYkJG0jI2ghLG8gK2ofKWYdJ2wcJmgkJG0jI2oiK2YhKWsgKGgfJ2weJmkkJG0jK2oiKWciKGshJ2kgJmwfJWoeJGckKmsjKWgiKGwhJ2khJm0gJWofJGgjKGkiJ2wiJmohJmggJWsgKWkfKGsjKGojJ2wiJmohJmkgKGkgKGwfJ2ojJ2giJmsiJmkhKWshKGogKGwgJ2ofJmkiJmsiJWkiKGshKGohJ2kgJ2sgJmkfJmsiKGoiKGghJ2ohJ2khJ2sgJmogJmsiKGoiKGkiJ2ohJ2khJmshJmogKGkgKGoiJ2kiJ2shJmshJmohKGkgJ2kiJ2siJmohJmkhKGohKGkgJ2sgJ2ogJ2siJmoiJmkhKGohJ2sgJ2ogJ2kiJmoiKGkhKGshJ2ohJ2shJ2ogJmkgJmoiKGoiKGshJ2ohJ2khJ2ohJmkgJmsgKGoiJ2siJ2ohJ2khJ2ohJmohKGsgKGoiJ2kiJ2ohJ2ohJmshJmohKGshJ2ogJ2kiJ2oiJ2ohJmshKGohJ2khJ2ogJ2siJmohJmshKGohJ2khJ2ogJ2sgJmoiKGkhJ2ohJ2ohJ2shJ2ohJ2kgJmoiKGoiJ2ohJ2ohJ2shJ2ohJmkhKGogJ2oiJ2ohJ2ohJ2khJ2ohKGohJ2ogJ2siJ2ohJ2khJ2ohKGohJ2ohJ2ohJ2kgJ2ohJ2ohJmohKGohJ2shJ2ohJ2ohJ2oiJ2ohKGohJ2ohJ2khJ2ohJ2ohJ2ogJmoiKGshJ2ohJ2ohJ2ohJ2ohJ2ohJmohJ2ohJ2ohJ2ohJ2ohJ2shJ2ohJ2oiJ2ohJ2ohJ2ohJ2ohJmohJ2ohJ2ohJ2ohJ2ohJ2shJ2ohJ2ohJ2ohJ2ohJ2ohJ2ohJ2ohJ2ohJ2ohJ2ohJ2ohJ2shJ2ohJ2ohJ2ohJ2ohJ2ohJ2r///8VJCplAAAA9nRSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTM0NTY3ODk6Ozw9P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiZGVmaGlqa2xtbm9wcXJzdXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ6foKGipKWmp6ipqqusra6vsLGys7S1tre4ubu8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna293e3+Dh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f6YMrjbAAAAAWJLR0T3q9x69wAACLtJREFUeNrt3WtcFUUUAPC59/KWCFES0DJvSUk+ktTQtJKkDM1KMUsyK1+JaYr2QMpItNTMrKjQkMwHPhLSTEvEMlN8oaTio4BSk0gQjcc9n/uiZXtm985dduaeD56P9+funDt/2Tt7ZmaXMeOITJz07rp9ZX/UAcD5qoo9+dlvJt/px64FqXBOXvUL8KKh5OMnIz0+XWBLTfhYmWxwy0inTrQRO4OfUz/Cg5qXnY/2uwe4OyJUc0Cw7r/sMH03GEbprE6eZTtLe4a+zebxuWXA+Hm5W0tOG2a6WuxknY2/b1X5jhXzUu5vZSrRBO3ZZrg7wqU5oJD/z2wJ+U3gPnZPDPaeVNSwBTvrQSSskboS5Rsmx1CRso86AoLxR1qYN6R84xceB+GwVgoA4NesPhSk+heDB3F+uq9qqZsyKjzJUIIUABx5OcLLUhHrwMPY31OpVP/1jR4mKEUKoD4nxptSw86Cx9GYYVcmNehHz/OTJAXQuKy9t6QCcsBUfBmiRip6o5nspEkB1C8M8YpU6yIwGSXhCqT8MuuBmBTAqXgvSHU8ZhYKsm3ypZw7TCYnVQpcC/1US3U6YxrqC7v8q9/g80BSCqAoSq1Uh19NQ230lT+iSG0EqlJQ2U2lVFip6USLr5c/Sn8VgK4U/NlXnZRji+k0DwuWwpojNRVIS0FNT2VS0w3SaDpesGBWaurMzCVbjuFyYGUH+TWKp5qIS0F1N0VS9zTopVCW8eDVF7fQgW+f+H+JuYv8ul+veqAuBccjlUj5HtL5a8rrg4fftrjl//26XxAvVZqWCjpk2Ednt+W+lzZlTNKwyzHapFTYGL2Ykpr61kerdlS4jNIodKiQmsZvvECvsOW8Uhysf1jBrEeWfvccW/gouucOMyklMBfa58V1F3RzeU2B1I21vJbPJBqc6PGzAACuZAXzU/fo/jHN7sr925AmxRhjgUPW6VyLG+LkSy3mNbyzneGZbiwCgMkK5nxtO/kd8/u4QJ2rmFQpxljE/Dp+Sc0hWyryEqfZPHc1EsdSSFMxO5/EL2PPvU7390a2FGNRedyknpMt9Tqn0U3+7hcxPGNTIGXnFiOPGVxpFEgxNryGk1VFkFwpf86UVEmI9V/OnNRAHtRao/UbSqRYN96yrWlypYbgFmujGRWp1ZwOWWW4/kyNFGt7Aif2i0Oq1Erc4nhGRaoNZ6C11fjKrEiKdf4Lp/aQTKlQPJ4oYmSkJnHm7tzUGVVJsZE4t3yZUpyxVT86UgW4bhLHiEixfHxPFSpR6n3U3LeMjJQ/Lgl8zMhIReNqaZJEqX2irXlDqh9K7lI7OlIsR/T/kRVSIWgutdqfjtRM1BXLGCGpHngttE1M6ujXbgIVgNm9JvpCndQKlF0fSlLsMMqvnZiUx1HInhO/+N0RaxBdpUihS3OljZRUBuq9B6RJZaLPdKfEDKeJfpMhZUMDis8YKan+qB8mSZNC973ljI5UWzP35CqlWqDR34fSpH7SfrSZkNTdqJn7aUmxMlTaliaFtkp9REgqXvAH23tSm7SNfS9Nqlz7URohKVw8biFwt6xdBvGARCm0cuCgNKlq7UcvEZJKRhOINkYr5qKqpDQpVKseR0hqrPaQi8Sg8K35OWlSf4uPrtRLTdAe4rITk5om1g9WSFVpP5pKSOpp1EwwMal0VCaSJoV2eKQTknrMzNjPbERlaeIJgYPeQdsppEmhLR5LSI/S+8mTQqudFwkctBT0VvpbLvWD+OyUeqmeqJnRxKRQ9xVIk/ocLZ210ZFqhZqZR0vKVm2ympQR4Sbw/BRe7NeRjhT7XexnwGtS3c1WaE3MJI5CbY0iJPUduvUNJSU1Q3B1khVSvUG4TBYXf1WMUyL1gcIfKjNSu1B+t0qTCkS3vrWBIt8rVonUcNQT2ylJ3YXSq/GRJsXw00LG0JEKR9tGXV0ISS0XXfBniRSqMcI+OlIMPyZpEx0pzs6uiRKlBuHmHqUjNQtnl0BFyhf/SsEdEqUC8PLqI75kpJx41/yZNkSk5nC2ENgkSrFPcIOzyUixbziLv31ISCVzHr3wBpMphYtr0NCLjNRQzr1bjp2A1FDOgyGabpYq5TiFmyxvS0XKl5Md5LXwulQ675EHels9rNo9ytn5AsUtiUhx5qgAoDjGu1Kt+I+sTJQsFfAbp9HSdkSk7Pt4fXLplUDvSdlH8x/Qvo1JlmJpvGaPd6chpTdjUJkS4h0p+xCdh1+7ekiXCqnkNVyXYjTGSlQmxbJ1isK1SxL8lUvd9nKZXpE6l0mX4u2DBAA4+LDO7YEt4WuXOqngo7oV/PNrU++LUCVldw5ddNhgNuEGBVK2Qp3W9yZzRlm3p5aomvW4XAj923A69GLpt8vmZ+rHSJNSe64+yacFB+oMs2gawBRIsRjdBzfVLn/WedWYudPQuUcVzk9djqRmPd8vz6SUZ/EmUyLFHwv/W8rfvz43K2vZms0l9YpnEq/ENPJSG3wVSXE2ZnsWcqV4JS9SUl/5MVVSAdtJS9nSSUvtCmHKpFhQIWUpxiY00ZXKdfeKNmufbH/9btJSLKmaqJQr3e0OFIvfFhG+g7QUa7ORpNQ5gQeHWv0GFr+lpKWY49WL5KRcWSLr2ix/q5EtvYGyFGNROcSkDiaaq102/01hvX42KVWgRIqxwXsJSe2NF8xaxtv3AuebeYz8RoFet+o9ibE5jTSkCkcILxOQ80bL6DUeZly3NFYkW+vePdppTqXXpU4v7uxBxrLe59t3k0s85QMTBZeKW/k+X8fA7HIvSh3K7O3ZUg5pb15mUelCb7Z0FU1qL5yt1e/I7jwl76R6qXOFmYPDPc5VnhRjLZJWXjDOuTL3eacn2b5SpYk41uxonfDCG9n5Px06UWUQOYLXVINTnCor2Zq7YPqIHmHm8uxfo4kp7o74S3OA4dLhoEfmfFfDnYo5uSEjqSO7FpTCETMoZf6azbtKysrKindvXb5o5tiEaL9r/aI+/gHOmhyslIgAyQAAAABJRU5ErkJggg==',
             handler: function (res) {
                 that.updateSubscriptionPayment(res, false, request);
                 that.razorpayRetryCount = 0;
@@ -1675,8 +2186,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             },
             amount: request.dueAmount,
             currency: request.planDetails?.currency?.code || this.activeCompany?.baseCurrency,
-            name: 'GIDDH',
-            description: 'Walkover Technologies Private Limited.',
+            name: this.serviceConfig.BRAND_NAME,
+            description: this.serviceConfig.LEGAL_NAME,
         };
         const razorpayRecurringSubscriptionConfig = {
             key: this.razorpayKey,
@@ -1692,12 +2203,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             },
             amount: request.dueAmount,
             currency: request.planDetails?.currency?.code || this.activeCompany?.baseCurrency,
-            name: 'GIDDH',
-            description: 'Walkover Technologies Private Limited.',
+            name: this.serviceConfig.BRAND_NAME,
+            description: this.serviceConfig.LEGAL_NAME
         };
 
         try {
-            const isChangePlan = this.isChangePlan ? (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') : (request?.duration === 'MONTHLY' || request?.duration === 'DAILY');
+            const isChangePlan = this.isChangePlan ? (
+                this.firstStepForm.get('duration')?.value === 'MONTHLY' 
+                || this.firstStepForm.get('duration')?.value === 'DAILY')
+                : (request?.duration === 'MONTHLY' || request?.duration === 'DAILY');
             this.razorpay = new window['Razorpay']((isChangePlan && request?.region?.code !== 'GBR')
                 ? razorpayRecurringSubscriptionConfig : options);
             setTimeout(() => { this.razorpay?.open(); }, 100);
@@ -1753,12 +2267,368 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionId = request.subscriptionId;
             }
             let data = { ...request, ...this.subscriptionRequest };
+            if (this.isAdvancePayment) {
+                this.saveAdvancePayment({ razorpayOrderId: request.razorpayOrderId, paymentId: request.paymentId });
+                return;
+            }
             if (request.paymentId && (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && payResponse?.region?.code !== 'GBR') {
                 this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId, orderId: request.razorpayOrderId });
             } else {
                 this.componentStore.changePlan(data);
             }
         }
+    }
+
+    public saveAdvancePayment(paymentDetails: any) : void {
+        const payload = {
+            paymentProvider: this.thirdStepForm.get('paymentProvider')?.value,
+            subscriptionId: this.subscriptionId,
+            duration: this.firstStepForm.get('duration')?.value,
+            prepaidUniqueName: this.createSubscriptionSuccess.prepaidUniqueName,
+            ...paymentDetails
+        };
+        this.componentStore.saveAdvancePayment(payload);
+    }
+
+    /**
+     * Loads Stripe.js script dynamically
+     *
+     * @private
+     * @returns {Promise<void>}
+     * @memberof BuyPlanComponent
+     */
+    private loadStripeScript(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            if (window['Stripe']) {
+                resolve();
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = STRIPE_JS_CDN_URL;
+            script.onload = () => resolve();
+            script.onerror = () => {
+                this.toasterService.showSnackBar('error', 'Failed to load Stripe payment library');
+                reject();
+            };
+            document.head.appendChild(script);
+        });
+    }
+
+    /**
+     * Initializes Stripe Payment Element with the client secret from API response
+     *
+     * @param {*} response
+     * @memberof BuyPlanComponent
+     */
+    public initializeStripePayment(response: any): void {
+        this.stripeClientSecret = this.getStripeClientSecret(response);
+        this.subscriptionResponse = response;
+
+        if (!this.stripeClientSecret) {
+            this.toasterService.showSnackBar('error', 'Invalid Stripe configuration');
+            return;
+        }
+
+        const subscriptionId = response?.subscriptionId || this.responseSubscriptionId || this.subscriptionId;
+        const sessionData: Record<string, string> = {
+            stripe_subscription_id: subscriptionId,
+            stripe_is_change_plan: String(this.isChangePlan),
+            stripe_is_advance_payment: String(this.isAdvancePayment),
+            stripe_prepaid_unique_name: this.createSubscriptionSuccess?.prepaidUniqueName || '',
+            stripe_after_success_redirection_url: this.afterSuccessRedirectionUrl || '',
+            stripe_payment_intent_id: this.extractPaymentIntentId(this.stripeClientSecret),
+            stripe_plan_unique_name: response?.planDetails?.uniqueName || this.firstStepForm.get('planUniqueName')?.value || '',
+            stripe_duration: response?.duration || this.firstStepForm.get('duration')?.value || '',
+            stripe_amount_paid: String(response?.dueAmount || 0),
+            stripe_subscription_form: JSON.stringify(this.subscriptionForm.value),
+            stripe_selected_plan: JSON.stringify(this.selectedPlan() || null),
+            stripe_region_value: this.newUserSelectedCountryValue || '',
+            stripe_region_label: this.newUserSelectedCountry || ''
+        };
+        if (this.subscriptionRequest) {
+            sessionData['stripe_subscription_request'] = JSON.stringify(this.subscriptionRequest);
+        }
+
+        const dialogData: StripePaymentDialogData = {
+            stripeKey: this.stripeKey,
+            clientSecret: this.stripeClientSecret,
+            sessionData,
+            returnUrl: window.location.origin + window.location.pathname,
+            isSetup:response?.isSetup,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        };
+
+        this.showStripePaymentElement = true;
+        // Pre-load Stripe.js before opening the dialog so the payment element
+        // renders instantly instead of waiting for the CDN fetch.
+        this.loadStripeScript().then(() => {
+            this.stripeDialogRef = this.dialog.open(StripePaymentDialogComponent, {
+                panelClass: ['mat-dialog-sm'],
+                disableClose: true,
+                data: dialogData
+            });
+
+            this.stripeDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+                this.stripeDialogRef = null;
+                this.showStripePaymentElement = false;
+                this.stripeClientSecret = '';
+                this.changeDetection.detectChanges();
+            });
+        }).catch(() => {
+            this.toasterService.showSnackBar('error', 'Failed to load Stripe payment library');
+            this.showStripePaymentElement = false;
+        });
+    }
+
+
+    /**
+     * Handles Stripe redirect return after payment confirmation
+     *
+     * @private
+     * @param {string} piClientSecret
+     * @param {string} piId
+     * @memberof BuyPlanComponent
+     */
+    private handleStripeRedirectReturn(piClientSecret: string, piId: string): void {
+        this.isLoading = true;
+        this.componentStore.patchState({ saveStripePaymentInProgress: true });
+        this.changeDetection.detectChanges();
+
+        // Notify any other open buy-plan tabs so their loader is dismissed
+        this.stripePaymentSuccessBroadcast?.postMessage({ success: true });
+
+        const subscriptionId = sessionStorage.getItem('stripe_subscription_id');
+        const isAdvancePaymentSession = sessionStorage.getItem('stripe_is_advance_payment') === 'true';
+        this.isAdvancePayment = isAdvancePaymentSession || this.isAdvancePayment;
+        this.afterSuccessRedirectionUrl = sessionStorage.getItem('stripe_after_success_redirection_url') || this.afterSuccessRedirectionUrl;
+        if (subscriptionId) {
+            sessionStorage.setItem('stripe_payment_intent_id', piId);
+            if (isAdvancePaymentSession) {
+                const payload = {
+                    paymentProvider: PaymentProvider.STRIPE,
+                    subscriptionId: subscriptionId,
+                    duration: sessionStorage.getItem('stripe_duration') || this.firstStepForm.get('duration')?.value,
+                    prepaidUniqueName: sessionStorage.getItem('stripe_prepaid_unique_name') || this.createSubscriptionSuccess?.prepaidUniqueName,
+                    paymentIntentId: piId
+                };
+                this.componentStore.saveAdvancePayment(payload);
+            } else {
+                this.componentStore.saveStripePayment({ subscriptionId, paymentIntentId: piId });
+            }
+        } else {
+            this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
+            this.toasterService.showSnackBar('error', 'Subscription ID not found.');
+        }
+
+        // Clear cached form data — we don't want stale sessionStorage values
+        // lingering after the redirect is handled.
+        this.clearStripeSessionData();
+        this.clearStripeRedirectParams();
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Handles Stripe redirect when payment fails (redirect_status=failed).
+     * Restores the full subscription form saved before the redirect and returns
+     * the user to the review-and-pay step (step 2) with Stripe pre-selected.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private handleStripeRedirectFailure(): void {
+        this.isLoading = false;
+        this.componentStore.patchState({ saveStripePaymentInProgress: false });
+        // Notify any other open buy-plan tabs so their loader is dismissed
+        this.stripePaymentSuccessBroadcast?.postMessage({ success: false });
+        this.clearStripeRedirectParams();
+
+        // Read every piece of state that was saved before the Stripe redirect
+        const savedFormStr = sessionStorage.getItem('stripe_subscription_form');
+        const savedPlanStr = sessionStorage.getItem('stripe_selected_plan');
+        const regionValue = sessionStorage.getItem('stripe_region_value');
+        const regionLabel = sessionStorage.getItem('stripe_region_label');
+        const savedPlanUniqueName = sessionStorage.getItem('stripe_plan_unique_name');
+
+        // Clean up snapshot keys immediately (remaining keys cleaned in saveStripePaymentSuccess$)
+        sessionStorage.removeItem('stripe_subscription_form');
+        sessionStorage.removeItem('stripe_selected_plan');
+        sessionStorage.removeItem('stripe_region_value');
+        sessionStorage.removeItem('stripe_region_label');
+
+        // Restore all three step-forms in one call:
+        //  - firstStepForm.planUniqueName  → must be valid for linear stepper to reach step 2
+        //  - secondStepForm required fields → must be valid for linear stepper to reach step 2
+        //  - thirdStepForm.paymentProvider → was 'STRIPE' when Buy Now was clicked, so Stripe
+        //    is automatically pre-selected without any extra work
+        let savedForm: any = null;
+        if (savedFormStr) {
+            try { savedForm = JSON.parse(savedFormStr); } catch {}
+        }
+        if (savedForm) {
+            this.subscriptionForm.patchValue(savedForm);
+            // Explicitly re-apply payment provider because nested patchValue can be flaky
+            // with ControlValueAccessor components that use OnPush change detection.
+            if (savedForm.thirdStepForm?.paymentProvider) {
+                this.thirdStepForm.get('paymentProvider')?.setValue(savedForm.thirdStepForm.paymentProvider);
+            }
+            // Explicitly sync the selectedDuration signal so setPlans() picks the right list
+            // (valueChanges may not have fired yet by the time getAllPlans() runs).
+            const restoredDuration = savedForm.firstStepForm?.duration;
+            if (restoredDuration) {
+                this.selectedDuration.set(restoredDuration);
+                this.restoredDuration = restoredDuration;
+                // Also explicitly set the form control value so mat-button-toggle-group reflects it
+                this.firstStepForm.get('duration')?.setValue(restoredDuration, { emitEvent: true });
+            }
+        }
+
+        // Restore the full plan object into the signal so the review screen renders the
+        // correct plan summary immediately (before the fresh API response arrives).
+        const savedPlan = savedPlanStr ? (JSON.parse(savedPlanStr) as any) : null;
+        if (savedPlan) {
+            this.selectedPlan.set(savedPlan);
+        }
+
+        // Block IP-based country detection (getDefaultPlan) while we reload the correct
+        // region's plans; otherwise the component switches to India and hides Stripe.
+        this.restoringFromStripeFailure = true;
+
+        // Re-trigger the API call for the originally selected region (e.g. GLB).
+        if (regionValue) {
+            this.newUserSelectCountry({ value: regionValue, label: regionLabel || regionValue });
+        }
+
+        // Once the correct region's plans arrive, do a final sync of all plan-dependent
+        // state. The filter() ignores cached plans from a different region; the subscription
+        // only fires when the right region's plans are actually available.
+        if (savedPlanUniqueName) {
+            this.planList$.pipe(
+                filter((plans: any[]) => Array.isArray(plans) && plans.some((p: any) => p.uniqueName === savedPlanUniqueName)),
+                take(1),
+                takeUntil(this.destroyed$)
+            ).subscribe((plans: any[]) => {
+                // Skip if setPlans() already handled the restoration (getAllPlans from newUserSelectCountry fires first)
+                if (!this.restoredDuration) {
+                    return;
+                }
+                this.allPlans = plans;
+                this.yearlyPlans = plans.filter((p: any) => p.hasOwnProperty('yearlyAmount') && p?.yearlyAmount !== null);
+                this.monthlyPlans = plans.filter((p: any) => p.hasOwnProperty('monthlyAmount') && p?.monthlyAmount !== null);
+                const useYearly = this.restoredDuration === PlanDuration.YEARLY;
+                const filteredPlans = useYearly ? this.yearlyPlans : this.monthlyPlans;
+                this.inputData = [];
+                filteredPlans?.forEach(plan => { this.inputData.push(plan); });
+                const restoredPlan = plans.find((p: any) => p.uniqueName === savedPlanUniqueName);
+                if (restoredPlan) {
+                    this.selectedPlan.set(restoredPlan);
+                    this.firstStepForm.get('planUniqueName')?.setValue(savedPlanUniqueName);
+                }
+                // NOTE: restoringFromStripeFailure is intentionally NOT cleared here.
+                // setPlans() fires after this subscription (triggered by the getAllPlans()
+                // take(1) set up 200ms later inside newUserSelectCountry). The flag is cleared
+                // inside setPlans so it can honour the restoration before resetting plan state.
+                this.setFinalAmount();
+                this.changeDetection.detectChanges();
+            });
+        }
+
+        // Calculate amounts / payment providers now using the restored plan so the review
+        // screen is correct before the fresh API response arrives.
+        this.setFinalAmount();
+
+        this.selectedStep.set(2);
+        // Defer stepper navigation so the linear stepper sees valid forms after patchValue.
+        // Use next() twice instead of selectedIndex because linear stepper validates
+        // stepControl before allowing navigation.
+        setTimeout(() => {
+            if (this.stepperIcon) {
+                this.stepperIcon.next();
+                setTimeout(() => {
+                    if (this.stepperIcon) {
+                        this.stepperIcon.next();
+                    }
+                    // Re-apply Stripe after the stepper has rendered step 3 and the
+                    // payment-provider-selector ControlValueAccessor has initialized.
+                    // A longer delay is needed because the component uses OnPush CD.
+                    setTimeout(() => {
+                        this.thirdStepForm.get('paymentProvider')?.patchValue(PaymentProvider.STRIPE);
+                        this.changeDetection.detectChanges();
+                    }, 100);
+                }, 0);
+            }
+        }, 0);
+
+        if (this.localeData?.payment_failed) {
+            this.toasterService.showSnackBar('error', this.localeData.payment_failed);
+        } else {
+            // Translations not yet loaded; defer toast until translationComplete fires
+            this.pendingStripeFailureToast = true;
+        }
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Removes Stripe-related query params (payment_intent, payment_intent_client_secret, redirect_status)
+     * from the current URL using the shared GeneralService helper.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private clearStripeRedirectParams(): void {
+        this.generalService.updateActivatedRouteQueryParams({
+            payment_intent: null,
+            payment_intent_client_secret: null,
+            redirect_status: null
+        });
+    }
+
+    /**
+     * Clears Stripe form sessionStorage items after redirect is handled.
+     * Keeps subscription_id and is_change_plan for saveStripePaymentSuccess$.
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private clearStripeSessionData(): void {
+        sessionStorage.removeItem('stripe_subscription_form');
+        sessionStorage.removeItem('stripe_selected_plan');
+        sessionStorage.removeItem('stripe_region_value');
+        sessionStorage.removeItem('stripe_region_label');
+        sessionStorage.removeItem('stripe_duration');
+        sessionStorage.removeItem('stripe_plan_unique_name');
+        sessionStorage.removeItem('stripe_amount_paid');
+        sessionStorage.removeItem('stripe_subscription_request');
+        sessionStorage.removeItem('stripe_is_advance_payment');
+        sessionStorage.removeItem('stripe_prepaid_unique_name');
+        sessionStorage.removeItem('stripe_after_success_redirection_url');
+    }
+
+    /**
+     * Extracts payment intent ID from client secret
+     *
+     * @private
+     * @param {string} clientSecret
+     * @returns {string}
+     * @memberof BuyPlanComponent
+     */
+    private extractPaymentIntentId(clientSecret: string): string {
+        return clientSecret?.split('_secret_')[0] || '';
+    }
+
+    private getStripeClientSecret(response: any): string | undefined {
+        return response?.clientSecret ?? response?.stripeClientSecret;
+    }
+
+    private resetStripeState(): void {
+        this.stripeDialogRef?.close();
+        this.stripeDialogRef = null;
+        this.showStripePaymentElement = false;
+        this.stripeClientSecret = '';
+        this.stripeError = '';
+        this.stripePaymentInProgress = false;
+        this.stripeElements = null;
+        this.stripe = null;
     }
 
     /**
@@ -1786,15 +2656,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
         this.secondStepForm.controls['address'].setValue(data?.address);
         if (data?.country) {
-            this.secondStepForm.controls['country'].setValue({ label: data.country.name, value: data.country.code, additional: data.country });
+            this.secondStepForm.controls['country'].patchValue({ name: data.country.name, code: data.country.code, additional: data.country });
         }
         if (data?.state) {
-            this.secondStepForm.controls['state'].setValue({ label: data.state.name, value: data.state.code, additional: data.state });
+            this.secondStepForm.controls['state'].patchValue({ name: data.state.name, code: data.state.code, additional: data.state });
         } else {
-            this.secondStepForm.controls['state'].setValue({ abel: data.county.name, value: data.county.code, additional: data.county });
+            this.secondStepForm.controls['state'].patchValue({ name: data.county.name, code: data.county.code, additional: data.county });
         }
-
-        this.initIntl(this.secondStepForm.get('mobileNumber')?.value);
 
         this.subscriptionForm.markAsPristine();
         this.changeDetection.detectChanges();
@@ -1808,7 +2676,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public getFlagUrl(countryRegionCode: string): string {
-        return this.generalService.getCountryFlagUrl(countryRegionCode);
+        return this.generalService.getCountryFlagUrl(countryRegionCode) || this.serviceConfig.IMG_PATH + 'exclamation-black.svg';
     }
 
     /**
@@ -1819,32 +2687,25 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
    */
     public translationComplete(event: any): void {
         if (event) {
+            if (this.pendingStripeFailureToast && this.localeData?.payment_failed) {
+                this.toasterService.showSnackBar('error', this.localeData.payment_failed);
+                this.pendingStripeFailureToast = false;
+            }
             this.allPaymentProviders = [
-                {
-                    label: this.localeData?.razorpay,
-                    value: PaymentProvider.RAZORPAY,
-                },
-                {
-                    label: this.localeData?.gocardless,
-                    value: PaymentProvider.GOCARDLESS
-                },
-                {
-                    label: this.localeData?.paypal,
-                    value: PaymentProvider.PAYPAL
-                },
-                {
-                    label: this.localeData?.payu,
-                    value: PaymentProvider.PAYU
-                }
-            ];
+                PaymentProvider.GOCARDLESS,
+                PaymentProvider.PAYPAL,
+                PaymentProvider.PAYU,
+                PaymentProvider.RAZORPAY,
+                PaymentProvider.STRIPE
+            ].filter(provider => this.serviceConfig.ALL_PAYMENT_PROVIDERS.includes(provider));
             this.changeDetection.detectChanges();
         }
     }
 
     /**
-     * Open PayU HTML in new window and listen for PayU response 
+     * Open PayU HTML in new window and listen for PayU response
      * then update subscription
-     * 
+     *
      * @param {string} html - PayU HTML
      */
     private openPayUPayment(html: string): void {
@@ -1859,6 +2720,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             provider: string;
         }>) => {
             if (event.data?.status?.toLocaleLowerCase() === 'success' && event.data.transactionId) {
+                if (this.isAdvancePayment) {
+                    this.saveAdvancePayment({ payuTransactionId: event.data.transactionId });
+                    window.removeEventListener("message", handlePayUMessage);
+                    return;
+                }
                 const model = {
                     payuTransactionId: event.data.transactionId,
                     paymentProvider: event.data.provider,
@@ -1875,5 +2741,31 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         };
         window.addEventListener("message", handlePayUMessage);
+    }
+
+    /**
+     * Navigate to new company page with billing form data as query parameters
+     *
+     * @param {string} subscriptionId - Subscription ID
+     * @memberof BuyPlanComponent
+     */ 
+    private navigateToNewCompany(subscriptionId: string): void {
+        if (this.subscriptionId && this.activateSubscription && this.atLeatOneCompany) {
+            this.navigateToRoute('/pages/user-details/subscription');
+        }
+        const billingForm = this.secondStepForm.value;
+        delete billingForm.billingName;
+
+        billingForm.country = billingForm.country?.value;
+        billingForm.state = billingForm.state?.value;
+        const queryParams: any = {};
+
+        Object.keys(billingForm).forEach(key => {
+            if (billingForm[key] !== null && billingForm[key] !== undefined && billingForm[key] !== '') {
+                queryParams[key] = billingForm[key];
+            }
+        });
+
+        this.navigateToRoute(`/pages/new-company/${subscriptionId}`, queryParams);
     }
 }

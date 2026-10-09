@@ -8,8 +8,11 @@ import { SearchRequest, SearchResponse } from '../models/api-models/Search';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { concat, forEach, get, keys } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SearchService {
     private companyUniqueName: string;
 
@@ -114,6 +117,8 @@ export class SearchService {
                 const delimiter = index === 0 ? '?' : '&';
                 if (key === 'branchUniqueName') {
                     params[key] = params[key] === companyUniqueName ? '' : params[key];
+                } else if (key === 'customerUniqueName') {
+                    params[key] = encodeURIComponent(params[key]);
                 }
                 contextPath += `${delimiter}${key}=${params[key]}`
             });

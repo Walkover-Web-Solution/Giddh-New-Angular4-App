@@ -4,8 +4,8 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from 'apps/web-giddh/src/app/app.constant';
+import { cloneDeep } from '../../../../lodash-optimized';
 import { PageEvent } from '@angular/material/paginator';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { NewBranchTransferDownloadRequest, NewBranchTransferListGetRequestParams } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -26,7 +26,8 @@ import { saveAs } from 'file-saver';
 @Component({
     selector: 'app-list-branch-transfer',
     templateUrl: './list-branch-transfer.component.html',
-    styleUrls: ['./list-branch-transfer.component.scss']
+    styleUrls: ['./list-branch-transfer.component.scss'],
+    standalone:false
 })
 
 export class ListBranchTransferComponent implements OnInit {
@@ -139,6 +140,8 @@ export class ListBranchTransferComponent implements OnInit {
     public translationLoaded: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
         return (
@@ -194,7 +197,7 @@ export class ListBranchTransferComponent implements OnInit {
         this.initAllForms();
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
                 this.datePicker = [dayjs(universalDate[0], GIDDH_DATE_FORMAT).toDate(), dayjs(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
                 this.branchTransferGetRequestParams.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.branchTransferGetRequestParams.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
@@ -208,6 +211,7 @@ export class ListBranchTransferComponent implements OnInit {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
+                this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && response.length > 1;
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.name,
                     value: branch?.uniqueName,
@@ -344,9 +348,11 @@ export class ListBranchTransferComponent implements OnInit {
                 this.branchTransferPaginationObject.totalPages = response.body.totalPages;
                 this.branchTransferPaginationObject.totalItems = response.body.totalItems;
                 this.branchTransferResponse = response.body?.items;
+                this.dialog?.closeAll();
             } else {
                 this.branchTransferResponse = [];
                 this.branchTransferPaginationObject.totalItems = 0;
+                this.toaster.showSnackBar('error', response?.message);
             }
             this.changeDetection.detectChanges();
         });
@@ -494,10 +500,10 @@ export class ListBranchTransferComponent implements OnInit {
         this.branchTransferConfirmationConfiguration = this.generalService.getDeleteBranchTransferConfiguration(this.localeData, this.commonLocaleData, this.selectedBranchTransferType,);
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    data: {
                 configuration: this.branchTransferConfirmationConfiguration
-            }
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -572,11 +578,11 @@ export class ListBranchTransferComponent implements OnInit {
     public openAdvanceFilterDialog(): void {
         this.voucherTypeDropdown?.closeDropdownPanel();
         this.dialog.open(this.advanceFilterComponent, {
-            width: '500px',
-            autoFocus: false,
-            role: 'alertdialog',
-            ariaLabel: 'Advance filter Dialog',
-        })
+                    width: '500px',
+                    autoFocus: false,
+                    role: 'alertdialog',
+                    ariaLabel: 'Advance filter Dialog'
+                })
     }
 
     /**
@@ -699,7 +705,6 @@ export class ListBranchTransferComponent implements OnInit {
             this.branchTransferForm.controls['voucherType'].setValue('deliverynote');
         }
         this.getBranchTransferList(true);
-        this.dialog?.closeAll();
     }
 
     /**
@@ -777,11 +782,20 @@ export class ListBranchTransferComponent implements OnInit {
         }
     }
 
+    /**
+     * This will be use for clear filter
+     *
+     * @param field
+     * @memberof ListBranchTransfer
+     */
+    public handleOnClear(field: string): void {
+        this.branchTransferForm.controls[field].setValue(null);
+        this.branchTransferAdvanceSearchFormObj[field] = null;
+    }
 
     /**
      * Component destroy hook
      *
-     * @param {*} event
      * @memberof ListBranchTransfer
      */
     public ngOnDestroy(): void {
@@ -789,7 +803,4 @@ export class ListBranchTransferComponent implements OnInit {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
-
-
 }

@@ -1,17 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { cloneDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { map, takeUntil, tap } from 'rxjs/operators';
+import { cloneDeep, filter, forEach, isEqual } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'create-recipe',
+
     templateUrl: './create-recipe.component.html',
+    standalone: false,
     styleUrls: ['./create-recipe.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -143,10 +145,12 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         this.getAllStocks(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1].byProducts[0], 1, "");
 
         if (!this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1]?.units?.length) {
-            this.getStockUnits(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1], this.stock.stockUnitUniqueName, true);
+            this.getStockUnits(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1], this.stock.stockUnitUniqueName, true).subscribe(updatedObject => {
+                this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1] = updatedObject;
+            });
         }
 
-        this.recipeObject.manufacturingDetails.forEach(data => {
+        (Array.isArray(this.recipeObject.manufacturingDetails) ? this.recipeObject.manufacturingDetails : []).forEach(data => {
             if (data?.linkedStocks[0]
                 ?.variant.uniqueName || data?.byProducts[0]
                     ?.variant.uniqueName) {
@@ -396,6 +400,21 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     }
 
     /**
+     * Handles the unit change event
+     *
+     * @param {*} object The object to update
+     * @param {string} stockUnitUniqueName The unique name of the stock unit
+     * @param {boolean} isFinishedStock True if the stock is a finished stock
+     * @memberof CreateRecipeComponent
+     */
+    public onUnitChange(object: any, stockUnitUniqueName: string, isFinishedStock: boolean): void {
+        this.getStockUnits(object, stockUnitUniqueName, isFinishedStock).subscribe(() => {
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+
+    /**
      * Get stock units
      *
      * @param {*} object
@@ -405,18 +424,19 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      * @returns {void}
      * @memberof CreateRecipeComponent
      */
-    public getStockUnits(object: any, stockUnitUniqueName: string, isFinishedStock: boolean, isEdit: boolean = false): void {
+    public getStockUnits(object: any, stockUnitUniqueName: string, isFinishedStock: boolean, isEdit: boolean = false): Observable<any> {
         if (!stockUnitUniqueName) {
-            return;
+            return of(null);
         }
 
         object.units = [];
 
+        // Finished stock case (sync)
         if (isFinishedStock && this.recipeObject.manufacturingDetails[0]?.units?.length) {
             object.units = cloneDeep(this.recipeObject.manufacturingDetails[0]?.units);
 
             if (!isEdit) {
-                if (object.units?.length === 1) {
+                if (object.units.length === 1) {
                     object.manufacturingUnitCode = object.units[0].label;
                     object.manufacturingUnitUniqueName = object.units[0].value;
                 } else {
@@ -424,38 +444,44 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     object.manufacturingUnitUniqueName = "";
                 }
             }
-            return;
+
+            return of(object); // sync return
         }
 
-        this.manufacturingService.loadStockUnits(stockUnitUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(units => {
-            if (units?.length) {
-                units?.forEach(unit => {
-                    object.units.push({ label: unit?.code, value: unit?.uniqueName });
-                });
+        // async case
+        return this.manufacturingService.loadStockUnits(stockUnitUniqueName).pipe(
+            tap(units => {
+                if (units?.length) {
+                    object.units = units.map(unit => ({
+                        label: unit.code,
+                        value: unit.uniqueName
+                    }));
 
-                if (!isEdit) {
-                    if (object.units?.length === 1) {
-                        if (isFinishedStock) {
-                            object.manufacturingUnitCode = object.units[0].label;
-                            object.manufacturingUnitUniqueName = object.units[0].value;
+                    if (!isEdit) {
+                        if (object.units.length === 1) {
+                            if (isFinishedStock) {
+                                object.manufacturingUnitCode = object.units[0].label;
+                                object.manufacturingUnitUniqueName = object.units[0].value;
+                            } else {
+                                object.stockUnitCode = object.units[0].label;
+                                object.stockUnitUniqueName = object.units[0].value;
+                            }
                         } else {
-                            object.stockUnitCode = object.units[0].label;
-                            object.stockUnitUniqueName = object.units[0].value;
-                        }
-                    } else {
-                        if (isFinishedStock) {
-                            object.manufacturingUnitCode = "";
-                            object.manufacturingUnitUniqueName = "";
-                        } else {
-                            object.stockUnitCode = "";
-                            object.stockUnitUniqueName = "";
+                            if (isFinishedStock) {
+                                object.manufacturingUnitCode = "";
+                                object.manufacturingUnitUniqueName = "";
+                            } else {
+                                object.stockUnitCode = "";
+                                object.stockUnitUniqueName = "";
+                            }
                         }
                     }
                 }
-                this.changeDetectionRef.detectChanges();
-            }
-        });
+            }),
+            map(() => object)
+        );
     }
+
 
     /**
      * Checks if variant is already selected to restrict from getting selected again
@@ -511,7 +537,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         this.recipeObject.manufacturingDetails[index].variant = manufacturingDetail.variant;
                         this.recipeObject.manufacturingDetails[index].linkedStocks = [];
 
-                        this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true);
+                        this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true).subscribe(updatedObject => {
+                            this.recipeObject.manufacturingDetails[index] = updatedObject;
+                        });
 
                         let linkedStockIndex = 0;
                         if (!manufacturingDetail?.linkedStocks?.length) {
@@ -553,7 +581,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                 linkedStockIndex++;
                             });
                         }
-                        index++;
                     });
                     this.existingRecipe = this.formatRecipeRequest();
                     this.isByLinkedStockExpanded = this.recipeObject.manufacturingDetails[0]?.linkedStocks[0]
@@ -581,7 +608,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         }
 
                         this.recipeObject.manufacturingDetails[index].byProducts = [];
-                        this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true);
+                        this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true).subscribe(updatedObject => {
+                            this.recipeObject.manufacturingDetails[index] = updatedObject;
+                        });
 
                         if (!manufacturingDetail?.byProducts?.length) {
                             this.recipeObject.manufacturingDetails[index].byProducts?.push(
@@ -624,7 +653,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                 byProductlinkedStockIndex++;
                             });
                         }
-                        index++;
                     });
                     this.existingRecipe = this.formatRecipeRequest();
                     this.isByProductExpanded = this.recipeObject.manufacturingDetails[0]?.byProducts[0]
@@ -653,14 +681,14 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public removeLinkedStock(recipeIndex: number, index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_recipe_linked_stock,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_recipe_linked_stock,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -680,14 +708,14 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     */
     public removeByProductLinkedStock(recipeIndex: number, index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_recipe_byproduct_stock,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_recipe_byproduct_stock,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -722,14 +750,14 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public removeRecipe(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_recipe,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_recipe,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

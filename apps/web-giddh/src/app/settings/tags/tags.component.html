@@ -1,31 +1,28 @@
-<ng-container
-    appTranslate
-    [file]="'settings/tags'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
-    <div class=" p-3 section-center">
-        <form [formGroup]="tagForm" >
+<div appTranslate [file]="'settings/tags'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <div class="p-3 section-center pt-5">
+        <form [formGroup]="tagForm">
             <div class="row">
                 <div class="col-12 px-0">
-                    <div *ngIf="isLoading">
+                    <div *ngIf="isLoading()">
                         <giddh-page-loader></giddh-page-loader>
                     </div>
-                    <mat-form-field class="initial-height w-100" appearance="outline" *ngIf="!isLoading">
-                        <mat-label>{{ localeData?.tags_name  }}</mat-label>
+                    <mat-form-field class="initial-height w-100" appearance="outline" *ngIf="!isLoading()">
+                        <mat-label>{{ localeData?.tags_name }}</mat-label>
                         <mat-chip-grid #chipGrid aria-label="Enter tag">
-                            <mat-chip-row *ngFor="let tag of tags"
-                                        (removed)="deleteTag(tag)"
-                                        [editable]="true"
-                                        (edited)="updateTag(tag, $event)"
-                                        [aria-description]="'press enter to edit ' + tag?.name"
+                            <mat-chip-row
+                                *ngFor="let tag of tags"
+                                (removed)="deleteTag(tag)"
+                                [editable]="true"
+                                (edited)="updateTag(tag, $event)"
+                                [aria-description]="'press enter to edit ' + tag?.name"
                             >
-                            {{ tag?.name | titlecase }}
-                            <button matChipRemove [attr.aria-label]="'remove ' + tag?.name">
-                                <i class="icon-cross"></i>
-                            </button>
+                                {{ tag?.name | titlecase }}
+                                <button matChipRemove [attr.aria-label]="'remove ' + tag?.name">
+                                    <i class="icon-cross"></i>
+                                </button>
                             </mat-chip-row>
-                            <input  
+                            <input
+                                #tagInput
                                 [placeholder]="localeData?.tag_name_placeholder"
                                 [matChipInputFor]="chipGrid"
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -34,8 +31,8 @@
                             />
                         </mat-chip-grid>
                     </mat-form-field>
-                   
-                    <div class="no-data font-size-24" *ngIf="!isLoading && !tags?.length">
+
+                    <div class="no-data font-size-24" *ngIf="!isLoading() && !tags?.length">
                         <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
                     </div>
                 </div>
@@ -47,19 +44,16 @@
     <ng-template #confirmationModal>
         <div class="modal-md">
             <div class="modal-content">
-                <div class="dialog-header">
+                <div cdkFocusInitial class="dialog-header">
                     <span>{{ commonLocaleData?.app_confirmation }}</span>
-                    <button mat-icon-button aria-label="close" mat-dialog-close (click)="onUserConfirmation(false)">
-                        <i class="icon-cross"></i>
-                    </button>
                 </div>
                 <mat-dialog-content class="dialog-body">
                     <div [innerHTML]="confirmationMessage"></div>
                     <div class="d-flex justify-content-end column-gap-1 mt-3">
-                        <button mat-raised-button mat-dialog-close color="primary" (click)="onUserConfirmation(true)">
+                        <button matButton="filled" mat-dialog-close color="primary" (click)="onUserConfirmation(true)">
                             {{ commonLocaleData?.app_yes }}
                         </button>
-                        <button mat-stroked-button mat-dialog-close (click)="onUserConfirmation(false)">
+                        <button matButton="outlined" mat-dialog-close (click)="onUserConfirmation(false)">
                             {{ commonLocaleData?.app_no }}
                         </button>
                     </div>
@@ -67,4 +61,4 @@
             </div>
         </div>
     </ng-template>
-</ng-container>
+</div>

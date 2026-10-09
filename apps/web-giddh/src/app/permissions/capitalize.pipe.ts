@@ -1,8 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { slice } from '../lodash-optimized';
 
 @Pipe({
     // tslint:disable-next-line:pipe-naming
-    name: 'capitalize'
+    name: 'capitalize',
+    standalone: false
 })
 export class CapitalizePipe implements PipeTransform {
 

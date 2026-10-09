@@ -14,7 +14,8 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 @Component({
     selector: 'reconcile',
     templateUrl: './reconcilation.component.html',
-    styleUrls: ['./reconcilation.component.scss']
+    styleUrls: ['./reconcilation.component.scss'],
+    standalone: false
 })
 export class ReconcileComponent implements OnInit, OnDestroy {
     @Input() public data: GstReconcileInvoiceDetails = null;
@@ -61,7 +62,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.fireGstReconcileRequest(GstReconcileActionsEnum.notfoundonportal);
     }
 

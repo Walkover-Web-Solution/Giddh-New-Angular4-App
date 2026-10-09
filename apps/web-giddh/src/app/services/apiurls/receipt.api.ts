@@ -4,6 +4,7 @@ export const RECEIPT_API = {
     PUT: COMMON_URL_FOR_RECIPT,
     GET_DETAILS: COMMON_URL_FOR_RECIPT,
     GET_ALL: 'company/:companyUniqueName/vouchers/get-all?',
+    STOCK_HISTORY: 'v2/company/:companyUniqueName/stock-history?branchUniqueName=:branchUniqueName&voucherVersion=2',
     DELETE: COMMON_URL_FOR_RECIPT,
     DOWNLOAD_VOUCHER: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file?fileType=pdf',
     GET_DETAILS_V4: COMMON_URL_FOR_RECIPT_V4,

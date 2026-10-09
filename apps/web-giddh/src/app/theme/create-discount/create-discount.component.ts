@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil, of as observableOf } from "rxjs";
 import { CreateDiscountComponentStore } from "./utility/create-discount.store";
 import { UntypedFormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -9,7 +9,9 @@ import { GeneralService } from "../../services/general.service";
     selector: "create-discount",
     templateUrl: "./create-discount.component.html",
     styleUrls: ["./create-discount.component.scss"],
-    providers: [CreateDiscountComponentStore]
+    providers: [CreateDiscountComponentStore],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CreateDiscountComponent implements OnInit, OnDestroy {
     /** Discounts list Observable */
@@ -34,13 +36,16 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     public isLoading: boolean = true;
     /** Voucher API Version */
     public voucherApiVersion: number;
+    /** Discount type options for dropdown */
+    public discountTypeOptions: any[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public discountInfo: any,
         private componentStore: CreateDiscountComponentStore,
         private formBuilder: UntypedFormBuilder,
         public dialogRef: MatDialogRef<any>,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private changeDetectorRef: ChangeDetectorRef
     ) { }
 
     /**
@@ -106,6 +111,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
                     this.createDiscountForm.get('accountUniqueName')?.patchValue(discountsAccountList[0]?.value);
                 }
                 this.isLoading = false;
+                this.changeDetectorRef.markForCheck();
             }
         });
     }
@@ -120,7 +126,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for save discount 
+     * This will be use for save discount
      *
      * @return {*}  {void}
      * @memberof CreateDiscountComponent
@@ -137,12 +143,11 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
         if (!model.accountUniqueName) {
             delete model.accountUniqueName;
         }
-
         this.componentStore.saveDiscount(model);
     }
 
     /**
-     * This will be use for update discount 
+     * This will be use for update discount
      *
      * @return {*}  {void}
      * @memberof CreateDiscountComponent
@@ -193,6 +198,31 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation completion
+     *
+     * @param {*} event
+     * @memberof CreateDiscountComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.initDiscountTypeOptions();
+        }
+    }
+
+    /**
+     * Initializes discount type options for dropdown
+     *
+     * @private
+     * @memberof CreateDiscountComponent
+     */
+    private initDiscountTypeOptions(): void {
+        this.discountTypeOptions = [
+            { label: this.localeData?.discount_types?.as_per_value, value: 'FIX_AMOUNT' },
+            { label: this.localeData?.discount_types?.as_per_percent, value: 'PERCENTAGE' }
+        ];
     }
 
     /**

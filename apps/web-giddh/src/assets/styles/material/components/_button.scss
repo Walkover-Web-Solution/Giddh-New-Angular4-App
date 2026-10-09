@@ -4,3 +4,9 @@
         --mdc-protected-button-container-color: var(--color-white) !important;
     }
 }
+
+.mat-mdc-icon-button {
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}

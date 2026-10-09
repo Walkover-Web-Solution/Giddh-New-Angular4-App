@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'trial-profit-balance/profit-loss'"
     (localeData)="localeData = $event"
@@ -13,7 +13,7 @@
         (expandAllChange)="expandAllEvent()"
         [(expandAll)]="expandAll"
     ></filter-multi-currency>
-    <giddh-page-loader  *ngIf="showLoader | async" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+    <giddh-page-loader *ngIf="showLoader | async" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     <div *ngIf="data && !(showLoader | async)">
         <profit-loss-report-grid
             #plGrid
@@ -28,4 +28,4 @@
     <div *ngIf="!(showLoader | async) && !data" class="no-data">
         <h2>{{ localeData?.no_data_found }}</h2>
     </div>
-</ng-container>
+</div>

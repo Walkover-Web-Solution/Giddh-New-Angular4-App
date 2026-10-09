@@ -15,6 +15,7 @@ import { ServiceConfig } from '../../../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { ComponentCanDeactivate } from '../../../decorators/page-leave-confirmation-guard';
+import { CommonActions } from '../../../actions/common.actions';
 
 /**
  * Data with nested structure.
@@ -39,7 +40,9 @@ interface SidebarFlatNode {
 }
 @Component({
     selector: 'inventory-sidebar',
+    
     templateUrl: './inventory-sidebar.component.html',
+    standalone: false,
     styleUrls: [`./inventory-sidebar.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -114,7 +117,8 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
         private settingsBranchAction: SettingsBranchActions,
         private location: Location,
         private dialog: MatDialog,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private commonAction: CommonActions
     ) {
     }
 
@@ -124,7 +128,7 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
      * @memberof InventorySidebarComponent
     */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.currentUrl = this.router.url;
         this.setupNavigationListener();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
@@ -241,6 +245,7 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/product/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/product/master' },
                         { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/bulk-stock-edit' },
+                        { name: this.localeData?.sidebar?.stock_aging_report, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/stock-aging-report' },
                         { name: this.localeData?.sidebar?.inventory_adjustment, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/adjust', hiddenLink: ['/pages/inventory/v2/product/adjust/create'] }
                     ],
                 },
@@ -255,6 +260,7 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/service/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/service/master' },
                         { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/bulk-stock-edit' },
+                        { name: this.localeData?.sidebar?.stock_aging_report, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/stock-aging-report' },
                         { name: this.localeData?.sidebar?.inventory_adjustment, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/adjust', hiddenLink: ['/pages/inventory/v2/service/adjust/create'] }
                     ],
                 },
@@ -268,7 +274,8 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/variant' },
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/fixedassets/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/fixedassets/master' },
-                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/fixedassets/bulk-stock-edit' }
+                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/fixedassets/bulk-stock-edit' },
+                        { name: this.localeData?.sidebar?.stock_aging_report, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/fixedassets/stock-aging-report' }
                     ],
                 },
                 {
@@ -429,6 +436,7 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
     * @memberof InventorySidebarComponent
     */
     public ngOnDestroy(): void {
+        this.store.dispatch(this.commonAction.hasUnsavedChanges(false));
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

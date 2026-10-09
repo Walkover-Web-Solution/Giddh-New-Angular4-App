@@ -10,6 +10,5 @@
     "not_mobile": "This is not a mobile phone number",
     "obviously_invalid": "This number appears to be invalid (repeated or sequential digits)",
     "impossible_number": "This number is not possible for {{country}}",
-    "parse_error": "Unable to parse this phone number",
     "invalid_format": "Invalid phone number format"
 }

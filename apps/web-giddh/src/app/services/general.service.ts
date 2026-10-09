@@ -1,16 +1,23 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+/**
+ * @fileoverview General service for business logic and data management
+ * @author Giddh Development Team
+ * @since 2026
+ */
+
+import { environment } from './../../environments/environment.generated';
+import { Inject, Injectable, Optional, signal } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
-import { CompanyCreateRequest } from '../models/api-models/Company';
+import { CompanyCreateRequest, CompanyResponse } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
-import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, GIDDH_ONLY_ROUTES, GiddhUiDomain, IOption, MOBILE_NUMBER_SELF_URL, GiddhRegion, RTL_COUNTRY_CODES, RTL_CURRENCY_CODES, RTL_LANGUAGE_CODES, RTL_SCRIPT_SUBTAGS, SUPPORTED_OPERATING_SYSTEMS, TextDirection, WeekdaysEnum } from '../app.constant';
+import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -22,11 +29,32 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
+import { Configuration, INTERNAL_EMAILS_DOMAINS, isSelectedAllOption } from '../app.constant';
+import { cloneDeep, find,orderBy } from '../lodash-optimized';
+import { ToasterService } from './toaster.service';
+import { AbstractControl } from '@angular/forms';
+import { UiSettingsService } from './ui-settings.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
+/**
+ * GeneralService class - Handles generalservice functionality
+ * @export
+ * @class GeneralService
+ */
+
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
     public isCurrencyPipeLoaded: boolean = false;
+
+    /**
+     * Debug flag - set to true to enable global variable logging
+     * To enable debugging: Change this value from false to true
+     * By default: false (no logging)
+     * For debugging: true (enables comprehensive global variable logging)
+     */
+    public debugMode: boolean = false;
 
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
@@ -37,6 +65,8 @@ export class GeneralService {
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     /** Stores the version number for new voucher APIs (1 for old APIs and 2 for new APIs) */
     public voucherApiVersion: number;
+    /** Stores the active company object, used for company-level fallbacks such as postal code label resolution */
+    public activeCompany: CompanyResponse;
 
     get user(): UserDetails {
         return this._user;
@@ -79,7 +109,7 @@ export class GeneralService {
         this._createNewCompany = newCompanyRequest;
     }
 
-    public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
+    public eventHandler: Subject<{ name: string, payload: any }> = new Subject();
     public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private _user: UserDetails;
@@ -91,13 +121,21 @@ export class GeneralService {
 
     private _sessionId: string;
 
+    /** Signal indicating whether the current app URL is a Giddh domain */
+    public readonly isGiddhDomain = signal<boolean>(false);
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private http: HttpClient,
         @Optional() @Inject(ServiceConfig)
-        private config: IServiceConfigArgs
-    ) { }
+        private config: IServiceConfigArgs,
+        private toasterService: ToasterService,
+        private uiSettingsService: UiSettingsService
+    ) {
+        const isGiddhDomain = this.config?.IS_GIDDH_DOMAIN ?? [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].map(url => new URL(url).hostname).includes(window.location.hostname);
+        this.isGiddhDomain.set(isGiddhDomain);
+    }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
         this.IAmLoaded.next(iAmLoaded);
@@ -107,10 +145,55 @@ export class GeneralService {
         Object.keys(params).forEach((key, index) => {
             if (params[key] !== undefined) {
                 const delimiter = url.indexOf('?') === -1 ? '?' : (index === 0 ? '' : '&');
-                url += `${delimiter}${key}=${params[key]}`
+                url += `${delimiter}${key}=${encodeURIComponent(params[key])}`;
             }
         });
         return url;
+    }
+
+    /**
+     * Replaces selected-all sentinel arrays with empty arrays and collects
+     * their field names in a root-level `selectAllFields` array.
+     *
+     * @param node Request object or nested request object
+     * @param createCopy When true, transforms and returns a deep clone without changing the original object
+     * @returns The transformed request object
+     * @memberof GeneralService
+     */
+    public replaceSelectedAllOptions<T>(node: T, createCopy: boolean = false): T {
+        const requestNode: any = createCopy ? cloneDeep(node) : node;
+        if (!requestNode || typeof requestNode !== 'object') {
+            return requestNode;
+        }
+
+        const selectAllFields: string[] = [];
+        this.replaceSelectedAllOptionsRecursive(requestNode, selectAllFields);
+        requestNode.selectAllFields = selectAllFields;
+
+        return requestNode;
+    }
+
+    /**
+     * Traverses request object and replaces selected-all values.
+     *
+     * @private
+     * @param node Request object or nested request object
+     * @param selectAllFields Root-level list of fields marked as select-all
+     * @memberof GeneralService
+     */
+    private replaceSelectedAllOptionsRecursive(node: any, selectAllFields: string[]): void {
+        if (!node || typeof node !== 'object' || Array.isArray(node)) {
+            return;
+        }
+        Object.keys(node).forEach(key => {
+            const value = node[key];
+            if (isSelectedAllOption(value)) {
+                node[key] = [];
+                selectAllFields.push(key);
+            } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+                this.replaceSelectedAllOptionsRecursive(value, selectAllFields);
+            }
+        });
     }
 
     public setIsMobileView(isMobileView: boolean) {
@@ -153,29 +236,54 @@ export class GeneralService {
 
     storeUtmParameters(routerParams: any): void {
         if (routerParams['utm_source']) {
-            localStorage.setItem('utm_source', routerParams['utm_source']);
+            localStorage.setItem('utm_source', decodeURIComponent(routerParams['utm_source']));
         }
         if (routerParams['utm_medium']) {
-            localStorage.setItem('utm_medium', routerParams['utm_medium']);
+            localStorage.setItem('utm_medium', decodeURIComponent(routerParams['utm_medium']));
         }
         if (routerParams['utm_campaign']) {
-            localStorage.setItem('utm_campaign', routerParams['utm_campaign']);
+            localStorage.setItem('utm_campaign', decodeURIComponent(routerParams['utm_campaign']));
         }
         if (routerParams['utm_term']) {
-            localStorage.setItem('utm_term', routerParams['utm_term']);
+            localStorage.setItem('utm_term', decodeURIComponent(routerParams['utm_term']));
         }
         if (routerParams['utm_content']) {
-            localStorage.setItem('utm_content', routerParams['utm_content']);
+            localStorage.setItem('utm_content', decodeURIComponent(routerParams['utm_content']));
         }
         if (routerParams['region']) {
-            localStorage.setItem('region', routerParams['region']);
+            localStorage.setItem('region', decodeURIComponent(routerParams['region']));
+        }
+        if (routerParams['ref']) {
+            localStorage.setItem('ref', decodeURIComponent(routerParams['ref']));
+        }
+        if (routerParams['source']) {
+            localStorage.setItem('source', decodeURIComponent(routerParams['source']));
         }
     }
 
     getUtmParameter(param: string): string {
-        if (localStorage.getItem(param)) {
-            return localStorage.getItem(param);
-        } else {
+        const localValue = localStorage.getItem(param);
+        if (localValue) {
+            return localValue;
+        }
+
+        try {
+            const cookieValue = this.getRawCookieValue('giddh_query');
+            if (!cookieValue) {
+                console.warn(`[getUtmParameter] No localStorage or giddh_query cookie for "${param}"`);
+                return "";
+            }
+
+            const giddhQuery = JSON.parse(decodeURIComponent(cookieValue)) as Record<string, unknown>;
+            const queryValue = giddhQuery?.[param];
+            if (typeof queryValue === 'string' || typeof queryValue === 'number') {
+                return String(queryValue);
+            }
+
+            console.warn(`[getUtmParameter] giddh_query cookie has no "${param}"`, giddhQuery);
+            return "";
+        } catch (error) {
+            console.error(`[getUtmParameter] Failed to read "${param}" from giddh_query cookie`, error);
             return "";
         }
     }
@@ -187,6 +295,11 @@ export class GeneralService {
         localStorage.removeItem("utm_term");
         localStorage.removeItem("utm_content");
         localStorage.removeItem("region");
+        localStorage.removeItem("ref");
+        localStorage.removeItem("source");
+
+        // Remove giddh_query cookie
+        this.setCookie('giddh_query', null, 0);
     }
 
     getLastElement(array) {
@@ -369,10 +482,9 @@ export class GeneralService {
      */
     public checkIfEmailDomainAllowed(email: string): boolean {
         let isAllowed = false;
-        const whiteLabelDomainsAllowed = this.getDecodedWhiteLabel();
         if (email) {
             let emailSplit = email.split("@");
-            if ((whiteLabelDomainsAllowed?.emailDomains || JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
+            if ((this.config?.EMAIL_DOMAINS).includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }
@@ -542,7 +654,7 @@ export class GeneralService {
     public addValueInArray(array: Array<string>, value: any): Array<string> {
         let exists = false;
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     exists = true;
                 }
@@ -568,7 +680,7 @@ export class GeneralService {
         let exists = false;
 
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     exists = true;
                 }
@@ -590,7 +702,7 @@ export class GeneralService {
         let index = -1;
         if (array && array.length > 0) {
             let loop = 0;
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     index = loop;
                 }
@@ -621,6 +733,28 @@ export class GeneralService {
     }
 
     /**
+     * This will return session cookie name based on logged in region
+     *
+     * @param {string} loggedInRegion
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getRegionSessionCookieName(loggedInRegion: GiddhRegion | string): string {
+        // Stores the default session cookie name.
+        const defaultCookieName = 'giddh_session_id';
+        // Stores region-wise session cookie mapping.
+        const regionSessionCookieMap: Record<GiddhRegion, string> = {
+            [GiddhRegion.UK]: 'giddh_session_id_uk',
+            [GiddhRegion.GB]: 'giddh_session_id_uk',
+            [GiddhRegion.IN]: defaultCookieName
+        };
+        // Stores normalized logged-in region for lookup.
+        const normalizedRegion = (loggedInRegion ?? '').trim().toUpperCase() as GiddhRegion;
+
+        return regionSessionCookieMap[normalizedRegion] ?? defaultCookieName;
+    }
+
+    /**
      *Get cookie value
      *
      * @param {*} name
@@ -628,14 +762,26 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getCookieValue(name: any): any {
+        const cookieValue = this.getRawCookieValue(name);
+        return cookieValue ? cookieValue.toUpperCase() : null;
+    }
+
+    /**
+     * Returns the raw cookie value without transforming case.
+     *
+     * @param {string} name Cookie name
+     * @returns {(string | null)} Raw cookie value or null when missing
+     * @memberof GeneralService
+     */
+    public getRawCookieValue(name: string): string | null {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) {
-            const cookieValue = parts.pop().split(';').shift();
-            return cookieValue.toUpperCase();
+            return parts.pop()?.split(';').shift() ?? null;
         }
         return null;
     }
+
     /**
      * This will be use for get giddh region url
      *
@@ -643,9 +789,13 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getGiddhRegionUrl(): string {
-        const countryRegion = localStorage.getItem('Country-Region');
-        const region = COUNTRY_REGION_MAP[countryRegion] || null;
-        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+        if (this.isGiddhDomain()){
+            const countryRegion = localStorage.getItem('Country-Region');
+            const region = COUNTRY_REGION_MAP[countryRegion] || null;
+            return region === 'gl' ? `${GiddhUiDomain.WEBSITE}login` : `${GiddhUiDomain.WEBSITE}${region}/login`;
+        } else {
+            return `${window.location.origin}/login`;
+        }
     }
 
     /**
@@ -792,13 +942,60 @@ export class GeneralService {
      *  @memberof GeneralService
      */
     public isRtlCurrency(currencyCode: string): boolean {
-        const rtlCurrencyCodes = ['AED'];
-
-        if (rtlCurrencyCodes?.indexOf(currencyCode) > -1) {
+        if (RTL_CURRENCY_CODES?.indexOf(currencyCode) > -1) {
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * This will return true if the given language/locale code is written right-to-left
+     *
+     * @param {string} languageCode Language code, e.g. 'ar', 'ur', 'pa-Arab'
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isRtlLanguage(languageCode: string): boolean {
+        const code = languageCode?.toLowerCase()?.trim();
+        if (!code) {
+            return false;
+        }
+        const parts = code.split(/[-_]/);
+        if (RTL_LANGUAGE_CODES?.indexOf(parts[0]) > -1) {
+            return true;
+        }
+        return parts.slice(1).some(part => RTL_SCRIPT_SUBTAGS?.indexOf(part) > -1);
+    }
+
+    /**
+     * This will return true if the given alpha-2 country code uses a right-to-left script
+     *
+     * @param {string} countryCode Alpha-2 country code, e.g. 'AE'
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isRtlCountry(countryCode: string): boolean {
+        return RTL_COUNTRY_CODES?.indexOf(countryCode?.toUpperCase()) > -1;
+    }
+
+    /**
+     * This will return the text direction of the given language code, falls back
+     * to the country code when no language code is provided
+     *
+     * @param {string} languageCode Language code, e.g. 'ar'
+     * @param {string} [countryCode] Alpha-2 country code, e.g. 'AE'
+     * @returns {TextDirection} 'rtl' when right-to-left else 'ltr'
+     * @memberof GeneralService
+     */
+    public getTextDirection(languageCode: string, countryCode?: string): TextDirection {
+        if (this.isRtlLanguage(languageCode)) {
+            return TextDirection.RTL;
+        }
+        if (!languageCode && this.isRtlCountry(countryCode)) {
+            return TextDirection.RTL;
+        }
+        return TextDirection.LTR;
     }
 
     /**
@@ -827,6 +1024,7 @@ export class GeneralService {
      */
     public fetchTaxesOnPriority(stockTaxes?: Array<string>, stockGroupTaxes?: Array<string>,
         accountTaxes?: Array<string>, accountGroupTaxes?: Array<string>): Array<string> {
+        accountTaxes = accountTaxes?.filter((tax) => !(accountGroupTaxes ?? []).includes(tax)) ?? [];
         if (stockTaxes?.length) {
             return stockTaxes;
         } else if (stockGroupTaxes?.length) {
@@ -855,7 +1053,7 @@ export class GeneralService {
                 // Check if "" is not present at 0th and 1st index
                 let count = 0;
                 let initials = '';
-                nameArray.forEach(word => {
+                (Array.isArray(nameArray) ? nameArray : []).forEach(word => {
                     if (word && count < 2) {
                         initials += ` ${word[0]}`;
                         count++;
@@ -881,11 +1079,12 @@ export class GeneralService {
      */
     public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
+        const voucherApiVersion = this.voucherApiVersion || 2;
+        const isGiddhDomain = this.isGiddhDomain();
         let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
-
-            if (visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion !== this.voucherApiVersion) {
+            if (visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion !== voucherApiVersion) {
                 visibleMenuItems[menuIndex].hide = true;
             } else {
                 visibleMenuItems[menuIndex].itemIndex = index;
@@ -893,8 +1092,13 @@ export class GeneralService {
             }
 
             menuItem.items?.forEach(item => {
+                // Filter out Giddh-only routes when running on a white-label domain
+                if (!isGiddhDomain && GIDDH_ONLY_ROUTES.includes(item.link)) {
+                    return;
+                }
+
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
-                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === this.voucherApiVersion)) {
+                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }
@@ -954,7 +1158,7 @@ export class GeneralService {
         } else {
             this.router.navigate([route], parameter);
         }
-        if (isElectron && isSocialLogin) {
+        if (Configuration.isElectron && isSocialLogin) {
             setTimeout(() => {
                 window.location.reload();
             }, 200);
@@ -1050,11 +1254,8 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public expandSidebar(): void {
-        const isAccountModalOpened = document.querySelector('.create-acc-form');
-        if (!isAccountModalOpened) {
-            document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
-            document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
-        }
+        document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
+        document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
     }
 
     /**
@@ -1075,8 +1276,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public addVoucherVersion(url: string, voucherVersion: number): string {
-        const delimiter = url.includes('?') ? '&' : '?';
-        return url.concat(`${delimiter}voucherVersion=${voucherVersion}`);
+        return this.appendQueryParam(url, 'voucherVersion', voucherVersion);
     }
 
     /**
@@ -1139,7 +1339,6 @@ export class GeneralService {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
-
 
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
             if (this.voucherApiVersion === 2) {
@@ -1333,7 +1532,7 @@ export class GeneralService {
     public addObjectInArray(array: any[], value: any): Array<string> {
         let exists = false;
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1359,7 +1558,7 @@ export class GeneralService {
         let exists = false;
 
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1381,7 +1580,7 @@ export class GeneralService {
         let index = -1;
         if (array && array.length > 0) {
             let loop = 0;
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     index = loop;
                 }
@@ -1544,7 +1743,7 @@ export class GeneralService {
             discountsList,
             discountAccountsDetails
         } = requestObj;
-        discountsList.forEach(acc => {
+        (Array.isArray(discountsList) ? discountsList : []).forEach(acc => {
             if (discountAccountsDetails) {
                 let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName || s.uniqueName === acc?.uniqueName);
                 if (!hasItem) {
@@ -1738,13 +1937,16 @@ export class GeneralService {
     public getOperatingSystem(): SUPPORTED_OPERATING_SYSTEMS {
         const platform = window.navigator.userAgent.toLowerCase(),
             macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i,
-            windowsPlatforms = /(win32|win64|windows|wince)/i;
+            windowsPlatforms = /(win32|win64|windows|wince)/i,
+            linuxPlatforms = /(linux|ubuntu|debian|fedora|redhat)/i;
         let operatingSystem = null;
 
         if (macosPlatforms.test(platform)) {
             operatingSystem = SUPPORTED_OPERATING_SYSTEMS.MacOS;
         } else if (windowsPlatforms.test(platform)) {
             operatingSystem = SUPPORTED_OPERATING_SYSTEMS.Windows;
+        } else if (linuxPlatforms.test(platform)) {
+            operatingSystem = SUPPORTED_OPERATING_SYSTEMS.Linux;
         }
 
         return operatingSystem;
@@ -2193,6 +2395,144 @@ export class GeneralService {
     }
 
     /**
+     * Parses a comma-separated query param string into a string array.
+     *
+     * @param {string} [value] - Raw query param value
+     * @returns {string[]} Parsed array, empty if no value
+     * @memberof GeneralService
+     */
+    public parseQueryParamArray(value?: string): string[] {
+        return value ? value.split(',').filter(Boolean) : [];
+    }
+
+    /**
+     * Normalizes query params by converting any array values to comma-separated strings.
+     *
+     * @private
+     * @param {Record<string, any>} queryParams - Raw query params
+     * @returns {Record<string, any>} Normalized params
+     * @memberof GeneralService
+     */
+    private normalizeQueryParams(queryParams: Record<string, any>): Record<string, any> {
+        const normalized: Record<string, any> = {};
+        for (const [key, value] of Object.entries(queryParams)) {
+            normalized[key] = Array.isArray(value) ? (value.length ? value.join(',') : null) : value;
+        }
+        return normalized;
+    }
+
+    /**
+     * Saves query params for a given route path scoped to the active company.
+     * Pass null as queryParams to clear the saved entry.
+     * When replaceOnly is true, saves exactly the provided params without merging with existing ones.
+     * When replaceOnly is false (default), merges the provided params with any existing saved params.
+     * Array values are automatically normalized to comma-separated strings.
+     *
+     * @public
+     * @param {(Record<string, any> | null)} queryParams - Params to save, or null to clear
+     * @param {boolean} [replaceOnly=false] - When true, replaces existing saved params entirely
+     * @memberof GeneralService
+     */
+    public saveRouteQueryFilters(queryParams: Record<string, any> | null, replaceOnly: boolean = false): void {
+        const companyUniqueName = this.companyUniqueName;
+        const { path, queryParams: forcedParams } = this.getCurrentPath(replaceOnly);
+        if (companyUniqueName && path) {
+            const normalized = queryParams ? this.normalizeQueryParams(queryParams) : {};
+            const existing = replaceOnly ? {} : (this.uiSettingsService.getRouteQueryFilters(companyUniqueName, path) ?? {});
+            const merged = { ...existing, ...forcedParams, ...normalized };
+            this.updateActivatedRouteQueryParams(merged ?? {}, replaceOnly ? 'replace' : 'merge');
+            this.uiSettingsService.setRouteQueryFilters(companyUniqueName, path, merged);
+        }
+    }
+
+    /**
+     * Gets the saved query params for a given route path scoped to the active company
+     *
+     * @public
+     * @param {string} routePath - Route path to look up (e.g. /pages/contact/customer)
+     * @returns {(Record<string, any> | null)} Saved query params or null
+     * @memberof GeneralService
+     */
+    public getRouteQueryFiltersForPath(): Record<string, any> | null {
+        const companyUniqueName = this.companyUniqueName;
+        const { path } = this.getCurrentPath();
+        if (!companyUniqueName || !path) {
+            return null;
+        }
+        return this.uiSettingsService.getRouteQueryFilters(companyUniqueName, path);
+    }
+
+    /**
+     * Restores saved query params for a given route path from localStorage only.
+     * Returns the saved params so the component can apply them to its own state and URL.
+     *
+     * @public
+     * @param {string} routePath - Explicit route path (e.g. /pages/contact/customer)
+     * @returns {(Record<string, any> | null)} Saved params or null if nothing found
+     * @memberof GeneralService
+     */
+    public restoreRouteQueryFilters(): void {
+        const { queryParams: forcedParams } = this.getCurrentPath();
+        const saved = this.getRouteQueryFiltersForPath() ?? {};
+        const merged: Record<string, any> = { ...saved, ...forcedParams };
+        this.updateActivatedRouteQueryParams(merged);
+    }
+
+    /**
+     * Returns the current route path scoped by required query params (for localStorage key)
+     * and the full current query params (for merging with saved filters).
+     * When replaceOnly is true, returns only the forced/required params as queryParams.
+     *
+     * @param {boolean} [replaceOnly] - When true, returns only required params in queryParams
+     * @returns {{ path: string; queryParams: Record<string, any> }} Scoped path and query params
+     * @memberof GeneralService
+     */
+    public getCurrentPath(replaceOnly: boolean = false): { path: string; queryParams: Record<string, any> } {
+        const currentUrlParams = this.activatedRoute.snapshot.queryParams;
+        const basePath = this.router.url.split('?')[0];
+        const forcedParams: Record<string, any> = {};
+
+        this.debugLog('[getCurrentPath] router.url:', this.router.url);
+        this.debugLog('[getCurrentPath] basePath:', basePath);
+        this.debugLog('[getCurrentPath] currentUrlParams:', currentUrlParams);
+
+        if (currentUrlParams?.required) {
+            const requiredKeys: string[] = currentUrlParams.required.split(',');
+            requiredKeys.forEach(key => {
+                if (currentUrlParams[key] != null) {
+                    forcedParams[key] = currentUrlParams[key];
+                }
+            });
+        } else if (currentUrlParams?.tab) {
+            forcedParams['tab'] = currentUrlParams['tab'];
+            if (currentUrlParams?.tabIndex) {
+                forcedParams['tabIndex'] = currentUrlParams['tabIndex'];
+            }
+        }
+        
+        const scopedPath = Object.keys(forcedParams).length
+            ? `${basePath}?${Object.entries(forcedParams).map(([k, v]) => `${k}=${v}`).join('&')}`
+            : basePath;
+
+        this.debugLog('[getCurrentPath] forcedParams:', forcedParams);
+        this.debugLog('[getCurrentPath] scopedPath:', scopedPath);
+        this.debugLog('[getCurrentPath] replaceOnly:', replaceOnly);
+
+        return { path: scopedPath, queryParams: replaceOnly ? forcedParams : currentUrlParams };
+    }
+
+    /** List of scoped route paths that support fromDate/toDate query param persistence */
+    public readonly currentSupportedQueryParam: string[] = [
+        '/pages/contact/customer?tab=customer&tabIndex=1',
+        '/pages/contact/vendor?tab=vendor&tabIndex=1',
+        '/pages/contact/aging-report?tab=aging-report&tabIndex=1',
+        '/pages/reports/sales-register?groupBy=salesPerson',
+        '/pages/reports/sales-register?groupBy=state',
+        '/pages/reports/sales-register?groupBy=country',
+        '/pages/reports/sales-register?groupBy=duration'
+    ];
+
+    /**
      * Update current page query params
      *
      * @param {Params} queryParams
@@ -2221,26 +2561,13 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
-        const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
+        const decimalPlaces =
+            companyDecimalPlaces === 4 ? 10000 :
+                companyDecimalPlaces === 3 ? 1000 :
+                    100;
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
 
-    /**
-     * Retrieves the decoded white label data from the local storage.
-     *
-     * @returns {any} The decoded white label data or null if the data is not available or cannot be parsed.
-     *
-     * @throws {Error} If there is an error parsing the white label data from the local storage.
-     */
-    public getDecodedWhiteLabel(): any {
-        try {
-            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
-            return whiteLabelData?.body || null;
-        } catch (error) {
-            console.error('Error parsing whiteLabel data from localStorage:', error);
-            return null;
-        }
-    }
 
     /**
      * Replaces placeholders in a URL with corresponding values from a model object.
@@ -2275,9 +2602,42 @@ export class GeneralService {
     }
 
     /**
+     * Debug logging function - logs only for developers in INTERNAL_EMAILS_DOMAINS
+     * Checks the current company creator's email and logs if it matches the developer email list
+     * 
+     * @param args - Variable number of arguments to log (same as console.log)
+     * 
+     * @example
+     * this.generalService.debugLog('message');
+     * this.generalService.debugLog('key:', value);
+     * this.generalService.debugLog('multiple', 'args', object);
+     * 
+     * @memberof GeneralService
+     */
+    public debugLog(...args: any): void {
+        if (this.isInternalEmailDomain()) {
+            console.log(...args);
+        }
+    }
+
+    /**
+     * Check if the current company creator's email domain is in the internal domains list
+     * Extracts the domain part from the email and checks against INTERNAL_EMAILS_DOMAINS
+     * 
+     * @returns {boolean} True if the email domain is in INTERNAL_EMAILS_DOMAINS, false otherwise
+     * 
+     * @memberof GeneralService
+     */
+    public isInternalEmailDomain(): boolean {
+        const allowDomain = this.activeCompany?.createdBy?.email?.split('@')[1] || '';
+        return INTERNAL_EMAILS_DOMAINS.includes(allowDomain);
+    }
+
+
+    /**
      * Retrieves a list of available voucher types with localized labels.
      *
-     * @param commonLocaleData 
+     * @param commonLocaleData
      * @param onlyVouchers Optional array of voucher types to filter by. Defaults to all voucher types.
      * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
      * @memberof GeneralService
@@ -2458,7 +2818,7 @@ export class GeneralService {
         isNavigatingRef: { value: boolean }
     ): void {
         let pendingNavigationUrl: string = '';
-        
+
         // Listen for navigation attempts
         router.events.pipe(
             filter(event => event instanceof NavigationStart),
@@ -2468,41 +2828,41 @@ export class GeneralService {
             if (hasUnsavedChangesCallback() && event.url !== router.url) {
                 // Always update the pending navigation URL to the most recent attempt
                 pendingNavigationUrl = event.url;
-                
+
                 if (!isNavigatingRef.value) {
                     // Set flag to prevent multiple dialogs
                     isNavigatingRef.value = true;
-                    
+
                     // Cancel the current navigation
                     router.navigateByUrl(router.url, { skipLocationChange: true });
-                    
+
                     // Show confirmation dialog
                     let dialogRef = pageLeaveUtilityService.openDialogWithoutAutoCleanup();
-                    
+
                     dialogRef.afterClosed().subscribe((action) => {
-                        
+
                         // Remove body CSS class that was added when dialog opened
                         document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
-                        
+
                         if (action === true) {
                         // User confirmed to leave - clean up and navigate
-                            
+
                             pageLeaveUtilityService.removeBrowserConfirmationDialog();
                             cleanupCallback();
-                            
+
                             // Use setTimeout to ensure navigation happens after all cleanup
                             setTimeout(() => {
                                 // Reset navigation flag after cleanup but before navigation
                                 isNavigatingRef.value = false;
-                                
+
                                 // Try Angular navigation first (smooth SPA navigation)
                                 router.navigateByUrl(pendingNavigationUrl, { replaceUrl: false }).then(
                                     (success) => {
                                         if (!success) {
                                             // Try with different navigation options
-                                            return router.navigateByUrl(pendingNavigationUrl, { 
+                                            return router.navigateByUrl(pendingNavigationUrl, {
                                                 skipLocationChange: false,
-                                                replaceUrl: false 
+                                                replaceUrl: false
                                             });
                                         }
                                         return success;
@@ -2556,7 +2916,7 @@ export class GeneralService {
      */
     public registerUnsavedChangesCallback(callback: () => boolean): () => void {
         this.unsavedChangesCallbacks.push(callback);
-        
+
         // Return unregister function
         return () => {
             const index = this.unsavedChangesCallbacks.indexOf(callback);
@@ -2575,7 +2935,7 @@ export class GeneralService {
      */
     public registerMarkFormsAsPristineCallback(callback: () => void): () => void {
         this.markFormsAsPristineCallbacks.push(callback);
-        
+
         // Return unregister function
         return () => {
             const index = this.markFormsAsPristineCallbacks.indexOf(callback);
@@ -2596,7 +2956,7 @@ export class GeneralService {
             try {
                 return callback();
             } catch (error) {
-                console.warn('Error checking unsaved changes:', error);
+
                 return false;
             }
         });
@@ -2608,12 +2968,620 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public markAllFormsAsPristine(): void {
-        this.markFormsAsPristineCallbacks.forEach(callback => {
+        (Array.isArray(this.markFormsAsPristineCallbacks) ? this.markFormsAsPristineCallbacks : []).forEach(callback => {
             try {
                 callback();
             } catch (error) {
-                console.warn('Error marking forms as pristine:', error);
+
             }
         });
+    }
+
+    /**
+     * Gets the dynamic decimal format string based on company settings
+     *
+     * @param {number} decimalPlaces Number of decimal places from company settings
+     * @returns {string} Decimal format string for Angular DecimalPipe
+     * @memberof GeneralService
+     */
+    public getDecimalFormat(decimalPlaces: number): string {
+        return `1.${decimalPlaces}-${decimalPlaces}`;
+    }
+
+    /**
+     * Formats amount with proper decimal places
+     *
+     * @param {number} amount Amount to format
+     * @param {number} decimalPlaces Number of decimal places from company settings
+     * @returns {string} Formatted amount
+     * @memberof GeneralService
+     */
+    public formatAmount(amount: number, decimalPlaces: number): string {
+        if (amount == null || amount === undefined) {
+            return '0.' + '0'.repeat(decimalPlaces);
+        }
+        return amount.toFixed(decimalPlaces);
+    }
+
+    /**
+     * Logs all global variables if debug mode is enabled
+     * Call this method after Angular app is fully loaded
+     *
+     * @memberof GeneralService
+     */
+    public logAllGlobalVariables(): void {
+        // Early exit if debug mode is disabled
+        if (!this.debugMode) {
+            return;
+        }
+
+        console.group('🌍 GLOBAL VARIABLES AFTER ANGULAR LOAD');
+
+        try {
+            // Get all global variables from window object
+            const globalVars: { [key: string]: any } = {};
+            const excludedKeys = ['parent', 'top', 'self', 'frames', 'frameElement']; // Avoid circular references
+
+            // Collect all enumerable properties from window
+            for (const key in window) {
+                if (window.hasOwnProperty(key) && !excludedKeys.includes(key)) {
+                    try {
+                        const value = (window as any)[key];
+                        globalVars[key] = {
+                            type: typeof value,
+                            value: this.getSafeValue(value),
+                            constructor: value?.constructor?.name || 'Unknown'
+                        };
+                    } catch (error) {
+                        globalVars[key] = {
+                            type: 'Error',
+                            value: `[Error accessing property: ${error}]`,
+                            constructor: 'Error'
+                        };
+                    }
+                }
+            }
+
+            // Log categorized global variables
+            this.logCategorizedGlobals(globalVars);
+
+            // Log Angular-specific globals
+            this.logAngularGlobals();
+
+            // Log Giddh-specific globals
+            this.logGiddhGlobals();
+
+            // Log Environment variables
+            this.logEnvironmentVariables();
+
+            // Log Browser APIs
+            this.logBrowserAPIs();
+
+            // Log Third-party libraries
+            this.logThirdPartyLibraries();
+
+        } catch (error) {
+            console.error('❌ Error logging global variables:', error);
+        }
+
+        console.groupEnd();
+    }
+
+    /**
+     * Gets a safe representation of a value for logging
+     *
+     * @private
+     * @param {any} value - The value to make safe
+     * @returns {any} Safe representation of the value
+     * @memberof GeneralService
+     */
+    private getSafeValue(value: any): any {
+        if (value === null) return null;
+        if (value === undefined) return undefined;
+
+        const type = typeof value;
+
+        switch (type) {
+            case 'string':
+            case 'number':
+            case 'boolean':
+                return value;
+            case 'function':
+                return `[Function: ${value.name || 'anonymous'}]`;
+            case 'object':
+                if (Array.isArray(value)) {
+                    return `[Array(${value.length})]`;
+                }
+                if (value instanceof Date) {
+                    return value.toISOString();
+                }
+                if (value instanceof Error) {
+                    return `[Error: ${value.message}]`;
+                }
+                if (value.constructor && value.constructor.name) {
+                    return `[Object: ${value.constructor.name}]`;
+                }
+                return '[Object]';
+            default:
+                return `[${type}]`;
+        }
+    }
+
+    /**
+     * Logs categorized global variables
+     *
+     * @private
+     * @param {any} globalVars - Object containing all global variables
+     * @memberof GeneralService
+     */
+    private logCategorizedGlobals(globalVars: any): void {
+        const categories = {
+            functions: [] as string[],
+            objects: [] as string[],
+            primitives: [] as string[],
+            arrays: [] as string[],
+            classes: [] as string[]
+        };
+
+        Object.keys(globalVars).forEach(key => {
+            const item = globalVars[key];
+            switch (item.type) {
+                case 'function':
+                    categories.functions.push(key);
+                    break;
+                case 'object':
+                    if (item.value && typeof item.value === 'string' && item.value.includes('Array')) {
+                        categories.arrays.push(key);
+                    } else if (item.constructor !== 'Object') {
+                        categories.classes.push(key);
+                    } else {
+                        categories.objects.push(key);
+                    }
+                    break;
+                default:
+                    categories.primitives.push(key);
+            }
+        });
+
+        console.group('📊 CATEGORIZED GLOBALS');
+        console.log('🔧 Functions:', categories.functions.sort());
+        console.log('📦 Objects:', categories.objects.sort());
+        console.log('🏗️ Classes/Constructors:', categories.classes.sort());
+        console.log('📋 Arrays:', categories.arrays.sort());
+        console.log('🔤 Primitives:', categories.primitives.sort());
+        console.groupEnd();
+
+        // Log detailed view of important globals
+        console.group('🔍 DETAILED GLOBAL VARIABLES');
+        Object.keys(globalVars).sort().forEach(key => {
+            const item = globalVars[key];
+            console.log(`${key}:`, {
+                type: item.type,
+                constructor: item.constructor,
+                value: item.value
+            });
+        });
+        console.groupEnd();
+    }
+
+    /**
+     * Logs Angular-specific global variables
+     *
+     * @private
+     * @memberof GeneralService
+     */
+    private logAngularGlobals(): void {
+        console.group('🅰️ ANGULAR GLOBALS');
+
+        const angularGlobals = [
+            'ng', 'ngDevMode', 'Zone', '__zone_symbol__', 'getAllAngularRootElements',
+            'getAngularTestability', 'getAllAngularTestabilities'
+        ];
+
+        angularGlobals.forEach(key => {
+            if ((window as any)[key] !== undefined) {
+                console.log(`${key}:`, this.getSafeValue((window as any)[key]));
+            }
+        });
+
+        // Log Angular version if available
+        if ((window as any).ng && (window as any).ng.version) {
+            console.log('Angular Version:', (window as any).ng.version);
+        }
+
+        console.groupEnd();
+    }
+
+    /**
+     * Logs Giddh-specific global variables
+     *
+     * @private
+     * @memberof GeneralService
+     */
+    private logGiddhGlobals(): void {
+        console.group('🏢 GIDDH GLOBALS');
+
+        const giddhGlobals = [
+            'PRODUCTION_ENV', 'AppUrl', 'isElectron', 'electronAPI', 'require',
+            'giddhRegion', 'Country-Region', 'whiteLabel'
+        ];
+
+        giddhGlobals.forEach(key => {
+            if ((window as any)[key] !== undefined) {
+                console.log(`${key}:`, this.getSafeValue((window as any)[key]));
+            }
+        });
+
+        // Log localStorage Giddh-specific items
+        console.group('💾 GIDDH LOCALSTORAGE');
+        const giddhStorageKeys = ['session', 'permission', 'branchConsolidated', 'whiteLabel', 'Country-Region'];
+        giddhStorageKeys.forEach(key => {
+            const value = localStorage.getItem(key);
+            if (value) {
+                try {
+                    const parsed = JSON.parse(value);
+                    console.log(`localStorage.${key}:`, parsed);
+                } catch {
+                    console.log(`localStorage.${key}:`, value);
+                }
+            }
+        });
+        console.groupEnd();
+
+        // Log sessionStorage Giddh-specific items
+        console.group('🗂️ GIDDH SESSIONSTORAGE');
+        giddhStorageKeys.forEach(key => {
+            const value = sessionStorage.getItem(key);
+            if (value) {
+                try {
+                    const parsed = JSON.parse(value);
+                    console.log(`sessionStorage.${key}:`, parsed);
+                } catch {
+                    console.log(`sessionStorage.${key}:`, value);
+                }
+            }
+        });
+        console.groupEnd();
+
+        console.groupEnd();
+    }
+
+    /**
+     * Logs environment variables
+     *
+     * @private
+     * @memberof GeneralService
+     */
+    private logEnvironmentVariables(): void {
+        console.group('🌐 ENVIRONMENT VARIABLES');
+
+        console.log('Environment Config:', {
+            production: environment.production,
+            PRODUCTION_ENV: environment.PRODUCTION_ENV,
+            APP_FOLDER: environment.APP_FOLDER,
+            isElectron: Configuration.isElectron,
+            AppUrl: Configuration.AppUrl,
+            ApiUrl: Configuration.ApiUrl
+        });
+
+        console.log('Service Config:', {
+            AppUrl: this.config?.AppUrl,
+            ApiUrl: this.config?.ApiUrl
+        });
+
+        console.groupEnd();
+    }
+
+    /**
+     * Logs browser APIs
+     *
+     * @private
+     * @memberof GeneralService
+     */
+    private logBrowserAPIs(): void {
+        console.group('🌐 BROWSER APIS');
+
+        const browserAPIs = [
+            'navigator', 'location', 'history', 'document', 'console',
+            'localStorage', 'sessionStorage', 'indexedDB', 'fetch',
+            'XMLHttpRequest', 'WebSocket', 'Worker', 'ServiceWorker'
+        ];
+
+        browserAPIs.forEach(api => {
+            if ((window as any)[api] !== undefined) {
+                console.log(`${api}:`, this.getSafeValue((window as any)[api]));
+            }
+        });
+
+        console.groupEnd();
+    }
+
+    /**
+     * Logs third-party libraries
+     *
+     * @private
+     * @memberof GeneralService
+     */
+    private logThirdPartyLibraries(): void {
+        console.group('📚 THIRD-PARTY LIBRARIES');
+
+        const thirdPartyLibs = [
+            'jQuery', '$', 'Razorpay', 'CodeMirror', 'moment', 'dayjs',
+            'Chart', 'D3', 'Froala', 'LogRocket', 'gtag', 'ga'
+        ];
+
+        thirdPartyLibs.forEach(lib => {
+            if ((window as any)[lib] !== undefined) {
+                const value = (window as any)[lib];
+                console.log(`${lib}:`, {
+                    type: typeof value,
+                    version: value.version || value.VERSION || 'Unknown',
+                    constructor: value.constructor?.name || 'Unknown'
+                });
+            }
+        });
+
+        console.groupEnd();
+    }
+
+    /**
+     * Dynamic form field validation with customizable toaster messages
+     *
+     * @param {AbstractControl} control - The form control to validate
+     * @param {string} fieldName - Display name of the field for error messages
+     * @param {object} validationConfig - Configuration object for validation rules and messages
+     * @param {string} [toasterType='warning'] - Type of toaster (error, warning, success, info)
+     * @returns {boolean} - Returns true if validation passes, false if validation fails
+     * @memberof GeneralService
+     */
+    public validateFormField(
+        control: AbstractControl,
+        fieldName: string,
+        validationConfig: {
+            required?: { enabled: boolean; message?: string };
+            maxlength?: { enabled: boolean; maxLength: number; message?: string };
+            minlength?: { enabled: boolean; minLength: number; message?: string };
+            pattern?: { enabled: boolean; pattern: RegExp; message?: string };
+            email?: { enabled: boolean; message?: string };
+            custom?: { enabled: boolean; validator: (value: any) => boolean; message?: string };
+        },
+        toasterType: 'error' | 'warning' | 'success' | 'info' = 'warning'
+    ): boolean {
+        // Only validate if control is dirty (user has interacted with it)
+        if (!control || !control.dirty || control.valid) {
+            return true;
+        }
+
+        const errors = control.errors;
+        if (!errors) {
+            return true;
+        }
+
+        // Check required validation
+        if (validationConfig.required?.enabled && errors['required']) {
+            const message = validationConfig.required.message || `${fieldName} can not be blank`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        // Check maxlength validation
+        if (validationConfig.maxlength?.enabled && errors['maxlength']) {
+            const message = validationConfig.maxlength.message ||
+                `${fieldName} can not be more than ${validationConfig.maxlength.maxLength} characters`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        // Check minlength validation
+        if (validationConfig.minlength?.enabled && errors['minlength']) {
+            const message = validationConfig.minlength.message ||
+                `${fieldName} must be at least ${validationConfig.minlength.minLength} characters`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        // Check pattern validation
+        if (validationConfig.pattern?.enabled && errors['pattern']) {
+            const message = validationConfig.pattern.message || `${fieldName} format is invalid`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        // Check email validation
+        if (validationConfig.email?.enabled && errors['email']) {
+            const message = validationConfig.email.message || `${fieldName} must be a valid email address`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        // Check custom validation
+        if (validationConfig.custom?.enabled && control.value && !validationConfig.custom.validator(control.value)) {
+            const message = validationConfig.custom.message || `${fieldName} is invalid`;
+            this.toasterService.showSnackBar(toasterType, message);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Simplified form field validation for common use cases
+     *
+     * @param {AbstractControl} control - The form control to validate
+     * @param {string} fieldName - Display name of the field for error messages
+     * @param {number} [maxLength] - Maximum allowed length (optional)
+     * @param {string} [customMessage] - Custom error message (optional)
+     * @param {string} [toasterType='warning'] - Type of toaster (error, warning, success, info)
+     * @returns {boolean} - Returns true if validation passes, false if validation fails
+     * @memberof GeneralService
+     */
+    public validateFieldSimple(
+        control: AbstractControl,
+        fieldName: string,
+        maxLength?: number,
+        customMessage?: string,
+        toasterType: 'error' | 'warning' | 'success' | 'info' = 'warning'
+    ): boolean {
+        const config: any = {
+            required: { enabled: true },
+            maxlength: maxLength ? { enabled: true, maxLength } : { enabled: false }
+        };
+
+        // Use custom message if provided, otherwise use default pattern
+        if (customMessage) {
+            // Replace dynamic placeholders in the message
+            const processedMessage = this.replaceDynamicPlaceholders(customMessage, {
+                FIELD_NAME: fieldName,
+                MAX_LENGTH: maxLength?.toString() || '0'
+            });
+
+            config.required.message = processedMessage;
+            if (maxLength) {
+                config.maxlength.message = processedMessage;
+            }
+        }
+
+        return this.validateFormField(control, fieldName, config, toasterType);
+    }
+
+    /**
+     * Replaces dynamic placeholders in messages with actual values
+     *
+     * @param {string} message - The message template with placeholders
+     * @param {object} replacements - Object containing placeholder replacements
+     * @returns {string} - Message with placeholders replaced
+     * @memberof GeneralService
+     */
+    private replaceDynamicPlaceholders(message: string, replacements: { [key: string]: string }): string {
+        let processedMessage = message;
+
+        Object.keys(replacements).forEach(placeholder => {
+            const regex = new RegExp(`\\[${placeholder}\\]`, 'g');
+            processedMessage = processedMessage.replace(regex, replacements[placeholder]);
+        });
+
+        return processedMessage;
+    }
+
+    /**
+     * Extracts date metadata from a given date
+     * Calculates day of month, weekday name, and week of month
+     *
+     * @param {Date} date - The date to extract metadata from
+     * @returns {Object} Object containing dayOfMonth, weekday (name), and weekOfMonth
+     * @memberof GeneralService
+     */
+    public getDateMeta(date: Date): { dayOfMonth: number; weekday: string; weekOfMonth: number } {
+        const dayOfMonth = date.getDate();
+        const dayOfWeek = date.getDay();
+        const weekday = [RecurringWeekday.SUNDAY, RecurringWeekday.MONDAY, RecurringWeekday.TUESDAY, RecurringWeekday.WEDNESDAY, RecurringWeekday.THURSDAY, RecurringWeekday.FRIDAY, RecurringWeekday.SATURDAY][dayOfWeek];
+        const weekOfMonth = Math.ceil(dayOfMonth / 7);
+        return { dayOfMonth, weekday, weekOfMonth };
+    }
+
+    /**
+     * Converts a number to its ordinal string representation
+     * Examples: 1 -> "1st", 2 -> "2nd", 3 -> "3rd", 4 -> "4th"
+     *
+     * @param {number} n - The number to convert to ordinal
+     * @returns {string} The ordinal representation of the number
+     * @memberof GeneralService
+     */
+    public getOrdinal(n: number): string {
+        if (n % 100 >= 11 && n % 100 <= 13) return `${n}th`;
+        switch (n % 10) {
+            case 1: return `${n}st`;
+            case 2: return `${n}nd`;
+            case 3: return `${n}rd`;
+            default: return `${n}th`;
+        }
+    }
+
+    /**
+     * Appends a query parameter to a URL
+     * Automatically determines whether to use '?' or '&' based on existing query parameters
+     *
+     * @param {string} url - The base URL to append the parameter to
+     * @param {string} paramName - The name of the query parameter
+     * @param {string | number | boolean} paramValue - The value of the query parameter
+     * @returns {string} The URL with the appended query parameter
+     * @memberof GeneralService
+     */
+    public appendQueryParam(url: string, paramName: string, paramValue: string | number | boolean): string {
+        const delimiter = url.includes('?') ? '&' : '?';
+        return `${url}${delimiter}${paramName}=${paramValue}`;
+    }
+
+    /**
+     * Returns the country-specific label for the postal/pin code field.
+     * Different countries use different names for their postal code:
+     * India uses "PIN Code", US uses "ZIP Code", UK uses "Postcode", Canada uses "Postal Code", etc.
+     *
+     * @param {string} countryCode - ISO alpha-2 country code (e.g. 'IN', 'US', 'GB', 'CA')
+     * @returns {string} The localized label for the postal code field
+     * @memberof GeneralService
+     */
+    public getPostalCodeLabel(countryCode: string): string {
+        const resolvedCode = countryCode || this.activeCompany?.countryV2?.alpha2CountryCode;
+        switch (resolvedCode?.toUpperCase()) {
+            case 'IN': return 'PIN Code';
+            case 'US': return 'ZIP Code';
+            case 'GB': return 'Postcode';
+            case 'CA': return 'Postal Code';
+            case 'AU': return 'Postcode';
+            case 'NZ': return 'Postcode';
+            case 'IE': return 'Eircode';
+            case 'NL': return 'Postcode';
+            case 'DE': return 'Postleitzahl';
+            case 'FR': return 'Code Postal';
+            case 'AE': return 'P.O. Box';
+            default: return 'Postal Code';
+        }
+    }
+
+    /**
+     * Returns the placeholder text for the postal/pin code field (e.g. "Enter PIN Code", "Enter ZIP Code").
+     *
+     * @param {string} countryCode - ISO alpha-2 country code (e.g. 'IN', 'US', 'GB', 'CA')
+     * @returns {string} The placeholder string for the postal code input field
+     * @memberof GeneralService
+     */
+    public getPostalCodePlaceholder(countryCode: string): string {
+        return `Enter ${this.getPostalCodeLabel(countryCode)}`;
+    }
+
+    /**
+     * Returns true when the given subscription is eligible for advance (prepaid) payment.
+     * Rules: auto-pay OFF, status not trial/cancelled/expired, and within
+     * 7 days of expiry (monthly) or 30 days of expiry (yearly).
+     *
+     * @param {*} subscription Subscription object (must contain expiry, status, isAutoPay, period/duration)
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isAdvancePaymentEligible(subscription: any): boolean {
+        if (!subscription || !subscription.expiry) {
+            return false;
+        }
+        if (subscription.autoPay || subscription.isPrepaidExist) {
+            return false;
+        }
+        const status = (subscription.status || '').toLowerCase();
+        if (status !== 'active') {
+            return false;
+        }
+        const period = (subscription.period || subscription.duration || '').toLowerCase();
+        const expiryStr = String(subscription.expiry).split('-').reverse().join('-');
+        const remainingDays = ((new Date(expiryStr).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) + 1;
+        if (isNaN(remainingDays) || remainingDays < 0) {
+            return false;
+        }
+        if ((period === 'monthly' || period === 'daily') && remainingDays <= 7) {
+            return true;
+        }
+        if (period === 'yearly' && remainingDays <= 30) {
+            return true;
+        }
+        return false;
     }
 }

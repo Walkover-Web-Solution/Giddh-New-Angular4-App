@@ -9,8 +9,11 @@ import { IMPORT_EXCEL_API } from './apiurls/import-excel.api';
 import { ImportExcelProcessResponseData, ImportExcelRequestData, ImportExcelResponseData, ImportExcelStatusPaginatedResponse } from '../models/api-models/import-excel';
 import { Observable } from 'rxjs';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
+import { concat, get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ImportExcelService {
 
     constructor(private errorHandler: GiddhErrorHandler,

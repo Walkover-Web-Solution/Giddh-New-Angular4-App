@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil, of as observableOf, of } from "rxjs";
 import { OtherTaxComponentStore } from "./utility/other-tax.store";
 import { AppState } from "../../store";
@@ -14,8 +14,9 @@ import { ASIDE_PANE_CONFIG } from "../../app.constant";
     templateUrl: "./other-tax.component.html",
     styleUrls: ["./other-tax.component.scss"],
     providers: [OtherTaxComponentStore],
+    standalone: false
 })
-export class OtherTaxComponent implements OnInit, OnDestroy {
+export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
     /** Company taxes Observable */
@@ -29,13 +30,17 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
     /** Create tax dialog ref  */
-    public taxAsideMenuRef: MatDialogRef<any>;
+    public taxAsideMenuRef: MatDialogRef<any> = null;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if create tax dialog is open  */
     public otherTax: boolean = false;
+    /** Calculation method options for dropdown */
+    public calculationMethodOptions: any[] = [];
+    /** This will open account dropdown by default */
+    public openAccountDropdown: boolean = false;
 
     constructor(
         private componentStore: OtherTaxComponentStore,
@@ -45,11 +50,12 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         public dialogRef: MatDialogRef<any>,
         @Inject(MAT_DIALOG_DATA) public inputData,
-        private settingsTaxesAction: SettingsTaxesActions
+        private settingsTaxesAction: SettingsTaxesActions,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
 
     }
-
+    
     /**
      * Hook cycle for component initialization
      *
@@ -59,6 +65,17 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
         this.initOtherTaxForm(this.inputData?.appliedOtherTax);
         this.getCompanyTaxes();
+    }
+
+    /**
+     * Hook cycle for component view initialization
+     *
+     * @memberof OtherTaxComponent
+     */
+    public ngAfterViewInit(): void {
+       setTimeout(() => {
+         this.openAccountDropdown = true;
+       }, 50);
     }
 
     /**
@@ -102,12 +119,12 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
      */
     public saveTax(): void {
         this.isFormSubmitted = false;
-        if (this.otherTaxForm.invalid) {
-            this.isFormSubmitted = true;
-            return;
+        let model = {};
+        const form = this.otherTaxForm.value;
+        if (form?.tax?.uniqueName && form?.calculationMethod) {
+              model = form;
         }
-
-        this.dialogRef.close(this.otherTaxForm?.value);
+        this.dialogRef.close(model);
     }
 
     /**
@@ -116,7 +133,13 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
      * @memberof OtherTaxComponent
      */
     public createTaxDialog(): void {
-        this.taxAsideMenuRef = this.dialog.open(this.createTax, ASIDE_PANE_CONFIG);
+        this.taxAsideMenuRef = this.dialog.open(this.createTax, { ...ASIDE_PANE_CONFIG, autoFocus: false});
+        this.openAccountDropdown = false; 
+        this.taxAsideMenuRef.afterClosed().subscribe(() => {
+            this.taxAsideMenuRef = null;
+            this.openAccountDropdown = true;
+            this.changeDetectorRef.detectChanges();
+        });
         this.otherTax = true;
     }
 
@@ -128,6 +151,31 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     public closeCreateTaxDialog(): void {
         this.taxAsideMenuRef.close();
         this.otherTax = false;
+    }
+
+    /**
+     * Callback for translation completion
+     *
+     * @param {*} event
+     * @memberof OtherTaxComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.initCalculationMethodOptions();
+        }
+    }
+
+    /**
+     * Initializes calculation method options for dropdown
+     *
+     * @private
+     * @memberof OtherTaxComponent
+     */
+    private initCalculationMethodOptions(): void {
+        this.calculationMethodOptions = [
+            { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
+            { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' }
+        ];
     }
 
     /**

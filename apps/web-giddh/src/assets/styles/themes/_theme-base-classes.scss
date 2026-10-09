@@ -1,17 +1,59 @@
 body {
     --text-primary-color: var(--theme-primary-color);
     --bg-primary-color: var(--theme-primary-color);
-    --border-color: var(--theme-border-color);
+    --border-color: var(--color-silver);
 
-    --theme-primary-light: color-mix(in oklch, var(--theme-primary-color) 10%, white);
-    --theme-accent-light: color-mix(in oklch, var(--theme-accent-color) 10%, white);
-    --theme-warn-light: color-mix(in oklch, var(--theme-warn-color) 10%, white);
+    &.default-theme {
+        --lighter-percent: 10%;
+    }
+    &.dark-theme {
+        --lighter-percent: 20%;
+    }
+    /* Using 'none' for hue prevents the 'color shift' bug in Electron/Chromium.
+       It ensures the mix stays within the same color family (e.g., Blue stays Blue).
+    */
+    --color-white-for-oklch: oklch(100% 0 none);
+
+    /* Lighter variants: Mixes the theme color with the 'hue-less' white.
+       The percentage applies to the theme color, meaning these will be 
+       very light (90% white if --lighter-percent is 10%).
+    */
+    --theme-primary-light: color-mix(
+        in oklch,
+        var(--theme-primary-color) var(--lighter-percent),
+        var(--color-white-for-oklch)
+    );
+    --theme-accent-light: color-mix(
+        in oklch,
+        var(--theme-accent-color) var(--lighter-percent),
+        var(--color-white-for-oklch)
+    );
+    --theme-warn-light: color-mix(
+        in oklch,
+        var(--theme-warn-color) var(--lighter-percent),
+        var(--color-white-for-oklch)
+    );
+
+    .theme-primary-light {
+        background-color: var(--theme-primary-light) !important;
+    }
+    .theme-accent-light {
+        background-color: var(--theme-accent-light) !important;
+    }
+    .theme-warn-light {
+        background-color: var(--theme-warn-light) !important;
+    }
+    .mat-app-background {
+        background-color: var(--theme-background-color, var(--mat-sys-surface));
+        color: var(--theme-foreground-color, var(--mat-sys-on-surface));
+    }
 
     &.default-theme,
     &.dark-theme {
         --color-black: #0d0d0d;
         --color-danger-light: #e545561a;
         --color-orange-light: #e58a0026;
+        --color-warm-orange-light: #fff3e0;
         --color-red-light: #e5455626;
         --color-green-light: #36b28326;
         --color-dark-black: #212529;
@@ -28,6 +70,7 @@ body {
         --color-deep-orange: #ff9933;
         --color-brown-gold: #996515;
         --color-red: #c51e3a;
+        --color-blue: #2196f3;
         --color-green: #098757;
         --color-transparent: transparent;
 
@@ -39,8 +82,9 @@ body {
         --color-shadow-light: #00000033;
         --color-drag-bottom-shadow: #00000024;
         --color-drag-right-shadow: #0000001f;
-        --mat-menu-box-shadow: 0px 5px 5px -3px var(--color-shadow-light),
-            0px 8px 10px 1px var(--color-drag-bottom-shadow), 0px 3px 14px 2px var(--color-drag-right-shadow);
+        --mat-menu-box-shadow:
+            0px 5px 5px -3px var(--color-shadow-light), 0px 8px 10px 1px var(--color-drag-bottom-shadow),
+            0px 3px 14px 2px var(--color-drag-right-shadow);
 
         // Filter for Image
         --filter-image-color-white: brightness(0) invert(1);
@@ -49,17 +93,19 @@ body {
             contrast(100%);
 
         // Image url
-        --url-caret-image: url("../../images/caret-light.svg");
+        --url-caret-image: url('../../images/caret-light.svg');
 
         --table-background-color: #ffffff;
     }
 
     &.dark-theme {
-        // --text-primary-color: var(--color-white);
         --color-dark-gray: var(--color-light-gray);
         --color-image-filter-quaternary: brightness(0) invert(1);
         --table-background-color: #424242;
-        --url-caret-image: url("../../images/caret-dark.svg");
+        --url-caret-image: url('../../images/caret-dark.svg');
+        --color-shadow-light: #ffffff33;
+        --color-drag-bottom-shadow: #ffffff24;
+        --color-drag-right-shadow: #ffffff1f;
     }
 }
 

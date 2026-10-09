@@ -14,6 +14,14 @@
     "sales_from": "कडून विक्री",
     "clients": "ग्राहक",
     "no_invoices": "पावत्यांची संख्या",
+    "top_salespersons": "शीर्ष विक्रेते",
+    "top_5_salespersons": "शीर्ष 5 विक्रेते",
+    "all_salespersons": "सर्व विक्रेते",
+    "tooltip_view_all_salespersons_chart": "सर्व विक्रेत्यांचा चार्ट पाहण्यासाठी क्लिक करा",
+    "tooltip_view_all_salespersons_new_vs_old_chart": "सर्व विक्रेत्यांची नवीन विरुद्ध जुनी विक्री चार्ट पाहण्यासाठी क्लिक करा",
+    "new_vs_old_sales": "नवीन विरुद्ध जुनी विक्री",
+    "old_sales_breakdown": "जुनी विक्री तपशील",
+    "period": "कालावधी",
     "bifurcation_clients": "मधील ग्राहकांचे विभाजन [COLUMN_NAME]",
     "from_new_clients": "नवीन ग्राहकांकडून",
     "from_old_clients": "जुन्या ग्राहकांकडून",
@@ -26,5 +34,8 @@
     "get_type_options": {
         "month": "महिना",
         "quarter": "तिमाहीत"
-    }
+    },
+    "others": "इतर",
+    "no_data_salespersons": "यासाठी कोणताही डेटा उपलब्ध नाही:",
+    "no_sales_data_salesperson": "निवडलेल्या विक्रेत्यासाठी कोणताही विक्री डेटा उपलब्ध नाही"
 }

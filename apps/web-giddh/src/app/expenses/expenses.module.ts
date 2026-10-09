@@ -8,7 +8,7 @@ import { LedgerModule } from '../ledger/ledger.module';
 import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { SalesModule } from '../sales/sales.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SharedModule } from '../shared/shared.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -31,6 +31,7 @@ import { LightboxModule } from 'ngx-lightbox';
 import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-petty-cash-entry-confirm-dialog/reject-petty-cash-entry-confirm-dialog.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -49,7 +50,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         Daterangepicker,
         ExpensesRoutingModule,
         LedgerModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         MatPaginatorModule,
         SharedModule,
         ElementViewChildModule,
@@ -68,11 +69,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         LightboxModule,
         MatMenuModule,
         FormFieldsModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        GiddhDatePipe
     ],
     exports: [
         ExpensesComponent,
-        CurrencyModule
+        GiddhNumberFormatModule
     ]
 })
 export class ExpensesModule {

@@ -9,13 +9,14 @@ import { Store } from '@ngrx/store';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { GeneralService } from '../../services/general.service';
+import { SettingsProfileService } from '../../services/settings.profile.service';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { AppState } from '../../store';
 import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, PlanDuration } from '../../app.constant';
 import { CompanyListDialogComponent } from '../company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
@@ -25,7 +26,8 @@ import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/
     templateUrl: './subscription-list.component.html',
     styleUrls: ['./subscription-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [SubscriptionComponentStore, BuyPlanComponentStore, CompanyListDialogComponentStore]
+    providers: [SubscriptionComponentStore, BuyPlanComponentStore, CompanyListDialogComponentStore],
+    standalone: false
 })
 export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** Mat menu instance reference */
@@ -41,7 +43,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
-    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'renewalDate'];
+    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'duration', 'renewalDate'];
     /** Hold the data of subscriptions */
     public dataSource: any;
     /** True if translations loaded */
@@ -116,10 +118,12 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public selectedStatus: string = '';
     /** This will use for voucher api version */
     public voucherApiVersion: number;
+    /** Hold plan duration constant reference for template usage */
+    public readonly planDuration: typeof PlanDuration = PlanDuration;
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
-        private generalService: GeneralService,
+        public generalService: GeneralService,
         private componentStore: SubscriptionComponentStore,
         private store: Store<AppState>,
         private formBuilder: FormBuilder,
@@ -127,7 +131,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         private readonly componentStoreCompanyListDialog: CompanyListDialogComponentStore,
         private generalActions: GeneralActions,
         private router: Router,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private settingsProfileService: SettingsProfileService
     ) {
         this.store.dispatch(this.generalActions.openSideMenu(true));
     }
@@ -432,9 +437,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         }
         this.dialog.open(CompanyListDialogComponent, {
             data: data,
-            panelClass: 'subscription-sidebar',
-            role: 'alertdialog',
-            ariaLabel: 'companyDialog'
+            ...ASIDE_PANE_CONFIG
         });
     }
 
@@ -570,6 +573,16 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Activates a subscription.
+     *
+     * @param id - The ID of the subscription to activate.
+     * @memberof SubscriptionComponent
+     */
+    public activateSubscription(id: any): void {
+        this.router.navigate(['/pages/user-details/subscription/activate-subscription/' + id]);
+    }
+
+    /**
      * Navigates to the page for changing billing information in the SubscriptionComponent.
      *
      * @param data - The subscription data for which billing information is to be changed.
@@ -678,10 +691,33 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         }
         this.dialog.open(PaymentMethodDialogComponent, {
             data: data,
-            panelClass: 'subscription-sidebar',
-            role: 'alertdialog',
-            ariaLabel: 'paymentDialog'
+            ...ASIDE_PANE_CONFIG
         });
+    }
+
+    /**
+     * This will be use for open wallet
+     *
+     * @param {string} subscriptionId
+     * @memberof SubscriptionListComponent
+     */
+    public openWallet(subscriptionId: string): void {
+        this.menu?.closeMenu();
+        this.router.navigate(['/pages/user-details/subscription/wallet/' + subscriptionId]);
+    }
+
+    /**
+     * Navigates to the advance payment page for the given subscription
+     *
+     * @param {string} subscriptionId
+     * @memberof SubscriptionListComponent
+     */
+    public goToAdvancePayment(subscriptionId: string): void {
+        this.menu?.closeMenu();
+        this.router.navigate(
+            [`/pages/user-details/subscription/advance-payment/${subscriptionId}`],
+            { queryParams: { removeWarning: true } }
+        );
     }
 
     /**

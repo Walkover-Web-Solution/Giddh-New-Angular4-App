@@ -239,7 +239,7 @@ export class TransactionsResponse implements ITransactions {
 
 export class TransactionsRequest {
     public q: string = '';
-    public page: number = 0;
+    public page: number = 1;
     public count: number = PAGINATION_LIMIT;
     public accountUniqueName: string = '';
     public from: string = '';
@@ -249,7 +249,7 @@ export class TransactionsRequest {
     public accountCurrency: boolean = false;
     public branchUniqueName?: string;
     public paginationToken?: string = '';
-    public isTView?: boolean = false;
+    public isTView?: boolean;
 }
 
 export interface ReconcileRequest {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject, signal, computed } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -8,7 +8,7 @@ import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
 import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,10 +19,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
+import { forEach, includes, map, set } from '../../../lodash-optimized';
+import { GroupBy } from '../../constants/reports.constant';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
-    styleUrls: ['./sales.register.expand.component.scss']
+    styleUrls: ['./sales.register.expand.component.scss'],
+    standalone: false
 })
 export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public SalesRegisteDetailedItems: SalesRegisteDetailedResponse;
@@ -87,12 +90,19 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public isDefaultLoaded: boolean = false;
     /** Hold active company country code */
     public activeCompanyCountryCode: string = '';
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Datasource of Sales Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Supported groupBy values for export functionality */
+    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration, GroupBy.SalesPerson, GroupBy.Country, GroupBy.State]);
+    /** Current groupBy value selected in the report form */
+    public currentGroupBy = signal<GroupBy | null>(null);
+    /** Computed signal that determines if export button should be visible based on current groupBy */
+    public showExport = computed(() => {
+        const currentGroupBy = this.currentGroupBy();
+        return this.supportedExportGroupBy().includes(currentGroupBy);
+    });
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig,
@@ -101,7 +111,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         private activeRoute: ActivatedRoute,
         private router: Router,
         private _cd: ChangeDetectorRef,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         private dialog: MatDialog,
         private companyActions: CompanyActions
     ) {
@@ -113,7 +123,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
+        this.imgPath = this.serviceConfig.IMG_PATH + 'icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedsalesRequestFilter.q = '';
@@ -138,7 +148,11 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
                 this.getDetailedsalesRequestFilter.to = this.to;
                 this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.getDetailedsalesRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedsalesRequestFilter.stateCode = params.stateCode;
+                this.getDetailedsalesRequestFilter.countryCode = params.countryCode;
                 this.getDetailedsalesRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
+                this.getDetailedsalesRequestFilter = this.generalService.replaceSelectedAllOptions(this.getDetailedsalesRequestFilter, true);
+                this.currentGroupBy.set(params.groupBy);
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
@@ -161,10 +175,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
                 this.SalesRegisteDetailedItems = res;
-                this.dataSource.data = this.SalesRegisteDetailedItems.items.map((obj: any) => {
-                    obj.date = this.getDateToDMY(obj.date);
-                    return obj;
-                });
+                this.dataSource.data = this.SalesRegisteDetailedItems.items;
                 if (this.voucherNumberInput?.value) {
                     setTimeout(() => {
                         if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
@@ -280,6 +291,12 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
                 "checked": true
             },
             {
+                "value": "app_round_off",
+                "label": "Round Off",
+                "checked": true,
+                "isCommonLocaleData": true
+            },
+            {
                 "value": "net_sales",
                 "label": "Net Sales",
                 "checked": true
@@ -318,7 +335,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
      */
     public gotoSalesRegister(): void {
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
-            this.router.navigate(['pages', 'reports', 'sales-register'], { queryParams: { from: params.from, to: params.to, branchUniqueName: params.branchUniqueName, interval: params.interval, selectedMonth: params.selectedMonth } });
+            this.router.navigate(['pages', 'reports', 'sales-register'], { queryParams: { groupBy: this.currentGroupBy(), required: "groupBy" } });
         });
     }
 
@@ -348,7 +365,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             let idx = this.from.split('-');
             this.monthYear = [];
             if (currentYearFrom === currentYearTo) {
-                this.monthNames.forEach(element => {
+                (Array.isArray(this.monthNames) ? this.monthNames : []).forEach(element => {
                     this.monthYear.push(element + ' ' + currentYearFrom);
                 });
             }
@@ -463,22 +480,35 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
      * @memberof SalesRegisterExpandComponent
      */
     public export(): void {
-        let exportData = {
+        const groupBy = this.currentGroupBy();
+        const salesPersonUniqueName = this.getDetailedsalesRequestFilter?.salesPersonUniqueName;
+        const countryCode = this.getDetailedsalesRequestFilter?.countryCode;
+        const stateCode = this.getDetailedsalesRequestFilter?.stateCode;
+        const accountUniqueNames = this.getDetailedsalesRequestFilter?.accountUniqueNames ?? [];
+
+        let exportData: any = {
             from: this.from,
             to: this.to,
             exportType: "SALES_REGISTER_DETAILED_EXPORT",
-            fileType: "CSV",
+            fileType: "XLSX",
             isExpanded: this.expand,
             q: this.voucherNumberInput?.value,
             branchUniqueName: this.getDetailedsalesRequestFilter?.branchUniqueName,
             commonLocaleData: this.commonLocaleData,
-            localeData: this.localeData
+            localeData: this.localeData,
+            activeCompanyCountryCode: this.activeCompanyCountryCode,
+            groupBy: groupBy && groupBy !== GroupBy.Duration ? groupBy : undefined,
+            accountUniqueNames: accountUniqueNames,
+            selectAllFields: this.getDetailedsalesRequestFilter?.selectAllFields,
+            salesPersonUniqueNames: groupBy === GroupBy.SalesPerson && salesPersonUniqueName ? [salesPersonUniqueName] : [],
+            countryCodes: (groupBy === GroupBy.Country || groupBy === GroupBy.State) && countryCode ? [countryCode] : [],
+            stateCodes: groupBy === GroupBy.State && stateCode ? [stateCode] : []
         }
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
-            width: '630px',
-            panelClass: 'export-container',
-            data: exportData
-        });
+                    width: '630px',
+                    panelClass: 'export-container',
+                    data: exportData
+                });
     }
 
     /**

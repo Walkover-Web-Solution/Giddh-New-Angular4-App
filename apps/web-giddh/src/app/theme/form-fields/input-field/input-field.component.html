@@ -6,12 +6,7 @@
     >
         <mat-label>
             {{ label || placeholder }}
-            <i
-                *ngIf="showLabelIcon"
-                [class]="labelIconClass"
-                [matTooltip]="labelIconTooltip"
-                matTooltipPosition="above"
-            ></i>
+            <i *ngIf="showLabelIcon" [class]="labelIconClass" [matTooltip]="labelIconTooltip" matTooltipPosition="above"></i>
         </mat-label>
         <input
             matInput
@@ -25,7 +20,7 @@
             (focus)="handleFocus($event)"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
-            (input)="handleInput()"
+            (input)="handleInput($event)"
             [maxlength]="maxlength"
             [minlength]="minlength"
             [readonly]="readonly"
@@ -34,11 +29,11 @@
             [required]="required"
             [attr.min]="min"
             [attr.max]="max"
-            *ngIf="!allowDecimalDigitsOnly && !allowDigitsOnly && !useMask"
+            *ngIf="!allowDecimalDigitsOnly && !useMask"
             #textField
-            (keydown.enter)="$event.preventDefault()"
+            (keydown.enter)="handleEnterKey($event)"
             [autocomplete]="autocomplete"
-            (blur)="emitBlurEvent()"
+            (blur)="emitBlurEvent($event)"
             [ngClass]="{ 'error-box': showError }"
         />
         <input
@@ -51,7 +46,7 @@
             [ngModelOptions]="{ standalone: true }"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
-            (input)="handleInput()"
+            (input)="handleInput($event)"
             [readonly]="readonly"
             [disabled]="disabled"
             [attr.pattern]="pattern"
@@ -64,39 +59,9 @@
             [customDecimalPlaces]="customDecimalPlaces"
             decimalDigitsDirective
             #textField
-            (keydown.enter)="$event.preventDefault()"
+            (keydown.enter)="handleEnterKey($event)"
             [autocomplete]="autocomplete"
-            (blur)="emitBlurEvent()"
-            [ngClass]="{ 'error-box': showError }"
-        />
-        <input
-            matInput
-            [name]="name"
-            type="number"
-            [id]="id"
-            [class]="cssClass"
-            [placeholder]="placeholder"
-            [ngModelOptions]="{ standalone: true }"
-            (paste)="handlePaste($event)"
-            (focus)="handleFocus($event)"
-            [(ngModel)]="ngModel"
-            (ngModelChange)="handleChange()"
-            (input)="handleInput()"
-            [readonly]="readonly"
-            [disabled]="disabled"
-            [attr.pattern]="pattern"
-            [required]="required"
-            [attr.min]="min"
-            [attr.max]="max"
-            [maxlength]="maxlength"
-            [minlength]="minlength"
-            *ngIf="allowDigitsOnly && !useMask"
-            [customDecimalPlaces]="customDecimalPlaces"
-            digitsOnlyDirective
-            #textField
-            (keydown.enter)="$event.preventDefault()"
-            [autocomplete]="autocomplete"
-            (blur)="emitBlurEvent()"
+            (blur)="emitBlurEvent($event)"
             [ngClass]="{ 'error-box': showError }"
         />
         <input
@@ -109,7 +74,7 @@
             [ngModelOptions]="{ standalone: true }"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
-            (input)="handleInput()"
+            (input)="handleInput($event)"
             [readonly]="readonly"
             [disabled]="disabled"
             [attr.pattern]="pattern"
@@ -121,48 +86,18 @@
             (paste)="handlePaste($event)"
             (focus)="handleFocus($event)"
             [validation]="false"
-            *ngIf="!allowDigitsOnly && useMask"
-            #textField
-            (keydown.enter)="$event.preventDefault()"
-            [autocomplete]="autocomplete"
-            (blur)="emitBlurEvent()"
-            [ngClass]="{ 'error-box': showError }"
-        />
-        <input
-            matInput
-            [name]="name"
-            [type]="type"
-            [id]="id"
-            [class]="cssClass"
-            [placeholder]="placeholder"
-            [ngModelOptions]="{ standalone: true }"
-            (paste)="handlePaste($event)"
-            (focus)="handleFocus($event)"
-            [(ngModel)]="ngModel"
-            (ngModelChange)="handleChange()"
-            (input)="handleInput()"
-            [readonly]="readonly"
-            [disabled]="disabled"
-            [attr.pattern]="pattern"
-            [required]="required"
-            [prefix]="prefix"
-            [suffix]="suffix"
-            [mask]="mask"
-            [allowUnsupportedPrefix]="allowUnsupportedPrefix"
-            [validation]="false"
-            *ngIf="allowDigitsOnly && useMask"
+            *ngIf="useMask"
             [customDecimalPlaces]="customDecimalPlaces"
-            digitsOnlyDirective
             #textField
-            (keydown.enter)="$event.preventDefault()"
+            (keydown.enter)="handleEnterKey($event)"
             [autocomplete]="autocomplete"
-            (blur)="emitBlurEvent()"
+            (blur)="emitBlurEvent($event)"
             [ngClass]="{ 'error-box': showError }"
         />
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
         <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute icon-prefix"></i>
-        
-        <span matSuffix *ngIf="matSuffix" (click)="handleSuffixClick()">{{ matSuffix }}</span>
+
+        <span matSuffix *ngIf="matSuffix" [ngClass]="matSuffixCssClass" (click)="handleSuffixClick()">{{ matSuffix }}</span>
         <i
             matSuffix
             *ngIf="matSuffixIcon"
@@ -172,7 +107,6 @@
             matTooltipPosition="above"
             role="button"
             [attr.aria-label]="label || placeholder"
-        >
-        </i>
+        ></i>
     </mat-form-field>
 </div>

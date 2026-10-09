@@ -10,7 +10,9 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { BankAccountsResponse, GraphTypesResponse } from '../../models/api-models/Dashboard';
 import { CustomActions } from '../../store/custom-actions';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 
 export class HomeActions {
 
