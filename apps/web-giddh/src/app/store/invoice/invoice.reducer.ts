@@ -9,7 +9,7 @@ import { COMMON_ACTIONS } from '../../actions/common.const';
 import { INVOICE_RECEIPT_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.const';
 import { LEDGER } from 'apps/web-giddh/src/app/actions/ledger/ledger.const';
 import { UNAUTHORISED } from '../../app.constant';
-import { indexOf } from '../../lodash-optimized';
+import { cloneDeep, concat, filter, findIndex, forEach, indexOf, isArray, map, remove } from '../../lodash-optimized';
 
 export interface InvoiceState {
     base64Data: string;
@@ -71,7 +71,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return Object.assign({}, state, initialState);
         }
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 newState.base64Data = res.body;
@@ -80,18 +80,18 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             newState.isGetAllLedgerDataInProgress = true;
             return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             newState.isBulkInvoiceGenerated = false;
             newState.isBulkInvoiceGeneratedWithoutErrors = false;
             newState.isGetAllLedgerDataInProgress = false;
             let res: BaseResponse<GetAllLedgersOfInvoicesResponse, CommonPaginatedRequest> = action.payload;
             if (res?.status === 'success') {
-                let body = _.cloneDeep(res.body);
+                let body = cloneDeep(res.body);
                 if (body?.results?.length > 0) {
                     body?.results.map((item: ILedgersInvoiceResult) => {
                         item.isSelected = (item.isSelected) ? true : false;
@@ -110,7 +110,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             }
         }
         case INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let uniq: string[] = action.payload;
             newState.ledgers.results.map((item: ILedgersInvoiceResult) => {
                 let idx = indexOf(uniq, item?.uniqueName);
@@ -128,7 +128,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return { ...state, invoiceData: null, invoiceDataHasError: false };
         }
         case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
             if (res?.status === 'success') {
                 newState.invoiceData = res.body;
@@ -152,15 +152,15 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             });
         }
         case INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             newState.isInvoiceGenerated = false;
             return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
-                newState.ledgers.results = _.remove(newState.ledgers.results, (item: ILedgersInvoiceResult) => {
+                newState.ledgers.results = remove(newState.ledgers.results, (item: ILedgersInvoiceResult) => {
                     return !item.isSelected;
                 });
                 return Object.assign({}, state, newState);
@@ -169,7 +169,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         }
 
         case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<any, GenerateBulkInvoiceRequest[]> = action.payload;
             let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request?.entryUniqueNames;
             // Check if requested form ledger
@@ -178,13 +178,13 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             }
             if (res?.status === 'success' && reqObj?.length > 0) {
                 // check for failed entries
-                if (_.isArray(res.body) && res.body?.length > 0) {
+                if (isArray(res.body) && res.body?.length > 0) {
                     let failedEntriesArr: string[] = [];
                     let needToRemoveEleArr: string[] = [];
-                    _.forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
-                        _.forEach(item.failedEntries, (uniqueName: string) => {
+                    forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
+                        forEach(item.failedEntries, (uniqueName: string) => {
                             failedEntriesArr.push(uniqueName);
-                            newState.ledgers.results = _.map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                            newState.ledgers.results = map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                                 if (o?.uniqueName === uniqueName) {
                                     o.hasGenerationErr = true;
                                     o.errMsg = item.reason;
@@ -193,8 +193,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                             });
                         });
                     });
-                    _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                        _.forEach(item.entries, (uniqueName: string) => {
+                    forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                        forEach(item.entries, (uniqueName: string) => {
                             // find index and push
                             if (indexOf(failedEntriesArr, uniqueName) === -1) {
                                 needToRemoveEleArr.push(uniqueName);
@@ -202,16 +202,16 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                         });
                     });
 
-                    _.forEach(needToRemoveEleArr, (uniqueName: string) => {
-                        newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                    forEach(needToRemoveEleArr, (uniqueName: string) => {
+                        newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                             return o?.uniqueName !== uniqueName;
                         });
                     });
 
                 } else if (typeof res.body === 'string') {
-                    _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                        _.forEach(item.entries, (uniqueName: string) => {
-                            newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                    forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                        forEach(item.entries, (uniqueName: string) => {
+                            newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                                 return o?.uniqueName !== uniqueName;
                             });
                         });
@@ -227,7 +227,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<InvoiceTemplateDetailsResponse, string> = action.payload;
             if (res?.status === 'success') {
                 newState.invoiceTemplateConditions = res.body;
@@ -237,7 +237,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         }
 
         case INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<InvoiceSetting, string> = action.payload;
             if (res?.status === 'success') {
                 newState.settings = res.body;
@@ -250,7 +250,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 let uniqueName = res.queryString?.uniquename;
@@ -263,7 +263,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 let emailId = res.queryString.emailId;
@@ -274,7 +274,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 newState.settings.webhooks = null;
@@ -283,7 +283,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 let form = res.queryString.form;
@@ -303,7 +303,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
             if (res?.status === 'success') {
                 newState.settings.razorPayform = res.body;
@@ -312,7 +312,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
             if (res?.status === 'success') {
                 let form = res.queryString.form;
@@ -322,7 +322,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE.SETTING.DELETE_RAZORPAY_DETAIL_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 newState.settings.razorPayform = new RazorPayDetailsResponse();
@@ -331,7 +331,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE.SETTING.DELETE_INVOICE_EMAIL_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 newState.settings.invoiceSettings.email = null;
@@ -341,7 +341,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
             if (res?.status === 'success') {
                 let form = res.queryString.form;
@@ -351,12 +351,12 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE_ACTIONS.ACTION_ON_INVOICE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             newState.invoiceActionUpdated = false;
             return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 // Just refreshing the list for now
@@ -367,7 +367,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return state;
         }
         case INVOICE_ACTIONS.RESET_ACTION_ON_INVOICE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             newState.invoiceActionUpdated = false;
             return Object.assign({}, state, newState);
         }
@@ -412,18 +412,18 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return newState;
         }
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             newState.exportInvoiceInprogress = true;
             return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             newState.exportInvoiceInprogress = false;
             newState.exportInvoicebase64Data = action.payload;
             return Object.assign({}, state, newState);
         }
         case LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<any, GenerateBulkInvoiceRequest[]> = action.payload;
             let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request;
             // Check if requested form ledger
@@ -432,13 +432,13 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             }
             if (res?.status === 'success' && reqObj?.length > 0) {
                 // check for failed entries
-                if (_.isArray(res.body) && res.body?.length > 0) {
+                if (isArray(res.body) && res.body?.length > 0) {
                     let failedEntriesArr: string[] = [];
                     let needToRemoveEleArr: string[] = [];
-                    _.forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
-                        _.forEach(item.failedEntries, (uniqueName: string) => {
+                    forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
+                        forEach(item.failedEntries, (uniqueName: string) => {
                             failedEntriesArr.push(uniqueName);
-                            newState.ledgers.results = _.map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                            newState.ledgers.results = map(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                                 if (o?.uniqueName === uniqueName) {
                                     o.hasGenerationErr = true;
                                     o.errMsg = item.reason;
@@ -447,8 +447,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                             });
                         });
                     });
-                    _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                        _.forEach(item.entries, (uniqueName: string) => {
+                    forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                        forEach(item.entries, (uniqueName: string) => {
                             // find index and push
                             if (indexOf(failedEntriesArr, uniqueName) === -1) {
                                 needToRemoveEleArr.push(uniqueName);
@@ -456,16 +456,16 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                         });
                     });
 
-                    _.forEach(needToRemoveEleArr, (uniqueName: string) => {
-                        newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                    forEach(needToRemoveEleArr, (uniqueName: string) => {
+                        newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                             return o?.uniqueName !== uniqueName;
                         });
                     });
 
                 } else if (typeof res.body === 'string') {
-                    _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
-                        _.forEach(item.entries, (uniqueName: string) => {
-                            newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
+                    forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                        forEach(item.entries, (uniqueName: string) => {
+                            newState.ledgers.results = remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                                 return o?.uniqueName !== uniqueName;
                             });
                         });

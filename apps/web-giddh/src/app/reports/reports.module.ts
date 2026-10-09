@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { SharedModule } from '../shared/shared.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -39,9 +39,9 @@ import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
 import { MatSortModule } from '@angular/material/sort';
 import { GiddhTableModule } from '../shared/common-table/giddh.table.module';
 import { MatSelectModule } from '@angular/material/select';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
 
 @NgModule({
@@ -68,7 +68,7 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         CommonModule,
         Daterangepicker,
         FormsModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         AccountDetailModalModule,
         ReactiveFormsModule,
         ClickOutsideModule,
@@ -95,9 +95,9 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         MatSortModule,
         GiddhTableModule,
         MatSelectModule,
-        NgxMatSelectSearchModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        GiddhDatePipe
     ]
 })
 

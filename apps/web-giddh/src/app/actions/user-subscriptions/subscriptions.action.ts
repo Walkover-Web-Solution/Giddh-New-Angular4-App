@@ -9,7 +9,9 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SubscriptionsService } from '../../services/subscriptions.service';
 import { ToasterService } from '../../services/toaster.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SubscriptionsActions {
     public static SubscribedCompanies = 'SubscribedCompanies';
     public static SubscribedCompaniesResponse = 'SubscribedCompaniesResponse';

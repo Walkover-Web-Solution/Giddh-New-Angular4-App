@@ -10,7 +10,8 @@ import { AppState } from '../../store';
 @Component({
     selector: 'ai-ocr-create',
     templateUrl: './ai-ocr-create.component.html',
-    styleUrls: ['./ai-ocr-create.component.scss']
+    styleUrls: ['./ai-ocr-create.component.scss'],
+    standalone:false
 })
 
 export class AiOcrCreateComponent implements OnInit, OnDestroy {
@@ -63,7 +64,7 @@ export class AiOcrCreateComponent implements OnInit, OnDestroy {
                     this.pdfFileURL = URL.createObjectURL(file);
                     this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                     this.imagePreviewSource = null;
-                } 
+                }
                 this.isFileUploading = false;
             } else {
                 this.isFileUploading = false;

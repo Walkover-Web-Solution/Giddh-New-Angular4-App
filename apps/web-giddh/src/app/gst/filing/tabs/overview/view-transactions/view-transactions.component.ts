@@ -20,6 +20,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/vouchers/utility/vouchers.const';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { PageEvent } from '@angular/material/paginator';
+import { cloneDeep, find } from '../../../../../lodash-optimized';
 
 export const filterTransaction = {
     entityType: '',
@@ -34,6 +35,7 @@ export const filterTransaction = {
     selector: 'view-transactions',
     templateUrl: './view-transactions.component.html',
     styleUrls: ['./view-transactions.component.scss'],
+    standalone: false
 })
 export class ViewTransactionsComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: any = null;
@@ -150,7 +152,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             { label: this.localeData?.unregistered, value: 'unregistered' }
         ];
 
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.filterParam.count = PAGINATION_LIMIT;
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
@@ -225,15 +227,15 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     public mapFilters() {
-        let filters = _.cloneDeep(this.filterParam);
+        let filters = cloneDeep(this.filterParam);
         if (this.selectedGst === GstReport.Gstr1) {
             this.displayedColumns.splice(4, 0, 'voucherType');
-            let selected = _.find(this.gstr1entityType, o => o?.value === filters.entityType);
+            let selected = find(this.gstr1entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
         } else {
-            let selected = _.find(this.gstr2entityType, o => o?.value === filters.entityType);
+            let selected = find(this.gstr2entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
@@ -243,18 +245,18 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             let selected;
             if (this.selectedGst === GstReport.Gstr1) {
                 if (this.filterParam.entityType === 'advance-receipt') {
-                    selected = _.find(this.otherEntityType, o => o?.value === filters.type)
+                    selected = find(this.otherEntityType, o => o?.value === filters.type)
                 } else {
-                    selected = _.find(this.invoiceType, o => o?.value === filters.type);
+                    selected = find(this.invoiceType, o => o?.value === filters.type);
                 }
             } else {
-                selected = _.find(this.gstr2InvoiceType, o => o?.value === filters.type);
+                selected = find(this.gstr2InvoiceType, o => o?.value === filters.type);
             }
             if (selected) {
                 this.selectedFilter.type = selected.label;
             }
         }
-        return this.filterParam = _.cloneDeep(filters);
+        return this.filterParam = cloneDeep(filters);
 
     }
 
@@ -370,12 +372,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      */
     public openDownloadOrSendMailDialog(): void {
         this.downloadOrSendMailDialogRef = this.dialog.open(this.downloadOrSendMailDialog, {
-            height: '80vh',
-            width: '80vw',
-            maxWidth: '800px',
-            disableClose: true,
-            autoFocus: false
-        });
+                    height: '80vh',
+                    width: '80vw',
+                    disableClose: true,
+            autoFocus: false,
+            panelClass: 'download-send-mail-dialog'
+                });
     }
 
     /**

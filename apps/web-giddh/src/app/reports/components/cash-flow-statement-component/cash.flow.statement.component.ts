@@ -11,11 +11,13 @@ import { GeneralService } from '../../../services/general.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from "file-saver";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'cash-flow-statement-component',
     templateUrl: './cash.flow.statement.component.html',
-    styleUrls: ['./cash.flow.statement.component.scss']
+    styleUrls: ['./cash.flow.statement.component.scss'],
+    standalone: false
 })
 
 export class CashFlowStatementComponent implements OnInit, OnDestroy {
@@ -67,7 +69,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         /* Observer to store universal from/to date */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
 
                 this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
                 this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -95,15 +97,15 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-    
+
     /**
      * Toggles the datepicker menu
-     * 
+     *
      * @param {boolean} isOpen - Whether to open or close the datepicker
      * @memberof CashFlowStatementComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {            
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
          } else {
             this.universalDatepickerTrigger?.closeMenu();

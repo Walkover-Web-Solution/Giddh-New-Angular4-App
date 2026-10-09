@@ -12,7 +12,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 
 import { ClickOutsideModule } from 'ng-click-outside';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { SharedModule } from '../shared/shared.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 @NgModule({
     declarations: [
@@ -50,7 +51,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         DecimalDigitsModule,
         Daterangepicker,
         ClickOutsideModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         SharedModule,
         NoDataModule,
         FormFieldsModule,
@@ -60,7 +61,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatCheckboxModule,
         MatInputModule,
         MatChipsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        HamburgerMenuModule
     ]
 })
 export class SearchModule {

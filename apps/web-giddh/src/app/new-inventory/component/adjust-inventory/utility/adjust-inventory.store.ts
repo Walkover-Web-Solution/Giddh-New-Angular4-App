@@ -1,6 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY, mergeMap } from "rxjs";
 import { Store } from "@ngrx/store";
 import { AppState } from "apps/web-giddh/src/app/store";
@@ -43,7 +44,9 @@ export const DEFAULT_ADJUSTINVENTORY_STATE: AdjustInventoryState = {
     createReasonIsSuccess: null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventoryState> implements OnDestroy {
 
     constructor(
@@ -81,7 +84,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         return data.pipe(
             switchMap((req) => {
                 return this.groupService.getMasters(req, 1).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -116,7 +119,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         return data.pipe(
             switchMap(() => {
                 return this.inventoryService.getInventoryAdjustReasons().pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -153,7 +156,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         return data.pipe(
             switchMap((req) => {
                 return this.inventoryService.searchStockTransactionReport(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -190,7 +193,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         return data.pipe(
             mergeMap((req) => {
                 return this.inventoryService.getVariantWiseReport(req.queryParams, req.stockReportRequest).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -228,7 +231,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         return data.pipe(
             mergeMap((req) => {
                 return this.inventoryService.getStockTransactionReportBalance(req.queryParams, req.balanceStockReportRequest).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -266,7 +269,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         return data.pipe(
             mergeMap((req) => {
                 return this.inventoryService.getInventoryAdjust(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -303,7 +306,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         return data.pipe(
             switchMap((req) => {
                 return this.inventoryService.getAdjustmentInventoryReport(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -342,7 +345,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
             switchMap((req) => {
                 this.patchState({ createReasonInProgress: true, createReasonIsSuccess: false });
                 return this.inventoryService.createInventoryAdjustReason(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -373,7 +376,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
             switchMap((req) => {
                 this.patchState({ createAdjustInventoryInProgress: true, createAdjustInventoryIsSuccess: null });
                 return this.inventoryService.createInventoryAdjustment(req?.formValue, req.branchUniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toaster.showSnackBar('success', res?.body);
@@ -414,7 +417,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
             switchMap((req) => {
                 this.patchState({ updateAdjustInventoryInProgress: true, updateAdjustInventoryIsSuccess: null });
                 return this.inventoryService.updateInventoryAdjustment(req?.formValue, req.branchUniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toaster.showSnackBar('success', res?.body);

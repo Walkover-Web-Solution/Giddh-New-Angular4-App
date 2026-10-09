@@ -213,7 +213,7 @@
     "uncheck_auto_generate_tooltip_message": "You cannot uncheck the checkbox as \"Automatically generate voucher for the entries\" setting is enabled. If you wish to disable it, <a href='/pages/vouchers/preview/sales/settings?tabIndex=4' target='_blank'>click here</a> to go to Invoice > Settings page.",
     "convert_to_entries": "Convert to entries",
     "connect_bank": "Connect Bank",
-    "convert_entries_message": "Are you sure you want to convert selected bank entries into Giddh entities?",
+    "convert_entries_message": "Are you sure you want to convert selected bank entries into [BRAND_NAME] entities?",
     "no_transaction_found_message":"No transactions found. Please change the page to get transactions.",
     "import_voucher_heading": "Import Voucher (CSV/EXCEL only)",
     "select_statement": "Select Statement",
@@ -222,5 +222,6 @@
     "no_data_found_message":"No transactions found. Please change the page to get transactions.",
     "opening_closing_balance_filter_message": "We do not show Opening and Closing balance when filters applied.",
     "duplicate": "Duplicate",
-    "change_salesperson_confirmation": "Are you sure you want to change the salesperson on this entry?<br />This will also update the salesperson on the linked voucher."
+    "change_salesperson_confirmation": "Are you sure you want to change the salesperson on this entry?<br />This will also update the salesperson on the linked voucher.",
+    "go_to_branch_message": "To access create entry, go to branch mode"
 }

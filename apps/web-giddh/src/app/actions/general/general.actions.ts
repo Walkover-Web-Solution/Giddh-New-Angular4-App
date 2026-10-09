@@ -14,8 +14,11 @@ import { DbService } from '../../services/db.service';
 import { GroupService } from '../../services/group.service';
 import { CustomActions } from '../../store/custom-actions';
 import { GENERAL_ACTIONS } from './general.const';
+import { findIndex, includes } from '../../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GeneralActions {
 
     public GetGroupsWithAccount$: Observable<Action> = createEffect(() => this.action$

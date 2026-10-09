@@ -18,7 +18,8 @@ import { each, find, orderBy } from '../../../lodash-optimized';
 @Component({
     selector: 'aside-branch-transfer-pane',
     templateUrl: './aside-branch-transfer-pane.component.html',
-    styleUrls: ['./aside-branch-transfer-pane.component.scss']
+    styleUrls: ['./aside-branch-transfer-pane.component.scss'],
+    standalone:false
 })
 
 export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {

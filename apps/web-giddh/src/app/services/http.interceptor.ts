@@ -12,8 +12,11 @@ import * as dayjs from 'dayjs';
 import { AppState } from '../store';
 import { Store } from '@ngrx/store';
 import { LoginActions } from '../actions/login.action';
+import { clone, forEach, get, has, includes, keys, set } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GiddhHttpInterceptor implements HttpInterceptor {
 
     private isOnline: boolean = true;
@@ -36,10 +39,27 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        var session = JSON.parse(localStorage.getItem("session"));
+        // Use hybrid storage approach to get session data
+        var session = this.getSessionFromHybridStorage();
         if (session?.user?.session?.expiresAt && this.generalService.user) {
             let sessionExpiresAt: any = dayjs((session.user.session.expiresAt), GIDDH_DATE_FORMAT + " h:m:s");
             if (sessionExpiresAt && sessionExpiresAt.diff(dayjs(), 'hours') < 0) {
+                // [GIDDH-RELOAD-DIAG] Cause C: session expired, dispatching LogOut from interceptor
+                const reason = {
+                    cause: 'C_SESSION_EXPIRED_LOGOUT',
+                    expiresAt: session.user.session.expiresAt,
+                    requestUrl: request.url,
+                    component: 'http.interceptor',
+                    line: '53',
+                    currentUrl: window.location.href,
+                    timestamp: new Date().toISOString()
+                };
+                console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
                 this.store.dispatch(this.loginAction.LogOut());
                 return;
             }
@@ -89,6 +109,139 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                 return of(new HttpResponse({ status: 200, body: { status: 'no-network' } }));
             } else {
                 return of();
+            }
+        }
+    }
+
+    /**
+     * Gets session data using hybrid storage approach (sessionStorage + localStorage)
+     * This matches the hybrid storage strategy used in app.module.ts
+     *
+     * @private
+     * @returns {any} Session data merged from both storages
+     * @memberof GiddhHttpInterceptor
+     */
+    private getSessionFromHybridStorage(): any {
+        try {
+            const sessionData = sessionStorage.getItem('session');
+            const localData = localStorage.getItem('session');
+
+            // Handle new tab scenario: only localStorage data exists
+            if (!sessionData && localData) {
+                // New tab - initialize with localStorage data
+                const localObj = JSON.parse(localData);
+                
+                // Check if localStorage has valid company data
+                const hasValidCompanyData = localObj.activeCompany && 
+                                          localObj.activeCompany.uniqueName && 
+                                          localObj.companyUniqueName;
+                
+                if (hasValidCompanyData) {
+                    // Extract tab-specific data and store in sessionStorage for this tab
+                    const tabSpecificKeys = ['companyUniqueName', 'activeCompany', 'companyUser', 'applicationDate', 'todaySelected', 'currentBranchUniqueName'];
+                    const tabSpecificData: any = {};
+                    
+                    (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(tabKey => {
+                        if (localObj.hasOwnProperty(tabKey)) {
+                            tabSpecificData[tabKey] = localObj[tabKey];
+                        }
+                    });
+                    
+                    // Store tab-specific data in sessionStorage for future use
+                    if (Object.keys(tabSpecificData).length > 0) {
+                        sessionStorage.setItem('session', JSON.stringify(tabSpecificData));
+                    }
+                    
+                    return localObj; // Return full localStorage data for initial load
+                } else {
+                    // No valid company data in localStorage - check if user has companies available
+
+                    // If user has companies available, try to use the first one as fallback
+                    if (localObj.companies && localObj.companies.length > 0) {
+                        const firstCompany = localObj.companies[0];
+
+                        const fallbackTabData = {
+                            applicationDate: null,
+                            companyUniqueName: firstCompany.uniqueName,
+                            todaySelected: false,
+                            activeCompany: firstCompany,
+                            companyUser: null,
+                            currentBranchUniqueName: '' // Reset branch when company changes
+                        };
+                        
+                        // Store fallback data in sessionStorage
+                        sessionStorage.setItem('session', JSON.stringify(fallbackTabData));
+                        
+                        // IMPORTANT: Also update localStorage with fallback company as latest selection
+                        const updatedLocalData = { 
+                            ...localObj, 
+                            companyUniqueName: firstCompany.uniqueName,
+                            activeCompany: firstCompany,
+                            lastAccessedAt: Date.now() // Mark as latest selection
+                            // Note: Don't update currentBranchUniqueName in localStorage - that stays tab-specific
+                        };
+                        localStorage.setItem('session', JSON.stringify(updatedLocalData));
+
+                        // Return merged data with fallback company
+                        return updatedLocalData;
+                    } else {
+                        // No companies available - initialize with defaults
+
+                        const defaultTabData = {
+                            applicationDate: null,
+                            companyUniqueName: '',
+                            todaySelected: false,
+                            activeCompany: null,
+                            companyUser: null,
+                            currentBranchUniqueName: ''
+                        };
+                        
+                        // Store default data in sessionStorage
+                        sessionStorage.setItem('session', JSON.stringify(defaultTabData));
+                        
+                        // Return the full localStorage data (which contains user auth info)
+                        return localObj;
+                    }
+                }
+            }
+
+            // Normal scenario: merge sessionStorage and localStorage
+            if (sessionData && localData) {
+                const sessionObj = JSON.parse(sessionData);
+                const localObj = JSON.parse(localData);
+                const merged = { ...localObj };
+
+                // Tab-specific keys that should come from sessionStorage
+                const tabSpecificKeys = ['companyUniqueName', 'activeCompany', 'companyUser', 'applicationDate', 'todaySelected', 'currentBranchUniqueName'];
+                
+                // Override with tab-specific data from sessionStorage
+                (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(tabKey => {
+                    if (sessionObj.hasOwnProperty(tabKey)) {
+                        merged[tabKey] = sessionObj[tabKey];
+                    }
+                });
+
+                return merged;
+            }
+
+            // Fallback to available data
+            if (sessionData) {
+                return JSON.parse(sessionData);
+            }
+            if (localData) {
+                return JSON.parse(localData);
+            }
+
+            return null;
+        } catch (error) {
+
+            // Fallback to localStorage only
+            try {
+                const fallbackData = localStorage.getItem('session');
+                return fallbackData ? JSON.parse(fallbackData) : null;
+            } catch (fallbackError) {
+
+                return null;
             }
         }
     }

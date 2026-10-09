@@ -15,14 +15,15 @@ import { InstitutionsListComponent } from '../../../shared/bank-integration/inst
 import { GeneralService } from '../../../services/general.service';
 import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
 import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
-import { cloneDeep } from '../../../lodash-optimized';
 import { SettingIntegrationComponentStore } from '../../../settings/integration/utility/setting.integration.store';
 import { BankIntegrationDialogComponent } from '../../../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
 import { Router } from '@angular/router';
+import { cloneDeep, filter, forEach, keys, map, some } from '../../../lodash-optimized';
 
 @Component({
     selector: 'bank-accounts',
     templateUrl: 'bank-accounts.component.html',
+    standalone: false,
     styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss'],
     providers: [BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore]
 })
@@ -92,7 +93,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
                 this.datePickerOptions = {
                     ...this.datePickerOptions, startDate: dayjs(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
                     endDate: dayjs(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
@@ -141,7 +142,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         this.homeComponentStore.profile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile?.userEntityRoles) {
-                profile.userEntityRoles.forEach(role => {
+                (Array.isArray(profile.userEntityRoles) ? profile.userEntityRoles : []).forEach(role => {
                     const scopes = role.role.scopes;
                     if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
                         this.hasIntegrationScope = true;

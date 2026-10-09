@@ -10,6 +10,7 @@ import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page
 import { FormsModule } from "@angular/forms";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         FormsModule,
         TranslateDirectiveModule,
         MatDialogModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatProgressSpinnerModule
     ],
     exports: [
         AttachmentsComponent

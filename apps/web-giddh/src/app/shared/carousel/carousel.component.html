@@ -1,7 +1,7 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate (commonLocaleData)="commonLocaleData = $event">
     <section class="carousel d-grid position-relative heightVH-100 widthVW-100 place-content-center">
         <button
-            mat-fab
+            matFab
             color="primary"
             class="navigation-icon navigation-icon-left position-absolute"
             (click)="handleNavigatePrevious()"
@@ -11,7 +11,7 @@
             <i class="icon-left slider-icon"></i>
         </button>
         <button
-            mat-fab
+            matFab
             color="primary"
             class="navigation-icon navigation-icon-right position-absolute"
             (click)="handleNavigateNext()"
@@ -27,4 +27,4 @@
             </ng-container>
         </main>
     </section>
-</ng-container>
+</div>

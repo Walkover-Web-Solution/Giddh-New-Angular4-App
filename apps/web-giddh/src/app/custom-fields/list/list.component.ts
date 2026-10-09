@@ -3,12 +3,13 @@ import { MatDialog } from "@angular/material/dialog";
 import { PageEvent } from '@angular/material/paginator';
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { ToasterService } from "../../services/toaster.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { FieldModules } from "../custom-fields.constant";
 import { GeneralService } from "../../services/general.service";
+import { map } from '../../lodash-optimized';
 
 export interface CustomFieldsInterface {
     fieldName: string;
@@ -21,7 +22,8 @@ export interface CustomFieldsInterface {
     selector: "list",
     templateUrl: "./list.component.html",
     styleUrls: ["./list.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CustomFieldsListComponent implements OnInit, OnDestroy {
     /** List of columns in table */
@@ -45,7 +47,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     /** Holds get all custom fields api response */
     public customFieldsList: any = {};
     /** Available field modules list */
-    public fieldModules: any[] = [];
+    public fieldModules: IOption[] = [];
     /** True if translations are loaded */
     public translationsLoaded: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -114,15 +116,15 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      */
     public deleteCustomField(customFieldUniqueName: any): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '500px',
-            role: 'alertdialog',
-            ariaLabel: 'Confirm Dialog',
-            data: {
+                    width: '500px',
+                    role: 'alertdialog',
+                    ariaLabel: 'Confirm Dialog',
+                    data: {
                 title: this.commonLocaleData?.app_delete,
-                body: this.localeData?.delete_custom_field_title,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.delete_custom_field_title,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -161,12 +163,12 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
         if (event) {
             if (this.voucherApiVersion === 2) {
                 this.fieldModules = [
-                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
-                    { name: this.commonLocaleData.app_variant, uniqueName: FieldModules.Variant }
+                    { label: this.localeData?.modules?.account, value: FieldModules.Account },
+                    { label: this.commonLocaleData.app_variant, value: FieldModules.Variant }
                 ];
             } else {
                 this.fieldModules = [
-                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account }
+                    { label: this.localeData?.modules?.account, value: FieldModules.Account }
                 ];
             }
             this.translationsLoaded = true;

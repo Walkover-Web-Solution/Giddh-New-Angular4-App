@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
@@ -8,6 +8,7 @@ import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
 import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, filter, merge, of as observableOf, skip, take, takeUntil } from "rxjs";
+import { finalize } from "rxjs/operators";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -15,10 +16,12 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, SubVoucher } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
+import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
+import { DscService } from "../../services/dsc.service";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
 import { InvoiceService } from "../../services/invoice.service";
 import { InvoiceTemplatesService } from "../../services/invoice.templates.service";
@@ -41,8 +44,10 @@ import { CommonActions } from "../../actions/common.actions";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
-import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../services/invoice.ui.data.service';
 import { TemplateModeEnum } from "../../models/api-models/Sales";
+import { AsideRecurrenceVoucherCreateComponent } from "../../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
+import { RecurrenceFormService } from "../../services/aside-recurring-voucher.service";
+import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -62,7 +67,8 @@ interface IReportFilterTableColumn {
     selector: "list",
     templateUrl: "./list.component.html",
     styleUrls: ["./list.component.scss"],
-    providers: [VoucherComponentStore]
+    providers: [VoucherComponentStore],
+    standalone: false
 })
 export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold all voucher list data source for table */
@@ -101,6 +107,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     /** Holds show Customer Search input visibility status */
     public showCustomerSearch: boolean = false;
+    /** Holds show Customer Search input visibility status */
+    public showAccountSearch: boolean = false;
     /** Holds show Invoice No Search input visibility status */
     public showInvoiceNoSearch: boolean = false;
     /** Holds show Purchase Order Number Search input visibility status */
@@ -109,10 +117,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public voucherNumberInput: FormControl = new FormControl(null);
     /** Holds account Unique Name form control */
     public accountUniqueNameInput: FormControl = new FormControl(null);
+    /** Holds account Unique Name form control */
+    public accountNameInput: FormControl = new FormControl(null);
     /** Holds Purchase Order Unique Name form control */
     public purchaseOrderUniqueNameInput: FormControl = new FormControl(null);
     /** True if searching is in progress */
     public isSearching: boolean = false;
+    /** True while DSC certificates are being preloaded; disables signed-PDF download buttons. */
+    public isDscPreloading: boolean = true;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -161,18 +173,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds universal date */
     public universalDate: any;
     /** Holds advance Filters keys */
-    public advanceFilters: any = {};
+    protected advanceFilters: any = {};
     /** Holds Sort Key Map */
     public sortKeyMap: object = {};
     /** Holds Advance Filters Applied Status */
     public advanceFiltersApplied: boolean = false;
     /** Holds Voucher Balances */
-    public voucherBalances: VoucherBalances = {
+    public voucherBalances = signal<VoucherBalances>({
         grandTotal: 0,
         totalDue: 0,
         advanceReceiptTotal: 0,
         normalReceiptTotal: 0
-    };
+    });
     /** Holds company specific data */
     public company: any = {
         baseCurrency: '',
@@ -198,6 +210,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public allVouchersSelected: boolean = false;
     /** Holds True if all Pending Vouchers are Selected */
     public allPendingVouchersSelected: boolean = false;
+    // Angular 21 Signals for Recurring Vouchers
+    /** Signal for recurring vouchers data source */
+    public recurringVouchersData = signal<any[]>([]);
+    /** Signal for recurring vouchers loading state */
+    public recurringVouchersLoading = signal<boolean>(false);
+    /** Signal for recurring vouchers total count */
+    public recurringVouchersTotalCount = signal<number>(0);
+    /** Signal for recurring vouchers display columns */
+    public recurringVouchersColumns = signal<string[]>(['index', 'accountName', 'frequency', 'createdAt', 'lastRun', 'nextRun', 'amount', 'status', 'actions']);
     /** Holds Eway Bill Dialog Ref */
     public ewayBillDialogRef: any;
     /** Holds Advance Search Dialog Ref */
@@ -349,7 +370,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** List of all templates fetched from the service */
     public templatesList: any[] = [];
     /** List of all created templates for a given type */
-    public createdTemplatesList: any[] = [];
+    public createdTemplatesList = signal<any[]>([]);
     /** True if datepicker menu is open */
     public isDatepickerMenuOpen: boolean = false;
     /** List of all created templates for a given type */
@@ -362,6 +383,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showInvoiceDate: boolean = true;
     /** Show purchase lock date */
     public showPurchaseDate: boolean = true;
+    public templateFor: string = '';
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: "", uniqueName: "" };
+    /** Stores the current branch data */
+    public currentBranchData: any;
+
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -371,23 +402,27 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private componentStore: VoucherComponentStore,
         private store: Store<AppState>,
-        private generalService: GeneralService,
+        public generalService: GeneralService,
         private vouchersUtilityService: VouchersUtilityService,
         private toasterService: ToasterService,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private invoiceTemplatesService: InvoiceTemplatesService,
-        private invoiceUiDataService: InvoiceUiDataService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private invoiceActions: InvoiceActions,
         private salesAction: SalesActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private changeDetectorRef: ChangeDetectorRef,
+        private recurrenceService: RecurrenceFormService,
+        private settingsBranchAction: SettingsBranchActions,
+        private dscSignDialogService: DscSignDialogService,
+        private dscService: DscService
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
 
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -467,7 +502,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
@@ -489,28 +524,35 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
-                const templateType =
-                    this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
-                        : this.voucherType === VoucherTypeEnum.purchase ? VoucherTypeEnum.purchase : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
+                this.setInitialAdvanceFilter(true);
+                this.resetAdvancedFilter();
                 if (this.activeModule === 'templates') {
                     if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                         this.fetchTemplates(VoucherTypeEnum.purchase_bill);
                         this.fetchAllCreatedTemplates(VoucherTypeEnum.purchase_bill);
-                    } else {
-                        this.fetchTemplates(templateType);
-                        this.fetchAllCreatedTemplates(templateType);
+                    } else if (this.urlVoucherType === 'debit-note' || this.urlVoucherType === 'credit-note') {
+                        this.fetchTemplates(VoucherTypeEnum.voucher);
+                        this.fetchAllCreatedTemplates(VoucherTypeEnum.voucher);
+                    } else if (this.urlVoucherType === VoucherTypeEnum.sales) {
+                        this.fetchTemplates(VoucherTypeEnum.invoice);
+                        this.fetchAllCreatedTemplates(VoucherTypeEnum.invoice);
                     }
+                } else if (this.activeModule === VoucherTypeEnum.recurring) {
+                    this.getRecurringVouchers();
                 }
                 setTimeout(() => {
                     if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                         this.purchaseTemplatesList = [
                             { label: this.commonLocaleData?.app_purchase_bill, value: this.voucherTypeEnum.purchase_bill },
                             { label: this.commonLocaleData?.app_voucher_types?.purchase_order, value: this.voucherTypeEnum.purchase_order }
-                        ]; 
+                        ];
                         this.selectedTemplate = this.purchaseTemplatesList[0];
-                    }  else {
+                        this.templateFor = this.purchaseTemplatesList[0]?.value || null;
+                    } else {
                         this.selectedTemplate = null;
+                        this.templateFor = null;
                     }
+                    this.changeDetectorRef.detectChanges();
                 }, 100);
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                     this.setModuleType();
@@ -524,7 +566,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.sortKeyMap = {};
-                this.setInitialAdvanceFilter(true);
                 if (this.settingResponse?.invoiceSettings) {
                     this.settingForm.patchValue({
                         purchaseBillSettings: this.settingResponse.purchaseBillSettings || {},
@@ -553,7 +594,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getSelectedTabIndex();
                 this.ledgerSearchRequest.page = 1;
                 this.ledgerSearchRequest.count = PAGINATION_LIMIT;
-                if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
+                if (this.universalDate && !['list', 'settings', 'templates', 'recurring'].includes(this.activeModule)) {
                     this.customDateSelected = false;
                     this.getLedgersOfInvoice();
                 }
@@ -574,6 +615,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.settingForm.get('invoiceSettings.gstEInvoiceEnable')?.disable();
                 }
             }
+        });
+
+        this.settingForm.get('invoiceSettings.useCustomPaymentNumber')?.valueChanges.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(() => {
+            this.changeDetectorRef.detectChanges();
         });
 
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -665,14 +712,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                     this.advanceFilters.page = this.queryParams.page;
                 }
-                this.getVouchers(true);
-                this.getVoucherBalances();
+                if (this.activeModule === VoucherTypeEnum.recurring) {
+                    this.getRecurringVouchers();
+                } else {
+                    this.getVouchers(true);
+                    this.getVoucherBalances();
+                }
             }
         });
 
         this.componentStore.voucherBalances$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.voucherBalances = response;
+                this.voucherBalances.set(response);
             }
         });
 
@@ -694,6 +745,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.getVouchers(this.isUniversalDateApplicable);
+                this.getVoucherBalances();
             }
         });
 
@@ -701,6 +753,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response) {
                     this.getVouchers(this.isUniversalDateApplicable);
+                    this.getVoucherBalances();
                 }
             });
 
@@ -730,19 +783,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (response) {
                 this.voucherDetails = response;
 
-                this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(response?.entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, response?.exchangeRate);
-
                 let tcsSum: number = 0;
+                let tcsGrandTotalAdjustment: number = 0;
                 let tdsSum: number = 0;
-                response.body?.entries.forEach(entry => {
+                (Array.isArray(response.body?.entries) ? response.body?.entries : []).forEach(entry => {
                     entry.taxes?.forEach(tax => {
                         if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
                             tcsSum += tax.amount?.amountForAccount;
+                            tcsGrandTotalAdjustment += tax.amount?.amountForAccount;
                         } else if (['tdsrc', 'tdspay'].includes(tax?.taxType)) {
                             tdsSum += tax.amount?.amountForAccount;
                         }
                     });
                 });
+
+                this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(response?.entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, response?.exchangeRate);
+                if (response?.body?.subVoucher !== SubVoucher.AdvanceReceipt && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
+                    this.voucherTotals.grandTotal += tcsGrandTotalAdjustment;
+                }
                 this.voucherTotals.tcsTotal = tcsSum;
                 this.voucherTotals.tdsTotal = tdsSum;
 
@@ -796,6 +854,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.checkSearchingIsEmpty();
                 this.advanceFilters.page = 1;
                 this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.accountNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search || search === '') {
+                this.advanceFilters.q = search;
+                this.isSearching = true;
+                this.checkSearchingIsEmpty();
+                this.advanceFilters.page = 1;
+                this.getRecurringVouchers();
             }
         });
 
@@ -937,6 +1005,58 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         };
+        if (this.activeModule === VoucherTypeEnum.recurring) {
+            this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+            this.currentCompanyBranches$.subscribe(response => {
+                if (response && response.length) {
+                    this.currentCompanyBranches = response.map(branch => ({
+                        label: branch?.name,
+                        value: branch?.uniqueName,
+                        name: branch?.name,
+                        parentBranch: branch?.parentBranch,
+                        consolidatedBranch: branch?.consolidatedBranch
+                    }));
+                    this.currentCompanyBranches.unshift({
+                        label: this.activeCompany ? this.activeCompany.name : '',
+                        name: this.activeCompany ? this.activeCompany.name : "",
+                        value: this.activeCompany ? this.activeCompany.uniqueName : "",
+                        isCompany: true,
+                    });
+                    let currentBranchUniqueName;
+                    if (!this.currentBranch?.uniqueName) {
+                        // Assign the current branch only when it is not selected. This check is necessary as
+                        // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                        // branches are loaded
+                        if (!this.isCompany) {
+                            currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                            this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                        } else {
+                            currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
+                            this.currentBranch = {
+                                name: this.activeCompany ? this.activeCompany.name : "",
+                                alias: this.activeCompany ? this.activeCompany.nameAlias : "",
+                                uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
+                            };
+                        }
+                        this.currentBranchData = cloneDeep(this.currentBranch);
+                    }
+                } else {
+                    if (this.generalService.companyUniqueName) {
+                        // Avoid API call if new user is onboarded
+                        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
+                    }
+                }
+            });
+        }
+
+        this.isDscPreloading = !this.dscService.hasCachedCertificates();
+        this.dscService.preloadCertificates().pipe(
+            takeUntil(this.destroyed$),
+            finalize(() => {
+                this.isDscPreloading = false;
+                this.changeDetectorRef.detectChanges();
+            })
+        ).subscribe();
     }
 
     /**
@@ -949,9 +1069,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         let searchingFieldIsEmpty: boolean = false;
 
         if (this.voucherType === VoucherTypeEnum.purchase) {
-            searchingFieldIsEmpty = (this.purchaseOrderUniqueNameInput.value?.length > 0) || (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0);
+            searchingFieldIsEmpty = (this.purchaseOrderUniqueNameInput.value?.length > 0) || (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value?.length > 0);
         } else {
-            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0);
+            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0) || (this.accountNameInput.value?.length > 0);
         }
 
         this.advanceFiltersApplied = this.isSearching = searchingFieldIsEmpty;
@@ -1078,6 +1198,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 4;
                 } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'templates') {
                     this.selectedTabIndex = 5;
+                } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 6;
                 }
             } else if (this.activeTabGroup === 1) {
                 if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'list') {
@@ -1090,6 +1212,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 3;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'templates') {
                     this.selectedTabIndex = 4;
+                } else if (['debit note', 'credit note'].includes(this.voucherType) && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 5;
                 }
             } else if (this.activeTabGroup === 2) {
                 if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
@@ -1100,6 +1224,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 3;
+                } else if (this.voucherType === 'purchase' && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === 'receipt' && this.activeModule === 'list') {
@@ -1108,6 +1234,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'settings') {
                     this.selectedTabIndex = 2;
+                } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 3;
                 }
             } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === 'payment' && this.activeModule === 'list') {
@@ -1116,6 +1244,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'settings') {
                     this.selectedTabIndex = 2;
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 3;
                 }
             }
         } else {
@@ -1130,6 +1260,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 3;
                 } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 4;
+                } else if (this.voucherType === 'sales' && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 5;
                 }
             } else if (this.activeTabGroup === 1) {
                 if (this.voucherType === 'debit note' && this.activeModule === 'list') {
@@ -1140,6 +1272,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 3;
+                } else if (['debit note', 'credit note'].includes(this.voucherType) && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 2) {
                 if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
@@ -1148,18 +1282,26 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 2;
+                } else if (this.voucherType === 'purchase' && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 3;
+                } else if (this.voucherType === 'purchase' && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
+                } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === VoucherTypeEnum.recurring) {
+                    this.selectedTabIndex = 2;
                 }
             }
         }
@@ -1199,6 +1341,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 5) {
                     voucherType = "sales";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 6) {
+                    voucherType = "sales";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 1) {
                 if (selectedTabIndex === 0) {
@@ -1216,6 +1361,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 4) {
                     voucherType = "debit-note";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 5) {
+                    voucherType = "debit-note";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 2) {
                 if (selectedTabIndex === 0) {
@@ -1230,6 +1378,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 3) {
                     voucherType = "purchase";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "purchase";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -1241,6 +1392,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 2) {
                     voucherType = this.voucherTypeEnum.receipt;
                     activeModule = "settings";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "receipt";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 4) {
                 if (selectedTabIndex === 0) {
@@ -1252,6 +1406,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 2) {
                     voucherType = this.voucherTypeEnum.payment;
                     activeModule = "settings";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "payment";
+                    activeModule = "recurring";
                 }
             }
         } else {
@@ -1271,6 +1428,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 4) {
                     voucherType = "sales";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 5) {
+                    voucherType = "sales";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 1) {
                 if (selectedTabIndex === 0) {
@@ -1285,6 +1445,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 3) {
                     voucherType = "debit-note";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "debit-note";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 2) {
                 if (selectedTabIndex === 0) {
@@ -1296,6 +1459,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 2) {
                     voucherType = "purchase";
                     activeModule = "templates";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "purchase";
+                    activeModule = "recurring";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "sales";
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -1304,6 +1473,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = this.voucherTypeEnum.receipt;
                     activeModule = "pending";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = this.voucherTypeEnum.receipt;
+                    activeModule = "recurring";
                 }
             } else if (this.activeTabGroup === 4) {
                 if (selectedTabIndex === 0) {
@@ -1312,6 +1484,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = this.voucherTypeEnum.payment;
                     activeModule = "pending";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = this.voucherTypeEnum.payment;
+                    activeModule = "recurring";
                 }
             }
         }
@@ -1361,7 +1536,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public getVoucherBalances(): void {
         if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote || this.voucherType === VoucherTypeEnum.purchase || this.voucherType === VoucherTypeEnum.payment || this.voucherType === VoucherTypeEnum.receipt) {
-            this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: cloneDeep(this.advanceFilters) });
+            this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true) });
         }
     }
 
@@ -1372,39 +1547,66 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private getAllVouchers(): void {
-        if (this.voucherType?.length) {
+        if (this.voucherTypes?.length) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+                this.componentStore.getPreviousProformaEstimates({ model: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true), type: this.voucherType });
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                this.componentStore.getPurchaseOrders({ request: cloneDeep(this.advanceFilters) });
+                this.componentStore.getPurchaseOrders({ request: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true) });
             } else {
-                this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+                this.componentStore.getPreviousVouchers({ model: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true), type: this.voucherType });
             }
         }
     }
 
     /**
-     *  Handle Mat table sort event
+     * Toggles sort direction between 'asc' and 'desc'
      *
-     * @param {*} event
+     * @param {string} currentDirection - Current sort direction
+     * @returns {string} Toggled sort direction
+     * @memberof VoucherListComponent
+     */
+    private toggleSortDirection(currentDirection: string): string {
+        return currentDirection === 'desc' ? 'asc' : 'desc';
+    }
+
+    /**
+     * Gets the sort value based on direction with toggle logic
+     *
+     * @param {string} direction - Sort direction from event
+     * @returns {string} Sort value ('asc', 'desc')
+     * @memberof VoucherListComponent
+     */
+    private getSortValue(direction: string): string {
+        return direction ? this.toggleSortDirection(direction) : 'desc';
+    }
+
+    /**
+     * Handle Mat table sort event
+     *
+     * @param {*} event - Sort event from MatSort
      * @memberof VoucherListComponent
      */
     public sortChange(event: any): void {
         if (this.sortKeyMap?.[event?.active]) {
-            const sortValue = this.sortKeyMap?.[event?.active] === 'asc' ? 'desc' : 'asc';
+            const sortValue = this.toggleSortDirection(this.sortKeyMap?.[event?.active]);
             this.advanceFilters.sort = sortValue;
             this.sortKeyMap[event?.active] = sortValue;
         } else {
-            this.advanceFilters.sort = event?.direction ?? 'asc';
+            const sortValue = this.getSortValue(event?.direction);
+            this.advanceFilters.sort = sortValue;
             this.sortKeyMap = {
                 ...this.sortKeyMap,
-                [event?.active]: event?.direction
+                [event?.active]: sortValue
             };
         }
         this.advanceFilters.sortBy = event?.active;
         this.advanceFilters.page = 1;
         this.advanceFiltersApplied = true;
-        this.getVouchers(false);
+        if (this.activeModule === VoucherTypeEnum.recurring) {
+            this.getRecurringVouchers();
+        } else {
+            this.getVouchers(false);
+        }
     }
 
     /**
@@ -1418,6 +1620,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.ledgerSearchRequest.page = event.pageIndex + 1;
             this.ledgerSearchRequest.count = event.pageSize;
             this.getLedgersOfInvoice();
+        } else if (this.activeModule === VoucherTypeEnum.recurring) {
+            this.advanceFilters.page = this.advanceFilters.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            this.advanceFilters.count = event.pageSize;
+            this.getRecurringVouchers();
         } else {
             this.advanceFilters.page = this.advanceFilters.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.advanceFilters.count = event.pageSize;
@@ -1547,6 +1753,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
             if (this.activeModule === 'pending') {
                 this.getLedgersOfInvoice();
+            } else if (this.activeModule === VoucherTypeEnum.recurring) {
+                this.getRecurringVouchers();
             } else {
                 this.getVouchers(this.isUniversalDateApplicable);
                 this.getVoucherBalances();
@@ -1712,9 +1920,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.localeData?.confirmation_messages?.map(message => {
             confirmationMessages[message.module] = message;
         });
-
-        const configuration = this.generalService.getVoucherDeleteConfiguration(confirmationMessages[this.voucherType]?.title, confirmationMessages[this.voucherType]?.message1, confirmationMessages[this.voucherType]?.message2, this.commonLocaleData);
-
+        let configuration;
+        if (this.activeModule === VoucherTypeEnum.recurring) {
+            configuration = this.generalService.getVoucherDeleteConfiguration(confirmationMessages[VoucherTypeEnum.recurring]?.title, confirmationMessages[VoucherTypeEnum.recurring]?.message1, confirmationMessages[VoucherTypeEnum.recurring]?.message2, this.commonLocaleData);
+        } else {
+            configuration = this.generalService.getVoucherDeleteConfiguration(confirmationMessages[this.voucherType]?.title, confirmationMessages[this.voucherType]?.message1, confirmationMessages[this.voucherType]?.message2, this.commonLocaleData);
+        }
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-md'],
             data: {
@@ -1725,37 +1936,59 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
-                this.advanceFilters.page = this.generalService.adjustPageIndex(this.dataSource?.length, this.advanceFilters.page, this.advanceFilters.count, voucher?.uniqueName ? 1 : this.selectedVouchers?.length);
-                if (this.voucherType === VoucherTypeEnum.purchase) {
-                    this.componentStore.deleteVoucher({
-                        accountUniqueName: voucher?.account?.uniqueName, model: {
-                            uniqueName: voucher?.uniqueName,
-                            voucherType: this.voucherType
-                        }
-                    });
-                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                    if (voucher?.uniqueName) {
-                        this.componentStore.deleteSinglePOVoucher(voucher?.uniqueName);
-                    } else {
-                        this.poBulkAction('delete');
+                if (this.activeModule === VoucherTypeEnum.recurring) {
+                    if (voucher?.recurringVoucherUniqueName) {
+                        this.recurrenceService.delete(voucher.recurringVoucherUniqueName).pipe(
+                            takeUntil(this.destroyed$)
+                        ).subscribe({
+                            next: (response: any) => {
+                                if (response?.status === 'success') {
+                                    this.toasterService.showSnackBar('success', response.body);
+                                    this.getRecurringVouchers();
+                                    this.getVoucherBalances();
+                                } else {
+                                    this.toasterService.showSnackBar('error', response?.message);
+                                }
+                            },
+                            error: (error) => {
+                                this.toasterService.showSnackBar('error', error?.message);
+                            }
+                        });
                     }
-                } else if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    const selectedVoucher = voucher ?? this.selectedVouchers[0];
-                    const payload = {
-                        accountUniqueName: selectedVoucher.customerUniqueName
-                    }
-                    if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-                        payload['estimateNumber'] = selectedVoucher?.estimateNumber;
-                    } else {
-                        payload['proformaNumber'] = selectedVoucher?.proformaNumber;
-                    }
-                    this.componentStore.deleteEstimsteProformaVoucher({ payload: payload, voucherType: this.voucherType });
                 } else {
-                    const payload = {
-                        voucherUniqueNames: voucher?.uniqueName ? [voucher.uniqueName] : this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
-                        voucherType: this.voucherType
-                    };
-                    this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
+                    this.advanceFilters.page = this.generalService.adjustPageIndex(this.dataSource?.length, this.advanceFilters.page, this.advanceFilters.count, voucher?.uniqueName ? 1 : this.selectedVouchers?.length);
+                    if (this.voucherType === VoucherTypeEnum.purchase) {
+                        this.componentStore.deleteVoucher({
+                            accountUniqueName: voucher?.account?.uniqueName, model: {
+                                uniqueName: voucher?.uniqueName,
+                                voucherType: this.voucherType
+                            }
+                        });
+
+                    } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                        if (voucher?.uniqueName) {
+                            this.componentStore.deleteSinglePOVoucher(voucher?.uniqueName);
+                        } else {
+                            this.poBulkAction('delete');
+                        }
+                    } else if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+                        const selectedVoucher = voucher ?? this.selectedVouchers[0];
+                        const payload = {
+                            accountUniqueName: selectedVoucher.customerUniqueName
+                        }
+                        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
+                            payload['estimateNumber'] = selectedVoucher?.estimateNumber;
+                        } else {
+                            payload['proformaNumber'] = selectedVoucher?.proformaNumber;
+                        }
+                        this.componentStore.deleteEstimsteProformaVoucher({ payload: payload, voucherType: this.voucherType });
+                    } else {
+                        const payload = {
+                            voucherUniqueNames: voucher?.uniqueName ? [voucher.uniqueName] : this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
+                            voucherType: this.voucherType
+                        };
+                        this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
+                    }
                 }
             }
         });
@@ -1777,6 +2010,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "invoiceNumber") {
                     this.showInvoiceNoSearch = true;
+                } else if (fieldName === "accountName") {
+                    this.showAccountSearch = true;
                 }
                 break;
             case VoucherTypeEnum.estimate:
@@ -1835,6 +2070,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.showInvoiceNoSearch = true;
                 } else if (fieldName === "purchaseOrderNumbers") {
                     this.showPurchaseOrderNumberSearch = true;
+                } else if (fieldName === "accountName") {
+                    this.showAccountSearch = true;
                 }
                 break;
         }
@@ -1865,6 +2102,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (this.purchaseOrderUniqueNameInput.value !== null && this.purchaseOrderUniqueNameInput.value !== '') {
                 return;
             }
+        } else if (searchedFieldName === 'accountName') {
+            if (this.accountNameInput.value !== null && this.accountNameInput.value !== '') {
+                return;
+            }
         }
 
         if (this.generalService.childOf(event?.target, element)) {
@@ -1876,6 +2117,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.showCustomerSearch = false;
             } else if (searchedFieldName === 'purchaseOrderNumbers') {
                 this.showPurchaseOrderNumberSearch = false;
+            } else if (searchedFieldName === 'accountName') {
+                this.showAccountSearch = false;
             }
         }
     }
@@ -1911,11 +2154,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.invoiceService.setSelectedInvoicesList(this.selectedVouchers);
             }
         }
-
-        this.ewayBillDialogRef = this.dialog.open(this.ewayBill, {
-            width: '600px',
-            disableClose: true
-        });
+        this.createEwayBill();
     }
 
     /**
@@ -1924,7 +2163,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public createEwayBill(): void {
-        this.componentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
+        this.componentStore.createEwayBill$.pipe(filter(Boolean), take(1)).subscribe(response => {
             if (!response?.account?.billingDetails?.pincode) {
                 this.toasterService.showSnackBar("error", this.localeData?.pincode_required);
             } else {
@@ -1986,7 +2225,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.page = advanceFilters.page;
         this.advanceFilters.count = advanceFilters.count;
         this.advanceFilters.q = advanceFilters.q;
-
         tempKeysInAdvanceFiltersForm.forEach(keys => {
             this.advanceSearchTempKeyObj = { ...this.advanceSearchTempKeyObj, [keys]: this.advanceFilters[keys] };
             delete this.advanceFilters[keys];
@@ -2176,7 +2414,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         if (accountUniqueName && fromDate && toDate) {
             let url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
-            url = url + `?redirectUrl=${this.currentUrl}`;
+            const separator = url.includes('?') ? '&' : '?';
+            url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
             this.openUrl(url);
         }
     }
@@ -2217,9 +2456,43 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     private openUrl(url: string): void {
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#.${url}`;
-            ipcRenderer.send('open-url', url);
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        const electronUrl = location.origin + location.pathname + `#.${url}`;
+                        (window as any).electronAPI.send('open-url', electronUrl);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            const electronUrl = location.origin + location.pathname + `#.${url}`;
+                            electron.ipcRenderer.send('open-url', electronUrl);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+
+                    }
+                }
+
+                // Fallback to regular window.open if IPC not available
+                if (!electronIpcAvailable) {
+
+                    (window as any).open(url);
+                }
+            } catch (error) {
+
+                (window as any).open(url);
+            }
         } else {
             (window as any).open(url);
         }
@@ -2261,9 +2534,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public setInitialAdvanceFilter(onlyResetValue: boolean = false): void {
         let universalDate;
         // get application date
-        this.componentStore.universalDate$.pipe(take(1)).subscribe(date => {
+        this.componentStore.universalDate$.pipe(filter(Boolean) ,take(1)).subscribe(date => {
             universalDate = date;
-        });
 
         // set date picker date as application date
         if (universalDate?.length > 1) {
@@ -2281,18 +2553,26 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         };
         this.voucherNumberInput.patchValue(null, { emitEvent: false });
         this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
+        this.accountNameInput.patchValue(null, { emitEvent: false });
         this.purchaseOrderUniqueNameInput.patchValue(null, { emitEvent: false });
         this.showCustomerSearch = false;
         this.showInvoiceNoSearch = false;
         this.showPurchaseOrderNumberSearch = false;
+        this.showAccountSearch = false;
         this.advanceFiltersApplied = false;
         this.isSearching = false;
         this.advanceSearchTempKeyObj = {};
         this.activeSearchField = null;
         this.sortKeyMap = {};
         if (!onlyResetValue) {
-            this.getVouchers(false);
+            if (this.activeModule === VoucherTypeEnum.recurring) {
+                this.getRecurringVouchers();
+            } else {
+                this.getVouchers(false);
+                this.getVoucherBalances();
+            }
         }
+        });
     }
 
     /**
@@ -2649,7 +2929,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private flattenGroupedVouchers(groupedVoucher: Record<string, GenBulkInvoiceGroupByObj[]>): string[] {
         const model: string[] = [];
         forEach(groupedVoucher, items => {
-            items.forEach(obj => model.push(obj?.uniqueName));
+            (Array.isArray(items) ? items : []).forEach(obj => model.push(obj?.uniqueName));
         });
         return model;
     }
@@ -2712,8 +2992,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string): void {
         const dataToSave = {
             code: authCode,
-            client_secret: GOOGLE_CLIENT_SECRET,
-            client_id: GOOGLE_CLIENT_ID,
+            client_secret: (this.serviceConfig.GOOGLE_CLIENT_SECRET || GOOGLE_CLIENT_SECRET),
+            client_id: (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID),
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl()
         };
@@ -2727,10 +3007,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public getRedirectUrl(): string {
+        const baseUrl = AppUrl.endsWith('/') ? AppUrl : AppUrl + '/';
         if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-            return AppUrl + 'pages/purchase-management/purchase/settings';
+            return baseUrl + 'pages/purchase-management/purchase/settings';
         } else {
-            return AppUrl + 'pages/vouchers/preview/sales/settings';
+            return baseUrl + 'pages/vouchers/preview/sales/settings';
         }
     }
 
@@ -2955,7 +3236,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             changePOStatusOnExpiry: [false],
             useCustomPONumber: [false],
             enableVoucherDownload: [true],
-            invoiceSettings: this.createInvoiceSettingsForm()
+            invoiceSettings: this.createInvoiceSettingsForm(),
+            purchaseOrderRoundOff: [true]
         });
     }
 
@@ -3056,7 +3338,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             sendSms: [null],
             enableProforma: [false],
             autoWhatsApp: [false],
-            branchProformaNumberPrefix: [null]
+            branchProformaNumberPrefix: [null],
+            proformaRoundOff: [true]
         });
     }
 
@@ -3076,7 +3359,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             autoMail: [true],
             enableEstimate: [false],
             autoWhatsApp: [false],
-            branchEstimateNumberPrefix: [null]
+            branchEstimateNumberPrefix: [null],
+            estimateRoundOff: [true]
         });
     }
 
@@ -3137,7 +3421,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         if (lockDateValue === null || lockDateValue === '') {
                             this.showPurchaseDate = false;
                             setTimeout(() => {
-                               this.showPurchaseDate = true;
+                                this.showPurchaseDate = true;
                             }, 0);
                         }
 
@@ -3157,7 +3441,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         if (invoiceLockDateValue === null || invoiceLockDateValue === '') {
                             this.showInvoiceDate = false;
                             setTimeout(() => {
-                               this.showInvoiceDate = true;
+                                this.showInvoiceDate = true;
                             }, 0);
                         }
 
@@ -3178,10 +3462,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.applyRoundOff = setting.invoiceSettings.debitNoteRoundOff;
                     } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                         this.applyRoundOff = setting.invoiceSettings.creditNoteRoundOff;
-                    } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
-                        this.applyRoundOff = true;
+                    } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate) {
+                        this.applyRoundOff = setting.estimateSettings.estimateRoundOff;
+                    } else if (this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
+                        this.applyRoundOff = setting.proformaSettings?.proformaRoundOff;
                     } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                        this.applyRoundOff = true;
+                        this.applyRoundOff = setting.purchaseBillSettings?.purchaseOrderRoundOff;
                     }
                 } else if (!setting) {
                     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
@@ -3296,7 +3582,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     /**
      * This will set module type for voucher report filter
-     * 
+     *
      * @private
      * @memberof VoucherListComponent
      */
@@ -3356,13 +3642,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param templateType The type of template to fetch
      */
     public fetchAllCreatedTemplates(templateType: string): void {
-        this.createdTemplatesList = [];
+        this.createdTemplatesList.set([]);
         this.invoiceTemplatesService.getAllCreatedTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
-                this.createdTemplatesList = res?.body || [];
+                this.createdTemplatesList.set(res?.body || []);
             } else {
-                this.createdTemplatesList = [];
+                this.createdTemplatesList.set([]);
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -3377,13 +3664,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (res?.status === 'success') {
                 this.toasterService.showSnackBar('success', this.localeData?.template_set_as_default_successfully);
                 // Update the UI immediately
-                this.createdTemplatesList.forEach(template => {
-                    if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
-                        template.isDefaultForVoucher = (template.uniqueName === templateUniqueName);
-                    } else {
-                        template.isDefault = (template.uniqueName === templateUniqueName);
-                    }
-                });
+                this.createdTemplatesList.update(list => list.map(template => ({
+                    ...template,
+                    ...(this.voucherType === 'credit note' || this.voucherType === 'debit note'
+                        ? { isDefaultForVoucher: template.uniqueName === templateUniqueName }
+                        : { isDefault: template.uniqueName === templateUniqueName })
+                })));
+                this.changeDetectorRef.detectChanges();
             } else {
                 this.toasterService.showSnackBar('error', res?.message);
             }
@@ -3438,7 +3725,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         };
         this.dialog.open(TemplatePreviewDialogComponent, {
-           panelClass: ['mat-dialog-lg'],
+            panelClass: ['mat-dialog-lg'],
             height: '90vh',
             maxHeight: '90vh',
             data: reqObj
@@ -3462,17 +3749,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             templateList: this.templatesList,
             voucherType: voucherType,
             templateType: templatesType,
-            createTemplateList: this.createdTemplatesList,
+            createTemplateList: this.createdTemplatesList(),
             updateTemplate: type === TemplateModeEnum.Edit ? template : null,
             mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create,
             localeData: this.localeData,
-            commonLocaleData: this.commonLocaleData
+            commonLocaleData: this.commonLocaleData,
+            activeCompany: this.activeCompany
         };
         const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',
             height: '95vh',
             maxHeight: '95vh',
-            maxWidth: '90vw',
             data: dataToSend,
             disableClose: true
         });
@@ -3527,5 +3814,220 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.selectedTemplate = template;
         this.fetchAllCreatedTemplates(template.value);
         this.fetchTemplates(template.value);
+    }
+
+    /**
+     * Fetch all recurring vouchers based on voucher type with query parameters
+     *
+     * @memberof VoucherListComponent
+     */
+    public getRecurringVouchers(): void {
+        if (this.activeModule !== VoucherTypeEnum.recurring) {
+            return;
+        }
+        this.recurringVouchersLoading.set(true);
+
+        // Build query parameters
+        const params: any = {
+            page: this.advanceFilters.page || 1,
+            count: this.advanceFilters.count || PAGINATION_LIMIT,
+        };
+
+        // Add date range if available
+        params.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT) ?? '';
+        params.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT) ?? '';
+
+        // Add search query if available
+        params.q = this.advanceFilters.q ?? '';
+
+        // Add sorting if available
+        params.sortBy = this.advanceFilters.sortBy ?? '';
+        params.sort = this.advanceFilters.sort ?? 'asc';
+        params['voucherType'] = this.voucherType;
+
+        this.recurrenceService.getAll(params).pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe({
+            next: (response: any) => {
+                if (response?.status === 'success' && response?.body) {
+                    const vouchersData = response.body?.items || response.body || [];
+                    const formattedVouchersData = vouchersData.map((voucher: any) => ({
+                        ...voucher,
+                        lastRun: voucher.lastRun === '--' ? '-' : (voucher.lastRun ? dayjs(voucher.lastRun).format(GIDDH_DATE_FORMAT) : ''),
+                        nextRun: voucher.nextRun === '--' ? '-' : (voucher.nextRun ? dayjs(voucher.nextRun).format(GIDDH_DATE_FORMAT) : '')
+                    }));
+                    this.recurringVouchersData.set(formattedVouchersData);
+                    this.recurringVouchersTotalCount.set(response.body?.totalItems || vouchersData.length);
+                } else {
+                    this.recurringVouchersData.set([]);
+                    this.recurringVouchersTotalCount.set(0);
+                }
+                this.recurringVouchersLoading.set(false);
+            },
+            error: (error) => {
+                this.recurringVouchersData.set([]);
+                this.recurringVouchersTotalCount.set(0);
+                this.recurringVouchersLoading.set(false);
+            }
+        });
+    }
+/**
+ *  Generate recurring voucher
+ *
+ * @param {*} voucher
+ * @memberof VoucherListComponent
+ */
+public generateRecurringVoucher(voucher: any): void {
+        try {
+            const dialogRef = this.dialog.open(AsideRecurrenceVoucherCreateComponent, {
+                panelClass: ['mat-dialog-md'],
+                disableClose: true,
+                autoFocus: false,
+                data: {
+                    title: this.commonLocaleData?.app_create_recurring_voucher,
+                    voucher: voucher
+                }
+            });
+
+            dialogRef.afterClosed().subscribe({
+                next: (result) => {
+                    if (result) {
+                        this.getAllVouchers();
+                    }
+                },
+                error: (error) => {
+                    this.toasterService.showSnackBar('error', error?.message);
+                }
+            });
+        } catch (error) {
+            this.toasterService.showSnackBar('error', error?.message);
+        }
+    }
+
+    /**
+     * Resume a recurring voucher
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
+    public resumeRecurringVoucher(voucher: any): void {
+        if (voucher?.recurringVoucherUniqueName) {
+            this.recurrenceService.updateStatus(voucher.recurringVoucherUniqueName, 'RESUME').pipe(
+                takeUntil(this.destroyed$)
+            ).subscribe({
+                next: (response: any) => {
+                    if (response?.status === 'success') {
+                        this.toasterService.showSnackBar('success', response?.body);
+                        this.getRecurringVouchers();
+                    } else {
+                        this.toasterService.showSnackBar('error', response?.message);
+                    }
+                },
+                error: (error) => {
+                    this.toasterService.showSnackBar('error', error?.message);
+                }
+            });
+        }
+    }
+
+    /**
+     * Stop a recurring voucher
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
+    public stopRecurringVoucher(voucher: any): void {
+        if (voucher?.recurringVoucherUniqueName) {
+            this.recurrenceService.updateStatus(voucher.recurringVoucherUniqueName, 'STOP').pipe(
+                takeUntil(this.destroyed$)
+            ).subscribe({
+                next: (response: any) => {
+                    if (response?.status === 'success') {
+                        this.toasterService.showSnackBar('success', response?.body);
+                        this.getRecurringVouchers();
+                    } else {
+                        this.toasterService.showSnackBar('error', response?.message);
+                    }
+                },
+                error: (error) => {
+                    this.toasterService.showSnackBar('error', error?.message);
+                }
+            });
+        }
+    }
+
+    /**
+     * Set all account to service variable and redirect to view page
+     *
+     * @memberof ContactComponent
+     */
+    public showRecurringPreview(recurringVoucherUniqueName: string): void {
+        if (!recurringVoucherUniqueName) {
+            return;
+        }
+        const queryParams = {
+            page: this.advanceFilters.page,
+            count: this.advanceFilters.count,
+            from: this.selectedDateRange?.startDate.format(GIDDH_DATE_FORMAT),
+            to: this.selectedDateRange?.endDate.format(GIDDH_DATE_FORMAT),
+            sort: this.advanceFilters.sort,
+            sortBy: this.advanceFilters.sortBy,
+            recurringVoucherUniqueName: recurringVoucherUniqueName
+        };
+        const searchString = this.advanceFilters.q;
+        if (searchString?.length) {
+            queryParams['search'] = searchString;
+        };
+
+        if (this.currentCompanyBranches?.length > 2 &&
+            (this.isCompany || this.isConsolidatedBranch)) {
+            queryParams['branchUniqueName'] = this.currentBranch?.uniqueName;
+        }
+        this.router.navigate([`/pages/vouchers/view/${this.vouchersUtilityService.getVoucherTypeUrl(this.voucherType)}/recurring/${recurringVoucherUniqueName}`], {
+            queryParams: queryParams
+        });
+    }
+
+    /**
+     * Navigates to create recurring voucher page
+     *
+     * @memberof VoucherListComponent
+     */
+    public navigateToCreateRecurringVoucher(voucherType: string): void {
+        const route = `/pages/vouchers/${this.vouchersUtilityService.getVoucherTypeUrl(voucherType ? voucherType : this.voucherType)}/create`;
+        this.router.navigate([route], {
+            queryParams: { isRecurringVoucher: true }
+        });
+    }
+
+    /**
+     * Reset Filter on tab change
+     * 
+     * @private
+     * @memberof ContactComponent
+     */
+    private resetAdvancedFilter(): void {
+        this.advanceFilters['q'] = "";
+        this.advanceFilters['sortBy'] = "";
+        this.advanceFilters['sort'] = "";
+        this.advanceFilters['page'] = this.queryParams.page || 1;
+        this.advanceFilters['count'] = this.queryParams.count || PAGINATION_LIMIT;
+        if (this.selectedDateRange) {
+            this.advanceFilters['from'] = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
+            this.advanceFilters['to'] = dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
+        }
+    }
+
+    /**
+     * Initiates digitally signed invoice PDF download by opening the reusable DSC PIN dialog.
+     *
+     * @param {*} voucher The voucher for which the signed PDF is requested
+     * @memberof VoucherListComponent
+     */
+    public downloadSignedInvoicePdf(voucher: any): void {
+        this.dscSignDialogService.openDownloadSignedInvoiceDialog({
+            voucher,
+            voucherType: this.voucherType
+        });
     }
 }

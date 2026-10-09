@@ -3,12 +3,13 @@ import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, Te
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, takeUntil } from "rxjs";
+import { finalize } from "rxjs/operators";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { ASIDE_PANE_CONFIG, FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT, SubVoucher } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
@@ -26,12 +27,15 @@ import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 import { DownloadVoucherComponent } from "../download-voucher/download-voucher.component";
 import { ServiceConfig } from "../../services/service.config";
+import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
+import { DscService } from "../../services/dsc.service";
 
 @Component({
     selector: "preview",
     templateUrl: "./preview.component.html",
     styleUrls: ["./preview.component.scss"],
-    providers: [VoucherComponentStore]
+    providers: [VoucherComponentStore],
+    standalone: false
 })
 export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Instance of PDF container iframe */
@@ -176,6 +180,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public pdfPreviewHasError: boolean = false;
     /** Hold true if searching */
     public isSearching: boolean;
+    /** True while DSC certificates are being preloaded; disables signed-PDF download button. */
+    public isDscPreloading: boolean = true;
     /** Holds true if invoice load more data is trigger */
     public isLoadMore: boolean;
     /** Holds Get all api call count */
@@ -212,7 +218,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private changeDetection: ChangeDetectorRef,
         private invoiceReceiptActions: InvoiceReceiptActions,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private dscSignDialogService: DscSignDialogService,
+        private dscService: DscService
     ) { }
 
 
@@ -258,7 +266,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
                 // Reset Filter
@@ -287,6 +295,30 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.getAllVouchers();
             }
         });
+        if (this.shouldShowDownloadSignedPdf()) {
+            this.isDscPreloading = !this.dscService.hasCachedCertificates();
+            this.dscService.preloadCertificates().pipe(
+                takeUntil(this.destroyed$),
+                finalize(() => {
+                    this.isDscPreloading = false;
+                    this.changeDetection.detectChanges();
+                })
+            ).subscribe();
+        }
+    }
+    /**
+     * True when Download Signed PDF is allowed for the current voucher type.
+     *
+     * @protected
+     * @returns {boolean} True if signed PDF action should be displayed
+     * @memberof VouchersPreviewComponent
+     */
+    protected shouldShowDownloadSignedPdf(): boolean {
+        return !this.invoiceType.isPurchaseOrder &&
+            !this.invoiceType.isEstimateInvoice &&
+            !this.invoiceType.isProformaInvoice &&
+            !this.invoiceType.isReceiptInvoice &&
+            !this.invoiceType.isPaymentInvoice;
     }
 
     /**
@@ -475,19 +507,24 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             if (response) {
                 this.voucherDetails = response;
 
-                this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(response?.entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, response?.exchangeRate);
-
                 let tcsSum: number = 0;
+                let tcsGrandTotalAdjustment: number = 0;
                 let tdsSum: number = 0;
-                response.body?.entries.forEach(entry => {
+                (Array.isArray(response.body?.entries) ? response.body?.entries : []).forEach(entry => {
                     entry.taxes?.forEach(tax => {
                         if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
                             tcsSum += tax.amount?.amountForAccount;
+                            tcsGrandTotalAdjustment += tax.amount?.amountForAccount;
                         } else if (['tdsrc', 'tdspay'].includes(tax?.taxType)) {
                             tdsSum += tax.amount?.amountForAccount;
                         }
                     });
                 });
+
+                this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(response?.entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, response?.exchangeRate);
+                if (response?.body?.subVoucher !== SubVoucher.AdvanceReceipt && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
+                    this.voucherTotals.grandTotal += tcsGrandTotalAdjustment;
+                }
                 this.voucherTotals.tcsTotal = tcsSum;
                 this.voucherTotals.tdsTotal = tdsSum;
 
@@ -1051,6 +1088,22 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @return {*}  {void}
      * @memberof VouchersPreviewComponent
      */
+    public downloadSignedInvoicePdf(): void {
+        if (!this.selectedInvoice) {
+            return;
+        }
+        this.dscSignDialogService.openDownloadSignedInvoiceDialog({
+            voucher: this.selectedInvoice,
+            voucherType: this.voucherType
+        });
+    }
+
+    /**
+     * Download Invoice PDF
+     *
+     * @return {*}  {void}
+     * @memberof VouchersPreviewComponent
+     */
     public downloadPdf(): void {
         if (this.isVoucherDownloading || this.isVoucherDownloadError) {
             return;
@@ -1058,11 +1111,11 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             if (this.selectedInvoice && this.selectedInvoice.blob) {
-                return saveAs(this.selectedInvoice.blob, `${this.selectedInvoice?.account?.name} - ${this.selectedInvoice.voucherNumber}.pdf`);
+                return saveAs(this.selectedInvoice.blob, `${this.selectedInvoice?.account?.name ?? this.selectedInvoice?.account?.customerName} - ${this.selectedInvoice.voucherNumber}.pdf`);
             } else {
                 return;
             }
-        } else if (this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote) {
+        } else if ([VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
             if (this.selectedInvoice?.hasAttachment) {
                 this.openDownloadVoucher();
             } else {
@@ -1277,14 +1330,26 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public redirectToGetAllPage(): void {
-        this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {
-            queryParams: {
-                page: this.queryParams.page ?? 1,
-                count: this.queryParams.count ?? PAGINATION_LIMIT,
-                from: this.advanceFilters.from,
-                to: this.advanceFilters.to
-            }
-        });
+        if (!this.queryParams.isRecurringVoucher) {
+            this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {
+                queryParams: {
+                    page: this.queryParams.page ?? 1,
+                    count: this.queryParams.count ?? PAGINATION_LIMIT,
+                    from: this.advanceFilters.from,
+                    to: this.advanceFilters.to
+                }
+            });
+        } else {
+            this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/recurring/${this.queryParams.recurringVoucherUniqueName}`], {
+                queryParams: {
+                    page: this.queryParams.page ?? 1,
+                    count: this.queryParams.count ?? PAGINATION_LIMIT,
+                    from: this.advanceFilters.from,
+                    to: this.advanceFilters.to,
+                    recurringVoucherUniqueName: this.queryParams.recurringVoucherUniqueName
+                }
+            });
+        }
     }
 
     /**

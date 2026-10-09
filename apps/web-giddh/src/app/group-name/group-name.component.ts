@@ -8,7 +8,8 @@ import { ServiceConfig } from '../services/service.config';
 @Component({
   selector: 'app-group-name',
   templateUrl: './group-name.component.html',
-  styleUrls: ['./group-name.component.scss']
+    styleUrls: ['./group-name.component.scss'],
+  standalone:false
 })
 export class GroupNameComponent implements OnInit {
   /** True if api call in progress */
@@ -46,7 +47,7 @@ export class GroupNameComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+      this.imgPath = this.serviceConfig.IMG_PATH;
 
     // get branches
     this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {

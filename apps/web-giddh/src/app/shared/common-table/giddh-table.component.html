@@ -1,96 +1,92 @@
 <div class="table-responsive overflow-visible">
     <table mat-table [dataSource]="tableDataSource" class="giddh-table">
-    <!-- Header Row 1: Displays total count values for each column when enabled -->
-    <ng-container *ngIf="isShowSecondaryHeader">
-        <ng-container *ngFor="let column of topHeaderColumns" [matColumnDef]="column">
-            <th 
-                mat-header-cell 
-                *matHeaderCellDef 
-                [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''"
-            >
-                <ng-container *ngIf="tableSecondaryHeader?.hasOwnProperty(trimColumn(column))">
-                    <!-- Number field -->
-                    <amount-field
-                        *ngIf="isNumber(tableSecondaryHeader[trimColumn(column)])"
-                        [amount]="tableSecondaryHeader[trimColumn(column)]"
-                        [currencySymbol]="false"
-                        [currencyCode]="false"
-                    ></amount-field>
+        <!-- Header Row 1: Displays total count values for each column when enabled -->
+        <ng-container *ngIf="isShowSecondaryHeader">
+            <ng-container *ngFor="let column of topHeaderColumns" [matColumnDef]="column">
+                <th mat-header-cell *matHeaderCellDef [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''">
+                    <ng-container *ngIf="tableSecondaryHeader?.hasOwnProperty(trimColumn(column))">
+                        <!-- Number field -->
+                        <amount-field
+                            *ngIf="isNumber(tableSecondaryHeader[trimColumn(column)])"
+                            [amount]="tableSecondaryHeader[trimColumn(column)]"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        ></amount-field>
 
-                    <!-- String field -->
-                    <span *ngIf="!isNumber(tableSecondaryHeader[trimColumn(column)])" class="text-uppercase">
-                        {{ tableSecondaryHeader[trimColumn(column)] }}
-                    </span>
-                </ng-container>
+                        <!-- String field -->
+                        <span *ngIf="!isNumber(tableSecondaryHeader[trimColumn(column)])" class="text-uppercase">
+                            {{ tableSecondaryHeader[trimColumn(column)] }}
+                        </span>
+                    </ng-container>
+                </th>
+            </ng-container>
+        </ng-container>
+
+        <!-- Dynamically generates columns based on displayedColumns array -->
+        <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+            <!-- Column Header Row: Displays the main headers for each column -->
+            <th mat-header-cell *matHeaderCellDef class="max-width-150" [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''">
+                {{ getHeaderLabel(column) }}
             </th>
-        </ng-container>
-    </ng-container>
 
-    <!-- Dynamically generates columns based on displayedColumns array -->
-    <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-        <!-- Column Header Row: Displays the main headers for each column -->
-        <th mat-header-cell *matHeaderCellDef class="max-width-150" [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''">
-            {{ getHeaderLabel(column) }}
-        </th>
-
-        <!-- Data Cells: Populates each row with corresponding data -->
-        <td mat-cell *matCellDef="let element" [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''">
-            <span *ngIf="!isClickableColumn(column)">
-                <!-- Number field -->
-                <amount-field
-                    *ngIf="isNumber(element?.[column])"
-                    [amount]="element?.[column]"
-                    [currencySymbol]="false"
-                    [currencyCode]="false"
-                ></amount-field>
-
-                <!-- String field -->
-                <span *ngIf="!isNumber(element?.[column])">
-                    {{ element?.[column] ?? '-' }}
-                </span>
-            </span>
-
-            <!-- Clickable link for clickable columns -->
-            <a *ngIf="isClickableColumn(column)" class="cursor-pointer break-word" (click)="handleClick(element, column)">
-                {{ element?.[column] ?? '-' }}
-            </a>
-        </td>
-
-        <!-- Footer Row: Displays total count values below data rows -->
-        <ng-container *ngIf="showFooterRow">
-            <td mat-footer-cell *matFooterCellDef class="p-0" [ngClass]="columnDefinitions?.[column]?.[2] ?? ''">
-                <ng-container *ngIf="footerRow?.hasOwnProperty(column)">
+            <!-- Data Cells: Populates each row with corresponding data -->
+            <td mat-cell *matCellDef="let element" [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''">
+                <span *ngIf="!isClickableColumn(column)">
                     <!-- Number field -->
                     <amount-field
-                        *ngIf="isNumber(footerRow[column])"
-                        [amount]="footerRow[column]"
+                        *ngIf="isNumber(element?.[column])"
+                        [amount]="element?.[column]"
                         [currencySymbol]="false"
                         [currencyCode]="false"
                     ></amount-field>
 
                     <!-- String field -->
-                    <span *ngIf="!isNumber(footerRow[column])">
-                        {{ footerRow[column] }}
+                    <span *ngIf="!isNumber(element?.[column])">
+                        {{ element?.[column] ?? '-' }}
                     </span>
-                </ng-container>
+                </span>
+
+                <!-- Clickable link for clickable columns -->
+                <a *ngIf="isClickableColumn(column)" class="cursor-pointer break-word" (click)="handleClick(element, column)">
+                    {{ element?.[column] ?? '-' }}
+                </a>
             </td>
+
+            <!-- Footer Row: Displays total count values below data rows -->
+            <ng-container *ngIf="showFooterRow">
+                <td mat-footer-cell *matFooterCellDef class="p-0" [ngClass]="columnDefinitions?.[column]?.[2] ?? ''">
+                    <ng-container *ngIf="footerRow?.hasOwnProperty(column)">
+                        <!-- Number field -->
+                        <amount-field
+                            *ngIf="isNumber(footerRow[column])"
+                            [amount]="footerRow[column]"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        ></amount-field>
+
+                        <!-- String field -->
+                        <span *ngIf="!isNumber(footerRow[column])">
+                            {{ footerRow[column] }}
+                        </span>
+                    </ng-container>
+                </td>
+            </ng-container>
         </ng-container>
-    </ng-container>
 
-    <!-- Renders Header Row 1 (Total Count Row) if isTotalCountAtTop is true -->
-    <ng-container *ngIf="isShowSecondaryHeader">
-        <tr mat-header-row *matHeaderRowDef="topHeaderColumns"></tr>
-    </ng-container>
+        <!-- Renders Header Row 1 (Total Count Row) if isTotalCountAtTop is true -->
+        <ng-container *ngIf="isShowSecondaryHeader">
+            <tr mat-header-row *matHeaderRowDef="topHeaderColumns"></tr>
+        </ng-container>
 
-    <!-- Renders Header Row 2 (Column Names) -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <!-- Renders Header Row 2 (Column Names) -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
-    <!-- Renders Data Rows -->
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <!-- Renders Data Rows -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-    <!-- Renders Footer Row (Total Count Row) if isTotalCountAtTop is false -->
-    <ng-container *ngIf="showFooterRow">
-        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-    </ng-container>
+        <!-- Renders Footer Row (Total Count Row) if isTotalCountAtTop is false -->
+        <ng-container *ngIf="showFooterRow">
+            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+        </ng-container>
     </table>
 </div>

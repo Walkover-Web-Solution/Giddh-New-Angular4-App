@@ -3,7 +3,9 @@ import { CustomActions } from '../../store/custom-actions';
 import { PURCHASE_RECORD_ACTIONS } from './purchase-record.const';
 import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/constants/purchase-record.interface';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class PurchaseRecordActions {
 
     /**

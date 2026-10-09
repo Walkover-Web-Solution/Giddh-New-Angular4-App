@@ -14,7 +14,9 @@ import { GstReport } from '../../gst/constants/gst.constant';
 import { LocaleService } from '../../services/locale.service';
 import { GeneralService } from '../../services/general.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GstReconcileActions {
 
     public GstReconcileOtpRequest$: Observable<Action> = createEffect(() => this.action$

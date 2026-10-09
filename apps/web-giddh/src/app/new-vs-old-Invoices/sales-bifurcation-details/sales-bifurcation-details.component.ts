@@ -7,12 +7,14 @@ import { SalesBifurcationDetailsStore } from './utility/sales-bifurcation-detail
 import { SalesBifurcationDetailsService } from './utility/sales-bifurcation-details.service';
 import { SalesBifurcationDetailsActionEnum } from './utility/sales-bifurcation-details.constant';
 import { PageEvent } from '@angular/material/paginator';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'sales-bifurcation-details',
     templateUrl: './sales-bifurcation-details.component.html',
     styleUrls: ['./sales-bifurcation-details.component.scss'],
-    providers: [SalesBifurcationDetailsService, SalesBifurcationDetailsStore]
+    providers: [SalesBifurcationDetailsService, SalesBifurcationDetailsStore],
+    standalone:false
 })
 
 export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
@@ -44,7 +46,8 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         sortBy: '',
         fromDate: null,
         toDate: null,
-        salesFrom: null
+        salesFrom: null,
+        salesPersonUniqueNames: null
     };
     /** Hold Sales Bifurcation Details Client List */
     public salesBifurcationDetailsClientList: any = [];
@@ -74,7 +77,8 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         @Inject(MAT_DIALOG_DATA) public salesBifurcationDetailsData: any,
         public dialogRef: MatDialogRef<any>,
         private componentStore: SalesBifurcationDetailsStore,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        @Inject(ServiceConfig) private serviceConfig
     ) { }
 
     /**
@@ -85,13 +89,14 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.goToLedgerDateRangeFrom = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.fromDate;
         this.goToLedgerDateRangeTo = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.toDate;
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.requestParams.type = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.type;
         this.requestParams.dataType = this.salesBifurcationDetailsData?.subType;
         this.requestParams.fromDate = this.salesBifurcationDetailsData?.newVsOldInvoicesData?.fromDate ?? null;
         this.requestParams.toDate = this.salesBifurcationDetailsData?.newVsOldInvoicesData?.toDate ?? null;
         this.requestParams.value = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.value;
         this.requestParams.salesFrom = this.salesBifurcationDetailsData?.salesFrom;
+        this.requestParams.salesPersonUniqueNames = this.salesBifurcationDetailsData?.salesPersonUniqueNames ?? null;
 
         this.salesBifurcationDetailsList$.pipe(
             takeUntil(this.destroyed$)
@@ -192,15 +197,15 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         transaction['voucherNumber'] = transaction?.invoiceNumber;
         transaction['salesBifurcation'] = true;
         this.selectedItem = transaction;
-        
+
         this.dialog.open(templateRef, {
-            width: '70%',
-            height: '790px',
-            maxHeight: '90vh',
-            role: 'alertdialog',
-            ariaLabel: 'template',
-            autoFocus: false
-        });
+                    width: '70%',
+                    height: '790px',
+                    maxHeight: '90vh',
+                    role: 'alertdialog',
+                    ariaLabel: 'template',
+                    autoFocus: false
+                });
     }
 
     /**

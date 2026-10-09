@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, ComponentFactoryResolver, Directive, DoCheck, ElementRef, EventEmitter, forwardRef, HostListener, Input, KeyValueDiffer, KeyValueDiffers, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewContainerRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as dayjs from 'dayjs';
+type Dayjs = any;
 import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
@@ -14,7 +15,8 @@ import { ReplaySubject } from 'rxjs';
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => NgxDaterangepickerDirective), multi: true
         }
-    ]
+    ],
+    standalone: false
 })
 
 export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
@@ -24,13 +26,13 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     private _value: any;
     private localeDiffer: KeyValueDiffer<string, any>;
     @Input()
-    inputStartDate: dayjs.Dayjs;
+    inputStartDate: Dayjs;
     @Input()
-    inputEndDate: dayjs.Dayjs;
+    inputEndDate: Dayjs;
     @Input()
-    minDate: dayjs.Dayjs;
+    minDate: Dayjs;
     @Input()
-    maxDate: dayjs.Dayjs;
+    maxDate: Dayjs;
     @Input()
     autoApply: boolean;
     @Input()

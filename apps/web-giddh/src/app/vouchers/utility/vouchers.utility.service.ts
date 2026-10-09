@@ -1,14 +1,18 @@
 import { Injectable } from "@angular/core";
-import { OtherTaxTypeEnum, SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
+import { OtherTaxTypeEnum, SearchType, TaxCollectionDeductionType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { VoucherForm } from "../../models/api-models/Voucher";
-import { API_BULK_FETCH_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM } from "../../app.constant";
+import { API_BULK_FETCH_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM, ROUND_OFF_THRESHOLD } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
 import * as cleaner from 'fast-clean';
 import { ReceiptItem } from "../../models/api-models/recipt";
 
-@Injectable()
+@Injectable(
+    {
+        providedIn: 'root'
+    }
+)
 export class VouchersUtilityService {
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
 
@@ -61,6 +65,49 @@ export class VouchersUtilityService {
         return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType?.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
     }
 
+    /**
+     * Converts voucher type to URL-friendly format by replacing spaces with hyphens
+     *
+     * @param {string} voucherType - Voucher type to convert
+     * @returns {string} URL-friendly voucher type
+     * @memberof VouchersUtilityService
+     */
+    public getVoucherTypeUrl(voucherType: string): string {
+        return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType?.toString().replace(/ /g, "-") : VoucherTypeEnum.purchaseOrder;
+    }
+
+    /**
+     * Gets the display name for a voucher with optional recurring prefix
+     *
+     * @param {string} voucherType - Voucher type
+     * @param {*} localeData - Locale data object
+     * @param {*} invoiceType - Invoice type object with flags
+     * @param {boolean} isRecurring - Whether this is a recurring voucher
+     * @returns {string} Display name for the voucher
+     * @memberof VouchersUtilityService
+     */
+    public getVoucherDisplayName(voucherType: string, localeData: any, invoiceType: any, isRecurring: boolean = false): string {
+        let voucherName = "";
+
+        if (invoiceType?.isCashInvoice && invoiceType?.isSalesInvoice) {
+            voucherName = localeData?.invoice_types?.cash_invoice;
+        } else if (invoiceType?.isCashInvoice && invoiceType?.isPurchaseInvoice) {
+            voucherName = localeData?.invoice_types?.cash_bill;
+        } else if (invoiceType?.isCashInvoice && invoiceType?.isDebitNote) {
+            voucherName = localeData?.invoice_types?.cash_debit_note;
+        } else if (invoiceType?.isCashInvoice && invoiceType?.isCreditNote) {
+            voucherName = localeData?.invoice_types?.cash_credit_note;
+        } else {
+            voucherName = this.getVoucherNameByType(voucherType, localeData);
+        }
+
+        if (isRecurring && localeData?.recurring) {
+            return `${localeData.recurring} ${voucherName}`;
+        }
+
+        return voucherName;
+    }
+
     public createQueryString(url: string, model: any): string {
         url += '?';
         Object.keys(model).forEach((key, index) => {
@@ -102,7 +149,7 @@ export class VouchersUtilityService {
         }
 
         const requestObject = {
-            q: encodeURIComponent(query),
+            q: encodeURIComponent(query || ''),
             page,
             count: API_BULK_FETCH_LIMIT,
             group: encodeURIComponent(group)
@@ -243,7 +290,7 @@ export class VouchersUtilityService {
         }
     }
 
-    public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean, exchangeRate: number): any {
+    public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean, exchangeRate: number, options?: { applyTcsToGrandTotal?: boolean }): any {
         let voucherTotals = {
             totalAmount: 0,
             totalDiscount: 0,
@@ -252,33 +299,40 @@ export class VouchersUtilityService {
             totalCess: 0,
             grandTotal: 0,
             grandTotalMultiCurrency: 0,
-            roundOff: 0,
+            roundOff: { value: 0, isPositive: true },
             tcsTotal: 0,
             tdsTotal: 0,
             balanceDue: 0
         };
 
         entries?.forEach(entry => {
-            voucherTotals.totalAmount += (Number(entry.transactions[0]?.amount?.amountForAccount));
-            voucherTotals.totalDiscount += (Number(entry.totalDiscount));
+            const otherTaxAmount = Number(entry.otherTax?.amount) || 0;
+            const isTcs = entry.otherTax?.type === OtherTaxTypeEnum.TCS;
+            const isTds = entry.otherTax?.type === OtherTaxTypeEnum.TDS;
+
+            voucherTotals.totalAmount += (Number(entry.transactions[0]?.amount?.amountForAccount) || 0);
+            voucherTotals.totalDiscount += (Number(entry.totalDiscount) || 0);
             if (entry.transactions[0]?.taxableValue) {
-                voucherTotals.totalTaxableValue += Number(entry.transactions[0]?.taxableValue?.amountForAccount);
+                voucherTotals.totalTaxableValue += Number(entry.transactions[0]?.taxableValue?.amountForAccount) || 0;
             } else {
-                voucherTotals.totalTaxableValue += (Number(entry.transactions[0]?.amount?.amountForAccount)) - (Number(entry.totalDiscount));
+                voucherTotals.totalTaxableValue += ((Number(entry.transactions[0]?.amount?.amountForAccount) || 0) - (Number(entry.totalDiscount) || 0));
             }
-            voucherTotals.totalTaxWithoutCess += Number(entry.totalTaxWithoutCess);
-            voucherTotals.totalCess += Number(entry.totalCess);
+            voucherTotals.totalTaxWithoutCess += (Number(entry.totalTaxWithoutCess) || 0);
+            voucherTotals.totalCess += (Number(entry.totalCess) || 0);
 
             if (entry.grandTotal) {
-                voucherTotals.grandTotal += Number(entry.grandTotal?.amountForAccount);
+                voucherTotals.grandTotal += (Number(entry.grandTotal?.amountForAccount) || 0);
             } else {
-                voucherTotals.grandTotal += Number(entry.total?.amountForAccount);
+                voucherTotals.grandTotal += (Number(entry.total?.amountForAccount) || 0);
             }
 
-            if (entry.otherTax?.type === OtherTaxTypeEnum.TCS) {
-                voucherTotals.tcsTotal += entry.otherTax?.amount;
-            } else if (entry.otherTax?.type === OtherTaxTypeEnum.TDS) {
-                voucherTotals.tdsTotal += entry.otherTax?.amount;
+            if (isTcs) {
+                voucherTotals.tcsTotal += otherTaxAmount;
+                if (options?.applyTcsToGrandTotal) {
+                    voucherTotals.grandTotal += otherTaxAmount;
+                }
+            } else if (isTds) {
+                voucherTotals.tdsTotal += otherTaxAmount;
             }
         });
 
@@ -286,11 +340,15 @@ export class VouchersUtilityService {
         voucherTotals.totalDiscount = giddhRoundOff(voucherTotals.totalDiscount, balanceDecimalPlaces);
         voucherTotals.totalTaxableValue = giddhRoundOff(voucherTotals.totalTaxableValue, balanceDecimalPlaces);
         voucherTotals.totalTaxWithoutCess = giddhRoundOff(voucherTotals.totalTaxWithoutCess, balanceDecimalPlaces);
-        voucherTotals.totalCess = giddhRoundOff(voucherTotals.totalCess, balanceDecimalPlaces);
-        voucherTotals.grandTotal = giddhRoundOff(voucherTotals.grandTotal, balanceDecimalPlaces);
-        voucherTotals.grandTotalMultiCurrency = giddhRoundOff(voucherTotals.grandTotal * exchangeRate, balanceDecimalPlaces);
-        voucherTotals.roundOff = (applyRoundOff) ? Number((Math.round(voucherTotals.grandTotal) - voucherTotals.grandTotal).toFixed(balanceDecimalPlaces)) : Number((0).toFixed(balanceDecimalPlaces));
-
+        voucherTotals.totalCess = giddhRoundOff(voucherTotals.totalCess, balanceDecimalPlaces); 
+        voucherTotals.roundOff.value = (applyRoundOff) ? Number((voucherTotals.grandTotal - Math.floor(voucherTotals.grandTotal)).toFixed(balanceDecimalPlaces)) : Number((0).toFixed(balanceDecimalPlaces));
+        if (voucherTotals.roundOff.value >= ROUND_OFF_THRESHOLD) {
+            voucherTotals.roundOff = { value: 1 - voucherTotals.roundOff.value, isPositive: true };
+        } else {
+            voucherTotals.roundOff = { value: voucherTotals.roundOff.value, isPositive: false };
+        }
+        voucherTotals.grandTotal = giddhRoundOff((voucherTotals.roundOff.isPositive ? Math.ceil(voucherTotals.grandTotal) : voucherTotals.grandTotal - voucherTotals.roundOff.value), balanceDecimalPlaces);
+        voucherTotals.grandTotalMultiCurrency = giddhRoundOff(voucherTotals.grandTotal * exchangeRate, balanceDecimalPlaces); 
         return voucherTotals;
     }
 
@@ -369,11 +427,14 @@ export class VouchersUtilityService {
 
                 delete entry.otherTax;
             });
+            // Custom fields are not cleaned
+            const customFields = invoiceForm.account?.customFields;
 
             invoiceForm = cleaner?.clean(invoiceForm, {
                 nullCleaner: true
             });
 
+            invoiceForm.account.customFields = customFields;
             return invoiceForm;
         }
     }
@@ -456,7 +517,7 @@ export class VouchersUtilityService {
         entry?.taxes?.forEach(selectedTax => {
             companyTaxes?.forEach(tax => {
                 if (tax.uniqueName === selectedTax?.uniqueName) {
-                    taxTotal = Number(tax.taxDetail[0].taxValue);
+                    taxTotal += Number(tax.taxDetail[0].taxValue);
                 }
             });
         });
@@ -517,7 +578,7 @@ export class VouchersUtilityService {
             const selectedAddressAddress = Array.isArray(selectedAddress?.address) && selectedAddress.address[0]
                 ? selectedAddress.address[0]
                 : "";
-            const state = add?.state?.name ? add?.state?.name : add?.stateName ? add?.stateName : "";
+            const state = add?.state?.name || add?.stateName || add?.county?.name || "";
             const taxNumber = !selectedAddress?.taxNumber ? "" : selectedAddress?.taxNumber;
 
             if (address === selectedAddressAddress && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === taxNumber)) {

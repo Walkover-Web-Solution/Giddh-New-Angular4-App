@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
@@ -18,6 +18,7 @@ const noop = () => {
         }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
     @ViewChild('textField', { static: false }) public textField: ElementRef;
@@ -26,7 +27,6 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public min: number = null;
     @Input() public max: number = null;
     @Input() public allowDecimalDigitsOnly: boolean = false;
-    @Input() public allowDigitsOnly: boolean = false;
     @Input() public cssClass: string = "";
     @Input() public cssStyle: string = "";
     /** Taking placeholder as input */
@@ -50,6 +50,12 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     /** It will show suffix in the text field */
     @Input() public suffix: any;
     @Input() public customDecimalPlaces: any;
+    /** Emits when the input gains focus */
+    @Output() public onFocus: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
+    /** Emits when the input loses focus */
+    @Output() public onBlurEvent: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
+    /** Emits when the inner value changes */
+    @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
@@ -62,6 +68,10 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public autocomplete: string;
     /** Holds mat suffic */
     @Input() public matSuffix: any;
+    /** BCP-47 language code applied on the input, e.g. 'ar' (drives font/spellcheck/shaping) */
+    @Input() public lang: string = null;
+    /** Text direction applied on the input: 'rtl' | 'ltr' */
+    @Input() public direction: string = null;
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -89,10 +99,19 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.autoFocus) {
-            setTimeout(() => {
-                this.textField?.nativeElement?.focus();
-            }, 20);
+           this.inputFocus();
         }
+    }
+
+    /**
+     * Focus on the text field
+     *
+     * @memberof TextFieldComponent
+     */
+    public inputFocus(): void {
+        setTimeout(() => {
+            this.textField?.nativeElement?.focus();
+        }, 50);
     }
 
     /**
@@ -144,6 +163,10 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public writeValue(value: any): void {
+        if (value === undefined) {
+            return;
+        }
+    
         this.value = value;
         this.changeDetectionRef.detectChanges();
     }
@@ -188,7 +211,28 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
         this.onChangeCallback(this.value);
     }
 
+    /**
+     * Callback for handling focus event
+     *
+     * @param {FocusEvent} event
+     * @memberof TextFieldComponent
+     */
+    public handleFocus(event: FocusEvent): void {
+        this.onFocus.emit(event);
+    }
+
+    /**
+     * Callback for handling blur event
+     * 
+     * @memberof TextFieldComponent
+     */
+    public handleBlur(event: FocusEvent): void {
+        this.onTouchedCallback();
+        this.onBlurEvent.emit(event);
+    }
+
     public handleChange(): void {
+        this.onChange.emit(this.value);
         this.onChangeCallback(this.value);
     }
 }

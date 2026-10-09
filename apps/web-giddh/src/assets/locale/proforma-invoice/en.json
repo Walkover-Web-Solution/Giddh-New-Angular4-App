@@ -31,6 +31,7 @@
     "pending": "Pending",
     "invalid_date": "Invalid Date",
     "transaction_reverse_charge": "Is this transaction applicable for reverse charge?",
+    "transaction_recurring": "Make Recurring Voucher",
     "transaction_tourist_scheme": "Is this transaction applicable for Tourist Scheme?",
     "passport_number": "Passport Number",
     "select_account": "Click to Select Account",

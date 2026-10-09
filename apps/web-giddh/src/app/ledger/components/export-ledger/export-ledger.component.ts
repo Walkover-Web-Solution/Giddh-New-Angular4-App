@@ -21,12 +21,14 @@ import { saveAs } from 'file-saver';
 import { IOption } from '../../../app.constant';
 import { CopyType } from '../../../shared/Enums/common.enum';
 import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
+import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
     styleUrls: ['./export-ledger.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [VoucherComponentStore]
+    providers: [VoucherComponentStore],
+    standalone:false
 })
 
 export class ExportLedgerComponent implements OnInit, OnDestroy {
@@ -149,7 +151,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         this.fileType = this.exportRequest.ledgerView ? 'XLSX' : 'CSV';
 
         if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
-            this.permissionDataService.getData.forEach(f => {
+            (Array.isArray(this.permissionDataService.getData) ? this.permissionDataService.getData : []).forEach(f => {
                 if (f.name === 'LEDGER') {
                     let isAdmin = f.permissions?.filter((prm) => prm.code === 'UPDT');
                     this.emailTypeSelected = isAdmin?.length ? 'admin-detailed' : 'view-detailed';
@@ -163,7 +165,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
 
         if (this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue) {
             let dateObj = this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue;
-            let universalDate = _.cloneDeep(dateObj);
+            let universalDate = cloneDeep(dateObj);
             this.selectedDateRange = { startDate: dateObj[0], endDate: dateObj[1] };
             this.selectedDateRangeUi = dateObj[0].format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dateObj[1].format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = universalDate[0].format(GIDDH_DATE_FORMAT);
@@ -171,7 +173,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         } else {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
-                    let universalDate = _.cloneDeep(dateObj);
+                    let universalDate = cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -208,28 +210,31 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.from = this.fromDate;
         exportRequest.to = this.toDate;
 
-        let body = _.cloneDeep(this.inputData?.advanceSearchRequest);
-        if (body && body.dataToSend) {
-            body.dataToSend.type = this.emailTypeSelected;
-            body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
-            body.dataToSend.sort = this.exportRequest.sort ? 'ASC' : 'DESC';
-            body.dataToSend.from = this.fromDate;
-            body.dataToSend.to = this.toDate;
-            body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
-            body.dataToSend.exportType = this.exportRequest.exportType;
-            body.dataToSend.fileType = this.fileType;
-            if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
-                body.dataToSend.showInAccountCurrency = this.exportRequest.showInAccountCurrency;
-            }
-            if (this.emailTypeSelected === this.emailTypeDetail) {
-                body.dataToSend.ledgerView = this.exportRequest.ledgerView ? 'T_View' : 'Statement_View';
-                if (!this.exportRequest.ledgerView) {
-                    body.dataToSend.showEntryVoucherNo = this.exportRequest.showEntryVoucherNo;
-                    body.dataToSend.showVoucherNumber = this.exportRequest.showVoucherNumber;
-                    body.dataToSend.showVoucherTotal = this.exportRequest.showVoucherTotal;
-                    body.dataToSend.showEntryVoucher = this.exportRequest.showEntryVoucher;
-                    body.dataToSend.showDescription = this.exportRequest.showDescription;
-                }
+        let ledgerRequest: any = {
+            type: this.emailTypeSelected,
+            balanceTypeAsSign: this.balanceTypeAsSign,
+            sort: this.exportRequest.sort ? 'ASC' : 'DESC',
+            from: this.fromDate,
+            to: this.toDate,
+            accountUniqueName: this.inputData?.accountUniqueName,
+            exportType: this.exportRequest.exportType,
+            fileType: this.fileType,
+            q: this.inputData?.searchText
+        }
+        if (this.inputData?.advanceSearchRequest?.isAdvanceSearchImplemented) {
+            ledgerRequest['ledgerAdvanceFilter'] = this.inputData?.advanceSearchRequest?.dataToSend;
+        }
+        if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
+            ledgerRequest['showInAccountCurrency'] = this.exportRequest.showInAccountCurrency;
+        }
+        if (this.emailTypeSelected === this.emailTypeDetail) {
+            ledgerRequest['ledgerView'] = this.exportRequest.ledgerView ? 'T_View' : 'Statement_View';
+            if (!this.exportRequest.ledgerView) {
+                ledgerRequest['showEntryVoucherNo'] = this.exportRequest.showEntryVoucherNo;
+                ledgerRequest['showVoucherNumber'] = this.exportRequest.showVoucherNumber;
+                ledgerRequest['showVoucherTotal'] = this.exportRequest.showVoucherTotal;
+                ledgerRequest['showEntryVoucher'] = this.exportRequest.showEntryVoucher;
+                ledgerRequest['showDescription'] = this.exportRequest.showDescription;
             }
         }
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
@@ -238,7 +243,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === "success") {
                     if (response?.body?.type === "message") {
-                        this.toaster.showSnackBar("success", response.body.name);
+                        this.toaster.showSnackBar("success", response.body.file);
                     } else {
                         let blob = this.generalService.base64ToBlob(response?.body?.data, 'application/vnd.ms-excel', 512);
                         return download(response.body.name, blob, 'application/vnd.ms-excel');
@@ -262,7 +267,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 if (this.exportRequest.attachmentExport) {
                     let fileNameFormat = this.selectedFormatList?.trim();
                     if (fileNameFormat?.length) {
-                        this.fileFormatList.forEach(format => {
+                        (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach(format => {
                             const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
                             fileNameFormat = fileNameFormat.replace(pattern, `\${${format.key}}`);
                         });
@@ -280,10 +285,11 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     from: this.fromDate,
                     to: this.toDate
                 };
+                this.generalService.replaceSelectedAllOptions(postRequest);
                 this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
                 return;
             }
-            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body?.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, this.generalService.replaceSelectedAllOptions(ledgerRequest, true), exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === 'success') {
@@ -360,7 +366,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();
@@ -410,7 +416,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      */
     public getFileFormat() {
         let fileNameFormat = this.selectedFormatList;
-        this.fileFormatList.forEach((format) => {
+        (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach((format) => {
             if (this.selectedFormatList.includes(`{${format.value}}`)) {
                 fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
             }
@@ -441,6 +447,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public onLedgerView(type: string): void {
-        this.fileType = type ? 'XLSX' : 'CSV';
+        this.fileType = type;
     }
 }

@@ -5,6 +5,7 @@ import { WatchVideoComponent } from './watch-video.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
     declarations: [WatchVideoComponent],
@@ -13,7 +14,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatButtonModule,
         MatDialogModule,
         TranslateDirectiveModule,
-        MatTooltipModule
+        MatTooltipModule,
+        A11yModule
     ],
     exports: [
         WatchVideoComponent

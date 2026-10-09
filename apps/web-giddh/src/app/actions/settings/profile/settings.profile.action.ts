@@ -13,7 +13,9 @@ import { SettingsProfileService } from '../../../services/settings.profile.servi
 import { CustomActions } from '../../../store/custom-actions';
 import { LocaleService } from '../../../services/locale.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsProfileActions {
 
     public GetSMSKey$: Observable<Action> = createEffect(() => this.action$

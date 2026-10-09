@@ -7,12 +7,12 @@
             "items": [
                 {
                     "label": "एजिंग रिपोर्ट",
-                    "link": "/pages/contact/aging-report",
+                    "link": "/pages/contact/sales",
                     "icon": "icon-aging-report-new",
                     "description": "मागील दिवस आणि आगामी काळात देय रक्कम",
                     "additional": {
                         "queryParams": {
-                            "tab": "aging-report",
+                            "tab": "sales-aging-report",
                             "tabIndex": 1
                         }
                     }
@@ -21,7 +21,13 @@
                     "label": "ग्राहक",
                     "link": "/pages/contact/customer",
                     "icon": "icon-customer",
-                    "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा"
+                    "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "customer",
+                            "tabIndex": 1
+                        }
+                    }
                 },
                 {
                     "label": "नवीन चालान",
@@ -287,6 +293,18 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "आवर्ती चालान",
+                    "link": "/pages/vouchers/preview/sales/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "चालान आवर्ती बनवा",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -295,10 +313,28 @@
             "icon": "icon-vendor",
             "items": [
                 {
+                    "label": "एजिंग रिपोर्ट",
+                    "link": "/pages/contact/purchase",
+                    "icon": "icon-aging-report-new",
+                    "description": "मागील दिवस आणि आगामी काळात देय रक्कम",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "purchase-aging-report",
+                            "tabIndex": 1
+                        }
+                    }
+                },
+                {
                     "label": "विक्रेता",
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
-                    "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा"
+                    "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "vendor",
+                            "tabIndex": 1
+                        }
+                    }
                 },
                 {
                     "label": "नवीन विधेयक",
@@ -525,6 +561,18 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "आवर्ती बिल",
+                    "link": "/pages/vouchers/preview/purchase/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "खरेदी बिल आवर्ती बनवा",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -735,6 +783,12 @@
             "icon": "icon-reports",
             "items": [
                 {
+                    "label": "सर्व अहवाल",
+                    "link": "/pages/all-reports",
+                    "icon": "icon-reports",
+                    "description": "श्रेणींमधील अहवाल पहा"
+                },
+                {
                     "label": "ताळेबंद",
                     "link": "/pages/trial-balance-and-profit-loss",
                     "icon": "icon-balance-sheet-new",
@@ -907,7 +961,7 @@
                     "description": "रोख प्रवाह अहवाल डाउनलोड करा"
                 },
                 {
-                    "label": "जर्नल प्रविष्टियां *",
+                    "label": "जर्नल प्रविष्टियां",
                     "link": "/pages/journal-voucher",
                     "icon": "icon-journal-voucher-new",
                     "description": "जर्नल व्हाउचरच्या नोंदी"
@@ -965,20 +1019,38 @@
             ]
         },
         {
-            "label": "AI",
-            "icon": "icon-audit-log",
+            "label": "ऑटोमेशन",
+            "icon": "icon-manage-group-acc",
             "items": [
                 {
-                    "label": "OCR for Income",
+                    "label": "Scan2Invoice",
                     "link": "/pages/ai-ocr/income",
                     "icon": "icon-audit-log",
                     "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
                 },
                 {
-                    "label": "OCR for Expense",
+                    "label": "Scan2Bill",
                     "link": "/pages/ai-ocr/expense",
                     "icon": "icon-audit-log",
                     "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
+                },
+                {
+                    "label": "ईमेल-टू-बँके सिंक",
+                    "link": "/pages/email-forwarding",
+                    "icon": "icon-mail",
+                    "description": "बँक स्टेटमेंट ईमेलपासून ऑटो-वाउचर तयार करा।"
+                },
+                {
+                    "label": "बजेट अंदाज",
+                    "link": "/pages/budget-forecasting",
+                    "icon": "icon-audit-log",
+                    "description": "एआय-संचालित रोख प्रवाह अंदाज आणि भविष्यवाण्या"
+                },
+                {
+                    "label": "बँक जुळवणी",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "आपली नोंदी बँक स्टेटमेंटशी जुळवा"
                 }
             ]
         },

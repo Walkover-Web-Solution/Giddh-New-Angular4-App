@@ -8,7 +8,8 @@ import { IOption } from '../../app.constant';
     selector: 'app-aside-menu-sales-other-taxes',
     templateUrl: './aside-menu-sales-other-taxes.html',
     styleUrls: [`./aside-menu-sales-other-taxes.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
@@ -34,7 +35,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
             { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
             { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
         ];
-        this.calculationMethodLabel = this.calculationMethodOptions.find(method => method.value === this.defaultOtherTaxesModal.tcsCalculationMethod).label;
+        this.calculationMethodLabel = this.calculationMethodOptions.find(method => method.value === this.defaultOtherTaxesModal.tcsCalculationMethod)?.label;
 
         this.taxesOptions = this.taxes
             ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))

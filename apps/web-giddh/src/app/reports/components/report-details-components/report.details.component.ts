@@ -1,16 +1,17 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, OnDestroy, OnInit, signal, TemplateRef, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { CompanyActions } from "../../../actions/company.actions";
+import { GeneralActions } from "../../../actions/general/general.actions";
 import { CompanyService } from "../../../services/company.service";
 import { ReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
-import { takeUntil, filter, take, skip, debounceTime, tap, distinctUntilChanged } from "rxjs/operators";
+import { takeUntil, filter, take, skip, debounceTime, tap, distinctUntilChanged, groupBy } from "rxjs/operators";
 import * as dayjs from 'dayjs';
-import { Observable, ReplaySubject } from "rxjs";
+import { combineLatest, Observable, ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MMM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -18,22 +19,23 @@ import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, isSelectedAllOption } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 import { DurationEnum } from '../../constants/reports.constant';
-import { cloneDeep } from '../../../lodash-optimized';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
+import { cloneDeep, find, forEach, get, includes, indexOf, keys, map, slice } from '../../../lodash-optimized';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
     styleUrls: ['./report.details.component.scss'],
-    providers: [ReportsComponentStore, SalesPersonComponentStore]
+    providers: [ReportsComponentStore, SalesPersonComponentStore],
+    standalone: false
 })
 export class ReportsDetailsComponent implements OnInit, OnDestroy {
     /** Directive to get reference of datepicker menu trigger */
@@ -71,9 +73,9 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public isTcsTdsApplicable: boolean;
     /**
      * Configuration for table columns.
-     * 
+     *
      * Each key represents a column, and its value is an array with the following structure:
-     * 
+     *
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
      * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
@@ -87,6 +89,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         discountTotal: ["net_discount", false, "text-right"],
         tcsTotal: ["net_tcs", false, "text-right"],
         tdsTotal: ["net_tds", false, "text-right"],
+        roundOff: ["app_round_off", false, "text-right"],
         netSales: ["net_sales", false, "text-right"],
         cumulative: ["app_cumulative", false, "text-right"]
     }
@@ -96,12 +99,17 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public groupByOptions: IOption[] = [];
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    /** This will use for instance of sales person Dropdown */
-    public salesPerson: FormControl = new FormControl();
-    /** This will use for instance of account Dropdown */
-    public account: FormControl = new FormControl();
-    /** Filtered Sales Person List */
-    public filteredSalesPersonList: IOption[] = [];
+    /** Country list */
+    public countryList = signal<IOption[]>([]);
+    /** State list */
+    public stateList = signal<IOption[]>([]);
+    /** Complete option lists used to determine when all items are effectively selected (selectAll) */
+    public allOptions: { salesPerson: IOption[]; country: IOption[]; state: IOption[]; account: any[] } = {
+        salesPerson: [],
+        country: [],
+        state: [],
+        account: []
+    };
     /** Group by enum */
     public groupByEnum: typeof GroupBy = GroupBy;
     /** Date range */
@@ -114,10 +122,13 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public salesRegisterList$: Observable<any[]> = this.componentStore.salesPurchaseList$;
     /** Holds report form */
     public reportForm: FormGroup = new FormGroup({
-        groupBy: new FormControl<GroupBy>(GroupBy.Duration, Validators.required),
+        groupBy: new FormControl<GroupBy>(null, Validators.required),
         accountUniqueNames: new FormControl<string[]>([]),
         salesPersonUniqueNames: new FormControl<string[]>([]),
-        interval: new FormControl<DurationEnum | null>(null)
+        interval: new FormControl<DurationEnum | null>(null),
+        countryCode: new FormControl<string | null>(null),
+        countryCodes: new FormControl<string[]>([]),
+        stateCodes: new FormControl<string[]>([])
     });
     /** Holds selected date range */
     public selectedDateRange: any;
@@ -127,6 +138,15 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
+    /** Supported groupBy values for export functionality */
+    public supportedExportGroupBy = signal<GroupBy[]>([GroupBy.Duration, GroupBy.SalesPerson, GroupBy.Country, GroupBy.State]);
+    /** Current groupBy value selected in the report form */
+    public currentGroupBy = signal<GroupBy>(GroupBy.Duration);
+    /** Computed signal that determines if export button should be visible based on current groupBy */
+    public showExport = computed(() => {
+        const currentGroupBy = this.currentGroupBy();
+        return this.supportedExportGroupBy().includes(currentGroupBy);
+    });
 constructor(
         private router: Router,
         private activeRoute: ActivatedRoute,
@@ -140,7 +160,8 @@ constructor(
         private ledgerService: LedgerService,
         private dialog: MatDialog,
         private componentStore: ReportsComponentStore,
-        private salesPersonStore: SalesPersonComponentStore) {
+        private salesPersonStore: SalesPersonComponentStore,
+        private generalActions: GeneralActions) {
     }
 
     ngOnInit() {
@@ -174,6 +195,7 @@ constructor(
                 this.salesRegisterTotal = new ReportsModel();
                 this.salesRegisterTotal.particular = this.getCustomParticular();
                 this.reportRespone = this.filterReportResp(response);
+                this.changeDetectorRef.detectChanges();
             }
         });
 
@@ -197,7 +219,7 @@ constructor(
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
@@ -207,7 +229,7 @@ constructor(
                         };
                     }
                 } else {
-                    const selectedBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
+                    const selectedBranch = cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
@@ -226,53 +248,37 @@ constructor(
 
         this.getSalesPersonList();
         this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
-            this.filteredSalesPersonList = res as IOption[];
+            this.allOptions.salesPerson = this.withOtherSalesPerson(res as IOption[]);
         });
 
-        /** Search for sales person dropdown */
-        this.salesPerson.valueChanges.pipe(debounceTime(700),
-            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
-                if (!search) {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res as IOption[];
-                    });
-                } else {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
-                    });
-                }
-            });
+        this.accountList$.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+            this.allOptions.account = res?.results ?? res ?? [];
+        });
+
         this.getAccounts();
 
-        /** Search for account dropdown */
-        this.account.valueChanges.pipe(debounceTime(700),
-            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
-                this.getAccounts(search ? search : '');
-            });
+        /** Load countries on init */
+        this.loadCountries();
 
-        /** Universal date */
-        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
-                this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.store.pipe(select(state => state.general.states), filter(Boolean), takeUntil(this.destroyed$)).subscribe(states => {
+            if (states && (states.stateList ?? states.countyList)) {
+                this.stateList.set((states.stateList ?? states.countyList).map(state => ({
+                    label: state.name,
+                    value: state.code
+                })));
+                this.allOptions.state = this.withOtherState(this.stateList());
             }
         });
-    }
 
-    /**
-     * Handle group by change
-     * 
-     * @param response 
-     */
-    public handleGroupByChange(response: IOption): void {
-        if (response?.value === GroupBy.SalesPerson) {
-            this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
-            this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
-            this.getSalesRegister(this.dateRange.from, this.dateRange.to);
-        } else {
-            this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
-            this.populateRecords(this.interval, this.selectedMonth);
-        }
+        // Subscribe to countryCode changes to automatically load states
+        this.reportForm.get('countryCode')?.valueChanges.pipe(filter(Boolean), debounceTime(500), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(countryCode => {
+            if (countryCode) {
+                this.loadStates(countryCode);
+            } else {
+                this.stateList.set([]);
+                this.allOptions.state = this.withOtherState([]);
+            }
+        });
     }
 
     public goToDashboard() {
@@ -285,7 +291,7 @@ constructor(
         let indexMonths = 0;
         let weekCount = 1;
         let reportsModelCombined: ReportsModel = new ReportsModel();
-        _.forEach(response, (item) => {
+        forEach(response, (item) => {
             let reportsModel: ReportsModel = new ReportsModel();
             reportsModel.sales = item.creditTotal;
             reportsModel.returns = item.debitTotal;
@@ -293,6 +299,7 @@ constructor(
             reportsModel.discountTotal = item.discountTotal;
             reportsModel.tcsTotal = item.tcsTotal;
             reportsModel.tdsTotal = item.tdsTotal;
+            reportsModel.roundOff = Number(item.roundOff ?? 0);
             reportsModel.netSales = (item.balance.type === "DEBIT") ? Number("-" + item.balance.amount) : item.balance.amount;
             reportsModel.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
             reportsModel.from = item.from;
@@ -304,7 +311,17 @@ constructor(
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
             let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
-            if (item?.salesPerson?.name) {
+            if(item?.stateName) {
+                this.setSalesRegisterTotal(item);
+                reportsModel.particular = item.stateName
+                reportsModel.stateCode = item.stateCode;
+                reportModelArray.push(reportsModel);
+            }else if(item?.countryName){
+                this.setSalesRegisterTotal(item);
+                reportsModel.countryCode = item.countryCode;
+                reportsModel.particular = item.countryName
+                reportModelArray.push(reportsModel);
+            }else if (item?.salesPerson?.name) {
                 this.setSalesRegisterTotal(item);
                 reportsModel.particular = item.salesPerson.name
                 reportModelArray.push(reportsModel);
@@ -323,6 +340,7 @@ constructor(
                 reportsModelCombined.discountTotal += item.discountTotal;
                 reportsModelCombined.tcsTotal += item.tcsTotal;
                 reportsModelCombined.tdsTotal += item.tdsTotal;
+                reportsModelCombined.roundOff += Number(item.roundOff ?? 0);
                 reportsModelCombined.netSales += (item.balance.type === "DEBIT") ? Number("-" + item.balance.amount) : item.balance.amount;
                 reportsModelCombined.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
                 reportsModelCombined.interval = this.interval;
@@ -360,68 +378,108 @@ constructor(
     public setCurrentFY() {
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
-        let currentTimeFilter: DurationEnum = this.selectedType;
-        let currentGroupBy = '';
-        let currentSalesPersonUniqueNames = [];
-        let currentAccountUniqueNames = [];
-
-        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
-            if (params?.interval || params?.selectedMonth) {
-                this.selectedType = params.interval;
-                this.interval = params.interval;
-                this.reportForm.get('interval').patchValue(params.interval);
-                this.selectedMonth = params.selectedMonth;
-
-                this.router.navigate(['pages', 'reports', 'sales-register']);
-            }
-        });
 
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
-            financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
-            currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
-            currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
-            currentSalesPersonUniqueNames = registerReportFilters?.salesPersonUniqueNames ?? [];
-            currentAccountUniqueNames = registerReportFilters?.accountUniqueNames ?? [];
-            currentGroupBy = registerReportFilters?.groupBy || GroupBy.Duration;
-            return activeCompany;
-        })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.selectedCompany = activeCompany;
-                this.financialOptions = activeCompany.financialYears?.map(response => {
-                    if (response) {
-                        return { label: response.uniqueName, value: response.uniqueName };
-                    }
-                });
-                let selectedFinancialYear, activeFinancialYear, uniqueNameToSearch;
-                if (financialYearChosenInReportUniqueName) {
-                    // User is navigating back from details page hence show the selected filter as pre-filled
-                    uniqueNameToSearch = financialYearChosenInReportUniqueName;
+        combineLatest([
+            this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
+                financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
+                currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
+                return activeCompany;
+            }))),
+            this.activeRoute.queryParams.pipe(debounceTime(700), distinctUntilChanged()),
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(([activeCompany, queryParam]) => {
+
+            this.reportForm.get('accountUniqueNames').patchValue(this.generalService.parseQueryParamArray(queryParam?.accountUniqueNames));
+            this.currentBranch.uniqueName = currentBranchUniqueName || this.currentBranch?.uniqueName || "";
+            const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
+            this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
+            // URL groupBy takes priority over store value
+            if (queryParam?.groupBy && [GroupBy.SalesPerson, GroupBy.State, GroupBy.Country].includes(queryParam.groupBy)) {
+                this.reportForm.get('groupBy').patchValue(queryParam.groupBy);
+
+                if (this.reportForm.get('groupBy').value === GroupBy.SalesPerson) {
+                    this.reportForm.get('salesPersonUniqueNames').patchValue(this.generalService.parseQueryParamArray(queryParam?.salesPersonUniqueNames));
+                }
+
+                if (this.reportForm.get('groupBy').value === GroupBy.State) {
+                    this.reportForm.get('countryCode').patchValue(queryParam.countryCode ?? (this.activeCompany || activeCompany)?.countryV2?.alpha2CountryCode);
+                    this.reportForm.get('stateCodes').patchValue(this.generalService.parseQueryParamArray(queryParam?.stateCodes));
+                }
+
+                if (this.reportForm.get('groupBy').value === GroupBy.Country) {
+                    this.reportForm.get('countryCodes').patchValue(this.generalService.parseQueryParamArray(queryParam?.countryCodes));
+                }
+
+                if (queryParam?.fromDate && queryParam?.toDate) {
+                    this.dateRange.from = queryParam.fromDate;
+                    this.dateRange.to = queryParam.toDate;
+                    this.selectedDateRange = {
+                        startDate: dayjs(queryParam.fromDate, GIDDH_DATE_FORMAT),
+                        endDate: dayjs(queryParam.toDate, GIDDH_DATE_FORMAT),
+                    };
+                    this.selectedDateRangeUi = dayjs(queryParam.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + ' - ' + dayjs(queryParam.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.getSalesRegister(this.dateRange.from, this.dateRange.to);
                 } else {
-                    uniqueNameToSearch = (activeCompany.activeFinancialYear) ? activeCompany.activeFinancialYear.uniqueName : "";
+                    this.componentStore.universalDate$.pipe(filter(Boolean),take(1)).subscribe(response => {
+                        if (response) {
+                            this.dateRange.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                            this.dateRange.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                            this.selectedDateRange = {
+                                startDate: dayjs(response[0]),
+                                endDate: dayjs(response[1]),
+                            };
+                            this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.getSalesRegister(this.dateRange.from, this.dateRange.to);
+                        }
+                    });
                 }
-                selectedFinancialYear = this.financialOptions?.find(option => option?.value === uniqueNameToSearch);
-                activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
-                this.activeFinacialYr = activeFinancialYear;
-                if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
-                    this.activeFinacialYr = this.selectedCompany.financialYears[0];
-                    selectedFinancialYear = this.selectedCompany.financialYears[0];
+
+            } else {
+                this.reportForm.get('groupBy').patchValue(GroupBy.Duration);
+                this.generalService.saveRouteQueryFilters({groupBy: GroupBy.Duration, required: "groupBy"});
+                this.selectedType = queryParam.interval ?? this.durationEnum.Monthly;
+                this.interval = this.selectedType;
+                this.reportForm.get('interval').patchValue(this.selectedType);
+                this.selectedMonth = queryParam.selectedMonth ?? '';
+
+                if (activeCompany) {
+                    this.selectedCompany = activeCompany;
+                    this.financialOptions = activeCompany.financialYears?.map(response => {
+                        if (response) {
+                            return { label: response.uniqueName, value: response.uniqueName };
+                        }
+                    });
+                    let selectedFinancialYear, activeFinancialYear, uniqueNameToSearch;
+                    if (financialYearChosenInReportUniqueName) {
+                        // User is navigating back from details page hence show the selected filter as pre-filled
+                        uniqueNameToSearch = financialYearChosenInReportUniqueName;
+                    } else {
+                        uniqueNameToSearch = (activeCompany.activeFinancialYear) ? activeCompany.activeFinancialYear.uniqueName : "";
+                    }
+                    selectedFinancialYear = this.financialOptions?.find(option => option?.value === uniqueNameToSearch);
+                    activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
+                    this.activeFinacialYr = activeFinancialYear;
+                    if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
+                        this.activeFinacialYr = this.selectedCompany.financialYears[0];
+                        selectedFinancialYear = this.selectedCompany.financialYears[0];
+                    }
+                    if (selectedFinancialYear) {
+                        this.currentActiveFinacialYear = cloneDeep(selectedFinancialYear);
+                    }
+                    this.populateRecords(this.selectedType, this.selectedMonth);
+                    this.changeDetectorRef.detectChanges();
                 }
-                if (selectedFinancialYear) {
-                    this.currentActiveFinacialYear = cloneDeep(selectedFinancialYear);
-                }
-                this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
-                const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
-                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
-                this.selectedType = currentTimeFilter || this.selectedType;
-                this.reportForm.get('groupBy').patchValue(currentGroupBy);
-                this.reportForm.get('salesPersonUniqueNames').patchValue(currentSalesPersonUniqueNames);
-                this.reportForm.get('accountUniqueNames').patchValue(currentAccountUniqueNames);
-                this.populateRecords(this.selectedType, this.selectedMonth);
-                this.salesRegisterTotal.particular = this.getCustomParticular();
-                this.changeDetectorRef.detectChanges();
             }
         });
+    }
+
+    /**
+     * Handle group by change
+     *
+     * @param groupBy
+     */
+    public handleGroupByChange(groupBy: string) {
+        this.generalService.updateActivatedRouteQueryParams({ groupBy, required: "groupBy" }, "replace");
     }
 
     public selectFinancialYearOption(event: IOption) {
@@ -435,7 +493,7 @@ constructor(
         this.interval = interval;
         this.reportForm.get('interval').patchValue(interval);
         if (interval === this.durationEnum.Weekly && !month) {
-            this.populateRecords(this.durationEnum.Monthly);
+            this.saveDurationFilter(this.durationEnum.Monthly);
             return;
         }
         if (this.activeFinacialYr && this.reportForm.get('groupBy')?.value === GroupBy.Duration) {
@@ -460,7 +518,7 @@ constructor(
                 this.currentBranch.uniqueName = this.generalService.currentBranchUniqueName;
             }
             this.getSalesRegister(startDate, endDate);
-        } else if (this.reportForm.get('groupBy')?.value === GroupBy.SalesPerson) {
+        } else if (this.reportForm.get('groupBy')?.value === GroupBy.SalesPerson || this.reportForm.get('groupBy')?.value === GroupBy.State || this.reportForm.get('groupBy')?.value === GroupBy.Country) {
             this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
             this.getSalesRegister(this.dateRange.from, this.dateRange.to);
@@ -469,27 +527,6 @@ constructor(
 
     public formatParticular(mdyTo, mdyFrom, index, monthNames) {
         return this.commonLocaleData?.app_quarter + ' ' + index + " (" + monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2] + "-" + monthNames[parseInt(mdyTo[1]) - 1] + " " + mdyTo[2] + ")";
-    }
-
-    public bsValueChange(event: any) {
-        if (event) {
-            let request: ReportsRequestModel = {
-                to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
-                from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
-                interval: this.durationEnum.Monthly,
-                branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
-            }
-            this.companyService.getSalesRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res?.status === 'error') {
-                    this._toaster.errorToast(res?.message);
-                } else {
-                    this.salesRegisterTotal = new ReportsModel();
-                    this.salesRegisterTotal.particular = this.getCustomParticular();
-                    this.reportRespone = this.filterReportResp(res?.body);
-                }
-            });
-
-        }
     }
 
     public getDateFromMonth(selectedMonth) {
@@ -532,6 +569,56 @@ constructor(
     }
 
     /**
+     * Saves the selected duration interval and optional month to URL query params
+     *
+     * @param {string} interval - Duration interval (e.g. Monthly, Quarterly, Weekly)
+     * @param {string} [month] - Optional month name for weekly view
+     * @memberof ReportsDetailsComponent
+     */
+    public saveDurationFilter(interval: string, month?: string): void {
+        this.generalService.saveRouteQueryFilters({
+            interval: interval ?? null,
+            selectedMonth: month ?? null
+        });
+    }
+
+    /**
+     * Saves the selected sales person unique names to URL query params
+     *
+     * @memberof ReportsDetailsComponent
+     */
+    public saveSalesPersonFilter(): void {
+        this.generalService.saveRouteQueryFilters({ salesPersonUniqueNames: this.reportForm.get('salesPersonUniqueNames')?.value ?? [] });
+    }
+
+    /**
+     * Saves the selected account unique names to URL query params
+     *
+     * @memberof ReportsDetailsComponent
+     */
+    public saveAccountFilter(): void {
+        this.generalService.saveRouteQueryFilters({ accountUniqueNames: this.reportForm.get('accountUniqueNames')?.value ?? [] });
+    }
+
+    /**
+     * Saves the selected country codes to URL query params
+     *
+     * @memberof ReportsDetailsComponent
+     */
+    public saveCountryCodesFilter(): void {
+        this.generalService.saveRouteQueryFilters({ countryCodes: this.reportForm.get('countryCodes')?.value ?? [] });
+    }
+
+    /**
+     * Saves the selected state codes to URL query params
+     *
+     * @memberof ReportsDetailsComponent
+     */
+    public saveStateCodesFilter(): void {
+        this.generalService.saveRouteQueryFilters({ stateCodes: this.reportForm.get('stateCodes')?.value ?? [] });
+    }
+
+    /**
      * Saves the user preference for filters
      *
      * @private
@@ -539,7 +626,15 @@ constructor(
      */
     private savePreferences(): void {
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
-            financialYear: this.currentActiveFinacialYear?.value, branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), timeFilter: this.selectedType, salesPersonUniqueNames: this.reportForm?.get('salesPersonUniqueNames')?.value, accountUniqueNames: this.reportForm?.get('accountUniqueNames')?.value, groupBy: this.reportForm?.get('groupBy')?.value
+            financialYear: this.currentActiveFinacialYear?.value, 
+            branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), 
+            timeFilter: this.selectedType, 
+            salesPersonUniqueNames: this.reportForm?.get('salesPersonUniqueNames')?.value, 
+            accountUniqueNames: this.reportForm?.get('accountUniqueNames')?.value, 
+            groupBy: this.reportForm?.get('groupBy')?.value, 
+            countryCodes: this.reportForm?.get('countryCodes')?.value,
+            countryCode: this.reportForm?.get('countryCode')?.value,
+            stateCodes: this.reportForm?.get('stateCodes')?.value
         }));
     }
 
@@ -551,13 +646,14 @@ constructor(
      * @memberof ReportsDetailsComponent
      */
     private setSalesRegisterTotal(transaction: any): void {
-        const item = _.cloneDeep(transaction);
+        const item = cloneDeep(transaction);
         this.salesRegisterTotal.sales += item.creditTotal;
         this.salesRegisterTotal.returns += item.debitTotal;
         this.salesRegisterTotal.taxTotal += item.taxTotal;
         this.salesRegisterTotal.discountTotal += item.discountTotal;
         this.salesRegisterTotal.tcsTotal += item.tcsTotal;
         this.salesRegisterTotal.tdsTotal += item.tdsTotal;
+        this.salesRegisterTotal.roundOff += Number(item.roundOff ?? 0);
         this.salesRegisterTotal.netSales += (item.balance.type === "DEBIT") ? Number("-" + item.balance.amount) : item.balance.amount;
         this.salesRegisterTotal.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
         this.salesRegisterTotal.interval = this.interval;
@@ -575,10 +671,11 @@ constructor(
         if (event) {
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
             this.setCurrentFY();
-            this.getSelectedDuration();
             this.groupByOptions = [
-                { label: this.commonLocaleData?.app_duration?.duration, value: GroupBy.Duration },
-                { label: this.commonLocaleData?.app_sales_person, value: GroupBy.SalesPerson }
+                { label: this.localeData?.by_duration, value: GroupBy.Duration },
+                { label: this.localeData?.by_sales_person, value: GroupBy.SalesPerson },
+                { label: this.localeData?.by_state, value: GroupBy.State },
+                { label: this.localeData?.by_country, value: GroupBy.Country }
             ];
         }
     }
@@ -594,19 +691,49 @@ constructor(
     }
 
     /**
-     * This will return duration name
+     * Applies the current groupBy specific filters to the overview export request.
      *
-     * @returns {string}
+     * @private
+     * @param {ExportBodyRequest} exportBodyRequest Export payload to be mutated.
      * @memberof ReportsDetailsComponent
      */
-    public getSelectedDuration(): string {
-        if (this.selectedType?.toLowerCase() === "monthly") {
-            return this.commonLocaleData?.app_duration?.monthly;
-        } else if (this.selectedType?.toLowerCase() === "quarterly") {
-            return this.commonLocaleData?.app_duration?.quarterly;
-        } else if (this.selectedType?.toLowerCase() === "weekly") {
-            return this.commonLocaleData?.app_duration?.weekly;
+    private applyOverviewGroupByFilters(exportBodyRequest: ExportBodyRequest): void {
+        const groupBy = this.currentGroupBy();
+        exportBodyRequest.accountUniqueNames = this.reportForm?.get('accountUniqueNames')?.value ?? [];
+        exportBodyRequest.groupBy = groupBy;
+        
+        if (groupBy === GroupBy.Duration) {
+            exportBodyRequest.interval = this.interval;
+        } else if (groupBy === GroupBy.SalesPerson) {
+            exportBodyRequest.salesPersonUniqueNames = this.reportForm?.get('salesPersonUniqueNames')?.value ?? [];
+        } else if (groupBy === GroupBy.Country) {
+            exportBodyRequest.countryCodes = this.reportForm?.get('countryCodes')?.value ?? [];
+        } else if (groupBy === GroupBy.State) {
+            const countryCode = this.reportForm?.get('countryCode')?.value;
+            exportBodyRequest.countryCodes = countryCode ? [countryCode] : [];
+            exportBodyRequest.stateCodes = this.reportForm?.get('stateCodes')?.value ?? [];
         }
+
+        this.generalService.replaceSelectedAllOptions(exportBodyRequest);
+
+    }
+
+    /**
+     * Determines whether a multi-select filter effectively represents "select all".
+     * Returns true when nothing is selected (default = all), when All was chosen ([SELECTED_ALL_OPTION]),
+     * or when every available option is selected.
+     *
+     * @private
+     * @param {any[]} selected Currently selected values
+     * @param {number} total Total number of available options
+     * @returns {boolean}
+     * @memberof ReportsDetailsComponent
+     */
+    private isAllSelected(selected: any[]): boolean {
+        if (isSelectedAllOption(selected)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -615,6 +742,7 @@ constructor(
      * @memberof ReportsDetailsComponent
      */
     public export(): void {
+        const groupBy = this.currentGroupBy();
         let startDate = this.activeFinacialYr?.financialYearStarts?.toString();
         let endDate = this.activeFinacialYr?.financialYearEnds?.toString();
         if (this.selectedMonth) {
@@ -622,14 +750,18 @@ constructor(
             startDate = startEndDate.firstDay;
             endDate = startEndDate.lastDay;
         }
+        if (groupBy && groupBy !== GroupBy.Duration && this.dateRange?.from && this.dateRange?.to) {
+            startDate = this.dateRange.from;
+            endDate = this.dateRange.to;
+        }
 
         let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
         exportBodyRequest.from = startDate;
         exportBodyRequest.to = endDate;
         exportBodyRequest.exportType = "SALES_REGISTER_OVERVIEW_EXPORT";
-        exportBodyRequest.fileType = "CSV";
-        exportBodyRequest.interval = this.interval;
+        exportBodyRequest.fileType = "XLSX";
         exportBodyRequest.branchUniqueName = this.currentBranch?.uniqueName;
+        this.applyOverviewGroupByFilters(exportBodyRequest);
         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this._toaster.successToast(response?.body);
@@ -642,7 +774,7 @@ constructor(
 
     /**
      * Updates the visibility of table columns based on specific conditions.
-     * 
+     *
      * @param {any} item - The transaction item.
      * @memberof ReportsDetailsComponent
      */
@@ -671,7 +803,34 @@ constructor(
         let to = item.to;
 
         if (from != null && to != null) {
-            this.router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranch?.uniqueName, interval: item.interval, selectedMonth: item.selectedMonth, salesPersonUniqueName: item.salesPerson?.uniqueName } });
+            const groupByValue = this.reportForm?.get('groupBy')?.value;
+            /** Map of query parameters for each group by type */
+            const groupByQueryParams: Record<GroupBy, any> = {
+                [GroupBy.Duration]: {
+                    interval: item.interval,
+                    selectedMonth: item.selectedMonth
+                },
+                [GroupBy.SalesPerson]: {
+                    salesPersonUniqueName: item.salesPerson?.uniqueName
+                },
+                [GroupBy.State]: {
+                    stateCode: item.stateCode,
+                    countryCode: this.reportForm?.get('countryCode')?.value
+                },
+                [GroupBy.Country]: {
+                    countryCode: item.countryCode
+                }
+            };
+
+            this.router.navigate(['pages', 'reports', 'sales-detailed-expand'], { 
+                queryParams: { 
+                    from, 
+                    to, 
+                    branchUniqueName: this.currentBranch?.uniqueName,
+                    groupBy: this.currentGroupBy(),
+                    ...(groupByQueryParams[groupByValue] || {})
+                } 
+            });
         }
     }
 
@@ -683,6 +842,30 @@ constructor(
     public openSalesPersonDialog(): void {
         const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
         dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
+    }
+
+    /**
+     * Prepends the Other sales person option used by the dropdown.
+     *
+     * @private
+     * @param {IOption[]} list Sales person options from the API
+     * @returns {IOption[]} List with Other first
+     * @memberof ReportsDetailsComponent
+     */
+    private withOtherSalesPerson(list: IOption[]): IOption[] {
+        return [{ label: 'Other', value: 'OTHER_SALES_PERSON' }, ...(list ?? [])];
+    }
+
+    /**
+     * Prepends the Other state option used by the dropdown.
+     *
+     * @private
+     * @param {IOption[]} list State options from the API
+     * @returns {IOption[]} List with Other first
+     * @memberof ReportsDetailsComponent
+     */
+    private withOtherState(list: IOption[]): IOption[] {
+        return [{ label: 'Other', value: 'OTHER_STATE' }, ...(list ?? [])];
     }
 
     /**
@@ -745,11 +928,9 @@ constructor(
         }
         this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.dateRange.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.getSalesRegister(this.dateRange.from, this.dateRange.to);
+            this.generalService.saveRouteQueryFilters({ fromDate: this.dateRange.from, toDate: this.dateRange.to });
         }
     }
 
@@ -767,17 +948,61 @@ constructor(
         if (!from || !to) {
             return;
         }
+        this.savePreferences();
+        this.salesRegisterTotal.particular = this.getCustomParticular();
+        const requestObject = this.generalService.replaceSelectedAllOptions(this.reportForm.value, true);
+        const groupByValue = this.reportForm?.get('groupBy')?.value;
 
-        let requestObject = this.reportForm.value;
-        if (this.reportForm?.get('groupBy')?.value === GroupBy.SalesPerson) {
-            requestObject.interval = undefined;
+        /** Map of keys to remove for each group by type */
+        const keysToRemoveByGroupType: Record<GroupBy, string[]> = {
+            [GroupBy.Duration]: ["salesPersonUniqueNames", "countryCode", "countryCodes", "stateCodes"],
+            [GroupBy.SalesPerson]: ["interval", "countryCode", "countryCodes", "stateCodes"],
+            [GroupBy.Country]: ["salesPersonUniqueNames", "interval", "countryCode", "stateCodes"],
+            [GroupBy.State]: ["salesPersonUniqueNames", "interval", "countryCodes", "countryCode"]
+        };
+
+        /** Add country object for State grouping */
+        if (groupByValue === GroupBy.State) {
+            requestObject.country = { code: requestObject.countryCode };
+        }
+
+        /** Remove unnecessary keys based on group by type */
+        const keysToRemove = keysToRemoveByGroupType[groupByValue];
+        if (keysToRemove) {
+            this.removeKeysFromObject(requestObject, keysToRemove);
+        }
+        this.currentGroupBy.set(requestObject.groupBy);
+        if (requestObject.groupBy === GroupBy.State && !requestObject.country?.code) {
+            if (this.activeCompany?.countryV2?.alpha2CountryCode) {
+                this.reportForm.get('countryCode')?.patchValue(this.activeCompany.countryV2.alpha2CountryCode, { emitEvent: false });
+                requestObject.country = { code: this.activeCompany.countryV2.alpha2CountryCode };
+            } else {
+                return;
+            }
         }
         this.componentStore.getSalesPurchaseList({
             payload: requestObject,
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },
             isSalesRegister: true
         });
-        this.savePreferences();
+    }
+
+    
+
+    /**
+     * Remove specified keys from object
+     *
+     * @param {any} obj Object to remove keys from
+     * @param {string[]} keysToRemove Array of keys to remove
+     * @returns {any} Object with specified keys removed
+     * @memberof ReportsDetailsComponent
+     */
+    private removeKeysFromObject(obj: any, keysToRemove: string[]): any {
+        // const newObj = { ...obj };
+        keysToRemove.forEach(key => {
+            delete obj[key];
+        });
+        // return newObj;
     }
 
     /**
@@ -793,6 +1018,52 @@ constructor(
             const fromDate = dayjs(this.dateRange?.from, GIDDH_DATE_FORMAT);
             const toDate = dayjs(this.dateRange?.to, GIDDH_DATE_FORMAT);
             return `${fromDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}-${toDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}`;
+        }
+    }
+
+    /**
+     * Load countries list
+     *
+     * @memberof ReportsDetailsComponent
+     */
+    private loadCountries(): void {
+        this.companyService.getAccountCountries().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success' && response?.body) {
+                this.countryList.set(response.body.map(country => ({
+                    label: country.countryName || country.name,
+                    value: country.alpha2CountryCode || country.code
+                })));
+                this.allOptions.country = this.countryList();
+            }
+        });
+    }
+
+    /**
+     * Load states based on selected country
+     *
+     * @param {string} countryCode
+     * @memberof ReportsDetailsComponent
+     */
+    private loadStates(countryCode: string): void {
+        const statesRequest = { country: countryCode };
+        this.store.dispatch(this.generalActions.getAllState(statesRequest));
+    }
+
+    /**
+     * Handle country selection for State groupBy
+     *
+     * @param {IOption} event
+     * @memberof ReportsDetailsComponent
+     */
+    public handleCountrySelection(event: IOption): void {
+        if (event?.value) {
+            this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+            this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+            this.reportForm.get('stateCodes')?.setValue([]);
+            this.generalService.saveRouteQueryFilters({
+                countryCode: event.value,
+                stateCodes: null,
+            });
         }
     }
 }

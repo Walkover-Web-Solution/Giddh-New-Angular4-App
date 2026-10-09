@@ -4,7 +4,8 @@ import { VouchersUtilityService } from "../../vouchers.utility.service";
 
 @Pipe({
     name: 'voucherCopyLink',
-    pure: true
+    pure: true,
+    standalone:false
 })
 export class VoucherCopyLinkPipe implements PipeTransform {
 

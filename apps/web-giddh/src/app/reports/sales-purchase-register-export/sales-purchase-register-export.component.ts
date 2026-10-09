@@ -8,11 +8,13 @@ import { takeUntil } from "rxjs/operators";
 import { ExportBodyRequest } from "../../models/api-models/DaybookRequest";
 import { LedgerService } from "../../services/ledger.service";
 import { ToasterService } from "../../services/toaster.service";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
     selector: "sales-purchase-register-export",
     templateUrl: "./sales-purchase-register-export.component.html",
     styleUrls: ["./sales-purchase-register-export.component.scss"],
+    standalone: false
 })
 export class SalesPurchaseRegisterExportComponent implements OnInit {
     /** Form Group for export  form */
@@ -28,7 +30,8 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         private ledgerService: LedgerService,
         private toaster: ToasterService,
         private router: Router,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        protected generalService: GeneralService
     ) {}
 
     /**
@@ -51,6 +54,7 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
             showVoucherNumber: new FormControl(false),
             showDiscount: new FormControl(false),
             showTax: new FormControl(false),
+            haveToShowTaxBifurcation: new FormControl(false),
             showGroup: new FormControl(false),
             showTaxNumber: new FormControl(false),
             showAddress: new FormControl(false),
@@ -59,6 +63,12 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
             showMobileNumber: new FormControl(false),
             showSalesPurchaseAccount: new FormControl(false),
             showStock: new FormControl(false),
+        });
+
+        this.exportForm.get('showTax')?.valueChanges.subscribe(value => {
+            if (!value) {
+                this.exportForm.get('haveToShowTaxBifurcation')?.setValue(false);
+            }
         });
     }
 
@@ -85,6 +95,22 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         exportBodyRequest.isExpanded = this.inputData?.expand;
         exportBodyRequest.q = this.inputData?.q;
         exportBodyRequest.branchUniqueName = this.inputData?.branchUniqueName;
+        if (this.inputData?.groupBy) {
+            exportBodyRequest.groupBy = this.inputData.groupBy;
+        }
+        if (this.inputData?.accountUniqueNames?.length || this.inputData?.selectAllFields?.length) {
+            exportBodyRequest.accountUniqueNames = this.inputData.selectAllFields?.length ? [] : this.inputData.accountUniqueNames;
+            exportBodyRequest.selectAllFields = this.inputData.selectAllFields;
+        }
+        if (this.inputData?.salesPersonUniqueNames?.length) {
+            exportBodyRequest.salesPersonUniqueNames = this.inputData.salesPersonUniqueNames;
+        }
+        if (this.inputData?.countryCodes?.length) {
+            exportBodyRequest.countryCodes = this.inputData.countryCodes;
+        }
+        if (this.inputData?.stateCodes?.length) {
+            exportBodyRequest.stateCodes = this.inputData.stateCodes;
+        }
         exportBodyRequest.columnsToExport = ["Account UniqueName"];
         if (this.exportForm.value.showVoucherType) {
             exportBodyRequest.columnsToExport.push("Voucher Type");
@@ -97,6 +123,7 @@ export class SalesPurchaseRegisterExportComponent implements OnInit {
         }
         if (this.exportForm.value.showTax) {
             exportBodyRequest.columnsToExport.push("Tax");
+            exportBodyRequest.haveToShowTaxBifurcation = this.exportForm.get('haveToShowTaxBifurcation')?.value;
         }
         if (this.exportForm.value.showGroup) {
             exportBodyRequest.columnsToExport.push("Group");

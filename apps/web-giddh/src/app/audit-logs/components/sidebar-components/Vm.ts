@@ -4,6 +4,7 @@ import * as dayjs from 'dayjs';
 import { Observable } from 'rxjs';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { IOption } from '../../../app.constant';
+import { set } from '../../../lodash-optimized';
 
 export class AuditLogsSidebarVM {
     public user$: Observable<UserDetails>;
@@ -11,7 +12,6 @@ export class AuditLogsSidebarVM {
     public groupsList$: Observable<GroupsWithAccountsResponse[]>;
     public groups$: Observable<IOption[]>;
     public users$: Observable<IOption[]>;
-    public options: Select2Options = {};
     public dayjs = dayjs;
     public maxDate: Date = dayjs().toDate();
     public filters: IOption[];
@@ -34,13 +34,6 @@ export class AuditLogsSidebarVM {
     public selectedDateOption: string = '0';
 
     constructor(private localeData, private commonLocaleData) {
-        this.options = {
-            multiple: false,
-            width: '100%',
-            placeholder: this.commonLocaleData?.app_select_option,
-            allowClear: true
-        };
-
         this.dateOptions = [{ label: this.commonLocaleData?.app_date_range, value: '1' }, { label: this.localeData?.entry_log_date, value: '0' }];
 
         this.filters = [

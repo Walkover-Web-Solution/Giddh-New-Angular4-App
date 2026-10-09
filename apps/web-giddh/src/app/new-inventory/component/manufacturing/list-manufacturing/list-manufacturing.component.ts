@@ -8,7 +8,6 @@ import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
-import { cloneDeep, forEach } from 'apps/web-giddh/src/app/lodash-optimized';
 import { MfStockSearchRequestClass } from 'apps/web-giddh/src/app/manufacturing/manufacturing.utility';
 import { LinkedStocksResponse } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { IMfStockSearchRequest } from 'apps/web-giddh/src/app/models/interfaces/manufacturing.interface';
@@ -23,10 +22,13 @@ import * as dayjs from 'dayjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { takeUntil } from 'rxjs/operators';
+import { cloneDeep, find, forEach, map } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'list-manufacturing',
+
     templateUrl: './list-manufacturing.component.html',
+    standalone: false,
     styleUrls: ['./list-manufacturing.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -42,7 +44,7 @@ export class ListManufacturingComponent implements OnInit {
     /** Table columns */
     public displayedColumns: string[] = ['date', 'voucher_no', 'stock', 'finished_variant', 'qty_outwards', 'qty_outwards_unit', 'raw_stock', 'raw_variant', 'qty_inwards', 'qty_inwards_unit', 'warehouse'];
     /** Holds list of data */
-    public dataSource: any = [];
+    public dataSource: any;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store available date ranges */
@@ -360,7 +362,6 @@ export class ListManufacturingComponent implements OnInit {
      */
     public getReport(): void {
         let data = cloneDeep(this.manufacturingSearchRequest);
-        this.dataSource = [];
         this.isReportLoading = true;
         this.showHideClearFilterButton();
         this.setFiltersInStore();
@@ -371,9 +372,9 @@ export class ListManufacturingComponent implements OnInit {
                 this.totalItems = response.body.totalItems;
                 this.totalPages = response.body.totalPages;
 
-                response.body.results.forEach(item => {
+                (Array.isArray(response.body.results) ? response.body.results : []).forEach(item => {
                     reportData.push({
-                        date: dayjs(item.date, GIDDH_DATE_FORMAT).format("DD MMM YY"),
+                        date: item.date,
                         voucher_no: item.voucherNumber,
                         stock: item.stockName,
                         variant: item.variant.name,
@@ -386,6 +387,8 @@ export class ListManufacturingComponent implements OnInit {
                 });
 
                 this.dataSource = reportData;
+            } else {
+                this.dataSource = [];
             }
 
             this.isReportLoading = false;
@@ -400,11 +403,11 @@ export class ListManufacturingComponent implements OnInit {
      */
     public openAdvanceFilterDialog(): void {
         this.dialog.open(this.advanceFilterComponent, {
-            width: '500px',
-            autoFocus: false,
-            role: 'alertdialog',
-            ariaLabel: 'Advance filter Dialog'
-        });
+                    width: '500px',
+                    autoFocus: false,
+                    role: 'alertdialog',
+                    ariaLabel: 'Advance filter Dialog'
+                });
     }
 
     /**
@@ -474,13 +477,13 @@ export class ListManufacturingComponent implements OnInit {
             if (branches) {
                 if (branches.results?.length) {
                     this.allWarehouses = [];
-                    branches.results.forEach(branch => {
+                    (Array.isArray(branches.results) ? branches.results : []).forEach(branch => {
                         if (!this.allWarehouses[branch?.uniqueName]) {
                             this.allWarehouses[branch?.uniqueName] = [];
                         }
 
                         if (branch?.warehouses?.length > 0) {
-                            branch?.warehouses.forEach(warehouse => {
+                            (Array.isArray(branch?.warehouses) ? branch?.warehouses : []).forEach(warehouse => {
                                 this.allWarehouses[branch?.uniqueName].push({ label: warehouse?.name, value: warehouse?.uniqueName, additional: warehouse?.taxNumber });
                             });
                         }
@@ -568,5 +571,15 @@ export class ListManufacturingComponent implements OnInit {
         }
         this.manufacturingSearchRequest.count = event.pageSize;
         this.getReport();
+    }
+
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof ListManufacturingComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

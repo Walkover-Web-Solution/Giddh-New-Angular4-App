@@ -15,7 +15,8 @@ import { GeneralService } from "../services/general.service";
 @Component({
     selector: 'home',
     styleUrls: ['./home.component.scss'],
-    templateUrl: './home.component.html'
+    templateUrl: './home.component.html',
+    standalone: false
 })
 export class HomeComponent implements OnInit, OnDestroy {
     public needsToRedirectToLedger$: Observable<boolean>;
@@ -61,6 +62,10 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.hideallcharts = false;
             }
         });
+        // Scroll to top when dashboard loads
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+        }, 100);
     }
 
     public ngOnDestroy() {

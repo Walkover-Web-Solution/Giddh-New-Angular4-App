@@ -4,6 +4,7 @@
     align-items: center;
     flex-direction: column;
     height: 100vh;
+    background-color: var(--theme-primary-light);
     .inner {
         display: flex;
         justify-content: center;
@@ -12,7 +13,6 @@
     }
     img {
         width: 400px;
-        opacity: 0.3;
     }
     span {
         font-size: var(--font-size-48);

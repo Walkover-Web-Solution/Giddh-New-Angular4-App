@@ -6,15 +6,20 @@ import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { get, set } from '../../../lodash-optimized';
 
 @Component({
     selector: 'create-unit-group',
+
     templateUrl: './create-unit-group.component.html',
+    standalone: false,
     styleUrls: ['./create-unit-group.component.scss']
 })
 export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds selected group data */
     @Input() public unitGroupDetails: any = {};
+    /** Holds true is open inside dialog */
+    @Input() public isInsideDialog: boolean = false;
     /** Emits close unit form */
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter(true);
     /* This will hold local JSON data */
@@ -144,16 +149,16 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
      */
     public deleteUnitGroup(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            role: 'alertdialog',
-            ariaLabel: 'Confirm Dialog',
-            data: {
+                    width: '40%',
+                    role: 'alertdialog',
+                    ariaLabel: 'Confirm Dialog',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.delete_unit_group_message,
-                permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.delete_unit_group_message,
+                    permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

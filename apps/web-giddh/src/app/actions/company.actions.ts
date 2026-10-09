@@ -24,8 +24,11 @@ import { ToasterService } from '../services/toaster.service';
 import { CustomActions } from '../store/custom-actions';
 import { AppState } from '../store/roots';
 import { COMMON_ACTIONS } from './common.const';
+import { findIndex } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 
 export class CompanyActions {
     public static CREATE_COMPANY = 'CompanyCreate';
@@ -584,11 +587,11 @@ export class CompanyActions {
     /**
      * Returns the action to set the financial year chosen in either sales or purchase register
      *
-     * @param {string} filterValues Stores the filter values
+     * @param {object} filterValues Stores the filter values including financial year, branch, time filter, sales person, accounts, groupBy, and country/state selections
      * @returns {CustomActions} Action to set the financial year
      * @memberof CompanyActions
      */
-    public setUserChosenFinancialYear(filterValues: { financialYear: string, branchUniqueName: string, timeFilter: string, salesPersonUniqueNames: string[], accountUniqueNames: string[], groupBy: string }): CustomActions {
+    public setUserChosenFinancialYear(filterValues: { financialYear: string, branchUniqueName: string, timeFilter: string, salesPersonUniqueNames: string[], accountUniqueNames: string[], groupBy: string, countryCodes: string[], countryCode: string, stateCodes: string[] }): CustomActions {
         return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: filterValues };
     }
 

@@ -5,7 +5,7 @@ import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable, ReplaySubject, of as observableOf, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../../app.constant";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, isSelectedAllOption } from "../../../app.constant";
 import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest, StockTransactionReportRequestExport } from "../../../models/api-models/Inventory";
 import { NewInventoryAdvanceSearch } from "../new-inventory-advance-search/new-inventory-advance-search.component";
 import * as dayjs from "dayjs";
@@ -14,17 +14,19 @@ import { InventoryService } from "../../../services/inventory.service";
 import { GeneralService } from "../../../services/general.service";
 import { OrganizationType } from "../../../models/user-login-state";
 import { ToasterService } from "../../../services/toaster.service";
-import { cloneDeep } from "../../../lodash-optimized";
 import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
 import { Router } from "@angular/router";
 import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 import { InventoryComponentStore } from "../inventory.store";
+import { cloneDeep, concat, filter, find, forEach, includes, indexOf, map, some } from '../../../lodash-optimized';
 
 @Component({
     selector: "report-filters",
+
     templateUrl: "./report-filters.component.html",
+    standalone: false,
     styleUrls: ["./report-filters.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [InventoryComponentStore]
@@ -70,10 +72,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public selectedDynamicColumns: EventEmitter<any> = new EventEmitter();
     /** True if show advance search model*/
     public showAdvanceSearchModal: boolean = false;
-    /** This will use for instance of warehouses Dropdown */
-    public warehousesDropdown: UntypedFormControl = new UntypedFormControl();
-    /** This will use for instance of branches Dropdown */
-    public branchesDropdown: UntypedFormControl = new UntypedFormControl();
     /** Search field form control */
     public searchFilters: UntypedFormControl = new UntypedFormControl();
 /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -98,8 +96,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public warehouses: any[] = [];
     /** Hold branches checked  */
     public selectedBranch: any[] = [];
-    /**Hold branches */
-    public branches: any[] = [];
     /** Hold all warehouses */
     public allWarehouses: any[] = [];
     /** Hold all warehouses */
@@ -146,6 +142,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Holds dynamic columns list for customised columns */
     public dynamicCustomColumns: any[] = [];
+    /** Hide selected options from dropdown list */
+    public hideSelectedOptions: boolean = true;
 
     constructor(
         public dialog: MatDialog,
@@ -179,7 +177,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
-                this.universalDate = _.cloneDeep(dateObj);
+                this.universalDate = cloneDeep(dateObj);
                 if (this.pullUniversalDate) {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
@@ -221,22 +219,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.getBranchWiseWarehouse();
-
-        this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            let branchesClone = cloneDeep(this.allBranches);
-            if (search) {
-                branchesClone = this.allBranches?.filter(branch => (branch.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
-            }
-            this.branches = branchesClone;
-        });
-
-        this.warehousesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            let warehousesClone = cloneDeep(this.currentWarehouses);
-            if (search) {
-                warehousesClone = this.currentWarehouses?.filter(warehouse => (warehouse.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
-            }
-            this.warehouses = warehousesClone;
-        });
 
         this.searchFilters?.valueChanges.pipe(
             debounceTime(700),
@@ -561,7 +543,15 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             mappedDynamicValues = this.displayedColumns;
         }
-        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: mappedDynamicValues, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse, stockReportRequestExport: this.stockReportRequestExport });
+        this.filters.emit({
+            stockReportRequest: this.stockReportRequest,
+            balanceStockReportRequest: this.balanceStockReportRequest,
+            displayedColumns: mappedDynamicValues,
+            todaySelected: this.todaySelected,
+            showClearFilter: this.showClearFilter,
+            advanceSearchModalResponse: this.advanceSearchModalResponse,
+            stockReportRequestExport: this.stockReportRequestExport
+        });
     }
 
     /**
@@ -599,7 +589,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if (res) {
                 this.fromDate = dayjs(res[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(res[1]).format(GIDDH_DATE_FORMAT);
-                let universalDate = _.cloneDeep(res);
+                let universalDate = cloneDeep(res);
                 if (universalDate && !this.todaySelected) {
                     this.selectedDateRange = { startDate: dayjs(res[0]), endDate: dayjs(res[1]) };
                     this.selectedDateRangeUi = dayjs(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -653,7 +643,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if (response && response.body) {
                 this.allBranchWarehouses = response.body;
                 this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
-                this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
                 if (!this.isCompany && !this.isConsolidatedBranch) {
@@ -683,11 +672,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses);
             });
         }
-        if (this.selectedBranch?.length === 0) {
+        if (this.selectedBranch?.length === 0 || isSelectedAllOption(this.selectedBranch)) {
             this.warehouses = this.allWarehouses;
         } else {
             let warehouses = [];
-            this.branches?.filter(value => this.selectedBranch?.includes(value?.uniqueName))?.forEach((branches) => {
+            this.allBranches?.filter(value => this.selectedBranch?.includes(value?.uniqueName))?.forEach((branches) => {
                 warehouses = warehouses?.concat(branches?.warehouses);
             });
             this.warehouses = warehouses;
@@ -764,7 +753,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will use for select filters in chiplist
+     * This will use for select filters in chiplist - removes selected option from dropdown
      *
      * @param {*} option
      * @return {*}  {void}
@@ -823,13 +812,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.stockReportRequestExport.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
         this.filtersChipList?.push(selectOptionValue);
         this.searchRequest.q = "";
+        // This will refresh filtered options and hide the selected item from dropdown
         this.searchInventory();
         this.isFilterActive();
         this.emitFilters();
     }
 
     /**
-     * This will be used for remove chiplist from search filter
+     * This will be used for remove chiplist from search filter - adds removed option back to dropdown
      *
      * @param {*} selectOptionValue
      * @param {number} index
@@ -863,6 +853,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
             this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
             this.searchRequest.q = "";
+            // This will refresh filtered options and show the removed item back in dropdown
             this.searchInventory();
             this.isFilterActive();
             this.emitFilters();
@@ -870,7 +861,25 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Searches the group/stock/variant
+     * Filters options to hide selected items from dropdown
+     *
+     * @private
+     * @param {any[]} options
+     * @returns {any[]}
+     * @memberof ReportFiltersComponent
+     */
+    private getFilteredOptionsForHideSelected(options: any[]): any[] {
+        if (!this.hideSelectedOptions || !options) {
+            return options || [];
+        }
+
+        return options.filter(option => {
+            return !this.filtersChipList?.some(chip => chip?.uniqueName === option?.uniqueName);
+        });
+    }
+
+    /**
+     * Searches the group/stock/variant and filters out selected options
      *
      * @param {boolean} [loadMore]
      * @memberof ReportFiltersComponent
@@ -904,11 +913,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.inventoryService.searchStockTransactionReport(searchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
+                    let allOptions = [];
                     if (loadMore) {
-                        this.fieldFilteredOptions = this.fieldFilteredOptions.concat(response.body.results);
+                        allOptions = this.fieldFilteredOptions.concat(response.body.results);
                     } else {
-                        this.fieldFilteredOptions = response.body.results;
+                        allOptions = response.body.results;
                     }
+                    // Filter out selected options to hide them from dropdown
+                    this.fieldFilteredOptions = this.getFilteredOptionsForHideSelected(allOptions);
                     this.searchRequest.totalItems = response.body.totalItems;
                     this.searchRequest.totalPages = response.body.totalPages;
                     if (this.autoSelectSearchOption) {

@@ -1,15 +1,21 @@
+/**
+ * @fileoverview App component for handling user interface and interactions
+ * @author Giddh Development Team
+ * @since 2026
+ */
+
 import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
-import { pick } from './lodash-optimized';
+import { UiSettingsService } from './services/ui-settings.service';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { BREAKPOINT_SCREEN_SIZE, Configuration, COUNTRY_REGION_MAP } from "./app.constant";
+import { AppThemeClassEnum, BREAKPOINT_SCREEN_SIZE, Configuration, GiddhUiDomain } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -18,6 +24,12 @@ import { CommonActions } from './actions/common.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceConfig } from './services/service.config';
 import { PageLeaveUtilityService } from './services/page-leave-utility.service';
+import { LoginActions } from './actions/login.action';
+import { InvoiceActions } from './actions/invoice/invoice.actions';
+import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
+import { CompanyService } from './services/company.service';
+import { environment } from '../environments/environment.generated';
+import { clone, get, includes, pick, remove, startsWith } from './lodash-optimized';
 
 /**
  * App Component
@@ -29,13 +41,20 @@ import { PageLeaveUtilityService } from './services/page-leave-utility.service';
     styleUrls: [
         './app.component.css'
     ],
-    templateUrl: './app.component.html'
+    templateUrl: './app.component.html',
+    standalone: false
 })
+/**
+ * AppComponent class - Handles appcomponent functionality
+ * @export
+ * @class AppComponent
+ */
+
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public sideMenu: { isopen: boolean } = { isopen: true };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isProdMode: boolean = false;
-    public isElectron: boolean = false;
+    public isElectron: boolean = Configuration.isElectron;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public IAmLoaded: boolean = false;
     private newVersionAvailableForWebApp: boolean = false;
@@ -43,6 +62,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public activeLocale: string = "";
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Bound method reference for event listener cleanup */
+    private boundHandleQueryParamsCompanySwitch: (event: any) => void;
 
     constructor(private store: Store<AppState>,
         private router: Router,
@@ -56,11 +77,20 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private commonActions: CommonActions,
         public dialog: MatDialog,
         @Inject(ServiceConfig) private serviceConfig,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private loginActions: LoginActions,
+        private invoiceActions: InvoiceActions,
+        private warehouseActions: WarehouseActions,
+        private companyService: CompanyService,
+        private uiSettingsService: UiSettingsService
     ) {
-        this.isProdMode = PRODUCTION_ENV;
-        this.isElectron = isElectron;
-        
+        this.isProdMode = environment.production;
+        this.isElectron = Configuration.isElectron;
+
+        this.initializeUiSettings();
+
+        this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
+
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
             if (ss?.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
@@ -88,10 +118,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const path = window.location.pathname || '';
             const search = window.location.search || '';
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
-            // Generate returnUrl for any non-login-like path (including root path)
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                if (PRODUCTION_ENV && !isElectron && !isLocalHost) {
+                // Hard redirect to giddh.com/login only when running on the production books domain
+                const isProductionBooksDomain = window.location.hostname === new URL(GiddhUiDomain.PRODUCTION).hostname;
+
+                if (environment.production && !Configuration.isElectron && !isLocalHost && isProductionBooksDomain) {
+                    // Hard redirect only for GiddhUiDomain.PRODUCTION (books.giddh.com)
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -99,10 +132,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     } else {
                         returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
                     }
-                    const regionLogin = this._generalService.getGiddhRegionUrl() + '/login';
-                    const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
-                    window.location.href = target;
+                    const regionLogin = this._generalService.getGiddhRegionUrl();
+                    window.location.href = this.buildLoginTargetUrl(regionLogin, returnUrl);
                 } else {
+                    // Soft redirect for other domains or local development
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -111,7 +144,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                         returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
                     }
                     if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '') {
-                        try { sessionStorage.setItem('returnUrl', returnUrl); } catch (_) {}
+                        try { sessionStorage.setItem('returnUrl', returnUrl); } catch (_) { }
                         this.router.navigate(['/login'], { queryParams: { returnUrl } });
                     } else {
                         this.router.navigate(['/login']);
@@ -125,24 +158,72 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         if (Configuration.isElectron) {
-            // electronOauth2
-            const { ipcRenderer } = (window as any).require("electron");
-            // google
-            const t = ipcRenderer.send("take-server-environment", {
-                'STAGING_ENV': STAGING_ENV,
-                'LOCAL_ENV': LOCAL_ENV,
-                'TEST_ENV': TEST_ENV,
-                'PRODUCTION_ENV': PRODUCTION_ENV,
-                'AppUrl': (this.serviceConfig.AppUrl || AppUrl),
-                'APP_FOLDER': APP_FOLDER
-            });
-            ipcRenderer.on('app-close-requested', () => {
-                this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
-                    if (confirmed) {
-                        ipcRenderer.send('force-close');
+            // electronOauth2 - Use secure Electron API
+            try {
+                const electron = (window as any).require("electron");
+                if (electron && electron.ipcRenderer) {
+                    const { ipcRenderer } = electron;
+                    const whiteLabel = localStorage.getItem('whiteLabel');
+                    let whiteLabelData = null;
+                    if (whiteLabel) {
+                        try {
+                            whiteLabelData = JSON.parse(whiteLabel);
+                        } catch (e) {
+                            console.error('Error parsing whiteLabel from localStorage:', e);
+                        }
                     }
-                });
-            });
+                    // Send server environment to main process
+                    ipcRenderer.send("take-server-environment", {
+                        'production': environment.production,
+                        'isLocalEnv': !environment.production,
+                        'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
+                        'APP_FOLDER': environment.APP_FOLDER,
+                        'WHITE_LABEL': whiteLabelData
+                    });
+                    // Handle app close requests
+                    ipcRenderer.on('app-close-requested', () => {
+                        this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                            if (confirmed) {
+                                ipcRenderer.send('force-close');
+                            }
+                        });
+                    });
+                } else if ((window as any).electronAPI) {
+                    // Fallback: Use secure electronAPI if available
+                    const electronAPI = (window as any).electronAPI;
+                    const whiteLabel = localStorage.getItem('whiteLabel');
+                    let whiteLabelData = null;
+                    if (whiteLabel) {
+                        try {
+                            whiteLabelData = JSON.parse(whiteLabel);
+                        } catch (e) {
+                            console.error('Error parsing whiteLabel from localStorage:', e);
+                        }
+                    }
+                    // Send server environment to main process
+                    electronAPI.send("take-server-environment", {
+                        'production': environment.production,
+                        'isLocalEnv': !environment.production,
+                        'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
+                        'APP_FOLDER': environment.APP_FOLDER,
+                        'WHITE_LABEL': whiteLabelData
+                    });
+                    // Handle app close requests (note: electronAPI.on might not support this channel)
+                    if (electronAPI.on) {
+                        electronAPI.on('app-close-requested', () => {
+                            this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                                if (confirmed) {
+                                    electronAPI.send('force-close');
+                                }
+                            });
+                        });
+                    }
+                } else {
+
+                }
+            } catch (error) {
+
+            }
         }
 
         /** This will be use for dialog close on route event */
@@ -197,7 +278,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]);
+            this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]);
         });
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
@@ -223,14 +304,17 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.value) {
-                document.querySelector("body")?.classList?.remove("dark-theme");
-                document.querySelector("body")?.classList?.remove("default-theme");
+                document.querySelector("body")?.classList?.remove(AppThemeClassEnum.Dark);
+                document.querySelector("body")?.classList?.remove(AppThemeClassEnum.Default);
                 document.querySelector("body")?.classList?.add(response?.value);
             } else {
                 let availableThemes = this._generalService.getAvailableThemes();
                 this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
             }
         });
+
+        // Listen for query params company/branch switch event from hybrid storage
+        window.addEventListener('giddh-query-params-company-switch', this.boundHandleQueryParamsCompanySwitch);
 
         setTimeout(() => {
             this._generalService.addLinkTag("./assets/styles/vendors/font-awesome.css");
@@ -282,8 +366,29 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
+
+        // Console all global variables after Angular app is fully loaded (controlled by debug flag)
+        setTimeout(() => {
+            this._generalService.logAllGlobalVariables();
+        }, 2000);
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
-            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
+            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !Configuration.isElectron) {
+                // [GIDDH-RELOAD-DIAG] Cause A: version-check forced reload on next navigation
+                const reason = {
+                    cause: 'A_VERSION_CHECK_RELOAD',
+                    fromUrl: this.router.url,
+                    toUrl: evt.url,
+                    newVersionAvailable: this.newVersionAvailableForWebApp,
+                    component: 'app.component',
+                    line: '396',
+                    timestamp: new Date().toISOString()
+                };
+                console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                try {
+                    const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                    giddhReloadDiag.push(reason);
+                    localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                } catch (e) { /* ignore localStorage errors */ }
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
@@ -303,7 +408,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (raw && raw.trim()) {
                 try {
                     const decoded = decodeURIComponent(raw);
-                    if (!isElectron) {
+                    if (!Configuration.isElectron) {
                         const target = decoded.startsWith('pages/') ? decoded : `pages/${decoded.startsWith('/') ? decoded.substring(1) : decoded}`;
                         this.router.navigateByUrl(`/${target}`);
                         return;
@@ -324,7 +429,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     this.router.navigateByUrl(`/${target}`);
                     return;
                 }
-            } catch (_) {}
+            } catch (_) { }
         }
 
         const lastState = localStorage.getItem('lastState');
@@ -334,11 +439,26 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             return this.router.navigate([lastState]);
         }
 
-        if (!LOCAL_ENV && !isElectron) {
-            this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || AppUrl) + 'version.json');
+        if (environment.PRODUCTION_ENV && !Configuration.isElectron) {
+            this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
-                    this.newVersionAvailableForWebApp = _.clone(isChanged);
+                    // [GIDDH-RELOAD-DIAG] version.json hash changed; will reload on next NavigationStart
+                    const reason = {
+                        cause: 'A_VERSION_CHECK_FLAG',
+                        message: 'version.json hash changed - newVersionAvailableForWebApp = true',
+                        component: 'app.component',
+                        line: '452',
+                        currentUrl: this.router.url,
+                        timestamp: new Date().toISOString()
+                    };
+                    console.warn('[GIDDH-RELOAD-DIAG]', reason);
+                    try {
+                        const giddhReloadDiag = JSON.parse(localStorage.getItem('giddh-reload-diag') || '[]');
+                        giddhReloadDiag.push(reason);
+                        localStorage.setItem('giddh-reload-diag', JSON.stringify(giddhReloadDiag));
+                    } catch (e) { /* ignore localStorage errors */ }
+                    this.newVersionAvailableForWebApp = clone(isChanged);
                 }
             });
         }
@@ -367,6 +487,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        // Remove event listener to prevent memory leaks
+        window.removeEventListener('giddh-query-params-company-switch', this.boundHandleQueryParamsCompanySwitch);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -385,5 +507,120 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.loadingService.hide();
             }
         })
+    }
+
+    /**
+     * Handles company/branch switching from query parameters, triggering same APIs as switchCompany/switchBranch
+     *
+     * @private
+     * @param {any} detail - Event detail containing companyUniqueName, branchUniqueName, and company object
+     * @memberof AppComponent
+     */
+    private handleQueryParamsCompanySwitch(detail: any): void {
+        console.log('handleQueryParamsCompanySwitch called with:', detail);
+
+        if (!detail || !detail.companyUniqueName || !detail.company) {
+            console.warn('Invalid detail provided to handleQueryParamsCompanySwitch:', detail);
+            return;
+        }
+
+        const { companyUniqueName, branchUniqueName, company } = detail;
+        console.log('Processing company/branch switch:', { companyUniqueName, branchUniqueName, company });
+
+        // Reset active company data and warehouse response (same as switchCompany)
+        this.store.dispatch(this.companyActions.resetActiveCompanyData());
+        this.store.dispatch(this.warehouseActions.resetWarehouseResponse());
+
+        // Update general service properties
+        this._generalService.companyUniqueName = companyUniqueName;
+        this._generalService.voucherApiVersion = company?.voucherVersion || 2;
+        this.store.dispatch(this.commonActions.setBranchConsolidated(false));
+
+        // Update store with company and branch details
+        this.store.dispatch(this.companyActions.setStateDetailsRequest({
+            lastState: '',
+            companyUniqueName: companyUniqueName,
+            currentBranchUniqueName: branchUniqueName || ''
+        }));
+
+        // Set organization details
+        const details = {
+            branchDetails: {
+                uniqueName: branchUniqueName || ''
+            }
+        };
+
+        if (branchUniqueName) {
+            this.setOrganizationDetails(OrganizationType.Branch, details);
+            this._generalService.currentBranchUniqueName = branchUniqueName;
+            // Trigger invoice settings for branch (same as switchBranch)
+            this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        } else {
+            this.setOrganizationDetails(OrganizationType.Company, details);
+        }
+
+        // Trigger company change (same as switchCompany)
+        this.store.dispatch(this.loginActions.ChangeCompany(companyUniqueName, false));
+
+        // Navigate to final state if branch is selected (same as switchBranch)
+        if (branchUniqueName) {
+            this.companyService.getStateDetails(companyUniqueName).pipe(take(1)).subscribe(response => {
+                if (response && response.body) {
+                    this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+                        this._generalService.finalNavigate(response.body.lastState);
+                    });
+                }
+            });
+        }
+
+        this._cdr.detectChanges();
+    }
+
+    /**
+     * Initializes UI settings and verifies cache integrity
+     *
+     * @private
+     * @memberof AppComponent
+     */
+    private initializeUiSettings(): void {
+        try {
+            const removedCount = this.uiSettingsService.verifyAndCleanCache();
+            if (removedCount > 0) {
+                console.log(`UI Settings: Cleaned ${removedCount} expired cache entries`);
+            }
+        } catch (error) {
+            console.error('Error initializing UI settings:', error);
+        }
+    }
+
+    /**
+     * Constructs the target login URL with optional returnUrl parameter
+     *
+     * @private
+     * @param {string} loginUrl - Base login URL
+     * @param {string} returnUrl - Optional return URL to append as query parameter
+     * @returns {string} Complete target URL with returnUrl if valid
+     * @memberof AppComponent
+     */
+    private buildLoginTargetUrl(loginUrl: string, returnUrl: string): string {
+        const isValidReturnUrl = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '';
+        return isValidReturnUrl ? `${loginUrl}?returnUrl=${encodeURIComponent(returnUrl)}` : loginUrl;
+    }
+
+    /**
+     * Sets the organization details for company or branch mode
+     *
+     * @private
+     * @param {OrganizationType} type - Type of the organization (Company or Branch)
+     * @param {any} branchDetails - Branch details of an organization
+     * @memberof AppComponent
+     */
+    private setOrganizationDetails(type: OrganizationType, branchDetails: any): void {
+        const organization = {
+            type, // Mode to which user is switched to
+            uniqueName: this._generalService.companyUniqueName,
+            details: branchDetails
+        };
+        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
     }
 }

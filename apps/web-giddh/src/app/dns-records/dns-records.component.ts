@@ -6,6 +6,9 @@ import { SettingsProfileService } from '../services/settings.profile.service';
 import { ToasterService } from '../services/toaster.service';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
+import { Configuration } from '../app.constant';
+import { environment } from '../../environments/environment.generated';
+import { map } from '../lodash-optimized';
 export interface GetDomainList {
     type: any;
     hostName: any;
@@ -19,13 +22,12 @@ const ELEMENT_DATA: GetDomainList[] = [];
 @Component({
     selector: 'dns-records',
     templateUrl: './dns-records.component.html',
-    styleUrls: ['./dns-records.component.scss']
+    styleUrls: ['./dns-records.component.scss'],
+    standalone: false
 })
 export class DnsRecordsComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* it will store image path */
-    public imgPath: string = '';
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if API is in progress */
@@ -42,7 +44,7 @@ export class DnsRecordsComponent implements OnInit {
     /* it will store company uniquename */
     public companyUniqueName: string = '';
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
 
 
     constructor(private route: ActivatedRoute,
@@ -61,9 +63,7 @@ export class DnsRecordsComponent implements OnInit {
    * @memberof DnsRecordsComponent
    */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-text-primary-logo.svg';
+        this.brandLogoUrl = this.serviceConfig.LOGOS.dark;
 
         combineLatest([
             this.route.queryParams.pipe(takeUntil(this.destroyed$)),
@@ -89,7 +89,7 @@ export class DnsRecordsComponent implements OnInit {
                 this.domain.name = response.body[0]?.domainName
                 if (response?.body?.length) {
                     this.dataSource = response.body?.map(portal => {
-                        return { type: 'CNAME', hostName: portal.domainName, value: PORTAL_URL, status: portal.verified, isCopiedHostName: false, isCopiedValue: false };
+                        return { type: 'CNAME', hostName: portal.domainName, value: 'environment.PORTAL_URL_PLACEHOLDER', status: portal.verified, isCopiedHostName: false, isCopiedValue: false };
                     });
                 }
             } else {

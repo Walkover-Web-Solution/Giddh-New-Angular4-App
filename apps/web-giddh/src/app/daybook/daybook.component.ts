@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep } from '../lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -31,7 +31,8 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
-    styleUrls: [`./daybook.component.scss`]
+    styleUrls: [`./daybook.component.scss`],
+    standalone:false
 })
 
 export class DaybookComponent implements OnInit, OnDestroy {
@@ -189,7 +190,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
@@ -222,7 +223,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
             this.daybookQueryRequest.from = from;
             this.daybookQueryRequest.to = to;
-            this.daybookQueryRequest.page = 0;
+            this.daybookQueryRequest.page = 1;
             this.getDaybook();
         }
     }
@@ -245,7 +246,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             }
             this.daybookQueryRequest.from = (reqObj.fromDate) ? reqObj.fromDate : this.todaySelected ? '' : this.daybookQueryRequest.from;
             this.daybookQueryRequest.to = (reqObj.toDate) ? reqObj.toDate : this.todaySelected ? '' : this.daybookQueryRequest.to;
-            this.daybookQueryRequest.page = 0;
+            this.daybookQueryRequest.page = 1;
             if (reqObj.action === 'search') {
                 this.modalDialogRef.close();
                 this.getDaybook(this.searchFilterData);
@@ -266,8 +267,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public getDaybook(withFilters: DayBookRequestModel = null): void {
         this.showLoader = true;
-        let daybookRequest = cloneDeep(withFilters);
-        if (withFilters) {
+        const daybookRequest = this.generalService.replaceSelectedAllOptions(withFilters, true);
+        if (daybookRequest) {
             delete daybookRequest.defaultVouchersLabel;
             delete daybookRequest.defaultTagsLabel;
             delete daybookRequest.defaultParticularsLabel;
@@ -284,7 +285,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     this.daybookData = response?.body;
                     this.checkIsStockEntryAvailable();
                 } else {
-                    this.daybookData = { entries: [], totalItems: 0, page: 0 };
+                    this.daybookData = { entries: [], totalItems: 0, page: 1 };
                 }
                 if (this.todaySelected) {
                     this.daybookQueryRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -298,7 +299,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
             } else {
                 if (response?.message) {
-                    this.daybookData = { entries: [], totalItems: 0, page: 0 };
+                    this.daybookData = { entries: [], totalItems: 0, page: 1};
                     this.toasterService.showSnackBar("error", response?.message);
                 } else {
                     this.daybookData = response?.body;
@@ -326,7 +327,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
@@ -343,7 +344,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         this.daybookQueryRequest.from = "";
                         this.daybookQueryRequest.to = "";
                     }
-                    this.daybookQueryRequest.page = 0;
+                    this.daybookQueryRequest.page = 1;
                     this.getDaybook();
                 });
             }
@@ -365,12 +366,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public exportDaybook() {
         this.daybookExportRequestType = 'post';
         this.modalDialogRef = this.dialog.open(this.exportDaybookModal, {
-            width: '630px'
-        });
+                    width: '630px',
+                });
     }
 
     public hideExportDaybookModal(response: any) {
         this.modalDialogRef.close();
+        const advanceFilter = this.generalService.replaceSelectedAllOptions(this.searchFilterData, true);
         if (response !== 'close') {
             if ((response.type === 'admin-detailed' || response.type === 'view-detailed') || (response.type === 'admin-condensed' || response.type === 'view-condensed')) {
                 this.daybookQueryRequest.type = response.type;
@@ -381,13 +383,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
                         exportBodyRequest.from = this.daybookQueryRequest.from;
                         exportBodyRequest.to = this.daybookQueryRequest.to;
+                        exportBodyRequest.type = this.daybookQueryRequest.type;
                         exportBodyRequest.exportType = "DAYBOOK";
                         exportBodyRequest.showVoucherNumber = response.showVoucherNumber;
                         exportBodyRequest.showEntryVoucher = response.showEntryVoucher;
                         exportBodyRequest.sort = response.order?.toUpperCase();
                         exportBodyRequest.fileType = "CSV";
-                        exportBodyRequest.tagNames = this.searchFilterData?.tags;
-                        exportBodyRequest.includeTag = this.searchFilterData?.includeTag;
+                        exportBodyRequest.ledgerAdvanceFilter = advanceFilter;
+                        exportBodyRequest.tagNames = advanceFilter?.tags;
+                        exportBodyRequest.includeTag = advanceFilter?.includeTag;
+                        exportBodyRequest.selectAllFields = advanceFilter?.selectAllFields;
                         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                             if (response?.status === 'success') {
                                 if (typeof response?.body === "string") {
@@ -402,7 +407,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                             }
                         });
                     } else {
-                        this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        this.daybookService.ExportDaybookPost(advanceFilter, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                             if (response?.status === 'success') {
                                 if (response?.body?.type === "message") {
                                     this.toasterService.showSnackBar("success", response?.body?.file);
@@ -483,6 +488,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             } else if (isInventory && !entry.isExpanded) {
                 this.checkIsStockEntryAvailable();
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -555,7 +561,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
             this.daybookQueryRequest.from = this.fromDate;
             this.daybookQueryRequest.to = this.toDate;
-            this.daybookQueryRequest.page = 0;
+            this.daybookQueryRequest.page = 1;
             this.getDaybook(this.searchFilterData);
         }
     }
@@ -587,10 +593,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.setTxnForEdit(txn?.uniqueName));
         this.lc.selectedTxnUniqueName = txn?.uniqueName;
         this.modalDialogRef = this.dialog.open(this.updateLedgerModal, {
-            width: '70%',
-            height: '650px',
-            disableClose: true
-        });
+                    width: '70%',
+                    disableClose: true
+                });
 
         this.modalDialogRef.afterOpened().subscribe(response => {
             this.updateLedgerComponent?.loadDefaultSearchSuggestions();

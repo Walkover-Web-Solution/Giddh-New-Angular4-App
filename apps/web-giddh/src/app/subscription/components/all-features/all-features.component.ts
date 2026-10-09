@@ -3,7 +3,8 @@ import { Component, Output, EventEmitter } from '@angular/core';
 @Component({
     selector: 'all-features',
     styleUrls: ['./all-features.component.scss'],
-    templateUrl: './all-features.component.html'
+    templateUrl: './all-features.component.html',
+    standalone: false
 })
 
 export class AllFeaturesComponent {

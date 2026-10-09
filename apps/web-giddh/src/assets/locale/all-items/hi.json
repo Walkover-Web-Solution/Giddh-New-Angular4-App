@@ -7,12 +7,12 @@
             "items": [
                 {
                     "label": "एजिंग रिपोर्ट",
-                    "link": "/pages/contact/aging-report",
+                    "link": "/pages/contact/sales",
                     "icon": "icon-aging-report-new",
                     "description": "पिछले दिनों और आगामी दिनों में देय राशि",
                     "additional": {
                         "queryParams": {
-                            "tab": "aging-report",
+                            "tab": "sales-aging-report",
                             "tabIndex": 1
                         }
                     }
@@ -21,7 +21,13 @@
                     "label": "ग्राहक",
                     "link": "/pages/contact/customer",
                     "icon": "icon-customer",
-                    "description": "ग्राहकों को प्रबंधित करें, एसएमएस/ईमेल के माध्यम से अनुस्मारक भेजें"
+                    "description": "ग्राहकों को प्रबंधित करें, एसएमएस/ईमेल के माध्यम से अनुस्मारक भेजें",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "customer",
+                            "tabIndex": 1
+                        }
+                    }
                 },
                 {
                     "label": "नया चालान",
@@ -287,6 +293,18 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "आवर्ती चालान",
+                    "link": "/pages/vouchers/preview/sales/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "चालान आवर्ती बनाएं",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -295,10 +313,28 @@
             "icon": "icon-vendor",
             "items": [
                 {
+                    "label": "एजिंग रिपोर्ट",
+                    "link": "/pages/contact/purchase",
+                    "icon": "icon-aging-report-new",
+                    "description": "पिछले दिनों और आगामी दिनों में देय राशि",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "purchase-aging-report",
+                            "tabIndex": 1
+                        }
+                    }
+                },
+                {
                     "label": "विक्रेता",
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
-                    "description": "बल्क एसएमएस/ईमेल भेजें, रिमाइंडर सेट करें"
+                    "description": "बल्क एसएमएस/ईमेल भेजें, रिमाइंडर सेट करें",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "vendor",
+                            "tabIndex": 1
+                        }
+                    }
                 },
                 {
                     "label": "नया बिल",
@@ -525,6 +561,18 @@
                             "voucherVersion": 2
                         }
                     }
+                },
+                {
+                    "label": "आवर्ती बिल",
+                    "link": "/pages/vouchers/preview/purchase/recurring",
+                    "icon": "icon-invoice-new",
+                    "description": "बिल आवर्ती बनाएं",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -581,7 +629,7 @@
                     "label": "ई-वे बिल",
                     "link": "/pages/invoice/ewaybill",
                     "icon": "icon-eway-bill-new",
-                    "description": "बाद में गिद्ध से सीधे उत्पन्न करें",
+                    "description": "बाद में [BRAND_NAME] से सीधे उत्पन्न करें",
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
@@ -734,6 +782,12 @@
             "label": "रिपोर्ट्स",
             "icon": "icon-reports",
             "items": [
+                {
+                    "label": "सभी रिपोर्ट्स",
+                    "link": "/pages/all-reports",
+                    "icon": "icon-reports",
+                    "description": "श्रेणियों में रिपोर्ट्स देखें"
+                },
                 {
                     "label": "संतुलन परीक्षण",
                     "link": "/pages/trial-balance-and-profit-loss",
@@ -907,7 +961,7 @@
                     "description": "कैश फ्लो रिपोर्ट डाउनलोड करें"
                 },
                 {
-                    "label": "जर्नल प्रविष्टियां *",
+                    "label": "जर्नल प्रविष्टियां",
                     "link": "/pages/journal-voucher",
                     "icon": "icon-journal-voucher-new",
                     "description": "जर्नल वाउचर की प्रविष्टियाँ"
@@ -965,20 +1019,38 @@
             ]
         },
         {
-            "label": "AI",
-            "icon": "icon-audit-log",
+            "label": "स्वचालन",
+            "icon": "icon-manage-group-acc",
             "items": [
                 {
-                    "label": "OCR for Income",
+                    "label": "Scan2Invoice",
                     "link": "/pages/ai-ocr/income",
                     "icon": "icon-audit-log",
                     "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
                 },
                 {
-                    "label": "OCR for Expense",
+                    "label": "Scan2Bill",
                     "link": "/pages/ai-ocr/expense",
                     "icon": "icon-audit-log",
-                "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
+                    "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
+                },
+                {
+                    "label": "ईमेल-टू-बैंक सिंक",
+                    "link": "/pages/email-forwarding",
+                    "icon": "icon-mail",
+                    "description": "बैंक स्टेटमेंट ईमेल से ऑटो-वाउचर बनाएं।"
+                },
+                {
+                    "label": "बजट पूर्वानुमान",
+                    "link": "/pages/budget-forecasting",
+                    "icon": "icon-audit-log",
+                    "description": "एआई-संचालित नकदी प्रवाह पूर्वानुमान और भविष्यवाणियां"
+                },
+                {
+                    "label": "बैंक समाधान",
+                    "link": "/pages/bank-reconciliation",
+                    "icon": "icon-E-way-bill",
+                    "description": "अपनी पुस्तकों को बैंक स्टेटमेंट से मिलाएं"
                 }
             ]
         },

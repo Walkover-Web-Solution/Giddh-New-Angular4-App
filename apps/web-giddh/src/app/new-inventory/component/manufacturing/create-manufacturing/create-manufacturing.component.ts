@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
-import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { isEqual } from '../../../../lodash-optimized';
+import { cloneDeep } from '../../../../lodash-optimized';
 import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -20,14 +20,15 @@ import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunct
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import * as dayjs from 'dayjs';
-import { ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { ReplaySubject, of } from 'rxjs';
+import { catchError, take, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'create-manufacturing',
     templateUrl: './create-manufacturing.component.html',
     styleUrls: ['./create-manufacturing.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 export class CreateManufacturingComponent implements OnInit, OnDestroy {
     /**  This will use for universal date */
@@ -161,7 +162,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
             setTimeout(() => {
                 this.changeDetectionRef.detectChanges();
-                console.log("changes")
             }, 2000);
             if (!this.manufactureUniqueName) {
                 this.increaseExpenseAmount = this.manufacturingObject.manufacturingDetails[0].increaseAssetValue;
@@ -247,7 +247,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
         this.preventStocksApiCall = true;
 
-        if (q) {
+        if (typeof q === 'string') {
             stockObject.stocksQ = q;
         } else if (stockObject.stocksQ) {
             q = stockObject.stocksQ;
@@ -302,7 +302,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
 
         this.preventByProductStocksApiCall = true;
-        if (q) {
+        if (typeof q === 'string') {
             stockObject.stocksQ = q;
         } else if (stockObject.stocksQ) {
             q = stockObject.stocksQ;
@@ -362,38 +362,44 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
 
         object.variants = [];
+        this.changeDetectionRef.detectChanges();
         if (!this.manufacturingObject.manufacturingDetails[0].otherExpenses.length) {
             this.manufacturingObject.manufacturingDetails[0].otherExpenses = [];
             this.initializeOtherExpenseObj();
         }
-        this.ledgerService.loadStockVariants(object.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(variants => {
-            if (variants?.length) {
-                variants?.forEach(variant => {
-                    object.variants.push({ label: variant?.name, value: variant?.uniqueName });
-                });
+        this.ledgerService.loadStockVariants(object.stockUniqueName).pipe(
+            catchError(() => of([])),
+            takeUntil(this.destroyed$)
+        ).subscribe((variants) => {
+            object.variants = Array.isArray(variants)
+                ? variants.map((variant) => ({ label: variant?.name, value: variant?.uniqueName }))
+                : [];
 
-                if (object.variants?.length === 1) {
-                    if (!isEdit) {
-                        object.variant = {
-                            name: object.variants[0].label,
-                            uniqueName: object.variants[0].value
-                        };
-
-                        if (loadRecipe) {
-                            this.getVariantRecipe();
-                        } else if (isRawStock) {
-                            this.getRateForStock(object, index);
-                        }
-                    }
+            if (object.variants.length && !isEdit) {
+                if (object.variants.length === 1) {
+                    object.variant = {
+                        name: object.variants[0].label,
+                        uniqueName: object.variants[0].value
+                    };
                 } else {
-                    if (!isEdit) {
-                        object.variant = {
-                            name: "",
-                            uniqueName: ""
-                        };
-                    }
+                    object.variant = {
+                        name: "",
+                        uniqueName: ""
+                    };
                 }
+
+                if (loadRecipe) {
+                    this.getVariantRecipe();
+                } else if (isRawStock) {
+                    this.getRateForStock(object, index);
+                }
+            } else if (!object.variants.length && !isEdit) {
+                object.variant = {
+                    name: "",
+                    uniqueName: ""
+                };
             }
+
             this.changeDetectionRef.detectChanges();
         });
     }
@@ -718,13 +724,13 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         if (this.recipeExists) {
             if (!isEqual(this.existingRecipe, recipeObject)) {
                 let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '585px',
-                    data: {
+                            width: '585px',
+                            data: {
                         title: this.commonLocaleData?.app_confirmation,
-                        body: this.localeData?.confirm_update_recipe,
-                        ok: this.commonLocaleData?.app_yes,
-                        cancel: this.commonLocaleData?.app_no
-                    }
+                            body: this.localeData?.confirm_update_recipe,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no
+                        }
                 });
 
                 dialogRef.afterClosed().subscribe(response => {
@@ -735,13 +741,13 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
         } else {
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                width: '585px',
-                data: {
+                        width: '585px',
+                        data: {
                     title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.confirm_save_recipe,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                        body: this.localeData?.confirm_save_recipe,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    }
             });
 
             dialogRef.afterClosed().subscribe(response => {
@@ -1016,7 +1022,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         });
 
         this.manufacturingObject.manufacturingDetails[0].otherExpenses?.forEach(expense => {
-            expense.transactions.forEach(res => {
+            (Array.isArray(expense.transactions) ? expense.transactions : []).forEach(res => {
                 expenseAmount += Number(res.amount) || 0;
             });
         });
@@ -1054,7 +1060,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             stocksPageNumber: prevDetails?.stocksPageNumber,
             stocksTotalPages: prevDetails?.stocksTotalPages
         };
-        
+
         this.manufacturingObject = new CreateManufacturing(preserveFields);
         this.initializeOtherExpenseObj();
         this.manufacturingObject.manufacturingDetails[0].date = cloneDeep(this.universalDate);
@@ -1168,7 +1174,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             isValidForm = false;
         }
         if (this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length) {
-            this.manufacturingObject.manufacturingDetails[0].linkedStocks.forEach(linkedStock => {
+            (Array.isArray(this.manufacturingObject.manufacturingDetails[0].linkedStocks) ? this.manufacturingObject.manufacturingDetails[0].linkedStocks : []).forEach(linkedStock => {
                 if (!linkedStock?.selectedStock?.value) {
                     linkedStock.stockNameError = true;
                     isValidForm = false;
@@ -1490,13 +1496,21 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @memberof CreateManufacturingComponent
      */
     public loadStockVariantsByStockUniqueName(stockUniqueName: string): void {
-        this.ledgerService.loadStockVariants(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(variants => {
-            this.stockVariants = [];
-            if (variants?.length) {
-                variants?.forEach(variant => {
-                    this.stockVariants.push({ label: variant?.name, value: variant?.uniqueName });
-                });
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            catchError(() => of([])),
+            takeUntil(this.destroyed$)
+        ).subscribe((variants) => {
+            this.stockVariants = Array.isArray(variants)
+                ? variants.map((variant) => ({ label: variant?.name, value: variant?.uniqueName }))
+                : [];
+
+            if (!this.stockVariants.length) {
+                this.manufacturingObject.manufacturingDetails[0].variant = {
+                    name: "",
+                    uniqueName: ""
+                };
             }
+
             this.changeDetectionRef.detectChanges();
         });
     }
@@ -1552,13 +1566,13 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         if (this.recipeExists) {
             if (!isEqual(this.existingRecipe, recipeObject)) {
                 let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '585px',
-                    data: {
+                            width: '585px',
+                            data: {
                         title: this.commonLocaleData?.app_confirmation,
-                        body: this.localeData?.confirm_update_recipe,
-                        ok: this.commonLocaleData?.app_yes,
-                        cancel: this.commonLocaleData?.app_no
-                    }
+                            body: this.localeData?.confirm_update_recipe,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no
+                        }
                 });
 
                 dialogRef.afterClosed().subscribe(response => {
@@ -1573,13 +1587,13 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
         } else {
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                width: '585px',
-                data: {
+                        width: '585px',
+                        data: {
                     title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.confirm_save_recipe,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                        body: this.localeData?.confirm_save_recipe,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    }
             });
 
             dialogRef.afterClosed().subscribe(response => {
@@ -1708,7 +1722,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public onLiabilitiesAssetAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.liabilitiesAssetAccountsSearchResultsPaginationData.query = query;
         if (!this.preventLiabilitiesAssetDefaultScrollApiCall &&
-            (query || (this.defaultLiabilitiesAssetAccountSuggestions && this.defaultLiabilitiesAssetAccountSuggestions.length === 0) || successCallback)) {
+            (typeof query === 'string' || (this.defaultLiabilitiesAssetAccountSuggestions && this.defaultLiabilitiesAssetAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
@@ -1766,7 +1780,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public onExpenseAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.expenseAccountsSearchResultsPaginationData.query = query;
         if (!this.preventExpenseDefaultScrollApiCall &&
-            (query || (this.defaultExpenseAccountSuggestions && this.defaultExpenseAccountSuggestions.length === 0) || successCallback)) {
+            (typeof query === 'string' || (this.defaultExpenseAccountSuggestions && this.defaultExpenseAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),

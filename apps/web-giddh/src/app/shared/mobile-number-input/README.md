@@ -558,11 +558,11 @@ export class UserRegistrationComponent {
         </app-mobile-number-input>
         
         <div class="contact-actions">
-          <button mat-button (click)="saveContact()" [disabled]="!isValidContact()">
+          <button matButton="outlined" (click)="saveContact()" [disabled]="!isValidContact()">
             Save Contact
           </button>
-          <button mat-button (click)="clearContact()">Clear</button>
-          <button mat-button (click)="formatNumber()">Format</button>
+          <button matButton="outlined" (click)="clearContact()">Clear</button>
+          <button matButton="outlined" (click)="formatNumber()">Format</button>
         </div>
       </div>
       

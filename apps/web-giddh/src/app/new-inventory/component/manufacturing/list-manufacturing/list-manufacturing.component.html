@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory/manufacturing'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -31,16 +31,16 @@
                                     />
                                 </div>
                             </div>
-                            <div class="list-header" *ngIf="(isCompany || isConsolidatedBranch)">
+                            <div class="list-header" *ngIf="isCompany || isConsolidatedBranch">
                                 <reactive-dropdown-field
                                     class="max-width-230"
                                     [name]="'branch'"
                                     [placeholder]="commonLocaleData?.app_select_branch"
                                     [options]="currentCompanyBranches"
                                     (selectedOption)="handleBranchChange($event)"
+                                    [(ngModel)]="currentBranch.uniqueName"
                                     [labelValue]="selectedBranchName"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="list-header" *ngIf="warehouses?.length > 1">
                                 <reactive-dropdown-field
@@ -49,22 +49,15 @@
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
                                     [options]="warehouses"
                                     [labelValue]="selectedWarehouseName"
+                                    [(ngModel)]="manufacturingSearchRequest.warehouseUniqueName"
                                     (selectedOption)="
-                                        selectedWarehouseName = $event.label;
-                                        manufacturingSearchRequest.warehouseUniqueName = $event.value
+                                        selectedWarehouseName = $event.label; manufacturingSearchRequest.warehouseUniqueName = $event.value
                                     "
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
 
                             <div>
-                                <button
-                                    type="button"
-                                    class="mr-0 search-btn"
-                                    mat-raised-button
-                                    color="primary"
-                                    (click)="getReport()"
-                                >
+                                <button type="button" class="mr-0 search-btn" matButton="filled" (click)="getReport()">
                                     {{ commonLocaleData?.app_search }}
                                 </button>
                             </div>
@@ -73,7 +66,7 @@
                                 <button
                                     type="button"
                                     class="mr-0"
-                                    mat-stroked-button
+                                    matButton="outlined"
                                     (click)="initializeSearchReqObj()"
                                     *ngIf="showClearButton"
                                 >
@@ -82,12 +75,7 @@
                             </div>
 
                             <div class="ml-auto">
-                                <button
-                                    type="button"
-                                    (click)="openAdvanceFilterDialog()"
-                                    mat-raised-button
-                                    color="primary"
-                                >
+                                <button type="button" (click)="openAdvanceFilterDialog()" matButton="filled">
                                     {{ commonLocaleData?.app_filter }}
                                     <span class="icon-advance-filter"></span>
                                 </button>
@@ -97,23 +85,33 @@
                 </form>
             </div>
         </div>
+
+        @if (isCompany || isConsolidatedBranch) {
+            <go-to-branch
+                [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
+                [message]="localeData?.info_message"
+                [buttonLabel]="commonLocaleData?.switch_to_branch"
+                [cssClass]="'mb-3 border-radius-8'"
+            ></go-to-branch>
+        }
+
         <!-- search form end -->
         <section *ngIf="isReportLoading" class="clear-both mt-custom-100 col-md-12">
             <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </section>
-        <div class="no-data mt-custom-100 col-12 col-sm-12" *ngIf="!isReportLoading && dataSource?.length === 0">
-            <no-data [secondaryMessageClass]="'p-0'"></no-data>
+        <div class="col-12 col-sm-12" *ngIf="!isReportLoading && dataSource?.length === 0">
+            <no-data [secondaryMessageClass]="'p-0'" [primaryMessageClass]="'no-data mt-custom-100'"></no-data>
         </div>
         <section
             class="list-table-wrapper table-responsive mobile-card-wrapper table-header-sticky overflow-visible"
             *ngIf="!isReportLoading && dataSource?.length > 0"
         >
             <table mat-table [dataSource]="dataSource" class="w-100 manufacturing-table on-mobile-view">
-                <ng-container matColumnDef="date">
+                <div matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_date }}</th>
-                    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-                </ng-container>
-                <ng-container matColumnDef="voucher_no">
+                    <td mat-cell *matCellDef="let element">{{ element.date | giddhDate }}</td>
+                </div>
+                <div matColumnDef="voucher_no">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_voucher_no }}</th>
                     <td
                         mat-cell
@@ -123,24 +121,24 @@
                     >
                         {{ element.voucher_no }}
                     </td>
-                </ng-container>
-                <ng-container matColumnDef="stock">
+                </div>
+                <div matColumnDef="stock">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.finished_stock }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.stock }}</td>
-                </ng-container>
-                <ng-container matColumnDef="finished_variant">
+                </div>
+                <div matColumnDef="finished_variant">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.finished_variant }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.variant }}</td>
-                </ng-container>
-                <ng-container matColumnDef="qty_outwards">
+                </div>
+                <div matColumnDef="qty_outwards">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.qty_outwards }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.qty_outwards }}</td>
-                </ng-container>
-                <ng-container matColumnDef="qty_outwards_unit">
+                </div>
+                <div matColumnDef="qty_outwards_unit">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_unit }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.qty_outwards_unit }}</td>
-                </ng-container>
-                <ng-container matColumnDef="raw_stock">
+                </div>
+                <div matColumnDef="raw_stock">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.raw_stock }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
@@ -149,8 +147,8 @@
                             </div>
                         </div>
                     </td>
-                </ng-container>
-                <ng-container matColumnDef="raw_variant">
+                </div>
+                <div matColumnDef="raw_variant">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.raw_variant }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
@@ -159,8 +157,8 @@
                             </div>
                         </div>
                     </td>
-                </ng-container>
-                <ng-container matColumnDef="qty_inwards">
+                </div>
+                <div matColumnDef="qty_inwards">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.qty_inwards }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
@@ -169,8 +167,8 @@
                             </div>
                         </div>
                     </td>
-                </ng-container>
-                <ng-container matColumnDef="qty_inwards_unit">
+                </div>
+                <div matColumnDef="qty_inwards_unit">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_unit }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
@@ -179,16 +177,16 @@
                             </div>
                         </div>
                     </td>
-                </ng-container>
-                <ng-container matColumnDef="warehouse">
+                </div>
+                <div matColumnDef="warehouse">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_warehouse }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.warehouse }}</td>
-                </ng-container>
+                </div>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
             <mat-paginator
-                *ngIf="(totalItems > pageSizeOptions[0]) && !isReportLoading"
+                *ngIf="totalItems > pageSizeOptions[0] && !isReportLoading"
                 [length]="totalItems"
                 [pageSize]="manufacturingSearchRequest.count"
                 [pageIndex]="currentPage"
@@ -205,11 +203,8 @@
 
     <ng-template #advanceFilterDialog>
         <div class="advance-search-dialog">
-            <div class="dialog-header">
+            <div cdkFocusInitial class="dialog-header">
                 <span>{{ commonLocaleData?.app_advanced_filter }}</span>
-                <button mat-icon-button aria-label="close" mat-dialog-close>
-                    <i class="icon-cross"></i>
-                </button>
             </div>
             <mat-dialog-content class="dialog-body">
                 <div class="form-fields clear-both">
@@ -223,11 +218,9 @@
                                     [options]="inventoryTypeFilters"
                                     [labelValue]="selectedInventoryTypeName"
                                     (selectedOption)="
-                                        manufacturingSearchRequest.inventoryType = $event.value;
-                                        selectedInventoryTypeName = $event.label
+                                        manufacturingSearchRequest.inventoryType = $event.value; selectedInventoryTypeName = $event.label
                                     "
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -245,8 +238,7 @@
                                             getVariants()
                                         "
                                         [labelValue]="selectedStockName"
-                                    >
-                                    </reactive-dropdown-field>
+                                    ></reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>
@@ -260,12 +252,10 @@
                                         [label]="commonLocaleData?.app_variant"
                                         [options]="variantList"
                                         (selectedOption)="
-                                            selectedVariantName = $event.label;
-                                            manufacturingSearchRequest.productVariant = $event.value
+                                            selectedVariantName = $event.label; manufacturingSearchRequest.productVariant = $event.value
                                         "
                                         [labelValue]="selectedVariantName"
-                                    >
-                                    </reactive-dropdown-field>
+                                    ></reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>
@@ -278,11 +268,9 @@
                                     [options]="searchByFilters"
                                     [labelValue]="selectedOperationName"
                                     (selectedOption)="
-                                        manufacturingSearchRequest.searchBy = $event.value;
-                                        selectedOperationName = $event.label
+                                        manufacturingSearchRequest.searchBy = $event.value; selectedOperationName = $event.label
                                     "
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -294,11 +282,9 @@
                                     [options]="operatorFilters"
                                     [labelValue]="selectedFilterByName"
                                     (selectedOption)="
-                                        manufacturingSearchRequest.searchOperation = $event.value;
-                                        selectedFilterByName = $event.label
+                                        manufacturingSearchRequest.searchOperation = $event.value; selectedFilterByName = $event.label
                                     "
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -314,24 +300,13 @@
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-end mt-4">
-                            <div class="mr-2">
-                                <button
-                                    type="button"
-                                    class="mr-0"
-                                    mat-raised-button
-                                    color="primary"
-                                    mat-dialog-close
-                                    (click)="getReport()"
-                                >
-                                    {{ commonLocaleData?.app_search }}
-                                </button>
-                            </div>
-                            <div class="ml-2">
-                                <button type="button" mat-dialog-close class="mr-0" mat-stroked-button>
-                                    {{ commonLocaleData?.app_cancel }}
-                                </button>
-                            </div>
+                        <div class="d-flex justify-content-end column-gap-1 mt-4">
+                            <button type="button" matButton="filled" mat-dialog-close (click)="getReport()">
+                                {{ commonLocaleData?.app_search }}
+                            </button>
+                            <button type="button" mat-dialog-close matButton="outlined">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -359,8 +334,7 @@
                 (closeCalender)="toggleGiddhDatepicker(false)"
                 [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false"
-            >
-        </app-datepicker-wrapper>
+            ></app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
-</ng-container>
+</div>

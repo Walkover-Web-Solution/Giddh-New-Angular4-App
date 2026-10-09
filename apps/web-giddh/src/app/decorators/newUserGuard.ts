@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class NewUserAuthGuard  {
     private user: VerifyEmailResponseModel;
 

@@ -8,7 +8,9 @@ import { catchError, map } from 'rxjs/operators';
 import { BULK_VOUCHER_EXPORT_API } from './apiurls/bulkvoucherexport.api';
 import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class BulkVoucherExportService {
 
     private companyUniqueName: string;

@@ -18,7 +18,8 @@ import { MatMenuModule } from "@angular/material/menu";
         MatInputModule,
         MatCheckboxModule,
         FormFieldsModule,
-        MatMenuModule
+        MatMenuModule,
+        DecimalDigitsModule
     ],
     exports: [LedgerDiscountComponent]
 })

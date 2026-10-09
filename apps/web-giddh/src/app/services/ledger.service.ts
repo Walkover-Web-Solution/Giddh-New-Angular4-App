@@ -12,11 +12,13 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
-import { cloneDeep } from '../lodash-optimized';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpBackend, HttpClient } from '@angular/common/http';
+import { cloneDeep, concat, forEach, get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class LedgerService {
     private companyUniqueName: string;
     private httpClient: HttpClient
@@ -80,11 +82,13 @@ export class LedgerService {
             ?.replace(':sort', encodeURIComponent(request.sort))
             ?.replace(':to', encodeURIComponent(request.to))
             ?.replace(':reversePage', request.reversePage?.toString())
-            ?.replace(':isTView', request.isTView?.toString() || '')
             ?.replace(':accountCurrency', request.accountCurrency?.toString());
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
+        }
+        if (request.isTView) {
+            url = url.concat(`&isTView=${request.isTView}`);
         }
         // tslint:disable-next-line:max-line-length
         const options = request.paginationToken ? { headers: { 'token': request.paginationToken } } : null;
@@ -161,7 +165,7 @@ export class LedgerService {
         const clonedRequest = cloneDeep(model);
         // Delete keys not required by API
         const keysToDelete = ['discountResources', 'warning', 'otherTaxModal', 'otherTaxesSum', 'refreshLedger', 'actualAmount', 'actualRate', 'unitRates', 'entryVoucherTotals', 'isOtherTaxesApplicable', 'tdsTcsTaxesSum'];
-        keysToDelete.forEach(key => delete model[key]);
+        (Array.isArray(keysToDelete) ? keysToDelete : []).forEach(key => delete model[key]);
         let url = this.config.apiUrl + LEDGER_API.UNIVERSAL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))?.replace(':entryUniqueName', entryUniqueName);
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);

@@ -1,13 +1,8 @@
-<ng-container
-    appTranslate
-    [file]="'accounts'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'accounts'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <section class="aside-dialog-wrapper">
-        <div class="dialog-header">
+        <div cdkFocusInitial class="dialog-header">
             <span>{{ localeData?.bulk_add }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
+            <button matIconButton aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -21,7 +16,9 @@
                                 {{ localeData?.foreign_opening_balance }}
                             </p>
                             <p class="font-weight-semibold text-left">{{ localeData?.opening_balance }}</p>
-                            <p class="font-weight-semibold text-right justify-self-end">{{ localeData?.opening_balance_type }}</p>
+                            <p class="font-weight-semibold text-right justify-self-end">
+                                {{ localeData?.opening_balance_type }}
+                            </p>
                         </div>
                         <ng-container
                             *ngFor="let item of bulkAddAccountForm.get('customFields')['controls']; let bulkIndex = index"
@@ -36,7 +33,7 @@
                                         type="number"
                                         min="0"
                                         class="form-control text-right mr-1 m-auto"
-                                        digitsOnlyDirective
+                                        decimalDigitsDirective
                                         formControlName="foreignOpeningBalance"
                                         [placeholder]="'0.00'"
                                     />
@@ -46,7 +43,7 @@
                                         type="number"
                                         min="0"
                                         class="form-control text-right mr-1"
-                                        digitsOnlyDirective
+                                        decimalDigitsDirective
                                         formControlName="openingBalance"
                                         [placeholder]="'0.00'"
                                     />
@@ -58,11 +55,9 @@
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 item.get('openingBalanceType')?.value === 'DEBIT' &&
-                                                (item.get('openingBalance')?.value > 0 ||
-                                                    item.get('foreignOpeningBalance')?.value > 0),
+                                                (item.get('openingBalance')?.value > 0 || item.get('foreignOpeningBalance')?.value > 0),
                                             'cursor-pointer':
-                                                item.get('openingBalance')?.value > 0 ||
-                                                item.get('foreignOpeningBalance')?.value > 0
+                                                item.get('openingBalance')?.value > 0 || item.get('foreignOpeningBalance')?.value > 0,
                                         }"
                                     >
                                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
@@ -73,11 +68,9 @@
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 item.get('openingBalanceType')?.value === 'CREDIT' &&
-                                                (item.get('openingBalance')?.value > 0 ||
-                                                    item.get('foreignOpeningBalance')?.value > 0),
+                                                (item.get('openingBalance')?.value > 0 || item.get('foreignOpeningBalance')?.value > 0),
                                             'cursor-pointer':
-                                                item.get('openingBalance')?.value > 0 ||
-                                                item.get('foreignOpeningBalance')?.value > 0
+                                                item.get('openingBalance')?.value > 0 || item.get('foreignOpeningBalance')?.value > 0,
                                         }"
                                     >
                                         {{ commonLocaleData?.app_cr?.toUpperCase() }}
@@ -88,8 +81,7 @@
                     </ng-container>
                     <button
                         class="float-right align-self-end mt-2"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         aria-label="save"
                         type="submit"
                         (click)="saveOpeningBalance()"
@@ -99,5 +91,5 @@
                 </form>
             </div>
         </mat-dialog-content>
-</section>
-</ng-container>
+    </section>
+</div>

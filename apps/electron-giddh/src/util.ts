@@ -1,8 +1,13 @@
 // tslint:disable-next-line:no-var-requires
 const _isDev = require('electron-is-dev');
+import { app } from 'electron';
 
 export function isDev() {
     return _isDev;
+}
+
+export function isPackaged() {
+    return app.isPackaged;
 }
 
 let _log: (...args: any[]) => void;

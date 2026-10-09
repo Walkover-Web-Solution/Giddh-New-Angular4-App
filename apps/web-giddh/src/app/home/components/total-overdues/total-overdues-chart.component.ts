@@ -7,20 +7,21 @@ import { AppState } from '../../../store/roots';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
-import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
-import { cloneDeep } from '../../../lodash-optimized';
 import { ReceiptService } from '../../../services/receipt.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
 import { ServiceConfig } from '../../../services/service.config';
+import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
+import { cloneDeep } from '../../../lodash-optimized';
 Chart.register(...registerables);
 
 @Component({
     selector: 'total-overdues-chart',
     templateUrl: 'total-overdues-chart.component.html',
     styleUrls: ['../../home.component.scss', './total-overdues-chart.component.scss'],
+    standalone:false
 })
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
@@ -73,7 +74,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     /** Chart object */
     public chart: any;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private receiptService: ReceiptService) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhNumberFormatPipe, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private receiptService: ReceiptService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -86,7 +87,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         // img path
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -128,6 +129,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        if (this.chart) {
+            this.chart.destroy();
+            this.chart = null;
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

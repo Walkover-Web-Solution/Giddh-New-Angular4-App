@@ -9,8 +9,6 @@ import { AsideCustomStockComponent } from '../inventory/components/aside-custom-
 import { AsideInventoryComponent } from '../inventory/components/aside-inventory.components/aside-inventory.components';
 import { AsidePaneComponent } from '../inventory/components/aside-pane/aside-pane.components';
 import { AsideTransferPaneComponent } from '../inventory/components/aside-transfer-pane/aside-transfer-pane.component';
-import { JobworkComponent } from '../inventory/jobwork/jobwork.component';
-import { JobworkWelcomeComponent } from '../inventory/jobwork/welcome-jobwork/welcome-jobwork.component';
 import { ExceptionLogService } from '../services/exception-log.service';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
@@ -19,7 +17,6 @@ import { GiddhRoundOffPipeModule } from '../shared/helpers/pipes/round-off/round
 import { SharedModule } from '../shared/shared.module';
 import { ConfirmModalModule } from '../theme';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { InventoryAddGroupComponent } from './components/add-group-components/inventory.addgroup.component';
 import { InventoryAddStockModule } from './components/add-stock-components/inventory.addstock.module';
 import { InventoryCustomStockComponent } from './components/custom-stock-components/inventory.customstock.component';
@@ -40,8 +37,6 @@ import { InventoryWelcomeComponent } from './components/welcome-inventory/welcom
 import { DateFormatterPipe } from './dateFormatter.pipe';
 import { InventoryComponent } from './inventory.component';
 import { InventoryRoutingModule } from './inventory.routing.module';
-import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
-import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -53,7 +48,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
     declarations: [
@@ -71,8 +69,6 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         InventoryUpdateGroupComponent,
         InventoryGroupStockReportComponent,
         InventoryWelcomeComponent,
-        JobworkComponent,
-        JobworkWelcomeComponent,
         AsidePaneComponent,
         AsideTransferPaneComponent,
         AsideBranchTransferPaneComponent,
@@ -80,8 +76,6 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         TransferNoteComponent,
         InwardNoteComponent,
         OutwardNoteComponent,
-        JobworkSidebarComponent,
-        ManufacturingComponent,
         NewBranchTransferAddComponent,
         NewBranchTransferListComponent,
         DateFormatterPipe
@@ -100,8 +94,6 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         InventoryUpdateGroupComponent,
         InventoryGroupStockReportComponent,
         InventoryWelcomeComponent,
-        JobworkComponent,
-        JobworkWelcomeComponent,
         AsidePaneComponent,
         AsideTransferPaneComponent,
         AsideBranchTransferPaneComponent,
@@ -109,8 +101,6 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         TransferNoteComponent,
         InwardNoteComponent,
         OutwardNoteComponent,
-        JobworkSidebarComponent,
-        ManufacturingComponent,
         NewBranchTransferAddComponent,
         NewBranchTransferListComponent,
         InventoryAddStockModule
@@ -122,11 +112,11 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         SharedModule,
         Daterangepicker,
         TextCaseChangeModule,
-        
-        CurrencyModule,
+        GiddhNumberFormatModule,
         MatTabsModule,
         ReactiveFormsModule,
         DigitsOnlyModule,
+        DecimalDigitsModule,
         NgxMaskModule.forRoot(),
         GiddhRoundOffPipeModule,
         InventoryAddStockModule,
@@ -145,7 +135,8 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         MatTableModule,
         MatCheckboxModule,
         MatRadioModule,
-        MatExpansionModule
+        MatExpansionModule,
+        GiddhDatePipe
     ]
 })
 export class InventoryModule { }

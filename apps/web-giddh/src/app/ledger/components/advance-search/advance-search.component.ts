@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatMenuTrigger } from '@angular/material/menu';
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, filter, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ILedgerAdvanceSearchRequest } from '../../../models/api-models/Ledger';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/advance-search-request';
 import { GeneralService } from '../../../services/general.service';
@@ -24,7 +24,8 @@ import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/
     templateUrl: './advance-search.component.html',
     styleUrls: ['./advance-search.component.scss'],
     providers: [SalesPersonComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
@@ -131,10 +132,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public advanceSearchRequestClone: AdvanceSearchRequest;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    /** This will use for instance of sales person Dropdown */
-    public salesPersonDropdown: FormControl = new FormControl();
-    /** Filtered Sales Person List */
-    public filteredSalesPersonList: IOption[] = [];
 
     constructor(
         private groupService: GroupService,
@@ -155,24 +152,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.loadDefaultStocksSuggestions();
         this.loadDefaultGroupsSuggestions();
         this.getSalesPersonList();
-
-        this.salesPersonList$.pipe(filter(Boolean), take(1)).subscribe(res => {
-            this.filteredSalesPersonList = res as IOption[];
-        });
-
-        this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
-            takeUntil(this.destroyed$)).subscribe((search: string) => {
-                if (!search) {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res as IOption[];
-                    });
-                } else {
-                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                        this.filteredSalesPersonList = res?.filter((salesPerson: IOption) => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
-                    });
-                }
-                this.changeDetectionRef.detectChanges();
-            });
     }
 
     /**
@@ -372,47 +351,11 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public prepareRequest() {
-        let dataToSend = _.cloneDeep(this.advanceSearchForm?.value);
+        let dataToSend = cloneDeep(this.advanceSearchForm?.value);
         if (dataToSend.dateOnCheque) {
             dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
         }
         return dataToSend;
-    }
-
-    /**
-     * onDDElementSelect
-     */
-    public onDDElementSelect(type: string, data: any[]) {
-        let values = [];
-        if (data && data.length > 0) {
-            data.forEach(element => {
-                values.push(element?.value);
-            });
-        }
-        switch (type) {
-            case 'particulars':
-                this.advanceSearchForm.get('particulars')?.patchValue(values);
-                break;
-            case 'accountUniqueNames':
-                this.advanceSearchForm.get('accountUniqueNames')?.patchValue(values);
-                break;
-            case 'vouchers':
-                this.advanceSearchForm.get('vouchers')?.patchValue(values);
-                break;
-            case 'inventory':
-                this.advanceSearchForm.get('inventory.inventories')?.patchValue(values);
-                break;
-            case 'groupUniqueNames':
-                this.advanceSearchForm.get('groupUniqueNames')?.patchValue(values);
-                break;
-        }
-    }
-
-    /**
-     * onDDClear
-     */
-    public onDDClear(type: string) {
-        this.onDDElementSelect(type, []);
     }
 
     /**
@@ -713,13 +656,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
-        if (this.stocksSearchResultsPaginationData.query === query && this.stocksSearchResultsPaginationData.page === page) {
+        if (query !== "" && this.stocksSearchResultsPaginationData.query === query && this.stocksSearchResultsPaginationData.page === page) {
             return;
         }
         this.stocksSearchResultsPaginationData.query = query;
         this.stocksSearchResultsPaginationData.page = page;
         if (!this.preventDefaultStockScrollApiCall &&
-            (query || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
+            (typeof query === 'string' || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
@@ -751,6 +694,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     if (successCallback) {
                         successCallback(data.body.results);
                     }
+                    this.changeDetectionRef.detectChanges();
                 } else {
                     this.isDefaultStocksLoading = false;
                 }

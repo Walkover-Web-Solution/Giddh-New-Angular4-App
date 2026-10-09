@@ -2,37 +2,18 @@ import { LOCALE_ID, NgModule } from "@angular/core";
 import localeEn from '@angular/common/locales/en-GB';
 import localeHi from '@angular/common/locales/hi';
 import localeMr from '@angular/common/locales/mr';
-import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, NativeDateAdapter } from "@angular/material/core";
-import { formatDate, registerLocaleData } from "@angular/common";
+import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS } from "@angular/material/core";
+import { registerLocaleData } from "@angular/common";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { GiddhDaterangepickerComponent } from "./giddh-daterangepicker.component";
+import { GIDDH_DATEPICKER_FORMAT, PickDateAdapter } from "../giddh-date-adapter/giddh-date-adapter";
 
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
 
-export const GIDDH_DATEPICKER_FORMAT = {
-    parse: { dateInput: 'dd-MM-yyyy' },
-    display: {
-        dateInput: 'input'
-    }
-};
-
-export class PickDateAdapter extends NativeDateAdapter {
-    format(date: Date, displayFormat: Object): string {
-        if (displayFormat === 'input') {
-            if (displayFormat === 'input') {
-                return formatDate(date, 'dd-MM-yyyy', this.locale) || formatDate(date, 'MM/dd/yyyy', this.locale);
-            } else {
-                return formatDate(date, 'MMM yyyy', this.locale);
-            }
-        } else {
-            return formatDate(date, 'MMM yyyy', this.locale);
-        }
-    }
-}
 
 @NgModule({
     declarations: [

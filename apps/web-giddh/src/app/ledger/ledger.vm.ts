@@ -152,9 +152,7 @@ export class LedgerVM {
                 bl.particular = bl.selectedAccount ? bl.selectedAccount?.uniqueName || bl.selectedAccount?.value : bl.particular;
                 bl.isInclusiveTax = false;
                 // filter taxes uniqueNames
-                bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
-                // filter discount
-                bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
+                bl.taxes = [...bl.taxesVm?.map(p => p?.uniqueName)];
                 // delete local id
                 delete bl['id'];
                 if (requestObj.isOtherTaxesApplicable && requestObj.otherTaxModal.appliedOtherTax) {
@@ -215,9 +213,9 @@ export class LedgerVM {
             let underStandingTextData = localeData?.text_data;
 
             if (isReverseChargeAccount) {
-                data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === "ReverseCharge"));
+                data = cloneDeep(underStandingTextData?.find(p => p.accountType === "ReverseCharge"));
             } else {
-                data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
+                data = cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
             }
 
             if (data) {
@@ -235,7 +233,7 @@ export class LedgerVM {
                     data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
                 data['accountName'] = accountName;
-                this.ledgerUnderStandingObj = _.cloneDeep(data);
+                this.ledgerUnderStandingObj = cloneDeep(data);
             }
         }
     }
@@ -324,9 +322,7 @@ export class LedgerVM {
                 // set transaction.particular to selectedAccount uniqueName
                 bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
                 // filter taxes uniqueNames
-                bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
-                // filter discount
-                bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
+                bl.taxes = [...bl.taxesVm?.map(p => p?.uniqueName)];
                 // delete local id
                 delete bl['id'];
             }
@@ -347,6 +343,7 @@ export class LedgerVM {
         return {
             discountType: 'FIX_AMOUNT',
             amount: 0,
+            discountValue: 0,
             name: '',
             particular: '',
             isActive: true

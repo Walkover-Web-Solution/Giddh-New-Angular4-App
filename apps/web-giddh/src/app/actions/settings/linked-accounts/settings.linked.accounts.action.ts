@@ -10,7 +10,9 @@ import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from './settings.linked.accounts.con
 import { IGetAllEbankAccountResponse } from '../../../models/api-models/SettingsLinkedAccounts';
 import { CustomActions } from '../../../store/custom-actions';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsLinkedAccountsActions {
 
     public GetEbankAccounts$: Observable<Action> = createEffect(() => this.action$

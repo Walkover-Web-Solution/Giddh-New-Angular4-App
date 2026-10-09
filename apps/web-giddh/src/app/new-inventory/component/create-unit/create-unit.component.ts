@@ -12,7 +12,8 @@ import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-
 @Component({
     selector: 'create-unit',
     templateUrl: './create-unit.component.html',
-    styleUrls: ['./create-unit.component.scss']
+    styleUrls: ['./create-unit.component.scss'],
+    standalone:false
 })
 export class CreateNewUnitComponent implements OnInit, OnDestroy {
     /** Holds unit group details */

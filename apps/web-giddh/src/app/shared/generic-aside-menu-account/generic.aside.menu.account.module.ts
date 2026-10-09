@@ -6,6 +6,7 @@ import { AccountUpdateNewDetailsModule } from "../header/components/account-upda
 import { GenericAsideMenuAccountComponent } from "./generic.aside.menu.account.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
+import { KeyboardShortutModule } from "../helpers/directives/keyboardShortcut/keyboardShortut.module";
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { MatButtonModule } from "@angular/material/button";
         AccountAddNewDetailsModule,
         AccountUpdateNewDetailsModule,
         MatDialogModule,
-        MatButtonModule
+        MatButtonModule,
+        KeyboardShortutModule
     ],
     exports: [
         GenericAsideMenuAccountComponent

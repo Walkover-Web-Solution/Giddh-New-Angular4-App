@@ -8,7 +8,8 @@ import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
 @Component({
     selector: 'inventory-inout-header',
-    templateUrl: './inventory-header.component.html'
+    templateUrl: './inventory-header.component.html',
+    standalone: false
 })
 
 export class InventoryHeaderComponent implements OnInit, OnDestroy {

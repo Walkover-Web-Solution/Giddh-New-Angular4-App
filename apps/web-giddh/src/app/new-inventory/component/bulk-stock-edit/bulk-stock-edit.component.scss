@@ -26,7 +26,7 @@
             table {
                 thead {
                     th {
-                        border-width: 2px;
+                        border-width: 1px;
                         vertical-align: baseline;
                         p {
                             padding: 0 10px;
@@ -84,14 +84,8 @@
 }
 
 // Remove CDK backdrop for mat-select
-::ng-deep .no-backdrop {
+::ng-deep .bulk-stock-edit .no-backdrop {
     .cdk-overlay-backdrop {
         display: none !important;
     }
-}
-
-// Alternative: Hide backdrop globally for this component
-::ng-deep .cdk-overlay-backdrop {
-    pointer-events: none !important;
-    background: transparent !important;
 }

@@ -1,7 +1,7 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VatService } from '../../services/vat.service';
-import { ReplaySubject, take, takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 import { VatReportRequest } from '../../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -14,6 +14,7 @@ import { GeneralService } from '../../services/general.service';
     selector: 'file-return',
     styleUrls: ['./file-return.component.scss'],
     templateUrl: './file-return.component.html',
+    standalone:false
 })
 export class FileReturnComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -23,7 +24,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if API Call is in progress */
-    public isLoading: boolean;
+    public isLoading = signal<boolean>(false);
     /** Holds table data for VAT Report */
     public vatReport: any[] = [];
     /** Hold table displayed columns */
@@ -73,15 +74,16 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         vatReportRequest.taxNumber = this.inputData.taxNumber;
         vatReportRequest.branchUniqueName = this.inputData.branchUniqueName;
 
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.vatService.getCountryWiseVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            this.isLoading = false;
-            if (res.status === 'success' && res.body?.sections) {
-                this.vatReport = res.body?.sections;
+            this.isLoading.set(false);
+            if (res.status === 'success' && res.body?.sections?.length) {
+                this.vatReport = res.body.sections;
             } else {
                 if (res?.message) {
                     this.toaster.showSnackBar('error', res.message);
                 }
+                 this.vatReport = [];
                 this.dialogRef.close(res);
             }
         });
@@ -103,10 +105,10 @@ export class FileReturnComponent implements OnInit, OnDestroy {
 
         this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData);
         let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    data: {
                 configuration: this.fileReturnConfirmationConfiguration
-            },
+                },
             disableClose: true
         });
 
@@ -120,7 +122,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
                     } else {
                         if (res?.errors) {
                             let errorMessage = '';
-                            res.errors.forEach(error => errorMessage += error.message + '\n');
+                            (Array.isArray(res.errors) ? res.errors : []).forEach(error => errorMessage += error.message + '\n');
                             this.toaster.showSnackBar('error', errorMessage);
                         } else if (res?.message) {
                             this.toaster.showSnackBar('error', res.message);

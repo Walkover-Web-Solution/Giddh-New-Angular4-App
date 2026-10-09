@@ -26,7 +26,8 @@ const CIDR_RANGE = 'cidr_range';
 @Component({
     selector: 'setting-permission-form',
     templateUrl: './form.component.html',
-    styleUrls: ['./form.component.scss']
+    styleUrls: ['./form.component.scss'],
+    standalone: false
 })
 export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
@@ -42,7 +43,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Emits when form is submitted */
     @Output() public onSubmitForm: EventEmitter<any> = new EventEmitter(null);
+    /** Emits when dialog is closed */
+    @Output() public closeDialog: EventEmitter<any> = new EventEmitter(null);
     /** Emits true if form has unsaved changes */
     @Output() public hasUnsavedChanges: EventEmitter<boolean> = new EventEmitter(null);
     public showTimeSpan: boolean = false;
@@ -76,7 +80,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
-    /** Email id validation regex pattern */
+    /** Email id validation regex pattern - string for Validators.pattern() */
     public giddhEmailRegex = GIDDH_EMAIL_REGEX;
     /** To check form is invalid */
     public isFormInvalid: boolean = false;
@@ -128,7 +132,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             if (p && p.roles) {
                 let roles = cloneDeep(p.roles);
                 let allRoleArray = [];
-                roles.forEach((role) => {
+                (Array.isArray(roles) ? roles : []).forEach((role) => {
                     allRoleArray.push({
                         label: role?.name,
                         value: role?.uniqueName
@@ -265,7 +269,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this.permissionForm = this._fb.group({
                 emailId: [null, Validators.compose([Validators.required, Validators.maxLength(150), Validators.pattern(this.giddhEmailRegex)])],
                 entity: ['company'],
-                roleUniqueName: ['admin', [Validators.required]],
+                roleUniqueName: [null, [Validators.required]],
                 periodOptions: [DATE_RANGE],
                 from: [null],
                 to: [null],

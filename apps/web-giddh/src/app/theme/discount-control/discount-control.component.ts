@@ -8,7 +8,8 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
     selector: 'discount-control-component',
     templateUrl: './discount-control-component.html',
-    styleUrls: ['./discount-control-component.scss']
+    styleUrls: ['./discount-control-component.scss'],
+    standalone: false
 })
 
 export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
@@ -127,7 +128,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof LedgerDiscountComponent
      */
     private processDiscountList(): void {
-        this.discountsList.forEach(acc => {
+        (Array.isArray(this.discountsList) ? this.discountsList : []).forEach(acc => {
             if (this.discountAccountsDetails) {
                 let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
                 if (!hasItem) {

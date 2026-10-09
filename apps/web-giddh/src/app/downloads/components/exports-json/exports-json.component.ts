@@ -4,7 +4,8 @@ import * as jsonTreeViewer from 'json-tree-viewer';
 
 @Component({
     selector: 'exports-json',
-    templateUrl: './exports-json.component.html',
+    
+    standalone: false,templateUrl: './exports-json.component.html',
     styleUrls: ['./exports-json.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

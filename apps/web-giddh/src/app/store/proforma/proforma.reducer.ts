@@ -3,8 +3,8 @@ import { PROFORMA_ACTIONS } from '../../actions/proforma/proforma.const';
 import { ProformaFilter, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaVersionItem } from '../../models/api-models/proforma';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { VoucherClass } from '../../models/api-models/Sales';
-import { cloneDeep } from '../../lodash-optimized';
 import { UNAUTHORISED } from '../../app.constant';
+import { cloneDeep, map } from '../../lodash-optimized';
 
 export interface ProformaState {
     isGenerateInProcess: boolean;

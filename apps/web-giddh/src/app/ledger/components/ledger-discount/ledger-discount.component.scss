@@ -1,12 +1,12 @@
 .or-line::before {
-    content: " ";
+    content: ' ';
     border-bottom: 1px solid var(--color-medium-gray);
     display: inline-block;
     width: 57px;
     margin-right: 13px;
 }
 .or-line::after {
-    content: "";
+    content: '';
     border-bottom: 1px solid var(--color-medium-gray);
     display: inline-block;
     width: 57px;

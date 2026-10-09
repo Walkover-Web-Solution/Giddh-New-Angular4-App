@@ -9,7 +9,6 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { CommonService } from '../../services/common.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../../services/general.service';
-import { ZIP_CODE_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 
@@ -32,6 +31,7 @@ enum TaxTypeNameEnum {
     selector: 'create-address',
     templateUrl: './create-address.component.html',
     styleUrls: ['./create-address.component.scss'],
+    standalone: false
 })
 export class CreateAddressComponent implements OnInit, OnDestroy {
     /** Emits when aside menu is closed */
@@ -70,15 +70,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     /** True, if aside pane needs to be closed */
     @Input() public closeSidePane: boolean;
     /** Indicates the addresses available.*/
-    @Input() public isAddress: boolean = false; 
+    @Input() public isAddress: boolean = false;
     /** List of entities which can be archived */
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
     /** Holds Selected Entity */
     public selectedEntity: any[] = [];
     /** Hold active company country code */
     public activeCompanyCountryCode: string = '';
-    /** Holds list of countries which use ZIP Code in address */
-    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Enum for tax type name */
     public taxTypeNameEnum: typeof TaxTypeNameEnum = TaxTypeNameEnum;
     /** Holds the type of address configuration */
@@ -89,7 +87,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private commonService: CommonService,
-        private generalService: GeneralService,
+        protected generalService: GeneralService,
         public dialog: MatDialog,
         private store: Store<AppState>
     ) {
@@ -150,14 +148,14 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             this.commonService.getGstInformationDetails(this.addressForm.get('taxNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                        width: '40%',
-                        data: {
+                                width: '40%',
+                                data: {
                             title: this.commonLocaleData?.app_confirmation,
-                            body: this.commonLocaleData?.app_gst_confirm_message1,
-                            ok: this.commonLocaleData?.app_yes,
-                            cancel: this.commonLocaleData?.app_no,
-                            permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
-                        }
+                                body: this.commonLocaleData?.app_gst_confirm_message1,
+                                ok: this.commonLocaleData?.app_yes,
+                                cancel: this.commonLocaleData?.app_no,
+                                permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+                            }
                     });
                     dialogRef.afterClosed().subscribe(response => {
                         if (response) {
@@ -436,7 +434,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         event.stopPropagation();
         event.preventDefault();
         if (!option.isDefault) {
-            this.addressConfiguration.linkedEntities.forEach(entity => {
+            (Array.isArray(this.addressConfiguration.linkedEntities) ? this.addressConfiguration.linkedEntities : []).forEach(entity => {
                 if (entity?.value !== option?.value) {
                     entity.isDefault = false;
                 }
@@ -478,7 +476,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFinalSelection(selectedEntities: Array<any>): void {
-        this.addressConfiguration.linkedEntities.forEach(entity => {
+        (Array.isArray(this.addressConfiguration.linkedEntities) ? this.addressConfiguration.linkedEntities : []).forEach(entity => {
             if (!selectedEntities?.includes(entity?.uniqueName)) {
                 entity.isDefault = false;
             }

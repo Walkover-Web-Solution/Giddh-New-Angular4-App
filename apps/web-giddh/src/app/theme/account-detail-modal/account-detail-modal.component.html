@@ -1,26 +1,15 @@
-<ng-container
-    appTranslate
-    [file]="'account-detail-modal'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'account-detail-modal'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <!-- AccountInfo -->
-    <div
-        *ngIf="isModalOpen"
-        class="p-modal-tooltip"
-    >
+    <div *ngIf="isModalOpen">
         <div class="tb-pl-modal-header p-0">
-            <div class="account-detail-modal-header-div" >
+            <div class="account-detail-modal-header-div">
                 <div class="account-detail-modal-div">
                     <div class="account-detail-custom-header">
                         <div class="d-flex p-0 border-right-none">
                             <div class="account-detail-padding flex-grow-1 border-right-none">
                                 <p class="account-detail-custom-title">{{ accInfo?.name }}</p>
                             </div>
-                            <a
-                                (click)="performActions(0, $event)"
-                                class="edit-icon pl-1 pt-1"
-                            >
+                            <a (click)="performActions(0, $event)" class="edit-icon pl-1 pt-1">
                                 <i *ngIf="!isLoading" class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                             </a>
                         </div>
@@ -34,15 +23,15 @@
                     <div class="height-82px">
                         <ul class="list-unstyled">
                             <li class="li-link">
-                                <a href="javascript:;" (click)="performActions(1)" class="theme-primary-color">{{
-                                    commonLocaleData?.app_goto_ledger
-                                }}</a>
+                                <a href="javascript:;" (click)="performActions(1)" class="theme-primary-color">
+                                    {{ commonLocaleData?.app_goto_ledger }}
+                                </a>
                             </li>
 
                             <li class="li-link" *ngIf="shouldShowGenerateInvoice">
-                                <a href="javascript:;" (click)="performActions(2)" class="theme-primary-color">{{
-                                    commonLocaleData?.app_generate_invoice
-                                }}</a>
+                                <a href="javascript:;" (click)="performActions(2)" class="theme-primary-color">
+                                    {{ commonLocaleData?.app_generate_invoice }}
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -59,7 +48,6 @@
             [commonLocaleData]="commonLocaleData"
             (closeAsideEvent)="getUpdatedList(true)"
             (getUpdateList)="getUpdatedList(true)"
-        >
-        </aside-menu-account>
+        ></aside-menu-account>
     </ng-template>
-</ng-container>
+</div>

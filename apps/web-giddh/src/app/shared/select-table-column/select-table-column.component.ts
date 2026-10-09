@@ -4,13 +4,14 @@ import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
 import { ToasterService } from "../../services/toaster.service";
 import { InventoryModuleName } from "../../new-inventory/inventory.enum";
-import { ContactsTab } from "../../contact/contacts.enum";
+import { ContactsModule } from "../../contact/contacts.enum";
 import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.const";
 @Component({
     selector: "select-table-column",
     styleUrls: ["./select-table-column.component.scss"],
     templateUrl: "./select-table-column.component.html",
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SelectTableColumnComponent implements OnInit, OnChanges {
     /* This will hold local JSON data */
@@ -60,8 +61,9 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         InventoryModuleName.stock,
         InventoryModuleName.variant,
         InventoryModuleName.bulk,
-        ContactsTab.customer,
-        ContactsTab.vendor,
+        InventoryModuleName.fixedAssetInventory,
+        ContactsModule.customer.toUpperCase(),
+        ContactsModule.vendor.toUpperCase(),
         VoucherReportFilterModuleEnum.Sales,
         VoucherReportFilterModuleEnum.Estimate,
         VoucherReportFilterModuleEnum.Proforma,
@@ -155,8 +157,11 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         this.displayedColumns = this.customiseColumns
             .filter(col => col?.checked)
             .map(col => col.value);
-        this.selectedColumns.emit(this.displayedColumns);
-        this.selectedDynamicColumns.emit(this.dynamicCustomColumns);
+        if (!this.isDynamicMode) {
+            this.selectedColumns.emit(this.displayedColumns);
+        } else {
+            this.selectedDynamicColumns.emit(this.dynamicCustomColumns);
+        }
         this.changeDetection.detectChanges();
     }
 
@@ -177,7 +182,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
                     this.dynamicCustomColumns = body.reportFilterColumns || [];
                 } else if (!isDynamic && body?.columns) {
                     const displayColumnsSet = new Set(body.columns);
-                    this.customiseColumns.forEach(column => {
+                    (Array.isArray(this.customiseColumns) ? this.customiseColumns : []).forEach(column => {
                         column.checked = displayColumnsSet.has(column.value);
                     });
                 }

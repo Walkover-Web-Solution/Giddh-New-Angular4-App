@@ -7,9 +7,7 @@
 .show-columnar-button {
     display: inline-block;
 }
-textarea
-
-.export-ledger-right {
+textarea .export-ledger-right {
     &::after {
         right: 25px !important;
     }
@@ -36,7 +34,7 @@ textarea
 
 .export-border {
     &::after {
-        content: "";
+        content: '';
         display: block;
         position: absolute;
         width: 1px;

@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, SimpleChanges, TemplateRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Inject, Input, OnDestroy, OnInit, SimpleChanges, TemplateRef } from "@angular/core";
 import { Store, select } from '@ngrx/store';
+import { ActivatedRoute } from '@angular/router';
 import { AppState } from '../../store';
 import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../services/general.service';
@@ -19,17 +20,19 @@ import { cloneDeep, uniq } from "../../lodash-optimized";
 import { LedgerComponentStore } from "../../ledger/ledger.store";
 import { LedgerActions } from "../../actions/ledger/ledger.actions";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { MatMenuTrigger } from '@angular/material/menu';
 import { SettingIntegrationComponentStore } from "../../settings/integration/utility/setting.integration.store";
 import { ICurrencyResponse } from "../../models/api-models/Company";
 import { AccountResponse, AccountResponseV2 } from "../../models/api-models/Account";
 import { LedgerService } from "../../services/ledger.service";
+import { ServiceConfig } from "../../services/service.config";
 @Component({
     selector: 'ledger-statement',
     templateUrl: './ledger-statement.component.html',
     styleUrls: ['./ledger-statement.component.scss'],
     providers: [LedgerStatementComponentStore, LedgerComponentStore, SettingIntegrationComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LedgerStatementComponent implements OnInit, OnDestroy {
     /** True if the columnar report table is shown */
@@ -178,7 +181,8 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private settingIntegrationComponentStore: SettingIntegrationComponentStore,
         private ledgerService: LedgerService,
-        private ledgerStatementStore: LedgerStatementComponentStore
+        private ledgerStatementStore: LedgerStatementComponentStore,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
     }
 
@@ -189,8 +193,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('ledger-body');
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
@@ -246,7 +249,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                         // branches are loaded
                         if (this.currentOrganizationType === OrganizationType.Branch) {
                             currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                            this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                            this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                         } else {
                             currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                             this.currentBranch = {
@@ -391,13 +394,13 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any): void {
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
-            width: '70%',
-            height: '790px',
-            maxHeight: '90vh',
-            role: 'alertdialog',
-            ariaLabel: 'template',
-            autoFocus: false
-        });
+                    width: '70%',
+                    height: '790px',
+                    maxHeight: '90vh',
+                    role: 'alertdialog',
+                    ariaLabel: 'template',
+                    autoFocus: false
+                });
 
         dialogRef.afterClosed().subscribe(response => {
             this.getTransactionData();
@@ -451,13 +454,12 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             const toDate = this.to;
             this.trxRequest.from = fromDate;
             this.trxRequest.to = toDate;
-            this.trxRequest.isTView = true;
             if (this.branchUniqueName) {
                 this.trxRequest.branchUniqueName = this.branchUniqueName;
             }
             this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.trxRequest.accountUniqueName));
             this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
-            this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: fromDate, to: toDate }));
+            this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: fromDate, to: toDate, isTView: true }));
             this.lc.transactionData$ = this.store.pipe(select(p => p.ledger.transactionsResponse), takeUntil(this.destroyed$), shareReplay(1));
             this.lc.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
             this.lc.companyProfile$ = this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$));

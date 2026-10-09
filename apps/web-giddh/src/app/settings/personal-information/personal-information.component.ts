@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil, pairwise, filter } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
-import { OrganizationProfile } from '../constants/settings.constant';
+import { CurrencyDisplayFormat, OrganizationProfile } from '../constants/settings.constant';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
@@ -13,7 +13,8 @@ import { ServiceConfig } from '../../services/service.config';
 @Component({
     selector: 'personal-information',
     templateUrl: './personal-information.component.html',
-    styleUrls: ['./personal-information.component.scss']
+    styleUrls: ['./personal-information.component.scss'],
+    standalone: false
 })
 export class PersonalInformationComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -42,7 +43,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
         nameAlias: '',
         headQuarterAlias: '',
         taxType: '',
-        portalDomain: ''
+        portalDomain: '',
+        autoGenerateNote: false,
+        currencyDisplayFormat: CurrencyDisplayFormat.Code
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -54,6 +57,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     @Output() public saveProfile: EventEmitter<any> = new EventEmitter();
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True when a typed name change should be saved after the debounce */
+    private shouldDebounceNameUpdate$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     /** Portal Domain name validation with regex pattern */
     public isValidDomain: boolean;
     /** Stores the voucher API version of company */
@@ -95,6 +100,21 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
                 this.saveProfile.emit(this.updatedData);
             }
         });
+
+        if (this.organizationType === 'COMPANY') {
+            combineLatest([
+                this.profileForm?.get('name')?.valueChanges,
+                this.shouldDebounceNameUpdate$
+            ]).pipe(
+                takeUntil(this.destroyed$),
+                debounceTime(2000)
+            ).subscribe(([, shouldUpdate]) => {
+                if (shouldUpdate) {
+                    this.profileUpdated('name');
+                    this.shouldDebounceNameUpdate$.next(false);
+                }
+            });
+        }
     }
 
     /**
@@ -120,15 +140,6 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
             }
 
             if (this.organizationType === 'COMPANY') {
-                this.profileForm?.get('name')?.valueChanges?.pipe(
-                    takeUntil(this.destroyed$),
-                    debounceTime(700),
-                    pairwise(), // Emits [previousValue, currentValue]
-                    filter(([prev, curr]) => prev !== curr) // Only proceed if values are different
-                ).subscribe(([prev, curr]) => {
-                    this.profileUpdated('name');
-                });
-
                 this.profileForm?.get('portalDomain')?.valueChanges?.pipe(
                     takeUntil(this.destroyed$),
                     debounceTime(700),
@@ -206,8 +217,31 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public ngOnDestroy(): void {
+        this.shouldDebounceNameUpdate$.complete();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Enables the debounced update when the user types a company name.
+     *
+     * @memberof PersonalInformationComponent
+     */
+    public onNameInput(): void {
+        this.shouldDebounceNameUpdate$.next(true);
+    }
+
+    /**
+     * Saves the company name on blur only when it differs from the last saved value.
+     *
+     * @memberof PersonalInformationComponent
+     */
+    public onNameBlur(): void {
+        this.shouldDebounceNameUpdate$.next(false);
+        const currentName = this.profileForm?.get('name')?.value;
+        if (currentName !== this.profileData?.name) {
+            this.profileUpdated('name');
+        }
     }
 
     /**

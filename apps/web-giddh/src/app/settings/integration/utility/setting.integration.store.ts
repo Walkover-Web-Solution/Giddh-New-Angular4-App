@@ -1,6 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
@@ -29,7 +30,9 @@ export const DEFAULT_SETTING_INTEGRATION_STATE: SettingIntegrationState = {
     getAllBankAccountsList: null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingIntegrationComponentStore extends ComponentStore<SettingIntegrationState> implements OnDestroy {
 
     constructor(
@@ -51,7 +54,7 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
             switchMap((req) => {
                 this.patchState({ institutionsListInProgress: true });
                 return this.settingsIntegrationService.getAllInstitutions(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
@@ -90,7 +93,7 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
             switchMap((req) => {
                 this.patchState({ requistionListInProgress: true });
                 return this.settingsIntegrationService.getRequisition(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
@@ -128,7 +131,7 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
         return data.pipe(
             switchMap((req) => {
                 return this.settingsIntegrationService.createEndUserAgreementByInstitutionId(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -166,7 +169,7 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
             switchMap((req) => {
                 this.patchState({ deleteAccountSuccess: false });
                 return this.settingsIntegrationService.deleteEndUserAgreementDetails(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -204,7 +207,7 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
             switchMap((req) => {
                 this.patchState({ updateAccount: false });
                 return this.settingsIntegrationService.updateAccount(req.accountForm, req.request).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success' && res?.body?.message) {
                                 this.toasterService.clearAllToaster();
@@ -244,7 +247,7 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
             switchMap(() => {
                 this.patchState({ getAllBankAccountsList: null });
                 return this.settingsIntegrationService.getAllBankAccounts().pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success' && res?.body) {
                                 return this.patchState({

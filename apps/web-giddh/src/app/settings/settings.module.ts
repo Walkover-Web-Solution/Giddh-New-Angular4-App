@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ContactModule } from '../contact/contact.module';
 import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { SharedModule } from '../shared/shared.module';
 import { BranchComponent } from './branch/branch.component';
 import { DiscountComponent } from './discount/discount.component';
@@ -77,6 +77,10 @@ import { ExportFileNameComponent } from './export-file-name/export-file-name.com
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replaceAll.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { CompanyAuthKeyComponent } from './company-auth-key/company-auth-key.component';
+import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company-auth-key/create-company-auth-key.component';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -93,6 +97,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         SettingPermissionFormComponent,
         BranchComponent,
         DiscountComponent,
+        CompanyAuthKeyComponent,
+        CreateCompanyAuthKeyComponent,
         ShopifyIntegrationComponent,
         CustomerPortalComponent,
         TallyIntegrationComponent,
@@ -116,9 +122,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         ContactModule,
         FormsModule,
         ReactiveFormsModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
+        DecimalDigitsModule,
         TaxSidebarModule,
         ReplacePipeModule,
         NoDataModule,
@@ -163,7 +170,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         TributeMentionModule,
         ReplaceAllPipeModule,
         TitleCasePipe,
-        MatPaginatorModule
+        MatPaginatorModule,
+        GiddhDatePipe
     ],
 })
 

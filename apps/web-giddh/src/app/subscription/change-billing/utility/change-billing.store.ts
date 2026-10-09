@@ -1,7 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { ComponentStore } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
@@ -17,7 +17,7 @@ export interface BillingState {
 
 export const DEFAULT_CHANGE_BILLING_STATE: BillingState = {
     getBillingDetailsInProgress: null,
-    getBillingDetails: [],
+    getBillingDetails: null,
     updateBillingDetailsSuccess: null,
     updateBillingDetailsInProgress: null,
 };
@@ -47,16 +47,16 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
             switchMap((req) => {
                 this.patchState({ getBillingDetailsInProgress: true });
                 return this.subscriptionService.getBillingDetails(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    getBillingDetails: res?.body ?? [],
+                                    getBillingDetails: res?.body ?? null,
                                     getBillingDetailsInProgress: false,
                                 });
                             } else {
                                 return this.patchState({
-                                    getBillingDetails: [],
+                                    getBillingDetails: null,
                                     getBillingDetailsInProgress: false,
                                 });
                             }
@@ -64,7 +64,7 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
                         (error: any) => {
                             this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
-                                getBillingDetails: [],
+                                getBillingDetails: null,
                                 getBillingDetailsInProgress: false
                             });
                         }
@@ -85,7 +85,7 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
             switchMap((req) => {
                 this.patchState({ updateBillingDetailsInProgress: true });
                 return this.subscriptionService.updateBillingDetails(req.request, req.id).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', res?.body);

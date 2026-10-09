@@ -8,7 +8,7 @@ import { DaybookAdvanceSearchModelComponent } from 'apps/web-giddh/src/app/daybo
 import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { SharedModule } from '../shared/shared.module';
 import { SalesModule } from '../sales/sales.module';
@@ -27,23 +27,22 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LedgerModule } from '../ledger/ledger.module';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
     providers: [],
     imports: [
         CommonModule,
-        ReactiveFormsModule, 
+        ReactiveFormsModule,
         DecimalDigitsModule,
         FormsModule,
         Daterangepicker,
         DaybookRoutingModule,
         ElementViewChildModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         SharedModule,
         NgxMaskModule.forRoot(),
         AsideMenuSalesOtherTaxesModule,
@@ -62,10 +61,9 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         MatSlideToggleModule,
         LedgerModule,
         WatchVideoModule,
-        NgxMatSelectSearchModule,
-        MatSelectModule,
         MatMenuModule,
-        FormFieldsModule
+        FormFieldsModule,
+        GiddhDatePipe
     ]
 })
 export class DaybookModule {

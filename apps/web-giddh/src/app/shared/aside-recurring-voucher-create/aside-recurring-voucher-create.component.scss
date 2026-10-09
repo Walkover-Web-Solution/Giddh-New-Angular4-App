@@ -1,0 +1,8 @@
+.weekday-toggle {
+    button {
+        &.active {
+            background-color: var(--bg-primary-color) !important;
+            color: var(--color-white) !important;
+        }
+    }
+}

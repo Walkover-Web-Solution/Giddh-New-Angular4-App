@@ -19,6 +19,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatInputModule } from "@angular/material/input";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
         MatTabsModule,
         MatTooltipModule,
         MatInputModule,
-        FormFieldsModule
+        FormFieldsModule,
+        GiddhDatePipe
     ]
 })
 

@@ -1,23 +1,15 @@
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { LaddaModule } from 'angular2-ladda';
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
-import { SharedModule } from '../shared/shared.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
-import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { ContactAdvanceSearchComponent } from './advanceSearch/contactAdvanceSearch.component';
 import { AgingReportComponent } from './aging-report/aging-report.component';
-import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
 import { PaymentAsideComponent } from './payment-aside/payment-aside.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
-import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import { NoDataModule } from '../shared/no-data/no-data.module';
 import { LightboxModule } from 'ngx-lightbox';
 import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from "@angular/material/menu";
@@ -28,12 +20,6 @@ import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatTableModule } from "@angular/material/table";
 import { MatInputModule } from "@angular/material/input";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { MatDialogModule } from "@angular/material/dialog";
-import { AccountUpdateNewDetailsModule } from '../shared/header/components/account-update-new-details/account-update-new-details.module';
-import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
-import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
-import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -43,21 +29,39 @@ import { AccountStatementComponent } from './account-statement/account-statement
 import { LedgerStatementModule } from '../shared/ledger-statement-t-view/ledger-statement.module';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { LedgerModule } from '../ledger/ledger.module';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { LedgerModule } from '../ledger/ledger.module';
+import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { AccountUpdateNewDetailsModule } from '../shared/header/components/account-update-new-details/account-update-new-details.module';
+import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
+import { NoDataModule } from '../shared/no-data/no-data.module';
+import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
+import { SharedModule } from '../shared/shared.module';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { ResizableDirective } from '../shared/directives/resizable.directive';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { AgeRangeEditorComponent } from '../theme/age-range-editor/age-range-editor.component';
 @NgModule({
     declarations: [
         ContactComponent,
         ContactAdvanceSearchComponent,
         AgingReportComponent,
-        AgingDropdownComponent,
         PaymentAsideComponent,
         ContactPreviewComponent,
         AccountStatementComponent
     ],
     exports: [
-        CurrencyModule
+        GiddhNumberFormatModule
     ],
     imports: [
         CommonModule,
@@ -71,8 +75,9 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         SharedModule,
         ClickOutsideModule,
         DigitsOnlyModule,
+        DecimalDigitsModule,
         ElementViewChildModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         Daterangepicker,
         NgxDaterangepickerMd.forRoot(),
         NgxMaskModule.forRoot(),
@@ -101,11 +106,16 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         LedgerStatementModule,
         MatSortModule,
         MatPaginatorModule,
-        LedgerModule,   
-        MatCardModule
+        LedgerModule,
+        MatCardModule,
+        AmountFieldComponentModule,
+        HamburgerMenuModule,
+        ResizableDirective,
+        GiddhDatePipe,
+        AgeRangeEditorComponent
     ],
     providers: [
-        GiddhCurrencyPipe
+        GiddhNumberFormatPipe
     ]
 })
 export class ContactModule {

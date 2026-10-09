@@ -2,8 +2,10 @@ import { Component, EventEmitter, OnInit, Output, OnDestroy, Inject } from '@ang
 import { Store } from '@ngrx/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -11,6 +13,7 @@ import { takeUntil } from 'rxjs/operators';
     selector: 'aside-help-support',
     templateUrl: './aside-help-support.component.html',
     styleUrls: [`./aside-help-support.component.scss`],
+    standalone: false
 })
 
 export class AsideHelpSupportComponent implements OnInit, OnDestroy {
@@ -21,6 +24,20 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public apkVersion: string;
     /** Version of lated mac app  */
     public macAppVersion: string;
+    /** Windows app download URL */
+    public windowsDownloadUrl: string;
+    /** Mac app download URL */
+    public macDownloadUrl: string;
+    /** Holds Giddh help documentation url */
+    public helpDocUrl: string = '';
+    /** Holds Giddh support phone number */
+    public supportPhoneNumber: string = '';
+    /** Holds Giddh support email */
+    public supportEmail: string = '';
+    /** Android app URL */
+    public androidAppUrl: string = '';
+    /** iOS app URL */
+    public iosAppUrl: string = '';
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -30,12 +47,11 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
 
     constructor(
         private authService: AuthenticationService,
-        @Inject(ServiceConfig) private serviceConfig,
+        @Inject(ServiceConfig) public serviceConfig,
         private generalActions: GeneralActions,
-        private store: Store<AppState>
-    ) {
-
-    }
+        private store: Store<AppState>,
+        public generalService: GeneralService
+    ) { }
 
     /**
      * Initialize the component
@@ -43,9 +59,15 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      * @memberof AsideHelpSupportComponent
      */
     public ngOnInit() {
+        this.setDownloadUrls();
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.helpDocUrl = this.serviceConfig.HELP_DOC_URL;
+        this.androidAppUrl = this.serviceConfig.ANDROID_APP_URL;
+        this.iosAppUrl = this.serviceConfig.IOS_APP_URL;
+        this.imgPath = this.serviceConfig.IMG_PATH;
+        this.supportPhoneNumber = this.serviceConfig.SUPPORT_PHONE;
+        this.supportEmail = this.serviceConfig.SUPPORT_EMAIL;
     }
 
     /**
@@ -99,6 +121,21 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
                 this.macAppVersion = versNum;
             }
         });
+    }
+
+    /**
+     * Sets download URLs based on environment
+     *
+     * @private
+     * @memberof AsideHelpSupportComponent
+     */
+    private setDownloadUrls(): void {
+        const isProduction = environment.PRODUCTION_ENV;
+        const envPath = isProduction ? 'prod' : 'test';
+        const fileName = isProduction ? 'giddh-setup' : 'giddh-test-setup';
+        
+        this.windowsDownloadUrl = `https://s3-ap-south-1.amazonaws.com/app-giddh-test/${envPath}/windows/latest/${fileName}.exe`;
+        this.macDownloadUrl = `https://s3-ap-south-1.amazonaws.com/app-giddh-test/${envPath}/mac/latest/${fileName}.dmg`;
     }
 
     /**

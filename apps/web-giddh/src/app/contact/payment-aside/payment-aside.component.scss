@@ -141,18 +141,6 @@ form label {
     align-items: center;
 }
 
-.confirm-btn {
-    height: auto !important;
-
-    .pay-btn {
-        margin-top: 34px;
-    }
-}
-
-.pay-btn {
-    margin-top: 8px;
-}
-
 @media (max-width: 1100px) {
     .payment-top-form {
         display: block;

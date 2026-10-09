@@ -10,7 +10,8 @@ import { Pipe, PipeTransform } from "@angular/core";
  */
 @Pipe({
     name: 'replaceAll',
-    pure: true
+    pure: true,
+    standalone: false
 })
 export class ReplaceAllPipe implements PipeTransform {
 

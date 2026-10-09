@@ -13,6 +13,8 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { GiddhProgressSpinnerComponent } from '../giddh-progress-spinner/giddh-progress-spinner.component';
 import { DatepickerWrapperModule } from '../datepicker-wrapper/datepicker.wrapper.module';
+import { KeyboardShortutModule } from '../helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keyboard-navigation.module';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { DatepickerWrapperModule } from '../datepicker-wrapper/datepicker.wrappe
         MatButtonModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        GiddhProgressSpinnerComponent
+        GiddhProgressSpinnerComponent,
+        KeyboardShortutModule,
+        KeyboardNavigationModule
     ],
     exports: [AsideMenuCreateTaxComponent],
     declarations: [AsideMenuCreateTaxComponent],

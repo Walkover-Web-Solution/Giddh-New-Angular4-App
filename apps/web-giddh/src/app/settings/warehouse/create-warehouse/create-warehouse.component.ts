@@ -24,7 +24,8 @@ import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 @Component({
     selector: 'create-warehouse',
     templateUrl: './create-warehouse.component.html',
-    styleUrls: ['./create-warehouse.component.scss']
+    styleUrls: ['./create-warehouse.component.scss'],
+    standalone:false
 })
 
 export class CreateWarehouseComponent implements OnInit, OnDestroy {
@@ -156,8 +157,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
-        this.imgPath = isElectron ? 'assets/images/warehouse-image.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-image.svg';
+        this.imgPath = this.serviceConfig.IMG_PATH + 'warehouse-image.svg';
 
         this.warehouseForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.showPageLeaveConfirmation) {

@@ -6,7 +6,7 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of as observableOf, ReplaySubject } from "rxjs";
-import { BROADCAST_CHANNELS, ICICI_ALLOWED_COMPANIES, IOption } from "../../app.constant";
+import { BROADCAST_CHANNELS, IOption } from "../../app.constant";
 import { SalesService } from "../../services/sales.service";
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
@@ -25,7 +25,8 @@ import { ServiceConfig } from "../../services/service.config";
     templateUrl: './bank-integration.component.html',
     styleUrls: ['./bank-integration.component.scss'],
     providers: [BankIntegrationComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class BankIntegrationComponent implements OnInit, OnDestroy {
     public isIciciBankSupportedCountry: boolean = false;
@@ -97,6 +98,8 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     public reconnectBankResponse: any = null;
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
+    /** Bank statement help doc url */
+    public bankStatementHelpDocUrl = '';
 
     /** @ignore */
     constructor(
@@ -114,10 +117,10 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         public dialog: MatDialog
     ) {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
+        this.iciciAllowedCompanies = this.serviceConfig.ICICI_SUPPORTED_COMPANIES;
+        this.bankStatementHelpDocUrl = this.serviceConfig.BANK_STATEMENT_HELP_DOC_URL;
     }
-    
+
     /**
     * This function will use for get institutions details
     *
@@ -151,9 +154,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      */
     public openCreateNewAccountModal(): void {
         this.createNewAccountDialogRef = this.dialog.open(this.createNewAccountModal, {
-            width: '630px',
-            disableClose: true
-        });
+                    width: '630px',
+                    disableClose: true
+                });
     }
 
     /**
@@ -163,17 +166,17 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.loadPaymentData();
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
-                res.userEntityRoles.forEach(role => {
+                (Array.isArray(res.userEntityRoles) ? res.userEntityRoles : []).forEach(role => {
                     const scopes = role.role.scopes;
                     if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
                         this.hasIntegrationScope = true;
                     }
                 });
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
-                    res.ecommerceDetails.forEach(item => {
+                    (Array.isArray(res.ecommerceDetails) ? res.ecommerceDetails : []).forEach(item => {
                         if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
                             // this.getShopifyVerifyStatus(item.uniqueName);
                         }
@@ -296,9 +299,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             this.isLoading = false;
             if (response?.body) {
                 this.connectedBankAccounts = response.body;
-                this.connectedBankAccounts.forEach(bankAccount => {
+                (Array.isArray(this.connectedBankAccounts) ? this.connectedBankAccounts : []).forEach(bankAccount => {
                     if (bankAccount?.bankResource?.payor?.length > 0) {
-                        bankAccount?.bankResource?.payor.forEach(payor => {
+                        (Array.isArray(bankAccount?.bankResource?.payor) ? bankAccount?.bankResource?.payor : []).forEach(payor => {
                             this.getPayorRegistrationStatus(bankAccount, payor);
                         });
                     }
@@ -345,9 +348,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     public openEditAccountModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
         this.editAccountModalRef = this.dialog.open(this.editAccountModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                });
     }
 
     /**
@@ -359,9 +362,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     public openCreateNewAccountUserModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
         this.createNewAccountUserModalRef = this.dialog.open(this.createNewAccountUserModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                });
     }
 
     /**
@@ -375,9 +378,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         this.activeBankAccount = bankAccount;
         this.activePayorAccount = payor;
         this.editAccountUserModalRef = this.dialog.open(this.editAccountUserModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                });
     }
     /**
     * This will show the delete bank account login confirmation modal
@@ -393,9 +396,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.bankUserId, loginId: payor?.loginId };
         }
         this.confirmationModalRef = this.dialog.open(this.confirmationModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                });
     }
 
     /**
@@ -455,13 +458,13 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
    */
     public deleteBankAccount(bank: any): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '540px',
-            data: {
+                    width: '540px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.payment?.confirm_bank_delete_message,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.payment?.confirm_bank_delete_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

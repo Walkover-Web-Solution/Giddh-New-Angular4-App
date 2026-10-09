@@ -43,7 +43,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { VoucherNameModule } from "./utility/pipe/voucher-name/voucher-name.module";
 import { VoucherCopyLinkModule } from "./utility/pipe/voucher-copy-link/voucher-copy-link.module";
 import { TaxDropdownModule } from "../theme/tax-dropdown/tax-dropdown.module";
-import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-dropdown.module";
+import { CommonDiscountComponent } from "../shared/common-discount/common-discount.component";
 import { TemplatePreviewDialogComponent } from "./template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "./template-edit-dialog/template-edit-dialog.component";
 import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
@@ -63,13 +63,12 @@ import { EntryAmountModule } from "./utility/directives/entry-amount/entry-amoun
 import { EntryTotalModule } from "./utility/directives/entry-total/entry-total.module";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
-import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
+
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-other-tax.module";
 import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
-import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBill/generateEWayBill.module";
 import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker.wrapper.module";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
@@ -92,12 +91,23 @@ import { TributeMentionModule } from "../shared/helpers/directives/tributeMentio
 import { AllTemplatesComponent } from "./template/all-templates/all-templates.component";
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
+import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
+import { ResizableDirective } from "../shared/directives/resizable.directive";
+import { CommonTaxComponent } from "../shared/common-tax/common-tax.component";
+import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
+import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview.component";
+import { AsideRecurrenceVoucherCreateComponent } from "../shared/aside-recurring-voucher-create/aside-recurring-voucher-create.component";
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
+import { CopyParticularDialogComponent } from "./copy-particular-dialog/copy-particular-dialog.component";
+import { DscPinDialogComponent } from "./dsc-pin-dialog/dsc-pin-dialog.component";
 
 @NgModule({
     declarations: [
         MainComponent,
         VoucherListComponent,
         VouchersPreviewComponent,
+        RecurringPreviewComponent,
         VoucherCreateComponent,
         AdvanceSearchComponent,
         BulkExportComponent,
@@ -105,6 +115,7 @@ import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
         HistoryDialogComponent,
+        CopyParticularDialogComponent,
         EmailSendDialogComponent,
         TemplatePreviewDialogComponent,
         TemplateEditDialogComponent,
@@ -115,6 +126,7 @@ import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
         AllTemplatesComponent,
+        DscPinDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -152,7 +164,7 @@ import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile
         VoucherCopyLinkModule,
         MatProgressSpinnerModule,
         TaxDropdownModule,
-        DiscountDropdownModule,
+        CommonDiscountComponent,
         GenericAsideMenuAccountModule,
         KeyboardShortutModule,
         MatBadgeModule,
@@ -168,12 +180,11 @@ import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile
         EntryOtherTaxModule,
         GiddhPageLoaderModule,
         ReplacePipeModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         NgxMatSelectSearchModule,
         PurchaseOrderPreviewModule,
         DecimalDigitsModule,
         NgxMaskModule,
-        GenerateEWayBillModule,
         DatepickerWrapperModule,
         MatDatepickerModule,
         MatNativeDateModule,
@@ -188,7 +199,13 @@ import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile
         SelectTableColumnModule,
         MatButtonToggleModule,
         TributeMentionModule,
-        MobileNumberInputComponent
+        MobileNumberInputComponent,
+        KeyboardNavigationModule,
+        ResizableDirective,
+        CommonTaxComponent,
+        AsideRecurrenceVoucherCreateComponent,
+        GiddhDatePipe,
+        GoToBranchComponent
     ],
     exports: [
         VoucherCreateComponent,

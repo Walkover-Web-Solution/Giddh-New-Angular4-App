@@ -8,8 +8,11 @@ import { AppState } from '../store';
 import { Store } from '@ngrx/store';
 import { CommonActions } from '../actions/common.actions';
 import { GeneralService } from './general.service';
+import { find, forEach, includes, isArray, keys } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ThermalService {
 
     /** This will use for max length for character according to paper */

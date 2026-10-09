@@ -96,7 +96,9 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 @Component({
     selector: "inventory-product-service-list",
+    
     templateUrl: "./inventory-product-service-list.component.html",
+    standalone: false,
     styleUrls: ["./inventory-product-service-list.component.scss"],
 
 })
@@ -114,7 +116,7 @@ export class ProductServiceListComponent implements OnInit {
 
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
     }
 
 

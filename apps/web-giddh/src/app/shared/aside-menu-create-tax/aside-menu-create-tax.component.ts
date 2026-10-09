@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { skip, take, takeUntil } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
@@ -14,14 +16,18 @@ import { GeneralService } from '../../services/general.service';
 import { TaxAuthorityComponentStore } from '../../theme/tax-authority/utility/tax-authority.store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IOption } from '../../app.constant';
+import { ReactiveDropdownFieldComponent } from '../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
     templateUrl: './aside-menu-create-tax.component.html',
     styleUrls: [`./aside-menu-create-tax.component.scss`],
-    providers: [TaxAuthorityComponentStore]
+    providers: [TaxAuthorityComponentStore],
+    standalone: false
 })
-export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy {
+export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+    /** Reference to the reactive dropdown field component for tax authority selection */
+    @ViewChild('dropdownRef') public dropdownRef: ReactiveDropdownFieldComponent;
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Input() public tax: TaxResponse;
     @Input() public asidePaneState: string;
@@ -74,9 +80,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         private salesService: SalesService,
         private generalService: GeneralService,
         private componentStore: TaxAuthorityComponentStore,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.initForm();
+        this.store.dispatch(this.settingsTaxesActions.CreateTaxResponse(null));
     }
 
     /**
@@ -109,7 +117,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             .subscribe(taxes => {
                 if (taxes && taxes.length) {
                     let arr: IOption[] = [];
-                    taxes.forEach(tax => {
+                    (Array.isArray(taxes) ? taxes : []).forEach(tax => {
                         arr.push({ label: tax.name, value: tax?.uniqueName });
                     });
                     this.allTaxes = arr;
@@ -134,6 +142,19 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             .subscribe(result => this.isUpdateTaxInProcess = result);
     }
 
+    /**
+     * Listens to the input change event of warehouse search filter
+     *
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    public ngAfterViewInit(): void {
+        if (!this.tax?.uniqueName){
+            setTimeout(() => {
+                this.dropdownRef?.openDropdownPanel();
+            }, 200);
+        }
+    }
+
     public ngOnChanges(changes: SimpleChanges): void {
         if ('tax' in changes && changes.tax.currentValue && (changes.tax.currentValue !== changes.tax.previousValue)) {
             this.checkIfTdsOrTcs = this.tax.taxType.includes('tcs') || this.tax.taxType.includes('tds');
@@ -149,7 +170,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             this.taxForm.get('taxAuthority').setValue(this.tax?.taxAuthority ?? '');
             (this.taxForm.get('taxAuthorityRequest') as FormGroup).get('uniqueName').setValue(this.tax.taxAuthority?.uniqueName ?? '');
             this.taxForm.get('taxValue').setValue(this.tax.taxDetail[0].taxValue ?? '');
-            this.taxForm.get('date').setValue(dayjs(this.tax.taxDetail[0].date).toDate() ?? dayjs().toDate());
+            const rawDate = this.tax.taxDetail[0].date;
+            const parsedDate = dayjs(rawDate, GIDDH_DATE_FORMAT).isValid() ? dayjs(rawDate, GIDDH_DATE_FORMAT).toDate() : (dayjs(rawDate).isValid() ? dayjs(rawDate).toDate() : dayjs().toDate());
+            this.taxForm.get('date').setValue(parsedDate);
             this.taxForm.get('tdsTcsTaxSubTypes').setValue(this.subType ?? '');
             this.taxForm.get('taxType').setValue(this.subType ? this.tax.taxType?.replace(this.subType, '') : this.tax.taxType);
             this.taxForm.get('taxFileDate').setValue(this.tax.taxFileDate?.toString() ?? '');
@@ -170,7 +193,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         this.componentStore.taxAuthorityList$.pipe(skip(1),take(1)).subscribe(taxAuthorities => {
             if (taxAuthorities?.length) {
                 let arr: IOption[] = [];
-                taxAuthorities.forEach(tax => {
+                (Array.isArray(taxAuthorities) ? taxAuthorities : []).forEach(tax => {
                     arr.push({ label: tax.name, value: tax?.uniqueName });
                 });
                 this.taxAuthorityList = arr;
@@ -272,7 +295,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             if (!dataToSave.accounts) {
                 dataToSave.accounts = [];
             }
-            this.linkedAccountsOption.forEach((obj) => {
+            (Array.isArray(this.linkedAccountsOption) ? this.linkedAccountsOption : []).forEach((obj) => {
                 if (obj?.value === dataToSave.account) {
                     let accountObj = obj.label.split(' - ');
                     dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj?.value });
@@ -312,6 +335,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                     }
 
                     this.taxList.push({ label: res.taxes[key]?.label, value: res.taxes[key]?.value });
+                    this.changeDetectorRef.detectChanges();
                 });
                 this.taxListSource$ = observableOf(this.taxList);
             } else {
@@ -385,7 +409,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             { label: this.commonLocaleData?.app_tax_subtypes?.payable, value: 'pay' }
         ];
         if (this.subType) {
-            this.tdsTcsTaxSubTypes.forEach(key => {
+            (Array.isArray(this.tdsTcsTaxSubTypes) ? this.tdsTcsTaxSubTypes : []).forEach(key => {
                 if (key?.value === this.subType) {
                     this.selectedTaxType = key.label;
                 }

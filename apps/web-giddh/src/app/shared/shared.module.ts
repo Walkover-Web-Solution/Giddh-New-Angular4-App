@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
+import { KeyboardNavigationModule } from './helpers/directives/enter-next/keyboard-navigation.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
@@ -23,9 +24,11 @@ import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalD
 import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
+import { Configuration } from '../app.constant';
+import { environment } from '../../environments/environment.generated';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
+import { TributeMentionModule } from './helpers/directives/tributeMention/tributeMention.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
@@ -42,6 +45,8 @@ import { CheckPermissionModule } from '../permissions/check-permission.module';
 import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/generic.aside.menu.account.module';
 import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { ExportMasterDialogComponent } from './header/components/export-master-dialog/export-master-dialog.component';
@@ -57,11 +62,13 @@ import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { GiddhNumberFormatModule } from './helpers/pipes/number-format/number-format.module';
 
-const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
+
+const SOCIAL_CONFIG = Configuration.isElectron ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
-        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
+        provider: new GoogleLoginProvider(environment.GOOGLE_CLIENT_ID)
     }
 ], false);
 
@@ -100,15 +107,17 @@ export function provideConfig() {
         ElementViewChildModule,
         DecimalDigitsModule,
         DigitsOnlyModule,
+        KeyboardNavigationModule,
         MatPaginatorModule,
         Daterangepicker,
         TextCaseChangeModule,
+        TributeMentionModule,
         HighlightModule,
         NgxMaskModule.forRoot(),
         CommandKModule,
         NgxDaterangepickerMd.forRoot(),
         ScrollingModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
@@ -123,6 +132,8 @@ export function provideConfig() {
         CheckPermissionModule,
         AccountUpdateNewDetailsModule,
         MatRadioModule,
+        MatFormFieldModule,
+        MatSelectModule,
         MatButtonModule,
         MatDialogModule,
         MatTooltipModule,
@@ -137,6 +148,7 @@ export function provideConfig() {
     exports: [
         CommonModule,
         DecimalDigitsModule,
+        KeyboardNavigationModule,
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,
@@ -150,7 +162,7 @@ export function provideConfig() {
         MfReportComponent,
         ElementViewChildModule,
         NgxDaterangepickerMd,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,

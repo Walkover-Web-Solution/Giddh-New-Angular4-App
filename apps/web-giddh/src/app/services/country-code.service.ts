@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { MOBILE_NUMBER_SELF_URL } from '../app.constant';
 
 @Injectable({
     providedIn: 'root'
@@ -17,8 +18,6 @@ export class CountryCodeService {
     private isLoading: boolean = false;
     /** Default country code to use when API calls fail */
     private readonly DEFAULT_COUNTRY_CODE: string = 'in';
-    /** API endpoint to get client's IP address */
-    private readonly MOBILE_NUMBER_SELF_URL: string = 'https://api.db-ip.com/v2/free/self';
     /** Primary API endpoint to get country code from IP address */
     private readonly MOBILE_NUMBER_IP_ADDRESS_URL: string = 'http://ip-api.com/json/';
     /** Fallback API endpoint to get country code from IP address */
@@ -99,7 +98,7 @@ export class CountryCodeService {
      */
     private getIPAddress(): Observable<any> {
         return ajax({
-            url: this.MOBILE_NUMBER_SELF_URL,
+            url: MOBILE_NUMBER_SELF_URL,
             method: 'GET'
         }).pipe(
             map(response => response.response),

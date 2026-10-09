@@ -4,10 +4,12 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { GeneralService } from '../../../services/general.service';
 import { SearchService } from '../../../services/search.service';
 import { IOption } from '../../../app.constant';
+import { concat, map, some } from '../../../lodash-optimized';
 
 @Component({
     selector: 'petty-cash-approve-confirm-dialog',
-    templateUrl: './approve-petty-cash-entry-confirm-dialog.component.html'
+    templateUrl: './approve-petty-cash-entry-confirm-dialog.component.html',
+    standalone: false
 })
 export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
     /** Show/hide option to choose expense category */

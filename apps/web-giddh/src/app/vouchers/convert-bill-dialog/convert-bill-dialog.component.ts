@@ -5,7 +5,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 @Component({
     selector: 'app-convert-bill-dialog',
     templateUrl: './convert-bill-dialog.component.html',
-    styleUrls: ['./convert-bill-dialog.component.scss']
+    styleUrls: ['./convert-bill-dialog.component.scss'],
+    standalone: false
 })
 export class ConvertBillDialogComponent implements OnInit {
     /* This will hold local JSON data */
@@ -33,7 +34,7 @@ export class ConvertBillDialogComponent implements OnInit {
     public ngOnInit(): void {
         if (this.vouchers?.length) {
             let formArray = this.convertToBillForm.get('purchaseOrders') as FormArray;
-            this.vouchers.forEach(voucher => {
+            (Array.isArray(this.vouchers) ? this.vouchers : []).forEach(voucher => {
                 formArray.push(this.getPurchaseOrderFormGroup(voucher));
             });  
         }

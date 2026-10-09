@@ -11,7 +11,9 @@ import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
 import { CustomActions } from '../../store/custom-actions';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ManufacturingActions {
     // GET_ALL MF Report
 

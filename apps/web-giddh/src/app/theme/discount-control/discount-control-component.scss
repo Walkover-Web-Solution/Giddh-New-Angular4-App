@@ -1,5 +1,5 @@
-.checkbox{
-    .checkbox-label{
+.checkbox {
+    .checkbox-label {
         white-space: normal;
         line-height: normal;
     }
@@ -10,10 +10,9 @@
 .display-none {
     display: none;
 }
-.custom-discount-menu{
-
-    ul{
-        &.discount-list{
+.custom-discount-menu {
+    ul {
+        &.discount-list {
             max-height: 164px !important;
         }
     }
@@ -26,5 +25,4 @@
             width: 85px;
         }
     }
-
 }

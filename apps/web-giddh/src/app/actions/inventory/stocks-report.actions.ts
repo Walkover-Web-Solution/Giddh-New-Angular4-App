@@ -10,7 +10,9 @@ import { InventoryService } from '../../services/inventory.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../../store/custom-actions';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class StockReportActions {
 
     public GetStocksReport$: Observable<Action> = createEffect(() => this.action$

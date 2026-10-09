@@ -9,8 +9,11 @@ import { HttpWrapperService } from '../http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from '../service.config';
 import { ERROR_LOG_API } from '../apiurls/exception-log.api';
 import { take } from 'rxjs/operators';
+import { indexOf } from '../../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GiddhErrorHandler {
 
     constructor(

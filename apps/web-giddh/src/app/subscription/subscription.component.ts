@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../store';
@@ -11,7 +11,6 @@ import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/he
 import { ClipboardService } from 'ngx-clipboard';
 import { LoginActions } from '../actions/login.action';
 import { SessionActions } from '../actions/session.action';
-import { API_POSTMAN_DOC_URL } from '../app.constant';
 import { cloneDeep } from '../lodash-optimized';
 import { AuthenticationService } from '../services/authentication.service';
 import * as dayjs from 'dayjs';
@@ -19,6 +18,7 @@ import * as duration from 'dayjs/plugin/duration';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
+import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 
 dayjs.extend(duration)
@@ -26,7 +26,8 @@ dayjs.extend(duration)
     selector: 'app-subscription',
     templateUrl: './subscription.component.html',
     styleUrls: ['./subscription.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
     /** True If Auth key copied and used toggle Copy text */
@@ -66,7 +67,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public userSessionId: any = null;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
-    public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
+    public apiPostmanDocUrl: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -97,8 +98,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private changeDetectionRef: ChangeDetectorRef,
         private dialog: MatDialog,
         private generalService: GeneralService,
-        private clipboardService: ClipboardService
+        private clipboardService: ClipboardService,
+        @Inject(ServiceConfig) private serviceConfig: IServiceConfigArgs
     ) {
+        this.apiPostmanDocUrl = this.serviceConfig.API_DOC_URL;
         this.contactNo$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
                 return appState.session.user.user.contactNo;
@@ -198,7 +201,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
             if (user) {
                 this.user = cloneDeep(user.user);
-                this.userSessionId = _.cloneDeep(user.session?.id);
+                this.userSessionId = cloneDeep(user.session?.id);
             }
         });
 

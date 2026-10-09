@@ -16,6 +16,7 @@ import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
     selector: 'app-aside-recurring-entry',
     templateUrl: './aside.menu.recurringEntry.component.html',
     styleUrls: ['./aside.menu.recurringEntry.component.scss'],
+    standalone: false
 })
 
 export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDestroy {

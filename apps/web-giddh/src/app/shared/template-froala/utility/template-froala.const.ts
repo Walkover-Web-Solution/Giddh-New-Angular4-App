@@ -2,7 +2,8 @@
 export enum EmailType {
     To = 'to',
     Cc = 'cc',
-    Bcc = 'bcc'
+    Bcc = 'bcc',
+    ReplyTo = 'replyTo'
 };
 /** Trigger module enum */
 export enum TriggerModuleEnum {

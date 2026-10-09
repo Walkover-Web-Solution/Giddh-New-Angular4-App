@@ -8,11 +8,13 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
 import { IOption } from '../../app.constant';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 
 @Component({
     selector: 'generic-aside-menu-account',
     styleUrls: [`./generic.aside.menu.account.component.scss`],
-    templateUrl: './generic.aside.menu.account.component.html'
+    templateUrl: './generic.aside.menu.account.component.html',
+    standalone: false
 })
 export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public selectedGrpUniqueName: string;
@@ -87,6 +89,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     constructor(
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
+        private groupWithAccountsAction: GroupWithAccountsAction,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         // account-add component's property

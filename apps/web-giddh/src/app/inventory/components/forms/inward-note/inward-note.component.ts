@@ -11,11 +11,13 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
+import { cloneDeep, forEach, without } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'transfer-inward-note',
     templateUrl: './inward-note.component.html',
     styleUrls: ['./inward-note.component.scss'],
+    standalone: false
 })
 
 export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
@@ -187,7 +189,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                 inventoryUser
             });
         } else {
-            items.controls.forEach(c => c?.patchValue({ ...c?.value, inventoryUser }));
+            (Array.isArray(items.controls) ? items.controls : []).forEach(c => c?.patchValue({ ...c?.value, inventoryUser }));
         }
     }
 
@@ -234,7 +236,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
             const control = items.at(index);
             control?.patchValue({ ...control?.value, stock, stockUnit });
         } else {
-            items.controls.forEach(c => c?.patchValue({ ...c?.value, stock, stockUnit }));
+            (Array.isArray(items.controls) ? items.controls : []).forEach(c => c?.patchValue({ ...c?.value, stock, stockUnit }));
         }
     }
 
@@ -245,7 +247,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         const manufacturingDetailsContorl = this.manufacturingDetails;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
         let count = 0;
-        _.forEach(control.controls, (o) => {
+        forEach(control.controls, (o) => {
             if (o?.value.stockUniqueName === uniqueName) {
                 count++;
             }
@@ -348,13 +350,13 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         const manufacturingDetailsContorl = this.manufacturingDetails;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
         let rawArr = control.getRawValue();
-        _.forEach(rawArr, (o, i) => {
+        forEach(rawArr, (o, i) => {
             if (!o.quantity || !o.stockUniqueName || !o.stockUnitCode) {
-                rawArr = _.without(rawArr, o);
+                rawArr = without(rawArr, o);
                 control.removeAt(i);
             }
         });
-        linkedStocks = _.cloneDeep(rawArr);
+        linkedStocks = cloneDeep(rawArr);
         return linkedStocks;
     }
 

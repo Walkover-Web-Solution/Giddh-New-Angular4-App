@@ -5,7 +5,7 @@ import { PAGINATION_LIMIT } from "../../app.constant";
 export class AdvanceSearchRequest {
     public dataToSend: AdvanceSearchModel = new AdvanceSearchModel();
     public q: string = '';
-    public page: number = 0;
+    public page: number = 1;
     public count: number = PAGINATION_LIMIT;
     public accountUniqueName: string = '';
     public sort: string = 'asc';
@@ -62,6 +62,7 @@ export class AdvanceSearchModel {
     public inventory: AdvanceSearchRequestInventory = new AdvanceSearchRequestInventory();
     public includeSalesPersons: boolean = true;
     public salesPersonUniqueNames: string[];
+    public selectAllFields?: string[];
 
     constructor() {
         this.inventory = new AdvanceSearchRequestInventory();
@@ -72,6 +73,7 @@ export class AdvanceSearchModel {
 export class AdvanceSearchRequestInventory {
     public includeInventory: false;
     public inventories: string[];
+    public selectAllFields?: string[];
     public quantity: null;
     public includeQuantity: false;
     public quantityLessThan: false;

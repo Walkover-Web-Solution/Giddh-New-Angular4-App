@@ -28,6 +28,18 @@ build/Release
 # Users Environment Variables
 .lock-wscript
 
+# Environment files with sensitive credentials
+.env.local
+.env.prod
+.env.stage
+.env.test
+.env.electron
+# Keep .env.example for reference
+!.env.example
+
+# Generated environment files (may contain sensitive data)
+apps/web-giddh/src/environments/environment.generated.ts
+
 # OS generated files #
 .DS_Store
 ehthumbs.db
@@ -159,10 +171,23 @@ xplat/**/*.ngsummary.json
 /apps/electron-giddh/src/node_modules
 
 package-lock.json
-/apps/electron-giddh/src/
+/apps/electron-giddh/src/*
+!/apps/electron-giddh/src/package.json
+!/apps/electron-giddh/src/preload.js
 
-#
+# Environment Variables - SECURITY: Never commit credentials to public repo
 .env
+.env.local
+.env.test
+.env.electron
+.env.stage
+.env.prod
+.env.test
+.env.*.local
+
+# Generated environment files
+apps/web-giddh/src/environments/environment.generated.ts
+
 .angular/
 
 # Script

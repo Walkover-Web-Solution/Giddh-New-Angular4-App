@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY, of, mergeMap } from "rxjs";
+import { ComponentStore } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
 import { ToasterService } from "../../services/toaster.service";
 import { VatService } from "../../services/vat.service";
 import { GstReconcileService } from "../../services/gst-reconcile.service";
@@ -16,6 +16,8 @@ export interface VatReportState {
     getHMRCInProgress: boolean;
     obligationList: any;
     getObligationListInProgress: boolean;
+    initiatePaymentInProgress: boolean;
+    initiatePaymentResponse: any;
 }
 
 const DEFAULT_STATE: VatReportState = {
@@ -26,7 +28,9 @@ const DEFAULT_STATE: VatReportState = {
     connectToHMRCUrl: null,
     getHMRCInProgress: false,
     obligationList: null,
-    getObligationListInProgress: false
+    getObligationListInProgress: false,
+    initiatePaymentInProgress: false,
+    initiatePaymentResponse: null
 };
 
 @Injectable()
@@ -44,6 +48,8 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
     public getObligationListInProgress$ = this.select(state => state.getObligationListInProgress);
     public getTaxNumberInProgress$ = this.select(state => state.getTaxNumberInProgress);
     public getHMRCInProgress$ = this.select(state => state.getHMRCInProgress);
+    public initiatePaymentInProgress$ = this.select(state => state.initiatePaymentInProgress);
+    public initiatePaymentResponse$ = this.select(state => state.initiatePaymentResponse);
 
     public currentCompanyBranches$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -59,7 +65,7 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
             switchMap((req) => {
                 this.patchState({ liabilityPaymentList: null, liabilityPaymentListInProgress: true });
                 return this.vatService.getPaymentLiabilityList(req.payload, req.searchForm, req.isPaymentMode).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 return this.patchState({ liabilityPaymentList: res, liabilityPaymentListInProgress: false });
@@ -89,7 +95,7 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
             switchMap(() => {
                 this.patchState({ taxNumber: null, getTaxNumberInProgress: true });
                 return this.gstReconcileService.getTaxDetails().pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 return this.patchState({ taxNumber: res, getTaxNumberInProgress: false });
@@ -119,7 +125,7 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
             switchMap((req) => {
                 this.patchState({ connectToHMRCUrl: null, getHMRCInProgress: true });
                 return this.vatService.getHMRCAuthorization(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 return this.patchState({ connectToHMRCUrl: res, getHMRCInProgress: false });
@@ -140,6 +146,36 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
     });
 
     /**
+     * Initiates VAT payment for UK liabilities
+     *
+     * @memberof VatReportComponentStore
+     */
+    readonly initiatePayment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ initiatePaymentResponse: null, initiatePaymentInProgress: true });
+                return this.vatService.initiatePayment(req.companyUniqueName, req.payload).pipe(
+                    tap(
+                        (res: any) => {
+                            if (res?.status === "success") {
+                                return this.patchState({ initiatePaymentResponse: res, initiatePaymentInProgress: false });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ initiatePaymentResponse: null, initiatePaymentInProgress: false });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ initiatePaymentResponse: null, initiatePaymentInProgress: false });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
      * VAT Obligations API Call
      *
      * @memberof VatReportComponentStore
@@ -149,7 +185,7 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
             switchMap((req) => {
                 this.patchState({ obligationList: null, getObligationListInProgress: true });
                 return this.vatService.getVatObligations(req.companyUniqueName, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 return this.patchState({ obligationList: res, getObligationListInProgress: false });

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -9,8 +9,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integration.service';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep  } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
+import { ServiceConfig } from '../../services/service.config';
 
 export interface ActiveTriggers {
     title: string;
@@ -23,7 +24,8 @@ export interface ActiveTriggers {
 @Component({
     selector: 'setting-triggers',
     templateUrl: './triggers.component.html',
-    styleUrls: ['./triggers.component.scss']
+    styleUrls: ['./triggers.component.scss'],
+    standalone: false
 })
 export class TriggersComponent implements OnInit, OnDestroy {
     /* Selector for variableComponent type field */
@@ -120,7 +122,8 @@ export class TriggersComponent implements OnInit, OnDestroy {
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        @Inject(ServiceConfig) private serviceConfig,
     ) {
         this.resetCommunicationForm();
     }
@@ -131,7 +134,7 @@ export class TriggersComponent implements OnInit, OnDestroy {
      * @memberof TriggersComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = this.serviceConfig.IMG_PATH;
         this.getCommunicationPlatforms();
     }
 

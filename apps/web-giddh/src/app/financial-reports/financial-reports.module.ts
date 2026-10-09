@@ -1,6 +1,6 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -14,7 +14,7 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { FinancialSearchPipe } from '../shared/header/pipe/financial-search.pipe';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
@@ -52,6 +52,8 @@ import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
+import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 
 @NgModule({
     declarations: [
@@ -75,10 +77,10 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
     ],
     providers: [ProjectAccountingService],
     exports: [
-        FinancialReportsComponent, 
-        CurrencyModule,
-        FinancialReportsComponent, 
-        CurrencyModule,
+        FinancialReportsComponent,
+        GiddhNumberFormatModule,
+        FinancialReportsComponent,
+        GiddhNumberFormatModule,
         ProfitLossComponent,
         ProfitLossGridComponent,
         ProfitLossGridRowComponent,
@@ -101,7 +103,7 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         RecTypeModule,
         FormFieldsModule,
         ClickOutsideModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,
@@ -117,8 +119,11 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         MatTooltipModule,
         MatMenuModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        NewConfirmationModalModule,
+        GiddhDatePipe
     ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class FinancialReportsModule {
 }

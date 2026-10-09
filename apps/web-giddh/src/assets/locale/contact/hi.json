@@ -36,6 +36,9 @@
     "third_interval": "तीसरा अंतराल",
     "last_interval": "अंतिम अंतराल",
     "aging_dropdown_error": "4 वां कॉलम 5 वीं से कम और 5 वां 6 वीं से कम होना चाहिए",
+    "aging_range_error_min": "[INTERVAL] [MIN] से बड़ा होना चाहिए",
+    "aging_range_error_max": "[INTERVAL] [MAX] से छोटा होना चाहिए",
+    "aging_range_error_between": "[INTERVAL] [MIN] से बड़ा और [MAX] से छोटा होना चाहिए",
     "customer_category_options": {
         "opening_balance": "प्रारंभिक शेष",
         "sales": "बिक्री",
@@ -79,7 +82,7 @@
     "parent_group": "जनक समूह",
     "state": "राज्य",
     "gstin": "कर संख्या",
-    "bulk_payment_warning": "थोक भुगतान के लिए एक एकल डेबिट लेनदेन उत्पन्न किया जाएगा, और आप इसे गिद्ध में एकाधिक प्रविष्टियों में मैप नहीं कर पाएंगे।",
+    "bulk_payment_warning": "थोक भुगतान के लिए एक एकल डेबिट लेनदेन उत्पन्न किया जाएगा, और आप इसे [BRAND_NAME] में एकाधिक प्रविष्टियों में मैप नहीं कर पाएंगे।",
     "show_bank_balance": "बैंक शेष दिखाएं",
     "hide_bank_balance": "बैंक शेष छिपाएं",
     "unpaid_invoices": "अवैतनिक चालान",

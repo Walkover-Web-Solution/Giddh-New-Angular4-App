@@ -8,7 +8,8 @@ import { ToasterService } from "../../../services/toaster.service";
 
 @Component({
     selector: "petty-cash-reject-confirm-dialog",
-    templateUrl: "./reject-petty-cash-entry-confirm-dialog.component.html"
+    
+      standalone: false,templateUrl: "./reject-petty-cash-entry-confirm-dialog.component.html"
 })
 export class RejectPettyCashEntryConfirmDialogComponent implements OnInit, OnDestroy {
     @Input() public selectedItem: ExpenseResults;

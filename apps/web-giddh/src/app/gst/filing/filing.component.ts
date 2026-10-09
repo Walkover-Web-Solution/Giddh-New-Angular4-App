@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -11,21 +11,27 @@ import { AppState } from '../../store';
 import { GstReport } from '../constants/gst.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { RestrictedModules } from '../../app.constant';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'filing',
     templateUrl: 'filing.component.html',
     styleUrls: ['filing.component.scss'],
-    encapsulation: ViewEncapsulation.Emulated
+    encapsulation: ViewEncapsulation.Emulated,
+    standalone:false
 })
 export class FilingComponent implements OnInit, OnDestroy {
     /** This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
     public currentPeriod: GstDatePeriod = null;
     public selectedGst: string = null;
+    /** Holds the GST report type that should be auto-navigated to (when URL lacks from/to).
+     *  Passed to <tax-sidebar> which uses its own currentPeriod to build the full URL. */
+    public pendingNavigateType: string = null;
     public gstNumber: string = null;
     public activeCompanyGstNumber: string = '';
     public selectedTab: string = '';
@@ -66,13 +72,16 @@ export class FilingComponent implements OnInit, OnDestroy {
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** Image path for assets */
+    public imgPath: string = '';
 
     constructor(
         private route: Router,
         private activatedRoute: ActivatedRoute,
         private store: Store<AppState>,
         private gstAction: GstReconcileActions,
-        private generalService: GeneralService) {
+        private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
         this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -89,6 +98,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.imgPath = this.serviceConfig.IMG_PATH;
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
@@ -98,13 +108,22 @@ export class FilingComponent implements OnInit, OnDestroy {
                 from: params['from'],
                 to: params['to']
             };
+            if (params['return_type'] && (!params['from'] || !params['to'])) {
+                this.pendingNavigateType = params['return_type'];
+                return;
+            } else {
+                this.pendingNavigateType = null;
+            }
             if (params['selectedGst']) {
                 this.activeCompanyGstNumber = params['selectedGst'];
                 this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
-            if (this.selectedGst !== params['return_type']) {
+            const returnTypeChanged = this.selectedGst !== params['return_type'];
+            if (returnTypeChanged) {
                 this.selectedGst = params['return_type'];
+            }
+            if (params['return_type'] && params['from'] && params['to']) {
                 this.loadGstReport(this.activeCompanyGstNumber);
             }
             let tab = Number(params['tab']);
@@ -233,6 +252,10 @@ export class FilingComponent implements OnInit, OnDestroy {
         if (gstNumber) {
             this.activeCompanyGstNumber = gstNumber;
         }
+        
+        if (!this.currentPeriod.from || !this.currentPeriod.to) {
+            return;
+        }
 
         let request: GstOverViewRequest = new GstOverViewRequest();
         request.from = this.currentPeriod.from;
@@ -279,7 +302,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      */
     public getGstReturnFieldText(): string {
         let text = this.localeData?.filing?.gst_filed_success;
-        text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
+        text = text?.replace("[PERIOD_FROM]", GiddhDatePipe.formatDate(this.currentPeriod?.from))?.replace("[PERIOD_TO]", GiddhDatePipe.formatDate(this.currentPeriod?.to));
         return text;
     }
 
@@ -308,6 +331,8 @@ export class FilingComponent implements OnInit, OnDestroy {
         if (event) {
             this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
+            // show "Pull from GSTN" button for Reconcilation and File Return tab
+            this.showTaxPro = event.index === 1 || event.index === 2;
         }
     }
 }

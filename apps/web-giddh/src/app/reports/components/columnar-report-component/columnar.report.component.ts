@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Angular21ChangeDetectionService } from '../../../services/angular21-change-detection.service';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
@@ -20,7 +21,9 @@ import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 @Component({
     selector: 'columnar-report-component',
     templateUrl: './columnar.report.component.html',
-    styleUrls: ['./columnar.report.component.scss']
+    styleUrls: ['./columnar.report.component.scss'],
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.Default
 })
 
 export class ColumnarReportComponent implements OnInit, OnDestroy {
@@ -38,6 +41,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public forceClear: boolean = false;
+    /** Signal bound to the group dropdown's `refreshList` input; bumping it triggers a fresh page-1 fetch */
+    public groupListRefreshTrigger = signal<number>(0);
     public fromMonth: any = null;
     public toMonth: any = null;
     public financialYearSelected: any;
@@ -78,7 +83,10 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private ledgerService: LedgerService,
         private generalService: GeneralService,
-        private groupService: GroupService
+        private groupService: GroupService,
+        private changeDetectorRef: ChangeDetectorRef,
+        private ngZone: NgZone,
+        private changeDetectionService: Angular21ChangeDetectionService
     ) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
@@ -98,6 +106,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                     this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
                     this.selectActiveFinancialYear();
                 }
+                this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
             }
         });
 
@@ -118,13 +127,14 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.settingsFinancialYearService.GetAllFinancialYears().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.body && res.body.financialYears) {
                 let selectYear = [];
-                res.body.financialYears.forEach(key => {
+                (Array.isArray(res.body.financialYears) ? res.body.financialYears : []).forEach(key => {
                     let financialYearStarts = dayjs(key?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = dayjs(key?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     selectYear.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
                 });
                 this.selectYear = selectYear;
                 this.selectActiveFinancialYear();
+                this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
             }
         });
     }
@@ -185,6 +195,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 if (res?.status === "success") {
                     if (isShowReport) {
                         this.columnarReportResponse = res?.body;
+                        this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
                     } else {
                         let blob = this.generalService.base64ToBlob(res.body.data, 'application/xls', 512);
                         return saveAs(blob, res.body.name);
@@ -192,6 +203,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(res?.message);
+                    this.changeDetectionService.safeChangeDetection(this.changeDetectorRef, this.ngZone);
                 }
             });
         }
@@ -227,6 +239,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public selectFinancialYear(event): void {
         if (event && event.value) {
             this.financialYearSelected = event.value;
+            
+            const financialYearStartLabel = dayjs(event?.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+            const financialYearEndLabel = dayjs(event?.value?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+            this.activeFinancialYearLabel = financialYearStartLabel + " - " + financialYearEndLabel;
+
             this.exportRequest.financialYear = dayjs(event.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
 
             let financialYearStarts = dayjs(new Date(event.value?.financialYearStarts?.split("-")?.reverse()?.join("-")));
@@ -247,6 +264,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
                 this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             }
+            this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
         }
     }
 
@@ -347,13 +365,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      */
     public selectActiveFinancialYear(): void {
         if (this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
-            this.selectYear.forEach(key => {
+            (Array.isArray(this.selectYear) ? this.selectYear : []).forEach(key => {
                 if (key?.value?.uniqueName === this.activeFinancialYear) {
                     this.selectFinancialYear(key);
-
-                    let financialYearStarts = dayjs(key?.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    let financialYearEnds = dayjs(key?.value?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    this.activeFinancialYearLabel = financialYearStarts + " - " + financialYearEnds;
                 }
             });
         }
@@ -361,7 +375,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
     /**
      * Handles pagination events and updates API parameters
-     * 
+     *
      * @param {PageEvent} event - Contains pagination details
      * @memberof ColumnarReportComponent
      */
@@ -384,13 +398,15 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.fromMonth = null;
         this.toMonth = null;
         this.forceClear$ = observableOf({ status: true });
-        this.forceClear = !this.forceClear; 
+        this.forceClear = !this.forceClear;
+        this.groupListRefreshTrigger.update(value => value + 1);
         this.fromMonthNames = [];
         this.toMonthNames = [];
         this.columnarReportResponse = null;
         this.exportRequest.balanceTypeAsSign = false;
         this.exportRequest.showHideOpeningClosingBalance = false;
         this.isBalanceTypeAsSign = false;
+        this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
     }
 
     /**
@@ -437,6 +453,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
+                    this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
                 }
             });
         } else {

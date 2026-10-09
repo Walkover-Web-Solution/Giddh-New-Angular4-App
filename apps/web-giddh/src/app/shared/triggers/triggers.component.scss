@@ -13,7 +13,8 @@
             }
             &:hover {
                 background-color: var(--bg-primary-color) !important;
-                mat-card-title, mat-card-subtitle {
+                mat-card-title,
+                mat-card-subtitle {
                     color: var(--color-white) !important;
                 }
             }

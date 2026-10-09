@@ -4,18 +4,13 @@
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
     [ngClass]="{ 'd-none': !groupDetail.isVisible }"
 >
-    <div
-        class="col-4 group"
-        [innerHTML]="groupDetail.groupName | highlight: search"
-        [style.padding-left]="padding + 'px !important'"
-    ></div>
+    <div class="col-4 group" [innerHTML]="groupDetail.groupName | highlight: search" [style.padding-left]="padding + 'px !important'"></div>
     <div class="col-8 border-left group pull-right" *ngIf="!groupDetail.level1">
         <div class="row">
             <span
                 class="col border-left text-right px-0 pr-3"
                 [ngClass]="{
-                    'invisible':
-                        groupDetail?.isOpen && (groupDetail?.accounts?.length || groupDetail?.childGroups?.length)
+                    'invisible': groupDetail?.isOpen && (groupDetail?.accounts?.length || groupDetail?.childGroups?.length),
                 }"
             >
                 <span
@@ -24,23 +19,24 @@
                         groupDetail.closingBalance.type === 'DEBIT' &&
                         groupDetail.closingBalance.amount !== 0
                     "
-                    >-</span
                 >
+                    -
+                </span>
                 <span
                     *ngIf="
                         groupDetail.category === 'expenses' &&
                         groupDetail.closingBalance.type === 'CREDIT' &&
                         groupDetail.closingBalance.amount !== 0
                     "
-                    >-</span
                 >
+                    -
+                </span>
                 <span class="d-inline-flex">
                     <amount-field
                         [amount]="groupDetail.closingBalance.amount"
                         [currencySymbol]="false"
                         [currencyCode]="false"
-                    >
-                    </amount-field>
+                    ></amount-field>
                 </span>
             </span>
         </div>
@@ -73,10 +69,7 @@
 </ng-container>
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
-    <section
-        class="flex-nowrap account"
-        [ngClass]="{ 'd-none': !account.isVisible }"
-    >
+    <section class="flex-nowrap account" [ngClass]="{ 'd-none': !account.isVisible }">
         <div class="row">
             <div
                 class="col-4"
@@ -92,23 +85,24 @@
                                 account.closingBalance.type === 'DEBIT' &&
                                 account.closingBalance.amount !== 0
                             "
-                            >-</span
                         >
+                            -
+                        </span>
                         <span
                             *ngIf="
                                 account.category === 'expenses' &&
                                 account.closingBalance.type === 'CREDIT' &&
                                 account.closingBalance.amount !== 0
                             "
-                            >-</span
                         >
+                            -
+                        </span>
                         <span class="d-inline-flex">
                             <amount-field
                                 [amount]="account.closingBalance.amount"
                                 [currencySymbol]="false"
                                 [currencyCode]="false"
-                            >
-                            </amount-field>
+                            ></amount-field>
                         </span>
                     </span>
                 </div>

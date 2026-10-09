@@ -4,5 +4,22 @@
     [file]="'trial-profit-balance/export'"
     (localeData)="localeData = $event"
 >
-    <a href="javascript:void(0);" aria-label="download" (click)="downloadPlXls()" *ngIf="enableDownload" class="cursor-pointer new-icon-img"><img src="{{ imgPath }}" alt="download img"  /></a>
+    <a
+        href="javascript:void(0);"
+        aria-label="download"
+        *ngIf="enableDownload"
+        [matMenuTriggerFor]="downloadMenu"
+        class="cursor-pointer new-icon-img"
+    >
+        <img [src]="imgPath" alt="download img" />
+    </a>
+    <!-- Menu -->
+    <mat-menu #downloadMenu="matMenu" xPosition="before" yPosition="below">
+        <button mat-menu-item (click)="downloadPlXls(false)" aria-label="group report">
+            {{ localeData?.xls?.main_group_report }}
+        </button>
+        <button mat-menu-item (click)="downloadPlXls(true)" aria-label="complete report">
+            {{ localeData?.xls?.complete_report }}
+        </button>
+    </mat-menu>
 </div>

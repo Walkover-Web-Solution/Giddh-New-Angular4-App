@@ -1,6 +1,6 @@
 
 import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, take, takeUntil, tap } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
@@ -12,14 +12,14 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization, StateDetailsRequest, OrganizationDetails } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
 import * as dayjs from 'dayjs';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { clone, cloneDeep, find } from '../../lodash-optimized';
+import { clone, cloneDeep, find, orderBy } from '../../lodash-optimized';
 import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -27,9 +27,9 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/default-menus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
+import { ACCOUNTING_BREAKPOINTS, BranchHierarchyType, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -44,6 +44,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { ServiceConfig } from '../../services/service.config';
+import { GiddhDatePipe } from '../pipes/giddh-date.pipe';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -51,19 +52,20 @@ interface SubscriptionErrorFlags {
     isSubscriptionRenewalExpired: boolean;
     isSubscriptionEnded: boolean;
     isTransactionLimitExceeded: boolean;
+    isPrepaidRenewalAvailable: boolean;
 };
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    styleUrls: ['./header.component.scss'],
+    standalone:false
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
     public userIsSuperUser: boolean = true; // Protect permission module
     public session$: Observable<userLoginStateEnum>;
     public accountSearchValue: string = '';
-    public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
     public dayjs = dayjs;
     public imgPath: string = '';
     public subscribedPlan: SubscriptionsUser;
@@ -75,7 +77,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
     /* Hold giddh logo source */
-    public giddhLogoSrc: string = '';
+    public brandLogoUrl: string = '';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -118,7 +120,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userIsCompanyUser: boolean = false;
     public userName: string;
     public userEmail: string;
-    public isElectron: boolean = isElectron;
+    public isElectron: boolean = Configuration.isElectron;
     public isTodaysDateSelected: boolean = false;
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
@@ -228,9 +230,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** Hold broadcast event */
     public broadcast: any;
     /** Hold true in production environment */
-    public isProdMode: boolean = PRODUCTION_ENV;
-    /** Hold broadcast event for project wise accounting */
-    public projectBroadcast: any;
+    public isProdMode: boolean = environment.PRODUCTION_ENV;
+    /** Hold broadcast event for go to branch */
+    public goToBranchBroadcast: any;
     /** Hold broadcast event for AI OCR */
     public aiOcrBroadcast: any;
     /** Holds true if plan is either trial or cancelled */
@@ -243,7 +245,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         isLiabilitiesExpired: true,
         isSubscriptionRenewalExpired: true,
         isSubscriptionEnded: true,
-        isTransactionLimitExceeded: true
+        isTransactionLimitExceeded: true,
+        isPrepaidRenewalAvailable: true
     }
     /** Holds obligations alert message */
     public obligation: any = null;
@@ -253,7 +256,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isUKCompany: boolean = false;
     /** Holds true if lister is added on error message */
     public isErrorMessageListenerAdded: boolean = false;
-/** True if command dialog is open */
+    /** True if command dialog is open */
     public showCommandDialog: boolean = false;
 
     /**
@@ -280,7 +283,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private authService: AuthenticationService,
         private changeDetection: ChangeDetectorRef,
         private _breakpointObserver: BreakpointObserver,
-        private generalService: GeneralService,
+        public generalService: GeneralService,
         private commonActions: CommonActions,
         private settingsProfileService: SettingsProfileService,
         private settingsProfileAction: SettingsProfileActions,
@@ -293,15 +296,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private sanitizer: DomSanitizer,
         public dialog: MatDialog,
         private socialAuthService: AuthService,
-        @Inject(ServiceConfig) private serviceConfig,
+        @Inject(ServiceConfig) public serviceConfig,
         private elementRef: ElementRef,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private giddhDatePipe: GiddhDatePipe,
+        private activeRoute: ActivatedRoute
     ) {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
-        const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
-        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
+        this.imgPath = this.serviceConfig.IMG_PATH;
+        this.brandLogoUrl = this.serviceConfig.LOGOS.light;
+        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.serviceConfig.CALENDLY_URL);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
@@ -322,6 +325,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
                 this.addClassInBodyIfPageHasTabs();
             }
+            this.generalService.debugLog('Event', event, 'Event type:', event.constructor.name);
+            this.generalService.debugLog('[NavigationEnd Event] Triggered for URL:', this.router.url);
             if (event instanceof NavigationEnd) {
                 if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
@@ -331,9 +336,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.isSubscriptionPage =
                     this.router.url.includes("/pages/user-details/subscription/buy-plan") ||
                     this.router.url.includes("/pages/user-details/subscription/view-subscription") ||
+                    this.router.url.includes("/pages/user-details/subscription/add-extra-transaction") ||
                     this.router.url.includes("/pages/user-details/mobile-number") ||
                     this.router.url.includes("/pages/user-details/auth-key") ||
-                    this.router.url.includes("/pages/user-details/session");
+                    this.router.url.includes("/pages/user-details/session") ||
+                    this.router.url.includes("/pages/user-details/subscription/wallet") ||
+                    this.router.url.includes("/pages/user-details/subscription/activate-subscription") ||
+                    this.router.url.includes("/pages/user-details/subscription/advance-payment");
 
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
@@ -349,6 +358,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
 
                 this.toggleSidebarPane(false, false);
+                this.generalService.debugLog('[NavigationEnd] About to call saveLastState()');
                 this.saveLastState();
             }
             if (event instanceof NavigationStart) {
@@ -447,7 +457,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return;
             }
 
-            let orderedCompanies = _.orderBy(companies, 'name');
+            let orderedCompanies = orderBy(companies, 'name');
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
@@ -459,6 +469,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
+                this.generalService.activeCompany = selectedCmp;
                 // for voucher company message
                 this.voucherApiVersion = this.generalService.voucherApiVersion;
                 if (this.voucherApiVersion === 2) {
@@ -512,15 +523,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
 
-        this.projectBroadcast = new BroadcastChannel("project-wise-accounting");
-        this.projectBroadcast.onmessage = (event) => {
-            if (event?.data?.success) {
-                this.gotToBranchTab();
-            }
-        };
-
-        this.aiOcrBroadcast = new BroadcastChannel("ai-ocr");
-        this.aiOcrBroadcast.onmessage = (event) => {
+        this.goToBranchBroadcast = new BroadcastChannel("go-to-branch");
+        this.goToBranchBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
                 this.gotToBranchTab();
             }
@@ -541,6 +545,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.activeRoute.queryParams.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response.tab || response.required) {
+                this.generalService.restoreRouteQueryFilters();
+            }
+            if (response.removeWarning === 'true' || response.removeWarning === true) {
+                this.showAlertMessage.isPrepaidRenewalAvailable = false;
+            } else {
+                this.showAlertMessage.isPrepaidRenewalAvailable = true;
+            }
+            this.changeDetection.detectChanges();
+        });
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -552,7 +567,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let branches = [];
-                this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
+                this.store.pipe(filter(Boolean), select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
                     branches = data || [];
                 });
                 reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, response);
@@ -590,7 +605,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let userEmail = u.email;
                 this.userEmail = clone(userEmail);
                 let userEmailDomain = userEmail?.replace(/.*@/, '');
-                this.userIsCompanyUser = userEmailDomain && this.companyDomains?.indexOf(userEmailDomain) !== -1;
+                this.userIsCompanyUser = userEmailDomain && this.serviceConfig.EMAIL_DOMAINS?.indexOf(userEmailDomain) !== -1;
                 let name = u.name;
                 if (u.name.match(/\s/g)) {
                     this.userFullName = name;
@@ -736,7 +751,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                     if (this.subscribedPlan?.expiry) {
                         let expiry = (this.subscribedPlan?.expiry)?.split("-")?.reverse()?.join("-");
-                        this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+                        this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) + 1;
                     } else {
                         this.remainingSubscriptionDays = false;
                     }
@@ -764,31 +779,51 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public addListenerErrorMessage(): void {
-        if (!this.isErrorMessageListenerAdded) {
-            this.isErrorMessageListenerAdded = true;
-            const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
-            liabilities.forEach((link: HTMLElement) => {
-                this.renderer.listen(link, 'click', () => {
-                    this.goToLiabilities();
-                });
-            });
-            const obligation = this.elementRef.nativeElement.querySelectorAll('.obligations');
-            obligation.forEach((link: HTMLElement) => {
-                this.renderer.listen(link, 'click', () => {
-                    this.goToObligation();
-                });
-            });
-        }
+        const bindOnce = (element: HTMLElement, handler: () => void) => {
+            if (!element || element.dataset.listenerAttached === 'true') {
+                return;
+            }
+            element.dataset.listenerAttached = 'true';
+            this.renderer.listen(element, 'click', handler);
+        };
+
+        this.elementRef.nativeElement.querySelectorAll('.liabilities').forEach((link: HTMLElement) => {
+            bindOnce(link, () => this.goToLiabilities());
+        });
+        this.elementRef.nativeElement.querySelectorAll('.obligations').forEach((link: HTMLElement) => {
+            bindOnce(link, () => this.goToObligation());
+        });
+        this.elementRef.nativeElement.querySelectorAll('.advance-payment').forEach((link: HTMLElement) => {
+            bindOnce(link, () => this.goToAdvancePayment());
+        });
     }
 
     public ngAfterViewInit() {
         /* TO SHOW NOTIFICATIONS */
+        // Initialize Headway widget in both web and Electron environments
+        // Ensure HW_config is properly set
+        if (!window['HW_config']) {
+            window['HW_config'] = {
+                selector: ".notification",
+                account: "7eB4aJ",
+                enabled: true
+            };
+        }
+
         if (window['Headway'] === undefined) {
             let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
+            scriptTag.src = './assets/js/headway-widget.js';
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             scriptTag.async = true;
+            scriptTag.onload = () => {
+                // Initialize Headway after script loads
+                setTimeout(() => {
+                    if (window['Headway']) {
+                        window['Headway'].init();
+                    }
+                }, 100);
+            };
             document.body.appendChild(scriptTag);
         } else {
             window['Headway']?.init();
@@ -806,8 +841,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    const whiteLabel = this.generalService.getDecodedWhiteLabel();
-                    window.location.href = (environment.production) ? this.generalService.getGiddhRegionUrl() : whiteLabel?.giddhWhiteLabel?.domainName ? `${whiteLabel.giddhWhiteLabel.domainName}` : `https://test.giddh.com/login`;
+                    window.location.href = this.generalService.getGiddhRegionUrl();
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 
@@ -875,7 +909,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         };
 
                         if (!this.isTodaysDateSelected) {
-                            response.financialYears.forEach(key => {
+                            (Array.isArray(response.financialYears) ? response.financialYears : []).forEach(key => {
                                 if (this.selectedDateRange?.endDate >= dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
                                         uniqueName: key?.uniqueName,
@@ -914,10 +948,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideHelpSupportDialogRef?.close();
             } else {
                 this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
-                    width: '1000px',
-                    panelClass: 'aside-help-panel',
-                    hasBackdrop: false,
-                    position: {
+                            width: '1000px',
+                            panelClass: 'aside-help-panel',
+                            hasBackdrop: false,
+                            position: {
                         right: '0',
                         top: '0'
                     }
@@ -936,6 +970,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
+
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             if (show) {
@@ -955,6 +990,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, ((this.asideSettingMenuState) ? 100 : 0));
+    }
+
+    /**
+     * Force close the sidebar pane immediately without delays
+     *
+     * @memberof HeaderComponent
+     */
+    public forceCloseSidebarPane(): void {
+        this.isMobileSidebar = false;
+        this.asideSettingMenuState = false;
+
+        document.querySelector('body')?.classList?.remove('aside-setting');
+        document.querySelector('body')?.classList?.remove('mobile-setting-sidebar');
     }
 
     /**
@@ -1042,7 +1090,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     /**
     * This function is used to open manage groups accounts dialog
-    * 
+    *
     * @returns {void}
     * @memberof HeaderComponent
     */
@@ -1050,8 +1098,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.manageGroupsAccountsDialogRef = this.dialog.open(ManageGroupsAccountsComponent, {
             width: '100%',
             height: '100%',
-            maxWidth: '100vw',
             maxHeight: '100vh',
+            disableClose: true
         });
 
         this.manageGroupsAccountsDialogRef.afterOpened().subscribe(() => {
@@ -1095,7 +1143,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let elementClass = e?.target?.className?.toString();
         let validElement = true;
 
-        excludeElements.forEach(className => {
+        (Array.isArray(excludeElements) ? excludeElements : []).forEach(className => {
             if (elementClass?.indexOf(className) > -1) {
                 validElement = false;
             }
@@ -1158,6 +1206,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnDestroy() {
         this.broadcast?.close();
+        this.goToBranchBroadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1197,13 +1246,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
-        this.dialogRefExpirePlanRef = this.dialog.open(template,{
+        this.dialogRefExpirePlanRef = this.dialog.open(template, {
             panelClass: 'mat-dialog-md'
         });
     }
 
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
-        this.dialogRefCrossLimitRef = this.dialog.open(template,{
+        this.dialogRefCrossLimitRef = this.dialog.open(template, {
             panelClass: 'mat-dialog-md'
         });
     }
@@ -1280,7 +1329,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public gotToBranchTab(): void {
         this.trigger?.closeMenu();
-        this.expandSidebar(false);
+        this.sideBarStateChange(false);
+        this.sidebarForcelyExpanded = false;
+        this.isSidebarExpanded = true;
+        this.generalService.expandSidebar();
         this.isGoToBranch = true;
     }
 
@@ -1521,7 +1573,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();
@@ -1555,6 +1607,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 toDate: this.toDate,
             };
             this.isTodaysDateSelected = false;
+            if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+                this.generalService.saveRouteQueryFilters({ fromDate: this.fromDate, toDate: this.toDate });
+            }
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         } else {
             this.isTodaysDateSelected = true;
@@ -1570,6 +1625,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 period: null,
                 noOfTransactions: null
             };
+            if (this.generalService.currentSupportedQueryParam.includes(this.generalService.getCurrentPath(true).path)) {
+                this.generalService.saveRouteQueryFilters({ fromDate: dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT), toDate: dayjs().format(GIDDH_DATE_FORMAT) });
+            }
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
     }
@@ -1598,6 +1656,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
         }
     }
+
 
     /**
      * This will init the notification on window orientation change
@@ -1704,7 +1763,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
             this.planVersion === 2 ? '' : this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
             this.subscribedPlan?.planDetails?.name,
-            this.subscribedPlan?.expiry
+            this.giddhDatePipe.transform(this.subscribedPlan?.expiry)
         ) ?? "";
     }
 
@@ -1723,7 +1782,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
             this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
             this.subscribedPlan?.planDetails?.name,
-            this.subscribedPlan?.expiry
+            this.giddhDatePipe.transform(this.subscribedPlan?.expiry)
         ) ?? "";
     }
 
@@ -1737,7 +1796,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let text = this.localeData?.subscription_transaction_limit_ended;
         text = text
             ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-            ?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt ?? '');
+            ?.replace("[PLAN_START_DATE]", this.giddhDatePipe.transform(this.subscribedPlan?.startedAt) ?? '');
         return text;
     }
 
@@ -1753,7 +1812,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
             this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
             this.subscribedPlan?.planDetails?.name,
-            this.subscribedPlan?.expiry
+            this.giddhDatePipe.transform(this.subscribedPlan?.expiry)
         ) ?? "";
     }
 
@@ -1767,8 +1826,34 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let text = this.localeData?.transaction_limit_crossed;
         text = text
             ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-            ?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt ?? '');
+            ?.replace("[PLAN_START_DATE]", this.giddhDatePipe.transform(this.subscribedPlan?.startedAt) ?? '');
         return text;
+    }
+
+    /**
+     * This will return prepaid renewal availability note
+     *
+     * @returns {string}
+     * @memberof HeaderComponent
+     */
+    public getPrepaidRenewalNote(): string {
+        let text = this.localeData?.subscription_expires;
+        return text
+            ?.replace("[REMAINING_DAY]", Math.ceil(this.remainingSubscriptionDays)?.toString() ?? '')
+            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '') ?? "";
+    }
+
+    /**
+     * Navigates to advance payment page for prepaid renewal
+     *
+     * @memberof HeaderComponent
+     */
+    public goToAdvancePayment(): void {
+        if (this.subscribedPlan?.subscriptionId) {
+            this.showAlertMessage.isPrepaidRenewalAvailable = false;
+            this.changeDetection.detectChanges();
+            this.router.navigate([`/pages/user-details/subscription/advance-payment/${this.subscribedPlan.subscriptionId}`], { queryParams: { removeWarning: true } });
+        }
     }
 
     /**
@@ -1824,16 +1909,37 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     private saveLastState(): void {
+        this.generalService.debugLog('saveLastState() called');
         let companyUniqueName = null;
         let lastState = this.router.url;
-        lastState = lastState?.replace("/pages", "pages");
-        this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = decodeURI(lastState);
-        if (lastState !== '/pages/user-details/subscription/buy-plan') {
-            this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        const currentPath = this.generalService.getCurrentPath(true).path;
+        this.generalService.debugLog('router.url:', this.router.url);
+        this.generalService.debugLog('getCurrentPath(true).path:', currentPath);
+        this.generalService.debugLog('currentSupportedQueryParam:', this.generalService.currentSupportedQueryParam);
+        
+        if (this.generalService.currentSupportedQueryParam.includes(currentPath)) {
+            this.generalService.debugLog('Condition matched! Using currentPath');
+            lastState = currentPath;
+        } else {
+            this.generalService.debugLog('Condition NOT matched! Using router.url');
         }
+        lastState = lastState?.replace("/pages", "pages");
+        this.generalService.debugLog('lastState after replace:', lastState);
+        
+        this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => {
+            companyUniqueName = response;
+            this.generalService.debugLog('companyUniqueName from store:', companyUniqueName);
+            let stateDetailsRequest = new StateDetailsRequest();
+            stateDetailsRequest.companyUniqueName = companyUniqueName;
+            stateDetailsRequest.lastState = decodeURI(lastState);
+            this.generalService.debugLog('stateDetailsRequest:', stateDetailsRequest);
+            if (lastState !== '/pages/user-details/subscription/buy-plan') {
+                this.generalService.debugLog('Dispatching SetStateDetails');
+                this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+            } else {
+                this.generalService.debugLog('Skipping dispatch - subscription page');
+            }
+        });
     }
 
     /**
@@ -1910,6 +2016,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public removeDepreciationMessage(): void {
         document.body?.classList?.remove("depreciation-message");
         this.showDepreciationMessage = false;
+    }
+
+    /**
+     * Opens notifications widget
+     *
+     * @memberof HeaderComponent
+     */
+    public openNotifications(): void {
+        if (window['Headway']) {
+            window['Headway'].show();
+        }
     }
 
     /**

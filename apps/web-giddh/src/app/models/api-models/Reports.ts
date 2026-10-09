@@ -11,6 +11,7 @@ export class ReportsModel {
     public discountTotal: number = 0;
     public tcsTotal: number = 0;
     public tdsTotal: number = 0;
+    public roundOff: number = 0;
     public netSales: number = 0;
     public cumulative: number = 0;
     public reportType: string;
@@ -19,6 +20,8 @@ export class ReportsModel {
     public interval?: string;
     public selectedMonth?: string;
     public salesPerson?: {name: string, uniqueName: string};
+    public stateCode?: string;
+    public countryCode?: string;
 }
 /*
 * Report Response Model to be bind with get sales report API
@@ -52,6 +55,9 @@ export class ReportsDetailedRequestFilter {
     public branchUniqueName?: string;
     public salesPersonUniqueName?: string;
     public accountUniqueNames?: string[];
+    public selectAllFields?: string[];
+    public stateCode?: string;
+    public countryCode: string;
 }
 export class Balance {
     public amount: number;
@@ -140,6 +146,7 @@ export class PurchaseReportsModel {
     public discountTotal: number = 0;
     public tcsTotal: number = 0;
     public tdsTotal: number = 0;
+    public roundOff: number = 0;
     public netPurchase: number = 0;
     public cumulative: number = 0;
     public reportType: string;
@@ -148,6 +155,8 @@ export class PurchaseReportsModel {
     public interval?: string;
     public selectedMonth?: string;
     public salesPerson?: {name: string, uniqueName: string};
+    public stateCode?: string;
+    public countryCode?: string;
 }
 
 export interface PurchaseRegisteDetailedResponse {

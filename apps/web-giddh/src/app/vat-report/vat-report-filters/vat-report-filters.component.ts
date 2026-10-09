@@ -30,7 +30,8 @@ interface DateCheckResult {
     selector: 'vat-report-filters',
     templateUrl: './vat-report-filters.component.html',
     styleUrls: ['./vat-report-filters.component.scss'],
-    providers: [TaxAuthorityComponentStore]
+    providers: [TaxAuthorityComponentStore],
+    standalone:false
 })
 export class VatReportFiltersComponent implements OnInit, OnChanges {
     /** This will hold local JSON data */
@@ -55,7 +56,12 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     @Input() public currentTaxAuthorityUniqueName: string = null;
     /** True if current Tax uniqueName is US */
     @Input() public currentTaxUniqueName: string = null;
-    /** Hold HMRC portal url */
+    /**
+     * Holds HMRC portal url
+     * - null: initial state or API failure (button hidden)
+     * - value: user needs to connect (button enabled with "connect_to_hmrc")
+     * - empty string: already connected (button disabled with "connected_to_hmrc")
+     */
     @Input() public connectToHMRCUrl: string = null;
     /** Holds Current Currency Code for Zimbabwe report */
     @Input() public vatReportCurrencyCode: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR' = 'BWP';
@@ -244,7 +250,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             this.componentStore.taxAuthorityList$.pipe(takeUntil(this.destroyed$)).subscribe(taxAuthorities => {
                 if (taxAuthorities?.length) {
                     let arr: IOption[] = [];
-                    taxAuthorities.forEach(taxAuthority => {
+                    (Array.isArray(taxAuthorities) ? taxAuthorities : []).forEach(taxAuthority => {
                         arr.push({ label: taxAuthority.name, value: taxAuthority?.uniqueName });
                     });
                     this.taxAuthorityList = arr;
@@ -258,7 +264,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(taxes => {
                 if (taxes) {
                     let arr: IOption[] = [];
-                    taxes.forEach(tax => {
+                    (Array.isArray(taxes) ? taxes : []).forEach(tax => {
                         arr.push({ label: tax?.name, value: tax?.uniqueName });
                     });
                     this.taxList = arr;
@@ -492,7 +498,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+        if (isOpen) {
            this.universalDatepickerTrigger?.openMenu();
         } else {
            this.universalDatepickerTrigger?.closeMenu();

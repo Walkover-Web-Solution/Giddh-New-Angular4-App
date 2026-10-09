@@ -38,11 +38,13 @@ import {
     NewBranchTransferRequest, NewBranchTransferResponse, NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest
 } from '../models/api-models/BranchTransfer';
 import { PAGINATION_LIMIT } from '../app.constant';
-import { cloneDeep } from '../lodash-optimized';
+import { cloneDeep, concat, get } from '../lodash-optimized';
 
 declare var _: any;
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class InventoryService {
     private companyUniqueName: string;
     private _: any;
@@ -787,46 +789,6 @@ export class InventoryService {
         }
     }
 
-    public downloadJobwork(stockUniqueName: string, reportType: string, format: string, from: string, to: string, reportFilters?: InventoryFilter): Observable<BaseResponse<string, string>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = null;
-        if (reportType === 'person') {
-            url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_JOBWORK_BY_PERSON
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
-                ?.replace(':format', encodeURIComponent(format))
-                ?.replace(':from', encodeURIComponent(from))
-                ?.replace(':to', encodeURIComponent(to))
-                ?.replace(':sort', encodeURIComponent(reportFilters.sort ? reportFilters.sort?.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(reportFilters.sortBy ? reportFilters.sortBy?.toString() : ''))
-            return this.http.post(url, reportFilters)
-                .pipe(map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = '';
-                    data.queryString = {};
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
-        } else {
-
-            url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_JOBWORK_BY_STOCK
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
-                ?.replace(':format', encodeURIComponent(format))
-                ?.replace(':from', encodeURIComponent(from))
-                ?.replace(':to', encodeURIComponent(to))
-                ?.replace(':sort', encodeURIComponent(reportFilters.sort ? reportFilters.sort?.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(reportFilters.sortBy ? reportFilters.sortBy?.toString() : ''))
-            return this.http.get(url)
-                .pipe(map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = '';
-                    data.queryString = {};
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
-        }
-
-    }
-
     public updateDescription(uniqueName: string, description: string): Observable<BaseResponse<InventoryUser, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
@@ -1438,7 +1400,7 @@ export class InventoryService {
             url = url.concat(`${delimiter}inventoryType=${payload.inventoryType}`);
             delimiter = '&';
         }
-        if (payload.q) {
+        if (typeof payload.q === 'string') {
             url = url.concat(`${delimiter}q=${payload.q}`);
             delimiter = '&';
         }
@@ -1919,6 +1881,106 @@ export class InventoryService {
                 data.request = { model };
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
+    }
+
+    /**
+     * Fetch stock aging report
+     *
+     * @param {*} model Request payload containing filters (asOnDate, stockGroupUniqueNames, etc.)
+     * @param {number} [page=1]
+     * @param {number} [count=50]
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getStockAgingReport(model: any, page: number = 1, count: number = 50): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.STOCK_AGING_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':page', encodeURIComponent(String(page ?? 1)))
+            ?.replace(':count', encodeURIComponent(String(count ?? 50)));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Get stock aging report totals (summary cards)
+     *
+     * @param {any} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getStockAgingReportTotals(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.STOCK_AGING_REPORT_TOTALS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Get the variant-level breakup of a single stock in the aging report
+     *
+     * @param {string} stockUniqueName Stock identifier of the expanded row
+     * @param {*} model Request payload containing the same filters as the report
+     * @param {number} [page=1]
+     * @param {number} [count=20]
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getStockAgingReportVariants(stockUniqueName: string, model: any, page: number = 1, count: number = 20): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.STOCK_AGING_REPORT_VARIANTS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
+            ?.replace(':page', encodeURIComponent(String(page ?? 1)))
+            ?.replace(':count', encodeURIComponent(String(count ?? 20)));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Get the transaction level breakup of a stock (or a variant when `variantUniqueName` is in the payload)
+     *
+     * @param {string} stockUniqueName Stock identifier
+     * @param {*} model Request payload containing the same filters as the report
+     * @param {number} [page=1]
+     * @param {number} [count=10]
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getStockAgingReportDetails(stockUniqueName: string, model: any, page: number = 1, count: number = 10): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.STOCK_AGING_REPORT_DETAILS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
+            ?.replace(':page', encodeURIComponent(String(page ?? 1)))
+            ?.replace(':count', encodeURIComponent(String(count ?? 10)));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
     }
 
     /**

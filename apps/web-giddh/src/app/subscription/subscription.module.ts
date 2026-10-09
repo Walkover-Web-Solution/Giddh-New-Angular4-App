@@ -32,7 +32,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CompanyListDialogComponent } from './company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
-import { MoveCompanyComponent } from './move-company/move-company.component';
 import { MatSelectModule } from '@angular/material/select';
 import { SubscriptionListComponent } from './subscription-list/subscription-list.component';
 import { CompanyDetailsSidebarComponent } from './components/company-details-sidebar/company-details-sidebar.component';
@@ -52,9 +51,14 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-method-dialog.component';
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
+import { MobileNumberInputComponent } from '../shared/mobile-number-input';
+import { MoveCompanyComponent } from './move-company/move-company.component';
+import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { PaymentProviderCardsComponent } from './components/payment-provider-cards/payment-provider-cards.component';
 
 @NgModule({
     imports: [
@@ -92,6 +96,7 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
         MatButtonToggleModule,
         AmountFieldComponentModule,
         MatSlideToggleModule,
+        MatProgressSpinnerModule,
         MatGridListModule,
         MatTabsModule,
         ClickOutsideModule,
@@ -104,7 +109,9 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
             style: 'slide-left',
             spinnerSize: 30
         }),
-
+        MobileNumberInputComponent,
+        GiddhDatePipe,
+        PaymentProviderCardsComponent
     ],
     exports: [SubscriptionListComponent,
         UserDetailsPipe,
@@ -128,7 +135,6 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
         MoveCompanyComponent,
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
-        MoveCompanyComponent,
         AllFeaturesComponent,
         UserDetailsPipe
     ],

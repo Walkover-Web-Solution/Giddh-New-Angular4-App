@@ -2,6 +2,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { EWAYBILL_ACTIONS } from '../../../actions/invoice/invoice.const';
 import { IAllTransporterDetails, IEwayBillAllList, IEwayBillGenerateResponse, IEwayBillTransporter, UpdateEwayVehicle } from '../../../models/api-models/Invoice';
 import { CustomActions } from '../../custom-actions';
+import { cloneDeep, filter, findIndex, map } from '../../../lodash-optimized';
 
 export interface EwayBillState {
     EwayBillGenerateResponse: IEwayBillGenerateResponse;
@@ -81,7 +82,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
         }
 
         case EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<IEwayBillAllList, any> = action.payload;
             if (res?.status === 'success') {
                 newState.EwayBillList = res.body;
@@ -95,7 +96,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
         }// EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER
 
         case EWAYBILL_ACTIONS.GET_All_FILTERED_LIST_EWAYBILLS_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<IEwayBillAllList, any> = action.payload;
             if (res?.status === 'success') {
                 newState.EwayBillList = res.body;
@@ -114,13 +115,13 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
         case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE: {
             let ewaybillLoginResponse: BaseResponse<any, any> = action.payload;
             if (ewaybillLoginResponse?.status === 'success') {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.isEwaybillAddnewUserInProcess = false;
                 d.isEwaybillUserCreationSuccess = true;
                 return Object.assign({}, state, d);
             }
             if (ewaybillLoginResponse?.status === 'error') {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.isEwaybillAddnewUserInProcess = false;
                 d.isEwaybillUserCreationSuccess = false;
                 return Object.assign({}, state, d);
@@ -136,13 +137,13 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
 
             let ewaybillGeneratedResponse: BaseResponse<any, any> = action.payload;
             if (ewaybillGeneratedResponse?.status === 'success') {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.isGenerateEwaybillInProcess = false;
                 d.isGenerateEwaybilSuccess = true;
                 return Object.assign({}, state, d);
             }
             if (ewaybillGeneratedResponse?.status === 'error') {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.isGenerateEwaybillInProcess = false;
                 d.isGenerateEwaybilSuccess = false;
                 return Object.assign({}, state, d);
@@ -155,12 +156,12 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
 
             let ewaybillGeneratedResponse: BaseResponse<any, any> = action.payload;
             if (ewaybillGeneratedResponse?.status === 'success') {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.isUserLoggedInEwaybillSuccess = true;
                 return Object.assign({}, state, d);
             }
             else {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.isUserLoggedInEwaybillSuccess = false;
                 return Object.assign({}, state, d);
             }
@@ -174,7 +175,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
 
             let addTransportResponse: BaseResponse<any, any> = action.payload;
             if (addTransportResponse?.status === 'success') {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.TransporterList = [];
                 d.TransporterList = addTransportResponse.body;
                 d.isAddnewTransporterInProcess = false;
@@ -186,7 +187,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
                 });
             }
             if (addTransportResponse?.status === 'error') {
-                let d = _.cloneDeep(state);
+                let d = cloneDeep(state);
                 d.TransporterList = [];
                 d.isAddnewTransporterInProcess = false;
                 d.isAddnewTransporterInSuccess = false;
@@ -210,7 +211,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
             }
         }
         case EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<IAllTransporterDetails, any> = action.payload;
             if (res?.status === 'success') {
                 newState.TransporterListDetails = res.body;
@@ -232,7 +233,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
             return Object.assign({}, state, { updateEwayvehicleInProcess: true, updateEwayvehicleSuccess: false });
         }
         case EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, UpdateEwayVehicle> = action.payload;
             if (res?.status === 'success') {
                 newState.updateEwayvehicleInProcess = false;
@@ -249,7 +250,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
             return Object.assign({}, state, { cancelEwayInProcess: true, cancelEwaySuccess: false });
         }
         case EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let res: BaseResponse<string, UpdateEwayVehicle> = action.payload;
             if (res?.status === 'success') {
                 newState.cancelEwayInProcess = false;

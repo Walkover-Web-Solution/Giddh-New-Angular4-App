@@ -31,6 +31,7 @@
     "pending": "विचाराधीन",
     "invalid_date": "अमान्य दिनांक",
     "transaction_reverse_charge": "क्या यह लेनदेन रिवर्स चार्ज के लिए लागू है?",
+    "transaction_recurring": "क्या यह लेनदेन आवर्ती लेनदेन के लिए लागू है?",
     "transaction_tourist_scheme": "क्या यह लेनदेन पर्यटक योजना के लिए लागू है?",
     "passport_number": "पासपोर्ट संख्या",
     "select_account": "सेलेक्ट अकाउंट पर क्लिक करें",

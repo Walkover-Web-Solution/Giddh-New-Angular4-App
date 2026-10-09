@@ -19,6 +19,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 import { ToasterService } from '../services/toaster.service';
 import { SearchService } from '../services/search.service';
+import { cloneDeep, concat, filter, forEach, map, remove, slice } from '../lodash-optimized';
 
 /** This will use for interface */
 export interface GetActivityLogs {
@@ -34,7 +35,8 @@ const ELEMENT_DATA: GetActivityLogs[] = [];
     selector: 'activity-logs',
     templateUrl: './activity-logs.component.html',
     styleUrls: [`./activity-logs.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 export class ActivityLogsComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
@@ -216,7 +218,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                this.universalDate = _.cloneDeep(dateObj);
+                this.universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.activityObj.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -393,7 +395,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityFieldsObj.voucherFromDate = undefined;
         this.activityFieldsObj.voucherToDate = undefined;
 
-        this.selectedFields.forEach(field => {
+        (Array.isArray(this.selectedFields) ? this.selectedFields : []).forEach(field => {
             if (field?.value === "LOG_DATE") {
                 this.activityFieldsObj.fromDate = this.activityObj.fromDate;
                 this.activityFieldsObj.toDate = this.activityObj.toDate;
@@ -738,6 +740,18 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
         document.body?.classList?.remove("activity-log-page");
     }
+    /**
+     * TrackBy function for selectedFields ngFor to improve Angular 21 performance
+     *
+     * @param index - Index of the item
+     * @param item - The item being tracked
+     * @returns Unique identifier for the item
+     * @memberof ActivityLogsComponent
+     */
+    public trackBySelectedField(index: number, item: any): any {
+        return item?.value || index;
+    }
+
     /**
      * Adds Z-index class to cdk-overlay element
      *
