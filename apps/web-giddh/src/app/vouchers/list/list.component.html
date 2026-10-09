@@ -6261,33 +6261,32 @@
                                 <mat-menu #inventoryActionsMenu="matMenu">
                                     @if (element?.documentStatusCode !== 'CANCELLED') {
                                         @if (
-                                            !['FULLY_INVOICED', 'FULLY_BILLED'].includes(element?.invoiceStatus) &&
-                                            element?.documentStatusCode !== 'FULL_RETURN'
+                                            !['FULL_RETURN', 'FULLY_ADJUSTED'].includes(element?.documentStatusCode) && !element?.isReturn
                                         ) {
-                                            <button mat-menu-item (click)="convertInventoryDocument(element)">
-                                                {{
-                                                    voucherType === voucherTypeEnum.deliveryChallan
-                                                        ? localeData?.convert_invoice
-                                                        : localeData?.convert_to_bill
-                                                }}
-                                            </button>
-                                            <button mat-menu-item (click)="previewAndConvertInventoryDocument(element)">
-                                                {{
-                                                    voucherType === voucherTypeEnum.deliveryChallan
-                                                        ? localeData?.preview_and_convert_invoice
-                                                        : localeData?.preview_and_convert_bill
-                                                }}
-                                            </button>
-                                            <button mat-menu-item (click)="openMakeAdjustmentDialog(element)">
-                                                {{ localeData?.make_adjustment }}
-                                            </button>
-                                        }
-                                        @if (element?.documentStatusCode !== 'FULL_RETURN') {
+                                            @if (!['FULLY_INVOICED', 'FULLY_BILLED'].includes(element?.invoiceStatus)) {
+                                                <button mat-menu-item (click)="convertInventoryDocument(element)">
+                                                    {{
+                                                        voucherType === voucherTypeEnum.deliveryChallan
+                                                            ? localeData?.convert_invoice
+                                                            : localeData?.convert_to_bill
+                                                    }}
+                                                </button>
+                                                <button mat-menu-item (click)="previewAndConvertInventoryDocument(element)">
+                                                    {{
+                                                        voucherType === voucherTypeEnum.deliveryChallan
+                                                            ? localeData?.preview_and_convert_invoice
+                                                            : localeData?.preview_and_convert_bill
+                                                    }}
+                                                </button>
+                                                <button mat-menu-item (click)="openMakeAdjustmentDialog(element)">
+                                                    {{ localeData?.make_adjustment }}
+                                                </button>
+                                            }
                                             <button mat-menu-item (click)="openMarkReturnDialog(element)">
                                                 {{ localeData?.mark_return }}
                                             </button>
+                                            <mat-divider></mat-divider>
                                         }
-                                        <mat-divider></mat-divider>
                                         <button mat-menu-item class="text-danger" (click)="cancelInventoryDocument(element)">
                                             {{
                                                 voucherType === voucherTypeEnum.deliveryChallan

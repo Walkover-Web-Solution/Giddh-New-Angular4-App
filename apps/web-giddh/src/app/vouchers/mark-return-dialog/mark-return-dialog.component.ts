@@ -387,7 +387,7 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Normalizes return qty without clamping over the returnable limit
+     * Normalizes return qty and clamps to returnable quantity with toast on overflow
      *
      * @param {MarkReturnRow} row
      * @memberof MarkReturnDialogComponent
@@ -397,14 +397,22 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         if (isNaN(qty) || qty < 0) {
             qty = 0;
         }
-        row.returnQty = giddhRoundOff(qty, 4);
+        qty = giddhRoundOff(qty, 4);
+        const maxQty = Math.max(Number(row.returnableQuantity) || 0, 0);
+        if (qty > maxQty) {
+            row.returnQty = qty;
+            this.toaster.errorToast(this.getReturnQtyError(row));
+            this.resetQtyField(row, 'returnQty', maxQty);
+            return;
+        }
+        row.returnQty = qty;
         if (row.returnQty > 0) {
             row.selected = true;
         }
     }
 
     /**
-     * Normalizes credit/debit note qty without clamping over the creditable limit
+     * Normalizes credit/debit note qty and clamps to creditable quantity with toast on overflow
      *
      * @param {MarkReturnRow} row
      * @memberof MarkReturnDialogComponent
@@ -414,7 +422,36 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
         if (isNaN(qty) || qty < 0) {
             qty = 0;
         }
-        row.cnQty = giddhRoundOff(qty, 4);
+        qty = giddhRoundOff(qty, 4);
+        const maxQty = Math.max(Number(row.creditableQuantity) || 0, 0);
+        if (qty > maxQty) {
+            row.cnQty = qty;
+            this.toaster.errorToast(this.getNoteQtyError(row));
+            this.resetQtyField(row, 'cnQty', maxQty);
+            return;
+        }
+        row.cnQty = qty;
+    }
+
+    /**
+     * Forces input UI to show corrected max qty (ngModel may skip view update in same cycle)
+     *
+     * @private
+     * @param {MarkReturnRow} row
+     * @param {('returnQty' | 'cnQty')} field
+     * @param {number} maxQty
+     * @memberof MarkReturnDialogComponent
+     */
+    private resetQtyField(row: MarkReturnRow, field: 'returnQty' | 'cnQty', maxQty: number): void {
+        if (field === 'returnQty' && maxQty > 0) {
+            row.selected = true;
+        }
+        setTimeout(() => {
+            row[field] = null as unknown as number;
+            this.changeDetectorRef.detectChanges();
+            row[field] = maxQty;
+            this.changeDetectorRef.detectChanges();
+        });
     }
 
     /**
@@ -484,12 +521,11 @@ export class MarkReturnDialogComponent implements OnInit, OnDestroy {
     /**
      * True when any selected batch qty exceeds its document available qty.
      *
-     * @private
      * @param {MarkReturnRow} row
      * @return {*}  {boolean}
      * @memberof MarkReturnDialogComponent
      */
-    private hasInvalidBatchAllocation(row: MarkReturnRow): boolean {
+    public hasInvalidBatchAllocation(row: MarkReturnRow): boolean {
         const availableByUniqueName = new Map(
             (row.availableBatches ?? []).map((batch) => [batch.uniqueName, Number(batch.availableQuantity) || 0])
         );
