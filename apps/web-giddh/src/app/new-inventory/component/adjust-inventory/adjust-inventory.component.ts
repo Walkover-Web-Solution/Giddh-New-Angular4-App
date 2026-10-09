@@ -36,7 +36,7 @@ export interface AdjustmentItemUiState {
     entityUniqueName: string;
     entity: string;
     preselectedVariantUniqueNames: string[];
-    /** Max adjustable quantity from DC/RN stock.quantity */
+    /** Max adjustable quantity from DC/RN documentItems.remainingQuantity */
     maxQuantity: number | null;
     dataSource: MatTableDataSource<any>;
     selection: SelectionModel<any>;
@@ -544,11 +544,12 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Extracts unique stocks (with variants) from voucher entries
+     * Extracts unique stocks (with variants) from voucher documentItems (preferred)
+     * or entries. Prefills/caps quantity using remainingQuantity for partial return/invoice cases.
      *
      * @private
      * @param {*} voucherDetails
-     * @return {*} 
+     * @return {*}
      * @memberof AdjustInventoryComponent
      */
     private extractStocksFromVoucher(voucherDetails: any): Array<{
@@ -565,6 +566,39 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
             variantUniqueNames: string[];
             quantity: number;
         }>();
+
+        const documentItems = voucherDetails?.documentItems || [];
+        if (documentItems.length) {
+            documentItems.forEach((item: any) => {
+                const stockUniqueName = item?.stock?.uniqueName;
+                if (!stockUniqueName) {
+                    return;
+                }
+                const remainingQuantity = Number(item?.remainingQuantity) || 0;
+                if (!stockMap.has(stockUniqueName)) {
+                    stockMap.set(stockUniqueName, {
+                        entity: 'STOCK',
+                        entityName: item.stock?.name ? `${item.stock.name} (STOCK)` : stockUniqueName,
+                        entityUniqueName: stockUniqueName,
+                        variantUniqueNames: [],
+                        quantity: remainingQuantity
+                    });
+                } else {
+                    const mapped = stockMap.get(stockUniqueName);
+                    if (mapped) {
+                        mapped.quantity += remainingQuantity;
+                    }
+                }
+                const variantUniqueName = item?.variant?.uniqueName;
+                if (variantUniqueName) {
+                    const mapped = stockMap.get(stockUniqueName);
+                    if (mapped && !mapped.variantUniqueNames.includes(variantUniqueName)) {
+                        mapped.variantUniqueNames.push(variantUniqueName);
+                    }
+                }
+            });
+            return Array.from(stockMap.values());
+        }
 
         (voucherDetails?.entries || []).forEach((entry: any) => {
             (entry?.transactions || []).forEach((transaction: any) => {
@@ -1311,7 +1345,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Whether change-in-value must be capped by DC/RN stock.quantity
+     * Whether change-in-value must be capped by DC/RN remainingQuantity
      *
      * @param {number} itemIndex
      * @return {*}  {boolean}
@@ -1347,7 +1381,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Caps change-in-value to stock.quantity for DC/RN quantity-value adjustments
+     * Caps change-in-value to remainingQuantity for DC/RN quantity-value adjustments
      *
      * @private
      * @param {number} itemIndex

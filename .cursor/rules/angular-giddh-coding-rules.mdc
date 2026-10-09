@@ -8,6 +8,13 @@ alwaysApply: true
 
 Write all new code and modifications using the project's latest supported Angular practices. Preserve existing patterns only when required for compatibility; do not introduce legacy patterns.
 
+## Code Quality (Always)
+
+- Write code as simple as possible. Prefer the smallest clear solution that meets the requirement.
+- Write developer-friendly code that is easy to read and understand. Prefer clear names, obvious control flow, and minimal indirection.
+- Do NOT add fallback / default / silent-recovery values unless the user explicitly forces or instructs it. If something fails, let it fail visibly. Silent fallbacks often hide real bugs and make unit testing miss issues.
+- Before writing new code, search for an existing implementation. If one exists, reuse it; if a small change is needed, modify the existing code instead of duplicating or inventing a parallel path.
+
 ## Angular
 
 - Use standalone components/directives/pipes. Do not add `standalone: true` in Angular v20+ decorators.
@@ -85,7 +92,7 @@ Before writing new code, check for an existing:
 4. Giddh CSS utility / theme class
 5. Small feature-specific implementation
 
-Create a new shared abstraction only when it is genuinely reusable.
+If something already exists, reuse it. If it almost fits, modify the existing implementation rather than creating a duplicate. Create a new shared abstraction only when it is genuinely reusable.
 
 ## Scope
 
