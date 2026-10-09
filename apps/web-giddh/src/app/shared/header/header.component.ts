@@ -34,6 +34,8 @@ import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { CompanyService } from '../../services/company.service';
+import { InventoryService } from '../../services/inventory.service';
+import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
@@ -239,6 +241,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True when inventory is managed via business documents (DC/RN). */
+    public inventoryViaBusinessDocument: boolean = false;
     /** Tracks the visibility of error messages related to subscription and plan. */
     public showAlertMessage: SubscriptionErrorFlags = {
         isObligationExpired: true,
@@ -288,6 +292,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsProfileService: SettingsProfileService,
         private settingsProfileAction: SettingsProfileActions,
         private companyService: CompanyService,
+        private inventoryService: InventoryService,
+        private inventoryAction: InventoryAction,
         private settingsBranchAction: SettingsBranchActions,
         private ledgerAction: LedgerActions,
         public location: Location,
@@ -325,8 +331,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
                 this.addClassInBodyIfPageHasTabs();
             }
-            this.generalService.debugLog('Event', event, 'Event type:', event.constructor.name);
-            this.generalService.debugLog('[NavigationEnd Event] Triggered for URL:', this.router.url);
             if (event instanceof NavigationEnd) {
                 if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
@@ -358,7 +362,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
 
                 this.toggleSidebarPane(false, false);
-                this.generalService.debugLog('[NavigationEnd] About to call saveLastState()');
                 this.saveLastState();
             }
             if (event instanceof NavigationStart) {
@@ -578,6 +581,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.getCurrentCompanyData();
 
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            this.inventoryViaBusinessDocument = !!settings?.voucherAutomation?.inventoryViaBusinessDocument;
+            this.changeDetection.detectChanges();
+        });
+
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
 
@@ -733,6 +741,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.store.dispatch(this.settingsProfileAction.handleCompanyProfileResponse(response));
                 let res = response.body;
                 this.store.dispatch(this.companyActions.setActiveCompanyData(res));
+                this.loadInventorySettingsForActiveCompany();
 
                 if (res?.countryV2 !== null && res?.countryV2 !== undefined) {
                     this.getStates(res?.countryV2.alpha2CountryCode);
@@ -1657,6 +1666,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
+    /**
+     * Loads inventory settings into the global store for header visibility checks.
+     *
+     * @memberof HeaderComponent
+     */
+    public loadInventorySettingsForActiveCompany(): void {
+        if (!this.generalService.companyUniqueName) {
+            this.inventoryViaBusinessDocument = false;
+            return;
+        }
+        this.inventoryService.getInventorySettings().pipe(take(1), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success' && response.body) {
+                this.store.dispatch(this.inventoryAction.setInventorySettings(response.body));
+                return;
+            }
+            this.inventoryViaBusinessDocument = false;
+            this.changeDetection.detectChanges();
+        });
+    }
 
     /**
      * This will init the notification on window orientation change
@@ -1909,35 +1937,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     private saveLastState(): void {
-        this.generalService.debugLog('saveLastState() called');
         let companyUniqueName = null;
         let lastState = this.router.url;
         const currentPath = this.generalService.getCurrentPath(true).path;
-        this.generalService.debugLog('router.url:', this.router.url);
-        this.generalService.debugLog('getCurrentPath(true).path:', currentPath);
-        this.generalService.debugLog('currentSupportedQueryParam:', this.generalService.currentSupportedQueryParam);
         
         if (this.generalService.currentSupportedQueryParam.includes(currentPath)) {
-            this.generalService.debugLog('Condition matched! Using currentPath');
             lastState = currentPath;
-        } else {
-            this.generalService.debugLog('Condition NOT matched! Using router.url');
         }
         lastState = lastState?.replace("/pages", "pages");
-        this.generalService.debugLog('lastState after replace:', lastState);
         
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => {
             companyUniqueName = response;
-            this.generalService.debugLog('companyUniqueName from store:', companyUniqueName);
             let stateDetailsRequest = new StateDetailsRequest();
             stateDetailsRequest.companyUniqueName = companyUniqueName;
             stateDetailsRequest.lastState = decodeURI(lastState);
-            this.generalService.debugLog('stateDetailsRequest:', stateDetailsRequest);
             if (lastState !== '/pages/user-details/subscription/buy-plan') {
-                this.generalService.debugLog('Dispatching SetStateDetails');
                 this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-            } else {
-                this.generalService.debugLog('Skipping dispatch - subscription page');
             }
         });
     }

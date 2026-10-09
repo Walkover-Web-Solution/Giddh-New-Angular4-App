@@ -37,8 +37,14 @@ import {
     TransferProductsRequest,
     NewBranchTransferRequest, NewBranchTransferResponse, NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest
 } from '../models/api-models/BranchTransfer';
-import { PAGINATION_LIMIT } from '../app.constant';
+import { API_BULK_FETCH_LIMIT, PAGINATION_LIMIT } from '../app.constant';
 import { cloneDeep, concat, get } from '../lodash-optimized';
+import {
+    BusinessDocumentStatus,
+    BusinessDocumentType,
+    InventorySettingsResponse,
+    InventorySettingsUpdateRequest
+} from '../models/api-models/InventorySettings';
 
 declare var _: any;
 
@@ -1108,6 +1114,7 @@ export class InventoryService {
         let updatedStockTransactionRequest = cloneDeep(stockReportRequest);
         delete updatedStockTransactionRequest.from;
         delete updatedStockTransactionRequest.to;
+        delete updatedStockTransactionRequest.reportNature;
         return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
             ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
@@ -1118,6 +1125,7 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
+            ?.replace(':reportNature', encodeURIComponent(stockReportRequest.reportNature ?? ''))
             , updatedStockTransactionRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
@@ -1156,6 +1164,7 @@ export class InventoryService {
             ?.replace(':entity', encodeURIComponent(<any>queryParams.entity))
             ?.replace(':from', encodeURIComponent(queryParams.from))
             ?.replace(':to', encodeURIComponent(queryParams.to))
+            ?.replace(':reportNature', encodeURIComponent(queryParams.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
@@ -1189,6 +1198,7 @@ export class InventoryService {
                 ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
                 ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
+                ?.replace(':reportNature', encodeURIComponent(queryParams?.reportNature ?? ''))
                 , stockReportRequest).pipe(
                     map((res) => {
                         let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -1217,6 +1227,7 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(queryParams.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
+            ?.replace(':reportNature', encodeURIComponent(queryParams.reportNature ?? ''))
 
             , stockReportRequest).pipe(
                 map((res) => {
@@ -1253,6 +1264,7 @@ export class InventoryService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
             ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
+            ?.replace(':reportNature', encodeURIComponent(queryParams?.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -1280,6 +1292,7 @@ export class InventoryService {
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
             ?.replace(':type', encodeURIComponent(queryParams.type))
+            ?.replace(':reportNature', encodeURIComponent(queryParams.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
@@ -1315,6 +1328,7 @@ export class InventoryService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
             ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
+            ?.replace(':reportNature', encodeURIComponent(queryParams?.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -1341,6 +1355,7 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
+            ?.replace(':reportNature', encodeURIComponent(queryParams.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
@@ -1375,6 +1390,7 @@ export class InventoryService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
             ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
+            ?.replace(':reportNature', encodeURIComponent(queryParams?.reportNature ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -2001,6 +2017,259 @@ export class InventoryService {
                 data.request = { model };
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
+    }
+
+    /**
+     * Fetches inventory settings for the active company.
+     *
+     * @returns {Observable<BaseResponse<InventorySettingsResponse, string>>}
+     * @memberof InventoryService
+     */
+    public getInventorySettings(): Observable<BaseResponse<InventorySettingsResponse, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.INVENTORY_SETTINGS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.get(url).pipe(
+            map((response) => response as BaseResponse<InventorySettingsResponse, string>),
+            catchError((error) => this.errorHandler.HandleCatch<InventorySettingsResponse, string>(error, ''))
+        );
+    }
+
+    /**
+     * Updates inventory settings for the active company.
+     *
+     * @param {InventorySettingsUpdateRequest} model Inventory settings payload
+     * @returns {Observable<BaseResponse<string, InventorySettingsUpdateRequest>>}
+     * @memberof InventoryService
+     */
+    public updateInventorySettings(model: InventorySettingsUpdateRequest): Observable<BaseResponse<string, InventorySettingsUpdateRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.INVENTORY_SETTINGS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.put(url, model).pipe(
+            map((response) => {
+                const data = response as BaseResponse<string, InventorySettingsUpdateRequest>;
+                data.request = model;
+                return data;
+            }),
+            catchError((error) => this.errorHandler.HandleCatch<string, InventorySettingsUpdateRequest>(error, model))
+        );
+    }
+
+     
+    /**
+     * Get all batches with filters and pagination
+     *
+     * @param {*} queryParams Query params (`q`, `page`, `count`, `from`, `to`)
+     * @param {*} model Filter payload
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getAllBatches(queryParams: any, model: any): Observable<BaseResponse<any, any>> {
+        const url = this.generalService.replaceUrlPlaceholders(INVENTORY_API.BATCH.GET_ALL, queryParams);
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Fetches available statuses for a business document.
+     *
+     * @param {BusinessDocumentType} documentType Business document type
+     * @returns {Observable<BaseResponse<BusinessDocumentStatus[], string>>}
+     * @memberof InventoryService
+     */
+    public getBusinessDocumentStatuses(documentType: BusinessDocumentType): Observable<BaseResponse<BusinessDocumentStatus[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BUSINESS_DOCUMENT_STATUSES
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':documentType', encodeURIComponent(documentType));
+        return this.http.get(url).pipe(
+            map((response) => response as BaseResponse<BusinessDocumentStatus[], string>),
+            catchError((error) => this.errorHandler.HandleCatch<BusinessDocumentStatus[], string>(error, ''))
+        );
+    }
+     
+    /**
+     * Create a batch
+     *
+     * @param {*} model Create batch payload
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public createBatch(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.CREATE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Get batch details
+     *
+     * @param {string} batchUniqueName Batch unique name
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getBatch(batchUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.GET
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':batchUniqueName', encodeURIComponent(batchUniqueName));
+        return this.http.get(url).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.queryString = { batchUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', { batchUniqueName }))
+        );
+    }
+
+    /**
+     * Update a batch
+     *
+     * @param {string} batchUniqueName Batch unique name
+     * @param {*} model Update batch payload
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public updateBatch(batchUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.UPDATE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':batchUniqueName', encodeURIComponent(batchUniqueName));
+        return this.http.put(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                data.queryString = { batchUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, { batchUniqueName }))
+        );
+    }
+
+    /**
+     * List batches available to transfer when archiving.
+     *
+     * @param {{ uniqueName?: string; isVariant?: boolean; page?: number; count?: number; excludeBatchUniqueName?: string; sort?: string; sortBy?: string; q?: string; noStock?: boolean }} queryParams Availability query
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getBatchAvailability(queryParams: {
+        uniqueName?: string;
+        isVariant?: boolean;
+        page?: number;
+        count?: number;
+        excludeBatchUniqueName?: string;
+        sort?: string;
+        sortBy?: string;
+        q?: string;
+        noStock?: boolean;
+        warehouseUniqueName?: string;
+        reportNature?: string;
+    }): Observable<BaseResponse<any, any>> {
+        const url = this.generalService.replaceUrlPlaceholders(INVENTORY_API.BATCH.AVAILABILITY, {
+            uniqueName: queryParams.uniqueName ?? "",
+            isVariant: queryParams.isVariant ?? false,
+            page: queryParams.page ?? 1,
+            count: queryParams.count ?? API_BULK_FETCH_LIMIT,
+            excludeBatchUniqueName: queryParams.excludeBatchUniqueName ?? "",
+            sort: queryParams.sort ?? "asc",
+            sortBy: queryParams.sortBy ?? "expiry",
+            q: queryParams.q ?? "",
+            noStock: queryParams.noStock ?? false,
+            warehouseUniqueName: queryParams.warehouseUniqueName ?? "",
+            reportNature: queryParams.reportNature ?? ""
+        });
+        return this.http.get(url).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.queryString = queryParams;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', queryParams))
+        );
+    }
+
+    /**
+     * Archive, transfer or unarchive a batch.
+     *
+     * @param {string} batchUniqueName Batch unique name
+     * @param {*} model Archive payload
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public archiveBatch(batchUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.ARCHIVE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':batchUniqueName', encodeURIComponent(batchUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                data.queryString = { batchUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, { batchUniqueName }))
+        );
+    }
+
+    /**
+     * Transfer quantity from one batch to another.
+     *
+     * @param {*} model Transfer payload
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public transferBatch(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.TRANSFER
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model))
+        );
+    }
+
+    /**
+     * Delete a batch
+     *
+     * @param {string} batchUniqueName Batch unique name
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public deleteBatch(batchUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + INVENTORY_API.BATCH.DELETE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':batchUniqueName', encodeURIComponent(batchUniqueName));
+        return this.http.delete(url).pipe(
+            map((res) => {
+                const data: BaseResponse<any, any> = res;
+                data.queryString = { batchUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', { batchUniqueName }))
+        );
     }
 
 }

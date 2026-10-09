@@ -2,7 +2,7 @@
     <span>
         <ng-container
             *ngIf="
-                (selectedService === taxServiceEnum.TAXPRO || selectedService === taxServiceEnum.VAYANA) &&
+                (selectedService === taxServiceEnum.TAXPRO || selectedService === taxServiceEnum.VAYANA || selectedService === taxServiceEnum.EXCELLON) &&
                 !gstAuthenticated() &&
                 !gspSessionOtpAuthorized()
             "

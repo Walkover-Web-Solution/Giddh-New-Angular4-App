@@ -10,7 +10,12 @@ export enum InventoryModuleName {
     variant = 'VARIANT_WISE_REPORT',
     transaction = 'INVENTORY_TRANSACTION_REPORT',
     bulk = 'INVENTORY_TABLE_REPORT',
-    fixedAssetInventory = 'FIXED_ASSET_INVENTORY_TABLE_REPORT'
+    fixedAssetInventory = 'FIXED_ASSET_INVENTORY_TABLE_REPORT',
+    batchReport = 'INVENTORY_BATCH_REPORT'
+}
+export enum ReportNature {
+    Inventory = 'INVENTORY',
+    Books = 'BOOKS'
 }
 export const INVENTORY_COMMON_COLUMNS = [
     {

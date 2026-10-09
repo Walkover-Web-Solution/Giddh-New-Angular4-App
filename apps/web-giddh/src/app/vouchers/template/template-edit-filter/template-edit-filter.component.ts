@@ -52,6 +52,8 @@ export class TemplateEditFilterComponent implements OnInit {
     ];
     /** List of preset font size options */
     public templateFontsSize = [
+        { label: '20px', value: "20" },
+        { label: '18px', value: "18" },
         { label: '16px', value: "16" },
         { label: '14px', value: "14" },
         { label: '12px', value: "12" },
@@ -834,14 +836,7 @@ export class TemplateEditFilterComponent implements OnInit {
     public setFontAndFontSize(): void {
         if (!this.customTemplate) return;
         if (this.customTemplate?.font) {
-            if (this.customTemplate?.templateType === TemplateTypeEnum.TallyTemplate) {
-                this.presetFonts = [
-                    { label: 'Open Sans', value: 'Open Sans' },
-                    { label: 'Roboto', value: 'Roboto' }
-                ];
-            } else {
-                this.presetFonts = this.templateFonts;
-            }
+            this.presetFonts = this.templateFonts;
         }
         if (this.customTemplate?.fontSize) {
             this.customTemplate.fontSize = this.customTemplate?.fontSize.toString();

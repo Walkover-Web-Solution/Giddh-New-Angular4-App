@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, forwardRef, signal } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, AfterContentInit, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef, signal } from "@angular/core";
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatSelect } from "@angular/material/select";
 import { fromEvent, merge, ReplaySubject, Subject, Subscription, timer } from "rxjs";
@@ -19,7 +19,7 @@ import { IOption, SELECTED_ALL_OPTION } from "../../../app.constant";
     ],
     standalone: false
 })
-export class MultiSelectDropdownComponent implements ControlValueAccessor, OnInit, OnChanges, OnDestroy {
+export class MultiSelectDropdownComponent implements ControlValueAccessor, OnInit, AfterContentInit, OnChanges, OnDestroy {
     /** Material select instance used to observe overlay-panel scrolling */
     @ViewChild(MatSelect) private matSelect: MatSelect;
     /** Field label shown above the select */
@@ -34,6 +34,8 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
     @Input() public optionLabel: string = "label";
     /** When true, search is emitted to the parent instead of filtering locally */
     @Input() public enableDynamicSearch: boolean = false;
+    /** Prefills the panel search box without emitting a search */
+    @Input() public searchQuery: string = "";
     /** Name attribute for the inner select */
     @Input() public name: string = "";
     /** True if field is required */
@@ -54,6 +56,10 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
     @Input() public showAllOption: boolean = false;
     /** Custom label for the All option */
     @Input() public allOptionLabel: string = "";
+    /** Optional custom option template projected by the parent (`#optionTemplate`) */
+    @ContentChild("optionTemplate") public optionTemplate: TemplateRef<{ option: IOption }> | undefined;
+    /** Optional custom trigger template projected by the parent (`#triggerTemplate`) */
+    @ContentChild("triggerTemplate") public triggerTemplate: TemplateRef<{ selected: IOption[] }> | undefined;
     /** Emits the committed control value after a user selection */
     @Output() public selectionChange: EventEmitter<Array<string | number>> = new EventEmitter<Array<string | number>>();
     /** Emits the search text when enableDynamicSearch is true */
@@ -84,6 +90,8 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Active subscription to the material select overlay scroll */
     private panelScrollSubscription?: Subscription;
+    /** Active subscription to overlay Tab key handling when a custom option template is used */
+    private panelKeydownSubscription?: Subscription;
     /** Tracks whether the overlay is still open while its element becomes available */
     private isPanelOpen: boolean = false;
     /** Function to be called when the control value changes */
@@ -93,7 +101,10 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
     /** Skips the first empty search emit for dynamic/API search */
     private skipInitialDynamicSearch: boolean = true;
 
-    constructor(private changeDetectorRef: ChangeDetectorRef) { }
+    constructor(
+        private changeDetectorRef: ChangeDetectorRef,
+        private elementRef: ElementRef<HTMLElement>
+    ) { }
 
     /**
      * Initializes search filtering
@@ -143,6 +154,15 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
     }
 
     /**
+     * Ensures a projected option template is picked up with OnPush
+     *
+     * @memberof MultiSelectDropdownComponent
+     */
+    public ngAfterContentInit(): void {
+        this.changeDetectorRef.markForCheck();
+    }
+
+    /**
      * Re-filters and re-syncs UI when options or All-option flag change
      *
      * @param {SimpleChanges} changes
@@ -162,6 +182,14 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
         }
         if (changes.showAllOption && !changes.showAllOption.firstChange) {
             this.syncUiFromControl();
+        }
+        if (changes.searchQuery) {
+            const term = (this.searchQuery ?? "").trim();
+            this.searchControl.setValue(term);
+            this.isSearching.set(!!term);
+            if (term) {
+                this.skipInitialDynamicSearch = false;
+            }
         }
         if (changes.showError || changes.label || changes.placeholder || changes.allOptionLabel) {
             this.changeDetectorRef.markForCheck();
@@ -239,6 +267,8 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
         this.isPanelOpen = false;
         this.panelScrollSubscription?.unsubscribe();
         this.panelScrollSubscription = undefined;
+        this.panelKeydownSubscription?.unsubscribe();
+        this.panelKeydownSubscription = undefined;
         this.flushParentValueChange();
         if (!this.filteredOptions()?.length) {
             this.searchControl.reset("", { emitEvent: false });
@@ -269,6 +299,8 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
         this.isPanelOpen = isOpen;
         this.panelScrollSubscription?.unsubscribe();
         this.panelScrollSubscription = undefined;
+        this.panelKeydownSubscription?.unsubscribe();
+        this.panelKeydownSubscription = undefined;
         if (!isOpen) {
             return;
         }
@@ -286,6 +318,11 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
                     this.scrollEnd.emit();
                 }
             });
+            if (this.optionTemplate) {
+                this.panelKeydownSubscription = fromEvent<KeyboardEvent>(panel, "keydown", { capture: true }).pipe(
+                    takeUntil(this.destroyed$)
+                ).subscribe((event) => this.onPanelTabKeydown(event));
+            }
         });
     }
 
@@ -296,6 +333,7 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
      */
     public ngOnDestroy(): void {
         this.panelScrollSubscription?.unsubscribe();
+        this.panelKeydownSubscription?.unsubscribe();
         this.destroyed$.next(true);
         this.destroyed$.complete();
         this.parentValueChange$.complete();
@@ -485,6 +523,105 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
     }
 
     /**
+     * Selected options used by a custom trigger template
+     *
+     * @return {IOption[]}
+     * @memberof MultiSelectDropdownComponent
+     */
+    public getSelectedTriggerOptions(): IOption[] {
+        const options = this.getOptionList();
+        return this.uiSelectedValues
+            .filter((value) => value !== this.allOptionValue)
+            .map((value) => options.find((option) => option.value === value) ?? { value: String(value), label: String(value) });
+    }
+
+    /**
+     * Moves Tab through search and option action buttons, then to the next form field.
+     *
+     * @private
+     * @param {KeyboardEvent} event
+     * @memberof MultiSelectDropdownComponent
+     */
+    private onPanelTabKeydown(event: KeyboardEvent): void {
+        if (event.key !== "Tab") {
+            return;
+        }
+
+        const panel = this.matSelect?.panel?.nativeElement as HTMLElement | undefined;
+        if (!panel) {
+            return;
+        }
+
+        const tabbables = this.getPanelInnerTabbables(panel);
+        if (!tabbables.length) {
+            return;
+        }
+
+        const active = document.activeElement as HTMLElement | null;
+        let currentIndex = tabbables.findIndex((element) => element === active || element.contains(active));
+        if (currentIndex === -1 && active) {
+            const optionPreview = active.closest("mat-option")?.querySelector("button:not([disabled])") as HTMLElement | null;
+            if (!event.shiftKey && optionPreview) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                optionPreview.focus();
+                return;
+            }
+            currentIndex = event.shiftKey ? 0 : -1;
+        }
+
+        const nextIndex = event.shiftKey ? currentIndex - 1 : currentIndex + 1;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (nextIndex >= 0 && nextIndex < tabbables.length) {
+            tabbables[nextIndex].focus();
+            return;
+        }
+
+        this.matSelect.close();
+        setTimeout(() => this.focusAdjacentField(event.shiftKey));
+    }
+
+    /**
+     * Search input and option action buttons inside the overlay panel.
+     *
+     * @private
+     * @param {HTMLElement} panel
+     * @return {HTMLElement[]}
+     * @memberof MultiSelectDropdownComponent
+     */
+    private getPanelInnerTabbables(panel: HTMLElement): HTMLElement[] {
+        const search = panel.querySelector("input") as HTMLElement | null;
+        const buttons = Array.from(panel.querySelectorAll("mat-option button:not([disabled])")) as HTMLElement[];
+        return [search, ...buttons].filter((element): element is HTMLElement => !!element);
+    }
+
+    /**
+     * Focuses the next or previous tabbable field outside the overlay.
+     *
+     * @private
+     * @param {boolean} shiftKey
+     * @memberof MultiSelectDropdownComponent
+     */
+    private focusAdjacentField(shiftKey: boolean): void {
+        const host = this.elementRef.nativeElement;
+        const selector = "a[href], button:not([disabled]), input:not([disabled]):not([type=\"hidden\"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex=\"-1\"])";
+        const visible = Array.from(document.querySelectorAll(selector))
+            .filter((element): element is HTMLElement => {
+                if (!(element instanceof HTMLElement) || element.closest(".cdk-overlay-pane")) {
+                    return false;
+                }
+                const style = window.getComputedStyle(element);
+                return style.visibility !== "hidden" && style.display !== "none" && element.getAttribute("aria-hidden") !== "true";
+            });
+        const hostTabbables = visible.filter((element) => host.contains(element));
+        const edge = shiftKey ? hostTabbables[0] : hostTabbables[hostTabbables.length - 1];
+        const edgeIndex = visible.indexOf(edge);
+        const target = visible[shiftKey ? edgeIndex - 1 : edgeIndex + 1];
+        target?.focus();
+    }
+
+    /**
      * Maps a raw option object onto IOption using optionValue / optionLabel
      *
      * @private
@@ -504,7 +641,7 @@ export class MultiSelectDropdownComponent implements ControlValueAccessor, OnIni
             value,
             label: option[this.optionLabel] ?? String(value),
             disabled: option.disabled,
-            additional: option
+            additional: option.additional ?? option
         };
     }
 

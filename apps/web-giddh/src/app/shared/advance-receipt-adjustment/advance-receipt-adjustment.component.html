@@ -53,7 +53,7 @@
                                         [currencyCode]="invoiceFormDetails.accountDetails.currency?.code"
                                     ></amount-field>
                                 </span>
-                                @if (enableVoucherAdjustmentMultiCurrency() && isMultiCurrencyAccount()) {
+                                @if (isMultiCurrencyAccount()) {
                                     <span class="d-flex justify-content-end company-currency">
                                         <amount-field
                                             [amount]="
@@ -83,7 +83,7 @@
                                         [currencyCode]="invoiceFormDetails.accountDetails.currency?.code"
                                     ></amount-field>
                                 </span>
-                                @if (enableVoucherAdjustmentMultiCurrency() && isMultiCurrencyAccount()) {
+                                @if (isMultiCurrencyAccount()) {
                                     <span class="d-flex justify-content-end company-currency">
                                         @if (
                                             !(
@@ -104,7 +104,6 @@
                                 }
                             </p>
                             @if (
-                                enableVoucherAdjustmentMultiCurrency() &&
                                 getBalanceDue() === 0 &&
                                 getConvertedBalanceDue() !== 0 &&
                                 invoiceFormDetails?.voucherDetails?.gainLoss &&
@@ -131,7 +130,7 @@
                                 <div class="col-5">
                                     <div class="form-group">
                                         <reactive-dropdown-field
-                                            [openDropdown]="shouldOpenDropdown"
+                                            [openDropdown]="shouldOpenDropdown()"
                                             [autocomplete]="'off'"
                                             [readonly]="shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null"
                                             [cssClass]="'text-left'"
@@ -192,11 +191,7 @@
                                         [(ngModel)]="entry.adjustmentAmount.amountForAccount"
                                         (change)="calculateTax(entry, entryIdx)"
                                     ></input-field>
-                                    @if (
-                                        enableVoucherAdjustmentMultiCurrency() &&
-                                        isMultiCurrencyAccount() &&
-                                        entry.adjustmentAmount.amountForAccount
-                                    ) {
+                                    @if (isMultiCurrencyAccount() && entry.adjustmentAmount.amountForAccount) {
                                         <span class="company-currency">
                                             <amount-field
                                                 [amount]="entry.adjustmentAmount.amountForCompany"

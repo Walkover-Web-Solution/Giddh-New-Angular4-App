@@ -30,5 +30,6 @@
     "adjust_inventory": "Adjust inventory",
     "create_reason": "Create Reason",
     "select_reason": "Select Reason",
-    "info_message": "To create or edit inventory adjustments, go to branch mode."
+    "info_message": "To create or edit inventory adjustments, go to branch mode.",
+    "quantity_exceeds_stock": "Quantity cannot be more than the stock quantity"
 }

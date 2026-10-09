@@ -15,7 +15,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { LoaderService } from '../loader/loader.service';
-import { clone, cloneDeep, filter, find, map as lodashMap, uniq, uniqBy } from '../lodash-optimized';
+import { clone, cloneDeep, filter, find, map as lodashMap, orderBy, uniq, uniqBy } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
@@ -3506,6 +3506,71 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Entry date for tax applicability (aligned with common-tax date input).
+     */
+    private normalizeLedgerDateForTax(date: unknown) {
+        if (!date) {
+            return null;
+        }
+        if (typeof date === "string") {
+            return dayjs(date, GIDDH_DATE_FORMAT);
+        }
+        return dayjs(date);
+    }
+
+    /**
+     * Whether a company tax applies on the ledger entry date (same rules as common-tax).
+     */
+    private isTaxUniqueNameValidForLedgerEntryDate(taxUniqueName: string, entryDate: unknown): boolean {
+        const companyTax = this.companyTaxesList?.find((tax) => tax.uniqueName === taxUniqueName);
+        if (!companyTax?.taxDetail?.length) {
+            return true;
+        }
+
+        const normalizedDate = this.normalizeLedgerDateForTax(entryDate);
+        if (!normalizedDate?.isValid()) {
+            return true;
+        }
+
+        const taxDetailsDesc = orderBy(
+            companyTax.taxDetail,
+            (detail: { date: string }) => dayjs(detail.date, GIDDH_DATE_FORMAT),
+            "desc"
+        );
+        const exactMatch = taxDetailsDesc.find((detail) =>
+            dayjs(detail.date, GIDDH_DATE_FORMAT).isSame(normalizedDate, "day")
+        );
+        if (exactMatch) {
+            return true;
+        }
+
+        const applicableBeforeEntryDate = taxDetailsDesc.find((detail) =>
+            dayjs(detail.date, GIDDH_DATE_FORMAT).isBefore(normalizedDate, "day")
+        );
+        return !!applicableBeforeEntryDate;
+    }
+
+    /**
+     * Splits stock tax unique names: TCS/TDS unchanged; GST filtered by entry date.
+     */
+    private resolveStockTaxUniqueNamesForLedger(
+        taxUniqueNames: string[] | undefined,
+        entryDate: unknown
+    ): { applicableTaxUniqueNames: string[]; otherTaxUniqueNames: string[] } {
+        const names = taxUniqueNames ?? [];
+
+        const otherTaxUniqueNames = this.companyTaxesList
+            .filter((tax) => names.includes(tax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(tax.taxType))
+            .map((tax) => tax.uniqueName);
+
+        const applicableTaxUniqueNames = names
+            .filter((uniqueName) => !otherTaxUniqueNames.includes(uniqueName))
+            .filter((uniqueName) => this.isTaxUniqueNameValidForLedgerEntryDate(uniqueName, entryDate));
+
+        return { applicableTaxUniqueNames, otherTaxUniqueNames };
+    }
+
+    /**
      * Load details of the selected account
      *
      * @private
@@ -3549,27 +3614,35 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const prioritizedApplicableTaxes = applicableTaxesExcludingOtherTaxes.length ? applicableTaxesExcludingOtherTaxes : accountOtherApplicableTaxes;
 
                 if (!isSundryDebtorCreditorGroup) {
-                    const stockGroupTax: string[] = [];
+                    const entryDateForTax = this.lc.blankLedger?.entryDate;
+
+                    const stockGroupTaxesResolved = this.resolveStockTaxUniqueNamesForLedger(
+                        data.body?.stock?.groupTaxes,
+                        entryDateForTax
+                    );
+                    const stockGroupTax = stockGroupTaxesResolved.otherTaxUniqueNames;
                     if (data.body?.stock?.groupTaxes) {
-                        stockGroupTax.push(...this.companyTaxesList.filter(otherTax =>
-                            data.body.stock?.groupTaxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
-                        ).map(tax => tax.uniqueName));
-                        data.body.stock.groupTaxes = data.body.stock?.groupTaxes.filter(tax => !stockGroupTax.includes(tax));
+                        data.body.stock.groupTaxes = stockGroupTaxesResolved.applicableTaxUniqueNames;
                     }
-                    const stockTax: string[] = [];
+
+                    const stockLineTaxesResolved = this.resolveStockTaxUniqueNamesForLedger(
+                        data.body?.stock?.taxes,
+                        entryDateForTax
+                    );
+                    const stockTax = stockLineTaxesResolved.otherTaxUniqueNames;
                     if (data.body?.stock?.taxes) {
-                        stockTax.push(...this.companyTaxesList.filter(otherTax =>
-                            data.body.stock?.taxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
-                        ).map(tax => tax.uniqueName));
-                        data.body.stock.taxes = data.body.stock?.taxes.filter(tax => !stockTax.includes(tax));
+                        data.body.stock.taxes = stockLineTaxesResolved.applicableTaxUniqueNames;
                     }
-                    
+
                     // Take taxes of parent group and stock's own taxes
                     taxes = this.generalService.fetchTaxesOnPriority(
                         data.body.stock?.taxes ?? [],
                         data.body.stock?.groupTaxes ?? [],
-                        data.body.taxes ?? [],
-                        data.body.groupTaxes ?? []);
+                        this.resolveStockTaxUniqueNamesForLedger(data.body.taxes ?? [],
+                        entryDateForTax).applicableTaxUniqueNames ?? [],
+                        this.resolveStockTaxUniqueNamesForLedger(data.body.groupTaxes ?? [],
+                        entryDateForTax).applicableTaxUniqueNames ?? []);
+                        
                         const isSundryDebtorCreditorAccount = data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryCreditors) || data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryDebtors);
                         if (data.body.oppositeAccount && (isSundryDebtorCreditorAccount || stockGroupTax.length || stockTax.length)) {
                             const stockAccountOtherTax = this.generalService.fetchTaxesOnPriority(
@@ -3776,6 +3849,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                 }
                 if (stockName && stockUniqueName) {
+                    const existingBatches = txn.duplicateEntry && Array.isArray(txn.inventory?.batches) ? txn.inventory.batches : [];
                     txn.inventory = {
                         stock: {
                             name: stockName,
@@ -3791,7 +3865,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             code: unitCode,
                             rate: rate,
                             stockUnitUniqueName: stockUnitUniqueName
-                        }
+                        },
+                        batches: existingBatches
                     };
                 } else {
                     delete txn.inventory;
