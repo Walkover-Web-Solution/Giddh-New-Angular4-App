@@ -203,7 +203,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Holds true when need to refresh page */
     private isRefresh: boolean = null;
     /** Voucher api version */
-    public voucherApiVersion: number;
+    public voucherApiVersion: number =  2;
     /** True when store observables are already subscribed */
     private storeSubscribed: boolean = false;
     /** True during initial dual get-all load (lookup + page list) */
@@ -249,7 +249,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @memberof VouchersPreviewComponent
     */
     public ngOnInit(): void {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.voucherApiVersion = this.generalService.voucherApiVersion || 2;
         this.subscribeStoreObservable();
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
@@ -267,9 +267,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             ),
             takeUntil(this.destroyed$)
         ).subscribe(([routeParams, queryParams]) => {
-            if (!routeParams?.voucherType || !queryParams?.page) {
+            if (!routeParams?.voucherType) {
                 return;
             }
+            // Default page when missing so client redirects without ?page= still resolve voucherType/UI
+            const normalizedQueryParams: any = {
+                ...queryParams,
+                page: queryParams?.page ?? 1,
+                count: queryParams?.count ?? PAGINATION_LIMIT
+            };
             if (this.params?.voucherUniqueName !== routeParams?.voucherUniqueName) {
                 this.initialPdfLoaded = false;
                 this.isInitialDualLoad = false;
@@ -279,8 +285,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.skipNextSearchEmit = null;
                 this.isUserSearchRequest = false;
             }
-            this.params = { ...routeParams, ...queryParams };
-            this.queryParams = queryParams;
+            this.params = { ...routeParams, ...normalizedQueryParams };
+            this.queryParams = normalizedQueryParams;
             this.isSearching = false;
             this.urlVoucherType = routeParams.voucherType;
             this.voucherType = this.vouchersUtilityService.parseVoucherType(routeParams.voucherType);
@@ -288,12 +294,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             this.showPaymentDetails = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote].includes(this.voucherType);
             this.getCreatedTemplates();
             this.getCreateNewVoucherText();
-            this.setPageListFiltersFromQuery(queryParams);
-            this.skipNextSearchEmit = queryParams.search ?? '';
+            this.setPageListFiltersFromQuery(normalizedQueryParams);
+            this.skipNextSearchEmit = normalizedQueryParams.search ?? '';
             this.search.setValue(this.skipNextSearchEmit, { emitEvent: false });
             this.loadPreviewPage();
+            this.changeDetection.detectChanges();
         });
-        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.imgPath = this.serviceConfig.IMG_PATH;
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (this.skipNextSearchEmit !== null && search === this.skipNextSearchEmit) {
@@ -1219,8 +1225,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         return [
             routeParams?.voucherType ?? '',
             routeParams?.voucherUniqueName ?? '',
-            queryParams?.page ?? '',
-            queryParams?.count ?? '',
+            queryParams?.page ?? 1,
+            queryParams?.count ?? PAGINATION_LIMIT,
             queryParams?.from ?? '',
             queryParams?.to ?? ''
         ].join('|');

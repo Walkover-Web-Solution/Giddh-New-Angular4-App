@@ -20,6 +20,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AdjustmentInventory, DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 import { InventoryService } from '../../../services/inventory.service';
+import { ToasterService } from '../../../services/toaster.service';
 import { VoucherTypeEnum } from '../../../vouchers/utility/vouchers.const';
 
 /** Dialog / query-param data for DC/RN inventory adjustment */
@@ -35,6 +36,8 @@ export interface AdjustmentItemUiState {
     entityUniqueName: string;
     entity: string;
     preselectedVariantUniqueNames: string[];
+    /** Max adjustable quantity from DC/RN stock.quantity */
+    maxQuantity: number | null;
     dataSource: MatTableDataSource<any>;
     selection: SelectionModel<any>;
     stockGroupClosingBalance: { newValue: number; changeValue: number; closing: any };
@@ -78,6 +81,8 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
     public panelOpenState: boolean = true;
     /** Adjustment Method  */
     public adjustmentMethod: any[] = [];
+    /** Adjustment methods allowed in DC/RN mode (Quantity Wise only) */
+    public businessDocumentAdjustmentMethod: any[] = [];
     /* dayjs object */
     public dayjs: any = dayjs;
     /** Stock Transactional Object */
@@ -174,6 +179,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private changeDetectorRef: ChangeDetectorRef,
         private inventoryService: InventoryService,
+        private toaster: ToasterService,
         private elementRef: ElementRef<HTMLElement>,
         @Optional() private dialogRef: MatDialogRef<AdjustInventoryComponent>,
         @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: AdjustInventoryDialogData
@@ -523,6 +529,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
                 entityUniqueName: stock.entityUniqueName,
                 entity: stock.entity,
                 preselectedVariantUniqueNames: stock.variantUniqueNames || [],
+                maxQuantity: stock.quantity ?? null,
                 dataSource: new MatTableDataSource<any>([]),
                 selection: new SelectionModel<any>(true, []),
                 stockGroupClosingBalance: { newValue: 0, changeValue: 0, closing: 0 },
@@ -549,12 +556,14 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
         entityName: string;
         entityUniqueName: string;
         variantUniqueNames: string[];
+        quantity: number;
     }> {
         const stockMap = new Map<string, {
             entity: string;
             entityName: string;
             entityUniqueName: string;
             variantUniqueNames: string[];
+            quantity: number;
         }>();
 
         (voucherDetails?.entries || []).forEach((entry: any) => {
@@ -563,13 +572,20 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
                 if (!stock?.uniqueName) {
                     return;
                 }
+                const stockQuantity = Number(stock.quantity) || 0;
                 if (!stockMap.has(stock.uniqueName)) {
                     stockMap.set(stock.uniqueName, {
                         entity: 'STOCK',
                         entityName: stock.name ? `${stock.name} (STOCK)` : stock.uniqueName,
                         entityUniqueName: stock.uniqueName,
-                        variantUniqueNames: []
+                        variantUniqueNames: [],
+                        quantity: stockQuantity
                     });
+                } else {
+                    const mapped = stockMap.get(stock.uniqueName);
+                    if (mapped) {
+                        mapped.quantity += stockQuantity;
+                    }
                 }
                 const variantUniqueName = stock.variant?.uniqueName;
                 if (variantUniqueName) {
@@ -593,16 +609,22 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryComponent
      */
     private createItemFormGroup(stock: any): FormGroup {
+        const maxQuantity = stock?.quantity != null ? Number(stock.quantity) : null;
+        const changeInValueValidators = [Validators.required];
+        if (maxQuantity != null) {
+            changeInValueValidators.push(Validators.max(maxQuantity));
+        }
+
         return this.formBuilder.group({
             entity: [stock?.entity ?? 'STOCK', Validators.required],
             entityName: [stock?.entityName ?? null],
             entityUniqueName: [stock?.entityUniqueName ?? null, Validators.required],
             reasonName: [null],
             reasonUniqueName: [null, Validators.required],
-            adjustmentMethodName: [null],
-            adjustmentMethod: [null, Validators.required],
-            calculationMethod: [null, Validators.required],
-            changeInValue: [null, Validators.required],
+            adjustmentMethodName: [this.localeData?.quantity_wise ?? null],
+            adjustmentMethod: [AdjustmentInventory.QuantityWise, Validators.required],
+            calculationMethod: [AdjustmentInventory.Value, Validators.required],
+            changeInValue: [maxQuantity, changeInValueValidators],
             variantUniqueNames: [stock?.variantUniqueNames ?? []]
         });
     }
@@ -816,15 +838,15 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
             this.adjustInventoryCreateEditForm.get('warehouseName')?.patchValue(warehouseName);
             this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(warehouseUniqueName);
             this.itemsFormArray?.controls?.forEach((control, index) => {
+                const item = this.adjustmentItems[index];
                 control.patchValue({
                     reasonName: null,
                     reasonUniqueName: null,
-                    adjustmentMethodName: null,
-                    adjustmentMethod: null,
-                    calculationMethod: null,
-                    changeInValue: null
+                    adjustmentMethodName: this.localeData?.quantity_wise,
+                    adjustmentMethod: AdjustmentInventory.QuantityWise,
+                    calculationMethod: AdjustmentInventory.Value,
+                    changeInValue: item?.maxQuantity ?? null
                 });
-                const item = this.adjustmentItems[index];
                 if (item) {
                     item.stockGroupClosingBalance = { newValue: 0, changeValue: 0, closing: item.stockGroupClosingBalance.closing };
                     item.selection.clear();
@@ -834,6 +856,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
                             item.selection.select(row);
                         }
                     });
+                    this.calculateInventoryForItem(index);
                 }
             });
             this.adjustInventoryCreateEditForm.updateValueAndValidity();
@@ -1223,12 +1246,16 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
 
         const adjustmentMethod = itemForm.get('adjustmentMethod')?.value;
         const calculationMethod = itemForm.get('calculationMethod')?.value;
-        const changeInValue = itemForm.get('changeInValue')?.value;
+        let changeInValue = itemForm.get('changeInValue')?.value;
         const entityUniqueName = itemForm.get('entityUniqueName')?.value;
+
+        this.updateItemChangeInValueValidators(itemIndex);
 
         if (!entityUniqueName || !adjustmentMethod || !calculationMethod || changeInValue === null || changeInValue === undefined) {
             return;
         }
+
+        changeInValue = this.enforceBusinessDocumentQuantityLimit(itemIndex, changeInValue);
 
         if (adjustmentMethod === AdjustmentInventory.QuantityWise && calculationMethod === AdjustmentInventory.Percentage) {
             let changeValue = item.stockGroupClosingBalance.closing?.closing?.quantity * (changeInValue / 100);
@@ -1278,11 +1305,83 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
             });
         }
 
-        item.showHideTable = false;
         setTimeout(() => {
-            item.showHideTable = true;
             this.changeDetectorRef.detectChanges();
         });
+    }
+
+    /**
+     * Whether change-in-value must be capped by DC/RN stock.quantity
+     *
+     * @param {number} itemIndex
+     * @return {*}  {boolean}
+     * @memberof AdjustInventoryComponent
+     */
+    public isQuantityValueAdjustment(itemIndex: number): boolean {
+        const itemForm = this.itemsFormArray?.at(itemIndex) as FormGroup;
+        return itemForm?.get('adjustmentMethod')?.value === AdjustmentInventory.QuantityWise
+            && itemForm?.get('calculationMethod')?.value === AdjustmentInventory.Value;
+    }
+
+    /**
+     * Applies / clears max validators for DC/RN quantity-value adjustments
+     *
+     * @private
+     * @param {number} itemIndex
+     * @memberof AdjustInventoryComponent
+     */
+    private updateItemChangeInValueValidators(itemIndex: number): void {
+        const item = this.adjustmentItems[itemIndex];
+        const itemForm = this.itemsFormArray?.at(itemIndex) as FormGroup;
+        const changeInValueControl = itemForm?.get('changeInValue');
+        if (!changeInValueControl) {
+            return;
+        }
+
+        const validators = [Validators.required];
+        if (this.isQuantityValueAdjustment(itemIndex) && item?.maxQuantity != null) {
+            validators.push(Validators.max(item.maxQuantity));
+        }
+        changeInValueControl.setValidators(validators);
+        changeInValueControl.updateValueAndValidity({ emitEvent: false });
+    }
+
+    /**
+     * Caps change-in-value to stock.quantity for DC/RN quantity-value adjustments
+     *
+     * @private
+     * @param {number} itemIndex
+     * @param {*} changeInValue
+     * @return {*}  {number}
+     * @memberof AdjustInventoryComponent
+     */
+    private enforceBusinessDocumentQuantityLimit(itemIndex: number, changeInValue: number): number {
+        const item = this.adjustmentItems[itemIndex];
+        const itemForm = this.itemsFormArray?.at(itemIndex) as FormGroup;
+        const changeInValueControl = itemForm?.get('changeInValue');
+        const maxQuantity = item?.maxQuantity;
+        if (
+            !item
+            || !changeInValueControl
+            || !this.isQuantityValueAdjustment(itemIndex)
+            || maxQuantity == null
+            || Number(changeInValue) <= maxQuantity
+        ) {
+            return changeInValue;
+        }
+
+        this.toaster.showSnackBar(
+            'error',
+            `${this.localeData?.quantity_exceeds_stock} (${maxQuantity})`
+        );
+        // Clear then set on next tick so text-field UI reflects max
+        setTimeout(() => {
+            changeInValueControl.setValue(null, { emitEvent: false });
+            this.changeDetectorRef.detectChanges();
+            changeInValueControl.setValue(maxQuantity, { emitEvent: false });
+            this.changeDetectorRef.detectChanges();
+        });
+        return maxQuantity;
     }
 
     /**
@@ -1609,6 +1708,12 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
                     value: AdjustmentInventory.ValueWise
                 }
             ];
+            this.businessDocumentAdjustmentMethod = [
+                {
+                    label: this.localeData?.quantity_wise,
+                    value: AdjustmentInventory.QuantityWise
+                }
+            ];
             this.calculationMethod = [
                 {
                     label: this.localeData?.percentage,
@@ -1619,7 +1724,25 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
                     value: AdjustmentInventory.Value
                 }
             ];
+            this.syncBusinessDocumentItemLabels();
         }
+    }
+
+    /**
+     * Syncs Quantity Wise labels after locale load for DC/RN item rows
+     *
+     * @private
+     * @memberof AdjustInventoryComponent
+     */
+    private syncBusinessDocumentItemLabels(): void {
+        if (!this.isBusinessDocumentMode || !this.itemsFormArray?.length) {
+            return;
+        }
+        this.itemsFormArray.controls.forEach((control) => {
+            if (control.get('adjustmentMethod')?.value === AdjustmentInventory.QuantityWise) {
+                control.get('adjustmentMethodName')?.patchValue(this.localeData?.quantity_wise, { emitEvent: false });
+            }
+        });
     }
 
     /**

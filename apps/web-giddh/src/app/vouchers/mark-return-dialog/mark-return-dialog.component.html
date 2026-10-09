@@ -88,13 +88,7 @@
                                 [(ngModel)]="row.returnQty"
                                 (ngModelChange)="onReturnQtyChange(row)"
                                 [disabled]="!row.selected || !isRowSelectable(row)"
-                                [showError]="isReturnQtyInvalid(row)"
                             ></input-field>
-                            @if (isReturnQtyInvalid(row)) {
-                                <div class="text-danger font-size-12 mt-1 text-wrap" role="alert">
-                                    {{ getReturnQtyError(row) }}
-                                </div>
-                            }
                         </div>
                     </td>
                 </ng-container>
@@ -124,7 +118,7 @@
                             } @else {
                                 <span class="text-muted" aria-hidden="true">-</span>
                             }
-                            @if (row.selected && isReturnQtyInvalid(row)) {
+                            @if (row.selected && hasInvalidBatchAllocation(row)) {
                                 <div class="text-danger font-size-12 mt-1 text-wrap" role="alert">
                                     {{ getReturnQtyError(row) }}
                                 </div>
@@ -141,13 +135,7 @@
                                     [(ngModel)]="row.returnQty"
                                     (ngModelChange)="onReturnQtyChange(row)"
                                     [disabled]="!row.selected || !isRowSelectable(row)"
-                                    [showError]="isReturnQtyInvalid(row)"
                                 ></input-field>
-                                @if (isReturnQtyInvalid(row)) {
-                                    <div class="text-danger font-size-12 mt-1 text-wrap" role="alert">
-                                        {{ getReturnQtyError(row) }}
-                                    </div>
-                                }
                             </div>
                         }
                     </td>
@@ -185,13 +173,7 @@
                                 [(ngModel)]="row.cnQty"
                                 (ngModelChange)="onCnQtyChange(row)"
                                 [disabled]="!isCnQtyEditable(row)"
-                                [showError]="isCnQtyInvalid(row)"
                             ></input-field>
-                            @if (isCnQtyInvalid(row)) {
-                                <div class="text-danger font-size-12 mt-1 text-wrap" role="alert">
-                                    {{ getNoteQtyError(row) }}
-                                </div>
-                            }
                         </div>
                     </td>
                 </ng-container>
