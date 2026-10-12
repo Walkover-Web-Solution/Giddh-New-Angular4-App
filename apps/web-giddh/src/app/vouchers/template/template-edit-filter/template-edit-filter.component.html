@@ -286,9 +286,16 @@
                                 name="showSectionsInline"
                                 [(ngModel)]="customTemplate.showSectionsInline"
                                 (ngModelChange)="onChangeDesignFieldVisibility('showSectionsInline', customTemplate?.showSectionsInline)"
+                                [disabled]="isShowSectionsInlineDisabled()"
                             >
                                 {{ localeData?.show_header_footer_first_last_page }}
                             </mat-checkbox>
+                            @if (isShowSectionsInlineDisabled()) {
+                                <p class="d-flex align-items-start column-gap-1 mt-2 mb-0 font-size-14 ml-2">
+                                    <i class="icon-info text-orange mt-1 pt-1" aria-hidden="true"></i>
+                                    <span>{{ localeData?.show_sections_inline_disabled_info }}</span>
+                                </p>
+                            }
                         </div>
                     </mat-expansion-panel>
 

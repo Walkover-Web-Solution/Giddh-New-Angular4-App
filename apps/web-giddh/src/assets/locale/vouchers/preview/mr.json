@@ -469,6 +469,7 @@
     "right": "उजवीकडे",
     "reset": "रीसेट करा",
     "show_sections_inline": "सेक्शन इनलाइन दाखवा",
+    "show_sections_inline_disabled_info": "18px आणि 20px फॉन्ट आकारांसाठी ही सेटिंग सक्षम आणि लॉक आहे कारण मोठ्या फॉन्टसाठी हेडर/फूटर फक्त पहिल्या आणि शेवटच्या पानावर असणे आवश्यक आहे.",
     "label_settings": "लेबल सेटिंग्ज",
     "enable_secondary_language": "दुय्यम भाषा सक्षम करा",
     "show_primary_label": "प्राथमिक लेबल दाखवा",
