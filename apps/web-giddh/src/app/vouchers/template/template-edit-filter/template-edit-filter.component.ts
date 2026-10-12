@@ -723,9 +723,49 @@ export class TemplateEditFilterComponent implements OnInit {
         if (!fontSize?.value) {
             const template = cloneDeep(this.customTemplate);
             this.onValueChange('fontSize', template?.fontSize);
-        } else {
-            this.onValueChange('fontSize', fontSize.value);
+            return;
         }
+
+        this.onValueChange('fontSize', fontSize.value);
+        this.disableShowSectionsInlineForLargeFont(fontSize.value);
+    }
+
+    /**
+     * Returns true when show sections inline must stay disabled (18px / 20px fonts).
+     *
+     * @returns {boolean}
+     * @memberof TemplateEditFilterComponent
+     */
+    public isShowSectionsInlineDisabled(): boolean {
+        return this.isLargeFontSize(this.customTemplate?.fontSize);
+    }
+
+    /**
+     * True for font sizes that cannot be used with show sections inline.
+     *
+     * @private
+     * @param {string} fontSize Font size value
+     * @returns {boolean}
+     * @memberof TemplateEditFilterComponent
+     */
+    private isLargeFontSize(fontSize: string): boolean {
+        return fontSize === '18' || fontSize === '20';
+    }
+
+    /**
+     * Forces show sections inline on (and locked) when a large font size is selected.
+     *
+     * @private
+     * @param {string} fontSize Selected font size value
+     * @memberof TemplateEditFilterComponent
+     */
+    private disableShowSectionsInlineForLargeFont(fontSize: string): void {
+        if (!this.isLargeFontSize(fontSize) || this.customTemplate?.showSectionsInline) {
+            return;
+        }
+
+        this.customTemplate.showSectionsInline = true;
+        this.onChangeDesignFieldVisibility('showSectionsInline', true);
     }
 
     /**
@@ -840,6 +880,7 @@ export class TemplateEditFilterComponent implements OnInit {
         }
         if (this.customTemplate?.fontSize) {
             this.customTemplate.fontSize = this.customTemplate?.fontSize.toString();
+            this.disableShowSectionsInlineForLargeFont(this.customTemplate.fontSize);
         }
     }
 
@@ -848,10 +889,10 @@ export class TemplateEditFilterComponent implements OnInit {
      * Handles the visibility change of a design field.
      *
      * @param {string} fieldName The name of the field
-     * @param {string} value The value to set for the field
+     * @param {string | boolean} value The value to set for the field
      * @memberof TemplateEditFilterComponent
      */
-    public onChangeDesignFieldVisibility(fieldName: string, value: string): void {
+    public onChangeDesignFieldVisibility(fieldName: string, value: string | boolean): void {
         const template = cloneDeep(this.customTemplate);
         template[fieldName] = value;
         this.templateService.setCustomTemplate(template);

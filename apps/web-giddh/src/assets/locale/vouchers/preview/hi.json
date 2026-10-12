@@ -471,6 +471,7 @@
     "right": "दाएँ",
     "reset": "रीसेट करें",
     "show_sections_inline": "सेक्शन इनलाइन दिखाएं",
+    "show_sections_inline_disabled_info": "18px और 20px फ़ॉन्ट आकार के लिए यह सेटिंग सक्षम और लॉक है क्योंकि बड़े फ़ॉन्ट के लिए हेडर/फूटर केवल पहले और अंतिम पृष्ठ पर होना आवश्यक है।",
     "label_settings": "लेबल सेटिंग्स",
     "enable_secondary_language": "द्वितीयक भाषा सक्षम करें",
     "show_primary_label": "प्राथमिक लेबल दिखाएं",
