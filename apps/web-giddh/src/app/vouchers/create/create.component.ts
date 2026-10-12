@@ -8339,6 +8339,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             if (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote) {
                 invoiceForm.type = this.invoiceType.isDeliveryChallan ? VoucherTypeEnum.sales : VoucherTypeEnum.purchase;
+                delete invoiceForm.dueDate;
 
                 invoiceForm.entries = invoiceForm.entries?.map((entry) => {
                     entry.voucherType = invoiceForm.type;
