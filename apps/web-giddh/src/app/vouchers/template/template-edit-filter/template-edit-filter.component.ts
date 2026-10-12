@@ -52,6 +52,8 @@ export class TemplateEditFilterComponent implements OnInit {
     ];
     /** List of preset font size options */
     public templateFontsSize = [
+        { label: '20px', value: "20" },
+        { label: '18px', value: "18" },
         { label: '16px', value: "16" },
         { label: '14px', value: "14" },
         { label: '12px', value: "12" },
