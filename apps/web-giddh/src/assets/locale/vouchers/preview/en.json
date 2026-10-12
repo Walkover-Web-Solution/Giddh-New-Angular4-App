@@ -471,6 +471,7 @@
     "right": "Right",
     "reset": "Reset",
     "show_sections_inline": "Show sections inline",
+    "show_sections_inline_disabled_info": "This setting is enabled and locked for 18px and 20px font sizes because larger fonts require header/footer on the first and last page only.",
     "label_settings": "Label Settings",
     "enable_secondary_language": "Enable Secondary Language",
     "show_primary_label": "Show Primary Label",
