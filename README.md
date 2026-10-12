@@ -370,3 +370,4 @@ Implement the lifecycle hook interfaces. Don't just use methods without implemen
 6. Provide the build to the tester for sanity testing.
 7. After the sanity check, upload the Electron build to the AWS S3 path (Coordinate with the lead for uploading the build to the AWS S3 path).
 
+## Thanks to read
