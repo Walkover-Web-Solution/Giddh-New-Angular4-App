@@ -118,5 +118,22 @@
     "update_opening_amount": "Update opening amount",
     "batch_already_added": "This batch is already added",
     "create_custom_batch": "Type to create custom batch number",
-    "batch_required_fields": "Please fill all the required fields for the batches"
+    "batch_required_fields": "Please fill all the required fields for the batches",
+    "edit_opening_balance": "Edit opening balance",
+    "add_opening_balance": "Add opening balance",
+    "add_warehouse": "Add warehouse",
+    "track_by_batch": "Track by batch",
+    "not_set": "Not set",
+    "one_warehouse": "1 warehouse",
+    "n_warehouses": "[COUNT] warehouses",
+    "no_batch": "no batch",
+    "one_batch": "1 batch",
+    "n_batches_count": "[COUNT] batches",
+    "variant_total": "Variant total",
+    "total_opening": "Total opening",
+    "opening_balance_warehouse_hint": "Add stock per warehouse. Turn on batch tracking only where the stock is held in batches.",
+    "quantity_amount_sum_of_batches": "Quantity and amount are the sum of the batches below",
+    "no_batches_enter_directly": "No batches · enter quantity and amount directly",
+    "batches_label": "Batches",
+    "warehouse_required": "Please select warehouse"
 }

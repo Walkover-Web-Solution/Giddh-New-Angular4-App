@@ -149,7 +149,8 @@ export class StockOpeningBatchDialogComponent implements OnInit, OnDestroy {
             sortBy: "expiry",
             q: query ?? "",
             noStock: true,
-            excludeBatchUniqueName: ""
+            excludeBatchUniqueName: "",
+            warehouseUniqueName: this.dialogData?.warehouseUniqueName ?? ""
         }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.allBatchAvailabilityOptions = mapAvailabilityBatches(response);
             this.syncSelectedBatchNumbers();
