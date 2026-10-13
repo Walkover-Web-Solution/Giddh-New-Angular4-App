@@ -306,11 +306,34 @@ table.stock-table {
         line-height: 22px;
     }
 
+    .opening-balance-col {
+        max-width: 220px;
+        min-width: 200px;
+    }
+
+    .variant-opening-balance-summary {
+        min-width: 160px;
+        padding: 4px 0;
+    }
+
+    .variant-batch-toolbar {
+        max-width: 220px;
+    }
+
+    .batch-warehouse-field {
+        max-width: 220px;
+        width: 100%;
+    }
+
     .variant-batch-fields {
-        grid-template-columns: minmax(130px, 1fr) minmax(130px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) minmax(120px, 1fr) minmax(130px, 1fr) 40px;
+        grid-template-columns: minmax(120px, 1fr) minmax(120px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(
+                100px,
+                1fr
+            ) minmax(110px, 1fr) 36px;
         align-items: end;
-        column-gap: 12px;
+        column-gap: 8px;
         row-gap: 8px;
+        min-width: 820px;
     }
 
     .variant-batch-datepicker {
@@ -772,6 +795,28 @@ table.stock-table {
 
 .stock-batch-box {
     padding: 12px 16px 8px;
+
+    .batch-warehouse-field {
+        max-width: 220px;
+        width: 100%;
+        margin-bottom: 12px;
+    }
+}
+
+.stock-batch-toolbar {
+    grid-template-columns: minmax(140px, 200px) minmax(110px, 140px) minmax(110px, 140px);
+    column-gap: 12px;
+    align-items: end;
+    max-width: 520px;
+}
+
+.stock-batch-alert {
+    max-width: 520px;
+}
+
+.batch-fields-scroll {
+    overflow-x: auto;
+    max-width: 100%;
 }
 
 .stock-batch-row {
@@ -779,9 +824,10 @@ table.stock-table {
 }
 
 .stock-batch-fields {
-    grid-template-columns: repeat(6, minmax(0, 1fr)) 36px;
+    grid-template-columns: repeat(6, minmax(110px, 1fr)) 36px;
     align-items: end;
-    column-gap: 12px;
+    column-gap: 8px;
+    min-width: 820px;
 
     giddh-datepicker {
         display: block;
@@ -798,4 +844,28 @@ table.stock-table {
 
 .add-new-text-container {
     color: var(--text-primary-color);
+}
+
+.stock-opening-balance-section {
+    .warehouse-card {
+        background-color: var(--table-background-color);
+    }
+
+    .warehouse-main-row {
+        .warehouse-field {
+            min-width: 180px;
+            flex: 1 1 220px;
+        }
+
+        .qty-field,
+        .amount-field {
+            width: 140px;
+            flex: 0 0 140px;
+        }
+    }
+
+    .batch-list {
+        background-color: transparent;
+        border-color: var(--border-color);
+    }
 }
