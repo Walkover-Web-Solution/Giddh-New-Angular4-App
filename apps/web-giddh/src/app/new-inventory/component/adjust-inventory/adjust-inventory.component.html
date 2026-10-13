@@ -29,9 +29,17 @@
         [class.dialog-body]="isDialogMode"
     >
         <div *ngIf="!apiCallInProgress">
-            <div class="adjustment container-fluid p-3 overflow-y-auto" *ngIf="showHideDiv" [style.max-height]="isDialogMode ? 'calc(100vh - 200px)' : 'auto'">
+            <div
+                class="adjustment container-fluid p-3 overflow-y-auto"
+                *ngIf="showHideDiv"
+                [style.max-height]="isDialogMode ? 'calc(100vh - 200px)' : 'auto'"
+            >
                 <div class="row">
-                    <div [class]="isDialogMode ? 'mt-3 col-xxl-6 col-xl-6 col-lg-12 col-md-12' : 'mt-3 col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6'">
+                    <div
+                        [class]="
+                            isDialogMode ? 'mt-3 col-xxl-6 col-xl-6 col-lg-12 col-md-12' : 'mt-3 col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6'
+                        "
+                    >
                         <giddh-datepicker
                             (keydown.enter)="$event.preventDefault()"
                             [label]="commonLocaleData?.app_date"
@@ -42,7 +50,11 @@
                             formControlName="date"
                         ></giddh-datepicker>
                     </div>
-                    <div [class]="isDialogMode ? 'mt-3 col-xxl-6 col-xl-6 col-lg-12 col-md-12' : 'mt-3 col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6'">
+                    <div
+                        [class]="
+                            isDialogMode ? 'mt-3 col-xxl-6 col-xl-6 col-lg-12 col-md-12' : 'mt-3 col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6'
+                        "
+                    >
                         <input-field
                             [readonly]="!!referenceNumber"
                             [name]="'reference'"
@@ -55,7 +67,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div [class]="isDialogMode ? 'mt-3 col-xxl-6 col-xl-6 col-lg-12 col-md-12' : 'mt-3 col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6'">
+                    <div
+                        [class]="
+                            isDialogMode ? 'mt-3 col-xxl-6 col-xl-6 col-lg-12 col-md-12' : 'mt-3 col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6'
+                        "
+                    >
                         <reactive-dropdown-field
                             [label]="localeData?.expense_accounts"
                             [placeholder]="localeData?.select_expense_accounts"
@@ -67,7 +83,11 @@
                             [showError]="isFormSubmitted && !adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.value"
                         ></reactive-dropdown-field>
                     </div>
-                    <div [class]="isDialogMode ? 'mt-3 col-xxl-6 col-xl-6 col-lg-12 col-md-12' : 'mt-3 col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6'">
+                    <div
+                        [class]="
+                            isDialogMode ? 'mt-3 col-xxl-6 col-xl-6 col-lg-12 col-md-12' : 'mt-3 col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6'
+                        "
+                    >
                         <reactive-dropdown-field
                             [label]="localeData?.warehouse"
                             [placeholder]="localeData?.select_warehouse"
@@ -215,12 +235,14 @@
                                                             (click)="$event.preventDefault(); $event.stopPropagation()"
                                                             formControlName="changeInValue"
                                                             [showError]="
-                                                                isFormSubmitted && !adjustInventoryCreateEditForm?.get('changeInValue')?.value
+                                                                isFormSubmitted &&
+                                                                !adjustInventoryCreateEditForm?.get('changeInValue')?.value
                                                             "
                                                         ></text-field>
                                                         <span>
                                                             {{
-                                                                adjustInventoryCreateEditForm.get('calculationMethod')?.value === 'PERCENTAGE'
+                                                                adjustInventoryCreateEditForm.get('calculationMethod')?.value ===
+                                                                'PERCENTAGE'
                                                                     ? '%'
                                                                     : ''
                                                             }}
@@ -230,7 +252,8 @@
                                                 <td [style.width]="'15.625%'" class="text-right">
                                                     {{
                                                         adjustInventoryCreateEditForm.get('adjustmentMethod')?.value
-                                                            ? adjustInventoryCreateEditForm.get('adjustmentMethod')?.value === 'QUANTITY_WISE'
+                                                            ? adjustInventoryCreateEditForm.get('adjustmentMethod')?.value ===
+                                                              'QUANTITY_WISE'
                                                                 ? referenceNumber
                                                                     ? stockGroupClosingBalance?.closing
                                                                     : (stockGroupClosingBalance?.closing?.closing?.quantity ?? 0)
@@ -368,7 +391,7 @@
                                     <reactive-dropdown-field
                                         [label]="localeData?.adjustment_method"
                                         [placeholder]="commonLocaleData?.app_select + ' ' + localeData?.adjustment_method"
-                                        [options]="adjustmentMethod"
+                                        [options]="businessDocumentAdjustmentMethod"
                                         [labelValue]="itemCtrl.get('adjustmentMethodName')?.value"
                                         formControlName="adjustmentMethod"
                                         [required]="true"
@@ -427,9 +450,7 @@
                                                             [placeholder]="commonLocaleData?.app_select_method"
                                                             [appearance]="'outline'"
                                                             (selectedOption)="calculateInventoryForItem(itemIndex)"
-                                                            [showError]="
-                                                                isFormSubmitted && !itemCtrl.get('calculationMethod')?.value
-                                                            "
+                                                            [showError]="isFormSubmitted && !itemCtrl.get('calculationMethod')?.value"
                                                         ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
@@ -571,12 +592,7 @@
                 <div class="row mt-3">
                     <div class="col-12">
                         <div class="button-group d-flex column-gap-15" [class.justify-content-end]="isDialogMode">
-                            <button
-                                aria-label="create"
-                                *ngIf="!referenceNumber"
-                                matButton="filled"
-                                (click)="createInventoryAdjustment()"
-                            >
+                            <button aria-label="create" *ngIf="!referenceNumber" matButton="filled" (click)="createInventoryAdjustment()">
                                 {{ commonLocaleData?.app_create }}
                             </button>
                             <button aria-label="clear" matButton="outlined" (click)="resetForm()">
@@ -600,7 +616,8 @@
                                 (click)="back(true)"
                             >
                                 {{ commonLocaleData?.app_close }}
-                            </button>                        </div>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

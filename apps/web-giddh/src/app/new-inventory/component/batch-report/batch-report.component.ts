@@ -17,6 +17,7 @@ import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_O
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { BatchReportFilter, BatchReportItem, BatchReportTotals } from "../../../models/interfaces/batch-report.interface";
 import { OrganizationType } from "../../../models/user-login-state";
+import { CommonService } from "../../../services/common.service";
 import { GeneralService } from "../../../services/general.service";
 import { InventoryService } from "../../../services/inventory.service";
 import { LedgerService } from "../../../services/ledger.service";
@@ -26,7 +27,7 @@ import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-
 import { BatchCreateEditComponent } from "../batch-create-edit/batch-create-edit.component";
 import { BatchArchiveDialogComponent } from "../batch-archive-dialog/batch-archive-dialog.component";
 import { BatchTransferDialogComponent } from "../batch-transfer-dialog/batch-transfer-dialog.component";
-import { InventoryModuleName } from "../../inventory.enum";
+import { InventoryModuleName, ReportNature } from "../../inventory.enum";
 
 export { mapAvailabilityBatches } from "./batch-report.helper";
 
@@ -60,6 +61,14 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     public dataSource: MatTableDataSource<BatchReportItem> = new MatTableDataSource<BatchReportItem>([]);
     /** Saved module key for column preferences. */
     public moduleType: string = InventoryModuleName.batchReport;
+    /** Report nature enum for template bindings. */
+    public readonly reportNature = ReportNature;
+    /** True if report nature is Inventory, false if Books. */
+    public reportAsPerInventory: boolean = false;
+    /** Currently selected report nature (Books/Inventory). */
+    public selectedReportNature: ReportNature = ReportNature.Books;
+    /** True when inventory via business document setting is enabled. */
+    public inventoryViaBusinessDocument: boolean = false;
     /** Customisable batch report columns. */
     public customiseColumns: Array<{ value: string; label: string; checked: boolean }> = [];
     /** Visible table column ids. */
@@ -160,6 +169,9 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     private advanceFilterDialogRef: MatDialogRef<any>;
     /** True when from/to came from reports query params, so universal date must not overwrite them. */
     private useQueryDateRange: boolean = false;
+    /** Session application date range (`DD-MM-YYYY`), used to detect a custom date filter. */
+    private applicationFromDate: string = "";
+    private applicationToDate: string = "";
     /** True when this page was opened from item-wise, variant-wise, or stock-balance. */
     public showBackButton: boolean = false;
 
@@ -168,6 +180,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         private router: Router,
         private cdr: ChangeDetectorRef,
         private inventoryService: InventoryService,
+        private commonService: CommonService,
         private ledgerService: LedgerService,
         private toaster: ToasterService,
         private generalService: GeneralService,
@@ -176,6 +189,11 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         private location: Location
     ) {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+        const reportNature = this.route.snapshot.queryParams?.["reportNature"];
+        if (reportNature === ReportNature.Inventory || reportNature === ReportNature.Books) {
+            this.selectedReportNature = reportNature;
+            this.reportAsPerInventory = reportNature === ReportNature.Inventory;
+        }
     }
 
     /**
@@ -188,11 +206,18 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.rejectInvalidWithinDays(value);
             this.cdr.detectChanges();
         });
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            this.inventoryViaBusinessDocument = !!settings?.voucherAutomation?.inventoryViaBusinessDocument;
+            this.cdr.detectChanges();
+        });
+        this.getReportNature();
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
+                this.applicationFromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.applicationToDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                 if (!this.useQueryDateRange) {
-                    this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                    this.fromDate = this.applicationFromDate;
+                    this.toDate = this.applicationToDate;
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
@@ -307,6 +332,94 @@ export class BatchReportComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Fetches saved report nature (Books/Inventory) for the batch module.
+     *
+     * @memberof BatchReportComponent
+     */
+    public getReportNature(): void {
+        if (this.applyReportNatureFromQueryParams()) {
+            return;
+        }
+        this.commonService.getSelectedTableColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            const reportNature = response?.status === "success"
+                && (response?.body?.reportNature === ReportNature.Inventory || response?.body?.reportNature === ReportNature.Books)
+                ? response.body.reportNature
+                : ReportNature.Books;
+            this.setReportNature(reportNature, false);
+        });
+    }
+
+    /**
+     * Applies selected report nature and refreshes the list.
+     *
+     * @param {ReportNature} reportNature Selected report nature
+     * @memberof BatchReportComponent
+     */
+    public onReportNatureChange(reportNature: ReportNature): void {
+        this.setReportNature(reportNature, true);
+        this.page = 1;
+        this.pageIndex = 0;
+        this.getBatches();
+    }
+
+    /**
+     * Applies report nature from URL query params when present.
+     *
+     * @private
+     * @returns {boolean} True when query param was applied
+     * @memberof BatchReportComponent
+     */
+    private applyReportNatureFromQueryParams(): boolean {
+        const reportNature = this.route.snapshot.queryParams?.["reportNature"];
+        if (reportNature === ReportNature.Inventory || reportNature === ReportNature.Books) {
+            this.setReportNature(reportNature, false);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Sets report nature and optionally syncs query params.
+     *
+     * @private
+     * @param {ReportNature} reportNature Selected report nature
+     * @param {boolean} updateQueryParams Whether to sync URL query params
+     * @memberof BatchReportComponent
+     */
+    private setReportNature(reportNature: ReportNature, updateQueryParams: boolean): void {
+        const previous = this.selectedReportNature;
+        this.selectedReportNature = reportNature;
+        this.reportAsPerInventory = reportNature === ReportNature.Inventory;
+        if (updateQueryParams) {
+            this.syncReportNatureQueryParam(reportNature);
+        }
+        if (!updateQueryParams && previous !== reportNature && this.inventoryType) {
+            this.getBatches();
+        }
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Stores report nature in URL query params.
+     *
+     * @private
+     * @param {ReportNature} reportNature Selected report nature
+     * @memberof BatchReportComponent
+     */
+    private syncReportNatureQueryParam(reportNature: ReportNature): void {
+        if (this.route.snapshot.queryParams?.["reportNature"] === reportNature) {
+            return;
+        }
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { reportNature },
+            queryParamsHandling: "merge",
+            replaceUrl: true
+        });
+    }
+
+    /**
+     * True when any list filter is active.
      * True when header filters (stock, variant, warehouse, or column search) are active.
      *
      * @readonly
@@ -318,7 +431,22 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             || this.selectedVariant?.length
             || this.selectedWarehouse?.length
             || this.batchNumberSearchText
-            || this.nameSearchText);
+            || this.nameSearchText
+            || this.isCustomDateRange);
+    }
+
+    /**
+     * True when the selected range differs from the session application date.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchReportComponent
+     */
+    private get isCustomDateRange(): boolean {
+        if (!this.fromDate || !this.toDate || !this.applicationFromDate || !this.applicationToDate) {
+            return false;
+        }
+        return this.fromDate !== this.applicationFromDate || this.toDate !== this.applicationToDate;
     }
 
     /**
@@ -719,6 +847,7 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         this.searchName.setValue("", { emitEvent: false });
         this.showBatchNumberSearchInput = false;
         this.showNameSearchInput = false;
+        this.resetDateRangeToApplication();
         this.page = 1;
         this.pageIndex = 0;
         if (refetch) {
@@ -1137,7 +1266,13 @@ export class BatchReportComponent implements OnInit, OnDestroy {
         if (this.archiveStatus !== null) {
             payload.archive = this.archiveStatus;
         }
-        this.inventoryService.getAllBatches({ page: this.page, count: this.count, from: this.fromDate, to: this.toDate }, payload)
+        this.inventoryService.getAllBatches({
+            page: this.page,
+            count: this.count,
+            from: this.fromDate,
+            to: this.toDate,
+            reportNature: this.selectedReportNature ?? ReportNature.Books
+        }, payload)
             .pipe(takeUntil(this.cancelApi$), takeUntil(this.destroyed$))
             .subscribe(response => {
                 this.isLoading = false;
@@ -1361,6 +1496,26 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.getBatches();
         }
         this.cdr.detectChanges();
+    }
+
+    /**
+     * Resets the batch report date range to the session application date (state only).
+     *
+     * @private
+     * @memberof BatchReportComponent
+     */
+    private resetDateRangeToApplication(): void {
+        if (!this.applicationFromDate || !this.applicationToDate) {
+            return;
+        }
+        this.useQueryDateRange = false;
+        this.selectedRangeLabel = "";
+        this.fromDate = this.applicationFromDate;
+        this.toDate = this.applicationToDate;
+        const startDate = dayjs(this.applicationFromDate, GIDDH_DATE_FORMAT);
+        const endDate = dayjs(this.applicationToDate, GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate, endDate };
+        this.selectedDateRangeUi = `${startDate.format(GIDDH_NEW_DATE_FORMAT_UI)} - ${endDate.format(GIDDH_NEW_DATE_FORMAT_UI)}`;
     }
 
     /**

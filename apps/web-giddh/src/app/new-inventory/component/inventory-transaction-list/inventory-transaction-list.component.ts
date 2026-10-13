@@ -716,6 +716,9 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
         if (batchNames.length) {
             queryParams.batchNames = batchNames.join(',');
         }
+        if (this.selectedReportNature) {
+            queryParams.reportNature = this.selectedReportNature;
+        }
         this.router.navigate(['/pages/inventory/v2', type, 'batch'], { queryParams });
     }
 }

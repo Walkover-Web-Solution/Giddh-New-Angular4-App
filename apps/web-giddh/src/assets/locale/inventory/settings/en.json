@@ -21,6 +21,8 @@
     "group_wise_report_description": "Choose which stock balance group-wise reports show.",
     "variant_wise_report": "Variant-wise Report",
     "variant_wise_report_description": "Choose which stock balance variant-wise reports show.",
+    "batch_wise_report": "Batch-wise Report",
+    "batch_wise_report_description": "Choose which stock balance batch-wise reports show.",
     "books": "Accounting Stock",
     "inventory": "Physical Stock",
     "batch_management": "Batch Management",

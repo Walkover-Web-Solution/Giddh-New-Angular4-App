@@ -88,10 +88,26 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
         this.searchQuery$.pipe(
             debounceTime(400),
             distinctUntilChanged(),
-            switchMap(query => this.fetchAvailability(query)),
+            switchMap(query => {
+                if (this.hasFixedBatches) {
+                    return of({ query, response: this.buildFixedBatchResponse(query) });
+                }
+                return this.fetchAvailability(query);
+            }),
             takeUntil(this.destroyed$)
         ).subscribe(({ query, response }) => this.applyAvailability(query, response));
         this.loadBatches("");
+    }
+
+    /**
+     * True when dialog is limited to document/source batches.
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof BatchSelectDialogComponent
+     */
+    public get hasFixedBatches(): boolean {
+        return Array.isArray(this.dialogData?.fixedBatches) && this.dialogData.fixedBatches.length > 0;
     }
 
     /**
@@ -433,9 +449,43 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @memberof BatchSelectDialogComponent
      */
     private loadBatches(query: string = ""): void {
-        this.fetchAvailability(query).pipe(take(1), takeUntil(this.destroyed$)).subscribe(({ query: searchQuery, response }) => {
+        if (this.hasFixedBatches) {
+            this.applyAvailability(query, this.buildFixedBatchResponse(query));
+            return;
+        }
+        this.fetchAvailability(query).pipe(take(1)).subscribe(({ query: searchQuery, response }) => {
             this.applyAvailability(searchQuery, response);
         });
+    }
+
+    /**
+     * Builds a synthetic availability response from fixed document batches.
+     *
+     * @private
+     * @param {string} [query]
+     * @return {*}
+     * @memberof BatchSelectDialogComponent
+     */
+    private buildFixedBatchResponse(query: string = ""): { status: string; body: { results: BatchReportItem[] } } {
+        const search = query?.trim()?.toLowerCase() ?? "";
+        const results = (this.dialogData?.fixedBatches ?? [])
+            .filter((batch) => {
+                if (!search) {
+                    return true;
+                }
+                return (batch.batchNumber ?? "").toLowerCase().includes(search)
+                    || (batch.name ?? "").toLowerCase().includes(search);
+            })
+            .map((batch) => ({
+                uniqueName: batch.uniqueName,
+                name: batch.name,
+                batchNumber: batch.batchNumber,
+                expiryDate: batch.expiryDate,
+                manufacturingDate: batch.manufacturingDate,
+                warehouse: batch.warehouse,
+                availableQuantity: Number(batch.availableQuantity) || 0
+            } as BatchReportItem));
+        return { status: "success", body: { results } };
     }
 
     /**
@@ -466,7 +516,8 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
             sort: "asc",
             sortBy: "expiry",
             q: query,
-            warehouseUniqueName: this.dialogData?.warehouseUniqueName
+            warehouseUniqueName: this.dialogData?.warehouseUniqueName,
+            reportNature: this.dialogData?.reportNature
         }).pipe(
             catchError(() => of({ status: "error" })),
             switchMap(response => of({ query, response }))
@@ -645,14 +696,14 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      */
     private getDefaultQuantity(row: BatchSelectRow): number {
         const remaining = Math.max((Number(this.dialogData?.lineQuantity) || 0) - this.allocatedQuantity, 0);
-        if (this.isInbound) {
-            return remaining > 0 ? remaining : 1;
-        }
         const available = Number(row.availableQuantity) || 0;
-        if (remaining > 0) {
-            return available > 0 ? Math.min(remaining, available) : remaining;
+        if (this.hasFixedBatches || !this.isInbound) {
+            if (remaining > 0) {
+                return available > 0 ? Math.min(remaining, available) : remaining;
+            }
+            return available > 0 ? available : 1;
         }
-        return available > 0 ? available : 1;
+        return remaining > 0 ? remaining : 1;
     }
 
     /**

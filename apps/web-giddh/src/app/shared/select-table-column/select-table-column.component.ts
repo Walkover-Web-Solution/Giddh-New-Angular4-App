@@ -200,7 +200,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         return this.moduleType === InventoryModuleName.group
             || this.moduleType === InventoryModuleName.stock
             || this.moduleType === InventoryModuleName.variant
-            || this.moduleType === InventoryModuleName.transaction;
+            || this.moduleType === InventoryModuleName.transaction
+            || this.moduleType === InventoryModuleName.batchReport;
     }
 
     /**

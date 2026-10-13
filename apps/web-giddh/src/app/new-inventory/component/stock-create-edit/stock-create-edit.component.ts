@@ -1316,7 +1316,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             const warehouses = Array.isArray(variant.warehouseBalance) && variant.warehouseBalance.length
                 ? variant.warehouseBalance
                 : [{}];
-            variant.warehouseBalance = warehouses.map(warehouse => ({
+            const warehouseBalancePayload = warehouses.map(warehouse => ({
                 warehouse: {
                     name: warehouse?.warehouse?.name || defaultWarehouse?.name,
                     uniqueName: warehouse?.warehouse?.uniqueName || defaultWarehouse?.uniqueName
@@ -1339,6 +1339,12 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                         openingAmount: Number(String(batch.openingAmount ?? "").toString().replace(/,/g, "")) || 0
                     }))
             }));
+            const warehouseBalanceWithBatches = warehouseBalancePayload.filter(warehouse => warehouse.batches?.length);
+            if (warehouseBalanceWithBatches.length) {
+                variant.warehouseBalance = warehouseBalanceWithBatches;
+            } else {
+                delete variant.warehouseBalance;
+            }
             delete variant.showBatches;
 
             delete variant.salesInformation;

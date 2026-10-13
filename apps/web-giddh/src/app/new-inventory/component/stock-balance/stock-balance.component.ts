@@ -757,12 +757,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         if (warehouse?.uniqueName) {
             queryParams.warehouseUniqueNames = warehouse.uniqueName;
         }
-        if (this.GroupStockReportRequest?.from) {
-            queryParams.from = this.GroupStockReportRequest.from;
-        }
-        if (this.GroupStockReportRequest?.to) {
-            queryParams.to = this.GroupStockReportRequest.to;
-        }
         this.router.navigate(["/pages/inventory/v2", type, "batch"], { queryParams });
     }
 

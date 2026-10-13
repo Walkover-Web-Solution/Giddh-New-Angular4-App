@@ -90,7 +90,7 @@ import { DscSignDialogService } from "../../services/dsc-sign-dialog.service";
 import { DscService } from "../../services/dsc.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
-import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
+import { cloneDeep, isEqual, orderBy, uniqBy } from "../../lodash-optimized";
 import {
     AdjustedVoucherType,
     BranchHierarchyType,
@@ -147,6 +147,7 @@ import { AccountCategoryEnum } from "../../shared/Enums/common.enum";
 import { CopyParticularDialogComponent } from "../copy-particular-dialog/copy-particular-dialog.component";
 import { BatchSelectDialogComponent } from "../batch-select-dialog/batch-select-dialog.component";
 import { BatchSelectDialogResult, VoucherSelectedBatch } from "../../models/interfaces/batch-report.interface";
+import { ReportNature } from "../../new-inventory/inventory.enum";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
@@ -231,6 +232,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public pendingPurchaseOrders$: Observable<any> = this.componentStore.pendingPurchaseOrders$;
     /** Pending DC/RN/invoice/bill documents for selected account */
     public pendingBusinessDocuments$: Observable<any[]> = this.componentStore.pendingBusinessDocuments$;
+    /** Dropdown options for pending business documents */
+    public pendingBusinessDocumentOptions: IOption[] = [];
+    /** Selected pending DC/RN/invoice/bill unique names */
+    public linkedBusinessDocuments: FormControl<Array<string | number>> = new FormControl<Array<string | number>>([], { nonNullable: true });
+    /** Currently linked pending business document unique names */
+    public selectedBusinessDocumentUniqueNames: string[] = [];
     /** Account search request */
     public accountSearchRequest: any;
     /** Annexure account search request */
@@ -353,14 +360,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     protected readonly selectedPdfVoucherNumber = signal<string>('');
     /** Signal holding the sanitized URL for the PDF preview iframe */
     protected readonly previewPdfUrl = signal<SafeResourceUrl>(null);
-    /** True when PDF preview dialog is for a pending business document and should show Copy */
-    protected readonly showPendingDocumentPreviewAction = signal(false);
     /** Holds URL string for revoking blob object */
     private previewPdfFileURL: string = '';
-    /** Pending document opened in the PDF preview dialog */
-    private pendingDocumentForPreview: { number?: string; uniqueName?: string; accountUniqueName?: string } | null = null;
     /** Dialog ref for pending business document PDF preview */
     private pendingBusinessDocumentPreviewRef: MatDialogRef<unknown>;
+    /** Unique name of the first pending document currently being prefilled via voucher details */
+    private pendingBusinessDocumentPrefillUniqueName: string | null = null;
+    /** Additional pending documents to append after the first prefill completes */
+    private pendingBusinessDocumentsQueuedForAppend: string[] = [];
+    /** Skips dropdown selectionChange while the control is patched programmatically */
+    private suppressLinkedBusinessDocumentChange = false;
+    /** Account unique name used for the last pending-document fetch */
+    private lastPendingBusinessDocumentAccount: string = "";
     /** Form Group for invoice form */
     public invoiceForm: FormGroup;
     /** This will open account dropdown by default */
@@ -617,6 +628,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private inventoryDocumentListRedirectUrl: string = "";
     /** True when create is opened from DC/RN/invoice/bill convert (preview & convert) */
     public isBusinessDocumentCreate: boolean = false;
+    /** True when create was opened via route queryParams (dc/rn/invoice/bill uniqueName), not dropdown select */
+    public isPreviewAndInvoiceBusinessDocument: boolean = false;
     /** Holds text for update voucher button */
     public updateVoucherText: string = "";
     /** Holds purchase order details to put PO in PO list if not available */
@@ -860,8 +873,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get showDueDate(): boolean {
         return (
             this.currentVoucherFormDetails?.dueDate ||
-            (this.invoiceType.isSalesInvoice || this.invoiceType.isDeliveryChallan) ||
-            (this.invoiceType.isPurchaseInvoice || this.invoiceType.isReceiptNote) ||
+            this.invoiceType.isSalesInvoice ||
+            this.invoiceType.isPurchaseInvoice ||
             this.invoiceType.isPurchaseOrder ||
             this.invoiceType.isProformaInvoice ||
             this.invoiceType.isEstimateInvoice
@@ -1080,8 +1093,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.redirectUrl = this.queryParams.redirect;
                         }
 
-                        if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
-                            || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName) {
+                        this.isPreviewAndInvoiceBusinessDocument = !!(
+                            response[1]?.dcUniqueName
+                            || response[1]?.rnUniqueName
+                            || response[1]?.invoiceUniqueName
+                            || response[1]?.billUniqueName
+                        );
+
+                        if (this.isPreviewAndInvoiceBusinessDocument) {
                             this.isBusinessDocumentCreate = true;
                             this.inventoryDocumentListRedirectUrl = this.queryParams.redirect
                                 || `/pages/vouchers/preview/${(this.queryParams.rnUniqueName || this.queryParams.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
@@ -1095,7 +1114,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.openAccountDropdown = false;
                         this.urlVoucherType = params.voucherType;
                         this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
-
+                        this.getVoucherVersion();
                         if (this.voucherApiVersion !== 2) {
                             this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
                         }
@@ -1832,6 +1851,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                         this.checkIfEntriesHasStock();
                         this.calculateVoucherTotals();
+                        this.finalizePendingBusinessDocumentPrefill();
 
                         if (voucherDetails.isCopyVoucher) {
                             this.recentVouchersAsideRef?.close();
@@ -1942,6 +1962,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.vendorPurchaseOrders$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.purchaseOrders = response;
             this.filterPurchaseOrder("");
+        });
+
+        this.pendingBusinessDocuments$.pipe(takeUntil(this.destroyed$)).subscribe((documents) => {
+            this.pendingBusinessDocumentOptions = (documents || []).map((item) => ({
+                value: item?.uniqueName,
+                label: item?.number || "N/A",
+                additional: {
+                    number: item?.number,
+                    uniqueName: item?.uniqueName,
+                    accountUniqueName: item?.accountUniqueName,
+                    date: item?.date,
+                    grandTotal: item?.grandTotal
+                }
+            }));
+            this.changeDetection.detectChanges();
         });
 
         /** Linked purchase orders list */
@@ -2720,7 +2755,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getCreatedTemplates(): void {
-        this.componentStore.createdTemplates$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             let templateType = VoucherTypeEnum.invoice;
             if (this.voucherType === VoucherTypeEnum.purchase) {
                 templateType = VoucherTypeEnum.purchase_bill;
@@ -3022,6 +3057,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private fetchPendingBusinessDocuments(accountUniqueName: string): void {
+        if (this.lastPendingBusinessDocumentAccount && accountUniqueName !== this.lastPendingBusinessDocumentAccount) {
+            this.resetPendingBusinessDocumentSelection(true);
+        }
+        this.lastPendingBusinessDocumentAccount = accountUniqueName || "";
+
         if (
             !accountUniqueName
             || !this.inventoryViaBusinessDocument
@@ -3093,7 +3133,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Opens PDF preview for a pending DC/RN or invoice/bill, then Copy prefills the form.
+     * Opens PDF preview for a pending DC/RN or invoice/bill from the dropdown eye icon.
      *
      * @param {{ number?: string; uniqueName?: string; accountUniqueName?: string }} document
      * @memberof VoucherCreateComponent
@@ -3108,17 +3148,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        this.pendingDocumentForPreview = document;
-        this.showPendingDocumentPreviewAction.set(true);
-        this.selectedPdfVoucherNumber.set(document.number ?? '');
+        this.selectedPdfVoucherNumber.set(document.number ?? "");
         this.previewPdfUrl.set(null);
         this.componentStore.downloadVoucherPdf({
             model: {
                 voucherType: previewVoucherType,
                 uniqueName: document.uniqueName
             },
-            type: 'ALL',
-            fileType: 'base64',
+            type: "ALL",
+            fileType: "base64",
             voucherType: previewVoucherType,
             isDownloadFromDialog: true
         });
@@ -3128,23 +3166,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             height: "90vh",
             maxHeight: "90vh"
         });
-        this.pendingBusinessDocumentPreviewRef.afterClosed().pipe(take(1)).subscribe(() => {
-            this.showPendingDocumentPreviewAction.set(false);
-            this.pendingDocumentForPreview = null;
-        });
     }
 
     /**
-     * Copies the pending document from the PDF preview into the create form.
+     * Preview click from a pending-document option; does not toggle checkbox selection.
      *
+     * @param {Event} event
+     * @param {IOption} option
      * @memberof VoucherCreateComponent
      */
-    public usePendingBusinessDocumentFromPreview(): void {
-        const document = this.pendingDocumentForPreview;
-        this.pendingBusinessDocumentPreviewRef?.close();
-        if (document) {
-            this.selectPendingBusinessDocument(document);
-        }
+    public previewPendingBusinessDocument(event: Event, option: IOption): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.openPendingBusinessDocumentPreview(option?.additional);
     }
 
     /**
@@ -3175,9 +3209,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * (same get-single flow as queryParams dcUniqueName / rnUniqueName / invoiceUniqueName / billUniqueName).
      *
      * @param {*} document
+     * @param {boolean} [showPageLoader=true]
      * @memberof VoucherCreateComponent
      */
-    public selectPendingBusinessDocument(document: any): void {
+    public selectPendingBusinessDocument(document: any, showPageLoader: boolean = true): void {
         if (!document?.uniqueName) {
             return;
         }
@@ -3190,7 +3225,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isBusinessDocumentCreate = true;
             this.isCopyMode = true;
             this.useDefaultAccountDetails = false;
-            this.prefillFromInventoryDocument();
+            this.prefillFromInventoryDocument(showPageLoader);
             return;
         }
 
@@ -3199,7 +3234,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isBusinessDocumentCreate = true;
             this.isCopyMode = true;
             this.useDefaultAccountDetails = false;
-            this.prefillFromInventoryDocument();
+            this.prefillFromInventoryDocument(showPageLoader);
             return;
         }
 
@@ -3212,7 +3247,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isBusinessDocumentCreate = true;
             this.isCopyMode = true;
             this.useDefaultAccountDetails = false;
-            this.prefillFromInvoiceVoucher();
+            this.prefillFromInvoiceVoucher(showPageLoader);
             return;
         }
 
@@ -3225,8 +3260,358 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isBusinessDocumentCreate = true;
             this.isCopyMode = true;
             this.useDefaultAccountDetails = false;
-            this.prefillFromInvoiceVoucher();
+            this.prefillFromInvoiceVoucher(showPageLoader);
         }
+    }
+
+    /**
+     * Handles pending business document multi-select. Newly checked documents prefill
+     * or append entries; unchecked documents remove their mapped lines.
+     *
+     * @param {Array<string | number>} selected
+     * @memberof VoucherCreateComponent
+     */
+    public onLinkedBusinessDocumentsChange(selected: Array<string | number>): void {
+        if (this.suppressLinkedBusinessDocumentChange) {
+            return;
+        }
+
+        const next = (selected ?? []).map(String);
+        const previous = this.selectedBusinessDocumentUniqueNames;
+        if (isEqual([...previous].sort(), [...next].sort())) {
+            return;
+        }
+
+        const removed = previous.filter((uniqueName) => !next.includes(uniqueName));
+        const added = next.filter((uniqueName) => !previous.includes(uniqueName));
+        removed.forEach((uniqueName) => this.removeBusinessDocumentEntries(uniqueName));
+        this.selectedBusinessDocumentUniqueNames = next;
+        this.isBusinessDocumentCreate = next.length > 0 || this.isPreviewAndInvoiceBusinessDocument;
+        this.syncQueryParamsFromSelectedDocuments();
+
+        if (added.length) {
+            this.addPendingBusinessDocuments(added);
+        }
+    }
+
+    /**
+     * Tags voucher-details entries after the first pending document prefill, then appends the rest.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private finalizePendingBusinessDocumentPrefill(): void {
+        const prefillUniqueName = this.pendingBusinessDocumentPrefillUniqueName;
+        const queued = [...this.pendingBusinessDocumentsQueuedForAppend];
+        this.pendingBusinessDocumentPrefillUniqueName = null;
+        this.pendingBusinessDocumentsQueuedForAppend = [];
+
+        if (prefillUniqueName) {
+            this.tagEntriesWithBusinessDocument(prefillUniqueName);
+            if (queued.length) {
+                this.appendPendingBusinessDocumentsSequential(queued);
+            }
+            return;
+        }
+
+        const queryDocumentUniqueName = this.queryParams?.dcUniqueName
+            || this.queryParams?.rnUniqueName
+            || this.queryParams?.invoiceUniqueName
+            || this.queryParams?.billUniqueName;
+        if (this.isBusinessDocumentCreate && queryDocumentUniqueName && !this.selectedBusinessDocumentUniqueNames.length) {
+            this.tagEntriesWithBusinessDocument(queryDocumentUniqueName);
+            this.patchLinkedBusinessDocuments([queryDocumentUniqueName]);
+        }
+    }
+
+    /**
+     * Prefills the first empty form from a document, otherwise appends each document as new lines.
+     *
+     * @private
+     * @param {string[]} uniqueNames
+     * @memberof VoucherCreateComponent
+     */
+    private addPendingBusinessDocuments(uniqueNames: string[]): void {
+        if (this.shouldReplaceEntriesWithPendingDocument()) {
+            const [first, ...rest] = uniqueNames;
+            this.pendingBusinessDocumentPrefillUniqueName = first;
+            this.pendingBusinessDocumentsQueuedForAppend = rest;
+            const document = this.findPendingBusinessDocument(first);
+            this.selectPendingBusinessDocument(document || { uniqueName: first }, false);
+            return;
+        }
+
+        this.appendPendingBusinessDocumentsSequential(uniqueNames);
+    }
+
+    /**
+     * Appends pending documents one after another so FormArray indexes stay stable.
+     *
+     * @private
+     * @param {string[]} uniqueNames
+     * @param {number} [index=0]
+     * @memberof VoucherCreateComponent
+     */
+    private appendPendingBusinessDocumentsSequential(uniqueNames: string[], index: number = 0): void {
+        if (index >= uniqueNames.length) {
+            return;
+        }
+
+        this.fetchAndAppendPendingBusinessDocument(uniqueNames[index], () => {
+            this.appendPendingBusinessDocumentsSequential(uniqueNames, index + 1);
+        });
+    }
+
+    /**
+     * Fetches one pending document and appends its entries as new lines (never merges quantity).
+     *
+     * @private
+     * @param {string} documentUniqueName
+     * @param {() => void} done
+     * @memberof VoucherCreateComponent
+     */
+    private fetchAndAppendPendingBusinessDocument(documentUniqueName: string, done: () => void): void {
+        if (!documentUniqueName) {
+            done();
+            return;
+        }
+
+        const document = this.findPendingBusinessDocument(documentUniqueName);
+        const accountUniqueName = document?.accountUniqueName
+            || this.invoiceForm.controls["account"]?.get("uniqueName")?.value;
+        const isInventorySource = this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice;
+        const request$ = isInventorySource
+            ? this.voucherService.getInventoryVoucherDetails(this.getPendingDocumentPreviewVoucherType(), documentUniqueName)
+            : this.voucherService.getVoucherDetails(accountUniqueName, {
+                uniqueName: documentUniqueName,
+                voucherType: this.invoiceType.isReceiptNote ? VoucherTypeEnum.purchase : VoucherTypeEnum.sales
+            });
+
+        request$.pipe(take(1)).subscribe((res) => {
+            if (res?.status === "success" && res.body) {
+                const voucherDetails = this.vouchersUtilityService.formatInventoryVoucherDetails(res.body, true);
+                this.appendBusinessDocumentEntries(documentUniqueName, voucherDetails?.entries);
+            } else {
+                this.toasterService.showSnackBar("error", res?.message);
+                this.uncheckPendingBusinessDocument(documentUniqueName, false);
+            }
+            done();
+        });
+    }
+
+    /**
+     * Pushes each source entry as its own line. Same stock from another document is never merged.
+     *
+     * @private
+     * @param {string} documentUniqueName
+     * @param {any[]} entries
+     * @memberof VoucherCreateComponent
+     */
+    private appendBusinessDocumentEntries(documentUniqueName: string, entries: any[]): void {
+        if (!entries?.length) {
+            return;
+        }
+
+        const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
+        entries.forEach((entry) => {
+            if (!entry || entry.entryClass === "ANNEXURE") {
+                return;
+            }
+
+            const mappedEntry = {
+                ...entry,
+                uniqueName: "",
+                businessDocumentItemMapping: {
+                    uniqueName: documentUniqueName,
+                    entryUniqueName: entry?.uniqueName || ""
+                }
+            };
+
+            let lastIndex = this.findBlankEntryIndex();
+            if (lastIndex > -1) {
+                entriesFormArray.setControl(lastIndex, this.getEntriesFormGroup(mappedEntry, false));
+            } else {
+                entriesFormArray.push(this.getEntriesFormGroup(mappedEntry, false));
+                lastIndex = entriesFormArray.length - 1;
+            }
+
+            if (mappedEntry.transactions?.[0]?.stock) {
+                this.stockUnits[lastIndex] = observableOf(mappedEntry.transactions[0].stock.unitRates);
+            }
+            this.applyEntryTaxesAndDiscounts(
+                lastIndex,
+                mappedEntry,
+                this.invoiceForm.get("isAdvanceReceipt")?.value
+            );
+        });
+
+        this.checkIfEntriesHasStock();
+        this.calculateVoucherTotals();
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Removes line items that were prefilled from the given business document.
+     *
+     * @private
+     * @param {string} documentUniqueName
+     * @memberof VoucherCreateComponent
+     */
+    private removeBusinessDocumentEntries(documentUniqueName: string): void {
+        const entries = this.invoiceForm.get("entries") as FormArray;
+        for (let index = entries.length - 1; index >= 0; index--) {
+            if (entries.at(index)?.get("businessDocumentItemMapping.uniqueName")?.value === documentUniqueName) {
+                this.deleteLineEntry(index, true);
+            }
+        }
+    }
+
+    /**
+     * Unchecks a document in the dropdown, optionally removing remaining mapped lines.
+     *
+     * @private
+     * @param {string} uniqueName
+     * @param {boolean} removeRemainingEntries
+     * @memberof VoucherCreateComponent
+     */
+    private uncheckPendingBusinessDocument(uniqueName: string, removeRemainingEntries: boolean): void {
+        const next = (this.linkedBusinessDocuments.value ?? []).filter((value) => value !== uniqueName).map(String);
+        this.patchLinkedBusinessDocuments(next);
+        if (removeRemainingEntries) {
+            this.removeBusinessDocumentEntries(uniqueName);
+        }
+        this.syncQueryParamsFromSelectedDocuments();
+    }
+
+    /**
+     * Writes selected unique names into the dropdown without emitting selectionChange.
+     *
+     * @private
+     * @param {string[]} uniqueNames
+     * @memberof VoucherCreateComponent
+     */
+    private patchLinkedBusinessDocuments(uniqueNames: string[]): void {
+        this.suppressLinkedBusinessDocumentChange = true;
+        this.selectedBusinessDocumentUniqueNames = [...uniqueNames];
+        this.linkedBusinessDocuments.setValue([...uniqueNames]);
+        this.isBusinessDocumentCreate = uniqueNames.length > 0 || this.isPreviewAndInvoiceBusinessDocument;
+        this.suppressLinkedBusinessDocumentChange = false;
+    }
+
+    /**
+     * Marks currently untagged entries as belonging to the given document.
+     *
+     * @private
+     * @param {string} documentUniqueName
+     * @memberof VoucherCreateComponent
+     */
+    private tagEntriesWithBusinessDocument(documentUniqueName: string): void {
+        const entries = this.invoiceForm.get("entries") as FormArray;
+        entries.controls.forEach((control) => {
+            if (
+                !control.get("businessDocumentItemMapping.uniqueName")?.value
+                && (control.get("transactions.0.account.uniqueName")?.value || control.get("transactions.0.stock.uniqueName")?.value)
+            ) {
+                control.get("businessDocumentItemMapping.uniqueName")?.patchValue(documentUniqueName);
+            }
+        });
+    }
+
+    /**
+     * True when the form has no real line items, so the first selected document can fully prefill.
+     *
+     * @private
+     * @return {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    private shouldReplaceEntriesWithPendingDocument(): boolean {
+        const entries = this.invoiceForm.get("entries") as FormArray;
+        return !entries?.controls?.some((control) =>
+            control.get("transactions.0.account.uniqueName")?.value
+            || control.get("transactions.0.stock.uniqueName")?.value
+        );
+    }
+
+    /**
+     * Index of an empty placeholder row that can be reused (not an existing stock line).
+     *
+     * @private
+     * @return {number}
+     * @memberof VoucherCreateComponent
+     */
+    private findBlankEntryIndex(): number {
+        const entries = this.invoiceForm.get("entries") as FormArray;
+        return entries.controls.findIndex((control) =>
+            !control.get("transactions.0.account.uniqueName")?.value
+            && !control.get("transactions.0.stock.uniqueName")?.value
+            && !control.get("businessDocumentItemMapping.uniqueName")?.value
+        );
+    }
+
+    /**
+     * Finds a pending document option by unique name.
+     *
+     * @private
+     * @param {string} uniqueName
+     * @return {*}
+     * @memberof VoucherCreateComponent
+     */
+    private findPendingBusinessDocument(uniqueName: string): { uniqueName?: string; accountUniqueName?: string; number?: string } | undefined {
+        const option = this.pendingBusinessDocumentOptions.find((item) => item.value === uniqueName);
+        return option?.additional;
+    }
+
+    /**
+     * Keeps query params in sync for generate payload compatibility and list redirects.
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private syncQueryParamsFromSelectedDocuments(): void {
+        this.queryParams = { ...(this.queryParams || {}) };
+        delete this.queryParams.dcUniqueName;
+        delete this.queryParams.rnUniqueName;
+        delete this.queryParams.invoiceUniqueName;
+        delete this.queryParams.billUniqueName;
+
+        const selected = this.selectedBusinessDocumentUniqueNames;
+        if (!selected.length) {
+            return;
+        }
+
+        const first = selected[0];
+        const accountUniqueName = this.invoiceForm.controls["account"]?.get("uniqueName")?.value;
+        if (this.invoiceType.isSalesInvoice) {
+            this.queryParams.dcUniqueName = first;
+        } else if (this.invoiceType.isPurchaseInvoice) {
+            this.queryParams.rnUniqueName = first;
+        } else if (this.invoiceType.isDeliveryChallan) {
+            this.queryParams.invoiceUniqueName = first;
+            this.queryParams.accountUniqueName = accountUniqueName;
+        } else if (this.invoiceType.isReceiptNote) {
+            this.queryParams.billUniqueName = first;
+            this.queryParams.accountUniqueName = accountUniqueName;
+        }
+    }
+
+    /**
+     * Clears pending-document dropdown selection without refetching.
+     *
+     * @private
+     * @param {boolean} [removeLinkedEntries=false] When true, also removes lines mapped to previously selected docs
+     * @memberof VoucherCreateComponent
+     */
+    private resetPendingBusinessDocumentSelection(removeLinkedEntries: boolean = false): void {
+        const previouslySelected = [...this.selectedBusinessDocumentUniqueNames];
+        this.patchLinkedBusinessDocuments([]);
+        if (removeLinkedEntries) {
+            previouslySelected.forEach((uniqueName) => this.removeBusinessDocumentEntries(uniqueName));
+            // Only sync on account change. Form reset also calls this method and must keep
+            // route queryParams (dcUniqueName / rnUniqueName / …) so create-from-DC/RN can prefill.
+            this.syncQueryParamsFromSelectedDocuments();
+        }
+        this.pendingBusinessDocumentPrefillUniqueName = null;
+        this.pendingBusinessDocumentsQueuedForAppend = [];
     }
 
     /**
@@ -3685,7 +4070,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 currencySymbol: this.account?.baseCurrencySymbol || this.company?.baseCurrencySymbol,
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData,
-                isInbound: this.isBatchInbound
+                isInbound: this.isBatchInbound,
+                reportNature: (this.invoiceType?.isDeliveryChallan || this.invoiceType?.isReceiptNote)
+                    ? ReportNature.Inventory
+                    : ReportNature.Books
             }
         });
 
@@ -4525,6 +4913,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 uniqueName: [entryData ? entryData?.purchaseOrderItemMapping?.uniqueName : ""],
                 entryUniqueName: [entryData ? entryData?.purchaseOrderItemMapping?.entryUniqueName : ""],
             }),
+            businessDocumentItemMapping: this.formBuilder.group({
+                uniqueName: [entryData ? entryData?.businessDocumentItemMapping?.uniqueName : ""],
+                entryUniqueName: [entryData ? entryData?.businessDocumentItemMapping?.entryUniqueName : ""],
+            }),
         });
     }
 
@@ -5167,26 +5559,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         });
                     }
 
-                    const stockGroupOtherTax: string[] = [];
+                    const stockGroupTaxes = this.resolveStockTaxUniqueNames(item.additional.stock?.groupTaxes);
+                    const stockGroupOtherTax = stockGroupTaxes.otherTaxUniqueNames;
                     if (item.additional.stock?.groupTaxes) {
-                        stockGroupOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
-                            item.additional.stock?.groupTaxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
-                        ).map(tax => tax.uniqueName));
-                        item.additional.stock.groupTaxes = item.additional.stock?.groupTaxes.filter(tax => !stockGroupOtherTax.includes(tax));
+                        item.additional.stock.groupTaxes = stockGroupTaxes.applicableTaxUniqueNames;
                     }
-                    const stockOtherTax: string[] = [];
+                    const stockLineTaxes = this.resolveStockTaxUniqueNames(item.additional.stock?.taxes);
+                    const stockOtherTax = stockLineTaxes.otherTaxUniqueNames;
                     if (item.additional.stock?.taxes) {
-                        stockOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
-                            item.additional.stock?.taxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
-                        ).map(tax => tax.uniqueName));
-                        item.additional.stock.taxes = item.additional.stock?.taxes.filter(tax => !stockOtherTax.includes(tax));
+                        item.additional.stock.taxes = stockLineTaxes.applicableTaxUniqueNames;
                     }
 
                     const taxes = this.generalService.fetchTaxesOnPriority(
                         item.additional.stock?.taxes ?? [],
                         item.additional.stock?.groupTaxes ?? [],
-                        item.additional.taxes ?? [],
-                        item.additional.groupTaxes ?? []
+                        this.resolveStockTaxUniqueNames(item.additional.taxes ?? []).applicableTaxUniqueNames ?? [],
+                        this.resolveStockTaxUniqueNames(item.additional.groupTaxes ?? []).applicableTaxUniqueNames ?? []
                     );
 
                     const otherTaxes = this.generalService.fetchTaxesOnPriority(
@@ -5210,9 +5598,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     const taxesFormArray = entryFormGroup.get("taxes") as FormArray;
                     taxesFormArray.clear();
 
-                    selectedTaxes?.forEach((tax) => {
-                        taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
-                    });
+                    if (this.showTaxColumn) {
+                        selectedTaxes?.forEach((tax) => {
+                            taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+                        });
+                    }
 
                     if (!otherTax && this.account?.applicableTaxes?.length) {
                         this.allCompanyTaxes?.forEach((tax) => {
@@ -5240,7 +5630,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     ) {
                         const amount = this.vouchersUtilityService.calculateInclusiveRate(
                             entryFormGroup?.value,
-                            this.companyTaxes,
+                            this.showTaxColumn ? this.companyTaxes : [],
                             this.company.giddhBalanceDecimalPlaces
                         );
                         transactionFormGroup.get("amount.amountForAccount").patchValue(amount);
@@ -6265,8 +6655,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {number} entryIndex
      * @memberof VoucherCreateComponent
      */
-    public deleteLineEntry(entryIndex: number): void {
+    public deleteLineEntry(entryIndex: number, skipBusinessDocumentUncheck: boolean = false): void {
         const entries = this.invoiceForm.get("entries") as FormArray;
+        const mappedUniqueName = skipBusinessDocumentUncheck
+            ? ""
+            : (entries.at(entryIndex)?.get("businessDocumentItemMapping.uniqueName")?.value as string);
         entries.removeAt(entryIndex);
         // Re-index per-row state so it stays aligned with the FormArray after removal
         this.stockVariants.splice(entryIndex, 1);
@@ -6277,6 +6670,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         this.checkIfEntriesHasStock();
         this.calculateVoucherTotals();
+        if (mappedUniqueName) {
+            const hasRemainingLinkedEntries = entries.controls.some(
+                (control) => control.get("businessDocumentItemMapping.uniqueName")?.value === mappedUniqueName
+            );
+            // Uncheck dropdown only when every line from that DC/RN/invoice/bill is gone
+            if (!hasRemainingLinkedEntries) {
+                this.uncheckPendingBusinessDocument(mappedUniqueName, false);
+            }
+        }
         if (this.lastInteraction === InteractionType.KEYBOARD && entries.length >= 1 && this.addNewParticular.nativeElement) {
             setTimeout(() => {
                 this.addNewParticular.nativeElement.focus();
@@ -6663,7 +7065,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
                 const amount = this.vouchersUtilityService.calculateInclusiveRate(
                     entryFormGroup?.value,
-                    this.companyTaxes,
+                    this.showTaxColumn ? this.companyTaxes : [],
                     this.company.giddhBalanceDecimalPlaces,
                     Number(entryFormGroup.get("total.amountForAccount")?.value)
                 );
@@ -6673,6 +7075,71 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.calculateTotalTax();
         this.calculateOtherTaxAmount(entryFormGroup, false);
+    }
+
+    /**
+     * Voucher date for tax applicability (aligned with common-tax date input).
+     */
+    private normalizeVoucherDateForTax(date: unknown) {
+        if (!date) {
+            return null;
+        }
+        if (typeof date === "string") {
+            return dayjs(date, GIDDH_DATE_FORMAT);
+        }
+        return dayjs(date);
+    }
+
+    /**
+     * Whether a company tax applies on the voucher date (same rules as common-tax prepareTaxObject).
+     */
+    private isTaxUniqueNameValidForVoucherDate(taxUniqueName: string): boolean {
+        const companyTax = this.allCompanyTaxes?.find((tax) => tax.uniqueName === taxUniqueName);
+        if (!companyTax?.taxDetail?.length) {
+            return true;
+        }
+
+        const normalizedDate = this.normalizeVoucherDateForTax(this.invoiceForm.get("date")?.value);
+        if (!normalizedDate?.isValid()) {
+            return true;
+        }
+
+        const taxDetailsDesc = orderBy(
+            companyTax.taxDetail,
+            (detail: { date: string }) => dayjs(detail.date, GIDDH_DATE_FORMAT),
+            "desc"
+        );
+        const exactDate = taxDetailsDesc.filter((detail) =>
+            dayjs(detail.date, GIDDH_DATE_FORMAT).isSame(normalizedDate, "day")
+        );
+        if (exactDate.length > 0) {
+            return true;
+        }
+
+        const beforeVoucherDate = taxDetailsDesc.filter((detail) =>
+            dayjs(detail.date, GIDDH_DATE_FORMAT).isBefore(normalizedDate, "day")
+        );
+        return beforeVoucherDate.length > 0;
+    }
+
+    /**
+     * Splits stock taxes into GST vs TCS/TDS. Date filter applies only to non-other taxes (same as common-tax GST list).
+     */
+    private resolveStockTaxUniqueNames(taxUniqueNames: string[] | undefined): {
+        applicableTaxUniqueNames: string[];
+        otherTaxUniqueNames: string[];
+    } {
+        const names = taxUniqueNames ?? [];
+
+        const otherTaxUniqueNames = this.allCompanyTaxes
+            .filter((tax) => names.includes(tax.uniqueName) && this.otherTaxTypes.includes(tax.taxType))
+            .map((tax) => tax.uniqueName);
+
+        const applicableTaxUniqueNames = names
+            .filter((uniqueName) => !otherTaxUniqueNames.includes(uniqueName))
+            .filter((uniqueName) => this.isTaxUniqueNameValidForVoucherDate(uniqueName));
+
+        return { applicableTaxUniqueNames, otherTaxUniqueNames };
     }
 
     /**
@@ -6786,7 +7253,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openVoucherPdfPreview(voucher: LastInvoices): void {
-        this.showPendingDocumentPreviewAction.set(false);
         this.selectedPdfVoucherNumber.set(voucher?.voucherNumber ?? '');
         this.previewPdfUrl.set(null);
         this.componentStore.downloadVoucherPdf({
@@ -6830,7 +7296,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        this.showPendingDocumentPreviewAction.set(false);
         this.selectedPdfVoucherNumber.set(item?.voucherNumber ?? '');
         this.previewPdfUrl.set(null);
         this.componentStore.downloadVoucherPdf({
@@ -7515,6 +7980,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         invoiceForm.entries = entries;
         invoiceForm.deposits = deposits;
         delete invoiceForm.annexureCharges;
+        invoiceForm.entries?.forEach((entry) => {
+            delete entry.businessDocumentItemMapping;
+        });
+        const linkedUniqueNames = this.selectedBusinessDocumentUniqueNames.length
+            ? [...this.selectedBusinessDocumentUniqueNames]
+            : [
+                this.queryParams?.dcUniqueName
+                    || this.queryParams?.rnUniqueName
+                    || this.queryParams?.invoiceUniqueName
+                    || this.queryParams?.billUniqueName
+            ].filter(Boolean);
+        if (linkedUniqueNames.length) {
+            invoiceForm.businessDocumentUniqueNames = linkedUniqueNames;
+        }
 
         // Delete Entry Date for Voucher Types that don't require it
         if (
@@ -7860,6 +8339,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             if (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote) {
                 invoiceForm.type = this.invoiceType.isDeliveryChallan ? VoucherTypeEnum.sales : VoucherTypeEnum.purchase;
+                delete invoiceForm.dueDate;
 
                 invoiceForm.entries = invoiceForm.entries?.map((entry) => {
                     entry.voucherType = invoiceForm.type;
@@ -7995,17 +8475,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
                 invoiceForm.isRecurringVoucher = this.queryParams.isRecurringVoucher ? true : false;
 
-                const businessDocumentUniqueName = this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName;
-                if (businessDocumentUniqueName) {
-                    invoiceForm.businessDocumentUniqueNames = [businessDocumentUniqueName];
-                }
-
-                // Link invoice/bill when creating DC/RN from pending reconciliation (Pending DC)
-                const linkedVoucherUniqueName = this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName;
-                if (linkedVoucherUniqueName && (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)) {
-                    invoiceForm.businessDocumentUniqueNames = [linkedVoucherUniqueName];
-                }
-
                 const generateRequest = (this.invoiceType.isDeliveryChallan || this.invoiceType.isReceiptNote)
                     ? this.voucherService.generateInventoryVoucher(this.voucherType, invoiceForm)
                     : this.voucherService.generateVoucher(invoiceForm.account?.uniqueName, invoiceForm);
@@ -8021,15 +8490,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 ocrType: this.ocrType
                             });
 
-                            if (this.queryParams?.dcUniqueName || this.queryParams?.rnUniqueName
-                                || this.queryParams?.invoiceUniqueName || this.queryParams?.billUniqueName
-                                || this.inventoryDocumentListRedirectUrl) {
+                            if (this.isPreviewAndInvoiceBusinessDocument || this.inventoryDocumentListRedirectUrl) {
                                 const listRedirectUrl = this.inventoryDocumentListRedirectUrl
                                     || `/pages/vouchers/preview/${(this.queryParams?.rnUniqueName || this.queryParams?.billUniqueName) ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan}/list?required=module&module=list`;
                                 delete this.queryParams.dcUniqueName;
                                 delete this.queryParams.rnUniqueName;
                                 delete this.queryParams.invoiceUniqueName;
                                 delete this.queryParams.billUniqueName;
+                                this.isPreviewAndInvoiceBusinessDocument = false;
                                 this.isBusinessDocumentCreate = false;
                                 this.inventoryDocumentListRedirectUrl = "";
                                 this.redirectUrl = "";
@@ -8185,6 +8653,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!initialLoad) {
             this.ocrDataEnabled = false;
         }
+
+        this.lastPendingBusinessDocumentAccount = "";
+        this.resetPendingBusinessDocumentSelection();
 
         const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
         entriesFormArray.clear();
@@ -9351,26 +9822,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         }
 
-        const stockGroupOtherTax: string[] = [];
+        const stockGroupTaxes = this.resolveStockTaxUniqueNames(response.stock?.groupTaxes);
+        const stockGroupOtherTax = stockGroupTaxes.otherTaxUniqueNames;
         if (response.stock?.groupTaxes) {
-            stockGroupOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
-                response.stock?.groupTaxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
-            ).map(tax => tax.uniqueName));
-            response.stock.groupTaxes = response.stock?.groupTaxes.filter(tax => !stockGroupOtherTax.includes(tax));
+            response.stock.groupTaxes = stockGroupTaxes.applicableTaxUniqueNames;
         }
-        const stockOtherTax: string[] = [];
+        const stockLineTaxes = this.resolveStockTaxUniqueNames(response.stock?.taxes);
+        const stockOtherTax = stockLineTaxes.otherTaxUniqueNames;
         if (response.stock?.taxes) {
-            stockOtherTax.push(...this.allCompanyTaxes.filter(otherTax =>
-                response.stock?.taxes?.includes(otherTax.uniqueName) && this.otherTaxTypes.includes(otherTax.taxType)
-            ).map(tax => tax.uniqueName));
-            response.stock.taxes = response.stock?.taxes.filter(tax => !stockOtherTax.includes(tax));
+            response.stock.taxes = stockLineTaxes.applicableTaxUniqueNames;
         }
 
         const taxes = this.generalService.fetchTaxesOnPriority(
             response.stock?.taxes ?? [],
             response.stock?.groupTaxes ?? [],
-            response.taxes ?? [],
-            response.groupTaxes ?? []
+            this.resolveStockTaxUniqueNames(response.taxes ?? []).applicableTaxUniqueNames ?? [],
+            this.resolveStockTaxUniqueNames(response.groupTaxes ?? []).applicableTaxUniqueNames ?? []
         );
 
         const otherTaxes = this.generalService.fetchTaxesOnPriority(
@@ -9391,9 +9858,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
 
-        selectedTaxes?.forEach((tax) => {
-            taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
-        });
+        if (this.showTaxColumn) {
+            selectedTaxes?.forEach((tax) => {
+                taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+            });
+        }
 
         if (!otherTax && this.account?.applicableTaxes?.length) {
             this.allCompanyTaxes?.forEach((tax) => {
@@ -9416,7 +9885,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if ((response.stock?.variant?.salesTaxInclusive && response.category === AccountCategoryEnum.INCOME) || (response.stock?.variant?.purchaseTaxInclusive && response.category === AccountCategoryEnum.EXPENSE)) {
             const amount = this.vouchersUtilityService.calculateInclusiveRate(
                 entryFormGroup?.value,
-                this.companyTaxes,
+                this.showTaxColumn ? this.companyTaxes : [],
                 this.company.giddhBalanceDecimalPlaces
             );
             transactionFormGroup.get("amount.amountForAccount").patchValue(amount);
@@ -9686,7 +10155,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             const amount = this.vouchersUtilityService.calculateInclusiveRate(
                 entryFormGroup?.value,
-                this.companyTaxes,
+                this.showTaxColumn ? this.companyTaxes : [],
                 this.company.giddhBalanceDecimalPlaces,
                 entryTotal
             );
@@ -9723,10 +10192,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Prefills invoice/bill create form from delivery challan or receipt note query params.
      * Does not set voucher uniqueName so a new invoice/bill is created.
      *
+     * @param {boolean} [showPageLoader=true]
      * @private
      * @memberof VoucherCreateComponent
      */
-    private prefillFromInventoryDocument(): void {
+    private prefillFromInventoryDocument(showPageLoader: boolean = true): void {
         const isFromReceiptNote = !!this.queryParams?.rnUniqueName;
         const voucherUniqueName = isFromReceiptNote
             ? this.queryParams.rnUniqueName
@@ -9744,7 +10214,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        this.startLoader(true);
+        if (showPageLoader) {
+            this.startLoader(true);
+        }
         this.componentStore.getInventoryVoucherDetails({
             voucherType: isFromReceiptNote ? VoucherTypeEnum.receiptNote : VoucherTypeEnum.deliveryChallan,
             voucherUniqueName,
@@ -9759,10 +10231,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Prefills DC/RN create form from invoice/bill query params (pending reconciliation).
      * Does not set voucher uniqueName so a new DC/RN is created.
      *
+     * @param {boolean} [showPageLoader=true]
      * @private
      * @memberof VoucherCreateComponent
      */
-    private prefillFromInvoiceVoucher(): void {
+    private prefillFromInvoiceVoucher(showPageLoader: boolean = true): void {
         const isFromBill = !!this.queryParams?.billUniqueName;
         const voucherUniqueName = isFromBill
             ? this.queryParams.billUniqueName
@@ -9781,7 +10254,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        this.startLoader(true);
+        if (showPageLoader) {
+            this.startLoader(true);
+        }
         this.componentStore.getVoucherDetails({
             isCopyVoucher: false,
             accountUniqueName,

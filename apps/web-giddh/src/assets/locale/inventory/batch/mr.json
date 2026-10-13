@@ -26,6 +26,8 @@
     "expiry_within": "समाप्तीच्या आत",
     "expiry_status": "समाप्ती स्थिती",
     "filters": "फिल्टर",
+    "books": "लेखांकन स्टॉक",
+    "inventory": "भौतिक स्टॉक",
     "clear_all": "सर्व साफ करा",
     "will_expire": "संपणार",
     "already_expired": "आधीच संपले",

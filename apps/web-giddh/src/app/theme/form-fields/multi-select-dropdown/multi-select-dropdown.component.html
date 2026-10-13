@@ -16,7 +16,7 @@
             @if (enableDynamicSearch || filteredOptions()?.length || isSearching()) {
                 <ngx-mat-select-search
                     [placeholderLabel]="placeholder || commonLocaleData?.app_search"
-                    [noEntriesFoundLabel]="enableDynamicSearch ? null : (noEntriesFoundLabel || commonLocaleData?.app_no_result_found)"
+                    [noEntriesFoundLabel]="enableDynamicSearch ? null : noEntriesFoundLabel || commonLocaleData?.app_no_result_found"
                     [formControl]="searchControl"
                     [clearSearchInput]="false"
                     [disableScrollToActiveOnOptionsChanged]="enableDynamicSearch"
@@ -24,9 +24,18 @@
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
             }
-            <mat-select-trigger *ngIf="showAllOption && isAllSelected()">
-                <span>{{ allOptionLabel || commonLocaleData?.app_all }}</span>
-            </mat-select-trigger>
+            @if (showAllOption && isAllSelected()) {
+                <mat-select-trigger>
+                    <span>{{ allOptionLabel || commonLocaleData?.app_all }}</span>
+                </mat-select-trigger>
+            } @else if (triggerTemplate) {
+                <mat-select-trigger>
+                    <ng-container
+                        [ngTemplateOutlet]="triggerTemplate"
+                        [ngTemplateOutletContext]="{ selected: getSelectedTriggerOptions() }"
+                    ></ng-container>
+                </mat-select-trigger>
+            }
             @if (showAllOption && !isSearching() && filteredOptions()?.length) {
                 <mat-option [value]="allOptionValue">
                     {{ allOptionLabel || commonLocaleData?.app_all }}
@@ -34,7 +43,11 @@
             }
             @for (option of filteredOptions(); track option?.value) {
                 <mat-option [value]="option?.value" [disabled]="option?.disabled">
-                    {{ option?.label }}
+                    @if (optionTemplate) {
+                        <ng-container [ngTemplateOutlet]="optionTemplate" [ngTemplateOutletContext]="{ option: option }"></ng-container>
+                    } @else {
+                        {{ option?.label }}
+                    }
                 </mat-option>
             }
             @if (!filteredOptions()?.length) {

@@ -620,7 +620,35 @@ export const GIDDH_VOUCHER_FORM = [
         otherDetails: true,
         dueDate: false,
         attachmentAllowed: false
-    }
+    },
+    {
+        type: "delivery-challan",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: true
+    },
+    {
+        type: "receipt-note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: true
+    },
 ];
 export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=${new Date().getTime()}`;
 export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
