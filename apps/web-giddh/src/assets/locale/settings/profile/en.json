@@ -101,6 +101,7 @@
     "pdf_currency_format": "PDF Currency Format",
     "pdf_currency_format_code": "Code",
     "pdf_currency_format_symbol": "Symbol",
-    "pdf_currency_format_tooltip": "Choose how currency amounts are displayed in generated PDFs: Symbol ([SYMBOL] 1,000) or Code ([CODE] 1,000)."
-
+    "pdf_currency_format_tooltip": "Choose how currency amounts are displayed in generated PDFs: Symbol ([SYMBOL] 1,000) or Code ([CODE] 1,000).",
+    "batch_tracking": "Batch Tracking",
+    "batch_tracking_tooltip": "Enable batch tracking for inventory items with manufacturing and expiry dates."
 }

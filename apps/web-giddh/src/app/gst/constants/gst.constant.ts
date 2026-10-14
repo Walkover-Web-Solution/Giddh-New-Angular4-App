@@ -10,8 +10,9 @@ export enum TaxServiceEnum {
     TAXPRO = 'TAXPRO',
     RECONCILE = 'RECONCILE',
     JIO_GST = 'JIO_GST',
-    VAYANA = 'VAYANA'
+    VAYANA = 'VAYANA',
+    EXCELLON = 'EXCELLON'
 }
 
 /** Type for tax service */
-export type TaxServiceType = 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
+export type TaxServiceType = 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA' | 'EXCELLON';

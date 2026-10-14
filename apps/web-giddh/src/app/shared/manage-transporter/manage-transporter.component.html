@@ -1,0 +1,169 @@
+<div
+    appTranslate
+    [keyboardShortcut]="'esc'"
+    [config]="{ dialogMode: true }"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (onShortcutPress)="closeDialog()"
+>
+    <div class="aside-dialog-wrapper">
+        <div cdkFocusInitial class="dialog-header">
+            <p class="modal-title">{{ commonLocaleData?.app_manage_transporter }}</p>
+            <button matIconButton aria-label="close" (click)="closeDialog()">
+                <i aria-label="close icon" class="icon-cross"></i>
+            </button>
+        </div>
+        <mat-dialog-content class="dialog-body manage-transporter">
+            <mat-accordion>
+                <mat-expansion-panel [expanded]="openMatExpansionPanel" class="overflow-visible">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="p-0">
+                            <span>
+                                {{ isEditMode ? commonLocaleData?.app_edit : commonLocaleData?.app_create }}
+                                {{ commonLocaleData?.app_transporter }}
+                            </span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <form [formGroup]="transporterForm" (ngSubmit)="onSubmit()">
+                        <div class="row row-gap-15 mb-3">
+                            <div class="col-md-6">
+                                <input-field
+                                    appEnterNext
+                                    #nameField
+                                    [type]="'text'"
+                                    [name]="'transporterName'"
+                                    [label]="commonLocaleData?.app_transporter_name"
+                                    [placeholder]="commonLocaleData?.app_transporter_name_placeholder"
+                                    formControlName="transporterName"
+                                    [required]="true"
+                                    [autoFocus]="true"
+                                    [showError]="
+                                        isFormSubmitted && transporterForm?.controls?.transporterName?.invalid
+                                    "
+                                ></input-field>
+                                @if (
+                                    (isFormSubmitted || transporterForm?.controls?.transporterName?.dirty) &&
+                                    transporterForm?.controls?.transporterName?.invalid &&
+                                    transporterForm?.controls?.transporterName?.value
+                                ) {
+                                    <small class="text-danger">
+                                        {{ commonLocaleData?.app_invalid_transporter_name_message }}
+                                    </small>
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                <input-field
+                                    appEnterNext
+                                    [type]="'text'"
+                                    [name]="'transporterId'"
+                                    [label]="commonLocaleData?.app_transporter_id"
+                                    [placeholder]="commonLocaleData?.app_transporter_id_placeholder"
+                                    formControlName="transporterId"
+                                    [required]="true"
+                                    [minlength]="4"
+                                    [maxlength]="15"
+                                    [showError]="isFormSubmitted && transporterForm?.controls?.transporterId?.invalid"
+                                ></input-field>
+                                @if (
+                                    (isFormSubmitted || transporterForm?.controls?.transporterId?.dirty) &&
+                                    transporterForm?.controls?.transporterId?.invalid &&
+                                    transporterForm?.controls?.transporterId?.value
+                                ) {
+                                    <small class="text-danger">
+                                        {{ commonLocaleData?.app_invalid_transporter_id_message }}
+                                    </small>
+                                }
+                            </div>
+                            <div class="col-12 d-flex justify-content-end column-gap-15">
+                                <button
+                                    matButton="filled"
+                                    type="submit"
+                                    [disabled]="
+                                        (saveInProgress$ | async) ||
+                                        (updateInProgress$ | async) ||
+                                        transporterForm?.invalid
+                                    "
+                                >
+                                    {{ isEditMode ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
+                                </button>
+                                <button
+                                    matButton="outlined"
+                                    type="button"
+                                    (click)="clearForm()"
+                                    [disabled]="(saveInProgress$ | async) || (updateInProgress$ | async)"
+                                >
+                                    {{ commonLocaleData?.app_clear }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+            <section class="table-responsive mt-3" *ngIf="(transporterList$ | async)?.length">
+                <table
+                    class="giddh-table table border"
+                    mat-table
+                    matSort
+                    [dataSource]="transporterList$ | async"
+                    (matSortChange)="sortChange($event)"
+                >
+                    <ng-container matColumnDef="transporterName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header width="40%">
+                            {{ commonLocaleData?.app_name }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.transporterName }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="transporterId">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header width="40%">
+                            {{ commonLocaleData?.app_transporter_id }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.transporterId }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+                        <td mat-cell *matCellDef="let element; let i = index" class="text-right">
+                            <button
+                                [ngClass]="{ invisible: activeRowIndex !== i }"
+                                matIconButton
+                                [matMenuTriggerFor]="menu"
+                                aria-label="Transporter actions"
+                            >
+                                <i class="icon-dots-three-vertical font-size-15"></i>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="editTransporter(element)">
+                                    {{ commonLocaleData?.app_edit }}
+                                </button>
+                                <button mat-menu-item (click)="deleteTransporter(element)">
+                                    {{ commonLocaleData?.app_delete }}
+                                </button>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: displayedColumns; let i = index"
+                        (mouseover)="activeRowIndex = i"
+                        (mouseout)="activeRowIndex = -1"
+                    ></tr>
+                </table>
+                <mat-paginator
+                    *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]"
+                    (page)="handlePageChange($event)"
+                    [length]="transporterListDetails?.totalItems"
+                    [pageSize]="transporterFilterRequest.count"
+                    [showFirstLastButtons]="true"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [hidePageSize]="false"
+                    [pageIndex]="transporterFilterRequest.page - 1"
+                ></mat-paginator>
+                <section class="mb-custom-80"></section>
+            </section>
+        </mat-dialog-content>
+    </div>
+</div>

@@ -59,7 +59,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         ledgerView: LedgerViewEnum.TView,
         showAccountUniqueName: false,
         autoGenerateNote: false,
-        currencyDisplayFormat: CurrencyDisplayFormat.Code
+        currencyDisplayFormat: CurrencyDisplayFormat.Code,
+        batchTrackingEnabled: false
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
