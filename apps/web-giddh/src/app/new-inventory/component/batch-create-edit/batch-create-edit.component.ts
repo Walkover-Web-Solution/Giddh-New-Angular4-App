@@ -327,6 +327,7 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
                 const currentBranch = branches.find((branch: any) => branch?.uniqueName === this.generalService.currentBranchUniqueName);
                 const warehouses = this.ensureSelectedOption(
                     (currentBranch?.warehouses ?? branches.flatMap((branch: any) => branch?.warehouses ?? []))
+                        .filter((warehouse: any) => !warehouse?.isArchived)
                         .map((warehouse: any) => ({ label: warehouse?.name, value: warehouse?.uniqueName })),
                     this.batchForm.get("warehouseUniqueName")?.value,
                     this.warehouseLabel()
