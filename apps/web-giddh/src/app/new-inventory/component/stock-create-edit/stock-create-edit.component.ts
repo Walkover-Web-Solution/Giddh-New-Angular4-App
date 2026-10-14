@@ -1330,8 +1330,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 .filter(warehouse => warehouse?.warehouse?.uniqueName);
             const isEditMode = !!this.queryParams?.stockUniqueName;
             let warehouses = formWarehouses;
-            // Edit + batch tracking: send every company warehouse (empty batches when not configured).
-            if (isEditMode && this.batchTrackingEnabled && this.warehouses?.length) {
+            // Edit mode: send every company warehouse (empty batches when not configured).
+            if (isEditMode && this.warehouses?.length) {
                 const formWarehouseByUniqueName = new Map(
                     formWarehouses.map(warehouse => [warehouse.warehouse.uniqueName, warehouse])
                 );
@@ -1355,19 +1355,13 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                         batches: []
                     };
                 });
-            } else if (!warehouses.length && !this.batchTrackingEnabled && variant.warehouseBalance?.[0] && defaultWarehouse?.uniqueName) {
-                warehouses = [{
-                    ...variant.warehouseBalance[0],
-                    warehouse: {
-                        name: defaultWarehouse.name,
-                        uniqueName: defaultWarehouse.uniqueName
-                    }
-                }];
             }
             const warehouseBalancePayload = warehouses
                 .map(warehouse => {
-                    const isShowBatch = warehouse?.isShowBatch !== false;
-                    const batches = (isShowBatch && this.batchTrackingEnabled && Array.isArray(warehouse?.batches) ? warehouse.batches : [])
+                    // When company batch tracking is on, respect per-warehouse isShowBatch.
+                    // When off, still send batches key (preserve existing data; UI does not show batches).
+                    const includeBatches = !this.batchTrackingEnabled || warehouse?.isShowBatch !== false;
+                    const batches = (includeBatches && Array.isArray(warehouse?.batches) ? warehouse.batches : [])
                         .filter(batch => this.isCompleteBatch(batch))
                         .map(batch => ({
                             uniqueName: batch.uniqueName,
@@ -1378,7 +1372,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                             openingQuantity: Number(batch.openingQuantity) || 0,
                             openingAmount: Number(String(batch.openingAmount ?? "").toString().replace(/,/g, "")) || 0
                         }));
-                    const openingBalance = {
+                    return {
                         warehouse: {
                             name: warehouse?.warehouse?.name,
                             uniqueName: warehouse?.warehouse?.uniqueName
@@ -1388,12 +1382,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                             uniqueName: warehouse?.stockUnit?.uniqueName || variant.warehouseBalance?.[0]?.stockUnit?.uniqueName || this.stockForm.stockUnitUniqueName
                         },
                         openingQuantity: Number(warehouse?.openingQuantity) || 0,
-                        openingAmount: Number(String(warehouse?.openingAmount ?? "").toString().replace(/,/g, "")) || 0
+                        openingAmount: Number(String(warehouse?.openingAmount ?? "").toString().replace(/,/g, "")) || 0,
+                        batches
                     };
-                    if (this.batchTrackingEnabled) {
-                        return { ...openingBalance, batches };
-                    }
-                    return openingBalance;
                 });
             variant.warehouseBalance = warehouseBalancePayload;
             if (!variant.warehouseBalance.length) {
@@ -1437,11 +1428,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             stockForm.hsnNumber = "";
         }
 
-        // Opening qty/amount live on warehouseBalance when batch tracking is on — do not send root fields.
-        // if (this.batchTrackingEnabled) {
-            delete stockForm.openingQuantity;
-            delete stockForm.openingAmount;
-        // }
+        // Opening qty/amount live on warehouseBalance — do not send root fields.
+        delete stockForm.openingQuantity;
+        delete stockForm.openingAmount;
 
         return stockForm;
     }
@@ -2173,7 +2162,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 },
                 openingQuantity: 0,
                 openingAmount: 0,
-                isShowBatch: true,
+                isShowBatch: this.batchTrackingEnabled,
                 batches: []
             }];
         }
@@ -2181,7 +2170,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             if (!Array.isArray(warehouse.batches)) {
                 warehouse.batches = [];
             }
-            if (warehouse.isShowBatch === undefined) {
+            if (!this.batchTrackingEnabled) {
+                warehouse.isShowBatch = false;
+            } else if (warehouse.isShowBatch === undefined) {
                 warehouse.isShowBatch = true;
             }
         });
@@ -2255,6 +2246,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         const warehouseMeta = uniqueName
             ? this.warehouses.find(warehouse => warehouse?.uniqueName === uniqueName)
             : undefined;
+        const showBatch = this.batchTrackingEnabled;
         return {
             warehouse: {
                 name: warehouseMeta?.name,
@@ -2266,8 +2258,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             },
             openingQuantity: 0,
             openingAmount: 0,
-            isShowBatch: true,
-            batches: [this.createEmptyVariantBatch()]
+            isShowBatch: showBatch,
+            batches: showBatch ? [this.createEmptyVariantBatch()] : []
         };
     }
 
@@ -2368,10 +2360,13 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public getOpeningBalanceSummaryLabel(variant: any): string {
         const warehouseCount = this.getVariantWarehouseCount(variant);
-        const batchCount = this.getVariantBatchCount(variant);
         const warehouseLabel = warehouseCount === 1
             ? (this.localeData?.one_warehouse || "1 warehouse")
             : (this.localeData?.n_warehouses || "[COUNT] warehouses").replace("[COUNT]", String(warehouseCount));
+        if (!this.batchTrackingEnabled) {
+            return warehouseLabel;
+        }
+        const batchCount = this.getVariantBatchCount(variant);
         const batchLabel = batchCount === 0
             ? (this.localeData?.no_batch || "no batch")
             : batchCount === 1
@@ -2406,7 +2401,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData,
                 currencySymbol: this.companyCurrencySymbol,
-                inputMaskFormat: this.inputMaskFormat
+                inputMaskFormat: this.inputMaskFormat,
+                batchTrackingEnabled: this.batchTrackingEnabled
             }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe((result: VariantOpeningBalanceDialogResult | undefined) => {
@@ -2417,7 +2413,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             variant.warehouseBalance = (result.warehouseBalance ?? []).map(row => ({
                 ...row,
                 stockUnit: row?.stockUnit?.uniqueName ? row.stockUnit : { ...unit },
-                isShowBatch: row?.isShowBatch !== false,
+                isShowBatch: this.batchTrackingEnabled ? row?.isShowBatch !== false : false,
                 isUserAdded: true
             }));
             if (!variant.warehouseBalance.length) {
@@ -2505,9 +2501,15 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (!row) {
             return;
         }
+        row.warehouse = {
+            name: undefined,
+            uniqueName: undefined
+        };
         row.openingQuantity = 0;
         row.openingAmount = 0;
-        row.batches = row.isShowBatch !== false ? [this.createEmptyVariantBatch()] : [];
+        row.batches = this.batchTrackingEnabled && row.isShowBatch !== false
+            ? [this.createEmptyVariantBatch()]
+            : [];
         this.updateBatchAvailabilityOptions();
         this.changeDetection.detectChanges();
     }
@@ -2531,10 +2533,16 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (warehouseChanged) {
             this.filterBatchesForWarehouse(warehouseRow, option.value);
             this.updateBatchAvailabilityOptions();
-        } else if (warehouseRow.isShowBatch !== false && !warehouseRow.batches?.length) {
+        } else if (
+            this.batchTrackingEnabled
+            && warehouseRow.isShowBatch !== false
+            && !warehouseRow.batches?.length
+        ) {
             warehouseRow.batches = [this.createEmptyVariantBatch()];
         }
-        this.searchBatchAvailability("", option.value);
+        if (this.batchTrackingEnabled) {
+            this.searchBatchAvailability("", option.value);
+        }
         this.changeDetection.detectChanges();
     }
 
@@ -2547,8 +2555,10 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     private filterBatchesForWarehouse(warehouseRow: any, warehouseUniqueName: string): void {
-        if (!warehouseRow || warehouseRow.isShowBatch === false) {
-            warehouseRow.batches = [];
+        if (!warehouseRow || !this.batchTrackingEnabled || warehouseRow.isShowBatch === false) {
+            if (warehouseRow && this.batchTrackingEnabled) {
+                warehouseRow.batches = [];
+            }
             return;
         }
         const keptBatches = (warehouseRow.batches ?? []).filter(batch => {
@@ -2873,7 +2883,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     private ensureDefaultStockBatch(): void {
-        if (!this.batchTrackingEnabled || this.isVariantAvailable) {
+        if (this.isVariantAvailable) {
             return;
         }
         const variant = this.stockForm?.variants?.[0];
@@ -2885,7 +2895,19 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.addStockWarehouse(variant);
         }
         (variant.warehouseBalance ?? []).forEach(warehouse => {
+            if (!Array.isArray(warehouse.batches)) {
+                warehouse.batches = [];
+            }
+            if (!this.batchTrackingEnabled) {
+                // Hide batch UI only; keep any existing batch data for the payload.
+                warehouse.isShowBatch = false;
+                return;
+            }
             if (warehouse.isShowBatch === undefined) {
+                warehouse.isShowBatch = true;
+            }
+            // Restore batch panel when rows already have batch data (e.g. settings loaded after get-stock).
+            if ((warehouse.batches ?? []).some(batch => this.hasBatchContent(batch))) {
                 warehouse.isShowBatch = true;
             }
             if (warehouse.isShowBatch !== false && !warehouse.batches?.length) {
@@ -3044,6 +3066,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 return {
                     ...warehouse,
                     stockUnit: warehouse?.stockUnit?.uniqueName ? warehouse.stockUnit : { ...stockUnit },
+                    // Visibility is also gated by batchTrackingEnabled in the template.
                     isShowBatch: hasBatchData,
                     isUserAdded: true,
                     batches: hasBatchData ? mappedBatches : []
@@ -3125,9 +3148,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     private hasMissingWarehouseSelection(): boolean {
-        if (!this.batchTrackingEnabled) {
-            return false;
-        }
         return (this.stockForm?.variants ?? []).some(variant =>
             (variant?.warehouseBalance ?? []).some(warehouse =>
                 this.isWarehouseSelectionRequired(warehouse) && !warehouse?.warehouse?.uniqueName
