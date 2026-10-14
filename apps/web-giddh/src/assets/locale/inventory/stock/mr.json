@@ -135,5 +135,6 @@
     "quantity_amount_sum_of_batches": "प्रमाण आणि रक्कम खालील बॅचची बेरीज आहे",
     "no_batches_enter_directly": "बॅच नाहीत · प्रमाण आणि रक्कम थेट भरा",
     "batches_label": "बॅच",
-    "warehouse_required": "कृपया गोदाम निवडा"
+    "warehouse_required": "कृपया गोदाम निवडा",
+    "warehouse_archived_message": "हे गोदाम आर्काइव्ह आहे"
 }

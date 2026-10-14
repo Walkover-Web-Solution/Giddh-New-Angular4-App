@@ -66,6 +66,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
     public commonLocaleData: any = {};
     /** Company warehouses. */
     public warehouses: any[] = [];
+    /** Full batch availability list from the initial API call (no warehouse filter). */
+    private allBatchAvailabilityOptions: IOption[] = [];
     /** Availability dropdown options keyed by warehouse unique name. */
     private batchAvailabilityByWarehouse: Record<string, IOption[]> = {};
     /** Batch numbers already used on other rows. */
@@ -99,11 +101,7 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             this.warehouseBalance = [this.createEmptyWarehouseRow()];
         }
         if (this.batchTrackingEnabled) {
-            this.warehouseBalance.forEach(warehouse => {
-                if (warehouse?.warehouse?.uniqueName) {
-                    this.searchBatchAvailability("", warehouse.warehouse.uniqueName);
-                }
-            });
+            this.searchBatchAvailability("");
             this.syncSelectedBatchNumbers();
         }
     }
@@ -129,13 +127,60 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
         const selectedUniqueNames = this.warehouseBalance
             .map((row, index) => (index === rowIndex ? "" : row?.warehouse?.uniqueName))
             .filter(Boolean);
+        const currentRowUniqueName = this.warehouseBalance?.[rowIndex]?.warehouse?.uniqueName;
         return (this.warehouses ?? [])
-            .filter(warehouse => warehouse?.uniqueName && !selectedUniqueNames.includes(warehouse.uniqueName))
+            .filter(warehouse => {
+                if (!warehouse?.uniqueName || selectedUniqueNames.includes(warehouse.uniqueName)) {
+                    return false;
+                }
+                return !warehouse.isArchived || warehouse.uniqueName === currentRowUniqueName;
+            })
             .map(warehouse => ({
                 label: warehouse?.name,
                 value: warehouse?.uniqueName,
                 additional: warehouse
             }));
+    }
+
+    /**
+     * True when the warehouse on a balance row is archived.
+     *
+     * @param {*} warehouseRow Warehouse balance row
+     * @return {*}  {boolean}
+     * @memberof VariantOpeningBalanceDialogComponent
+     */
+    public isWarehouseArchived(warehouseRow: any): boolean {
+        const uniqueName = warehouseRow?.warehouse?.uniqueName;
+        if (!uniqueName) {
+            return false;
+        }
+        return !!(this.warehouses ?? []).find(
+            warehouse => warehouse?.uniqueName === uniqueName && warehouse?.isArchived
+        );
+    }
+
+    /**
+     * True when an active warehouse is still available to add.
+     *
+     * @return {*}  {boolean}
+     * @memberof VariantOpeningBalanceDialogComponent
+     */
+    public canAddWarehouse(): boolean {
+        const activeWarehouses = (this.warehouses ?? []).filter(warehouse => !warehouse?.isArchived);
+        if (!activeWarehouses.length) {
+            return false;
+        }
+        const selectedUniqueNames = new Set(
+            this.warehouseBalance.map(row => row?.warehouse?.uniqueName).filter(Boolean)
+        );
+        const hasUnselectedActive = activeWarehouses.some(
+            warehouse => warehouse?.uniqueName && !selectedUniqueNames.has(warehouse.uniqueName)
+        );
+        if (!hasUnselectedActive) {
+            return false;
+        }
+        const archivedRowCount = this.warehouseBalance.filter(row => this.isWarehouseArchived(row)).length;
+        return this.warehouseBalance.length < activeWarehouses.length + archivedRowCount;
     }
 
     /**
@@ -222,9 +267,7 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             this.filterBatchesForWarehouse(warehouseRow, option.value);
             this.syncSelectedBatchNumbers();
         }
-        if (this.batchTrackingEnabled) {
-            this.searchBatchAvailability("", option.value);
-        }
+        // Initial list is already loaded without warehouse and filtered client-side — no API call here.
         this.cdr.detectChanges();
     }
 
@@ -431,7 +474,9 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
      */
     public getBatchAvailabilityOptions(batch: any, warehouseUniqueName: string = ""): IOption[] {
         const warehouseKey = String(warehouseUniqueName ?? "").trim();
-        const options = this.batchAvailabilityByWarehouse[warehouseKey] ?? [];
+        const options = warehouseKey
+            ? (this.batchAvailabilityByWarehouse[warehouseKey] ?? [])
+            : this.allBatchAvailabilityOptions;
         const currentValue = String(batch?.batchNumber ?? "").trim();
         return options.filter(option => {
             const optionValue = String(option?.value ?? "").trim();
@@ -440,7 +485,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
     }
 
     /**
-     * Search batches from availability API with warehouse filter (same as voucher batch select).
+     * Batch availability: initial empty query loads all warehouses once and filters client-side;
+     * search query calls API with warehouseUniqueName.
      *
      * @param {string} [query=""] Search text
      * @param {string} [warehouseUniqueName=""] Selected warehouse unique name
@@ -450,7 +496,35 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
         if (!this.batchTrackingEnabled) {
             return;
         }
+        const searchQuery = String(query ?? "").trim();
         const warehouseKey = String(warehouseUniqueName ?? "").trim();
+
+        if (!searchQuery) {
+            if (this.allBatchAvailabilityOptions.length) {
+                this.assignBatchAvailabilityByWarehouse(this.allBatchAvailabilityOptions);
+                this.syncSelectedBatchNumbers();
+                this.cdr.detectChanges();
+                return;
+            }
+            this.inventoryService.getBatchAvailability({
+                uniqueName: "",
+                isVariant: false,
+                page: 1,
+                count: API_BULK_FETCH_LIMIT,
+                sort: "asc",
+                sortBy: "expiry",
+                q: "",
+                noStock: true,
+                excludeBatchUniqueName: "",
+                warehouseUniqueName: ""
+            }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.assignBatchAvailabilityByWarehouse(mapAvailabilityBatches(response));
+                this.syncSelectedBatchNumbers();
+                this.cdr.detectChanges();
+            });
+            return;
+        }
+
         this.inventoryService.getBatchAvailability({
             uniqueName: "",
             isVariant: false,
@@ -458,7 +532,7 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             count: API_BULK_FETCH_LIMIT,
             sort: "asc",
             sortBy: "expiry",
-            q: query ?? "",
+            q: searchQuery,
             noStock: true,
             excludeBatchUniqueName: "",
             warehouseUniqueName: warehouseKey
@@ -466,6 +540,28 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             this.batchAvailabilityByWarehouse[warehouseKey] = mapAvailabilityBatches(response);
             this.syncSelectedBatchNumbers();
             this.cdr.detectChanges();
+        });
+    }
+
+    /**
+     * Split full availability options into per-warehouse buckets.
+     *
+     * @private
+     * @param {IOption[]} options Full availability options
+     * @memberof VariantOpeningBalanceDialogComponent
+     */
+    private assignBatchAvailabilityByWarehouse(options: IOption[]): void {
+        this.allBatchAvailabilityOptions = options ?? [];
+        this.batchAvailabilityByWarehouse = {};
+        this.allBatchAvailabilityOptions.forEach(option => {
+            const key = String(option?.additional?.warehouse?.uniqueName ?? "").trim();
+            if (!key) {
+                return;
+            }
+            if (!this.batchAvailabilityByWarehouse[key]) {
+                this.batchAvailabilityByWarehouse[key] = [];
+            }
+            this.batchAvailabilityByWarehouse[key].push(option);
         });
     }
 

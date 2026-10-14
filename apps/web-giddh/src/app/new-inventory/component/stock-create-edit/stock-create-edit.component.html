@@ -1010,6 +1010,10 @@
                                                                             @if (hasOpeningBalanceSet(variant)) {
                                                                                 <div class="font-weight-semibold variant-opening-qty">
                                                                                     {{ getVariantOpeningQtyTotal(variant) }}
+                                                                                    {{
+                                                                                        variant.warehouseBalance?.[0]?.stockUnit?.name ||
+                                                                                            stockUnitName
+                                                                                    }}
                                                                                     ·
                                                                                     {{ companyCurrencySymbol
                                                                                     }}{{ getVariantOpeningAmountTotalAll(variant) }}
@@ -1418,10 +1422,7 @@
                                                                     matButton="outlined"
                                                                     color="primary"
                                                                     (click)="addStockWarehouse(stockVariant)"
-                                                                    [disabled]="
-                                                                        stockVariant.warehouseBalance?.length >= warehouses.length &&
-                                                                        warehouses.length > 0
-                                                                    "
+                                                                    [disabled]="!canAddWarehouse(stockVariant)"
                                                                 >
                                                                     + {{ localeData?.add_warehouse }}
                                                                 </button>
@@ -1435,6 +1436,14 @@
                                                                 let warehouseIndex = $index
                                                             ) {
                                                                 <div class="warehouse-card border border-radius-8 p-3">
+                                                                    @if (isWarehouseArchived(warehouseRow)) {
+                                                                        <p
+                                                                            class="d-flex align-items-center column-gap-1 font-size-12 text-orange mb-2 pl-0"
+                                                                        >
+                                                                            <i class="icon-info font-size-14"></i>
+                                                                            <span>{{ localeData?.warehouse_archived_message }}</span>
+                                                                        </p>
+                                                                    }
                                                                     <div
                                                                         class="d-flex align-items-end column-gap-2 flex-wrap warehouse-main-row"
                                                                     >
@@ -1457,6 +1466,7 @@
                                                                                     isWarehouseSelectionRequired(warehouseRow) &&
                                                                                     !warehouseRow?.warehouse?.uniqueName
                                                                                 "
+                                                                                [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                 (selectedOption)="
                                                                                     onStockWarehouseSelected(warehouseRow, $event)
                                                                                 "
@@ -1472,6 +1482,7 @@
                                                                                 [(ngModel)]="warehouseRow.openingQuantity"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [min]="0"
+                                                                                [disabled]="isWarehouseArchived(warehouseRow)"
                                                                             ></input-field>
                                                                         </div>
                                                                         <div class="amount-field">
@@ -1485,6 +1496,7 @@
                                                                                 [prefix]="companyCurrencySymbol"
                                                                                 [mask]="inputMaskFormat"
                                                                                 [useMask]="true"
+                                                                                [disabled]="isWarehouseArchived(warehouseRow)"
                                                                             ></input-field>
                                                                         </div>
                                                                         <div class="d-flex align-items-center column-gap-2 mb-1">
@@ -1492,6 +1504,7 @@
                                                                                 <mat-slide-toggle
                                                                                     color="primary"
                                                                                     [checked]="warehouseRow.isShowBatch !== false"
+                                                                                    [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                     (change)="
                                                                                         onTrackByBatchChange(warehouseRow, $event.checked)
                                                                                     "
@@ -1506,6 +1519,7 @@
                                                                                     matIconButton
                                                                                     class="light-gray"
                                                                                     [attr.aria-label]="commonLocaleData?.app_delete"
+                                                                                    [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                     (click)="
                                                                                         removeStockWarehouse(stockVariant, warehouseIndex)
                                                                                     "
@@ -1519,6 +1533,7 @@
                                                                                     class="light-gray"
                                                                                     [matTooltip]="commonLocaleData?.app_reset"
                                                                                     [attr.aria-label]="commonLocaleData?.app_reset"
+                                                                                    [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                     (click)="
                                                                                         clearStockWarehouse(stockVariant, warehouseIndex)
                                                                                     "
@@ -1536,8 +1551,9 @@
                                                                                 {{ localeData?.batches_label || 'Batches' }}
                                                                             </p>
                                                                             @if (
-                                                                                isWarehouseBatchQtyExceeded(warehouseRow) ||
-                                                                                isWarehouseBatchAmountExceeded(warehouseRow)
+                                                                                !isWarehouseArchived(warehouseRow) &&
+                                                                                (isWarehouseBatchQtyExceeded(warehouseRow) ||
+                                                                                    isWarehouseBatchAmountExceeded(warehouseRow))
                                                                             ) {
                                                                                 <div class="mb-2 font-size-12">
                                                                                     @if (isWarehouseBatchQtyExceeded(warehouseRow)) {
@@ -1640,6 +1656,7 @@
                                                                                         [required]="
                                                                                             isBatchNameRequired(batch) && !batch.batchNumber
                                                                                         "
+                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                         (dynamicSearchedQuery)="
                                                                                             searchBatchAvailability(
                                                                                                 $event,
@@ -1669,6 +1686,7 @@
                                                                                         [required]="
                                                                                             isBatchNameRequired(batch) && !batch.name
                                                                                         "
+                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                     ></input-field>
                                                                                     <giddh-datepicker
                                                                                         [label]="localeData?.manufacturing_date"
@@ -1681,6 +1699,7 @@
                                                                                         "
                                                                                         [showToggleIcon]="false"
                                                                                         [appearance]="'outline'"
+                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                         [(ngModel)]="batch.manufacturingDate"
                                                                                     ></giddh-datepicker>
                                                                                     <giddh-datepicker
@@ -1694,6 +1713,7 @@
                                                                                         "
                                                                                         [showToggleIcon]="false"
                                                                                         [appearance]="'outline'"
+                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                         [(ngModel)]="batch.expiryDate"
                                                                                     ></giddh-datepicker>
                                                                                     <input-field
@@ -1709,6 +1729,7 @@
                                                                                         [placeholder]="localeData?.opening_quantity"
                                                                                         [allowDecimalDigitsOnly]="true"
                                                                                         [min]="0"
+                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                         [(ngModel)]="batch.openingQuantity"
                                                                                     ></input-field>
                                                                                     <input-field
@@ -1726,6 +1747,7 @@
                                                                                         [prefix]="companyCurrencySymbol"
                                                                                         [mask]="inputMaskFormat"
                                                                                         [useMask]="true"
+                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                     ></input-field>
                                                                                     @if (warehouseRow.batches?.length > 1) {
                                                                                         <button
@@ -1733,6 +1755,7 @@
                                                                                             aria-label="remove batch"
                                                                                             matIconButton
                                                                                             class="stock-batch-remove light-gray"
+                                                                                            [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                             (click)="
                                                                                                 removeWarehouseBatchRow(
                                                                                                     warehouseRow,
@@ -1749,6 +1772,7 @@
                                                                                             class="stock-batch-remove light-gray"
                                                                                             [matTooltip]="commonLocaleData?.app_reset"
                                                                                             [attr.aria-label]="commonLocaleData?.app_reset"
+                                                                                            [disabled]="isWarehouseArchived(warehouseRow)"
                                                                                             (click)="
                                                                                                 resetWarehouseBatchRow(
                                                                                                     warehouseRow,
@@ -1761,12 +1785,14 @@
                                                                                     }
                                                                                 </div>
                                                                             }
-                                                                            <a
-                                                                                class="d-inline-block mt-1 mb-1 text-primary cursor-pointer another-option-btn"
-                                                                                (click)="addWarehouseBatchRow(warehouseRow)"
-                                                                            >
-                                                                                + {{ localeData?.add_batch }}
-                                                                            </a>
+                                                                            @if (!isWarehouseArchived(warehouseRow)) {
+                                                                                <a
+                                                                                    class="d-inline-block mt-1 mb-1 text-primary cursor-pointer another-option-btn"
+                                                                                    (click)="addWarehouseBatchRow(warehouseRow)"
+                                                                                >
+                                                                                    + {{ localeData?.add_batch }}
+                                                                                </a>
+                                                                            }
                                                                         </div>
                                                                     }
                                                                 </div>

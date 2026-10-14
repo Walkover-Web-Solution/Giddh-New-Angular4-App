@@ -192,7 +192,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public isVariantAvailable: boolean = false;
     /** True when company has batch tracking enabled. */
     public batchTrackingEnabled: boolean = false;
-    /** Raw batch availability options from API (keyed by warehouse unique name). */
+    /** Full batch availability list from the initial API call (no warehouse filter). */
+    private allBatchAvailabilityOptions: IOption[] = [];
+    /** Batch availability options keyed by warehouse unique name (client-filtered or search result). */
     private batchAvailabilityByWarehouse: Record<string, IOption[]> = {};
     /** Unique names of batches already selected on form rows. */
     private selectedBatchUniqueNames: string[] = [];
@@ -1330,31 +1332,36 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 .filter(warehouse => warehouse?.warehouse?.uniqueName);
             const isEditMode = !!this.queryParams?.stockUniqueName;
             let warehouses = formWarehouses;
-            // Edit mode: send every company warehouse (empty batches when not configured).
+            // Edit mode: send every active company warehouse (+ archived ones already on the form).
             if (isEditMode && this.warehouses?.length) {
                 const formWarehouseByUniqueName = new Map(
                     formWarehouses.map(warehouse => [warehouse.warehouse.uniqueName, warehouse])
                 );
-                warehouses = this.warehouses.map(companyWarehouse => {
-                    const formWarehouse = formWarehouseByUniqueName.get(companyWarehouse?.uniqueName);
-                    if (formWarehouse) {
-                        return formWarehouse;
-                    }
-                    return {
-                        warehouse: {
-                            name: companyWarehouse?.name,
-                            uniqueName: companyWarehouse?.uniqueName
-                        },
-                        stockUnit: variant.warehouseBalance?.[0]?.stockUnit || {
-                            name: this.stockUnitName,
-                            uniqueName: this.stockForm.stockUnitUniqueName
-                        },
-                        openingQuantity: 0,
-                        openingAmount: 0,
-                        isShowBatch: false,
-                        batches: []
-                    };
-                });
+                warehouses = this.warehouses
+                    .filter(companyWarehouse =>
+                        !companyWarehouse?.isArchived
+                        || formWarehouseByUniqueName.has(companyWarehouse?.uniqueName)
+                    )
+                    .map(companyWarehouse => {
+                        const formWarehouse = formWarehouseByUniqueName.get(companyWarehouse?.uniqueName);
+                        if (formWarehouse) {
+                            return formWarehouse;
+                        }
+                        return {
+                            warehouse: {
+                                name: companyWarehouse?.name,
+                                uniqueName: companyWarehouse?.uniqueName
+                            },
+                            stockUnit: variant.warehouseBalance?.[0]?.stockUnit || {
+                                name: this.stockUnitName,
+                                uniqueName: this.stockForm.stockUnitUniqueName
+                            },
+                            openingQuantity: 0,
+                            openingAmount: 0,
+                            isShowBatch: false,
+                            batches: []
+                        };
+                    });
             }
             const warehouseBalancePayload = warehouses
                 .map(warehouse => {
@@ -1897,8 +1904,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     /**
-     * Search batches from availability API (`noStock=true` for stock create/edit).
-     * Passes `warehouseUniqueName` the same way as voucher batch select.
+     * Batch availability for stock create/edit (`noStock=true`).
+     * Initial / empty query: one API call without warehouse, then client-filter by warehouse.
+     * Search query: API call with warehouseUniqueName to minimize payload.
      *
      * @param {string} query Search text
      * @param {string} [warehouseUniqueName=""] Selected warehouse unique name
@@ -1908,7 +1916,37 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (!this.batchTrackingEnabled) {
             return;
         }
+        const searchQuery = String(query ?? "").trim();
         const warehouseKey = String(warehouseUniqueName ?? "").trim();
+
+        // Empty search: use cached all-warehouse list (or fetch once without warehouse).
+        if (!searchQuery) {
+            if (this.allBatchAvailabilityOptions.length) {
+                this.assignBatchAvailabilityByWarehouse(this.allBatchAvailabilityOptions);
+                this.updateBatchAvailabilityOptions();
+                this.changeDetection.detectChanges();
+                return;
+            }
+            this.inventoryService.getBatchAvailability({
+                uniqueName: "",
+                isVariant: false,
+                page: 1,
+                count: API_BULK_FETCH_LIMIT,
+                sort: "asc",
+                sortBy: "expiry",
+                q: "",
+                noStock: true,
+                excludeBatchUniqueName: "",
+                warehouseUniqueName: ""
+            }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.assignBatchAvailabilityByWarehouse(mapAvailabilityBatches(response));
+                this.updateBatchAvailabilityOptions();
+                this.changeDetection.detectChanges();
+            });
+            return;
+        }
+
+        // Searching: send warehouse filter to API.
         this.inventoryService.getBatchAvailability({
             uniqueName: "",
             isVariant: false,
@@ -1916,7 +1954,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             count: API_BULK_FETCH_LIMIT,
             sort: "asc",
             sortBy: "expiry",
-            q: query ?? "",
+            q: searchQuery,
             noStock: true,
             excludeBatchUniqueName: "",
             warehouseUniqueName: warehouseKey
@@ -1924,6 +1962,28 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.batchAvailabilityByWarehouse[warehouseKey] = mapAvailabilityBatches(response);
             this.updateBatchAvailabilityOptions();
             this.changeDetection.detectChanges();
+        });
+    }
+
+    /**
+     * Split full availability options into per-warehouse buckets using result.warehouse.uniqueName.
+     *
+     * @private
+     * @param {IOption[]} options Full availability options
+     * @memberof StockCreateEditComponent
+     */
+    private assignBatchAvailabilityByWarehouse(options: IOption[]): void {
+        this.allBatchAvailabilityOptions = options ?? [];
+        this.batchAvailabilityByWarehouse = {};
+        this.allBatchAvailabilityOptions.forEach(option => {
+            const warehouseKey = String(option?.additional?.warehouse?.uniqueName ?? "").trim();
+            if (!warehouseKey) {
+                return;
+            }
+            if (!this.batchAvailabilityByWarehouse[warehouseKey]) {
+                this.batchAvailabilityByWarehouse[warehouseKey] = [];
+            }
+            this.batchAvailabilityByWarehouse[warehouseKey].push(option);
         });
     }
 
@@ -1938,7 +1998,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public getBatchAvailabilityOptions(batch: any, warehouseUniqueName: string = ""): IOption[] {
         const warehouseKey = String(warehouseUniqueName ?? "").trim();
-        const options = this.batchAvailabilityByWarehouse[warehouseKey] ?? [];
+        const options = warehouseKey
+            ? (this.batchAvailabilityByWarehouse[warehouseKey] ?? [])
+            : this.allBatchAvailabilityOptions;
         const currentValue = String(batch?.batchNumber ?? "").trim();
         return options.filter(option => {
             const optionValue = String(option?.value ?? "").trim();
@@ -2000,7 +2062,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     /**
-     * Load availability batches for all rows after stock details load.
+     * Load all availability batches once (no warehouse filter); rows filter client-side.
      *
      * @private
      * @memberof StockCreateEditComponent
@@ -2009,20 +2071,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (!this.batchTrackingEnabled) {
             return;
         }
-        const warehouseUniqueNames = new Set<string>();
-        (this.stockForm?.variants ?? []).forEach(variant => {
-            (variant?.warehouseBalance ?? []).forEach(warehouse => {
-                const uniqueName = String(warehouse?.warehouse?.uniqueName ?? "").trim();
-                if (uniqueName) {
-                    warehouseUniqueNames.add(uniqueName);
-                }
-            });
-        });
-        if (!warehouseUniqueNames.size) {
-            this.searchBatchAvailability("");
-            return;
-        }
-        warehouseUniqueNames.forEach(uniqueName => this.searchBatchAvailability("", uniqueName));
+        this.allBatchAvailabilityOptions = [];
+        this.batchAvailabilityByWarehouse = {};
+        this.searchBatchAvailability("");
     }
 
     /**
@@ -2050,11 +2101,65 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public getWarehouseOptions(): IOption[] {
-        return (this.warehouses ?? []).map(warehouse => ({
+        return this.getActiveWarehouses().map(warehouse => ({
             label: warehouse?.name,
             value: warehouse?.uniqueName,
             additional: warehouse
         }));
+    }
+
+    /**
+     * Non-archived company warehouses for selection / Add warehouse.
+     *
+     * @return {*}  {any[]}
+     * @memberof StockCreateEditComponent
+     */
+    public getActiveWarehouses(): any[] {
+        return (this.warehouses ?? []).filter(warehouse => !warehouse?.isArchived);
+    }
+
+    /**
+     * True when the warehouse on a balance row is archived in company settings.
+     *
+     * @param {*} warehouseRow Warehouse balance row
+     * @return {*}  {boolean}
+     * @memberof StockCreateEditComponent
+     */
+    public isWarehouseArchived(warehouseRow: any): boolean {
+        const uniqueName = warehouseRow?.warehouse?.uniqueName;
+        if (!uniqueName) {
+            return false;
+        }
+        return !!(this.warehouses ?? []).find(
+            warehouse => warehouse?.uniqueName === uniqueName && warehouse?.isArchived
+        );
+    }
+
+    /**
+     * True when at least one active warehouse is still available to add.
+     *
+     * @param {*} variant Stock / variant row
+     * @return {*}  {boolean}
+     * @memberof StockCreateEditComponent
+     */
+    public canAddWarehouse(variant: any): boolean {
+        const activeWarehouses = this.getActiveWarehouses();
+        if (!activeWarehouses.length) {
+            return false;
+        }
+        const rows = variant?.warehouseBalance ?? [];
+        const selectedUniqueNames = new Set(
+            rows.map(row => row?.warehouse?.uniqueName).filter(Boolean)
+        );
+        const hasUnselectedActive = activeWarehouses.some(
+            warehouse => warehouse?.uniqueName && !selectedUniqueNames.has(warehouse.uniqueName)
+        );
+        if (!hasUnselectedActive) {
+            return false;
+        }
+        // Empty rows also consume a slot — do not allow more cards than active + archived-on-form.
+        const archivedRowCount = rows.filter(row => this.isWarehouseArchived(row)).length;
+        return rows.length < activeWarehouses.length + archivedRowCount;
     }
 
     /** True when user must pick a warehouse (more than one in company). */
@@ -2219,7 +2324,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     private getDefaultWarehouse(): any {
-        return this.warehouses.find(warehouse => warehouse?.isDefault) || this.warehouses[0];
+        const activeWarehouses = this.getActiveWarehouses();
+        return activeWarehouses.find(warehouse => warehouse?.isDefault) || activeWarehouses[0];
     }
 
     private resolveBatchWarehouseUniqueName(variant: any): string {
@@ -2438,8 +2544,15 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         const selectedUniqueNames = (variant?.warehouseBalance ?? [])
             .map((row, index) => (index === rowIndex ? "" : row?.warehouse?.uniqueName))
             .filter(Boolean);
+        const currentRowUniqueName = variant?.warehouseBalance?.[rowIndex]?.warehouse?.uniqueName;
         return (this.warehouses ?? [])
-            .filter(warehouse => warehouse?.uniqueName && !selectedUniqueNames.includes(warehouse.uniqueName))
+            .filter(warehouse => {
+                if (!warehouse?.uniqueName || selectedUniqueNames.includes(warehouse.uniqueName)) {
+                    return false;
+                }
+                // Keep archived warehouse only when it is already selected on this row.
+                return !warehouse.isArchived || warehouse.uniqueName === currentRowUniqueName;
+            })
             .map(warehouse => ({
                 label: warehouse?.name,
                 value: warehouse?.uniqueName,
@@ -2540,9 +2653,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         ) {
             warehouseRow.batches = [this.createEmptyVariantBatch()];
         }
-        if (this.batchTrackingEnabled) {
-            this.searchBatchAvailability("", option.value);
-        }
+        // Initial list is already loaded without warehouse and filtered client-side — no API call here.
         this.changeDetection.detectChanges();
     }
 
