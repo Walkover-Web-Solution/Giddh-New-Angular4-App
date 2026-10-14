@@ -14,7 +14,7 @@ import { ReportFiltersComponent } from '../report-filters/report-filters.compone
 import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import * as dayjs from "dayjs";
 import { ActivatedRoute, Router } from '@angular/router';
-import { INVENTORY_COMMON_COLUMNS, InventoryReportType, InventoryModuleName } from '../../inventory.enum';
+import { INVENTORY_COMMON_COLUMNS, InventoryReportType, InventoryModuleName, ReportNature } from '../../inventory.enum';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { CommonActions } from '../../../actions/common.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
@@ -61,6 +61,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
     public translationLoaded: boolean = false;
     /* This will hold active company data */
     public activeCompany: any = {};
+    /** True if company batch tracking is enabled */
+    public batchTrackingEnabled: boolean = false;
     /** Image path variable */
     public imgPath: string = '';
     /** This will store selected date range to use in api */
@@ -135,6 +137,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
     private filtersSubject$ = new Subject<any>();
     /** Subject for dynamic columns changes */
     private dynamicColumnsSubject$ = new Subject<any>();
+    /** Currently selected report nature */
+    public selectedReportNature: ReportNature = ReportNature.Inventory;
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -193,6 +197,16 @@ export class ReportsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+            }
+        });
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                const wasEnabled = this.batchTrackingEnabled;
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
+                if (wasEnabled !== this.batchTrackingEnabled && this.displayedColumns?.length) {
+                    this.displayedColumns = this.withBatchColumn(this.displayedColumns);
+                    this.changeDetection.detectChanges();
+                }
             }
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -348,8 +362,18 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 this.handleDynamicColumnsChange(dynamicColumnsData);
             }
             
-            this.getReport(true);
+            this.getReport(true, this.selectedReportNature);
         });
+    }
+
+    /**
+     * Updates report nature and reloads report data
+     *
+     * @param {ReportNature} reportNature
+     * @memberof ReportsComponent
+     */
+    public onReportNatureChange(reportNature: ReportNature): void {
+        this.selectedReportNature = reportNature;
     }
 
     /**
@@ -387,9 +411,11 @@ export class ReportsComponent implements OnInit, OnDestroy {
      */
     private handleDynamicColumnsChange(event: any): void {
         if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
-            this.displayedColumns = event
-                .filter(item => item?.checked)
-                .map(item => item?.value);
+            this.displayedColumns = this.withBatchColumn(
+                event
+                    .filter(item => item?.checked)
+                    .map(item => item?.value)
+            );
         }
     }
 
@@ -425,7 +451,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @return {*}  {void}
      * @memberof ReportsComponent
      */
-    public getReport(fetchBalance: boolean = true): void {
+    public getReport(fetchBalance: boolean = true, reportNature: ReportNature = this.selectedReportNature): void {
         if (this.todaySelected) {
             this.stockReportRequest.from = '';
             this.stockReportRequest.to = '';
@@ -450,6 +476,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     sort: stockReportRequest.sort ?? '',
                     sortBy: stockReportRequest.sortBy ?? '',
                     stockGroupUniqueName: this.reportUniqueName ?? '',
+                    reportNature: reportNature ?? ''
                 };
 
                 stockReportRequest.from = undefined;
@@ -502,7 +529,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     count: stockReportRequest.count ?? PAGINATION_LIMIT,
                     page: stockReportRequest.page ?? 1,
                     sort: stockReportRequest.sort ?? '',
-                    sortBy: stockReportRequest.sortBy ?? ''
+                    sortBy: stockReportRequest.sortBy ?? '',
+                    reportNature: reportNature ?? ''
                 };
                 stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getItemWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
@@ -544,7 +572,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     count: stockReportRequest.count ?? PAGINATION_LIMIT,
                     page: stockReportRequest.page ?? 1,
                     sort: stockReportRequest.sort ?? '',
-                    sortBy: stockReportRequest.sortBy ?? ''
+                    sortBy: stockReportRequest.sortBy ?? '',
+                    reportNature: reportNature ?? ''
                 };
                 stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
@@ -596,6 +625,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
                         entity: ''
                     };
                 }
+                queryParams['reportNature'] = reportNature ?? '';
                 balanceReportRequest.from = undefined;
                 balanceReportRequest.to = undefined;
                 balanceReportRequest.inventoryType = this.moduleType;
@@ -670,7 +700,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
      * @memberof ReportsComponent
      */
     public getCustomiseHeaderColumns(event: any): void {
-        this.displayedColumns = event;
+        this.displayedColumns = this.withBatchColumn(event);
     }
 
     /**
@@ -813,6 +843,110 @@ export class ReportsComponent implements OnInit, OnDestroy {
         }
 
         this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName], { queryParams: { tab: 1 } });
+    }
+
+    /**
+     * Inserts the batch column when company batch tracking is enabled.
+     *
+     * @private
+     * @param {string[]} columns Current displayed columns
+     * @return {*}  {string[]}
+     * @memberof ReportsComponent
+     */
+    private withBatchColumn(columns: string[]): string[] {
+        const cols = (columns ?? []).filter(column => column !== 'batch');
+        if (!this.batchTrackingEnabled || this.reportType === InventoryReportType.group) {
+            return cols;
+        }
+        let insertIndex = 0;
+        ['variant_name', 'stock_name', 'group_name', 'unit_name'].forEach(column => {
+            const index = cols.indexOf(column);
+            if (index >= insertIndex) {
+                insertIndex = index + 1;
+            }
+        });
+        cols.splice(insertIndex, 0, 'batch');
+        return cols;
+    }
+
+    /**
+     * Batch count from a report row.
+     *
+     * @param {*} element Report row
+     * @return {*}  {number}
+     * @memberof ReportsComponent
+     */
+    public getBatchCount(element: any): number {
+        return Number(element?.batchCount) || 0;
+    }
+
+    /**
+     * Label for the batch column (`-`, batch name, or `{count} Batch`).
+     *
+     * @param {*} element Report row
+     * @return {*}  {string}
+     * @memberof ReportsComponent
+     */
+    public getBatchDisplay(element: any): string {
+        const count = this.getBatchCount(element);
+        if (count <= 0) {
+            return '-';
+        }
+        if (count === 1) {
+            return element?.batchName || '-';
+        }
+        return `${count} ${this.localeData?.reports?.batch || 'Batch'}`;
+    }
+
+    /**
+     * Opens the batch report for the current module with stock/variant/warehouse filters.
+     *
+     * @param {*} element Report row
+     * @param {Event} [event] Click event
+     * @memberof ReportsComponent
+     */
+    public openBatchReport(element: any, event?: Event): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+        if (this.getBatchCount(element) <= 0) {
+            return;
+        }
+        const type = this.moduleType?.toUpperCase() === 'FIXED_ASSETS' ? 'fixedassets' : this.moduleType?.toLowerCase();
+        const stockUniqueNames = element?.stock?.uniqueName
+            ? [element.stock.uniqueName]
+            : (this.stockReportRequest?.stockUniqueNames ?? []);
+        const variantUniqueNames = element?.variant?.uniqueName
+            ? [element.variant.uniqueName]
+            : (this.stockReportRequest?.variantUniqueNames ?? []);
+        const warehouseUniqueNames = this.stockReportRequest?.warehouseUniqueNames ?? [];
+        const queryParams: any = {};
+        if (stockUniqueNames?.length) {
+            queryParams.stockUniqueNames = stockUniqueNames.join(',');
+        }
+        const stockNames = element?.stock?.name
+            ? [element.stock.name]
+            : [];
+        if (stockNames?.length) {
+            queryParams.stockNames = stockNames.join(',');
+        }
+        if (variantUniqueNames?.length) {
+            queryParams.variantUniqueNames = variantUniqueNames.join(',');
+        }
+        if (warehouseUniqueNames?.length) {
+            queryParams.warehouseUniqueNames = warehouseUniqueNames.join(',');
+        }
+        const from = this.fromDate || this.stockReportRequest?.from;
+        const to = this.toDate || this.stockReportRequest?.to;
+        if (from) {
+            queryParams.from = from;
+        }
+        if (to) {
+            queryParams.to = to;
+        }
+        if (this.selectedReportNature) {
+            queryParams.reportNature = this.selectedReportNature;
+        }
+        this.router.navigate(['/pages/inventory/v2', type, 'batch'], { queryParams });
     }
 
     /**

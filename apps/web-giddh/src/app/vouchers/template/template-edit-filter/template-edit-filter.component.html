@@ -4,6 +4,8 @@
 @let isTallyTemplateOrTemplateA = isTemplateA || isTallyTemplate;
 
 @let isTemplateTypeInvoice = templateType === voucherTypeEnum.invoice;
+@let isTemplateTypeProforma = templateType === voucherTypeEnum.proforma;
+@let isTemplateTypeEstimate = templateType === voucherTypeEnum.estimate;
 @let isTemplateTypeVoucher = templateType === voucherTypeEnum.voucher;
 @let isTemplateTypePurchaseOrder = templateType === voucherTypeEnum.purchase_order;
 @let isTemplateTypePurchaseBill = templateType === voucherTypeEnum.purchase_bill;
@@ -286,9 +288,16 @@
                                 name="showSectionsInline"
                                 [(ngModel)]="customTemplate.showSectionsInline"
                                 (ngModelChange)="onChangeDesignFieldVisibility('showSectionsInline', customTemplate?.showSectionsInline)"
+                                [disabled]="isShowSectionsInlineDisabled()"
                             >
                                 {{ localeData?.show_header_footer_first_last_page }}
                             </mat-checkbox>
+                            @if (isShowSectionsInlineDisabled()) {
+                                <p class="d-flex align-items-start column-gap-1 mt-2 mb-0 font-size-14 ml-2">
+                                    <i class="icon-info text-orange mt-1 pt-1" aria-hidden="true"></i>
+                                    <span>{{ localeData?.show_sections_inline_disabled_info }}</span>
+                                </p>
+                            }
                         </div>
                     </mat-expansion-panel>
 
@@ -440,7 +449,10 @@
                                         @if (
                                             sectionSettings?.header.displayPlaceOfSupply &&
                                             !isThermalTemplate &&
-                                            (isTemplateTypeInvoice || isTemplateTypeVoucher)
+                                            (isTemplateTypeInvoice ||
+                                                isTemplateTypeVoucher ||
+                                                isTemplateTypeProforma ||
+                                                isTemplateTypeEstimate)
                                         ) {
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -579,7 +591,12 @@
                                             ></ng-container>
                                         }
 
-                                        @if (showGstComposition && isTallyTemplateOrTemplateA) {
+                                        @if (
+                                            showGstComposition &&
+                                            isTallyTemplateOrTemplateA &&
+                                            !isTemplateTypeEstimate &&
+                                            !isTemplateTypeProforma
+                                        ) {
                                             <!-- irn and ack number -->
                                             @if (sectionSettings?.header.showEInvoiceDetails) {
                                                 <ng-container
@@ -1613,7 +1630,12 @@
                                                 ></ng-container>
                                             }
                                             <!-- date -->
-                                            @if (sectionSettings?.table.date && !isThermalTemplate) {
+                                            @if (
+                                                sectionSettings?.table.date &&
+                                                !isThermalTemplate &&
+                                                !isTemplateTypeEstimate &&
+                                                !isTemplateTypeProforma
+                                            ) {
                                                 <ng-container
                                                     *ngTemplateOutlet="
                                                         labelRow;
@@ -2000,7 +2022,7 @@
                                                         "
                                                     ></ng-container>
                                                 }
-    
+
                                                 <!-- tds -->
                                                 @if (sectionSettings?.footer?.tds) {
                                                     <ng-container
@@ -2491,7 +2513,7 @@
                                         }
 
                                         <!-- Total Quantity -->
-                                        @if (sectionSettings?.footer?.totalQuantity && isThermalTemplate && isVoucherTypeSales) {
+                                        @if (sectionSettings?.table?.totalQuantity && isThermalTemplate && isVoucherTypeSales) {
                                             <ng-container
                                                 *ngTemplateOutlet="
                                                     labelRow;
@@ -2499,7 +2521,7 @@
                                                         rowId: 'totalQuantityRow',
                                                         showInputField: true,
                                                         showCheckbox: true,
-                                                        section: 'footer',
+                                                        section: 'table',
                                                         field: 'totalQuantity',
                                                         callbacks: [onChangeFieldVisibility],
                                                         name: 'totalQuantity',
@@ -2704,7 +2726,10 @@
                                         @if (
                                             sectionSettings?.footer?.showNotesAtLastPage &&
                                             isTemplateA &&
-                                            (isTemplateTypeInvoice || isTemplateTypeVoucher)
+                                            (isTemplateTypeInvoice ||
+                                                isTemplateTypeVoucher ||
+                                                isTemplateTypeProforma ||
+                                                isTemplateTypeEstimate)
                                         ) {
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -2808,7 +2833,10 @@
                                                     </td>
                                                     <td class="p-2 text-center">
                                                         <span class="font-size-12">
-                                                            @if (!customTemplate.sections['footer'].data['showNotesAtLastPage']?.display && isCharacterFieldFocused('footer', 'message1', 'value')) {
+                                                            @if (
+                                                                !customTemplate.sections['footer'].data['showNotesAtLastPage']?.display &&
+                                                                isCharacterFieldFocused('footer', 'message1', 'value')
+                                                            ) {
                                                                 {{
                                                                     getRemainingCharacters(
                                                                         200,
@@ -2905,7 +2933,10 @@
                                                     </td>
                                                     <td class="p-2 text-center">
                                                         <span class="font-size-12">
-                                                            @if (!customTemplate.sections['footer'].data['showNotesAtLastPage']?.display && isCharacterFieldFocused('footer', 'message1', 'value')) {
+                                                            @if (
+                                                                !customTemplate.sections['footer'].data['showNotesAtLastPage']?.display &&
+                                                                isCharacterFieldFocused('footer', 'message1', 'value')
+                                                            ) {
                                                                 {{
                                                                     getRemainingCharacters(
                                                                         200,
@@ -2999,7 +3030,10 @@
                                                     </td>
                                                     <td class="p-2 text-center">
                                                         <span class="font-size-12">
-                                                            @if (!customTemplate.sections['footer'].data['showNotesAtLastPage']?.display && isCharacterFieldFocused('footer', 'message1', 'secondaryValue')) {
+                                                            @if (
+                                                                !customTemplate.sections['footer'].data['showNotesAtLastPage']?.display &&
+                                                                isCharacterFieldFocused('footer', 'message1', 'secondaryValue')
+                                                            ) {
                                                                 {{
                                                                     getRemainingCharacters(
                                                                         200,

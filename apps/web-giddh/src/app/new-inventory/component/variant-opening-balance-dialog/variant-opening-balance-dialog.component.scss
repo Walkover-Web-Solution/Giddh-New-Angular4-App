@@ -1,0 +1,73 @@
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.variant-opening-balance-dialog {
+    height: 100%;
+}
+
+.warehouse-card {
+    background-color: var(--table-background-color);
+}
+
+.warehouse-main-row {
+    flex-wrap: wrap;
+
+    .warehouse-field {
+        min-width: 160px;
+        flex: 1 1 180px;
+    }
+
+    .qty-field,
+    .amount-field {
+        width: 110px;
+        flex: 0 0 110px;
+    }
+
+    .warehouse-action {
+        margin-bottom: 4px;
+    }
+}
+
+.track-by-batch {
+    padding-bottom: 0 !important;
+}
+
+.batch-list {
+    background-color: transparent;
+    border-color: var(--border-color);
+}
+
+.batch-row-top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 40px;
+}
+
+.batch-row-bottom {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.batch-remove {
+    justify-self: end;
+}
+
+.dialog-footer {
+    padding: 12px 16px 16px;
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+    .warehouse-main-row {
+        .qty-field,
+        .amount-field {
+            flex: 1 1 110px;
+        }
+    }
+
+    .batch-row-top,
+    .batch-row-bottom {
+        grid-template-columns: 1fr;
+    }
+}
