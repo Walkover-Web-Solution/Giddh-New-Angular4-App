@@ -5,6 +5,7 @@ import { GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1Summ
 import { GST_RETURN_ACTIONS } from '../../actions/purchase-invoice/purchase-invoice.const';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { cloneDeep } from '../../lodash-optimized';
+import { buildGspSessionResponse, createEmptyGspSessionResponse, isActiveGspAuthenticated } from '../../gst/constants/gst.constant';
 
 export interface GstRReducerState {
     gstr1OverViewDataInProgress: boolean;
@@ -62,7 +63,7 @@ const initialState: GstRReducerState = {
     viewTransactionInProgress: true,
     currentPeriod: {},
     gstAuthenticated: false,
-    gstSessionResponse: { taxpro: false, vayana: false, excellon: false },
+    gstSessionResponse: createEmptyGspSessionResponse(),
     getGspSessionInProgress: false,
     gstReturnFileInProgress: false,
     gstReturnFileSuccess: false,
@@ -268,11 +269,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
                 authorizeGspSessionOtpInProcess: true,
                 gstAuthenticated: false,
                 gspSessionOtpAuthorized: false,
-                gstSessionResponse: {
-                    taxpro: false,
-                    vayana: false,
-                    excellon: false
-                }
+                gstSessionResponse: createEmptyGspSessionResponse()
             };
         }
 
@@ -284,11 +281,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
                     authorizeGspSessionOtpInProcess: false,
                     gstAuthenticated: true,
                     gspSessionOtpAuthorized: true,
-                    gstSessionResponse: {
-                        taxpro: response.queryString.gsp === 'TAXPRO',
-                        vayana: response.queryString.gsp === 'VAYANA',
-                        excellon: response.queryString.gsp === 'EXCELLON'
-                    }
+                    gstSessionResponse: buildGspSessionResponse(response.queryString.gsp)
                 };
             }
             return {
@@ -296,11 +289,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
                 authorizeGspSessionOtpInProcess: false,
                 gstAuthenticated: false,
                 gspSessionOtpAuthorized: false,
-                gstSessionResponse: {
-                    taxpro: false,
-                    vayana: false,
-                    excellon: false
-                }
+                gstSessionResponse: createEmptyGspSessionResponse()
             };
         }
         // endregion
@@ -310,7 +299,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             return {
                 ...state, gstAuthenticated: false,
                 getGspSessionInProgress: true,
-                gstSessionResponse: { ...state.gstSessionResponse, taxpro: false, vayana: false, excellon: false }
+                gstSessionResponse: createEmptyGspSessionResponse()
             };
         }
 
@@ -319,7 +308,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             if (response?.status === 'success') {
                 let newState = cloneDeep(state);
                 let session = response.body;
-                newState.gstAuthenticated = !!(session?.taxpro || session?.vayana || session?.excellon);
+                newState.gstAuthenticated = isActiveGspAuthenticated(session);
                 newState.gstSessionResponse = session;
                 newState.getGspSessionInProgress = false;
                 return Object.assign({}, state, newState);
@@ -328,7 +317,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
                 ...state,
                 gstAuthenticated: false,
                 getGspSessionInProgress: false,
-                gstSessionResponse: { ...state.gstSessionResponse, taxpro: false, vayana: false, excellon: false }
+                gstSessionResponse: createEmptyGspSessionResponse()
             };
         }
         // endregion
