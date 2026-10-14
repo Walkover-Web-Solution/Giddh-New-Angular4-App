@@ -1,9 +1,6 @@
 <div class="aside-dialog-wrapper d-flex flex-column h-100 variant-opening-balance-dialog">
     <div cdkFocusInitial class="dialog-header">
         <span>{{ localeData?.opening_balance }}</span>
-        <button type="button" matIconButton mat-dialog-close [attr.aria-label]="commonLocaleData?.app_close">
-            <i class="icon-cross"></i>
-        </button>
     </div>
 
     <mat-dialog-content class="dialog-body overflow-auto flex-grow-1">
@@ -28,7 +25,10 @@
 
         <div class="d-flex flex-column row-gap-15">
             @for (warehouseRow of warehouseBalance; track $index; let warehouseIndex = $index) {
-                <div class="warehouse-card border border-radius-8 p-3" [ngClass]="{ 'track-by-batch': !warehouseRow.isShowBatch }">
+                <div
+                    class="warehouse-card border border-radius-8 p-3"
+                    [ngClass]="{ 'track-by-batch': !warehouseRow.isShowBatch && batchTrackingEnabled }"
+                >
                     <div class="d-flex align-items-end column-gap-2 warehouse-main-row">
                         <div class="warehouse-field flex-grow-1">
                             <reactive-dropdown-field
@@ -91,18 +91,20 @@
                         }
                     </div>
 
-                    <div class="d-flex align-items-center column-gap-2 mt-2 mb-2">
-                        <mat-slide-toggle
-                            color="primary"
-                            [checked]="warehouseRow.isShowBatch"
-                            (change)="onTrackByBatchChange(warehouseRow, $event.checked)"
-                            [attr.aria-label]="localeData?.track_by_batch"
-                        >
-                            {{ localeData?.track_by_batch }}
-                        </mat-slide-toggle>
-                    </div>
+                    @if (batchTrackingEnabled) {
+                        <div class="d-flex align-items-center column-gap-2 mt-2 mb-2">
+                            <mat-slide-toggle
+                                color="primary"
+                                [checked]="warehouseRow.isShowBatch"
+                                (change)="onTrackByBatchChange(warehouseRow, $event.checked)"
+                                [attr.aria-label]="localeData?.track_by_batch"
+                            >
+                                {{ localeData?.track_by_batch }}
+                            </mat-slide-toggle>
+                        </div>
+                    }
 
-                    @if (warehouseRow.isShowBatch) {
+                    @if (batchTrackingEnabled && warehouseRow.isShowBatch) {
                         <div class="batch-list border border-radius-8 p-3 mt-2">
                             @if (isWarehouseBatchQtyExceeded(warehouseRow) || isWarehouseBatchAmountExceeded(warehouseRow)) {
                                 <div class="mb-2 font-size-12">
@@ -243,7 +245,7 @@
 
     <div class="dialog-footer d-flex align-items-center justify-content-between flex-wrap row-gap-2 column-gap-2">
         <div class="font-size-14">
-            <span class="text-light text-uppercase font-size-12">{{ localeData?.variant_total }}</span>
+            <span class="text-uppercase font-size-12">{{ localeData?.variant_total }}</span>
             <strong class="d-block">
                 {{ getVariantTotalQty() }}
                 {{ dialogData?.unitName }}

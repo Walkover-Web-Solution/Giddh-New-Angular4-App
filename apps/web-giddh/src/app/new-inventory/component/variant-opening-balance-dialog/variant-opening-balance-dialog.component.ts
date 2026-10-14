@@ -31,6 +31,7 @@ export interface VariantOpeningBalanceDialogData {
     commonLocaleData?: any;
     currencySymbol?: string;
     inputMaskFormat?: string;
+    batchTrackingEnabled?: boolean;
 }
 
 export interface VariantOpeningBalanceDialogResult {
@@ -77,6 +78,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
     private stockUnit: { name?: string; uniqueName?: string } = {};
     /** True after Apply is clicked with validation errors. */
     public isApplySubmitted: boolean = false;
+    /** Company-level batch tracking; when false, warehouse UI only (batches kept in data, not shown). */
+    public batchTrackingEnabled: boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public dialogData: VariantOpeningBalanceDialogData,
@@ -89,17 +92,20 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
         this.currencySymbol = dialogData?.currencySymbol ?? "";
         this.inputMaskFormat = dialogData?.inputMaskFormat ?? "";
         this.warehouses = dialogData?.warehouses ?? [];
+        this.batchTrackingEnabled = !!dialogData?.batchTrackingEnabled;
         this.stockUnit = { ...(dialogData?.stockUnit ?? {}) };
         this.warehouseBalance = this.normalizeIncomingWarehouses(dialogData?.warehouseBalance);
         if (!this.warehouseBalance.length) {
             this.warehouseBalance = [this.createEmptyWarehouseRow()];
         }
-        this.warehouseBalance.forEach(warehouse => {
-            if (warehouse?.warehouse?.uniqueName) {
-                this.searchBatchAvailability("", warehouse.warehouse.uniqueName);
-            }
-        });
-        this.syncSelectedBatchNumbers();
+        if (this.batchTrackingEnabled) {
+            this.warehouseBalance.forEach(warehouse => {
+                if (warehouse?.warehouse?.uniqueName) {
+                    this.searchBatchAvailability("", warehouse.warehouse.uniqueName);
+                }
+            });
+            this.syncSelectedBatchNumbers();
+        }
     }
 
     /**
@@ -171,7 +177,7 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
     }
 
     /**
-     * Clears qty, amount and resets batches for a single warehouse row.
+     * Clears warehouse selection, qty, amount and resets batches for a single warehouse row.
      *
      * @param {number} index Warehouse row index
      * @memberof VariantOpeningBalanceDialogComponent
@@ -181,9 +187,13 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
         if (!row) {
             return;
         }
+        row.warehouse = {
+            name: undefined,
+            uniqueName: undefined
+        };
         row.openingQuantity = 0;
         row.openingAmount = 0;
-        if (row.isShowBatch) {
+        if (this.batchTrackingEnabled && row.isShowBatch) {
             row.batches = [this.createEmptyBatch()];
         } else {
             row.batches = [];
@@ -208,11 +218,13 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             name: option.label,
             uniqueName: option.value
         };
-        if (warehouseChanged) {
+        if (warehouseChanged && this.batchTrackingEnabled) {
             this.filterBatchesForWarehouse(warehouseRow, option.value);
             this.syncSelectedBatchNumbers();
         }
-        this.searchBatchAvailability("", option.value);
+        if (this.batchTrackingEnabled) {
+            this.searchBatchAvailability("", option.value);
+        }
         this.cdr.detectChanges();
     }
 
@@ -225,8 +237,10 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
      * @memberof VariantOpeningBalanceDialogComponent
      */
     private filterBatchesForWarehouse(warehouseRow: any, warehouseUniqueName: string): void {
-        if (!warehouseRow?.isShowBatch) {
-            warehouseRow.batches = [];
+        if (!this.batchTrackingEnabled || !warehouseRow?.isShowBatch) {
+            if (warehouseRow && this.batchTrackingEnabled) {
+                warehouseRow.batches = [];
+            }
             return;
         }
         const selectedWarehouse = String(warehouseUniqueName ?? "").trim();
@@ -433,6 +447,9 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
      * @memberof VariantOpeningBalanceDialogComponent
      */
     public searchBatchAvailability(query: string = "", warehouseUniqueName: string = ""): void {
+        if (!this.batchTrackingEnabled) {
+            return;
+        }
         const warehouseKey = String(warehouseUniqueName ?? "").trim();
         this.inventoryService.getBatchAvailability({
             uniqueName: "",
@@ -554,14 +571,15 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
                     stockUnit: row?.stockUnit?.uniqueName ? { ...row.stockUnit } : { ...this.stockUnit },
                     openingQuantity: Number(row?.openingQuantity) || 0,
                     openingAmount: row?.openingAmount ?? 0,
-                    isShowBatch: hasBatchData,
+                    isShowBatch: this.batchTrackingEnabled && hasBatchData,
+                    // Keep batch data even when tracking UI is off so Apply/save can send it.
                     batches: hasBatchData ? batches : []
                 };
             });
     }
 
     /**
-     * Empty warehouse card with track-by-batch on by default.
+     * Empty warehouse card; track-by-batch on by default only when company batch tracking is enabled.
      *
      * @private
      * @return {*}  {*}
@@ -576,8 +594,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             stockUnit: { ...this.stockUnit },
             openingQuantity: 0,
             openingAmount: 0,
-            isShowBatch: true,
-            batches: [this.createEmptyBatch()]
+            isShowBatch: this.batchTrackingEnabled,
+            batches: this.batchTrackingEnabled ? [this.createEmptyBatch()] : []
         };
     }
 
