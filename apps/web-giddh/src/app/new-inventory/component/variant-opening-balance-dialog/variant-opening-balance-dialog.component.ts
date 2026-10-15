@@ -280,10 +280,7 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
      * @memberof VariantOpeningBalanceDialogComponent
      */
     private filterBatchesForWarehouse(warehouseRow: any, warehouseUniqueName: string): void {
-        if (!this.batchTrackingEnabled || !warehouseRow?.isShowBatch) {
-            if (warehouseRow && this.batchTrackingEnabled) {
-                warehouseRow.batches = [];
-            }
+        if (!warehouseRow || !this.batchTrackingEnabled) {
             return;
         }
         const selectedWarehouse = String(warehouseUniqueName ?? "").trim();
@@ -291,11 +288,16 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             const batchWarehouse = String(batch?.warehouseUniqueName ?? "").trim();
             return !batchWarehouse || batchWarehouse === selectedWarehouse;
         });
+        // isShowBatch is UI-only: keep existing data when hidden; only auto-add an empty row when visible.
+        if (!warehouseRow.isShowBatch) {
+            warehouseRow.batches = keptBatches;
+            return;
+        }
         warehouseRow.batches = keptBatches.length ? keptBatches : [this.createEmptyBatch()];
     }
 
     /**
-     * Toggles batch tracking visibility for a warehouse (`isShowBatch`).
+     * Toggles batch list visibility for a warehouse (`isShowBatch` is UI-only).
      *
      * @param {*} warehouseRow Warehouse balance row
      * @param {boolean} checked Toggle value
