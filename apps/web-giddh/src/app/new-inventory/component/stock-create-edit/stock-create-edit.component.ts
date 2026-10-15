@@ -1365,10 +1365,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             }
             const warehouseBalancePayload = warehouses
                 .map(warehouse => {
-                    // When company batch tracking is on, respect per-warehouse isShowBatch.
-                    // When off, still send batches key (preserve existing data; UI does not show batches).
-                    const includeBatches = !this.batchTrackingEnabled || warehouse?.isShowBatch !== false;
-                    const batches = (includeBatches && Array.isArray(warehouse?.batches) ? warehouse.batches : [])
+                    // isShowBatch is UI-only (show/hide batch rows). Always send batches in the API payload.
+                    const batches = (Array.isArray(warehouse?.batches) ? warehouse.batches : [])
                         .filter(batch => this.isCompleteBatch(batch))
                         .map(batch => ({
                             uniqueName: batch.uniqueName,
@@ -2666,20 +2664,22 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     private filterBatchesForWarehouse(warehouseRow: any, warehouseUniqueName: string): void {
-        if (!warehouseRow || !this.batchTrackingEnabled || warehouseRow.isShowBatch === false) {
-            if (warehouseRow && this.batchTrackingEnabled) {
-                warehouseRow.batches = [];
-            }
+        if (!warehouseRow || !this.batchTrackingEnabled) {
             return;
         }
         const keptBatches = (warehouseRow.batches ?? []).filter(batch => {
             return batch?.uniqueName?.trim() === batch?.batchNumber?.trim();
         });
+        // isShowBatch is UI-only: keep existing data when hidden; only auto-add an empty row when visible.
+        if (warehouseRow.isShowBatch === false) {
+            warehouseRow.batches = keptBatches;
+            return;
+        }
         warehouseRow.batches = keptBatches.length ? keptBatches : [this.createEmptyVariantBatch()];
     }
 
     /**
-     * Toggles batch list visibility for a warehouse (`isShowBatch`).
+     * Toggles batch list visibility for a warehouse (`isShowBatch` is UI-only).
      *
      * @param {*} warehouseRow Warehouse balance row
      * @param {boolean} checked Toggle value
