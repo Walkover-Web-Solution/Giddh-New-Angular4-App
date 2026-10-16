@@ -600,7 +600,11 @@
         "shipped": "Shipped",
         "delivered": "Delivered",
         "received": "Received",
-        "completed": "Completed"
+        "completed": "Completed",
+        "returned": "Returned",
+        "partially_returned": "Partially Returned",
+        "partially_adjusted": "Partially Adjusted",
+        "fully_adjusted": "Fully Adjusted"
     },
     "inventory_invoice_status": {
         "invoiced": "Invoiced",
