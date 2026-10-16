@@ -93,7 +93,6 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         private generalService: GeneralService) {
         this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
             this.exportData = p;
-            this.dataFormatter = new DataFormatter(p, this.selectedCompany, recType, this.generalService);
         });
     }
 
@@ -108,6 +107,8 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
 
     public downloadCSV(value: string) {
         this.showCsvDownloadOptions = false;
+        // Use company from global storage so CSV header has the current address
+        this.dataFormatter = new DataFormatter(this.exportData, this.generalService.activeCompany, this.recType, this.generalService);
         let csv = '';
         let name = '';
         let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);

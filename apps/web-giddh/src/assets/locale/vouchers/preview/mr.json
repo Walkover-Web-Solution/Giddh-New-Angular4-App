@@ -600,7 +600,11 @@
         "shipped": "शिप्ड",
         "delivered": "डिलिव्हर्ड",
         "received": "प्राप्त",
-        "completed": "पूर्ण"
+        "completed": "पूर्ण",
+        "returned": "परत केले",
+        "partially_returned": "अंशतः परत",
+        "partially_adjusted": "अंशतः समायोजित",
+        "fully_adjusted": "पूर्ण समायोजित"
     },
     "inventory_invoice_status": {
         "invoiced": "इनव्हॉइस केले",
