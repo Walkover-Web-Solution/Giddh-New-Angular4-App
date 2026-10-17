@@ -57,18 +57,18 @@
             </mat-tab>
             <mat-tab [label]="localeData?.mobile_number?.tab_heading">
                 <div class="wrap-tab-content- p-3">
-                    <div class="p-3 clear-both mt-1 contact-details-tab">
-                        <div class="sky-blue-bg p-3 mb-4 auth-key-note d-flex column-gap-2 align-items-start" role="note">
+                    <div class="p-3 clear-both mt-1">
+                        <div class="sky-blue-bg p-3 mb-4 border-radius-4 d-flex column-gap-2 align-items-start" role="note">
                             <i class="icon-info font-size-16 text-primary mt-1" aria-hidden="true"></i>
-                            <p class="mb-0">
+                            <p class="mb-0 text-black">
                                 <strong>{{ commonLocaleData?.app_note }}:</strong>
                                 {{ localeData?.mobile_number?.email_auth_key_note }}
                             </p>
                         </div>
 
                         <!-- Email -->
-                        <div class="contact-row">
-                            <div class="contact-control">
+                        <div class="d-grid align-items-center column-gap-3 row-gap-05 mb-4 grid-cols-fixed-fluid grid-stack-small-desktop">
+                            <div class="grid-col-1 grid-row-1">
                                 @if (isEditingEmail) {
                                     <input-field
                                         [name]="'registeredEmail'"
@@ -79,13 +79,15 @@
                                         (ngModelChange)="onEmailInputChange()"
                                     ></input-field>
                                 } @else {
-                                    <div class="contact-view">
-                                        <p class="contact-view-label mb-1">{{ localeData?.mobile_number?.registered_email_address }}</p>
-                                        <p class="contact-view-value mb-0">{{ email }}</p>
+                                    <div class="d-flex flex-column justify-content-center min-h-50">
+                                        <p class="font-size-12 text-light line-height-16 mb-1">
+                                            {{ localeData?.mobile_number?.registered_email_address }}
+                                        </p>
+                                        <p class="font-size-15 line-height-20 word-break-break-all mb-0">{{ email }}</p>
                                     </div>
                                 }
                             </div>
-                            <div class="contact-actions">
+                            <div class="grid-col-2 grid-row-1 d-flex align-items-center min-h-50">
                                 @if (!isEditingEmail) {
                                     <button
                                         type="button"
@@ -109,9 +111,9 @@
                                     </button>
                                 }
                                 @if (showEmailOtp && !isEmailVerified) {
-                                    <div class="otp-line">
+                                    <div class="d-flex align-items-center column-gap-1 row-gap-1 flex-wrap w-100">
                                         <input-field
-                                            class="otp-field"
+                                            class="min-w-150 max-w-150 flex-shrink-0"
                                             [name]="'emailOtp'"
                                             [type]="'tel'"
                                             [floatLabel]="'never'"
@@ -148,9 +150,11 @@
                                 }
                             </div>
                             @if (isEditingEmail) {
-                                <p class="contact-hint mb-0">{{ localeData?.mobile_number?.email_format }}</p>
+                                <p class="grid-col-1 grid-row-2 font-size-12 text-light line-height-20 mb-0">
+                                    {{ localeData?.mobile_number?.email_format }}
+                                </p>
                             }
-                            <div class="contact-meta">
+                            <div class="grid-col-2 grid-row-2 font-size-12 text-light line-height-20">
                                 @if (showEmailOtp && !isEmailVerified) {
                                     <p class="mb-0">
                                         {{ localeData?.mobile_number?.otp_sent_to }}
@@ -161,8 +165,8 @@
                         </div>
 
                         <!-- Mobile -->
-                        <div class="contact-row">
-                            <div class="contact-control">
+                        <div class="d-grid align-items-center column-gap-3 row-gap-05 mb-4 grid-cols-fixed-fluid grid-stack-small-desktop">
+                            <div class="grid-col-1 grid-row-1">
                                 @if (isEditingMobile) {
                                     <mobile-number-input
                                         [formControl]="mobileControl"
@@ -172,13 +176,17 @@
                                         [useImageFlags]="true"
                                     ></mobile-number-input>
                                 } @else {
-                                    <div class="contact-view">
-                                        <p class="contact-view-label mb-1">{{ localeData?.mobile_number?.registered_mobile_number }}</p>
-                                        <p class="contact-view-value mb-0">{{ originalMobile ? '+' + originalMobile : '' }}</p>
+                                    <div class="d-flex flex-column justify-content-center min-h-50">
+                                        <p class="font-size-12 text-light line-height-16 mb-1">
+                                            {{ localeData?.mobile_number?.registered_mobile_number }}
+                                        </p>
+                                        <p class="font-size-15 line-height-20 word-break-break-all mb-0">
+                                            {{ originalMobile ? '+' + originalMobile : '' }}
+                                        </p>
                                     </div>
                                 }
                             </div>
-                            <div class="contact-actions">
+                            <div class="grid-col-2 grid-row-1 d-flex align-items-center min-h-50">
                                 @if (!isEditingMobile) {
                                     <button
                                         type="button"
@@ -202,9 +210,9 @@
                                     </button>
                                 }
                                 @if (showMobileOtp && !isMobileVerified) {
-                                    <div class="otp-line">
+                                    <div class="d-flex align-items-center column-gap-1 row-gap-1 flex-wrap w-100">
                                         <input-field
-                                            class="otp-field"
+                                            class="min-w-150 max-w-150 flex-shrink-0"
                                             [name]="'mobileOtp'"
                                             [type]="'tel'"
                                             [floatLabel]="'never'"
@@ -233,9 +241,11 @@
                                 }
                             </div>
                             @if (isEditingMobile) {
-                                <p class="contact-hint mb-0">{{ localeData?.mobile_number?.mobile_number_format }}</p>
+                                <p class="grid-col-1 grid-row-2 font-size-12 text-light line-height-20 mb-0">
+                                    {{ localeData?.mobile_number?.mobile_number_format }}
+                                </p>
                             }
-                            <div class="contact-meta">
+                            <div class="grid-col-2 grid-row-2 font-size-12 text-light line-height-20">
                                 @if (showMobileOtp && !isMobileVerified) {
                                     <p class="mb-1">
                                         {{ localeData?.mobile_number?.otp_sent_to }}
@@ -247,7 +257,10 @@
                                             @for (channel of otpResendChannels; track channel.value; let last = $last) {
                                                 <button
                                                     type="button"
-                                                    class="contact-channel-btn"
+                                                    class="p-0 border-none bg-transparent text-primary font-weight-semibold text-uppercase"
+                                                    [class.cursor-pointer]="!(mobileResendOtpInProgress || mobileVerifyOtpInProgress)"
+                                                    [class.cursor-not-allowed]="mobileResendOtpInProgress || mobileVerifyOtpInProgress"
+                                                    [class.opacity-50]="mobileResendOtpInProgress || mobileVerifyOtpInProgress"
                                                     [disabled]="mobileResendOtpInProgress || mobileVerifyOtpInProgress"
                                                     (click)="resendMobileOtp(channel.value)"
                                                 >
@@ -264,11 +277,11 @@
                         </div>
 
                         @if (isEditingEmail || isEditingMobile) {
-                            <div class="contact-save d-flex justify-content-start">
+                            <div class="d-flex justify-content-start border-top pt-3 mb-4">
                                 <button
                                     type="button"
                                     matButton="filled"
-                                    class="save-contact-btn"
+                                    class="min-width-160"
                                     [disabled]="isSavingContact"
                                     (click)="saveContactChanges()"
                                 >
