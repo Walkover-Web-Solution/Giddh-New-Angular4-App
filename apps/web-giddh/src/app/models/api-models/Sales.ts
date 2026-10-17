@@ -29,7 +29,9 @@ export enum VoucherTypeEnum {
     invoice = 'invoice',
     voucher = 'voucher',
     purchase_bill = 'purchase_bill',
-    purchase_order = 'purchase_order'
+    purchase_order = 'purchase_order',
+    deliveryChallan = 'delivery-challan',
+    receiptNote = 'receipt-note'
 };
 
 export enum TemplateTypeEnum {

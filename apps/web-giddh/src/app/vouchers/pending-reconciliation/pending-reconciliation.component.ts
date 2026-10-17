@@ -873,8 +873,6 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
             partyName: account.name,
             accountUniqueName: account.uniqueName,
             grandTotal: item.grandTotal,
-            currencySymbol: this.company.baseCurrencySymbol,
-            currencyCode: this.company.baseCurrency,
             invoiceStatus: item.invoiceStatus,
             invoiceStatusLabel: this.getInvoiceStatusLabel(item.invoiceStatus),
             documentStatus: item.statusName || item.status?.statusName || "",
