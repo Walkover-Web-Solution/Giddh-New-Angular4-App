@@ -347,18 +347,37 @@ export class VouchersUtilityService {
             };
         }
 
-        const documentItemsByVariant: Record<string, any> = {};
-        const documentItemsByStock: Record<string, any> = {};
-        const variantNames = {};
+        // Queue document items per variant/stock so duplicate line items keep their own remainingQuantity
+        // (a plain Record overwrites when the same stock appears on multiple entries).
+        const documentItemsByVariant: Record<string, any[]> = {};
+        const documentItemsByStock: Record<string, any[]> = {};
+        const variantNames: Record<string, string> = {};
         voucherDetails.documentItems?.forEach((item) => {
             if (item.variant?.uniqueName) {
                 variantNames[item.variant.uniqueName] = item.variant.name;
-                documentItemsByVariant[item.variant.uniqueName] = item;
+                (documentItemsByVariant[item.variant.uniqueName] ??= []).push(item);
             }
             if (item.stock?.uniqueName) {
-                documentItemsByStock[item.stock.uniqueName] = item;
+                (documentItemsByStock[item.stock.uniqueName] ??= []).push(item);
             }
         });
+
+        const takeDocumentItem = (stock: { variant?: { uniqueName?: string }; uniqueName?: string }): any => {
+            const variantKey = stock.variant?.uniqueName;
+            if (variantKey && documentItemsByVariant[variantKey]?.length) {
+                const item = documentItemsByVariant[variantKey].shift();
+                const stockQueue = stock.uniqueName ? documentItemsByStock[stock.uniqueName] : undefined;
+                const stockIndex = stockQueue?.indexOf(item) ?? -1;
+                if (stockIndex >= 0) {
+                    stockQueue.splice(stockIndex, 1);
+                }
+                return item;
+            }
+            if (stock.uniqueName && documentItemsByStock[stock.uniqueName]?.length) {
+                return documentItemsByStock[stock.uniqueName].shift();
+            }
+            return undefined;
+        };
 
         let voucherGrandTotal = 0;
         voucherDetails.entries = (voucherDetails.entries || []).map((entry) => {
@@ -372,8 +391,7 @@ export class VouchersUtilityService {
                     return acc;
                 }
 
-                const documentItem = documentItemsByVariant[stock.variant?.uniqueName]
-                    ?? documentItemsByStock[stock.uniqueName];
+                const documentItem = takeDocumentItem(stock);
                 const rate = Number(
                     stock.rate?.rateForAccount
                     ?? stock.rate?.amountForAccount
