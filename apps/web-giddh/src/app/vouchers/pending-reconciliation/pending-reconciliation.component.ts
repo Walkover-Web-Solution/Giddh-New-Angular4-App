@@ -876,7 +876,9 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
             invoiceStatus: item.invoiceStatus,
             invoiceStatusLabel: this.getInvoiceStatusLabel(item.invoiceStatus),
             documentStatus: item.statusName || item.status?.statusName || "",
-            linkedInvoiceCount: item.linkedInvoiceCount ?? 0
+            linkedInvoiceCount: item.linkedInvoiceCount ?? 0,
+            currencySymbol: item.accountCurrencySymbol,
+            currencyCode: item.accountCurrencyCode
         };
     }
 
