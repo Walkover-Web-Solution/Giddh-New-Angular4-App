@@ -296,8 +296,8 @@
                                             *ngIf="
                                                 inventoryViaBusinessDocument &&
                                                 ((!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
-                                                (currentCompanyBranches?.length <= 1 &&
-                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)))
+                                                    (currentCompanyBranches?.length <= 1 &&
+                                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)))
                                             "
                                         >
                                             <div class="mt-4 mb-1 d-flex align-items-center">
@@ -537,7 +537,7 @@
                                     </p>
                                 </div>
                                 <mat-divider></mat-divider>
-                                <button mat-menu-item class="font-size-16" [routerLink]="['/pages/user-details/mobile-number']">
+                                <button mat-menu-item class="font-size-16" [routerLink]="['/pages/user-details/contact-details']">
                                     {{ commonLocaleData?.app_user_settings }}
                                 </button>
                                 <mat-divider></mat-divider>

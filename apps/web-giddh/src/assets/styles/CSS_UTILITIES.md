@@ -292,6 +292,11 @@ Examples: `.min-h-100`, `.max-h-500`, `.min-w-200`, `.max-w-1000`.
 | `.d-grid` `.d-inline-grid` | display |
 | `.grid-column-3` | `repeat(3, 1fr)` |
 | `.grid-child-column-full` | `grid-column: 1 / -1` |
+| `.grid-col-1` … `.grid-col-4` | `grid-column` |
+| `.grid-row-1` … `.grid-row-4` `.grid-row-auto` | `grid-row` |
+| `.grid-cols-1` | `1fr` |
+| `.grid-cols-fixed-fluid` | `minmax(280px, 380px) minmax(0, 1fr)` |
+| `.grid-stack-small-desktop` | one column below 1024px |
 | `.column-gap-05` | 5px |
 | `.column-gap-1` | 10px |
 | `.column-gap-15` | 15px |
