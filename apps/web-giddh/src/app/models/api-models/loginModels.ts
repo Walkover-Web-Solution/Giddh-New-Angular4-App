@@ -80,3 +80,21 @@ export class AuthKeyResponse {
     public authKey: string;
     public uniqueName: string;
 }
+
+/** Payload for POST /users/{userUniqueName}/contact — send only changed fields */
+export interface UpdateUserContactRequest {
+    email?: string;
+    mobile?: string;
+    emailAccessToken?: string;
+    mobileAccessToken?: string;
+}
+
+/** Response body for contact update */
+export interface UpdateUserContactResponse {
+    uniqueName: string;
+    email: string;
+    contactNo: string;
+    isVerified: boolean;
+    mobileVerified: boolean;
+    authKey?: string;
+}

@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
+import { UntypedFormControl } from '@angular/forms';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
 import { GeneralActions } from '../actions/general/general.actions';
 import { ToasterService } from '../services/toaster.service';
-import { CompanyResponse } from '../models/api-models/Company';
-import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
+import { UpdateUserContactRequest, UserDetails } from '../models/api-models/loginModels';
 import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { ClipboardService } from 'ngx-clipboard';
 import { LoginActions } from '../actions/login.action';
@@ -20,6 +20,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL } from '../app.constant';
+
+declare var initSendOTP: (config: Record<string, unknown>) => void;
 
 dayjs.extend(duration)
 @Component({
@@ -34,29 +37,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public isCopied: boolean = false;
     public userAuthKey: string = '';
     public twoWayAuth: boolean = false;
-    public phoneNumber: string = '';
-    public oneTimePassword: string = '';
-    public countryCode: string = '';
-    public showVerificationBox: boolean = false;
-    public amount: number = 0;
-    public discount: number = 0;
-    public payStep2: boolean = false;
-    public payStep3: boolean = false;
-    public isHaveCoupon: boolean = false;
-    public couponcode: string = '';
-    public payAlert: any[] = [];
-    public directPay: boolean = false;
-    public disableRazorPay: boolean = false;
-    public contactNo$: Observable<string>;
     public subscriptions: any;
     public transactions: any;
     public companies: any;
     public companyTransactions: any;
-    public countryCode$: Observable<string>;
-    public isAddNewMobileNoInProcess$: Observable<boolean>;
-    public isAddNewMobileNoSuccess$: Observable<boolean>;
-    public isVerifyAddNewMobileNoInProcess$: Observable<boolean>;
-    public isVerifyAddNewMobileNoSuccess$: Observable<boolean>;
     public authenticateTwoWay$: Observable<boolean>;
     public user: UserDetails = null;
     public apiTabActivated: boolean = false;
@@ -77,14 +61,52 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['ipaddress', 'signindate', 'signintime', 'duration', 'agent', 'action'];
     /** Holds Active Tab Index */
     public activeTabIndex: number = 0;
-    /** Holds Tab Name */
-    private tabName = ['auth-key', 'mobile-number', 'session', 'subscription'];
+    /** Holds Tab Name — contact-details replaces deprecated mobile-number */
+    private tabName = ['auth-key', 'contact-details', 'session', 'subscription'];
     /** Holds True if API calling in progress in old subscription page */
     public isSubscriptionLoading: boolean = false;
     /** Holds subscription id */
     public subscriptionId: string = '';
     /** Holds profile data */
     public profileData: any = null;
+
+    /** Original email loaded from session (for change detection) */
+    public originalEmail: string = '';
+    /** Original mobile with country code digits only */
+    public originalMobile: string = '';
+    /** Editable email value */
+    public email: string = '';
+    /** Mobile form control for mobile-number-input (value includes +countryCode) */
+    public mobileControl: UntypedFormControl = new UntypedFormControl({ value: '', disabled: true });
+    /** Email OTP input */
+    public emailOtp: string = '';
+    /** Mobile OTP input */
+    public mobileOtp: string = '';
+    /** MSG91 request id for email OTP */
+    public emailOtpRequestId: string = '';
+    /** MSG91 request id for mobile OTP */
+    public mobileOtpRequestId: string = '';
+    /** MSG91 access token after email OTP verify */
+    public emailAccessToken: string = '';
+    /** MSG91 access token after mobile OTP verify */
+    public mobileAccessToken: string = '';
+    public showEmailOtp: boolean = false;
+    public showMobileOtp: boolean = false;
+    public isEmailVerified: boolean = false;
+    public isMobileVerified: boolean = false;
+    public emailSendOtpInProgress: boolean = false;
+    public mobileSendOtpInProgress: boolean = false;
+    public emailVerifyOtpInProgress: boolean = false;
+    public mobileVerifyOtpInProgress: boolean = false;
+    public emailResendOtpInProgress: boolean = false;
+    public mobileResendOtpInProgress: boolean = false;
+    public isSavingContact: boolean = false;
+    public isEditingEmail: boolean = false;
+    public isEditingMobile: boolean = false;
+    /** True once MSG91 widget script is initialized */
+    private isOtpWidgetReady: boolean = false;
+    /** MSG91 mobile resend channels (VOICE / SMS / WHATSAPP), excludes email channel 3 */
+    public otpResendChannels: Array<{ name: string; value: string | number }> = [];
 
 
     constructor(private store: Store<AppState>,
@@ -102,21 +124,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig: IServiceConfigArgs
     ) {
         this.apiPostmanDocUrl = this.serviceConfig.API_DOC_URL;
-        this.contactNo$ = this.store.pipe(select(appState => {
-            if (appState.session.user) {
-                return appState.session.user.user.contactNo;
-            }
-        }), takeUntil(this.destroyed$));
-        this.countryCode$ = this.store.pipe(select(appState => {
-            if (appState.session.user) {
-                return appState.session.user.countryCode;
-            }
-        }), takeUntil(this.destroyed$));
-
-        this.isAddNewMobileNoInProcess$ = this.store.pipe(select(appState => appState.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
-        this.isAddNewMobileNoSuccess$ = this.store.pipe(select(appState => appState.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
-        this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(appState => appState.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
-        this.isVerifyAddNewMobileNoSuccess$ = this.store.pipe(select(appState => appState.login.isVerifyAddNewMobileNoSuccess), takeUntil(this.destroyed$));
         this.userSessionResponse$ = this.store.pipe(select(appState => appState.userLoggedInSessions.Usersession), takeUntil(this.destroyed$));
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(appState => appState.settings.getProfileInProgress), takeUntil(this.destroyed$));
 
@@ -151,10 +158,20 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         }
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params['type'] && this.tabName[this.activeTabIndex] !== params['type']) {
-                this.activeTabIndex = this.tabName.indexOf(params['type']);
+            const routeType = params['type'] === 'mobile-number' ? 'contact-details' : params['type'];
+            if (params['type'] === 'mobile-number') {
+                this.router.navigate(['pages/user-details/contact-details'], { replaceUrl: true });
+            }
+            if (routeType && this.tabName[this.activeTabIndex] !== routeType) {
+                const tabIndex = this.tabName.indexOf(routeType);
+                if (tabIndex > -1) {
+                    this.activeTabIndex = tabIndex;
+                }
             } else if (!params['type'] && !this.activeTabIndex) {
                 this.activeTabIndex = 0;
+            }
+            if (this.activeTabIndex === 1) {
+                this.initOtpWidget();
             }
         });
 
@@ -173,15 +190,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.contactNo$.subscribe(appState => this.phoneNumber = appState);
-        this.countryCode$.subscribe(appState => this.countryCode = appState);
-        this.isAddNewMobileNoSuccess$.subscribe(appState => this.showVerificationBox = appState);
-        this.isVerifyAddNewMobileNoSuccess$.subscribe(appState => {
-            if (appState) {
-                this.oneTimePassword = '';
-                this.showVerificationBox = false;
-            }
-        });
         this.authenticateTwoWay$.subscribe(response => {
             this.twoWayAuth = (response) ? true : false;
         });
@@ -202,7 +210,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (user) {
                 this.user = cloneDeep(user.user);
                 this.userSessionId = cloneDeep(user.session?.id);
+                this.patchContactFieldsFromUser();
             }
+        });
+
+        this.mobileControl.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            if (this.isEditingMobile) {
+                this.resetMobileOtpState();
+            }
+            this.changeDetectionRef.detectChanges();
         });
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response: any) => {
@@ -251,25 +267,496 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
     }
 
-    public addNumber(no: string) {
-        this.oneTimePassword = '';
-        const mobileRegex = /^[0-9]{1,10}$/;
-        if (mobileRegex.test(no) && (no?.length === 10)) {
-            const request: SignupWithMobile = new SignupWithMobile();
-            request.countryCode = Number(this.countryCode) || 91;
-            request.mobileNumber = this.phoneNumber;
-            this.store.dispatch(this.loginAction.AddNewMobileNo(request));
+    /**
+     * Loads email/mobile from session user into editable fields
+     *
+     * @private
+     * @param {boolean} [force=false] When true, overwrites in-progress edits (e.g. after save)
+     * @memberof SubscriptionComponent
+     */
+    private patchContactFieldsFromUser(force: boolean = false): void {
+        if (!this.user) {
+            return;
+        }
+        if (!force && (this.isEditingEmail || this.isEditingMobile)) {
+            return;
+        }
+        this.originalEmail = (this.user.email ?? '').trim();
+        this.email = this.originalEmail;
+        this.originalMobile = this.normalizeMobile(this.user.contactNo ?? this.user.mobileNo ?? '');
+        const mobileWithPlus = this.originalMobile ? `+${this.originalMobile}` : '';
+        this.mobileControl.setValue(mobileWithPlus, { emitEvent: false });
+        this.resetEmailOtpState();
+        this.resetMobileOtpState();
+        this.isEditingEmail = false;
+        this.isEditingMobile = false;
+        this.mobileControl.disable({ emitEvent: false });
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Strips non-digits from mobile (API expects e.g. 919876543210)
+     *
+     * @private
+     * @param {string} value
+     * @returns {string}
+     * @memberof SubscriptionComponent
+     */
+    private normalizeMobile(value: string): string {
+        return (value ?? '').replace(/\D/g, '');
+    }
+
+    /**
+     * Current mobile digits from control (country code included)
+     *
+     * @returns {string}
+     * @memberof SubscriptionComponent
+     */
+    public getCurrentMobileDigits(): string {
+        return this.normalizeMobile(this.mobileControl.value ?? '');
+    }
+
+    /**
+     * Whether email value differs from original
+     *
+     * @returns {boolean}
+     * @memberof SubscriptionComponent
+     */
+    public isEmailChanged(): boolean {
+        return this.email.trim().toLowerCase() !== this.originalEmail.toLowerCase();
+    }
+
+    /**
+     * Whether mobile value differs from original
+     *
+     * @returns {boolean}
+     * @memberof SubscriptionComponent
+     */
+    public isMobileChanged(): boolean {
+        return this.getCurrentMobileDigits() !== this.originalMobile;
+    }
+
+    /**
+     * Enables email editing
+     *
+     * @memberof SubscriptionComponent
+     */
+    public enableEmailEdit(): void {
+        this.isEditingEmail = true;
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Enables mobile editing
+     *
+     * @memberof SubscriptionComponent
+     */
+    public enableMobileEdit(): void {
+        this.isEditingMobile = true;
+        this.mobileControl.enable({ emitEvent: false });
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Resets email OTP verification state when value changes
+     *
+     * @memberof SubscriptionComponent
+     */
+    public onEmailInputChange(): void {
+        this.resetEmailOtpState();
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Initializes MSG91 OTP widget (same pattern as add-company / signup)
+     *
+     * @private
+     * @memberof SubscriptionComponent
+     */
+    private initOtpWidget(): void {
+        if (this.isOtpWidgetReady && typeof window['sendOtp'] === 'function') {
+            this.loadOtpResendChannels();
+            return;
+        }
+
+        const configuration = {
+            widgetId: this.serviceConfig.OTP_WIDGET_ID_WEB || this.serviceConfig.OTP_WIDGET_ID,
+            tokenAuth: this.serviceConfig.OTP_WIDGET_TOKEN_WEB || this.serviceConfig.OTP_TOKEN_AUTH,
+            exposeMethods: true,
+            success: () => { },
+            failure: (error: { message?: string }) => {
+                this.toasty.errorToast(error?.message);
+            }
+        };
+
+        if (window['initSendOTP'] === undefined) {
+            const scriptTag = document.createElement('script');
+            scriptTag.src = Configuration.isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            scriptTag.onload = () => {
+                initSendOTP(configuration);
+                this.isOtpWidgetReady = true;
+                // Widget channel list is available shortly after init (same delay as website signup)
+                setTimeout(() => this.loadOtpResendChannels(), 2000);
+            };
+            document.body.appendChild(scriptTag);
         } else {
-            this.toasty.errorToast(this.localeData?.mobile_number?.mobile_number_validation_error);
+            initSendOTP(configuration);
+            this.isOtpWidgetReady = true;
+            setTimeout(() => this.loadOtpResendChannels(), 2000);
         }
     }
 
-    public verifyNumber() {
-        const request: VerifyMobileModel = new VerifyMobileModel();
-        request.countryCode = Number(this.countryCode) || 91;
-        request.mobileNumber = this.phoneNumber;
-        request.oneTimePassword = this.oneTimePassword;
-        this.store.dispatch(this.loginAction.VerifyAddNewMobileNo(request));
+    /**
+     * Loads MSG91 resend channels for mobile (VOICE / SMS / WHATSAPP).
+     * Email channel value "3" is excluded — same as website signup.js / msg91Otp.getResendChannels.
+     *
+     * @private
+     * @memberof SubscriptionComponent
+     */
+    private loadOtpResendChannels(): void {
+        if (typeof window['getWidgetData'] !== 'function') {
+            return;
+        }
+        const widgetData = window['getWidgetData']();
+        if (!widgetData?.processes?.length) {
+            return;
+        }
+        const seen = new Set<string>();
+        const channels: Array<{ name: string; value: string | number }> = [];
+        widgetData.processes.forEach((process: { channel?: { name?: string; value?: string | number } }) => {
+            const channel = process?.channel;
+            if (!channel || channel.value == null || String(channel.value) === '3' || seen.has(String(channel.value))) {
+                return;
+            }
+            seen.add(String(channel.value));
+            channels.push({ name: channel.name ?? String(channel.value), value: channel.value });
+        });
+        this.otpResendChannels = channels;
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Sends OTP to email via MSG91
+     *
+     * @memberof SubscriptionComponent
+     */
+    public sendEmailOtp(): void {
+        const email = this.email?.trim();
+        if (!email || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+            this.toasty.errorToast(this.localeData?.mobile_number?.email_validation_error);
+            return;
+        }
+        if (!this.isEmailChanged()) {
+            return;
+        }
+        this.initOtpWidget();
+        if (typeof window['sendOtp'] !== 'function') {
+            this.toasty.errorToast(this.localeData?.mobile_number?.email_validation_error);
+            return;
+        }
+        this.emailSendOtpInProgress = true;
+        this.resetEmailOtpState(false);
+        window['sendOtp'](
+            email,
+            (data: { message?: string }) => {
+                this.emailSendOtpInProgress = false;
+                this.emailOtpRequestId = data?.message ?? '';
+                this.showEmailOtp = true;
+                this.toasty.successToast(this.localeData?.mobile_number?.otp_sent);
+                this.changeDetectionRef.detectChanges();
+            },
+            (error: { message?: string } | string) => {
+                this.emailSendOtpInProgress = false;
+                this.showEmailOtp = false;
+                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
+                this.changeDetectionRef.detectChanges();
+            }
+        );
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Sends OTP to mobile via MSG91
+     *
+     * @memberof SubscriptionComponent
+     */
+    public sendMobileOtp(): void {
+        const mobile = this.getCurrentMobileDigits();
+        if (!mobile || this.mobileControl.invalid) {
+            this.toasty.errorToast(this.localeData?.mobile_number?.mobile_number_validation_error);
+            return;
+        }
+        if (!this.isMobileChanged()) {
+            return;
+        }
+        this.initOtpWidget();
+        if (typeof window['sendOtp'] !== 'function') {
+            this.toasty.errorToast(this.localeData?.mobile_number?.mobile_number_validation_error);
+            return;
+        }
+        this.mobileSendOtpInProgress = true;
+        this.resetMobileOtpState(false);
+        window['sendOtp'](
+            mobile,
+            (data: { message?: string }) => {
+                this.mobileSendOtpInProgress = false;
+                this.mobileOtpRequestId = data?.message ?? '';
+                this.showMobileOtp = true;
+                this.loadOtpResendChannels();
+                this.toasty.successToast(this.localeData?.mobile_number?.otp_sent);
+                this.changeDetectionRef.detectChanges();
+            },
+            (error: { message?: string } | string) => {
+                this.mobileSendOtpInProgress = false;
+                this.showMobileOtp = false;
+                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
+                this.changeDetectionRef.detectChanges();
+            }
+        );
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Resends email OTP (MSG91 channel 3 = email)
+     *
+     * @memberof SubscriptionComponent
+     */
+    public resendEmailOtp(): void {
+        if (!this.emailOtpRequestId || typeof window['retryOtp'] !== 'function') {
+            return;
+        }
+        this.emailResendOtpInProgress = true;
+        this.emailOtp = '';
+        this.isEmailVerified = false;
+        this.emailAccessToken = '';
+        window['retryOtp'](
+            3,
+            () => {
+                this.emailResendOtpInProgress = false;
+                this.toasty.successToast(this.localeData?.mobile_number?.otp_resent);
+                this.changeDetectionRef.detectChanges();
+            },
+            (error: { message?: string } | string) => {
+                this.emailResendOtpInProgress = false;
+                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
+                this.changeDetectionRef.detectChanges();
+            },
+            this.emailOtpRequestId
+        );
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Resends mobile OTP on selected MSG91 channel (VOICE / SMS / WHATSAPP)
+     *
+     * @param {string | number} channel Channel value from widget processes
+     * @memberof SubscriptionComponent
+     */
+    public resendMobileOtp(channel: string | number): void {
+        if (!this.mobileOtpRequestId || typeof window['retryOtp'] !== 'function' || this.mobileResendOtpInProgress) {
+            return;
+        }
+        this.mobileResendOtpInProgress = true;
+        this.mobileOtp = '';
+        this.isMobileVerified = false;
+        this.mobileAccessToken = '';
+        window['retryOtp'](
+            channel,
+            () => {
+                this.mobileResendOtpInProgress = false;
+                this.toasty.successToast(this.localeData?.mobile_number?.otp_resent);
+                this.changeDetectionRef.detectChanges();
+            },
+            (error: { message?: string } | string) => {
+                this.mobileResendOtpInProgress = false;
+                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
+                this.changeDetectionRef.detectChanges();
+            },
+            this.mobileOtpRequestId
+        );
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Verifies email OTP via MSG91 and stores access token
+     *
+     * @memberof SubscriptionComponent
+     */
+    public verifyEmailOtp(): void {
+        if (!this.emailOtp?.trim()) {
+            this.toasty.errorToast(this.localeData?.mobile_number?.enter_valid_otp);
+            return;
+        }
+        if (!this.emailOtpRequestId || typeof window['verifyOtp'] !== 'function') {
+            return;
+        }
+        this.emailVerifyOtpInProgress = true;
+        window['verifyOtp'](
+            this.emailOtp.trim(),
+            (data: { message?: string }) => {
+                this.emailVerifyOtpInProgress = false;
+                this.isEmailVerified = true;
+                this.emailAccessToken = data?.message ?? '';
+                this.showEmailOtp = false;
+                this.toasty.successToast(this.localeData?.mobile_number?.otp_verified);
+                this.changeDetectionRef.detectChanges();
+            },
+            (error: { message?: string } | string) => {
+                this.emailVerifyOtpInProgress = false;
+                this.isEmailVerified = false;
+                this.emailAccessToken = '';
+                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
+                this.changeDetectionRef.detectChanges();
+            },
+            this.emailOtpRequestId
+        );
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Verifies mobile OTP via MSG91 and stores access token
+     *
+     * @memberof SubscriptionComponent
+     */
+    public verifyMobileOtp(): void {
+        if (!this.mobileOtp?.trim()) {
+            this.toasty.errorToast(this.localeData?.mobile_number?.enter_valid_otp);
+            return;
+        }
+        if (!this.mobileOtpRequestId || typeof window['verifyOtp'] !== 'function') {
+            return;
+        }
+        this.mobileVerifyOtpInProgress = true;
+        window['verifyOtp'](
+            this.mobileOtp.trim(),
+            (data: { message?: string }) => {
+                this.mobileVerifyOtpInProgress = false;
+                this.isMobileVerified = true;
+                this.mobileAccessToken = data?.message ?? '';
+                this.showMobileOtp = false;
+                this.toasty.successToast(this.localeData?.mobile_number?.otp_verified);
+                this.changeDetectionRef.detectChanges();
+            },
+            (error: { message?: string } | string) => {
+                this.mobileVerifyOtpInProgress = false;
+                this.isMobileVerified = false;
+                this.mobileAccessToken = '';
+                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
+                this.changeDetectionRef.detectChanges();
+            },
+            this.mobileOtpRequestId
+        );
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Saves only changed + OTP-verified contact fields via POST /users/{uniqueName}/contact
+     *
+     * @memberof SubscriptionComponent
+     */
+    public saveContactChanges(): void {
+        const emailChanged = this.isEmailChanged();
+        const mobileChanged = this.isMobileChanged();
+
+        if (!emailChanged && !mobileChanged) {
+            this.toasty.errorToast(this.localeData?.mobile_number?.no_changes_to_save);
+            return;
+        }
+
+        if ((emailChanged && !this.isEmailVerified) || (mobileChanged && !this.isMobileVerified)) {
+            this.toasty.errorToast(this.localeData?.mobile_number?.verify_before_save);
+            return;
+        }
+
+        const payload: UpdateUserContactRequest = {};
+        if (emailChanged && this.isEmailVerified && this.emailAccessToken) {
+            payload.email = this.email.trim();
+            payload.emailAccessToken = this.emailAccessToken;
+        }
+        if (mobileChanged && this.isMobileVerified && this.mobileAccessToken) {
+            payload.mobile = this.getCurrentMobileDigits();
+            payload.mobileAccessToken = this.mobileAccessToken;
+        }
+
+        if (!payload.email && !payload.mobile) {
+            this.toasty.errorToast(this.localeData?.mobile_number?.no_changes_to_save);
+            return;
+        }
+
+        this.isSavingContact = true;
+        this.loginService.updateUserContact(payload).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isSavingContact = false;
+            if (response?.status === 'success') {
+                const body = response.body;
+                if (body?.authKey) {
+                    this.userAuthKey = body.authKey;
+                    this.toasty.successToast(this.localeData?.mobile_number?.new_auth_key_message);
+                } else {
+                    this.toasty.successToast(this.localeData?.mobile_number?.contact_update_success);
+                }
+                if (this.user && body) {
+                    this.user.email = body.email;
+                    this.user.contactNo = body.contactNo;
+                    if (body.uniqueName) {
+                        this.user.uniqueName = body.uniqueName;
+                    }
+                    this.generalService.user = {
+                        ...this.generalService.user,
+                        email: body.email,
+                        contactNo: body.contactNo,
+                        uniqueName: body.uniqueName || this.generalService.user?.uniqueName
+                    };
+                }
+                if (body) {
+                    this.originalEmail = (body.email ?? '').trim();
+                    this.email = this.originalEmail;
+                    this.originalMobile = this.normalizeMobile(body.contactNo ?? '');
+                    const mobileWithPlus = this.originalMobile ? `+${this.originalMobile}` : '';
+                    this.mobileControl.setValue(mobileWithPlus, { emitEvent: false });
+                    this.resetEmailOtpState();
+                    this.resetMobileOtpState();
+                    this.isEditingEmail = false;
+                    this.isEditingMobile = false;
+                    this.mobileControl.disable({ emitEvent: false });
+                }
+                this.store.dispatch(this.loginAction.FetchUserDetails());
+            } else {
+                this.toasty.errorToast(response?.message);
+            }
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * @private
+     * @param {boolean} [clearRequestId=true]
+     * @memberof SubscriptionComponent
+     */
+    private resetEmailOtpState(clearRequestId: boolean = true): void {
+        this.emailOtp = '';
+        this.emailAccessToken = '';
+        this.isEmailVerified = false;
+        this.showEmailOtp = false;
+        if (clearRequestId) {
+            this.emailOtpRequestId = '';
+        }
+    }
+
+    /**
+     * @private
+     * @param {boolean} [clearRequestId=true]
+     * @memberof SubscriptionComponent
+     */
+    private resetMobileOtpState(clearRequestId: boolean = true): void {
+        this.mobileOtp = '';
+        this.mobileAccessToken = '';
+        this.isMobileVerified = false;
+        this.showMobileOtp = false;
+        if (clearRequestId) {
+            this.mobileOtpRequestId = '';
+        }
     }
 
     public changeTwoWayAuth() {
@@ -367,6 +854,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      */
     public selectTab(event: MatTabChangeEvent): void {
         this.activeTabIndex = event?.index;
+        if (this.activeTabIndex === 1) {
+            this.initOtpWidget();
+        }
         this.onTabChanged();
     }
 
