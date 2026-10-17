@@ -20,9 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL } from '../app.constant';
-
-declare var initSendOTP: (config: Record<string, unknown>) => void;
+import { Msg91OtpChannel, Msg91OtpService } from '../services/msg91-otp.service';
 
 dayjs.extend(duration)
 @Component({
@@ -103,10 +101,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public isSavingContact: boolean = false;
     public isEditingEmail: boolean = false;
     public isEditingMobile: boolean = false;
-    /** True once MSG91 widget script is initialized */
-    private isOtpWidgetReady: boolean = false;
     /** MSG91 mobile resend channels (VOICE / SMS / WHATSAPP), excludes email channel 3 */
-    public otpResendChannels: Array<{ name: string; value: string | number }> = [];
+    public otpResendChannels: Msg91OtpChannel[] = [];
 
 
     constructor(private store: Store<AppState>,
@@ -121,6 +117,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private generalService: GeneralService,
         private clipboardService: ClipboardService,
+        private msg91OtpService: Msg91OtpService,
         @Inject(ServiceConfig) private serviceConfig: IServiceConfigArgs
     ) {
         this.apiPostmanDocUrl = this.serviceConfig.API_DOC_URL;
@@ -368,73 +365,33 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Initializes MSG91 OTP widget (same pattern as add-company / signup)
+     * Preloads MSG91 widget and mobile resend channels (VOICE / SMS / WHATSAPP).
      *
      * @private
      * @memberof SubscriptionComponent
      */
     private initOtpWidget(): void {
-        if (this.isOtpWidgetReady && typeof window['sendOtp'] === 'function') {
-            this.loadOtpResendChannels();
-            return;
-        }
-
-        const configuration = {
-            widgetId: this.serviceConfig.OTP_WIDGET_ID_WEB || this.serviceConfig.OTP_WIDGET_ID,
-            tokenAuth: this.serviceConfig.OTP_WIDGET_TOKEN_WEB || this.serviceConfig.OTP_TOKEN_AUTH,
-            exposeMethods: true,
-            success: () => { },
-            failure: (error: { message?: string }) => {
-                this.toasty.errorToast(error?.message);
-            }
-        };
-
-        if (window['initSendOTP'] === undefined) {
-            const scriptTag = document.createElement('script');
-            scriptTag.src = Configuration.isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            scriptTag.onload = () => {
-                initSendOTP(configuration);
-                this.isOtpWidgetReady = true;
-                // Widget channel list is available shortly after init (same delay as website signup)
-                setTimeout(() => this.loadOtpResendChannels(), 2000);
-            };
-            document.body.appendChild(scriptTag);
-        } else {
-            initSendOTP(configuration);
-            this.isOtpWidgetReady = true;
-            setTimeout(() => this.loadOtpResendChannels(), 2000);
-        }
+        this.msg91OtpService.init({
+            onFailure: (error) => this.toasty.errorToast(error?.message)
+        }).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: () => this.refreshOtpResendChannels(),
+            error: (error: Error) => this.toasty.errorToast(error?.message)
+        });
     }
 
     /**
-     * Loads MSG91 resend channels for mobile (VOICE / SMS / WHATSAPP).
-     * Email channel value "3" is excluded — same as website signup.js / msg91Otp.getResendChannels.
+     * Refreshes MSG91 mobile resend channels from the widget.
      *
      * @private
      * @memberof SubscriptionComponent
      */
-    private loadOtpResendChannels(): void {
-        if (typeof window['getWidgetData'] !== 'function') {
-            return;
-        }
-        const widgetData = window['getWidgetData']();
-        if (!widgetData?.processes?.length) {
-            return;
-        }
-        const seen = new Set<string>();
-        const channels: Array<{ name: string; value: string | number }> = [];
-        widgetData.processes.forEach((process: { channel?: { name?: string; value?: string | number } }) => {
-            const channel = process?.channel;
-            if (!channel || channel.value == null || String(channel.value) === '3' || seen.has(String(channel.value))) {
-                return;
+    private refreshOtpResendChannels(): void {
+        this.msg91OtpService.loadResendChannels().pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (channels) => {
+                this.otpResendChannels = channels;
+                this.changeDetectionRef.detectChanges();
             }
-            seen.add(String(channel.value));
-            channels.push({ name: channel.name ?? String(channel.value), value: channel.value });
         });
-        this.otpResendChannels = channels;
-        this.changeDetectionRef.detectChanges();
     }
 
     /**
@@ -451,29 +408,23 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         if (!this.isEmailChanged()) {
             return;
         }
-        this.initOtpWidget();
-        if (typeof window['sendOtp'] !== 'function') {
-            this.toasty.errorToast(this.localeData?.mobile_number?.email_validation_error);
-            return;
-        }
         this.emailSendOtpInProgress = true;
         this.resetEmailOtpState(false);
-        window['sendOtp'](
-            email,
-            (data: { message?: string }) => {
+        this.msg91OtpService.sendOtp(email).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response) => {
                 this.emailSendOtpInProgress = false;
-                this.emailOtpRequestId = data?.message ?? '';
+                this.emailOtpRequestId = response.requestId;
                 this.showEmailOtp = true;
                 this.toasty.successToast(this.localeData?.mobile_number?.otp_sent);
                 this.changeDetectionRef.detectChanges();
             },
-            (error: { message?: string } | string) => {
+            error: (error: Error) => {
                 this.emailSendOtpInProgress = false;
                 this.showEmailOtp = false;
-                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
+                this.toasty.errorToast(error?.message);
                 this.changeDetectionRef.detectChanges();
             }
-        );
+        });
         this.changeDetectionRef.detectChanges();
     }
 
@@ -491,60 +442,54 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         if (!this.isMobileChanged()) {
             return;
         }
-        this.initOtpWidget();
-        if (typeof window['sendOtp'] !== 'function') {
-            this.toasty.errorToast(this.localeData?.mobile_number?.mobile_number_validation_error);
-            return;
-        }
         this.mobileSendOtpInProgress = true;
         this.resetMobileOtpState(false);
-        window['sendOtp'](
-            mobile,
-            (data: { message?: string }) => {
+        this.msg91OtpService.sendOtp(mobile).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response) => {
                 this.mobileSendOtpInProgress = false;
-                this.mobileOtpRequestId = data?.message ?? '';
+                this.mobileOtpRequestId = response.requestId;
                 this.showMobileOtp = true;
-                this.loadOtpResendChannels();
+                this.refreshOtpResendChannels();
                 this.toasty.successToast(this.localeData?.mobile_number?.otp_sent);
                 this.changeDetectionRef.detectChanges();
             },
-            (error: { message?: string } | string) => {
+            error: (error: Error) => {
                 this.mobileSendOtpInProgress = false;
                 this.showMobileOtp = false;
-                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
+                this.toasty.errorToast(error?.message);
                 this.changeDetectionRef.detectChanges();
             }
-        );
+        });
         this.changeDetectionRef.detectChanges();
     }
 
     /**
-     * Resends email OTP (MSG91 channel 3 = email)
+     * Resends email OTP (MSG91 email channel)
      *
      * @memberof SubscriptionComponent
      */
     public resendEmailOtp(): void {
-        if (!this.emailOtpRequestId || typeof window['retryOtp'] !== 'function') {
+        if (!this.emailOtpRequestId) {
             return;
         }
         this.emailResendOtpInProgress = true;
         this.emailOtp = '';
         this.isEmailVerified = false;
         this.emailAccessToken = '';
-        window['retryOtp'](
-            3,
-            () => {
-                this.emailResendOtpInProgress = false;
-                this.toasty.successToast(this.localeData?.mobile_number?.otp_resent);
-                this.changeDetectionRef.detectChanges();
-            },
-            (error: { message?: string } | string) => {
-                this.emailResendOtpInProgress = false;
-                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
-                this.changeDetectionRef.detectChanges();
-            },
-            this.emailOtpRequestId
-        );
+        this.msg91OtpService.retryOtp(this.msg91OtpService.emailChannel, this.emailOtpRequestId)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: () => {
+                    this.emailResendOtpInProgress = false;
+                    this.toasty.successToast(this.localeData?.mobile_number?.otp_resent);
+                    this.changeDetectionRef.detectChanges();
+                },
+                error: (error: Error) => {
+                    this.emailResendOtpInProgress = false;
+                    this.toasty.errorToast(error?.message);
+                    this.changeDetectionRef.detectChanges();
+                }
+            });
         this.changeDetectionRef.detectChanges();
     }
 
@@ -555,27 +500,27 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public resendMobileOtp(channel: string | number): void {
-        if (!this.mobileOtpRequestId || typeof window['retryOtp'] !== 'function' || this.mobileResendOtpInProgress) {
+        if (!this.mobileOtpRequestId || this.mobileResendOtpInProgress) {
             return;
         }
         this.mobileResendOtpInProgress = true;
         this.mobileOtp = '';
         this.isMobileVerified = false;
         this.mobileAccessToken = '';
-        window['retryOtp'](
-            channel,
-            () => {
-                this.mobileResendOtpInProgress = false;
-                this.toasty.successToast(this.localeData?.mobile_number?.otp_resent);
-                this.changeDetectionRef.detectChanges();
-            },
-            (error: { message?: string } | string) => {
-                this.mobileResendOtpInProgress = false;
-                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
-                this.changeDetectionRef.detectChanges();
-            },
-            this.mobileOtpRequestId
-        );
+        this.msg91OtpService.retryOtp(channel, this.mobileOtpRequestId)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: () => {
+                    this.mobileResendOtpInProgress = false;
+                    this.toasty.successToast(this.localeData?.mobile_number?.otp_resent);
+                    this.changeDetectionRef.detectChanges();
+                },
+                error: (error: Error) => {
+                    this.mobileResendOtpInProgress = false;
+                    this.toasty.errorToast(error?.message);
+                    this.changeDetectionRef.detectChanges();
+                }
+            });
         this.changeDetectionRef.detectChanges();
     }
 
@@ -589,29 +534,29 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             this.toasty.errorToast(this.localeData?.mobile_number?.enter_valid_otp);
             return;
         }
-        if (!this.emailOtpRequestId || typeof window['verifyOtp'] !== 'function') {
+        if (!this.emailOtpRequestId) {
             return;
         }
         this.emailVerifyOtpInProgress = true;
-        window['verifyOtp'](
-            this.emailOtp.trim(),
-            (data: { message?: string }) => {
-                this.emailVerifyOtpInProgress = false;
-                this.isEmailVerified = true;
-                this.emailAccessToken = data?.message ?? '';
-                this.showEmailOtp = false;
-                this.toasty.successToast(this.localeData?.mobile_number?.otp_verified);
-                this.changeDetectionRef.detectChanges();
-            },
-            (error: { message?: string } | string) => {
-                this.emailVerifyOtpInProgress = false;
-                this.isEmailVerified = false;
-                this.emailAccessToken = '';
-                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
-                this.changeDetectionRef.detectChanges();
-            },
-            this.emailOtpRequestId
-        );
+        this.msg91OtpService.verifyOtp(this.emailOtp, this.emailOtpRequestId)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (response) => {
+                    this.emailVerifyOtpInProgress = false;
+                    this.isEmailVerified = true;
+                    this.emailAccessToken = response.accessToken;
+                    this.showEmailOtp = false;
+                    this.toasty.successToast(this.localeData?.mobile_number?.otp_verified);
+                    this.changeDetectionRef.detectChanges();
+                },
+                error: (error: Error) => {
+                    this.emailVerifyOtpInProgress = false;
+                    this.isEmailVerified = false;
+                    this.emailAccessToken = '';
+                    this.toasty.errorToast(error?.message);
+                    this.changeDetectionRef.detectChanges();
+                }
+            });
         this.changeDetectionRef.detectChanges();
     }
 
@@ -625,29 +570,29 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             this.toasty.errorToast(this.localeData?.mobile_number?.enter_valid_otp);
             return;
         }
-        if (!this.mobileOtpRequestId || typeof window['verifyOtp'] !== 'function') {
+        if (!this.mobileOtpRequestId) {
             return;
         }
         this.mobileVerifyOtpInProgress = true;
-        window['verifyOtp'](
-            this.mobileOtp.trim(),
-            (data: { message?: string }) => {
-                this.mobileVerifyOtpInProgress = false;
-                this.isMobileVerified = true;
-                this.mobileAccessToken = data?.message ?? '';
-                this.showMobileOtp = false;
-                this.toasty.successToast(this.localeData?.mobile_number?.otp_verified);
-                this.changeDetectionRef.detectChanges();
-            },
-            (error: { message?: string } | string) => {
-                this.mobileVerifyOtpInProgress = false;
-                this.isMobileVerified = false;
-                this.mobileAccessToken = '';
-                this.toasty.errorToast(typeof error === 'string' ? error : error?.message);
-                this.changeDetectionRef.detectChanges();
-            },
-            this.mobileOtpRequestId
-        );
+        this.msg91OtpService.verifyOtp(this.mobileOtp, this.mobileOtpRequestId)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (response) => {
+                    this.mobileVerifyOtpInProgress = false;
+                    this.isMobileVerified = true;
+                    this.mobileAccessToken = response.accessToken;
+                    this.showMobileOtp = false;
+                    this.toasty.successToast(this.localeData?.mobile_number?.otp_verified);
+                    this.changeDetectionRef.detectChanges();
+                },
+                error: (error: Error) => {
+                    this.mobileVerifyOtpInProgress = false;
+                    this.isMobileVerified = false;
+                    this.mobileAccessToken = '';
+                    this.toasty.errorToast(error?.message);
+                    this.changeDetectionRef.detectChanges();
+                }
+            });
         this.changeDetectionRef.detectChanges();
     }
 
