@@ -43,7 +43,7 @@ import { OnboardingFormRequest } from "../../models/api-models/Common";
 import { CommonActions } from "../../actions/common.actions";
 import { CompanyActions } from "../../actions/company.actions";
 import { TaxResponse } from "../../models/api-models/Company";
-import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
+import { AccountingGroupEnum, DataOperationEnum } from "../../shared/Enums/common.enum";
 import { WarehouseActions } from "../../settings/warehouse/action/warehouse.action";
 import { SettingsUtilityService } from "../../settings/services/settings-utility.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
@@ -5883,11 +5883,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {*} [event]
      * @memberof VoucherCreateComponent
      */
-    public toggleStockAsidePane(event?: any): void {
-        if (event) {
+    public toggleStockAsidePane(event?: any, entryIndex?: number): void {
+        if (event?.preventDefault) {
             event.preventDefault();
         }
         this.storeFocus();
+
+        const targetEntryIndex = entryIndex ?? this.activeEntryIndex ?? 0;
+        this.activeEntryIndex = targetEntryIndex;
 
         this.productServiceAsideMenuRef = this.dialog.open(this.asideMenuProductService, {
             position: {
@@ -5902,7 +5905,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.productServiceAsideMenuRef
             .afterClosed()
             .pipe(take(1))
-            .subscribe((response) => {
+            .subscribe(() => {
                 setTimeout(() => {
                     if (this.showPageLeaveConfirmation) {
                         this.pageLeaveUtilityService.addBrowserConfirmationDialog();
@@ -5915,10 +5918,121 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * This Function is used to close Aside Menu Sidebar
      *
+     * @param {*} [response]
      * @memberof VoucherCreateComponent
      */
-    public closeAsideMenuProductServiceModal(): void {
+    public closeAsideMenuProductServiceModal(response?: any): void {
+        if (response?.operation === DataOperationEnum.CREATE && response?.uniqueName) {
+            const entryIndex = this.activeEntryIndex ?? 0;
+            const selectedOption = this.buildSelectStockEventFromCreatedItem(response);
+            this.prependCreatedItemToStockResults(entryIndex, selectedOption);
+            // Same flow as selecting an item from the account/stock dropdown list
+            this.selectStock(selectedOption, entryIndex);
+            this.changeDetection.detectChanges();
+        }
         this.productServiceAsideMenuRef?.close();
+    }
+
+    /**
+     * Builds the same option shape used by list selection for a newly created stock/account.
+     *
+     * @private
+     * @param {*} createdItem
+     * @return {*}  {OptionInterface}
+     * @memberof VoucherCreateComponent
+     */
+    private buildSelectStockEventFromCreatedItem(createdItem: any): OptionInterface {
+        if (createdItem?.type === "stock") {
+            const accountUniqueName = this.getLinkedAccountUniqueNameForCreatedStock(createdItem);
+            const hasVariants = !!createdItem?.variants?.some(
+                (variant: { isVariantSystemGenerated?: boolean }) => !variant?.isVariantSystemGenerated
+            );
+
+            return {
+                label: createdItem.name,
+                value: accountUniqueName,
+                additional: {
+                    name: createdItem.name,
+                    uniqueName: accountUniqueName,
+                    hsnNumber: createdItem.hsnNumber,
+                    sacNumber: createdItem.sacNumber,
+                    hasVariants,
+                    stock: {
+                        name: createdItem.name,
+                        uniqueName: createdItem.uniqueName,
+                    },
+                },
+            };
+        }
+
+        return {
+            label: createdItem.name,
+            value: createdItem.uniqueName,
+            additional: {
+                name: createdItem.name,
+                uniqueName: createdItem.uniqueName,
+                hsnNumber: createdItem.hsnNumber,
+                sacNumber: createdItem.sacNumber,
+            },
+        };
+    }
+
+    /**
+     * Adds newly created stock/account option into the active entry dropdown results.
+     *
+     * @private
+     * @param {number} entryIndex
+     * @param {OptionInterface} option
+     * @memberof VoucherCreateComponent
+     */
+    private prependCreatedItemToStockResults(entryIndex: number, option: OptionInterface): void {
+        if (!option?.value) {
+            return;
+        }
+
+        const requestState = this.stockSearchRequestByEntry.get(entryIndex);
+        const existingResults: OptionInterface[] = requestState?.results ? [...requestState.results] : [];
+        const isAlreadyPresent = existingResults.some((item) => {
+            if (option.additional?.stock?.uniqueName) {
+                return item.additional?.stock?.uniqueName === option.additional.stock.uniqueName;
+            }
+            return item.value === option.value && !item.additional?.stock;
+        });
+
+        if (!isAlreadyPresent) {
+            this.stockSearchRequestByEntry.set(entryIndex, {
+                ...requestState,
+                results: [option, ...existingResults],
+            });
+        }
+    }
+
+    /**
+     * Resolves linked account unique name for a newly created stock based on voucher type.
+     *
+     * @private
+     * @param {*} createdStock
+     * @return {*}  {string}
+     * @memberof VoucherCreateComponent
+     */
+    private getLinkedAccountUniqueNameForCreatedStock(createdStock: any): string {
+        if (
+            this.invoiceType.isPurchaseInvoice ||
+            this.invoiceType.isDebitNote ||
+            this.invoiceType.isReceiptNote
+        ) {
+            return (
+                createdStock?.purchaseAccountUniqueNames?.[0] ||
+                createdStock?.salesAccountUniqueNames?.[0] ||
+                createdStock?.fixedAssetsAccountUniqueNames?.[0]
+            );
+        }
+
+        return (
+            createdStock?.salesAccountUniqueNames?.[0] ||
+            createdStock?.purchaseAccountUniqueNames?.[0] ||
+            createdStock?.fixedAssetsAccountUniqueNames?.[0]
+        );
     }
 
     /**
