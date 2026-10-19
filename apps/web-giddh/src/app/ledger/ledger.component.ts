@@ -3771,6 +3771,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : (Array.isArray(data.body.parentGroups) ? data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', ') : ''),
                     accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
+                    country: data.body.oppositeAccount?.country ?? data.body.country,
+                    countryCode: data.body.oppositeAccount?.country?.countryCode ?? data.body.country?.countryCode,
+                    addresses: data.body.oppositeAccount?.addresses ?? data.body.addresses,
                 };
                 if (!txn?.duplicateEntry) {
                     this.lc.blankLedger.otherTaxModal = {
