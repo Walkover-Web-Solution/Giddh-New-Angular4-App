@@ -98,7 +98,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isLoggedInUserEwayBill$ = this.store.pipe(select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess), takeUntil(this.destroyed$));
         this.isUserAddedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
-        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.account?.billingDetails?.taxNumber : '';
+        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.account?.billingDetails?.gstNumber : '';
         this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
         this.generateEwayBillform.transactionType = '1'; // transactionType is default 1 for Regular
     }
@@ -142,7 +142,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             }
         });
         this.invoiceNumber = this.selectedInvoices?.length ? this.selectedInvoices[0]?.voucherNumber : '';
-        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.account?.billingDetails?.taxNumber : null;
+        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.account?.billingDetails?.gstNumber : null;
         this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
         if (this.selectedInvoices?.length === 0) {
             this.redirectToSalesInvoice();
