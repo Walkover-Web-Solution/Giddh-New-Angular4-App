@@ -214,6 +214,7 @@
 
         .other-width {
             max-width: 1095px;
+            width: 100%;
 
             &:has(.stock-batch-box) {
                 max-width: 1280px;
@@ -326,10 +327,9 @@ table.stock-table {
     }
 
     .variant-batch-fields {
-        grid-template-columns: minmax(120px, 1fr) minmax(120px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(
-                100px,
-                1fr
-            ) minmax(110px, 1fr) 36px;
+        grid-template-columns:
+            minmax(120px, 1fr) minmax(120px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(100px, 1fr)
+            minmax(110px, 1fr) 36px;
         align-items: end;
         column-gap: 8px;
         row-gap: 8px;
@@ -760,7 +760,12 @@ table.stock-table {
 .custom-label {
     display: flex;
     align-items: center;
-    column-gap: 15px;
+    column-gap: 8px;
+    min-height: 48px;
+
+    label {
+        max-width: calc(100% - 30px);
+    }
 
     &:hover {
         .right-fix-pencil-icon {
@@ -824,10 +829,18 @@ table.stock-table {
 }
 
 .stock-batch-fields {
-    grid-template-columns: repeat(6, minmax(110px, 1fr)) 36px;
+    display: flex;
+    flex-wrap: wrap;
     align-items: end;
     column-gap: 8px;
-    min-width: 820px;
+    row-gap: 12px;
+    min-width: 0;
+
+    > * {
+        flex: 1 1 140px;
+        min-width: 120px;
+        max-width: 100%;
+    }
 
     giddh-datepicker {
         display: block;
@@ -840,6 +853,8 @@ table.stock-table {
     height: 36px;
     padding: 0;
     margin-bottom: 6px;
+    flex: 0 0 36px;
+    min-width: 36px;
 }
 
 .add-new-text-container {
@@ -849,23 +864,25 @@ table.stock-table {
 .stock-opening-balance-section {
     .warehouse-card {
         background-color: var(--table-background-color);
+        overflow: hidden;
     }
 
     .warehouse-main-row {
         .warehouse-field {
-            min-width: 180px;
-            flex: 1 1 220px;
+            min-width: 160px;
+            flex: 1 1 180px;
         }
 
         .qty-field,
         .amount-field {
-            width: 140px;
-            flex: 0 0 140px;
+            width: 130px;
+            flex: 0 0 130px;
         }
     }
 
     .batch-list {
         background-color: transparent;
         border-color: var(--border-color);
+        overflow-x: auto;
     }
 }
