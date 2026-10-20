@@ -326,10 +326,9 @@ table.stock-table {
     }
 
     .variant-batch-fields {
-        grid-template-columns: minmax(120px, 1fr) minmax(120px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(
-                100px,
-                1fr
-            ) minmax(110px, 1fr) 36px;
+        grid-template-columns:
+            minmax(120px, 1fr) minmax(120px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(100px, 1fr)
+            minmax(110px, 1fr) 36px;
         align-items: end;
         column-gap: 8px;
         row-gap: 8px;
@@ -824,15 +823,20 @@ table.stock-table {
 }
 
 .stock-batch-fields {
-    grid-template-columns: repeat(6, minmax(110px, 1fr)) 36px;
+    grid-template-columns: repeat(6, minmax(110px, 1fr)) minmax(90px, auto) 36px;
     align-items: end;
     column-gap: 8px;
-    min-width: 820px;
+    min-width: 920px;
 
     giddh-datepicker {
         display: block;
         width: 100%;
     }
+}
+
+.stock-batch-archive {
+    min-height: 36px;
+    margin-bottom: 6px;
 }
 
 .stock-batch-remove {

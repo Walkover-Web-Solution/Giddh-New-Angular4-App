@@ -595,7 +595,34 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
      * @memberof VariantOpeningBalanceDialogComponent
      */
     public isBatchNameRequired(batch: any): boolean {
+        if (!!batch?.archive) {
+            return false;
+        }
         return Number(batch?.openingQuantity) > 0 || Number(batch?.openingAmount) > 0;
+    }
+
+    /**
+     * True when batch fields (except archive toggle) should be read-only.
+     *
+     * @param {*} batch Batch row
+     * @param {*} [warehouseRow] Warehouse balance row
+     * @return {*}  {boolean}
+     * @memberof VariantOpeningBalanceDialogComponent
+     */
+    public isBatchFieldsDisabled(batch: any, warehouseRow?: any): boolean {
+        return this.isWarehouseArchived(warehouseRow) || !!batch?.archive;
+    }
+
+    /**
+     * Refresh view after archive toggle so field disabled state updates.
+     *
+     * @memberof VariantOpeningBalanceDialogComponent
+     */
+    public onBatchArchiveChange(batch: any): void {
+        if (batch) {
+            batch.archiveOnly = !!batch.archive;
+        }
+        this.cdr.detectChanges();
     }
 
     /**
@@ -712,7 +739,9 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             manufacturingDate: null,
             expiryDate: null,
             openingQuantity: null,
-            openingAmount: null
+            openingAmount: null,
+            archive: false,
+            archiveOnly: false
         };
     }
 
@@ -733,6 +762,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             expiryDate: this.parseBatchDate(batch?.expiryDate),
             openingQuantity: batch?.openingQuantity ?? null,
             openingAmount: batch?.openingAmount ?? null,
+            archive: !!batch?.archive,
+            archiveOnly: !!batch?.archive,
             warehouseUniqueName: batch?.warehouse?.uniqueName
                 || batch?.warehouseUniqueName
                 || warehouseUniqueName
@@ -798,6 +829,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
         batch.openingAmount = !batch.openingAmount && item.openingAmount ? item.openingAmount : batch.openingAmount;
         batch.uniqueName = !batch.uniqueName && item.uniqueName ? item.uniqueName : batch.uniqueName;
         batch.warehouseUniqueName = item?.warehouse?.uniqueName || warehouseUniqueName || batch.warehouseUniqueName;
+        batch.archive = !!item.archive;
+        batch.archiveOnly = !!item.archive;
     }
 
     /**

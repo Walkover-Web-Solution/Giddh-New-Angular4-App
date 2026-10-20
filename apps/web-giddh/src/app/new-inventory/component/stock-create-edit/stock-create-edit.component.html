@@ -1656,7 +1656,9 @@
                                                                                         [required]="
                                                                                             isBatchNameRequired(batch) && !batch.batchNumber
                                                                                         "
-                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
                                                                                         (dynamicSearchedQuery)="
                                                                                             searchBatchAvailability(
                                                                                                 $event,
@@ -1686,7 +1688,9 @@
                                                                                         [required]="
                                                                                             isBatchNameRequired(batch) && !batch.name
                                                                                         "
-                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
                                                                                     ></input-field>
                                                                                     <giddh-datepicker
                                                                                         [label]="localeData?.manufacturing_date"
@@ -1699,7 +1703,9 @@
                                                                                         "
                                                                                         [showToggleIcon]="false"
                                                                                         [appearance]="'outline'"
-                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
                                                                                         [(ngModel)]="batch.manufacturingDate"
                                                                                     ></giddh-datepicker>
                                                                                     <giddh-datepicker
@@ -1713,7 +1719,9 @@
                                                                                         "
                                                                                         [showToggleIcon]="false"
                                                                                         [appearance]="'outline'"
-                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
                                                                                         [(ngModel)]="batch.expiryDate"
                                                                                     ></giddh-datepicker>
                                                                                     <input-field
@@ -1729,7 +1737,9 @@
                                                                                         [placeholder]="localeData?.opening_quantity"
                                                                                         [allowDecimalDigitsOnly]="true"
                                                                                         [min]="0"
-                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
                                                                                         [(ngModel)]="batch.openingQuantity"
                                                                                     ></input-field>
                                                                                     <input-field
@@ -1741,21 +1751,50 @@
                                                                                             batchIndex
                                                                                         "
                                                                                         [type]="'text'"
+                                                                                        [ngClass]="{ 'mr-2': batch.archive }"
                                                                                         [label]="localeData?.opening_amount"
                                                                                         [placeholder]="localeData?.opening_amount"
                                                                                         [(ngModel)]="batch.openingAmount"
                                                                                         [prefix]="companyCurrencySymbol"
                                                                                         [mask]="inputMaskFormat"
                                                                                         [useMask]="true"
-                                                                                        [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
                                                                                     ></input-field>
+                                                                                    <div
+                                                                                        class="stock-batch-archive d-flex align-items-center justify-content-center"
+                                                                                    >
+                                                                                        <mat-slide-toggle
+                                                                                            color="primary"
+                                                                                            name="stockBatchArchive{{ warehouseIndex }}_{{
+                                                                                                batchIndex
+                                                                                            }}"
+                                                                                            [(ngModel)]="batch.archive"
+                                                                                            [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                            [attr.aria-label]="
+                                                                                                batch.archive
+                                                                                                    ? commonLocaleData?.app_active
+                                                                                                    : commonLocaleData?.app_archive
+                                                                                            "
+                                                                                            (change)="onBatchArchiveChange(batch)"
+                                                                                        >
+                                                                                            {{
+                                                                                                batch.archive
+                                                                                                    ? commonLocaleData?.app_active
+                                                                                                    : commonLocaleData?.app_archive
+                                                                                            }}
+                                                                                        </mat-slide-toggle>
+                                                                                    </div>
                                                                                     @if (warehouseRow.batches?.length > 1) {
                                                                                         <button
                                                                                             type="button"
                                                                                             aria-label="remove batch"
                                                                                             matIconButton
                                                                                             class="stock-batch-remove light-gray"
-                                                                                            [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                            [disabled]="
+                                                                                                isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                            "
                                                                                             (click)="
                                                                                                 removeWarehouseBatchRow(
                                                                                                     warehouseRow,
@@ -1772,7 +1811,9 @@
                                                                                             class="stock-batch-remove light-gray"
                                                                                             [matTooltip]="commonLocaleData?.app_reset"
                                                                                             [attr.aria-label]="commonLocaleData?.app_reset"
-                                                                                            [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                            [disabled]="
+                                                                                                isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                            "
                                                                                             (click)="
                                                                                                 resetWarehouseBatchRow(
                                                                                                     warehouseRow,
