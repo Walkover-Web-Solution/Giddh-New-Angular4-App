@@ -41,7 +41,12 @@
 }
 
 .batch-row-top {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 40px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(90px, auto) 40px;
+}
+
+.batch-archive {
+    min-height: 36px;
+    margin-bottom: 4px;
 }
 
 .batch-row-bottom {
