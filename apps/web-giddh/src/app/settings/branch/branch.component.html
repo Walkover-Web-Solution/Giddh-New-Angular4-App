@@ -156,7 +156,11 @@
                                                                         cdkConnectedOverlay
                                                                         [cdkConnectedOverlayOrigin]="addressTemplate"
                                                                         [cdkConnectedOverlayOpen]="
-                                                                            isAddressInfoOpen === address?.uniqueName + branch.uniqueName
+                                                                            isAddressInfoOpen === address?.uniqueName + branch.uniqueName &&
+                                                                            (address?.address ||
+                                                                                address?.stateCode ||
+                                                                                (address?.taxType && address?.taxNumber) ||
+                                                                                address?.pincode)
                                                                         "
                                                                         [cdkConnectedOverlayPositions]="[
                                                                             {
