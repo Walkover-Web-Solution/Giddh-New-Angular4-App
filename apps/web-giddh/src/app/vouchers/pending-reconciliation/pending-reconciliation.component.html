@@ -228,8 +228,8 @@
                                 {{
                                     isWithoutChallanReport
                                         ? voucherType === voucherTypeEnum.deliveryChallan
-                                            ? localeData?.challan_no
-                                            : localeData?.receipt_note_no
+                                            ? localeData?.linked_challan_no
+                                            : localeData?.linked_receipt_note_no
                                         : voucherType === voucherTypeEnum.deliveryChallan
                                           ? localeData?.linked_invoice_no
                                           : localeData?.linked_bill_no
