@@ -156,30 +156,6 @@ export class AuthenticationService {
             }), catchError((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, '')));
     }
 
-    public GetAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
-        let uniqueName = (this.generalService.user) ? this.generalService.user?.uniqueName : "";
-
-        return this.http.get(this.config.apiUrl + LOGIN_API.GET_AUTH_KEY
-            ?.replace(':uniqueName', uniqueName)).pipe(map((res) => {
-                let data: BaseResponse<AuthKeyResponse, string> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')));
-    }
-
-    public RegenerateAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
-        let userEmail = (this.generalService.user) ? this.generalService.user.email : "";
-
-        return this.http.put(this.config.apiUrl + LOGIN_API.REGENERATE_AUTH_KEY
-            ?.replace(':userEmail', userEmail), {}).pipe(map((res) => {
-                let data: BaseResponse<AuthKeyResponse, string> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')));
-    }
-
     public ReportInvalidJSON(model): Observable<BaseResponse<AuthKeyResponse, string>> {
         model.email = (this.generalService.user) ? this.generalService.user.email : "";
         model.environment = this.config.apiUrl;
