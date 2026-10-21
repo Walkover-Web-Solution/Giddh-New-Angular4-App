@@ -262,7 +262,7 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
      */
     public get displayedColumns(): string[] {
         if (this.isWithoutChallanReport) {
-            return ["date", "number", "voucherType", "party", "amount", "action"];
+            return ["date", "number", "voucherType", "party", "amount", "linkedInvoice", "action"];
         }
         return ["date", "number", "documentType", "party", "amount", "invoiceStatus", "status", "linkedInvoice", "action"];
     }
@@ -877,6 +877,8 @@ export class PendingReconciliationComponent implements OnInit, OnDestroy {
             invoiceStatusLabel: this.getInvoiceStatusLabel(item.invoiceStatus),
             documentStatus: item.statusName || item.status?.statusName || "",
             linkedInvoiceCount: item.linkedInvoiceCount ?? 0,
+            linkedInvoiceNumber: item.linkedInvoiceNumber,
+            linkedInvoiceNumbers: item.linkedInvoiceNumbers ?? item.linkedVoucherNumbers ?? [],
             currencySymbol: item.accountCurrencySymbol,
             currencyCode: item.accountCurrencyCode
         };
