@@ -15,7 +15,7 @@ import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.a
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../shared/helpers/defaultDateFormat';
 import { GiddhDatePipe } from '../../shared/pipes/giddh-date.pipe';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
-import { GstReport, TaxServiceEnum, TaxServiceType } from '../constants/gst.constant';
+import { ACTIVE_GSP_PROVIDER, GstReport, TaxServiceType } from '../constants/gst.constant';
 import { GeneralService } from '../../services/general.service';
 import { FormControl } from '@angular/forms';
 import { BreakpointObserver } from "@angular/cdk/layout";
@@ -103,8 +103,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public isTabScreen: boolean = false;
     /** Holds selected service */
     public selectedService: TaxServiceType;
-    /** Holds Tax Service Enum */
-    public taxServiceEnum = TaxServiceEnum;
+    /** Active GSP provider — change ACTIVE_GSP_PROVIDER in gst.constant.ts to switch everywhere */
+    public readonly activeGspProvider = ACTIVE_GSP_PROVIDER;
     /** Holds aside authentication dialog ref */
     public asideAuthenticationDialogRef: MatDialogRef<any>;
     /** Holds cancel confirmation dialog ref */
@@ -815,7 +815,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             return;
         }
 
-        this.selectedService = selectedService || TaxServiceEnum.EXCELLON;
+        this.selectedService = selectedService || ACTIVE_GSP_PROVIDER;
         this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, { ...ASIDE_PANE_CONFIG, autoFocus: false });
     }
 
@@ -842,7 +842,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.componentStore.fileGstr3B({
             period: this.currentPeriod,
             gstNumber: this.activeCompanyGstNumber,
-            via: TaxServiceEnum.EXCELLON,
+            via: ACTIVE_GSP_PROVIDER,
             monthYear,
             currentDateTime
         });

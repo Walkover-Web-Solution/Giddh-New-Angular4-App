@@ -135,5 +135,6 @@
     "quantity_amount_sum_of_batches": "मात्रा और राशि नीचे दिए बैचों का योग हैं",
     "no_batches_enter_directly": "कोई बैच नहीं · मात्रा और राशि सीधे दर्ज करें",
     "batches_label": "बैच",
-    "warehouse_required": "कृपया वेयरहाउस चुनें"
+    "warehouse_required": "कृपया वेयरहाउस चुनें",
+    "warehouse_archived_message": "यह वेयरहाउस आर्काइव है"
 }

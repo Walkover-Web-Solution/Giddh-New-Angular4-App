@@ -135,5 +135,6 @@
     "quantity_amount_sum_of_batches": "Quantity and amount are the sum of the batches below",
     "no_batches_enter_directly": "No batches · enter quantity and amount directly",
     "batches_label": "Batches",
-    "warehouse_required": "Please select warehouse"
+    "warehouse_required": "Please select warehouse",
+    "warehouse_archived_message": "This warehouse is archived"
 }
