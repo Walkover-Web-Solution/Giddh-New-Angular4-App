@@ -46,10 +46,7 @@
                                     [currencyCode]="account?.baseCurrency"
                                 ></amount-field>
                             </span>
-                            <span
-                                *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount"
-                                class="d-flex justify-content-end company-currency"
-                            >
+                            <span *ngIf="isMultiCurrencyAccount" class="d-flex justify-content-end company-currency">
                                 <amount-field
                                     [amount]="getConvertedCompanyAmount(adjustPayment?.grandTotal, voucherDetails?.exchangeRate)"
                                     [currencySymbol]="baseCurrencySymbol"
@@ -72,10 +69,7 @@
                                     [currencyCode]="account?.baseCurrency"
                                 ></amount-field>
                             </span>
-                            <span
-                                *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount"
-                                class="d-flex justify-content-end company-currency"
-                            >
+                            <span *ngIf="isMultiCurrencyAccount" class="d-flex justify-content-end company-currency">
                                 <amount-field
                                     *ngIf="
                                         !(
@@ -94,10 +88,10 @@
                         </p>
                         <p
                             *ngIf="
-                                enableVoucherAdjustmentMultiCurrency &&
                                 getBalanceDue() === 0 &&
                                 getConvertedBalanceDue() !== 0 &&
                                 voucherDetails?.gainLoss &&
+                                voucherDetails?.gainLoss !== 0 &&
                                 adjustedVoucherType !== 'rcpt' &&
                                 adjustedVoucherType !== 'advance-receipt' &&
                                 adjustedVoucherType !== 'jr' &&
@@ -173,7 +167,7 @@
                                         [type]="'text'"
                                         [cssClass]="'text-right'"
                                         [name]="'amount' + entry?.uniqueName"
-                                        [prefix]="currencySymbol"
+                                        [prefix]="entry?.currency?.symbol"
                                         [mask]="inputMaskFormat"
                                         [useMask]="true"
                                         [(ngModel)]="entry.adjustmentAmount.amountForAccount"
@@ -181,11 +175,7 @@
                                         [required]="true"
                                     ></input-field>
                                     <span
-                                        *ngIf="
-                                            enableVoucherAdjustmentMultiCurrency &&
-                                            isMultiCurrencyAccount &&
-                                            entry.adjustmentAmount.amountForAccount
-                                        "
+                                        *ngIf="isMultiCurrencyAccount && entry.adjustmentAmount.amountForAccount"
                                         class="company-currency"
                                     >
                                         <amount-field

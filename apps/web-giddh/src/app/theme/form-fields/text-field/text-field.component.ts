@@ -98,6 +98,9 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.showError) {
+            this.changeDetectionRef.markForCheck();
+        }
         if (this.autoFocus) {
            this.inputFocus();
         }

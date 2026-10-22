@@ -44,6 +44,20 @@ export enum AccountingGroupEnum {
     SundryDebtors = 'sundrydebtors'
 }
 
+/** Top-level fixed accounting groups that cannot be selected as move target for accounts. */
+export const FIXED_TOP_LEVEL_ACCOUNTING_GROUPS: string[] = [
+    'shareholdersfunds',
+    'noncurrentliabilities',
+    'currentliabilities',
+    'fixedassets',
+    'noncurrentassets',
+    'currentassets',
+    'revenuefromoperations',
+    'otherincome',
+    'operatingcost',
+    'indirectexpenses'
+];
+
 /** Enum representing data operations for database manipulation, including CRUD and extended operations. */
 export enum DataOperationEnum {
     /** Create a new record in the database */

@@ -76,6 +76,13 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isSidebarExpanded: boolean = false;
     /** True if command dialog is open */
     @Input() public showCommandDialog: boolean = false;
+    /** True when inventory is managed via business documents (DC/RN). */
+    public inventoryViaBusinessDocument = signal<boolean>(false);
+    /** Create links that require inventory-via-business-document setting. */
+    private readonly businessDocumentCreateLinks: readonly string[] = [
+        '/pages/vouchers/delivery-challan/create',
+        '/pages/vouchers/receipt-note/create'
+    ];
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Holds the template reference of generic aside menu account */
@@ -242,6 +249,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (response) {
                 this.isConsolidatedBranch.set(response.isBranchConsolidated);
             }
+        });
+        this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
+            this.inventoryViaBusinessDocument.set(!!settings?.voucherAutomation?.inventoryViaBusinessDocument);
+            this.changeDetectorRef.detectChanges();
         });
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -916,6 +927,24 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
       public isExpanded(node: any): boolean {
         return node.isExpanded || false;
       }
+
+    /**
+     * Whether the sidebar create (+) action should be shown for a menu node.
+     *
+     * @param {*} node Menu tree node
+     * @returns {boolean} True when create new is allowed
+     * @memberof PrimarySidebarComponent
+     */
+    public canShowCreateNew(node: any): boolean {
+        const createNewLink = node?.additional?.createNew?.link;
+        if (!createNewLink) {
+            return false;
+        }
+        if (this.businessDocumentCreateLinks.includes(createNewLink)) {
+            return this.inventoryViaBusinessDocument();
+        }
+        return true;
+    }
 
     /**
      * Navigates to createNew link with embedded query parameters

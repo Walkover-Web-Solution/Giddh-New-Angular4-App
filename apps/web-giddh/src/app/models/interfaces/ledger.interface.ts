@@ -37,6 +37,7 @@ export interface IInventory {
     warehouse?: WarehouseDetails;
     variant?: IVariant;
     taxInclusive?: boolean;
+    batches?: any[];
 }
 
 export interface IUnit {

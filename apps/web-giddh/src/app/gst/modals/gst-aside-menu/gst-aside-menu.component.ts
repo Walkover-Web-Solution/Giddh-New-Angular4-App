@@ -8,7 +8,7 @@ import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-
 import { AppState } from '../../../store';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/gst-reconcile.actions';
 import { ToasterService } from '../../../services/toaster.service';
-import { GstReport, TaxServiceEnum, TaxServiceType } from '../../constants/gst.constant';
+import { ACTIVE_GSP_PROVIDER, ACTIVE_GSP_SESSION_KEY, GstReport, TaxServiceEnum, TaxServiceType } from '../../constants/gst.constant';
 import { cloneDeep, isEqual } from '../../../lodash-optimized';
 import { IOption } from '../../../app.constant';
 
@@ -64,10 +64,10 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     public gstAuthenticated = signal<boolean>(false);
     /** Signal to track if GST return filing is in process */
     public gstReturnInProcess = signal<boolean>(false);
-    /** Signal to track if Taxpro service is authenticated */
-    public isTaxproAuthenticated = signal<boolean>(false);
-    /** Signal to track if Vayana service is authenticated */
-    public isVayanaAuthenticated = signal<boolean>(false);
+    /** Signal to track if the active GSP provider is authenticated */
+    public isProviderAuthenticated = signal<boolean>(false);
+    /** Active GSP provider — change ACTIVE_GSP_PROVIDER in gst.constant.ts to switch everywhere */
+    public readonly activeGspProvider = ACTIVE_GSP_PROVIDER;
     /** Returns the enum to be used in template */
     public get GstReport() {
         return GstReport;
@@ -148,14 +148,17 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(s => s.gstR.gstSessionResponse), takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
-                this.isTaxproAuthenticated.set(a.taxpro);
-                this.isVayanaAuthenticated.set(a.vayana);
+                this.isProviderAuthenticated.set(!!a[ACTIVE_GSP_SESSION_KEY]);
             }
         });
     }
 
     public ngOnInit() {
-        this.providerOptions = [{ label: this.localeData?.aside_menu?.giddh_provider1, value: 'TAXPRO' }];
+        this.providerOptions = [{ label: this.localeData?.aside_menu?.giddh_provider1, value: ACTIVE_GSP_PROVIDER }];
+        if (!this.selectedService) {
+            this.selectedService = ACTIVE_GSP_PROVIDER;
+        }
+        this.taxProForm.gsp = this.selectedService;
 
         // Watch for reconcile OTP verification success
         this.store.pipe(
@@ -184,7 +187,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     }
 
     public resetTaxPro() {
-        this.selectedService = this.taxServiceEnum.TAXPRO;
+        this.selectedService = ACTIVE_GSP_PROVIDER;
         this.taxProForm.otp = '';
         this.taxProForm.userName = '';
         this.otpSentSuccessFully.set(false);
@@ -202,10 +205,12 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
      * save
      */
     public save() {
-        this.taxProForm.gsp = this.selectedService;
-        if ((this.selectedService === this.taxServiceEnum.TAXPRO || this.selectedService === this.taxServiceEnum.VAYANA) && !this.otpSentSuccessFully()) {
+        const gsp = (this.taxProForm.gsp || this.selectedService) as TaxServiceType;
+        this.taxProForm.gsp = gsp;
+        this.selectedService = gsp;
+        if (this.isGspAuthService(gsp) && !this.otpSentSuccessFully()) {
             this.store.dispatch(this.gstReconcileActions.SaveGSPSession(this.taxProForm));
-        } else if ((this.selectedService === this.taxServiceEnum.TAXPRO || this.selectedService === this.taxServiceEnum.VAYANA) && this.otpSentSuccessFully()) {
+        } else if (this.isGspAuthService(gsp) && this.otpSentSuccessFully()) {
             if (!(/^(?!\s*$).+/g.test(this.taxProForm.otp))) {
                 this.toaster.showSnackBar('error',this.localeData?.aside_menu?.otp_required_error);
                 return;
@@ -243,6 +248,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     }
 
     public changeProvider() {
+        this.selectedService = this.taxProForm.gsp as TaxServiceType;
         this.otpSentSuccessFully.set(false);
         this.taxProForm.otp = '';
     }
@@ -274,7 +280,20 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
      */
     public getGstAuthenticatedText(): string {
         let text = this.localeData?.aside_menu?.gst_authenticated;
-        text = text?.replace("[IS_VAYANA_AUTHENTICATED]", (this.isVayanaAuthenticated ? this.commonLocaleData?.app_numbers?.one : this.commonLocaleData?.app_numbers?.one));
+        text = text?.replace("[IS_VAYANA_AUTHENTICATED]", this.commonLocaleData?.app_numbers?.one);
         return text;
+    }
+
+    /**
+     * Checks whether the selected service uses the GSP OTP authentication flow.
+     * The active GSP provider goes through Get OTP / Verify OTP (gsp-session APIs).
+     * Other services such as RECONCILE use a separate reconcile OTP flow.
+     *
+     * @param {TaxServiceType} service - Provider selected in the aside dialog
+     * @returns {boolean} True when the service should use SaveGSPSession / SaveGSPSessionWithOTP
+     * @memberof GstAsideMenuComponent
+     */
+    private isGspAuthService(service: TaxServiceType): boolean {
+        return service === ACTIVE_GSP_PROVIDER;
     }
 }

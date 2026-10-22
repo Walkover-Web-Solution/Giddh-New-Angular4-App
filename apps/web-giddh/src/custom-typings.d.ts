@@ -61,7 +61,6 @@ declare var FilePicker: any;
 declare var errlyticsNeeded: boolean;
 declare var errlyticsKey: string;
 declare var _: any;
-declare var enableVoucherAdjustmentMultiCurrency: boolean;
 declare var GOOGLE_CLIENT_ID: string;
 declare var GOOGLE_CLIENT_SECRET: string;
 declare var RAZORPAY_KEY: string;
@@ -102,7 +101,6 @@ interface GlobalEnvironment {
     errlyticsKey: string;
     APP_FOLDER: string;
     RAZORPAY_KEY: string;
-    enableVoucherAdjustmentMultiCurrency: boolean;
     PRODUCTION_ENV: boolean;
     STAGING_ENV: boolean;
     TEST_ENV: boolean;
