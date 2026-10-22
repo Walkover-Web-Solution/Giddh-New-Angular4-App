@@ -456,7 +456,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
         }
 
-        entity.isDefault = !entity.isDefault;;
+        entity.isDefault = !entity.isDefault;
 
  
         if (entityType === 'address') {
