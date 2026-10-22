@@ -372,8 +372,15 @@ cdk-tree {
                     display: flex;
                     align-items: center;
 
+                    &:has(+ .create-new) {
+                        min-width: unset;
+                    }
+
                     i {
                         font-size: 22px;
+                        width: 22px;
+                        height: 22px;
+                        text-align: center;
                         margin-right: 10px;
 
                         &.icon-right {

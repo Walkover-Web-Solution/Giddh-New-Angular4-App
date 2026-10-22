@@ -1,6 +1,7 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { CreateStockRequest, StockDetailResponse, StockGroupRequest, StockGroupResponse, StocksResponse } from '../../models/api-models/Inventory';
+import { InventorySettingsResponse } from '../../models/api-models/InventorySettings';
 import { Action, Store } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
@@ -629,6 +630,20 @@ export class InventoryAction {
         return {
             type: InventoryActionsConst.BulkStockResponse,
             payload: data
+        };
+    }
+
+    /**
+     * Stores inventory settings in the global inventory state.
+     *
+     * @param {InventorySettingsResponse} settings Inventory settings payload
+     * @returns {CustomActions}
+     * @memberof InventoryAction
+     */
+    public setInventorySettings(settings: InventorySettingsResponse): CustomActions {
+        return {
+            type: InventoryActionsConst.SetInventorySettings,
+            payload: settings
         };
     }
 }

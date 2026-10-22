@@ -76,8 +76,6 @@ const envConfig = {
     UkApiUrl: getUkApiUrl(environment, env),
     PORTAL_URL: getPortalUrl(environment, env),
     OFFLINE_API_URL: env.OFFLINE_API_URL || 'http://localhost:59448/',
-    // Feature flags
-    enableVoucherAdjustmentMultiCurrency: env.ENABLE_VOUCHER_ADJUSTMENT_MULTI_CURRENCY === 'true' || true,
     // External service keys - map environment-specific keys
     GOOGLE_CLIENT_ID: env.GOOGLE_CLIENT_ID || (environment === 'prod' ? env.GOOGLE_CLIENT_ID_PROD : env.GOOGLE_CLIENT_ID_TEST) || '',
     GOOGLE_CLIENT_SECRET: env.GOOGLE_CLIENT_SECRET || (environment === 'prod' ? env.GOOGLE_CLIENT_SECRET_PROD : env.GOOGLE_CLIENT_SECRET_TEST) || '',

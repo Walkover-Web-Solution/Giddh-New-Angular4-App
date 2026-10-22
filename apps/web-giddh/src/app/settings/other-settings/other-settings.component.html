@@ -38,12 +38,6 @@
                         {{ profileData?.showAccountUniqueName ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
                     </span>
                 </div>
-                <div class="mb-3">
-                    <label>{{ localeData?.auto_create_opposite_voucher }}</label>
-                    <span>
-                        {{ profileData?.autoGenerateNote ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
-                    </span>
-                </div>
             </div>
             <!-- branch profile element end -->
         </div>
@@ -160,18 +154,6 @@
                     color="primary"
                     [checked]="profileData?.showAccountUniqueName"
                     (change)="toggleShowAccountUniqueName($event.checked)"
-                ></mat-slide-toggle>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4 col-lg-4 col-xl-3 pr-1">
-            <div class="form-group d-flex align-items-center justify-content-between">
-                <label class="mb-0">{{ localeData?.auto_create_opposite_voucher }}</label>
-                <mat-slide-toggle
-                    color="primary"
-                    [checked]="profileData?.autoGenerateNote"
-                    (change)="profileData.autoGenerateNote = $event.checked; profileUpdated('autoGenerateNote')"
                 ></mat-slide-toggle>
             </div>
         </div>

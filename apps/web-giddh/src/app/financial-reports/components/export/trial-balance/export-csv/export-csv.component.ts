@@ -14,7 +14,7 @@ import { saveAs } from 'file-saver';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { DataFormatter, IFormatable } from '../../model/data-formatter';
+import { buildTrialBalanceCsvHeader, DataFormatter, IFormatable } from '../../model/data-formatter';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { forEach, indexOf } from '../../../../../lodash-optimized';
 
@@ -39,7 +39,12 @@ class FormatCsv implements IFormatable {
     }
 
     public setHeader(selectedCompany: CompanyResponse) {
-        this.header = `${selectedCompany.name ?? ''}\r\n"${selectedCompany.address ?? ''}"\r\n${selectedCompany.city ?? ''}${selectedCompany?.pincode ? '-' : ''}${selectedCompany?.pincode ?? ''}\r\n${this.localeData?.csv.trial_balance.trial_balance} ${this.request.from ?? ''} ${this.localeData?.csv.trial_balance.to} ${this.request.to  ?? ''}\r\n`;
+        this.header = buildTrialBalanceCsvHeader(
+            selectedCompany,
+            this.localeData,
+            this.request.from,
+            this.request.to
+        );
     }
 
     public setRowData(data: any[], padding: number) {
@@ -88,7 +93,6 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         private generalService: GeneralService) {
         this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
             this.exportData = p;
-            this.dataFormatter = new DataFormatter(p, this.selectedCompany, recType, this.generalService);
         });
     }
 
@@ -103,6 +107,8 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
 
     public downloadCSV(value: string) {
         this.showCsvDownloadOptions = false;
+        // Use company from global storage so CSV header has the current address
+        this.dataFormatter = new DataFormatter(this.exportData, this.generalService.activeCompany, this.recType, this.generalService);
         let csv = '';
         let name = '';
         let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);

@@ -22,7 +22,9 @@
         "customer_wise":"ग्राहक समझदार",
         "vendor_wise":"विक्रेता समझदार",
         "inventory_adjustment":"माल - सूची का समायोजन",
-        "stock_aging_report":"एजिंग रिपोर्ट"
+        "stock_aging_report":"एजिंग रिपोर्ट",
+        "batch_report":"बैच रिपोर्ट",
+        "inventory_settings":"इन्वेंटरी सेटिंग्स"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",
@@ -53,6 +55,7 @@
         "closing_amount":"समापन मूल्य",
         "stock_name":"स्टॉक का नाम",
         "variant_name":"वेरिएंट का नाम",
+        "batch":"बैच",
         "no_entries_found_1":"दिए गए मानदंडों के भीतर कोई प्रविष्टि नहीं मिली।",
         "no_entries_found_2":"कुछ अन्य तिथियों के साथ खोजें",
         "voucher_type":"वाउचर प्रकार",
@@ -78,7 +81,9 @@
         "customise":"अनुकूलित करें",
         "no_result_found":"कोई परिणाम नहीं मिला",
         "select_all":"सबका चयन करें",
-        "select_account_group":"खाता समूह चुनें"
+        "select_account_group":"खाता समूह चुनें",
+        "books":"लेखांकन स्टॉक",
+        "inventory":"भौतिक स्टॉक"
     },
     "advance_search_filter":{
         "advance_search":"उन्नत खोज",
@@ -107,6 +112,44 @@
         "select_warehouse":"गोदाम का चयन करें",
         "opening_bal":"ओपनिंग बाल",
         "variant":"प्रकार",
-        "variants":"वेरिएंट"
-    }
+        "variants":"वेरिएंट",
+        "batch":"बैच"
+    },
+    "batch": "बैच",
+    "select_batch": "बैच चुनें",
+    "select_batches": "बैच चुनें",
+    "allocated_of": "आवंटित <strong>[ALLOCATED]</strong> / [TOTAL] [UNIT]",
+    "fully_allocated": "पूरी तरह आवंटित",
+    "over_line_quantity": "लाइन मात्रा से [QTY] [UNIT] अधिक",
+    "over_line_warning": "आपने इस लाइन की मात्रा से अधिक आवंटित किया है।",
+    "override_line_quantity": "लाइन आइटम को [QTY] मात्रा से ओवरराइड करें",
+    "negative_stock_warning": "[BATCH] उपलब्ध स्टॉक से अधिक जारी किया गया है और खरीद या समायोजन होने तक -[QTY] [UNIT] नकारात्मक शेष दिखाएगा।",
+    "add_batch": "+ बैच जोड़ें",
+    "quick_add_hint": "जोड़ने के लिए Enter · मात्रा पर जाने के लिए Tab",
+    "search_batch_number_or_name": "बैच नंबर या नाम खोजें",
+    "sorted_by_expiry": "सबसे पहले समाप्त होने वाले के अनुसार क्रमबद्ध",
+    "n_batches": "[COUNT] बैच",
+    "one_batch_negative": "1 बैच नकारात्मक",
+    "n_batches_negative": "[COUNT] बैच नकारात्मक",
+    "batch_not_found": "इस कोड का कोई बैच नहीं मिला",
+    "select_variant_first": "पहले वेरिएंट चुनें",
+    "batch_expiry": "समाप्ति",
+    "batch_available": "उपलब्ध",
+    "batch_manufacturing": "निर्माण",
+    "batch_will_go_negative": "बैच -[QTY] [UNIT] पर चला जाएगा",
+    "batch_will_increase": "बैच [QTY] [UNIT] पर चला जाएगा",
+    "batches_summary": "[COUNT] बैच · [QTY] [UNIT]",
+    "add_batch_row": "+ बैच पंक्ति जोड़ें",
+    "batch_number": "बैच संख्या",
+    "batch_name": "बैच नाम",
+    "manufacturing_date": "निर्माण तिथि",
+    "expiry_date": "समाप्ति तिथि",
+    "opening_qty": "उद्घाटन मात्रा",
+    "opening_amount": "उद्घाटन राशि",
+    "batch_qty_exceeds_opening": "बैच मात्रा, उद्घाटन मात्रा से अधिक है",
+    "batch_amount_exceeds_opening": "बैच राशि, उद्घाटन राशि से अधिक है",
+    "update_opening_qty": "उद्घाटन मात्रा अपडेट करें",
+    "update_opening_amount": "उद्घाटन राशि अपडेट करें",
+    "create_custom_batch": "कस्टम बैच नंबर बनाने के लिए टाइप करें",
+    "batch_required_fields": "कृपया बैच के सभी आवश्यक फ़ील्ड भरें"
 }

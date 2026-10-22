@@ -25,6 +25,8 @@ import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module'
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
 import { GoToBranchComponent } from '../../../shared/go-to-branch/go-to-branch.component';
+import { BatchChipListComponent } from '../../../shared/batch-chip-list/batch-chip-list.component';
+import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
 
 @NgModule({
     imports: [
@@ -50,7 +52,9 @@ import { GoToBranchComponent } from '../../../shared/go-to-branch/go-to-branch.c
         WatchVideoModule,
         MatPaginatorModule,
         GiddhDatePipe,
-        GoToBranchComponent
+        GoToBranchComponent,
+        BatchChipListComponent,
+        BatchSelectDialogComponent
     ],
     exports: [
         CreateManufacturingComponent,

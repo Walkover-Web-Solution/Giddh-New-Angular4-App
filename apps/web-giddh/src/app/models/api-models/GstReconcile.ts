@@ -1,5 +1,6 @@
 // tslint:disable:variable-name
 import { PAGINATION_LIMIT } from '../../app.constant';
+import { TaxServiceType } from '../../gst/constants/gst.constant';
 import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 
 export class VerifyOtpRequest {
@@ -100,13 +101,13 @@ export class GstrSheetDownloadRequest extends GstOverViewRequest {
 }
 
 export class FileGstr1Request extends GstOverViewRequest {
-    public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
+    public gsp: TaxServiceType;
 }
 
 export class GstSaveGspSessionRequest {
     public gstin: string;
     public userName: string;
-    public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
+    public gsp: TaxServiceType;
     public otp?: string;
 }
 
@@ -310,10 +311,8 @@ export class DocIssueSummary {
     public doc_det: DocIssueSummaryDetails[];
 }
 
-export class GetGspSessionResponse {
-    public vayana: boolean;
-    public taxpro: boolean;
-}
+/** GSP session flags keyed by lowercase provider name (e.g. whitebooks). */
+export type GetGspSessionResponse = Record<string, boolean>;
 
 /**
  *
@@ -405,7 +404,7 @@ export class GstrJsonDownloadRequest extends GstOverViewRequest {
  * @extends {GstOverViewRequest}
  */
 export class FilingStatusListRequest extends GstOverViewRequest {
-    public gsp: 'TAXPRO';
+    public gsp: TaxServiceType;
     public page: number;
     public count: number;
 }
