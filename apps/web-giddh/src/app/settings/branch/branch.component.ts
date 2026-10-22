@@ -456,8 +456,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
         }
 
-        entity.isDefault = true;
+        entity.isDefault = !entity.isDefault;;
 
+ 
         if (entityType === 'address') {
             (Array.isArray(branch.addresses) ? branch.addresses : []).forEach(branchAddress => {
                 if (branchAddress?.uniqueName === entity?.uniqueName) {
