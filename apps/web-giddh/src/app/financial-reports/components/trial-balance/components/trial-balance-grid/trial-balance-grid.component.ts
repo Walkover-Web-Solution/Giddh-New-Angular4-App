@@ -11,7 +11,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    SimpleChanges,
+    type SimpleChanges,
     TemplateRef,
     ViewChild,
 } from '@angular/core';

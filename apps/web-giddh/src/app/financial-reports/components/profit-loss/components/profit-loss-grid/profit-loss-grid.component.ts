@@ -11,7 +11,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    SimpleChanges,
+    type SimpleChanges,
     ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
