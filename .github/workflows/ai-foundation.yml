@@ -1,0 +1,36 @@
+name: Agent map and focused regression checks
+
+on:
+  pull_request:
+    paths:
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - 'docs/**'
+      - '.cursor/rules/**'
+      - '.github/workflows/ai-foundation.yml'
+      - 'scripts/check-ai-docs.js'
+      - 'scripts/tests/**'
+      - 'package.json'
+      - 'apps/web-giddh/src/app/app.constant.ts'
+      - 'apps/web-giddh/src/app/services/general.service.ts'
+      - 'apps/web-giddh/src/app/shared/helpers/selected-all.ts'
+      - 'apps/web-giddh/src/app/lodash-optimized.ts'
+
+permissions:
+  contents: read
+
+jobs:
+  focused-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.1'
+      - name: Check documentation without application dependencies
+        run: npm run check:docs
+      - name: Install for focused TypeScript regression checks
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Run focused regressions
+        run: npm run test:focused
