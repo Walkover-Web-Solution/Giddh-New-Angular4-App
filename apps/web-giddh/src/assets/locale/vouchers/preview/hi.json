@@ -592,6 +592,8 @@
     "document_status": "दस्तावेज़ स्थिति",
     "linked_invoice_no": "लिंक्ड इनवॉइस संख्या",
     "linked_bill_no": "लिंक्ड बिल संख्या",
+    "linked_challan_no": "लिंक्ड चालान संख्या",
+    "linked_receipt_note_no": "लिंक्ड रसीद नोट संख्या",
     "inventory_document_status": {
         "open": "ओपन",
         "closed": "क्लोज्ड",
@@ -600,7 +602,11 @@
         "shipped": "शिप्ड",
         "delivered": "डिलीवर्ड",
         "received": "प्राप्त",
-        "completed": "पूर्ण"
+        "completed": "पूर्ण",
+        "returned": "वापस किया गया",
+        "partially_returned": "आंशिक वापसी",
+        "partially_adjusted": "आंशिक समायोजित",
+        "fully_adjusted": "पूर्ण समायोजित"
     },
     "inventory_invoice_status": {
         "invoiced": "इनवॉइस किया गया",

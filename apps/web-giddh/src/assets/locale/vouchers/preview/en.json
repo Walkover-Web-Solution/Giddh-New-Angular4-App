@@ -592,6 +592,8 @@
     "document_status": "Document Status",
     "linked_invoice_no": "Linked Invoice No.",
     "linked_bill_no": "Linked Bill No.",
+    "linked_challan_no": "Linked Challan No.",
+    "linked_receipt_note_no": "Linked Receipt Note No.",
     "inventory_document_status": {
         "open": "Open",
         "closed": "Closed",
@@ -600,7 +602,11 @@
         "shipped": "Shipped",
         "delivered": "Delivered",
         "received": "Received",
-        "completed": "Completed"
+        "completed": "Completed",
+        "returned": "Returned",
+        "partially_returned": "Partially Returned",
+        "partially_adjusted": "Partially Adjusted",
+        "fully_adjusted": "Fully Adjusted"
     },
     "inventory_invoice_status": {
         "invoiced": "Invoiced",

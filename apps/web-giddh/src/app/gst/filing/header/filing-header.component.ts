@@ -10,7 +10,7 @@ import { takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/gst-reconcile.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../../shared/helpers/defaultDateFormat';
-import { GstReport, TaxServiceEnum, TaxServiceType } from '../../constants/gst.constant';
+import { ACTIVE_GSP_PROVIDER, ACTIVE_GSP_SESSION_KEY, GstReport, TaxServiceType } from '../../constants/gst.constant';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
 import { saveAs } from 'file-saver';
@@ -58,9 +58,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public imgPath: string = '';
     public gstAuthenticated: boolean = false;
     public gstSessionResponse$: Observable<any> = of({});
-    public isTaxproAuthenticated: boolean = false;
-    public isVayanaAuthenticated: boolean = false;
-    public isExcellonAuthenticated: boolean = false;
+    /** True when the active GSP provider session is authenticated */
+    public isProviderAuthenticated: boolean = false;
+    /** Active GSP provider — change ACTIVE_GSP_PROVIDER in gst.constant.ts to switch everywhere */
+    public readonly activeGspProvider = ACTIVE_GSP_PROVIDER;
     /** Returns the enum to be used in template */
     public get GstReport() {
         return GstReport;
@@ -90,8 +91,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public activeCompany: any = null;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
-    /** Holds Tax Service Enum */
-    public taxServiceEnum = TaxServiceEnum;
 
     constructor(
         private store: Store<AppState>,
@@ -136,9 +135,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
         this.gstSessionResponse$.subscribe(a => {
             if (a) {
-                this.isTaxproAuthenticated = a.taxpro;
-                this.isVayanaAuthenticated = a.vayana;
-                this.isExcellonAuthenticated = a.excellon;
+                this.isProviderAuthenticated = !!a[ACTIVE_GSP_SESSION_KEY];
             }
         });
 
@@ -202,7 +199,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             if (this.gstAuthenticated) {
                 this.fileGstReturnV2();
             } else {
-                this.openSettingAsidePane(null, this.taxServiceEnum.EXCELLON);
+                this.openSettingAsidePane(null, this.activeGspProvider);
             }
         }
 
@@ -265,7 +262,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public fileGstReturn(Via: 'JIO_GST' | 'TAXPRO' | 'VAYANA' | 'EXCELLON') {
+    public fileGstReturn(Via: TaxServiceType) {
         if (this.activeCompanyGstNumber) {
             this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
         } else {
@@ -274,7 +271,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public fileGstReturnV2() {
-        const gsp = this.getActiveGsp();
+        const gsp = ACTIVE_GSP_PROVIDER;
         if (this.selectedGst === GstReport.Gstr1) {
             this.store.dispatch(this.gstReconcileActions.FileGstr1({
                 gstin: this.activeCompanyGstNumber,
@@ -291,44 +288,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     /**
      * Checks whether the given GSP provider has an active authenticated session.
-     * Session flags are populated from `gstR.gstSessionResponse` (GET session on load or OTP verify).
      *
-     * @param {TaxServiceType} gsp - GSP provider to validate (TAXPRO, VAYANA, or EXCELLON)
-     * @returns {boolean} True when the matching provider flag is set in the store
+     * @param {TaxServiceType} gsp - GSP provider to validate
+     * @returns {boolean} True when the active provider session is authenticated
      * @memberof FilingHeaderComponent
      */
     private isGspAuthenticated(gsp: TaxServiceType): boolean {
-        if (gsp === this.taxServiceEnum.EXCELLON) {
-            return this.isExcellonAuthenticated;
-        }
-        if (gsp === this.taxServiceEnum.VAYANA) {
-            return this.isVayanaAuthenticated;
-        }
-        if (gsp === this.taxServiceEnum.TAXPRO) {
-            return this.isTaxproAuthenticated;
-        }
-        return false;
-    }
-
-    /**
-     * Resolves which GSP provider to use when filing a return.
-     * Picks the first authenticated provider in priority order: EXCELLON → VAYANA → TAXPRO.
-     * Falls back to EXCELLON when none are authenticated (e.g. before OTP flow completes).
-     *
-     * @returns {TaxServiceType} GSP value sent to file-gstr1 / save-gstr3b APIs
-     * @memberof FilingHeaderComponent
-     */
-    private getActiveGsp(): TaxServiceType {
-        if (this.isExcellonAuthenticated) {
-            return this.taxServiceEnum.EXCELLON;
-        }
-        if (this.isVayanaAuthenticated) {
-            return this.taxServiceEnum.VAYANA;
-        }
-        if (this.isTaxproAuthenticated) {
-            return this.taxServiceEnum.TAXPRO;
-        }
-        return this.taxServiceEnum.EXCELLON;
+        return gsp === ACTIVE_GSP_PROVIDER && this.isProviderAuthenticated;
     }
 
     public fileGstr3B(via) {

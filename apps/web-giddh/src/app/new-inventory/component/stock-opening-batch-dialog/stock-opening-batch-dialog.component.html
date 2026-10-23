@@ -65,7 +65,8 @@
                 <span>
                     {{ localeData?.batch_amount_exceeds_opening }}
                     <strong class="text-orange">
-                        ({{ currencySymbol }}{{ getBatchOpeningAmountTotal() }} / {{ currencySymbol }}{{ parseOpeningAmount(openingAmount) }})
+                        ({{ currencySymbol }}{{ getBatchOpeningAmountTotal() }} / {{ currencySymbol
+                        }}{{ parseOpeningAmount(openingAmount) }})
                     </strong>
                 </span>
                 <a class="text-primary cursor-pointer" (click)="applyBatchAmountToOpening()">
@@ -88,6 +89,7 @@
                     [allowCustomDropdownValue]="true"
                     [noResultsFoundMessage]="localeData?.create_custom_batch"
                     [required]="isBatchNameRequired(batch) && !batch.batchNumber"
+                    [disabled]="isBatchFieldsDisabled(batch)"
                     (dynamicSearchedQuery)="searchBatchAvailability($event)"
                     (selectedOption)="onBatchAvailabilitySelected(batch, $event)"
                 ></reactive-dropdown-field>
@@ -98,6 +100,7 @@
                     [(ngModel)]="batch.name"
                     [type]="'text'"
                     [required]="isBatchNameRequired(batch) && !batch.name"
+                    [disabled]="isBatchFieldsDisabled(batch)"
                 ></input-field>
                 <div class="variant-batch-datepicker">
                     <giddh-datepicker
@@ -106,6 +109,7 @@
                         [name]="'openingBatchMfg' + batchIndex"
                         [showToggleIcon]="false"
                         [appearance]="'outline'"
+                        [disabled]="isBatchFieldsDisabled(batch)"
                         [(ngModel)]="batch.manufacturingDate"
                     ></giddh-datepicker>
                 </div>
@@ -116,6 +120,7 @@
                         [name]="'openingBatchExpiry' + batchIndex"
                         [showToggleIcon]="false"
                         [appearance]="'outline'"
+                        [disabled]="isBatchFieldsDisabled(batch)"
                         [(ngModel)]="batch.expiryDate"
                     ></giddh-datepicker>
                 </div>
@@ -127,9 +132,11 @@
                     [type]="'number'"
                     [min]="0"
                     [allowDecimalDigitsOnly]="true"
+                    [disabled]="isBatchFieldsDisabled(batch)"
                 ></input-field>
                 <input-field
                     [label]="localeData?.opening_amount"
+                    [ngClass]="{ 'mr-2': batch.archive }"
                     [placeholder]="localeData?.opening_amount"
                     [name]="'openingBatchAmount' + batchIndex"
                     [(ngModel)]="batch.openingAmount"
@@ -137,7 +144,19 @@
                     [prefix]="currencySymbol"
                     [mask]="inputMaskFormat"
                     [useMask]="true"
+                    [disabled]="isBatchFieldsDisabled(batch)"
                 ></input-field>
+                <div class="batch-archive d-flex align-items-center justify-content-center">
+                    <mat-slide-toggle
+                        color="primary"
+                        name="openingBatchArchive{{ batchIndex }}"
+                        [(ngModel)]="batch.archive"
+                        [attr.aria-label]="batch.archive ? commonLocaleData?.app_active : commonLocaleData?.app_archive"
+                        (change)="onBatchArchiveChange(batch)"
+                    >
+                        {{ batch.archive ? commonLocaleData?.app_active : commonLocaleData?.app_archive }}
+                    </mat-slide-toggle>
+                </div>
             </div>
             <div class="batch-row-actions">
                 <button
@@ -146,6 +165,7 @@
                     matIconButton
                     class="chip-close-btn"
                     [attr.aria-label]="commonLocaleData?.app_delete"
+                    [disabled]="isBatchFieldsDisabled(batch)"
                     (click)="removeBatchRow(batchIndex)"
                 >
                     <i class="icon-trash"></i>
@@ -157,6 +177,7 @@
                     class="chip-close-btn"
                     [matTooltip]="commonLocaleData?.app_reset"
                     [attr.aria-label]="commonLocaleData?.app_reset"
+                    [disabled]="isBatchFieldsDisabled(batch)"
                     (click)="resetBatchRow(batchIndex)"
                 >
                     <i class="icon-refresh font-size-20"></i>

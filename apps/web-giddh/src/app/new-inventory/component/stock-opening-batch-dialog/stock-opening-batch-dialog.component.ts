@@ -4,6 +4,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -59,6 +60,7 @@ export interface StockOpeningBatchDialogResult {
         FormsModule,
         MatButtonModule,
         MatDialogModule,
+        MatSlideToggleModule,
         MatTooltipModule,
         FormFieldsModule,
         GiddhDatepickerModule
@@ -149,7 +151,8 @@ export class StockOpeningBatchDialogComponent implements OnInit, OnDestroy {
             sortBy: "expiry",
             q: query ?? "",
             noStock: true,
-            excludeBatchUniqueName: ""
+            excludeBatchUniqueName: "",
+            warehouseUniqueName: this.dialogData?.warehouseUniqueName ?? ""
         }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.allBatchAvailabilityOptions = mapAvailabilityBatches(response);
             this.syncSelectedBatchNumbers();
@@ -230,7 +233,34 @@ export class StockOpeningBatchDialogComponent implements OnInit, OnDestroy {
      * @memberof StockOpeningBatchDialogComponent
      */
     public isBatchNameRequired(batch: any): boolean {
+        if (!!batch?.archive) {
+            return false;
+        }
         return Number(batch?.openingQuantity) > 0 || this.parseOpeningAmount(batch?.openingAmount) > 0;
+    }
+
+    /**
+     * True when batch fields (except archive toggle) should be read-only.
+     *
+     * @param {*} batch Batch row
+     * @return {*}  {boolean}
+     * @memberof StockOpeningBatchDialogComponent
+     */
+    public isBatchFieldsDisabled(batch: any): boolean {
+        return !!batch?.archive;
+    }
+
+    /**
+     * Keep archiveOnly in sync with archive and refresh disabled state.
+     *
+     * @param {*} batch Batch row
+     * @memberof StockOpeningBatchDialogComponent
+     */
+    public onBatchArchiveChange(batch: any): void {
+        if (batch) {
+            batch.archiveOnly = !!batch.archive;
+        }
+        this.cdr.markForCheck();
     }
 
     /**
@@ -390,7 +420,9 @@ export class StockOpeningBatchDialogComponent implements OnInit, OnDestroy {
             manufacturingDate: null,
             expiryDate: null,
             openingQuantity: null,
-            openingAmount: null
+            openingAmount: null,
+            archive: false,
+            archiveOnly: false
         };
     }
 
@@ -412,7 +444,9 @@ export class StockOpeningBatchDialogComponent implements OnInit, OnDestroy {
                 manufacturingDate: this.parseBatchDate(batch.manufacturingDate),
                 expiryDate: this.parseBatchDate(batch.expiryDate),
                 openingQuantity: batch.openingQuantity ?? batch.quantity ?? null,
-                openingAmount: batch.openingAmount ?? null
+                openingAmount: batch.openingAmount ?? null,
+                archive: !!batch.archive,
+                archiveOnly: !!batch.archive
             }));
     }
 
@@ -434,7 +468,9 @@ export class StockOpeningBatchDialogComponent implements OnInit, OnDestroy {
                     batchNumber: String(batch.batchNumber).trim(),
                     quantity,
                     openingQuantity: quantity,
-                    openingAmount: this.parseOpeningAmount(batch.openingAmount)
+                    openingAmount: this.parseOpeningAmount(batch.openingAmount),
+                    archive: !!batch.archive,
+                    archiveOnly: !!batch.archive
                 };
                 const manufacturingDate = this.formatBatchDate(batch.manufacturingDate);
                 const expiryDate = this.formatBatchDate(batch.expiryDate);
@@ -468,6 +504,8 @@ export class StockOpeningBatchDialogComponent implements OnInit, OnDestroy {
         batch.openingQuantity = !batch.openingQuantity && item.openingQuantity ? item.openingQuantity : batch.openingQuantity;
         batch.openingAmount = !batch.openingAmount && item.openingAmount ? item.openingAmount : batch.openingAmount;
         batch.uniqueName = !batch.uniqueName && item.uniqueName ? item.uniqueName : batch.uniqueName;
+        batch.archive = !!item.archive;
+        batch.archiveOnly = !!item.archive;
     }
 
     /**

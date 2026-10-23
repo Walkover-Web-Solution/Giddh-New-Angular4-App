@@ -373,7 +373,7 @@ export class LoginComponent implements OnInit, OnDestroy {
      */
     public showTwoWayAuthModal() {
         this.twoWayAuthDialogRef = this.dialog.open(this.twoWayAuthTemplate, {
-            panelClass: 'mat-dialog-md',
+            panelClass: 'mat-dialog-sm',
             disableClose: true
         });
 

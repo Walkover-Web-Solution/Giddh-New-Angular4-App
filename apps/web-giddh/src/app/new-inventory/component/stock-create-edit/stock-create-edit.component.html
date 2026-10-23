@@ -872,11 +872,8 @@
                                                                 <th class="unit-name">
                                                                     {{ commonLocaleData?.app_unit }}
                                                                 </th>
-                                                                <th class="opening-qty">
-                                                                    {{ localeData?.opening_quantity }}
-                                                                </th>
-                                                                <th class="opening-amount">
-                                                                    {{ localeData?.opening_amount }}
+                                                                <th class="opening-qty opening-balance-col">
+                                                                    {{ localeData?.opening_balance }}
                                                                 </th>
                                                                 <th class="sku-code">
                                                                     {{ commonLocaleData?.app_sku_code }}
@@ -1008,53 +1005,43 @@
                                                                             [cssClass]="'form-control'"
                                                                         ></select-field>
                                                                     </td>
-                                                                    <td class="opening-qty">
-                                                                        <text-field
-                                                                            appEnterNext
-                                                                            [cssClass]="'text-right form-control'"
-                                                                            [placeholder]="'0.00'"
-                                                                            [name]="'variantOpeningQuantity' + i"
-                                                                            [(ngModel)]="variant.warehouseBalance[0].openingQuantity"
-                                                                            [type]="'number'"
-                                                                        ></text-field>
-                                                                        <a
-                                                                            *ngIf="batchTrackingEnabled"
-                                                                            class="d-inline-flex align-items-center column-gap-1 mt-1 font-size-12 text-primary cursor-pointer flex-wrap"
-                                                                            (click)="toggleVariantBatches(variant)"
-                                                                        >
-                                                                            <ng-container
-                                                                                *ngIf="getVariantBatchCount(variant); else addBatchLink"
-                                                                            >
-                                                                                {{ localeData?.manage_batches }} ({{
-                                                                                    getVariantBatchCount(variant)
-                                                                                }})
-                                                                            </ng-container>
-                                                                            <ng-template #addBatchLink>
-                                                                                {{ localeData?.add_batch }}
-                                                                            </ng-template>
-                                                                            <i
-                                                                                *ngIf="
-                                                                                    hasVariantBatchOpeningMismatch(variant) &&
-                                                                                    !variant.showBatches
-                                                                                "
-                                                                                class="icon-info text-orange font-size-14"
-                                                                                [matTooltip]="localeData?.batch_opening_mismatch_hint"
-                                                                                matTooltipPosition="above"
-                                                                            ></i>
-                                                                        </a>
-                                                                    </td>
-                                                                    <td class="opening-amount">
-                                                                        <text-field
-                                                                            appEnterNext
-                                                                            [cssClass]="'text-right form-control'"
-                                                                            [placeholder]="'0.00'"
-                                                                            [name]="'variantOpeningAmount' + i"
-                                                                            [(ngModel)]="variant.warehouseBalance[0].openingAmount"
-                                                                            [type]="'text'"
-                                                                            [prefix]="companyCurrencySymbol"
-                                                                            [mask]="inputMaskFormat"
-                                                                            [useMask]="true"
-                                                                        ></text-field>
+                                                                    <td class="opening-qty opening-balance-col">
+                                                                        <div class="variant-opening-balance-summary font-size-14">
+                                                                            @if (hasOpeningBalanceSet(variant)) {
+                                                                                <div class="font-weight-semibold variant-opening-qty">
+                                                                                    {{ getVariantOpeningQtyTotal(variant) }}
+                                                                                    {{
+                                                                                        variant.warehouseBalance?.[0]?.stockUnit?.name ||
+                                                                                            stockUnitName
+                                                                                    }}
+                                                                                    ·
+                                                                                    {{ companyCurrencySymbol
+                                                                                    }}{{ getVariantOpeningAmountTotalAll(variant) }}
+                                                                                </div>
+                                                                                <div>
+                                                                                    {{ getOpeningBalanceSummaryLabel(variant) }}
+                                                                                </div>
+                                                                                <a
+                                                                                    class="d-inline-block mt-1 text-primary cursor-pointer"
+                                                                                    (click)="openVariantOpeningBalanceDialog(variant)"
+                                                                                >
+                                                                                    {{ localeData?.edit_opening_balance }}
+                                                                                </a>
+                                                                            } @else {
+                                                                                <div class="font-weight-semibold variant-opening-qty">
+                                                                                    —
+                                                                                </div>
+                                                                                <div class="font-size-12 text-orange">
+                                                                                    {{ localeData?.not_set }}
+                                                                                </div>
+                                                                                <a
+                                                                                    class="d-inline-block mt-1 text-primary cursor-pointer"
+                                                                                    (click)="openVariantOpeningBalanceDialog(variant)"
+                                                                                >
+                                                                                    + {{ localeData?.add_opening_balance }}
+                                                                                </a>
+                                                                            }
+                                                                        </div>
                                                                     </td>
                                                                     <td class="sku-code">
                                                                         <text-field
@@ -1284,178 +1271,6 @@
                                                                         ></mat-slide-toggle>
                                                                     </td>
                                                                 </tr>
-                                                                <tr
-                                                                    class="variant-batch-row d-block w-100"
-                                                                    *ngIf="batchTrackingEnabled && variant.showBatches && variant.name"
-                                                                >
-                                                                    <td class="variant-batch-cell d-block w-100 min-width-0">
-                                                                        <div
-                                                                            *ngIf="hasVariantBatchOpeningMismatch(variant)"
-                                                                            class="w-75 mb-2 font-size-12"
-                                                                        >
-                                                                            <p
-                                                                                *ngIf="isVariantBatchQtyExceeded(variant)"
-                                                                                class="d-flex align-items-center flex-wrap column-gap-1 mb-1 pl-1"
-                                                                            >
-                                                                                <i class="icon-info text-orange font-size-14"></i>
-                                                                                <span>
-                                                                                    {{ localeData?.batch_qty_exceeds_opening }}
-                                                                                    <strong class="text-orange">
-                                                                                        ({{ getVariantBatchOpeningQtyTotal(variant) }} /
-                                                                                        {{
-                                                                                            variant.warehouseBalance[0].openingQuantity ||
-                                                                                                0
-                                                                                        }})
-                                                                                    </strong>
-                                                                                </span>
-                                                                                <a
-                                                                                    class="text-primary cursor-pointer another-option-btn"
-                                                                                    (click)="applyBatchQtyToVariantOpening(variant)"
-                                                                                >
-                                                                                    {{ localeData?.update_opening_qty }}
-                                                                                </a>
-                                                                            </p>
-                                                                            <p
-                                                                                *ngIf="isVariantBatchAmountExceeded(variant)"
-                                                                                class="d-flex align-items-center flex-wrap column-gap-1 mb-0 pl-1"
-                                                                            >
-                                                                                <i class="icon-info text-orange font-size-14"></i>
-                                                                                <span>
-                                                                                    {{ localeData?.batch_amount_exceeds_opening }}
-                                                                                    <strong class="text-orange">
-                                                                                        ({{ companyCurrencySymbol
-                                                                                        }}{{ getVariantBatchOpeningAmountTotal(variant) }} /
-                                                                                        {{ companyCurrencySymbol
-                                                                                        }}{{
-                                                                                            variant.warehouseBalance[0].openingAmount || 0
-                                                                                        }})
-                                                                                    </strong>
-                                                                                </span>
-                                                                                <a
-                                                                                    class="text-primary cursor-pointer another-option-btn"
-                                                                                    (click)="applyBatchAmountToVariantOpening(variant)"
-                                                                                >
-                                                                                    {{ localeData?.update_opening_amount }}
-                                                                                </a>
-                                                                            </p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="variant-batch-fields d-grid mb-2 w-75"
-                                                                            *ngFor="
-                                                                                let batch of getWarehouseBatches(variant);
-                                                                                let batchIndex = index
-                                                                            "
-                                                                        >
-                                                                            <div class="min-width-0 w-100">
-                                                                                <reactive-dropdown-field
-                                                                                    appEnterNext
-                                                                                    [label]="localeData?.batch_number"
-                                                                                    [placeholder]="localeData?.batch_number"
-                                                                                    [name]="'variantBatchNumber' + i + '_' + batchIndex"
-                                                                                    [options]="getBatchAvailabilityOptions(batch)"
-                                                                                    [ngModel]="batch.batchNumber"
-                                                                                    [labelValue]="batch.batchNumber"
-                                                                                    [useCustomLabelValue]="true"
-                                                                                    [enableDynamicSearch]="true"
-                                                                                    [allowCustomDropdownValue]="true"
-                                                                                    [noResultsFoundMessage]="
-                                                                                        localeData?.create_custom_batch
-                                                                                    "
-                                                                                    [required]="
-                                                                                        isBatchNameRequired(batch) && !batch.batchNumber
-                                                                                    "
-                                                                                    (dynamicSearchedQuery)="searchBatchAvailability($event)"
-                                                                                    (selectedOption)="
-                                                                                        onBatchAvailabilitySelected(batch, $event)
-                                                                                    "
-                                                                                ></reactive-dropdown-field>
-                                                                            </div>
-                                                                            <div class="min-width-0 w-100">
-                                                                                <input-field
-                                                                                    [label]="localeData?.batch_name"
-                                                                                    [placeholder]="localeData?.batch_name"
-                                                                                    [name]="'variantBatchName' + i + '_' + batchIndex"
-                                                                                    [(ngModel)]="batch.name"
-                                                                                    [type]="'text'"
-                                                                                    [required]="isBatchNameRequired(batch) && !batch.name"
-                                                                                ></input-field>
-                                                                            </div>
-                                                                            <div class="min-width-0 w-100 variant-batch-datepicker">
-                                                                                <giddh-datepicker
-                                                                                    [label]="localeData?.manufacturing_date"
-                                                                                    [placeholder]="localeData?.manufacturing_date"
-                                                                                    [name]="'variantBatchMfg' + i + '_' + batchIndex"
-                                                                                    [showToggleIcon]="false"
-                                                                                    [appearance]="'outline'"
-                                                                                    [(ngModel)]="batch.manufacturingDate"
-                                                                                ></giddh-datepicker>
-                                                                            </div>
-                                                                            <div class="min-width-0 w-100 variant-batch-datepicker">
-                                                                                <giddh-datepicker
-                                                                                    [label]="localeData?.expiry_date"
-                                                                                    [placeholder]="localeData?.expiry_date"
-                                                                                    [name]="'variantBatchExpiry' + i + '_' + batchIndex"
-                                                                                    [showToggleIcon]="false"
-                                                                                    [appearance]="'outline'"
-                                                                                    [(ngModel)]="batch.expiryDate"
-                                                                                ></giddh-datepicker>
-                                                                            </div>
-                                                                            <div class="min-width-0 w-100">
-                                                                                <input-field
-                                                                                    [label]="localeData?.opening_qty"
-                                                                                    [placeholder]="'0.00'"
-                                                                                    [name]="'variantBatchOpeningQty' + i + '_' + batchIndex"
-                                                                                    [(ngModel)]="batch.openingQuantity"
-                                                                                    [type]="'number'"
-                                                                                    [min]="0"
-                                                                                    [allowDecimalDigitsOnly]="true"
-                                                                                ></input-field>
-                                                                            </div>
-                                                                            <div class="min-width-0 w-100">
-                                                                                <input-field
-                                                                                    [label]="localeData?.opening_amount"
-                                                                                    [placeholder]="'0.00'"
-                                                                                    [name]="
-                                                                                        'variantBatchOpeningAmount' + i + '_' + batchIndex
-                                                                                    "
-                                                                                    [(ngModel)]="batch.openingAmount"
-                                                                                    [type]="'text'"
-                                                                                    [prefix]="companyCurrencySymbol"
-                                                                                    [mask]="inputMaskFormat"
-                                                                                    [useMask]="true"
-                                                                                ></input-field>
-                                                                            </div>
-                                                                            <div class="variant-batch-remove">
-                                                                                <button
-                                                                                    *ngIf="getWarehouseBatches(variant)?.length > 1"
-                                                                                    aria-label="delete icon"
-                                                                                    matIconButton
-                                                                                    class="chip-close-btn"
-                                                                                    (click)="removeVariantBatchRow(variant, batchIndex)"
-                                                                                >
-                                                                                    <i class="icon-trash"></i>
-                                                                                </button>
-                                                                                <button
-                                                                                    *ngIf="getWarehouseBatches(variant)?.length === 1"
-                                                                                    type="button"
-                                                                                    matIconButton
-                                                                                    class="chip-close-btn"
-                                                                                    [matTooltip]="commonLocaleData?.app_reset"
-                                                                                    [attr.aria-label]="commonLocaleData?.app_reset"
-                                                                                    (click)="resetVariantBatchRow(variant, batchIndex)"
-                                                                                >
-                                                                                    <i class="icon-refresh font-size-20"></i>
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                        <a
-                                                                            class="d-inline-block text-primary cursor-pointer another-option-btn mt-2"
-                                                                            (click)="addVariantBatchRow(variant)"
-                                                                        >
-                                                                            {{ localeData?.add_batch_row }}
-                                                                        </a>
-                                                                    </td>
-                                                                </tr>
                                                             </ng-container>
                                                         </table>
                                                     </div>
@@ -1578,211 +1393,452 @@
                                                 </div>
                                             </div>
                                             <div class="row mt-4 align-items-center">
-                                                <ng-container
-                                                    *ngIf="
-                                                        !isVariantAvailable && batchTrackingEnabled && stockForm.variants[0] as stockVariant
-                                                    "
-                                                >
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            appEnterNext
-                                                            [name]="'openingQuantity'"
-                                                            [type]="'number'"
-                                                            [label]="localeData?.opening_quantity"
-                                                            [placeholder]="localeData?.opening_quantity"
-                                                            [(ngModel)]="stockForm.openingQuantity"
-                                                            [allowDecimalDigitsOnly]="true"
-                                                            [min]="0"
-                                                        ></input-field>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            appEnterNext
-                                                            [name]="'openingAmount'"
-                                                            [type]="'text'"
-                                                            [label]="localeData?.opening_amount"
-                                                            [placeholder]="localeData?.opening_amount"
-                                                            [(ngModel)]="stockForm.openingAmount"
-                                                            [prefix]="companyCurrencySymbol"
-                                                            [mask]="inputMaskFormat"
-                                                            [useMask]="true"
-                                                        ></input-field>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="mb-2">
-                                                            <p class="font-weight-semibold mb-2 pt-2">
-                                                                {{ localeData?.opening_balance_batch_wise }}
-                                                            </p>
-                                                            <div class="stock-batch-box border border-radius-8">
-                                                                <div
-                                                                    *ngIf="hasVariantBatchOpeningMismatch(stockVariant)"
-                                                                    class="w-75 mb-2 font-size-12"
-                                                                >
-                                                                    <p
-                                                                        *ngIf="isVariantBatchQtyExceeded(stockVariant)"
-                                                                        class="d-flex align-items-center flex-wrap column-gap-1 mb-1 pl-1"
-                                                                    >
-                                                                        <i class="icon-info text-orange font-size-14"></i>
-                                                                        <span>
-                                                                            {{ localeData?.batch_qty_exceeds_opening }}
-                                                                            <strong class="text-orange">
-                                                                                ({{ getVariantBatchOpeningQtyTotal(stockVariant) }} /
-                                                                                {{ stockForm.openingQuantity || 0 }})
-                                                                            </strong>
-                                                                        </span>
-                                                                        <a
-                                                                            class="text-primary cursor-pointer another-option-btn"
-                                                                            (click)="applyBatchQtyToVariantOpening(stockVariant)"
-                                                                        >
-                                                                            {{ localeData?.update_opening_qty }}
-                                                                        </a>
-                                                                    </p>
-                                                                    <p
-                                                                        *ngIf="isVariantBatchAmountExceeded(stockVariant)"
-                                                                        class="d-flex align-items-center flex-wrap column-gap-1 mb-0 pl-1"
-                                                                    >
-                                                                        <i class="icon-info text-orange font-size-14"></i>
-                                                                        <span>
-                                                                            {{ localeData?.batch_amount_exceeds_opening }}
-                                                                            <strong class="text-orange">
-                                                                                ({{ companyCurrencySymbol
-                                                                                }}{{ getVariantBatchOpeningAmountTotal(stockVariant) }} /
-                                                                                {{ companyCurrencySymbol
-                                                                                }}{{ stockForm.openingAmount || 0 }})
-                                                                            </strong>
-                                                                        </span>
-                                                                        <a
-                                                                            class="text-primary cursor-pointer another-option-btn"
-                                                                            (click)="applyBatchAmountToVariantOpening(stockVariant)"
-                                                                        >
-                                                                            {{ localeData?.update_opening_amount }}
-                                                                        </a>
-                                                                    </p>
+                                                <ng-container *ngIf="!isVariantAvailable && stockForm.variants[0] as stockVariant">
+                                                    <div class="col-12 stock-opening-balance-section">
+                                                        <div
+                                                            class="d-flex align-items-start justify-content-between flex-wrap column-gap-2 row-gap-2 mb-3"
+                                                        >
+                                                            <div>
+                                                                <h3 class="font-size-16 font-weight-semibold mb-1">
+                                                                    {{ localeData?.opening_balance }}
+                                                                </h3>
+                                                                <p class="font-size-12 mb-0 pl-0">
+                                                                    {{ localeData?.opening_balance_warehouse_hint }}
+                                                                </p>
+                                                            </div>
+                                                            <div class="d-flex align-items-center column-gap-3 flex-wrap">
+                                                                <div class="font-size-12 text-right">
+                                                                    <span class="text-uppercase">{{ localeData?.total_opening }}</span>
+                                                                    <strong class="d-block font-size-14">
+                                                                        {{ getStockOpeningQtyTotal(stockVariant) }}
+                                                                        {{ stockUnitName }}
+                                                                        ·
+                                                                        {{ companyCurrencySymbol
+                                                                        }}{{ getStockOpeningAmountTotal(stockVariant) }}
+                                                                    </strong>
                                                                 </div>
-                                                                <div
-                                                                    class="stock-batch-row"
-                                                                    *ngFor="
-                                                                        let batch of getWarehouseBatches(stockVariant);
-                                                                        let batchIndex = index
-                                                                    "
+                                                                <button
+                                                                    type="button"
+                                                                    matButton="outlined"
+                                                                    color="primary"
+                                                                    (click)="addStockWarehouse(stockVariant)"
+                                                                    [disabled]="!canAddWarehouse(stockVariant)"
                                                                 >
-                                                                    <div class="stock-batch-fields d-grid">
-                                                                        <reactive-dropdown-field
-                                                                            appEnterNext
-                                                                            [name]="'stockBatchNumber' + batchIndex"
-                                                                            [label]="localeData?.batch_number"
-                                                                            [placeholder]="localeData?.batch_number"
-                                                                            [options]="getBatchAvailabilityOptions(batch)"
-                                                                            [ngModel]="batch.batchNumber"
-                                                                            [labelValue]="batch.batchNumber"
-                                                                            [useCustomLabelValue]="true"
-                                                                            [enableDynamicSearch]="true"
-                                                                            [allowCustomDropdownValue]="true"
-                                                                            [noResultsFoundMessage]="localeData?.create_custom_batch"
-                                                                            [required]="isBatchNameRequired(batch) && !batch.batchNumber"
-                                                                            (dynamicSearchedQuery)="searchBatchAvailability($event)"
-                                                                            (selectedOption)="onBatchAvailabilitySelected(batch, $event)"
-                                                                        ></reactive-dropdown-field>
-                                                                        <input-field
-                                                                            appEnterNext
-                                                                            [name]="'stockBatchName' + batchIndex"
-                                                                            [type]="'text'"
-                                                                            [label]="localeData?.batch_name"
-                                                                            [placeholder]="localeData?.batch_name"
-                                                                            [(ngModel)]="batch.name"
-                                                                            [required]="isBatchNameRequired(batch) && !batch.name"
-                                                                        ></input-field>
-                                                                        <giddh-datepicker
-                                                                            [label]="localeData?.manufacturing_date"
-                                                                            [placeholder]="localeData?.manufacturing_date"
-                                                                            [name]="'stockBatchMfg' + batchIndex"
-                                                                            [showToggleIcon]="false"
-                                                                            [appearance]="'outline'"
-                                                                            [(ngModel)]="batch.manufacturingDate"
-                                                                        ></giddh-datepicker>
-                                                                        <giddh-datepicker
-                                                                            [label]="localeData?.expiry_date"
-                                                                            [placeholder]="localeData?.expiry_date"
-                                                                            [name]="'stockBatchExpiry' + batchIndex"
-                                                                            [showToggleIcon]="false"
-                                                                            [appearance]="'outline'"
-                                                                            [(ngModel)]="batch.expiryDate"
-                                                                        ></giddh-datepicker>
-                                                                        <input-field
-                                                                            appEnterNext
-                                                                            [name]="'stockBatchOpeningQty' + batchIndex"
-                                                                            [type]="'number'"
-                                                                            [label]="localeData?.opening_quantity"
-                                                                            [placeholder]="localeData?.opening_quantity"
-                                                                            [allowDecimalDigitsOnly]="true"
-                                                                            [min]="0"
-                                                                            [(ngModel)]="batch.openingQuantity"
-                                                                        ></input-field>
-                                                                        <input-field
-                                                                            appEnterNext
-                                                                            [name]="'stockBatchOpeningAmount' + batchIndex"
-                                                                            [type]="'text'"
-                                                                            [label]="localeData?.opening_amount"
-                                                                            [placeholder]="localeData?.opening_amount"
-                                                                            [(ngModel)]="batch.openingAmount"
-                                                                            [prefix]="companyCurrencySymbol"
-                                                                            [mask]="inputMaskFormat"
-                                                                            [useMask]="true"
-                                                                        ></input-field>
-                                                                        <button
-                                                                            *ngIf="getWarehouseBatches(stockVariant)?.length > 1"
-                                                                            type="button"
-                                                                            aria-label="remove batch"
-                                                                            matIconButton
-                                                                            class="stock-batch-remove light-gray"
-                                                                            (click)="removeVariantBatchRow(stockVariant, batchIndex)"
-                                                                        >
-                                                                            <i class="icon-trash"></i>
-                                                                        </button>
-                                                                        <button
-                                                                            *ngIf="getWarehouseBatches(stockVariant)?.length === 1"
-                                                                            type="button"
-                                                                            matIconButton
-                                                                            class="stock-batch-remove light-gray"
-                                                                            [matTooltip]="commonLocaleData?.app_reset"
-                                                                            [attr.aria-label]="commonLocaleData?.app_reset"
-                                                                            (click)="resetVariantBatchRow(stockVariant, batchIndex)"
-                                                                        >
-                                                                            <i class="icon-refresh font-size-20"></i>
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                                <a
-                                                                    class="d-inline-block mt-1 mb-2 text-primary cursor-pointer another-option-btn"
-                                                                    (click)="addVariantBatchRow(stockVariant)"
-                                                                >
-                                                                    + {{ localeData?.add_batch }}
-                                                                </a>
+                                                                    + {{ localeData?.add_warehouse }}
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </ng-container>
-                                                <ng-container *ngIf="!isVariantAvailable && !batchTrackingEnabled">
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            appEnterNext
-                                                            [name]="'openingQuantity'"
-                                                            [type]="'number'"
-                                                            [placeholder]="localeData?.opening_quantity"
-                                                            [(ngModel)]="stockForm.variants[0].warehouseBalance[0].openingQuantity"
-                                                        ></input-field>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            appEnterNext
-                                                            [name]="'openingAmount'"
-                                                            [type]="'text'"
-                                                            [placeholder]="localeData?.opening_amount"
-                                                            [(ngModel)]="stockForm.variants[0].warehouseBalance[0].openingAmount"
-                                                            [prefix]="companyCurrencySymbol"
-                                                            [mask]="inputMaskFormat"
-                                                            [useMask]="true"
-                                                        ></input-field>
+
+                                                        <div class="d-flex flex-column row-gap-15 pb-3">
+                                                            @for (
+                                                                warehouseRow of stockVariant.warehouseBalance;
+                                                                track $index;
+                                                                let warehouseIndex = $index
+                                                            ) {
+                                                                <div class="warehouse-card border border-radius-8 p-3">
+                                                                    @if (isWarehouseArchived(warehouseRow)) {
+                                                                        <p
+                                                                            class="d-flex align-items-center column-gap-1 font-size-12 text-orange mb-2 pl-0"
+                                                                        >
+                                                                            <i class="icon-info font-size-14"></i>
+                                                                            <span>{{ localeData?.warehouse_archived_message }}</span>
+                                                                        </p>
+                                                                    }
+                                                                    <div
+                                                                        class="d-flex align-items-end column-gap-2 flex-wrap warehouse-main-row"
+                                                                    >
+                                                                        <div class="warehouse-field flex-grow-1">
+                                                                            <reactive-dropdown-field
+                                                                                appEnterNext
+                                                                                [label]="
+                                                                                    commonLocaleData?.app_warehouse ||
+                                                                                    commonLocaleData?.app_select_warehouse
+                                                                                "
+                                                                                [placeholder]="commonLocaleData?.app_select_warehouse"
+                                                                                [name]="'stockWarehouse' + warehouseIndex"
+                                                                                [options]="
+                                                                                    getWarehouseOptionsForRow(stockVariant, warehouseIndex)
+                                                                                "
+                                                                                [labelValue]="warehouseRow?.warehouse?.name"
+                                                                                [required]="isWarehouseSelectionRequired(warehouseRow)"
+                                                                                [showError]="
+                                                                                    isFormSubmitted &&
+                                                                                    isWarehouseSelectionRequired(warehouseRow) &&
+                                                                                    !warehouseRow?.warehouse?.uniqueName
+                                                                                "
+                                                                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                (selectedOption)="
+                                                                                    onStockWarehouseSelected(warehouseRow, $event)
+                                                                                "
+                                                                            ></reactive-dropdown-field>
+                                                                        </div>
+                                                                        <div class="qty-field">
+                                                                            <input-field
+                                                                                appEnterNext
+                                                                                [name]="'stockWarehouseQty' + warehouseIndex"
+                                                                                [type]="'number'"
+                                                                                [label]="localeData?.opening_quantity"
+                                                                                [placeholder]="localeData?.opening_quantity"
+                                                                                [(ngModel)]="warehouseRow.openingQuantity"
+                                                                                [allowDecimalDigitsOnly]="true"
+                                                                                [min]="0"
+                                                                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                            ></input-field>
+                                                                        </div>
+                                                                        <div class="amount-field">
+                                                                            <input-field
+                                                                                appEnterNext
+                                                                                [name]="'stockWarehouseAmount' + warehouseIndex"
+                                                                                [type]="'text'"
+                                                                                [label]="localeData?.opening_amount"
+                                                                                [placeholder]="localeData?.opening_amount"
+                                                                                [(ngModel)]="warehouseRow.openingAmount"
+                                                                                [prefix]="companyCurrencySymbol"
+                                                                                [mask]="inputMaskFormat"
+                                                                                [useMask]="true"
+                                                                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                            ></input-field>
+                                                                        </div>
+                                                                        <div class="d-flex align-items-center column-gap-2 mb-1">
+                                                                            @if (batchTrackingEnabled) {
+                                                                                <mat-slide-toggle
+                                                                                    color="primary"
+                                                                                    [checked]="warehouseRow.isShowBatch !== false"
+                                                                                    [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                    (change)="
+                                                                                        onTrackByBatchChange(warehouseRow, $event.checked)
+                                                                                    "
+                                                                                    [attr.aria-label]="localeData?.track_by_batch"
+                                                                                >
+                                                                                    {{ localeData?.track_by_batch }}
+                                                                                </mat-slide-toggle>
+                                                                            }
+                                                                            @if (stockVariant.warehouseBalance.length > 1) {
+                                                                                <button
+                                                                                    type="button"
+                                                                                    matIconButton
+                                                                                    class="light-gray"
+                                                                                    [attr.aria-label]="commonLocaleData?.app_delete"
+                                                                                    [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                    (click)="
+                                                                                        removeStockWarehouse(stockVariant, warehouseIndex)
+                                                                                    "
+                                                                                >
+                                                                                    <i class="icon-trash"></i>
+                                                                                </button>
+                                                                            } @else {
+                                                                                <button
+                                                                                    type="button"
+                                                                                    matIconButton
+                                                                                    class="light-gray"
+                                                                                    [matTooltip]="commonLocaleData?.app_reset"
+                                                                                    [attr.aria-label]="commonLocaleData?.app_reset"
+                                                                                    [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                    (click)="
+                                                                                        clearStockWarehouse(stockVariant, warehouseIndex)
+                                                                                    "
+                                                                                >
+                                                                                    <i class="icon-refresh font-size-20"></i>
+                                                                                </button>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                    @if (batchTrackingEnabled && warehouseRow.isShowBatch !== false) {
+                                                                        <div class="batch-list border border-radius-8 p-3 mt-3">
+                                                                            <p
+                                                                                class="font-size-12 font-weight-semibold text-light text-uppercase mb-2"
+                                                                            >
+                                                                                {{ localeData?.batches_label || 'Batches' }}
+                                                                            </p>
+                                                                            @if (
+                                                                                !isWarehouseArchived(warehouseRow) &&
+                                                                                (isWarehouseBatchQtyExceeded(warehouseRow) ||
+                                                                                    isWarehouseBatchAmountExceeded(warehouseRow))
+                                                                            ) {
+                                                                                <div class="mb-2 font-size-12">
+                                                                                    @if (isWarehouseBatchQtyExceeded(warehouseRow)) {
+                                                                                        <p
+                                                                                            class="d-flex align-items-center flex-wrap column-gap-1 mb-1"
+                                                                                        >
+                                                                                            <i
+                                                                                                class="icon-info text-orange font-size-14"
+                                                                                            ></i>
+                                                                                            <span>
+                                                                                                {{ localeData?.batch_qty_exceeds_opening }}
+                                                                                                <strong class="text-orange">
+                                                                                                    ({{
+                                                                                                        getWarehouseBatchOpeningQtyTotal(
+                                                                                                            warehouseRow
+                                                                                                        )
+                                                                                                    }}
+                                                                                                    /
+                                                                                                    {{ warehouseRow.openingQuantity || 0 }})
+                                                                                                </strong>
+                                                                                            </span>
+                                                                                            <a
+                                                                                                class="text-primary cursor-pointer another-option-btn"
+                                                                                                (click)="
+                                                                                                    applyBatchQtyToWarehouseOpening(
+                                                                                                        warehouseRow
+                                                                                                    )
+                                                                                                "
+                                                                                            >
+                                                                                                {{ localeData?.update_opening_qty }}
+                                                                                            </a>
+                                                                                        </p>
+                                                                                    }
+                                                                                    @if (isWarehouseBatchAmountExceeded(warehouseRow)) {
+                                                                                        <p
+                                                                                            class="d-flex align-items-center flex-wrap column-gap-1 mb-0"
+                                                                                        >
+                                                                                            <i
+                                                                                                class="icon-info text-orange font-size-14"
+                                                                                            ></i>
+                                                                                            <span>
+                                                                                                {{
+                                                                                                    localeData?.batch_amount_exceeds_opening
+                                                                                                }}
+                                                                                                <strong class="text-orange">
+                                                                                                    ({{ companyCurrencySymbol
+                                                                                                    }}{{
+                                                                                                        getWarehouseBatchOpeningAmountTotal(
+                                                                                                            warehouseRow
+                                                                                                        )
+                                                                                                    }}
+                                                                                                    / {{ companyCurrencySymbol
+                                                                                                    }}{{ warehouseRow.openingAmount || 0 }})
+                                                                                                </strong>
+                                                                                            </span>
+                                                                                            <a
+                                                                                                class="text-primary cursor-pointer another-option-btn"
+                                                                                                (click)="
+                                                                                                    applyBatchAmountToWarehouseOpening(
+                                                                                                        warehouseRow
+                                                                                                    )
+                                                                                                "
+                                                                                            >
+                                                                                                {{ localeData?.update_opening_amount }}
+                                                                                            </a>
+                                                                                        </p>
+                                                                                    }
+                                                                                </div>
+                                                                            }
+                                                                            @for (
+                                                                                batch of warehouseRow.batches;
+                                                                                track $index;
+                                                                                let batchIndex = $index
+                                                                            ) {
+                                                                                <div class="stock-batch-fields d-grid mb-2">
+                                                                                    <reactive-dropdown-field
+                                                                                        appEnterNext
+                                                                                        [name]="
+                                                                                            'stockBatchNumber' +
+                                                                                            warehouseIndex +
+                                                                                            '_' +
+                                                                                            batchIndex
+                                                                                        "
+                                                                                        [label]="localeData?.batch_number"
+                                                                                        [placeholder]="localeData?.batch_number"
+                                                                                        [options]="
+                                                                                            getBatchAvailabilityOptions(
+                                                                                                batch,
+                                                                                                warehouseRow?.warehouse?.uniqueName
+                                                                                            )
+                                                                                        "
+                                                                                        [ngModel]="batch.batchNumber"
+                                                                                        [labelValue]="batch.batchNumber"
+                                                                                        [useCustomLabelValue]="true"
+                                                                                        [enableDynamicSearch]="true"
+                                                                                        [allowCustomDropdownValue]="true"
+                                                                                        [noResultsFoundMessage]="
+                                                                                            localeData?.create_custom_batch
+                                                                                        "
+                                                                                        [required]="
+                                                                                            isBatchNameRequired(batch) && !batch.batchNumber
+                                                                                        "
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
+                                                                                        (dynamicSearchedQuery)="
+                                                                                            searchBatchAvailability(
+                                                                                                $event,
+                                                                                                warehouseRow?.warehouse?.uniqueName
+                                                                                            )
+                                                                                        "
+                                                                                        (selectedOption)="
+                                                                                            onBatchAvailabilitySelected(
+                                                                                                batch,
+                                                                                                $event,
+                                                                                                warehouseRow?.warehouse?.uniqueName
+                                                                                            )
+                                                                                        "
+                                                                                    ></reactive-dropdown-field>
+                                                                                    <input-field
+                                                                                        appEnterNext
+                                                                                        [name]="
+                                                                                            'stockBatchName' +
+                                                                                            warehouseIndex +
+                                                                                            '_' +
+                                                                                            batchIndex
+                                                                                        "
+                                                                                        [type]="'text'"
+                                                                                        [label]="localeData?.batch_name"
+                                                                                        [placeholder]="localeData?.batch_name"
+                                                                                        [(ngModel)]="batch.name"
+                                                                                        [required]="
+                                                                                            isBatchNameRequired(batch) && !batch.name
+                                                                                        "
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
+                                                                                    ></input-field>
+                                                                                    <giddh-datepicker
+                                                                                        [label]="localeData?.manufacturing_date"
+                                                                                        [placeholder]="localeData?.manufacturing_date"
+                                                                                        [name]="
+                                                                                            'stockBatchMfg' +
+                                                                                            warehouseIndex +
+                                                                                            '_' +
+                                                                                            batchIndex
+                                                                                        "
+                                                                                        [showToggleIcon]="false"
+                                                                                        [appearance]="'outline'"
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
+                                                                                        [(ngModel)]="batch.manufacturingDate"
+                                                                                    ></giddh-datepicker>
+                                                                                    <giddh-datepicker
+                                                                                        [label]="localeData?.expiry_date"
+                                                                                        [placeholder]="localeData?.expiry_date"
+                                                                                        [name]="
+                                                                                            'stockBatchExpiry' +
+                                                                                            warehouseIndex +
+                                                                                            '_' +
+                                                                                            batchIndex
+                                                                                        "
+                                                                                        [showToggleIcon]="false"
+                                                                                        [appearance]="'outline'"
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
+                                                                                        [(ngModel)]="batch.expiryDate"
+                                                                                    ></giddh-datepicker>
+                                                                                    <input-field
+                                                                                        appEnterNext
+                                                                                        [name]="
+                                                                                            'stockBatchOpeningQty' +
+                                                                                            warehouseIndex +
+                                                                                            '_' +
+                                                                                            batchIndex
+                                                                                        "
+                                                                                        [type]="'number'"
+                                                                                        [label]="localeData?.opening_quantity"
+                                                                                        [placeholder]="localeData?.opening_quantity"
+                                                                                        [allowDecimalDigitsOnly]="true"
+                                                                                        [min]="0"
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
+                                                                                        [(ngModel)]="batch.openingQuantity"
+                                                                                    ></input-field>
+                                                                                    <input-field
+                                                                                        appEnterNext
+                                                                                        [name]="
+                                                                                            'stockBatchOpeningAmount' +
+                                                                                            warehouseIndex +
+                                                                                            '_' +
+                                                                                            batchIndex
+                                                                                        "
+                                                                                        [type]="'text'"
+                                                                                        [ngClass]="{ 'mr-2': batch.archive }"
+                                                                                        [label]="localeData?.opening_amount"
+                                                                                        [placeholder]="localeData?.opening_amount"
+                                                                                        [(ngModel)]="batch.openingAmount"
+                                                                                        [prefix]="companyCurrencySymbol"
+                                                                                        [mask]="inputMaskFormat"
+                                                                                        [useMask]="true"
+                                                                                        [disabled]="
+                                                                                            isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                        "
+                                                                                    ></input-field>
+                                                                                    <div
+                                                                                        class="stock-batch-archive d-flex align-items-center justify-content-center"
+                                                                                    >
+                                                                                        <mat-slide-toggle
+                                                                                            color="primary"
+                                                                                            name="stockBatchArchive{{ warehouseIndex }}_{{
+                                                                                                batchIndex
+                                                                                            }}"
+                                                                                            [(ngModel)]="batch.archive"
+                                                                                            [disabled]="isWarehouseArchived(warehouseRow)"
+                                                                                            [attr.aria-label]="
+                                                                                                batch.archive
+                                                                                                    ? commonLocaleData?.app_active
+                                                                                                    : commonLocaleData?.app_archive
+                                                                                            "
+                                                                                            (change)="onBatchArchiveChange(batch)"
+                                                                                        >
+                                                                                            {{
+                                                                                                batch.archive
+                                                                                                    ? commonLocaleData?.app_active
+                                                                                                    : commonLocaleData?.app_archive
+                                                                                            }}
+                                                                                        </mat-slide-toggle>
+                                                                                    </div>
+                                                                                    @if (warehouseRow.batches?.length > 1) {
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            aria-label="remove batch"
+                                                                                            matIconButton
+                                                                                            class="stock-batch-remove light-gray"
+                                                                                            [disabled]="
+                                                                                                isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                            "
+                                                                                            (click)="
+                                                                                                removeWarehouseBatchRow(
+                                                                                                    warehouseRow,
+                                                                                                    batchIndex
+                                                                                                )
+                                                                                            "
+                                                                                        >
+                                                                                            <i class="icon-trash"></i>
+                                                                                        </button>
+                                                                                    } @else {
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            matIconButton
+                                                                                            class="stock-batch-remove light-gray"
+                                                                                            [matTooltip]="commonLocaleData?.app_reset"
+                                                                                            [attr.aria-label]="commonLocaleData?.app_reset"
+                                                                                            [disabled]="
+                                                                                                isBatchFieldsDisabled(batch, warehouseRow)
+                                                                                            "
+                                                                                            (click)="
+                                                                                                resetWarehouseBatchRow(
+                                                                                                    warehouseRow,
+                                                                                                    batchIndex
+                                                                                                )
+                                                                                            "
+                                                                                        >
+                                                                                            <i class="icon-refresh font-size-20"></i>
+                                                                                        </button>
+                                                                                    }
+                                                                                </div>
+                                                                            }
+                                                                            @if (!isWarehouseArchived(warehouseRow)) {
+                                                                                <a
+                                                                                    class="d-inline-block mt-1 mb-1 text-primary cursor-pointer another-option-btn"
+                                                                                    (click)="addWarehouseBatchRow(warehouseRow)"
+                                                                                >
+                                                                                    + {{ localeData?.add_batch }}
+                                                                                </a>
+                                                                            }
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </ng-container>
                                                 <div class="col-sm-6 col-lg-3" *ngIf="isVariantAvailable">
