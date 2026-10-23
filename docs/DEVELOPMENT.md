@@ -6,13 +6,16 @@ Commands below run from the repository root. The preparation baseline used Node 
 
 ```sh
 npm install --ignore-scripts --no-audit --no-fund
-node scripts/build-env.js local
 npm run check:ai
-node node_modules/typescript/bin/tsc --noEmit -p apps/web-giddh/tsconfig.app.json
+npm run check:types
 npm run build
+npx playwright install chromium
+npm run check:browser
 ```
 
 The install command was verified for web analysis with lifecycle scripts disabled; it does not prepare Electron binaries or Git hooks. [.npmrc](../.npmrc) enables legacy peer resolution. No lockfile is tracked, so dependency resolution can differ between runs. Do not use `npm ci` until the team adopts a lockfile. A normal `npm install` also runs Husky's `prepare` hook; desktop installation remains a separate validation task.
+
+`npm run check:browser` starts its own localhost server from built files, intercepts every external request, and stores its screenshot and results in `dist/browser-checks`. Its API responses are fixtures.
 
 `npm run check:ai` runs the documentation checker and focused Node regression tests. It does not replace Angular integration, browser, or accounting journey checks. `npm test` currently has no Angular test target; `npm run lint` currently fails because Nx is absent. Keep these gaps visible instead of reporting an all-green application.
 
@@ -28,7 +31,7 @@ Local defaults contact the test primary API but **the UK API default is producti
 npm start
 ```
 
-The web serve target in [angular.json](../angular.json) uses `http://localhost:3000`. Once compilation succeeds, compare login, company/branch selection, report filters, and the changed flow against the baseline. Exercise empty/error responses and allowed/denied permissions. For UI changes, follow [design verification](DESIGN.md). This preparation's build failure prevents a working local preview; see [verification](VERIFICATION.md).
+The web serve target in [angular.json](../angular.json) uses `http://localhost:3000`. Once compilation succeeds, compare login, company/branch selection, report filters, and the changed flow against the baseline. Exercise empty/error responses and allowed/denied permissions. For UI changes, follow [design verification](DESIGN.md). The local build and fixture login checks pass; see [verification](VERIFICATION.md) for remaining gaps.
 
 ## Release and recovery
 
@@ -40,4 +43,4 @@ Desktop releases use the [macOS workflow](../.github/workflows/macos-release.yml
 
 Keep changes in small commits. To undo a refactor, revert its commit on a working branch and rerun the affected checks; do not reset, clean, or stash someone else's work. A deployed rollback must use the release owner's approved previous artifact and account for persisted data/API compatibility. No production rollback procedure has been exercised here.
 
-The existing Husky pre-commit hook runs `lint-staged`; post-commit runs `code-review-graph update`. Those tools are not fully declared by package.json, so hooks need their team-managed tooling. The [agent-map CI check](../.github/workflows/ai-foundation.yml) is a separate, repeatable verification path with no deployment step.
+The existing Husky pre-commit hook runs `lint-staged`; post-commit runs `code-review-graph update`. Those tools are not fully declared by package.json, so hooks need their team-managed tooling. The [application regression CI check](../.github/workflows/ai-foundation.yml) is a separate, repeatable verification path with no deployment step.

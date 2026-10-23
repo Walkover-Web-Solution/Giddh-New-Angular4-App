@@ -6,7 +6,7 @@ Giddh is an accounting workspace with shared web and Electron frontend code. Sta
 | --- | --- |
 | Change a user journey | [Flows](docs/FLOWS.md), [contracts](docs/CONTRACTS.md) |
 | Change a screen or shared control | [Design](docs/DESIGN.md), existing [Angular/CSS rules](.cursor/rules/angular-giddh-coding-rules.mdc) |
-| Run, test, or prepare a release | [Development](docs/DEVELOPMENT.md), [verification baseline](docs/VERIFICATION.md) |
+| Run, test, or prepare a release | [Development](docs/DEVELOPMENT.md), [verification](docs/VERIFICATION.md), [review findings](docs/REVIEW.md) |
 | Propose a UI experiment | [Experiments](docs/EXPERIMENTS.md) |
 | Understand a tradeoff or missing fact | [Decisions](docs/DECISIONS.md), [open questions](docs/OPEN_QUESTIONS.md) |
 
@@ -27,12 +27,11 @@ From the repository root, after [setup](docs/DEVELOPMENT.md#setup-and-local-chec
 
 ```sh
 npm run check:ai
-node scripts/build-env.js local
-node node_modules/typescript/bin/tsc --noEmit -p apps/web-giddh/tsconfig.app.json
+npm run check:types
 npm run build
 ```
 
-The focused checks and typecheck pass in the recorded baseline. The full build, `npm test`, and `npm run lint` have known failures; [verification](docs/VERIFICATION.md) states exactly what is and is not covered. A docs check proves links resolve, not that every claim is true.
+Focused checks, type checking, the local web build and fixture browser checks pass. Existing `npm test` and `npm run lint` still have known failures; [verification](docs/VERIFICATION.md) states exactly what is and is not covered. A docs check proves links resolve, not that every claim is true.
 
 ## Each future change
 

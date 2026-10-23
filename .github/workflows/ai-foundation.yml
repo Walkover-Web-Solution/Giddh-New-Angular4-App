@@ -1,28 +1,15 @@
-name: Agent map and focused regression checks
+name: Agent map and application regression checks
 
 on:
   pull_request:
-    paths:
-      - 'AGENTS.md'
-      - 'CLAUDE.md'
-      - 'docs/**'
-      - '.cursor/rules/**'
-      - '.github/workflows/ai-foundation.yml'
-      - 'scripts/check-ai-docs.js'
-      - 'scripts/tests/**'
-      - 'package.json'
-      - 'apps/web-giddh/src/app/app.constant.ts'
-      - 'apps/web-giddh/src/app/services/general.service.ts'
-      - 'apps/web-giddh/src/app/shared/helpers/selected-all.ts'
-      - 'apps/web-giddh/src/app/lodash-optimized.ts'
 
 permissions:
   contents: read
 
 jobs:
-  focused-checks:
+  regression-checks:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -30,7 +17,22 @@ jobs:
           node-version: '22.22.1'
       - name: Check documentation without application dependencies
         run: npm run check:docs
-      - name: Install for focused TypeScript regression checks
+      - name: Install dependencies without lifecycle scripts
         run: npm install --ignore-scripts --no-audit --no-fund
       - name: Run focused regressions
         run: npm run test:focused
+      - name: Check application types
+        run: npm run check:types
+      - name: Build the local web application
+        run: npm run build
+      - name: Install Chromium for local fixture checks
+        run: npx playwright install --with-deps chromium
+      - name: Check browser flows with external requests blocked
+        run: npm run check:browser
+      - name: Keep browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-checks
+          path: dist/browser-checks
+          if-no-files-found: ignore

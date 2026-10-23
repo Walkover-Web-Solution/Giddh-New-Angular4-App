@@ -14,4 +14,8 @@ Do not combine similar query builders: their encoding and delimiter behavior dif
 
 ## 2026-10-23 — Keep baseline failures visible
 
-Add focused tests and a lightweight local-link check without weakening or replacing existing build/test/lint commands. TypeScript checking passes, but the application build, test target, and lint baseline need separate repair. Successful focused tests cannot prove the whole app works. No performance improvement is claimed and no experiment is launched.
+Add focused tests and a lightweight local-link check without weakening or replacing existing build/test/lint commands. The expanded review repaired the build with type imports and added fixture browser checks. Legacy test/lint targets still need repair. Successful focused tests cannot prove the whole app works. No performance improvement is claimed and no experiment is launched.
+
+## 2026-10-23 — Refactor from whole-codebase evidence
+
+Review every area, then change boundaries whose behavior can be characterized. Share repeated feature logic, delegate identical API operations to existing owners, and remove only unreachable reducer cases. Keep ambiguous payments, tenant configuration and desktop callback changes as findings in [REVIEW](REVIEW.md). The user chose local checks and fixtures; no live-accounting verification is claimed.

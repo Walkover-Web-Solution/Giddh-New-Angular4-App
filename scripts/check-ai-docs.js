@@ -7,7 +7,7 @@ const documents = [
     'AGENTS.md', 'docs/VISION.md', 'docs/ARCHITECTURE.md', 'docs/FLOWS.md',
     'docs/DESIGN.md', 'docs/CONTRACTS.md', 'docs/EXPERIMENTS.md',
     'docs/DEVELOPMENT.md', 'docs/DECISIONS.md', 'docs/OPEN_QUESTIONS.md',
-    'docs/VERIFICATION.md'
+    'docs/VERIFICATION.md', 'docs/REVIEW.md'
 ];
 
 function withoutFences(content) {
