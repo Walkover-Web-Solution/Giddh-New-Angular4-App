@@ -1,8 +1,8 @@
 # White Label Service
 
-Manages per-tenant configuration overrides. Falls back to `EnvironmentService` defaults when no white label config is present.
+Manages per-tenant configuration overrides with field-specific defaults from `EnvironmentService`, Giddh constants or empty values.
 
-**File:** `apps/web-giddh/src/app/services/white-label.service.ts`
+**Source:** [WhiteLabelService](../apps/web-giddh/src/app/services/white-label.service.ts), reviewed 2026-10-23.
 
 ---
 
@@ -20,20 +20,19 @@ getServiceConfig()  ──►  white label value exists?  ──Yes──►  us
                                    No
                                     │
                                     ▼
-                          EnvironmentService default
+                          Field-specific default
 ```
 
-Every getter checks the white label config first and falls back to `EnvironmentService` if the value is absent. This makes the service safe to use on both Giddh domains and white label domains without any conditional logic in consumers.
+Configuration getters prefer supplied white-label values. Defaults vary by field: API/auth values can use `EnvironmentService`, while `getServiceConfig()` suppresses Giddh-specific branding/defaults and links when `IS_GIDDH_DOMAIN` is false.
 
 ---
 
 ## Setup
 
-The config is loaded once at app boot (usually in `AppComponent` or an `APP_INITIALIZER`) and injected into the service:
+The startup implementation is in [AppModule](../apps/web-giddh/src/app/app.module.ts): `fetchWhiteLabel()` uses the `whiteLabel` local-storage cache or fetches configuration, and the initializer calls `getServiceConfigAfterInit()`. `getServiceConfig()` passes that configuration into `WhiteLabelService`:
 
 ```typescript
-// In your bootstrap / initializer
-this.whiteLabelService.setWhiteLabelConfig(apiResponse);
+whiteLabelService.setWhiteLabelConfig(whiteLabelConfig);
 ```
 
 ---
@@ -132,7 +131,7 @@ interface WhiteLabelConfig {
   OTP_WIDGET_ID,
   OTP_TOKEN_AUTH,
   RAZORPAY_KEY,
-  IS_GIDDH_DOMAIN,         // true when running on giddh.com domains
+  IS_GIDDH_DOMAIN,         // resolved by resolveIsGiddhDomain()
   BRAND_NAME,
   LEGAL_NAME,
   SUPPORT_EMAIL,
@@ -147,7 +146,7 @@ interface WhiteLabelConfig {
 }
 ```
 
-> **`IS_GIDDH_DOMAIN`** — `true` only for `localhost`, test, and production Giddh domains. Use this flag to gate Giddh-only features (app store links, help docs, etc.).
+> **`IS_GIDDH_DOMAIN`** gates Giddh-specific links and defaults. It also returns true in Electron or with an empty hostname; see the exact rules below.
 
 ---
 
@@ -192,19 +191,9 @@ No exception is thrown — warnings are advisory only.
 
 ## IS_GIDDH_DOMAIN Logic
 
-```typescript
-// Giddh domains
-enum GiddhUiDomain {
-  LOCAL      = 'http://localhost:3000/',
-  TEST       = 'https://test.giddh.com/',
-  PRODUCTION = 'https://giddh.com/',
-}
+`WhiteLabelService.resolveIsGiddhDomain()` normalizes a trailing slash and compares the resolved app URL with `GiddhUiDomain.LOCAL`, `TEST` and `PRODUCTION` in [app.constant.ts](../apps/web-giddh/src/app/app.constant.ts). These are currently `http://localhost:3000/`, `https://test.giddh.com/` and `https://books.giddh.com/`. It also returns true when `EnvironmentService.isElectron` is true or `window.location.hostname` is empty; otherwise it returns false.
 
-// Inside getServiceConfig()
-const isGiddhDomain = [LOCAL, TEST, PRODUCTION].includes(appUrl);
-```
-
-When `IS_GIDDH_DOMAIN` is `false`, Giddh-specific URLs (`HELP_DOC_URL`, `ANDROID_APP_URL`, etc.) and defaults (`CALENDLY_URL`, `EMAIL_DOMAINS`, `ICICI_SUPPORTED_COMPANIES`) are set to empty values automatically.
+When false, Giddh-only URLs (`HELP_DOC_URL`, `ANDROID_APP_URL`, etc.) become empty strings. Fields such as `CALENDLY_URL`, `EMAIL_DOMAINS` and `ICICI_SUPPORTED_COMPANIES` still accept explicit white-label values; only their Giddh defaults are suppressed.
 
 ---
 

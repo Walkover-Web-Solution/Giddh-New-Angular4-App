@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';

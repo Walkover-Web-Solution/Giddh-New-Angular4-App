@@ -11,7 +11,7 @@ import {
     OnInit,
     Output,
     Renderer2,
-    SimpleChanges,
+    type SimpleChanges,
 } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
