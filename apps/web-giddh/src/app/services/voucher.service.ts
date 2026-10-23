@@ -1,4 +1,4 @@
-import { Inject, Injectable, Optional } from "@angular/core";
+import { inject, Inject, Injectable, Optional } from "@angular/core";
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./http-wrapper.service";
 import { GeneralService } from "./general.service";
@@ -21,6 +21,8 @@ import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
 import { COMMON_API } from "./apiurls/common.api";
 import { VoucherTypeEnum } from "../vouchers/utility/vouchers.const";
 import { LEDGER_API } from "./apiurls/ledger.api";
+import { ProformaService } from "./proforma.service";
+import { PurchaseOrderService } from "./purchase-order.service";
 
 
 @Injectable({
@@ -28,6 +30,8 @@ import { LEDGER_API } from "./apiurls/ledger.api";
 })
 export class VoucherService {
     private companyUniqueName: string;
+    private readonly proformaService = inject(ProformaService);
+    private readonly purchaseOrderService = inject(PurchaseOrderService);
 
     constructor(
         private errorHandler: GiddhErrorHandler,
@@ -64,21 +68,7 @@ export class VoucherService {
      */
     public getAllProformaEstimate(request: ProformaFilter, voucherType: string): Observable<BaseResponse<ProformaResponse, ProformaFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.generalService.createQueryString(this.config.apiUrl + PROFORMA_API.getAll, {
-            page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
-        });
-
-        return this.http.post(url
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':vouchers', voucherType), request)
-            .pipe(
-                map((res) => {
-                    let data: BaseResponse<ProformaResponse, ProformaFilter> = res;
-                    data.queryString = { page: request.page, count: request.count, from: request.from, to: request.to, type: 'pdf' };
-                    data.request = request;
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<ProformaResponse, ProformaFilter>(e, request, { page: request.page, count: request.count, from: request.from, to: request.to, type: 'pdf' })));
+        return this.proformaService.getAll(request, voucherType);
     }
 
     /**
@@ -180,17 +170,7 @@ export class VoucherService {
      * @memberof VoucherService
      */
     public getVendorPurchaseOrders(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
-        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_PENDING;
-        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
-        url = url?.replace(':from', getRequestObject.from);
-        url = url?.replace(':to', getRequestObject.to);
-        url = url?.replace(':page', getRequestObject.page);
-        url = url?.replace(':count', getRequestObject.count);
-        url = url?.replace(':sort', getRequestObject.sort);
-        url = url?.replace(':sortBy', getRequestObject.sortBy);
-
-        return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+        return this.purchaseOrderService.getAllPendingPo(getRequestObject, postRequestObject);
     }
 
     /**
@@ -586,19 +566,7 @@ export class VoucherService {
      */
     public sendProformaEstimateOnEmail(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + PROFORMA_API.mailProforma
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':vouchers', voucherType)
-            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
-            request
-        ).pipe(
-            map((res) => {
-                let data: BaseResponse<string, ProformaGetRequest> = res;
-                data.queryString = voucherType;
-                data.request = request;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+        return this.proformaService.sendEmail(request, voucherType);
     }
 
     /**
@@ -633,17 +601,7 @@ export class VoucherService {
      * @memberof VoucherService
      */
     public getAllPendingPo(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
-        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_PENDING;
-        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
-        url = url?.replace(':from', getRequestObject.from);
-        url = url?.replace(':to', getRequestObject.to);
-        url = url?.replace(':page', getRequestObject.page);
-        url = url?.replace(':count', getRequestObject.count);
-        url = url?.replace(':sort', getRequestObject.sort);
-        url = url?.replace(':sortBy', getRequestObject.sortBy);
-
-        return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+        return this.purchaseOrderService.getAllPendingPo(getRequestObject, postRequestObject);
     }
 
     /**
@@ -928,19 +886,7 @@ export class VoucherService {
      */
     public updateAction(request: ProformaUpdateActionRequest, voucherType: string): Observable<BaseResponse<string, ProformaUpdateActionRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + PROFORMA_API.updateAction
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':vouchers', voucherType)
-            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
-            request
-        ).pipe(
-            map((res) => {
-                let data: BaseResponse<string, ProformaUpdateActionRequest> = res;
-                data.queryString = voucherType;
-                data.request = request;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<string, ProformaUpdateActionRequest>(e, request)));
+        return this.proformaService.updateAction(request, voucherType);
     }
 
     /**
@@ -953,18 +899,7 @@ export class VoucherService {
      */
     public generateInvoice(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + (voucherType === 'proformas' ? PROFORMA_API.generateInvoice : ESTIMATES_API.generateInvoice)
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
-            request
-        ).pipe(
-            map((res) => {
-                let data: BaseResponse<string, ProformaGetRequest> = res;
-                data.queryString = voucherType;
-                data.request = request;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+        return this.proformaService.generateInvoice(request, voucherType);
     }
 
     /**
@@ -977,19 +912,7 @@ export class VoucherService {
      */
     public generateProforma(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + ESTIMATES_API.generateProforma
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':vouchers', voucherType)
-            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
-            request
-        ).pipe(
-            map((res) => {
-                let data: BaseResponse<string, ProformaGetRequest> = res;
-                data.queryString = voucherType;
-                data.request = request;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+        return this.proformaService.generateProforma(request, voucherType);
     }
 
     /**
@@ -1002,19 +925,7 @@ export class VoucherService {
      */
     public deleteEstimsteProformaVoucher(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.deleteWithBody(this.config.apiUrl + PROFORMA_API.base
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':vouchers', voucherType)
-            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
-            request
-        ).pipe(
-            map((res) => {
-                let data: BaseResponse<string, ProformaGetRequest> = res;
-                data.queryString = voucherType;
-                data.request = request;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+        return this.proformaService.delete(request, voucherType);
     }
 
     /**

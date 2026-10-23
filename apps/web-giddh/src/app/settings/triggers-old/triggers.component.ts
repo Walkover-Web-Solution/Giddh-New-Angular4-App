@@ -12,6 +12,7 @@ import * as dayjs from 'dayjs';
 import { cloneDeep  } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { ServiceConfig } from '../../services/service.config';
+import { getTriggerFormError } from '../../shared/triggers/uitilty/trigger-form-validation';
 
 export interface ActiveTriggers {
     title: string;
@@ -670,35 +671,10 @@ export class TriggersComponent implements OnInit, OnDestroy {
      */
     public validateTriggerForm(): boolean {
         this.resetValidationErrors();
-
-        if (!this.createTrigger.title) {
-            this.mandatoryFields.title = true;
-            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_title);
-            return false;
-        }
-        if (!this.createTrigger.condition.action[0]) {
-            this.mandatoryFields.condition = true;
-            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_action);
-            return false;
-        }
-        if (!this.createTrigger.condition.entity) {
-            this.mandatoryFields.entity = true;
-            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_entity);
-            return false;
-        }
-        if (!this.createTrigger.condition.subConditions[0]?.action[0]) {
-            this.mandatoryFields.subConditions = true;
-            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_sub_entity);
-            return false;
-        }
-        if (!this.createTrigger.campaignDetails.campaignName) {
-            this.mandatoryFields.campaignSlug = true;
-            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_slug);
-            return false;
-        }
-        if (!this.createTrigger.campaignDetails.to?.length) {
-            this.mandatoryFields.triggerToChiplist = true;
-            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
+        const error = getTriggerFormError(this.createTrigger);
+        if (error) {
+            this.mandatoryFields[error.field] = true;
+            this.toasty.showSnackBar("error", this.localeData?.communication?.[error.message]);
             return false;
         }
         return true;

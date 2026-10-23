@@ -302,16 +302,6 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
             newState.isSocialLogoutAttempted = false;
             return newState;
         }
-        case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
-            let newState = cloneDeep(state);
-            let GOOGLE_RESPONSE: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
-            if (GOOGLE_RESPONSE?.status === 'success') {
-                newState.isLoggedInWithSocialAccount = true;
-            } else {
-                newState.isLoggedInWithSocialAccount = false;
-            }
-            return newState;
-        }
         case LoginActions.VerifyTwoWayAuthRequest: {
             return {
                 ...state,
@@ -641,12 +631,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         // create new Company
         case CompanyActions.CREATE_NEW_COMPANY:
             return Object.assign({}, state, { isCompanyCreationInProcess: true, isCompanyCreationSuccess: false });
-        case CompanyActions.RESET_CREATE_COMPANY_FLAG:
-            return Object.assign({}, state, {
-                isCompanyCreated: false,
-                isCompanyCreationInProcess: false,
-                isCompanyCreationSuccess: false
-            });
         case CompanyActions.CREATE_NEW_COMPANY_RESPONSE: {
             let companyResp: BaseResponse<CompanyResponse, CompanyCreateRequest> = action.payload;
             if (companyResp?.status === 'success') {
