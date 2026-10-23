@@ -1,0 +1,301 @@
+<div class="aside-dialog-wrapper d-flex flex-column h-100 variant-opening-balance-dialog">
+    <div cdkFocusInitial class="dialog-header">
+        <span>{{ localeData?.opening_balance }}</span>
+    </div>
+
+    <mat-dialog-content class="dialog-body overflow-auto flex-grow-1">
+        <div class="d-flex align-items-start justify-content-between flex-wrap column-gap-2 row-gap-2 mb-3">
+            <p class="font-size-14 mb-0">
+                {{ localeData?.variant || commonLocaleData?.app_variant || 'Variant' }}:
+                <strong>{{ dialogData?.variantName }}</strong>
+                <span class="mx-1">·</span>
+                {{ commonLocaleData?.app_unit }}:
+                <strong>{{ dialogData?.unitName }}</strong>
+            </p>
+            <button type="button" matButton="outlined" color="primary" (click)="addWarehouse()" [disabled]="!canAddWarehouse()">
+                + {{ localeData?.add_warehouse }}
+            </button>
+        </div>
+
+        <div class="d-flex flex-column row-gap-15">
+            @for (warehouseRow of warehouseBalance; track $index; let warehouseIndex = $index) {
+                <div
+                    class="warehouse-card border border-radius-8 p-3"
+                    [ngClass]="{ 'track-by-batch': !warehouseRow.isShowBatch && batchTrackingEnabled }"
+                >
+                    @if (isWarehouseArchived(warehouseRow)) {
+                        <p class="d-flex align-items-center column-gap-1 font-size-12 text-orange mb-2">
+                            <i class="icon-info font-size-14"></i>
+                            <span>{{ localeData?.warehouse_archived_message }}</span>
+                        </p>
+                    }
+                    <div class="d-flex align-items-end column-gap-2 warehouse-main-row">
+                        <div class="warehouse-field flex-grow-1">
+                            <reactive-dropdown-field
+                                [label]="commonLocaleData?.app_warehouse || commonLocaleData?.app_select_warehouse"
+                                [placeholder]="commonLocaleData?.app_select_warehouse"
+                                [name]="'dialogWarehouse' + warehouseIndex"
+                                [options]="getWarehouseOptions(warehouseIndex)"
+                                [labelValue]="getWarehouseLabel(warehouseRow)"
+                                [required]="isWarehouseSelectionRequired(warehouseRow)"
+                                [showError]="
+                                    isApplySubmitted && isWarehouseSelectionRequired(warehouseRow) && !warehouseRow?.warehouse?.uniqueName
+                                "
+                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                (selectedOption)="onWarehouseSelected(warehouseRow, $event)"
+                            ></reactive-dropdown-field>
+                        </div>
+                        <div class="qty-field">
+                            <input-field
+                                [name]="'dialogWarehouseQty' + warehouseIndex"
+                                [type]="'number'"
+                                [label]="commonLocaleData?.app_quantity || localeData?.opening_quantity"
+                                [placeholder]="'0'"
+                                [(ngModel)]="warehouseRow.openingQuantity"
+                                [allowDecimalDigitsOnly]="true"
+                                [min]="0"
+                                [disabled]="isWarehouseArchived(warehouseRow)"
+                            ></input-field>
+                        </div>
+                        <div class="amount-field">
+                            <input-field
+                                [name]="'dialogWarehouseAmount' + warehouseIndex"
+                                [type]="'text'"
+                                [label]="localeData?.opening_amount || commonLocaleData?.app_amount"
+                                [placeholder]="'0'"
+                                [(ngModel)]="warehouseRow.openingAmount"
+                                [prefix]="currencySymbol"
+                                [mask]="inputMaskFormat"
+                                [useMask]="true"
+                                [disabled]="isWarehouseArchived(warehouseRow)"
+                            ></input-field>
+                        </div>
+                        @if (warehouseBalance.length > 1) {
+                            <button
+                                type="button"
+                                matIconButton
+                                class="warehouse-action light-gray"
+                                [attr.aria-label]="commonLocaleData?.app_delete"
+                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                (click)="removeWarehouse(warehouseIndex)"
+                            >
+                                <i class="icon-trash"></i>
+                            </button>
+                        } @else {
+                            <button
+                                type="button"
+                                matIconButton
+                                class="warehouse-action light-gray"
+                                [matTooltip]="commonLocaleData?.app_reset"
+                                [attr.aria-label]="commonLocaleData?.app_reset"
+                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                (click)="clearWarehouse(warehouseIndex)"
+                            >
+                                <i class="icon-refresh font-size-20"></i>
+                            </button>
+                        }
+                    </div>
+
+                    @if (batchTrackingEnabled) {
+                        <div class="d-flex align-items-center column-gap-2 mt-2 mb-2">
+                            <mat-slide-toggle
+                                color="primary"
+                                [checked]="warehouseRow.isShowBatch"
+                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                (change)="onTrackByBatchChange(warehouseRow, $event.checked)"
+                                [attr.aria-label]="localeData?.track_by_batch"
+                            >
+                                {{ localeData?.track_by_batch }}
+                            </mat-slide-toggle>
+                        </div>
+                    }
+
+                    @if (batchTrackingEnabled && warehouseRow.isShowBatch) {
+                        <div class="batch-list border border-radius-8 p-3 mt-2">
+                            @if (
+                                !isWarehouseArchived(warehouseRow) &&
+                                (isWarehouseBatchQtyExceeded(warehouseRow) || isWarehouseBatchAmountExceeded(warehouseRow))
+                            ) {
+                                <div class="mb-2 font-size-12">
+                                    @if (isWarehouseBatchQtyExceeded(warehouseRow)) {
+                                        <p class="d-flex align-items-center flex-wrap column-gap-1 mb-1">
+                                            <i class="icon-info text-orange font-size-14"></i>
+                                            <span>
+                                                {{ localeData?.batch_qty_exceeds_opening }}
+                                                <strong class="text-orange">
+                                                    ({{ getWarehouseBatchOpeningQtyTotal(warehouseRow) }} /
+                                                    {{ warehouseRow.openingQuantity || 0 }})
+                                                </strong>
+                                            </span>
+                                            <a class="text-primary cursor-pointer" (click)="applyBatchQtyToWarehouseOpening(warehouseRow)">
+                                                {{ localeData?.update_opening_qty }}
+                                            </a>
+                                        </p>
+                                    }
+                                    @if (isWarehouseBatchAmountExceeded(warehouseRow)) {
+                                        <p class="d-flex align-items-center flex-wrap column-gap-1 mb-0">
+                                            <i class="icon-info text-orange font-size-14"></i>
+                                            <span>
+                                                {{ localeData?.batch_amount_exceeds_opening }}
+                                                <strong class="text-orange">
+                                                    ({{ currencySymbol }}{{ getWarehouseBatchOpeningAmountTotal(warehouseRow) }} /
+                                                    {{ currencySymbol }}{{ warehouseRow.openingAmount || 0 }})
+                                                </strong>
+                                            </span>
+                                            <a
+                                                class="text-primary cursor-pointer"
+                                                (click)="applyBatchAmountToWarehouseOpening(warehouseRow)"
+                                            >
+                                                {{ localeData?.update_opening_amount }}
+                                            </a>
+                                        </p>
+                                    }
+                                </div>
+                            }
+                            @for (batch of warehouseRow.batches; track $index; let batchIndex = $index) {
+                                <div class="batch-card border border-radius-8 p-2 mb-2">
+                                    <div class="d-grid batch-row-top column-gap-2 align-items-end mb-2">
+                                        <reactive-dropdown-field
+                                            [name]="'dialogBatchNumber' + warehouseIndex + '_' + batchIndex"
+                                            [label]="localeData?.batch_number"
+                                            [placeholder]="localeData?.batch_number"
+                                            [options]="getBatchAvailabilityOptions(batch, warehouseRow?.warehouse?.uniqueName)"
+                                            [ngModel]="batch.batchNumber"
+                                            [labelValue]="batch.batchNumber"
+                                            [useCustomLabelValue]="true"
+                                            [enableDynamicSearch]="true"
+                                            [allowCustomDropdownValue]="true"
+                                            [noResultsFoundMessage]="localeData?.create_custom_batch"
+                                            [required]="isBatchNameRequired(batch) && !batch.batchNumber"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
+                                            (dynamicSearchedQuery)="searchBatchAvailability($event, warehouseRow?.warehouse?.uniqueName)"
+                                            (selectedOption)="
+                                                onBatchAvailabilitySelected(batch, $event, warehouseRow?.warehouse?.uniqueName)
+                                            "
+                                        ></reactive-dropdown-field>
+                                        <input-field
+                                            [name]="'dialogBatchName' + warehouseIndex + '_' + batchIndex"
+                                            [type]="'text'"
+                                            [label]="localeData?.batch_name"
+                                            [placeholder]="localeData?.batch_name"
+                                            [(ngModel)]="batch.name"
+                                            [required]="isBatchNameRequired(batch) && !batch.name"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
+                                        ></input-field>
+                                        <div class="batch-archive d-flex align-items-center">
+                                            <mat-slide-toggle
+                                                color="primary"
+                                                name="dialogBatchArchive{{ warehouseIndex }}_{{ batchIndex }}"
+                                                [(ngModel)]="batch.archive"
+                                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                                [attr.aria-label]="
+                                                    batch.archive ? commonLocaleData?.app_active : commonLocaleData?.app_archive
+                                                "
+                                                (change)="onBatchArchiveChange(batch)"
+                                            >
+                                                {{ batch.archive ? commonLocaleData?.app_active : commonLocaleData?.app_archive }}
+                                            </mat-slide-toggle>
+                                        </div>
+                                        @if (warehouseRow.batches?.length > 1) {
+                                            <button
+                                                type="button"
+                                                matIconButton
+                                                class="batch-remove light-gray"
+                                                [attr.aria-label]="commonLocaleData?.app_delete"
+                                                [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
+                                                (click)="removeBatch(warehouseRow, batchIndex)"
+                                            >
+                                                <i class="icon-trash"></i>
+                                            </button>
+                                        } @else {
+                                            <button
+                                                type="button"
+                                                matIconButton
+                                                class="batch-remove light-gray"
+                                                [matTooltip]="commonLocaleData?.app_reset"
+                                                [attr.aria-label]="commonLocaleData?.app_reset"
+                                                [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
+                                                (click)="resetBatch(warehouseRow, batchIndex)"
+                                            >
+                                                <i class="icon-refresh font-size-20"></i>
+                                            </button>
+                                        }
+                                    </div>
+                                    <div class="d-grid batch-row-bottom column-gap-2 align-items-end">
+                                        <giddh-datepicker
+                                            [label]="localeData?.manufacturing_date"
+                                            [placeholder]="localeData?.manufacturing_date"
+                                            [name]="'dialogBatchMfg' + warehouseIndex + '_' + batchIndex"
+                                            [showToggleIcon]="false"
+                                            [appearance]="'outline'"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
+                                            [(ngModel)]="batch.manufacturingDate"
+                                        ></giddh-datepicker>
+                                        <giddh-datepicker
+                                            [label]="localeData?.expiry_date"
+                                            [placeholder]="localeData?.expiry_date"
+                                            [name]="'dialogBatchExpiry' + warehouseIndex + '_' + batchIndex"
+                                            [showToggleIcon]="false"
+                                            [appearance]="'outline'"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
+                                            [(ngModel)]="batch.expiryDate"
+                                        ></giddh-datepicker>
+                                        <input-field
+                                            [name]="'dialogBatchQty' + warehouseIndex + '_' + batchIndex"
+                                            [type]="'number'"
+                                            [label]="commonLocaleData?.app_quantity || localeData?.opening_quantity"
+                                            [placeholder]="'0'"
+                                            [(ngModel)]="batch.openingQuantity"
+                                            [allowDecimalDigitsOnly]="true"
+                                            [min]="0"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
+                                        ></input-field>
+                                        <input-field
+                                            [name]="'dialogBatchAmount' + warehouseIndex + '_' + batchIndex"
+                                            [type]="'text'"
+                                            [label]="localeData?.opening_amount || commonLocaleData?.app_amount"
+                                            [placeholder]="'0'"
+                                            [(ngModel)]="batch.openingAmount"
+                                            [prefix]="currencySymbol"
+                                            [mask]="inputMaskFormat"
+                                            [useMask]="true"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
+                                        ></input-field>
+                                    </div>
+                                </div>
+                            }
+                            @if (!isWarehouseArchived(warehouseRow)) {
+                                <a
+                                    class="d-inline-block mt-1 text-primary cursor-pointer another-option-btn"
+                                    (click)="addBatch(warehouseRow)"
+                                >
+                                    + {{ localeData?.add_batch }}
+                                </a>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </mat-dialog-content>
+
+    <div class="dialog-footer d-flex align-items-center justify-content-between flex-wrap row-gap-2 column-gap-2">
+        <div class="font-size-14">
+            <span class="text-uppercase font-size-12">{{ localeData?.variant_total }}</span>
+            <strong class="d-block">
+                {{ getVariantTotalQty() }}
+                {{ dialogData?.unitName }}
+                ·
+                {{ currencySymbol }}{{ getVariantTotalAmount() }}
+            </strong>
+        </div>
+        <div class="d-flex column-gap-2">
+            <button type="button" matButton="outlined" (click)="cancel()">
+                {{ commonLocaleData?.app_cancel }}
+            </button>
+            <button type="button" matButton="filled" color="primary" (click)="apply()">
+                {{ commonLocaleData?.app_apply || localeData?.apply || 'Apply' }}
+            </button>
+        </div>
+    </div>
+</div>

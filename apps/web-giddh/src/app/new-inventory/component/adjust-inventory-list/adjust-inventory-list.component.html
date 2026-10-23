@@ -193,7 +193,14 @@
                                     "
                                 ></div>
                             </th>
-                            <td mat-cell *matCellDef="let element">{{ element?.status }}</td>
+                            <td
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltip]="element?.status === 'FAILED' ? element?.failureReason : ''"
+                                matTooltipPosition="above"
+                            >
+                                {{ element?.status }}
+                            </td>
                         </div>
 
                         <!-- Adjusted By Column -->
