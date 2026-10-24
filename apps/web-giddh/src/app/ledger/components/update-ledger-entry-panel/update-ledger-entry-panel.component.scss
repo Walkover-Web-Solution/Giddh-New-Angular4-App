@@ -13,6 +13,21 @@ table.width-100 {
     position: relative;
 }
 
+// The trash icon sits beside a reactive-dropdown-field that renders a floating
+// mat-label above its input box, so centering it against the whole column
+// (label + box) pushes it off the box's actual visual center. Align the column
+// to the top instead and center the icon within just the field's own height.
+.reference-invoice {
+    display: flex;
+    align-items: flex-start !important;
+    flex-wrap: nowrap;
+    .remove-invoice {
+        height: var(--custom-mat-form-field-height, 48px);
+        display: flex;
+        align-items: center;
+    }
+}
+
 .h32 {
     height: 32px;
 }

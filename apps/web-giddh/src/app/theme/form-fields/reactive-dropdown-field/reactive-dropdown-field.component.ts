@@ -798,7 +798,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
         this.focusInputField();
         setTimeout(() => {
-            this.handleDropdownPanelOperation('open');
+               this.handleDropdownPanelOperation('open');
         }, 200);
     }
 
@@ -807,19 +807,22 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      *
      * @memberof ReactiveDropdownFieldComponent
      */
-    public focusInputField(): void {
-        if (this.trigger) {
-            // Temporarily disable autocomplete to prevent dropdown from opening
-            this.trigger.autocompleteDisabled = true;
+public focusInputField(): void {
+    if (this.trigger) {
+        // Temporarily disable autocomplete to prevent dropdown from opening
+        this.trigger.autocompleteDisabled = true;
+        // Re-enable autocomplete after a short delay
+        setTimeout(() => {
+            if (this.trigger?.panelOpen) {
+                this.trigger.updatePosition();
+            }
             this.selectField?.nativeElement?.focus();
-            // Re-enable autocomplete after a short delay
-            setTimeout(() => {
-                this.trigger.autocompleteDisabled = false;
-            }, 100);
-        } else {
-            this.selectField?.nativeElement?.focus();
-        }
+            this.trigger.autocompleteDisabled = false;
+        }, 100);
+    } else {
+        this.selectField?.nativeElement?.focus();
     }
+}
 
     /**
      * Set value of Label from options using control value
@@ -855,6 +858,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public panelOpened(): void {
+       this.stabilizePanel();
         if (!this.enableDynamicSearch) {
             this.filterOptions("").pipe(take(1)).subscribe(opts => this.fieldFilteredOptions.set(opts));
         }
@@ -874,6 +878,42 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 this.focusSecondOption();
             }, 100);
         }
+    }
+
+    /**
+    * Keeps the autocomplete panel's width and position correct while a parent
+    * @private
+    * @memberof ReactiveDropdownFieldComponent
+    */
+    private stabilizePanel(): void {
+        // Remember when we started, so the loop can stop itself after 600ms
+        const start = performance.now();
+
+        // This function runs once per animation frame (~60 times per second)
+        const tick = () => {
+         // Stop the loop if any of these is true
+         if (this.isDestroyed || !this.trigger?.panelOpen || performance.now() - start > 600) {
+            return;
+          }
+
+        // Find the element whose width the panel should match
+        const field: HTMLElement = this.selectField?.nativeElement?.closest('.mat-mdc-form-field, .mat-form-field')
+            ?? this.selectField?.nativeElement;
+
+        if (field) {
+            // Set the overlay (panel) width to the field's layout width.
+            (this.trigger as any)?._overlayRef?.updateSize({ width: field.offsetWidth });
+
+            // Re-align the panel under the field, because the field's position
+            this.trigger.updatePosition();
+        }
+
+            // Schedule the next check for the next animation frame
+             requestAnimationFrame(tick);
+        };
+
+             // Start the loop on the next animation frame
+             requestAnimationFrame(tick);
     }
 
     /**
