@@ -319,30 +319,40 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
         }
     }
 
-    public getTaxList(countryCode) {
-        this.store.dispatch(this.settingsTaxesActions.resetTaxList());
-        this.store.pipe(select(s => s.settings.taxes), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                Object.keys(res.taxes).forEach(key => {
-                    // CREATED TAX VALUE AND TAX TYPES LIST MAPPING TO SHOW SELECT TYPE DROPDOWN VALUES BASED ON SELECTED TAX
-                    if (res.taxes[key]?.types?.length > 0) {
-                        this.taxNameTypesMapping[res.taxes[key].value] = [];
-                        this.taxNameTypesMapping[res.taxes[key].value] = res.taxes[key].types;
-                    }
+  public getTaxList(countryCode) {
+    // Clear old tax list from the store so a fresh one is fetched
+    this.store.dispatch(this.settingsTaxesActions.resetTaxList());
 
-                    if (res.taxes[key].value === this.taxForm.get('taxType').value) {
-                        this.selectedTax = res.taxes[key]?.label;
-                    }
+    this.store.pipe(select(s => s.settings.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+        // Treat "no taxes yet" (null, or empty taxes object) as not loaded
+        if (res?.taxes && Object.keys(res.taxes).length) {
+            // Build a brand new array each time, so the child always sees a new reference
+            const list: IOption[] = [];
 
-                    this.taxList.push({ label: res.taxes[key]?.label, value: res.taxes[key]?.value });
-                    this.changeDetectorRef.detectChanges();
-                });
-                this.taxListSource$ = observableOf(this.taxList);
-            } else {
-                this.store.dispatch(this.settingsTaxesActions.getTaxList(countryCode));
-            }
-        });
-    }
+            Object.keys(res.taxes).forEach(key => {
+                // Map tax value to its sub types (used by the TDS/TCS type dropdown)
+                if (res.taxes[key]?.types?.length > 0) {
+                    this.taxNameTypesMapping[res.taxes[key].value] = res.taxes[key].types;
+                }
+
+                // Pre-select label if the form already has a tax type
+                if (res.taxes[key].value === this.taxForm.get('taxType').value) {
+                    this.selectedTax = res.taxes[key]?.label;
+                }
+
+                list.push({ label: res.taxes[key]?.label, value: res.taxes[key]?.value });
+            });
+
+            // Replace (not push into) the old list. New reference makes the child's ngOnChanges fire
+            this.taxList = list;
+            this.taxListSource$ = observableOf(list);
+            this.changeDetectorRef.detectChanges();
+        } else {
+            // Nothing in the store yet, so ask the API for it
+            this.store.dispatch(this.settingsTaxesActions.getTaxList(countryCode));
+        }
+    });
+}
 
     /**
      * Handle Tax select 
