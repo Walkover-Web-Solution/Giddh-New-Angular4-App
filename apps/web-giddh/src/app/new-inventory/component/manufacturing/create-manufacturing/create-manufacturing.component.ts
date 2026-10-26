@@ -880,30 +880,40 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             let byProducts = [];
 
             manufacturingDetail.linkedStocks?.forEach(linkedStock => {
-                linkedStocks.push({
+                const row: any = {
                     stockUniqueName: linkedStock.stockUniqueName,
                     stockUnitUniqueName: linkedStock.stockUnitUniqueName,
                     quantity: Number(linkedStock.quantity),
                     variant: {
                         uniqueName: linkedStock.variant?.uniqueName
                     }
-                });
+                };
+                const batches = this.mapBatchesForPayload(linkedStock.batches);
+                if (batches?.length) {
+                    row.batches = batches;
+                }
+                linkedStocks.push(row);
             });
 
             manufacturingDetail.byProducts?.forEach(linkedStock => {
                 if (linkedStock.selectedStock.value) {
-                    byProducts.push({
+                    const row: any = {
                         stockUniqueName: linkedStock.stockUniqueName,
                         stockUnitUniqueName: linkedStock.stockUnitUniqueName,
                         quantity: Number(linkedStock.quantity),
                         variant: {
                             uniqueName: linkedStock.variant?.uniqueName
                         }
-                    });
+                    };
+                    const batches = this.mapBatchesForPayload(linkedStock.batches);
+                    if (batches?.length) {
+                        row.batches = batches;
+                    }
+                    byProducts.push(row);
                 }
             });
 
-            recipeObject.manufacturingDetails.push({
+            const finished: any = {
                 manufacturingQuantity: Number(manufacturingDetail.manufacturingQuantity),
                 manufacturingUnitUniqueName: manufacturingDetail.manufacturingUnitUniqueName,
                 variant: {
@@ -911,7 +921,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 },
                 linkedStocks: linkedStocks,
                 byProducts: byProducts
-            });
+            };
+            const finishedBatches = this.mapBatchesForPayload(manufacturingDetail.batches);
+            if (finishedBatches?.length) {
+                finished.batches = finishedBatches;
+            }
+            recipeObject.manufacturingDetails.push(finished);
         });
 
 
