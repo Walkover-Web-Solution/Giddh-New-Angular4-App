@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, effect, ElementRef, EventEmitter, HostListener, Input, input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, untracked, ViewChild, forwardRef, inject, signal } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, effect, ElementRef, EventEmitter, HostListener, Input, input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, TemplateRef, untracked, ViewChild, forwardRef, inject, signal } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil, take, filter } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";

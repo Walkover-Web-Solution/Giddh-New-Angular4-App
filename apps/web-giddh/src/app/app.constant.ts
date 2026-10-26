@@ -435,8 +435,7 @@ export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
 export const SELECT_ALL_RECORDS = "selectallrecords";
-/** Sentinel written by multi-select-dropdown when the All option is selected */
-export const SELECTED_ALL_OPTION = "SELECTED_ALL_OPTION";
+export { SELECTED_ALL_OPTION, isSelectedAllOption } from './shared/helpers/selected-all';
 /** Stores the voucher wise form values to toggle fields in voucher module */
 export const GIDDH_VOUCHER_FORM = [
     {
@@ -842,16 +841,6 @@ export interface IOption {
     additional?: any;
     subVoucher?: string;
     tooltip?: string;
-}
-
-/**
- * Returns true when the multi-select value represents the All option.
- *
- * @param {Array<string | number>} selected Form control value
- * @returns {boolean}
- */
-export function isSelectedAllOption(selected: Array<string | number> | null | undefined): boolean {
-    return Array.isArray(selected) && selected.length === 1 && selected[0] === SELECTED_ALL_OPTION;
 }
 
 /** Number Format Locale Mapping for GiddhNumberFormatPipe */

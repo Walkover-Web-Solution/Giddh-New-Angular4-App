@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, SimpleChanges, Inject, ChangeDetectorRef, signal } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, type SimpleChanges, Inject, ChangeDetectorRef, signal } from '@angular/core';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { TemplateContentUISectionVisibility, InvoiceUiDataService } from '../../../services/invoice.ui.data.service';

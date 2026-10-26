@@ -6,7 +6,7 @@ import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { TlPlService } from '../services/tl-pl.service';
-import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossDateRangeResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
+import { type AccountDetails, type BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossDateRangeResponse, type ProfitLossRequest, type TrialBalanceExportExcelRequest, type TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
 import { CustomActions } from '../store/custom-actions';
 
 @Injectable({

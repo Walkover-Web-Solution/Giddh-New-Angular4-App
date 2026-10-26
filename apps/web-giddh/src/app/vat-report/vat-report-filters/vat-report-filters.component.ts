@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, type SimpleChanges, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GeneralService } from '../../services/general.service';
