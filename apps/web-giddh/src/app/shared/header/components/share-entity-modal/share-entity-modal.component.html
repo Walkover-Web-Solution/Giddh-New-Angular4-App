@@ -1,0 +1,103 @@
+<div appTranslate [file]="'settings/permission'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <div cdkFocusInitial class="dialog-header">
+        <span>{{ dialogTitle }}</span>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        @if (localeData?.give_permission) {
+            <setting-permission-form
+                [userdata]="null"
+                [isLblShow]="true"
+                [isUpdtCase]="false"
+                [isHorizntl]="true"
+                [isOpenedInModal]="true"
+                [entityType]="data.entity"
+                [entityUniqueName]="data.entityUniqueName"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                (onSubmitForm)="onSubmitForm($event)"
+                (closeDialog)="closeModal()"
+            ></setting-permission-form>
+        }
+
+        @if (sharedWith()?.length) {
+            <div class="pt-2">
+                <mat-list role="list" class="shared-list group-shared-list">
+                    @for (val of sharedWith(); track val.uniqueName) {
+                        <mat-list-item class="p-0 mat-list-item-height">
+                            <div class="d-flex align-items-center pt-2 pb-2 w-100 column-gap-1">
+                                <div class="user-name-email col-md-4">
+                                    <i class="icon-user-black pr-2"></i>
+                                    <span class="user-email">
+                                        @if (val.emailId !== val.userName) {
+                                            <small>{{ val.userName }}</small>
+                                        }
+                                        <small>{{ val.emailId }}</small>
+                                    </span>
+                                </div>
+                                <div class="col-md-4">
+                                    <input-field
+                                        [label]="localeData?.role_name_label"
+                                        [defaultValue]="val.roleName"
+                                        [disabled]="true"
+                                        [readonly]="true"
+                                    ></input-field>
+                                </div>
+                                <div class="ico-btn d-flex column-gap-1">
+                                    <button
+                                        matButton="outlined"
+                                        class="action-icon-btn"
+                                        type="button"
+                                        (click)="showModalForEdit(val)"
+                                        aria-label="edit icon"
+                                    >
+                                        <i aria-hidden="true" class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button
+                                        matButton="outlined"
+                                        class="action-icon-btn"
+                                        type="button"
+                                        (click)="onRevokePermission(val?.uniqueName)"
+                                        aria-label="delete icon"
+                                    >
+                                        <i aria-hidden="true" class="icon-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                    }
+                </mat-list>
+            </div>
+        } @else if (isSharedWithLoaded()) {
+            <div class="no-data pt-4 pb-3">
+                <no-data
+                    [primaryMessage]="localeData?.no_shared_permission || commonLocaleData?.app_no_data_found"
+                    [secondaryMessage]="' '"
+                    [secondaryMessageClass]="'p-0'"
+                ></no-data>
+            </div>
+        }
+    </mat-dialog-content>
+
+    <ng-template #editUserModal>
+        <div class="modal-content">
+            <div cdkFocusInitial class="dialog-header">
+                <span>{{ localeData?.create_user_permission }}</span>
+            </div>
+            <mat-dialog-content class="dialog-body">
+                <setting-permission-form
+                    [isOpenedInModal]="true"
+                    [userdata]="selectedUser"
+                    [isLblShow]="true"
+                    [isUpdtCase]="true"
+                    [isHorizntl]="false"
+                    [entityType]="data.entity"
+                    [entityUniqueName]="data.entityUniqueName"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (onSubmitForm)="onSubmitForm($event)"
+                    (closeDialog)="closeEditUserModal()"
+                ></setting-permission-form>
+            </mat-dialog-content>
+        </div>
+    </ng-template>
+</div>

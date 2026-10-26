@@ -24,6 +24,11 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 import { FormControl } from '@angular/forms';
 import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
+import {
+    ShareEntityModalComponent,
+    ShareEntityModalData
+} from '../../shared/header/components/share-entity-modal/share-entity-modal.component';
+
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
@@ -544,6 +549,30 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 { label: this.localeData?.data_sync_options?.bank, value: 'bank' }
             ];
         }
+    }
+
+
+    /**
+     * Opens share permission dialog for a branch
+     *
+     * @param {*} branch
+     * @memberof BranchComponent
+     */
+    public shareBranch(branch: any): void {
+        if (!branch?.uniqueName) {
+            return;
+        }
+        const dialogData: ShareEntityModalData = {
+            entity: 'branch',
+            entityUniqueName: branch.uniqueName,
+            entityName: branch.name,
+            commonLocaleData: this.commonLocaleData
+        };
+        this.dialog.open(ShareEntityModalComponent, {
+            width: '1225px',
+            disableClose: true,
+            data: dialogData
+        });
     }
 
     /**
