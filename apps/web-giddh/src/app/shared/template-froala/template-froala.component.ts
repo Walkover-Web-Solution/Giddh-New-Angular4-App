@@ -340,10 +340,17 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private updateFormControl(): void {
+            console.log('updateFormControl called',this.froalaEditor);
         if (this.froalaEditor) {
             const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
+            console.log('Current form:', currentForm);
             const htmlContent = this.froalaEditor.html.get();
-            currentForm.get('html')?.patchValue(htmlContent, { emitEvent: false });
+            console.log('HTML content from Froala editor:', htmlContent);
+            // emitModelToViewChange: false prevents writeValue() from calling back into
+            // Froala's html.set() from inside its own contentChanged handler, which was
+            // corrupting the editor's internal state on fast Enter/Backspace sequences.
+            currentForm.get('html')?.patchValue(htmlContent, { emitEvent: false, emitModelToViewChange: false });
+            console.log('Form control updated with HTML content:', currentForm.get('html')?.value);
         }
     }
     /**
