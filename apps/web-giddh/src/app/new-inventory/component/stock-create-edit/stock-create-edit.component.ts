@@ -1386,7 +1386,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                             manufacturingDate: this.formatBatchDate(batch.manufacturingDate),
                             expiryDate: this.formatBatchDate(batch.expiryDate),
                             openingQuantity: Number(batch.openingQuantity) || 0,
-                            openingAmount: Number(String(batch.openingAmount ?? "").toString().replace(/,/g, "")) || 0
+                            openingAmount: Number(String(batch.openingAmount ?? "").toString().replace(/,/g, "")) || 0,
+                            archive: !!batch.archive,
+                            archiveOnly: !!batch.archive
                         }));
                     return {
                         warehouse: {
@@ -2101,6 +2103,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         batch.openingAmount = !batch.openingAmount && item.openingAmount ? item.openingAmount : batch.openingAmount;
         batch.uniqueName = !batch.uniqueName && item.uniqueName ? item.uniqueName : batch.uniqueName;
         batch.warehouseUniqueName = item?.warehouse?.uniqueName || warehouseUniqueName || batch.warehouseUniqueName;
+        batch.archive = !!item.archive;
+        batch.archiveOnly = !!item.archive;
     }
 
     /**
@@ -2386,8 +2390,35 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             manufacturingDate: null,
             expiryDate: null,
             openingQuantity: null,
-            openingAmount: null
+            openingAmount: null,
+            archive: false,
+            archiveOnly: false
         };
+    }
+
+    /**
+     * True when batch fields (except archive toggle) should be read-only.
+     * When `archive` is true the batch is archived and its fields are disabled.
+     *
+     * @param {*} batch Batch row
+     * @param {*} [warehouseRow] Warehouse balance row
+     * @return {*}  {boolean}
+     * @memberof StockCreateEditComponent
+     */
+    public isBatchFieldsDisabled(batch: any, warehouseRow?: any): boolean {
+        return this.isWarehouseArchived(warehouseRow) || !!batch?.archive;
+    }
+
+    /**
+     * Refresh view after archive toggle so field disabled state updates.
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public onBatchArchiveChange(batch: any): void {
+        if (batch) {
+            batch.archiveOnly = !!batch.archive;
+        }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -2976,6 +3007,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public isBatchNameRequired(batch: any): boolean {
+        if (!!batch?.archive) {
+            return false;
+        }
         return Number(batch?.openingQuantity) > 0 || Number(batch?.openingAmount) > 0;
     }
 
@@ -3179,6 +3213,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                         expiryDate: this.parseBatchDate(batch.expiryDate),
                         openingQuantity: batch.openingQuantity ?? null,
                         openingAmount: batch.openingAmount ?? null,
+                        archive: !!batch.archive,
+                        archiveOnly: !!batch.archive,
                         warehouseUniqueName: batch?.warehouse?.uniqueName
                             || batch?.warehouseUniqueName
                             || warehouse?.warehouse?.uniqueName

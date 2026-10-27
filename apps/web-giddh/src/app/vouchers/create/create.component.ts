@@ -102,7 +102,7 @@ import {
     RATE_FIELD_PRECISION,
     SubVoucher,
     ASIDE_PANE_CONFIG,
-    IOption,
+    type IOption,
     API_BULK_FETCH_LIMIT,
     FormFieldsType,
     PAGE_SIZE_OPTIONS,

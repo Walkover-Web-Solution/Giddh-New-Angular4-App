@@ -167,7 +167,7 @@
                                             [allowCustomDropdownValue]="true"
                                             [noResultsFoundMessage]="localeData?.create_custom_batch"
                                             [required]="isBatchNameRequired(batch) && !batch.batchNumber"
-                                            [disabled]="isWarehouseArchived(warehouseRow)"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
                                             (dynamicSearchedQuery)="searchBatchAvailability($event, warehouseRow?.warehouse?.uniqueName)"
                                             (selectedOption)="
                                                 onBatchAvailabilitySelected(batch, $event, warehouseRow?.warehouse?.uniqueName)
@@ -180,15 +180,29 @@
                                             [placeholder]="localeData?.batch_name"
                                             [(ngModel)]="batch.name"
                                             [required]="isBatchNameRequired(batch) && !batch.name"
-                                            [disabled]="isWarehouseArchived(warehouseRow)"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
                                         ></input-field>
+                                        <div class="batch-archive d-flex align-items-center">
+                                            <mat-slide-toggle
+                                                color="primary"
+                                                name="dialogBatchArchive{{ warehouseIndex }}_{{ batchIndex }}"
+                                                [(ngModel)]="batch.archive"
+                                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                                [attr.aria-label]="
+                                                    batch.archive ? commonLocaleData?.app_active : commonLocaleData?.app_archive
+                                                "
+                                                (change)="onBatchArchiveChange(batch)"
+                                            >
+                                                {{ batch.archive ? commonLocaleData?.app_active : commonLocaleData?.app_archive }}
+                                            </mat-slide-toggle>
+                                        </div>
                                         @if (warehouseRow.batches?.length > 1) {
                                             <button
                                                 type="button"
                                                 matIconButton
                                                 class="batch-remove light-gray"
                                                 [attr.aria-label]="commonLocaleData?.app_delete"
-                                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                                [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
                                                 (click)="removeBatch(warehouseRow, batchIndex)"
                                             >
                                                 <i class="icon-trash"></i>
@@ -200,7 +214,7 @@
                                                 class="batch-remove light-gray"
                                                 [matTooltip]="commonLocaleData?.app_reset"
                                                 [attr.aria-label]="commonLocaleData?.app_reset"
-                                                [disabled]="isWarehouseArchived(warehouseRow)"
+                                                [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
                                                 (click)="resetBatch(warehouseRow, batchIndex)"
                                             >
                                                 <i class="icon-refresh font-size-20"></i>
@@ -214,7 +228,7 @@
                                             [name]="'dialogBatchMfg' + warehouseIndex + '_' + batchIndex"
                                             [showToggleIcon]="false"
                                             [appearance]="'outline'"
-                                            [disabled]="isWarehouseArchived(warehouseRow)"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
                                             [(ngModel)]="batch.manufacturingDate"
                                         ></giddh-datepicker>
                                         <giddh-datepicker
@@ -223,7 +237,7 @@
                                             [name]="'dialogBatchExpiry' + warehouseIndex + '_' + batchIndex"
                                             [showToggleIcon]="false"
                                             [appearance]="'outline'"
-                                            [disabled]="isWarehouseArchived(warehouseRow)"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
                                             [(ngModel)]="batch.expiryDate"
                                         ></giddh-datepicker>
                                         <input-field
@@ -234,7 +248,7 @@
                                             [(ngModel)]="batch.openingQuantity"
                                             [allowDecimalDigitsOnly]="true"
                                             [min]="0"
-                                            [disabled]="isWarehouseArchived(warehouseRow)"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
                                         ></input-field>
                                         <input-field
                                             [name]="'dialogBatchAmount' + warehouseIndex + '_' + batchIndex"
@@ -245,7 +259,7 @@
                                             [prefix]="currencySymbol"
                                             [mask]="inputMaskFormat"
                                             [useMask]="true"
-                                            [disabled]="isWarehouseArchived(warehouseRow)"
+                                            [disabled]="isBatchFieldsDisabled(batch, warehouseRow)"
                                         ></input-field>
                                     </div>
                                 </div>

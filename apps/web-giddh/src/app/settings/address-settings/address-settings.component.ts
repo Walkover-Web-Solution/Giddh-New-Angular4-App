@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, type SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';

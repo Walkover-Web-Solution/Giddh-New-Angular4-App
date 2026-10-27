@@ -1,5 +1,5 @@
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, ViewChild } from "@angular/core";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
@@ -200,6 +200,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
         this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
             this.inventoryViaBusinessDocument = !!settings?.voucherAutomation?.inventoryViaBusinessDocument;
+            if (!this.inventoryViaBusinessDocument) {
+                this.setReportNature(ReportNature.Books, false);
+            }
             this.changeDetection.detectChanges();
         });
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
@@ -648,6 +651,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     private setReportNature(reportNature: ReportNature, updateQueryParams: boolean): void {
+        if (!this.inventoryViaBusinessDocument) {
+            reportNature = ReportNature.Books;
+        }
         this.selectedReportNature = reportNature;
         this.reportAsPerInventory = reportNature === ReportNature.Inventory;
         if (updateQueryParams) {

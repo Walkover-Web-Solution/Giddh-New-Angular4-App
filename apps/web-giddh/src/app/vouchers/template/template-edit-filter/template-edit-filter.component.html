@@ -681,26 +681,25 @@
                                                     ></ng-container>
                                                 }
                                             }
-
-                                            <!-- qr code -->
-                                            @if (sectionSettings?.header.showQrCode) {
-                                                <ng-container
-                                                    *ngTemplateOutlet="
-                                                        labelRow;
-                                                        context: {
-                                                            rowId: 'showQrCodeRow',
-                                                            showInputField: false,
-                                                            showCheckbox: true,
-                                                            section: 'header',
-                                                            field: 'showQrCode',
-                                                            callbacks: [onChangeFieldVisibility],
-                                                            name: 'headershowQrCode',
-                                                            label: localeData?.show_qr_code,
-                                                            showSecondaryLabel: showSecondaryLabel,
-                                                        }
-                                                    "
-                                                ></ng-container>
-                                            }
+                                        }
+                                        <!-- qr code -->
+                                        @if (isTallyTemplateOrTemplateA && sectionSettings?.header.showQrCode) {
+                                            <ng-container
+                                                *ngTemplateOutlet="
+                                                    labelRow;
+                                                    context: {
+                                                        rowId: 'showQrCodeRow',
+                                                        showInputField: false,
+                                                        showCheckbox: true,
+                                                        section: 'header',
+                                                        field: 'showQrCode',
+                                                        callbacks: [onChangeFieldVisibility],
+                                                        name: 'headershowQrCode',
+                                                        label: localeData?.show_qr_code,
+                                                        showSecondaryLabel: showSecondaryLabel,
+                                                    }
+                                                "
+                                            ></ng-container>
                                         }
 
                                         <!-- company address -->

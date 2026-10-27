@@ -349,10 +349,12 @@ export class VouchersUtilityService {
 
         // Queue document items per variant/stock so duplicate line items keep their own remainingQuantity
         // (a plain Record overwrites when the same stock appears on multiple entries).
+        const documentItems = voucherDetails.documentItems ?? [];
+        const hasDocumentItems = documentItems.length > 0;
         const documentItemsByVariant: Record<string, any[]> = {};
         const documentItemsByStock: Record<string, any[]> = {};
         const variantNames: Record<string, string> = {};
-        voucherDetails.documentItems?.forEach((item) => {
+        documentItems.forEach((item) => {
             if (item.variant?.uniqueName) {
                 variantNames[item.variant.uniqueName] = item.variant.name;
                 (documentItemsByVariant[item.variant.uniqueName] ??= []).push(item);
@@ -384,7 +386,11 @@ export class VouchersUtilityService {
             let entryTotal = 0;
             const transactions = (entry.transactions || []).reduce((acc, transaction) => {
                 const stock = transaction.stock;
+                // DC/RN create from invoice/bill: only stock lines are convertible
                 if (!stock) {
+                    if (isBusinessDocumentCreate) {
+                        return acc;
+                    }
                     const amount = Number(transaction.amount?.amountForAccount) || 0;
                     entryTotal += amount;
                     acc.push(transaction);
@@ -392,6 +398,16 @@ export class VouchersUtilityService {
                 }
 
                 const documentItem = takeDocumentItem(stock);
+                const remainingQuantity = documentItem?.remainingQuantity != null
+                    ? Number(documentItem.remainingQuantity)
+                    : undefined;
+
+                // Invoice→DC/RN and DC/RN→invoice: only prefill stocks still available on documentItems
+                if (isBusinessDocumentCreate && hasDocumentItems
+                    && (remainingQuantity == null || !(remainingQuantity > 0))) {
+                    return acc;
+                }
+
                 const rate = Number(
                     stock.rate?.rateForAccount
                     ?? stock.rate?.amountForAccount
@@ -399,10 +415,9 @@ export class VouchersUtilityService {
                     ?? 0
                 );
                 const stockQuantity = stock.quantity ?? documentItem?.quantity ?? 0;
-                const remainingQuantity = documentItem?.remainingQuantity;
                 const quantity = Number(
-                    isBusinessDocumentCreate
-                        ? (remainingQuantity ?? stockQuantity)
+                    isBusinessDocumentCreate && remainingQuantity != null
+                        ? remainingQuantity
                         : stockQuantity
                 );
 

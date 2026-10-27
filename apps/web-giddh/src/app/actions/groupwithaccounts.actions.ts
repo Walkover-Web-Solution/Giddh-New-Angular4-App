@@ -5,7 +5,7 @@ import { GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHi
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Action, Store, select } from '@ngrx/store';
+import { type Action, Store, select } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, type SimpleChanges } from '@angular/core';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { IStocksItem } from '../../../../models/interfaces/stocks-item.interface';
