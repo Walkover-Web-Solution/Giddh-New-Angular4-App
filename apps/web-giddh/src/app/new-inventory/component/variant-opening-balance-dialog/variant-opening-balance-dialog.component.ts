@@ -82,6 +82,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
     public isApplySubmitted: boolean = false;
     /** Company-level batch tracking; when false, warehouse UI only (batches kept in data, not shown). */
     public batchTrackingEnabled: boolean = false;
+    /** Toggles to force-clear the warehouse dropdown (internal CVA value). */
+    public warehouseForceClear: boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public dialogData: VariantOpeningBalanceDialogData,
@@ -233,8 +235,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             return;
         }
         row.warehouse = {
-            name: undefined,
-            uniqueName: undefined
+            name: null,
+            uniqueName: null
         };
         row.openingQuantity = 0;
         row.openingAmount = 0;
@@ -243,6 +245,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
         } else {
             row.batches = [];
         }
+        // reactive-dropdown-field keeps an internal selected value; labelValue alone does not clear it.
+        this.warehouseForceClear = !this.warehouseForceClear;
         this.syncSelectedBatchNumbers();
         this.cdr.detectChanges();
     }
