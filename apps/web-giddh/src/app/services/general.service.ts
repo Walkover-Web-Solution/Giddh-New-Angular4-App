@@ -10,7 +10,7 @@ import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eve
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
-import { CompanyCreateRequest, CompanyResponse } from '../models/api-models/Company';
+import { Addresses, CompanyCreateRequest, CompanyResponse } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
@@ -68,6 +68,8 @@ export class GeneralService {
     public voucherApiVersion: number;
     /** Stores the active company object, used for company-level fallbacks such as postal code label resolution */
     public activeCompany: CompanyResponse;
+    /** Organization addresses for TB/PL/BS CSV header only (company or branch); do not mutate activeCompany.addresses */
+    public csvExportAddresses: Addresses[] = [];
 
     get user(): UserDetails {
         return this._user;

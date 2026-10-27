@@ -5,8 +5,11 @@ import { Total } from "../trial-balance/export-csv/export-csv.component";
 import { forEach, keys, slice } from '../../../../lodash-optimized';
 import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 
-export function getCompanyDefaultAddress(selectedCompany: CompanyResponse): Addresses | undefined {
-    const addresses = selectedCompany?.addresses;
+/**
+ * Picks the default address from organization address details
+ * (company addresses or branch-linked addresses — same shape).
+ */
+export function getDefaultAddress(addresses: Addresses[] | undefined): Addresses | undefined {
     if (!addresses?.length) {
         return undefined;
     }
@@ -22,7 +25,7 @@ export function buildTrialBalanceCsvHeader(
     fromDate: string,
     toDate: string
 ): string {
-    const defaultAddress = getCompanyDefaultAddress(selectedCompany);
+    const defaultAddress = getDefaultAddress(selectedCompany?.addresses);
     const address = defaultAddress?.address ?? '';
     const location = defaultAddress?.stateName || defaultAddress?.county?.name || '';
     const pincode = defaultAddress?.pincode ?? '';
