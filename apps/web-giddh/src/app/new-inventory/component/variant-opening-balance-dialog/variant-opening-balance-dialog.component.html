@@ -18,10 +18,10 @@
         </div>
 
         <div class="d-flex flex-column row-gap-15">
-            @for (warehouseRow of warehouseBalance; track $index; let warehouseIndex = $index) {
+            @for (warehouseRow of warehouseBalance; track warehouseRow.rowId; let warehouseIndex = $index) {
                 <div
                     class="warehouse-card border border-radius-8 p-3"
-                    [ngClass]="{ 'track-by-batch': !warehouseRow.isShowBatch && batchTrackingEnabled }"
+                    [class.track-by-batch]="!warehouseRow.isShowBatch && batchTrackingEnabled"
                 >
                     @if (isWarehouseArchived(warehouseRow)) {
                         <p class="d-flex align-items-center column-gap-1 font-size-12 text-orange mb-2">
@@ -37,7 +37,7 @@
                                 [name]="'dialogWarehouse' + warehouseIndex"
                                 [options]="getWarehouseOptions(warehouseIndex)"
                                 [labelValue]="getWarehouseLabel(warehouseRow)"
-                                [forceClear]="warehouseForceClear"
+                                [forceClear]="warehouseRow.forceClear"
                                 [required]="isWarehouseSelectionRequired(warehouseRow)"
                                 [showError]="
                                     isApplySubmitted && isWarehouseSelectionRequired(warehouseRow) && !warehouseRow?.warehouse?.uniqueName
