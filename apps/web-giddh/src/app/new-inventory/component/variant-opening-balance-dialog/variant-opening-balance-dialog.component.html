@@ -37,6 +37,7 @@
                                 [name]="'dialogWarehouse' + warehouseIndex"
                                 [options]="getWarehouseOptions(warehouseIndex)"
                                 [labelValue]="getWarehouseLabel(warehouseRow)"
+                                [forceClear]="warehouseForceClear"
                                 [required]="isWarehouseSelectionRequired(warehouseRow)"
                                 [showError]="
                                     isApplySubmitted && isWarehouseSelectionRequired(warehouseRow) && !warehouseRow?.warehouse?.uniqueName
