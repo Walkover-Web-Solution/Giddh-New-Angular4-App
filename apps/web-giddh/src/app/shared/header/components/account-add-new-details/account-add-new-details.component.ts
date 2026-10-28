@@ -267,6 +267,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.initializeNewForm();
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
@@ -303,7 +304,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.showBankDetail = true;
         }
 
-        this.initializeNewForm();
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.activeGroupUniqueName && response.uniqueName !== this.activeGroupUniqueName) {
