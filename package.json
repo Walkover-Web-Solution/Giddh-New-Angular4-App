@@ -104,7 +104,8 @@
     "jsondiffpatch": "^0.7.3",
     "jsrsasign": "^11.1.0",
     "ladda": "^2.0.3",
-    "lodash-es": "^4.17.22",
+    "lodash": "^4.18.1",
+    "lodash-es": "^4.18.1",
     "ng-click-outside": "^9.0.0",
     "ngrx-store-localstorage": "^20.0.0",
     "ngx-clipboard": "^16.0.0",
@@ -167,6 +168,9 @@
     "*.{js,json,css,scss,html,md}": [
       "prettier --write"
     ]
+  },
+  "overrides": {
+    "lodash": "$lodash"
   },
   "xplat": {
     "prefix": "foo"
