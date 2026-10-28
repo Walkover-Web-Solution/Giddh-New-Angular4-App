@@ -104,6 +104,9 @@
                                                                 <button mat-menu-item (click)="updateBranch(branch)">
                                                                     {{ commonLocaleData?.app_edit }}
                                                                 </button>
+                                                                <button mat-menu-item (click)="shareBranch(branch)">
+                                                                    {{ commonLocaleData?.app_share }}
+                                                                </button>
                                                                 <button mat-menu-item (click)="confirmStatusUpdate(branch)">
                                                                     {{
                                                                         branch?.isArchived
