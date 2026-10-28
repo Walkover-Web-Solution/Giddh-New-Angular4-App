@@ -1395,7 +1395,7 @@
                                                     <div class="d-flex flex-column row-gap-15 pb-3">
                                                         @for (
                                                             warehouseRow of stockVariant.warehouseBalance;
-                                                            track $index;
+                                                            track warehouseRow.rowId;
                                                             let warehouseIndex = $index
                                                         ) {
                                                             <div class="warehouse-card border border-radius-8 p-3">
@@ -1423,7 +1423,7 @@
                                                                                 getWarehouseOptionsForRow(stockVariant, warehouseIndex)
                                                                             "
                                                                             [labelValue]="warehouseRow?.warehouse?.name"
-                                                                            [forceClear]="stockWarehouseForceClear"
+                                                                            [forceClear]="warehouseRow.forceClear"
                                                                             [required]="isWarehouseSelectionRequired(warehouseRow)"
                                                                             [showError]="
                                                                                 isFormSubmitted &&

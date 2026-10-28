@@ -63,7 +63,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && this.generalService.currentOrganizationType === OrganizationType.Company) {
                 this.setUsersList(response);
             }
         });

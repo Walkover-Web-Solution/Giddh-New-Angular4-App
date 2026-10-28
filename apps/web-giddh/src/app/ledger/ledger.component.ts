@@ -306,6 +306,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         isLedgerEntry: boolean;
         transactionType?: string;
     };
+    /** Pending create-aside selection applied after dialog close (blank txn may be recreated) */
+    private pendingCreatedLedgerParticular: {
+        selectedOption: IOption;
+        txnId: string;
+        txnType: string;
+        isBankTransaction: boolean;
+        isLedgerEntry: boolean;
+        transactionType?: string;
+    };
     /** Total pages for reference vouchers */
     public referenceVouchersTotalPages: number = 1;
     /** Returns true if account is selected else false */
@@ -2645,8 +2654,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                 }
+                const pending = this.pendingCreatedLedgerParticular;
+                this.pendingCreatedLedgerParticular = undefined;
                 this.ledgerAsidePaneDialogRef = undefined;
                 this.ledgerAsideCreateContext = undefined;
+
+                if (pending) {
+                    this.applyCreatedLedgerParticular(pending);
+                    return;
+                }
+
                 if (this.ledgerView === LedgerViewEnum.StatementView) {
                     this.focusDebitCreditDropdowns(null);
                 }
@@ -2664,21 +2681,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public closeLedgerAsidePaneDialog(response?: any): void {
         if (response?.operation === DataOperationEnum.CREATE && response?.uniqueName) {
-            this.selectNewlyCreatedLedgerParticular(response);
+            this.queueNewlyCreatedLedgerParticular(response);
         }
         this.ledgerAsidePaneDialogRef?.close();
     }
 
     /**
-     * Selects newly created stock/account using the same flow as dropdown list click.
+     * Queues newly created stock/account selection until create-aside dialog closes.
+     * Blank ledger rows can be recreated while the aside is open, so apply against the live txn after close.
      *
      * @private
      * @param {*} createdItem
      * @memberof LedgerComponent
      */
-    private selectNewlyCreatedLedgerParticular(createdItem: any): void {
-        const txn = this.ledgerAsideCreateContext?.txn;
-        if (!txn || !createdItem?.uniqueName) {
+    private queueNewlyCreatedLedgerParticular(createdItem: any): void {
+        const contextTxn = this.ledgerAsideCreateContext?.txn;
+        if (!contextTxn || !createdItem?.uniqueName) {
             return;
         }
 
@@ -2687,26 +2705,80 @@ export class LedgerComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const alreadyPresent = this.searchResults?.some((item) => item.value === selectedOption.value);
-        if (!alreadyPresent) {
-            this.searchResults = [selectedOption, ...(this.searchResults || [])];
+        this.pendingCreatedLedgerParticular = {
+            selectedOption,
+            txnId: contextTxn.id,
+            txnType: contextTxn.type,
+            isBankTransaction: this.ledgerAsideCreateContext.isBankTransaction,
+            isLedgerEntry: this.ledgerAsideCreateContext.isLedgerEntry,
+            transactionType: this.ledgerAsideCreateContext.transactionType,
+        };
+    }
+
+    /**
+     * Applies queued create-aside selection on the current blank-ledger txn and opens entry panel.
+     *
+     * @private
+     * @param {*} pending
+     * @memberof LedgerComponent
+     */
+    private applyCreatedLedgerParticular(pending: {
+        selectedOption: IOption;
+        txnId: string;
+        txnType: string;
+        isBankTransaction: boolean;
+        isLedgerEntry: boolean;
+        transactionType?: string;
+    }): void {
+        const txn = this.findLiveBlankTxn(pending.txnId, pending.txnType);
+        if (!txn || !pending.selectedOption?.value) {
+            return;
         }
 
-        txn.particular = selectedOption.value;
+        const alreadyPresent = this.searchResults?.some((item) => item.value === pending.selectedOption.value);
+        if (!alreadyPresent) {
+            this.searchResults = [pending.selectedOption, ...(this.searchResults || [])];
+        }
+
+        txn.particular = pending.selectedOption.value;
+        txn.selectedAccount = {
+            ...pending.selectedOption.additional,
+            label: pending.selectedOption.label,
+            name: pending.selectedOption.label,
+            value: pending.selectedOption.value,
+        };
         this.isTotalChanged = false;
         this.addBrowserConfirmation();
         this.selectAccount(
-            selectedOption,
+            pending.selectedOption,
             txn,
             false,
-            this.ledgerAsideCreateContext.isBankTransaction,
-            null,
-            this.ledgerAsideCreateContext.transactionType
+            pending.isBankTransaction,
+            true,
+            pending.transactionType
         );
-        if (this.ledgerAsideCreateContext.isLedgerEntry) {
+        if (pending.isLedgerEntry) {
             this.showNewLedgerEntryPopup(txn);
         }
         this.cdRf.detectChanges();
+    }
+
+    /**
+     * Finds the blank-ledger txn currently rendered for create-aside selection.
+     *
+     * @private
+     * @param {string} txnId
+     * @param {string} txnType
+     * @return {*}  {TransactionVM}
+     * @memberof LedgerComponent
+     */
+    private findLiveBlankTxn(txnId: string, txnType: string): TransactionVM {
+        const transactions = this.lc.blankLedger?.transactions || [];
+        return (
+            transactions.find((item) => item.id === txnId) ||
+            transactions.find((item) => item.type === txnType && !item.particular) ||
+            transactions.find((item) => item.type === txnType)
+        );
     }
 
     /**
@@ -3315,8 +3387,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                     if (data[0]?.ledgerView) {
                         this.ledgerView = data[0].ledgerView;
-                        if (this.currentOrganizationType === OrganizationType.Branch ||
-                            (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+                        // Only seed empty blank rows — never wipe an in-progress entry (e.g. after create-account).
+                        if ((this.currentOrganizationType === OrganizationType.Branch ||
+                            (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) &&
+                            !this.lc.blankLedger?.transactions?.length) {
                             this.setBlankLedgerTransactions();
                         }
                     }
