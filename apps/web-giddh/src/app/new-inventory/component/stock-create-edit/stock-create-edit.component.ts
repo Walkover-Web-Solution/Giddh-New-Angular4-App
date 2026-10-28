@@ -1235,7 +1235,18 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     }
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_successfully);
                     if (this.addStock) {
-                        this.closeAsideEvent.emit(DataOperationEnum.CREATE);
+                        this.closeAsideEvent.emit({
+                            operation: DataOperationEnum.CREATE,
+                            type: "stock",
+                            uniqueName: response.body?.uniqueName,
+                            name: response.body?.name,
+                            hsnNumber: response.body?.hsnNumber,
+                            sacNumber: response.body?.sacNumber,
+                            variants: response.body?.variants,
+                            salesAccountUniqueNames: request?.salesAccountUniqueNames,
+                            purchaseAccountUniqueNames: request?.purchaseAccountUniqueNames,
+                            fixedAssetsAccountUniqueNames: request?.fixedAssetsAccountUniqueNames,
+                        });
                     } else {
                         this.getVariantCustomFields();
                         if (this.groupList?.length) {
