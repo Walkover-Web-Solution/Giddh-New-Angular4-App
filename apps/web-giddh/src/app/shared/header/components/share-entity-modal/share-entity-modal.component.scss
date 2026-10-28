@@ -1,35 +1,3 @@
-.group-shared-list {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    border-top: 1px solid var(--border-color);
-    margin-top: 15px;
-    padding-top: 20px;
-
-    .user-name-email {
-        width: 40%;
-        display: flex;
-        white-space: normal;
-        word-break: break-all;
-
-        i {
-            position: relative;
-            top: 3px;
-        }
-
-        .user-email {
-            display: inline-flex;
-            flex-direction: column;
-
-            small {
-                &:first-child {
-                    font-size: var(--font-size-15);
-                }
-            }
-        }
-    }
-}
-
 .mat-list-item-height {
     height: auto !important;
     min-height: 70px;

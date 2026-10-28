@@ -91,9 +91,9 @@ export class ShareEntityModalComponent implements OnInit, OnDestroy {
     public get dialogTitle(): string {
         const entityName = this.data.entityName || '';
         if (this.data.entity === 'warehouse') {
-            return (this.localeData?.share_warehouse || 'Share [NAME]')?.replace('[NAME]', entityName);
+            return (this.localeData?.share_warehouse)?.replace('[NAME]', entityName);
         }
-        return (this.localeData?.share_branch || 'Share [NAME] Branch')?.replace('[NAME]', entityName);
+        return (this.localeData?.share_branch)?.replace('[NAME]', entityName);
     }
 
     /**

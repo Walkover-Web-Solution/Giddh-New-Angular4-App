@@ -2,7 +2,7 @@
     <div cdkFocusInitial class="dialog-header">
         <span>{{ dialogTitle }}</span>
     </div>
-    <mat-dialog-content class="dialog-body">
+    <mat-dialog-content class="dialog-body max-height-80vh">
         @if (localeData?.give_permission) {
             <setting-permission-form
                 [userdata]="null"
@@ -21,15 +21,15 @@
 
         @if (sharedWith()?.length) {
             <div class="pt-2">
-                <mat-list role="list" class="shared-list group-shared-list">
+                <mat-list role="list" class="shared-list d-flex flex-column w-100 border-top mt-3 pt-3">
                     @for (val of sharedWith(); track val.uniqueName) {
                         <mat-list-item class="p-0 mat-list-item-height">
                             <div class="d-flex align-items-center pt-2 pb-2 w-100 column-gap-1">
-                                <div class="user-name-email col-md-4">
-                                    <i class="icon-user-black pr-2"></i>
-                                    <span class="user-email">
+                                <div class="d-flex align-items-center white-space-normal word-break-break-all col-md-4">
+                                    <i class="icon-user-black pr-2" aria-hidden="true"></i>
+                                    <span class="user-email d-inline-flex flex-column">
                                         @if (val.emailId !== val.userName) {
-                                            <small>{{ val.userName }}</small>
+                                            <small class="font-size-15">{{ val.userName }}</small>
                                         }
                                         <small>{{ val.emailId }}</small>
                                     </span>
