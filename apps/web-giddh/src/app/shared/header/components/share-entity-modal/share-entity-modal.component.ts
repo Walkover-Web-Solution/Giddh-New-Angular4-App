@@ -118,7 +118,7 @@ export class ShareEntityModalComponent implements OnInit, OnDestroy {
     public showModalForEdit(user: ShareRequestForm): void {
         this.selectedUser = user;
         this.editDialogRef = this.dialog.open(this.editUserModal, {
-            width: '1200px'
+            panelClass: 'mat-dialog-xl',
         });
     }
 

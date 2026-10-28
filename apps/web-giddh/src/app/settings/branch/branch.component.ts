@@ -569,7 +569,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         };
         this.dialog.open(ShareEntityModalComponent, {
-            width: '1225px',
+            panelClass: 'mat-dialog-xl',
             disableClose: true,
             data: dialogData
         });
