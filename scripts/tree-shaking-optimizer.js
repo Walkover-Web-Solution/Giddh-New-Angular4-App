@@ -256,7 +256,7 @@ module.exports = {
         const optimizations = {
             "sideEffects": false,
             "dependencies": {
-                "lodash-es": "^4.17.21", // ES modules version
+                "lodash-es": "^4.18.1", // ES modules version
                 "@angular/material": "^20.2.14" // Already using specific imports
             },
             "devDependencies": {

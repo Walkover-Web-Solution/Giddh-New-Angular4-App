@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, ViewChild } from '@angular/core';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';

@@ -10,7 +10,7 @@ import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eve
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
-import { CompanyCreateRequest, CompanyResponse } from '../models/api-models/Company';
+import { Addresses, CompanyCreateRequest, CompanyResponse } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
@@ -29,7 +29,8 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
-import { Configuration, INTERNAL_EMAILS_DOMAINS, isSelectedAllOption } from '../app.constant';
+import { Configuration, INTERNAL_EMAILS_DOMAINS } from '../app.constant';
+import { normalizeSelectedAllRequest } from '../shared/helpers/selected-all';
 import { cloneDeep, find,orderBy } from '../lodash-optimized';
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
@@ -67,6 +68,8 @@ export class GeneralService {
     public voucherApiVersion: number;
     /** Stores the active company object, used for company-level fallbacks such as postal code label resolution */
     public activeCompany: CompanyResponse;
+    /** Organization addresses for TB/PL/BS CSV header only (company or branch); do not mutate activeCompany.addresses */
+    public csvExportAddresses: Addresses[] = [];
 
     get user(): UserDetails {
         return this._user;
@@ -175,39 +178,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public replaceSelectedAllOptions<T>(node: T, createCopy: boolean = false): T {
-        const requestNode: any = createCopy ? cloneDeep(node) : node;
-        if (!requestNode || typeof requestNode !== 'object') {
-            return requestNode;
-        }
-
-        const selectAllFields: string[] = [];
-        this.replaceSelectedAllOptionsRecursive(requestNode, selectAllFields);
-        requestNode.selectAllFields = selectAllFields;
-
-        return requestNode;
-    }
-
-    /**
-     * Traverses request object and replaces selected-all values.
-     *
-     * @private
-     * @param node Request object or nested request object
-     * @param selectAllFields Root-level list of fields marked as select-all
-     * @memberof GeneralService
-     */
-    private replaceSelectedAllOptionsRecursive(node: any, selectAllFields: string[]): void {
-        if (!node || typeof node !== 'object' || Array.isArray(node)) {
-            return;
-        }
-        Object.keys(node).forEach(key => {
-            const value = node[key];
-            if (isSelectedAllOption(value)) {
-                node[key] = [];
-                selectAllFields.push(key);
-            } else if (value && typeof value === 'object' && !Array.isArray(value)) {
-                this.replaceSelectedAllOptionsRecursive(value, selectAllFields);
-            }
-        });
+        return normalizeSelectedAllRequest(createCopy ? cloneDeep(node) : node);
     }
 
     public setIsMobileView(isMobileView: boolean) {

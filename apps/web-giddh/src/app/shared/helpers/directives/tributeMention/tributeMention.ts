@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
+import {Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, type SimpleChanges, OnChanges } from '@angular/core';
 import Tribute from 'tributejs';
 
 @Directive({

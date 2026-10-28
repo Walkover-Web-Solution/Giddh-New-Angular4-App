@@ -202,6 +202,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public inlineEditCustomField: number = 0;
     /** List of warehouses */
     public warehouses: any[] = [];
+    /** Toggles to force-clear the Other-tab warehouse dropdown (internal CVA value). */
+    public stockWarehouseForceClear: boolean = false;
     /** Holds stock unit name */
     public stockUnitName: string = "";
     /** Holds stock group name */
@@ -1233,7 +1235,18 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     }
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_successfully);
                     if (this.addStock) {
-                        this.closeAsideEvent.emit(DataOperationEnum.CREATE);
+                        this.closeAsideEvent.emit({
+                            operation: DataOperationEnum.CREATE,
+                            type: "stock",
+                            uniqueName: response.body?.uniqueName,
+                            name: response.body?.name,
+                            hsnNumber: response.body?.hsnNumber,
+                            sacNumber: response.body?.sacNumber,
+                            variants: response.body?.variants,
+                            salesAccountUniqueNames: request?.salesAccountUniqueNames,
+                            purchaseAccountUniqueNames: request?.purchaseAccountUniqueNames,
+                            fixedAssetsAccountUniqueNames: request?.fixedAssetsAccountUniqueNames,
+                        });
                     } else {
                         this.getVariantCustomFields();
                         if (this.groupList?.length) {
@@ -2644,14 +2657,17 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             return;
         }
         row.warehouse = {
-            name: undefined,
-            uniqueName: undefined
+            name: null,
+            uniqueName: null
         };
         row.openingQuantity = 0;
         row.openingAmount = 0;
         row.batches = this.batchTrackingEnabled && row.isShowBatch !== false
             ? [this.createEmptyVariantBatch()]
             : [];
+        // reactive-dropdown-field keeps an internal selected value; labelValue alone does not clear it.
+        // Options are rebuilt each CD, so setLabelValue would restore the old label without forceClear.
+        this.stockWarehouseForceClear = !this.stockWarehouseForceClear;
         this.updateBatchAvailabilityOptions();
         this.changeDetection.detectChanges();
     }

@@ -19,7 +19,7 @@ import { clone, cloneDeep, filter, find, map as lodashMap, orderBy, uniq, uniqBy
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, LedgerType, TransactionType, LedgerResponse } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, type TLedgerView, LedgerViewEnum, type LedgerType, TransactionType, LedgerResponse } from '../models/api-models/Ledger';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
@@ -64,7 +64,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
 import { LedgerDropdownTypeEnum } from '../models/api-models/Ledger';
-import { AccountingGroupEnum } from '../shared/Enums/common.enum';
+import { AccountingGroupEnum, DataOperationEnum } from '../shared/Enums/common.enum';
 import { IOption } from '../app.constant';
 import { SettingsDiscountService } from '../services/settings.discount.service';
 
@@ -299,6 +299,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private isHideBankLedgerPopup: boolean = false;
     /** Ledger aside pan modal */
     public ledgerAsidePaneDialogRef: any;
+    /** Context of the transaction from which create aside was opened */
+    private ledgerAsideCreateContext: {
+        txn: TransactionVM;
+        isBankTransaction: boolean;
+        isLedgerEntry: boolean;
+        transactionType?: string;
+    };
     /** Total pages for reference vouchers */
     public referenceVouchersTotalPages: number = 1;
     /** Returns true if account is selected else false */
@@ -2610,9 +2617,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Open ledger aside pane
      *
+     * @param {TransactionVM} [txn]
+     * @param {boolean} [isBankTransaction]
+     * @param {boolean} [isLedgerEntry]
+     * @param {string} [transactionType]
      * @memberof LedgerComponent
      */
-    public openLedgerAsidePaneDialog(): void {
+    public openLedgerAsidePaneDialog(
+        txn?: TransactionVM,
+        isBankTransaction?: boolean,
+        isLedgerEntry?: boolean,
+        transactionType?: string
+    ): void {
+        this.ledgerAsideCreateContext = txn
+            ? {
+                txn,
+                isBankTransaction: !!isBankTransaction,
+                isLedgerEntry: !!isLedgerEntry,
+                transactionType,
+            }
+            : undefined;
+
         this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
 
         this.ledgerAsidePaneDialogRef.afterClosed().subscribe(() => {
@@ -2621,6 +2646,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                 }
                 this.ledgerAsidePaneDialogRef = undefined;
+                this.ledgerAsideCreateContext = undefined;
                 if (this.ledgerView === LedgerViewEnum.StatementView) {
                     this.focusDebitCreditDropdowns(null);
                 }
@@ -2628,6 +2654,118 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         this.cdRf.detectChanges();
+    }
+
+    /**
+     * Closes ledger aside pane and selects newly created stock/account like list selection.
+     *
+     * @param {*} [response]
+     * @memberof LedgerComponent
+     */
+    public closeLedgerAsidePaneDialog(response?: any): void {
+        if (response?.operation === DataOperationEnum.CREATE && response?.uniqueName) {
+            this.selectNewlyCreatedLedgerParticular(response);
+        }
+        this.ledgerAsidePaneDialogRef?.close();
+    }
+
+    /**
+     * Selects newly created stock/account using the same flow as dropdown list click.
+     *
+     * @private
+     * @param {*} createdItem
+     * @memberof LedgerComponent
+     */
+    private selectNewlyCreatedLedgerParticular(createdItem: any): void {
+        const txn = this.ledgerAsideCreateContext?.txn;
+        if (!txn || !createdItem?.uniqueName) {
+            return;
+        }
+
+        const selectedOption = this.buildLedgerSelectAccountOption(createdItem);
+        if (!selectedOption?.value) {
+            return;
+        }
+
+        const alreadyPresent = this.searchResults?.some((item) => item.value === selectedOption.value);
+        if (!alreadyPresent) {
+            this.searchResults = [selectedOption, ...(this.searchResults || [])];
+        }
+
+        txn.particular = selectedOption.value;
+        this.isTotalChanged = false;
+        this.addBrowserConfirmation();
+        this.selectAccount(
+            selectedOption,
+            txn,
+            false,
+            this.ledgerAsideCreateContext.isBankTransaction,
+            null,
+            this.ledgerAsideCreateContext.transactionType
+        );
+        if (this.ledgerAsideCreateContext.isLedgerEntry) {
+            this.showNewLedgerEntryPopup(txn);
+        }
+        this.cdRf.detectChanges();
+    }
+
+    /**
+     * Builds ledger dropdown option in the same shape used by account search results.
+     *
+     * @private
+     * @param {*} createdItem
+     * @return {*}  {IOption}
+     * @memberof LedgerComponent
+     */
+    private buildLedgerSelectAccountOption(createdItem: any): IOption {
+        if (createdItem?.type === 'stock') {
+            const accountUniqueName = this.getLinkedAccountUniqueNameForCreatedStock(createdItem);
+            if (!accountUniqueName) {
+                return null;
+            }
+
+            return {
+                value: `${accountUniqueName}#${createdItem.uniqueName}`,
+                label: `${accountUniqueName} (${createdItem.name})`,
+                additional: {
+                    name: accountUniqueName,
+                    uniqueName: accountUniqueName,
+                    hsnNumber: createdItem.hsnNumber,
+                    sacNumber: createdItem.sacNumber,
+                    stock: {
+                        name: createdItem.name,
+                        uniqueName: createdItem.uniqueName,
+                    },
+                },
+            };
+        }
+
+        return {
+            value: createdItem.uniqueName,
+            label: createdItem.name,
+            additional: {
+                name: createdItem.name,
+                uniqueName: createdItem.uniqueName,
+                hsnNumber: createdItem.hsnNumber,
+                sacNumber: createdItem.sacNumber,
+            },
+        };
+    }
+
+    /**
+     * Resolves linked account unique name for a newly created stock.
+     *
+     * @private
+     * @param {*} createdStock
+     * @return {*}  {string}
+     * @memberof LedgerComponent
+     */
+    private getLinkedAccountUniqueNameForCreatedStock(createdStock: any): string {
+        return (
+            createdStock?.salesAccountUniqueNames?.[0] ||
+            createdStock?.purchaseAccountUniqueNames?.[0] ||
+            createdStock?.fixedAssetsAccountUniqueNames?.[0]
+        );
     }
 
     public toggleOtherTaxesAsidePane(updateLedgerModalVm: any): void {
