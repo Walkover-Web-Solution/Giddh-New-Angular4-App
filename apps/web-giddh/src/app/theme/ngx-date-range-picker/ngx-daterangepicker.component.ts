@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges, AfterViewInit, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, type SimpleChanges, AfterViewInit, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as dayjs from 'dayjs';
 type Dayjs = any;

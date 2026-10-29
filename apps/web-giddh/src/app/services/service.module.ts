@@ -1,7 +1,7 @@
 import { PermissionDataService } from "../permissions/permission-data.service";
 import { LogsService } from "./logs.service";
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
-import { ModuleWithProviders, NgModule } from "@angular/core";
+import { type ModuleWithProviders, NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";

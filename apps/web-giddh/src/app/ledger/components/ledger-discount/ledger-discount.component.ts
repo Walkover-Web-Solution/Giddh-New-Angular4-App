@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { HIGH_RATE_FIELD_PRECISION } from '../../../app.constant';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';

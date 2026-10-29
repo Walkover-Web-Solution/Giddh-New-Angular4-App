@@ -41,8 +41,30 @@ let mainHash = '';
 let mainBundleFile = '';
 const mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
 
+// CSP for the web app HTML document (not API JSON). Restricts script origins to self + known vendors.
+const contentSecurityPolicy = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://www.google.com https://*.g.doubleclick.net https://checkout.razorpay.com https://*.razorpay.com https://js.stripe.com https://*.stripe.com https://accounts.google.com https://verify.msg91.com https://control.msg91.com https://cdn.headwayapp.co",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.headwayapp.co https://www.googletagmanager.com https://tagmanager.google.com",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data: https://fonts.gstatic.com",
+    "connect-src 'self' https: wss: blob:",
+    "frame-src 'self' https://www.googletagmanager.com https://*.googletagmanager.com https://js.stripe.com https://hooks.stripe.com https://*.stripe.com https://checkout.razorpay.com https://*.razorpay.com https://accounts.google.com https://headway-widget.net https://verify.msg91.com https://control.msg91.com",
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self' https://accounts.google.com https://*.razorpay.com https://*.stripe.com",
+    "frame-ancestors 'self'",
+    "upgrade-insecure-requests"
+].join('; ');
+
 // PHP script to prepend to index.html
 const phpScript = `<?php
+
+/* -------------------------------------------------
+ * 0. Security headers for HTML document responses
+ * ------------------------------------------------- */
+header("Content-Security-Policy: ${contentSecurityPolicy}");
 
 /* -------------------------------------------------
  * 1. Instance metadata endpoint

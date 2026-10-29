@@ -19,7 +19,7 @@ import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, isSelectedAllOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, type IOption, isSelectedAllOption } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 import { DurationEnum } from '../../constants/reports.constant';

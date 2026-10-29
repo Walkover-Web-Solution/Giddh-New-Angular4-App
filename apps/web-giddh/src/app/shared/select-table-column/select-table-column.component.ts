@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, type SimpleChanges } from "@angular/core";
 import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";

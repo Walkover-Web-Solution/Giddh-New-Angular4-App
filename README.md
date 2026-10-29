@@ -1,16 +1,6 @@
-# Setup Guide
+# Giddh development
 
-1. Clone https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App.git.
-
-2. This project requires Node version 14+, install Node from [here](https://nodejs.org/en/).
-
-3. Go inside the cloned directory `Giddh-New-Angular4-App` in any terminal and run these following commands in the terminal to install dependency and start local serve.
-
-4. Run `npm i` for installation of dependencies.
-
-5. You need to add a ```.env``` file at the root of the project (similar to ```.env.example``` already present at the root) which is  used to store credentials related to Google, Razorpay. You can get the ```.env``` file from any of the contributors of this project.
-
-6. Run `npm run start` to local serve the project.
+Start with [AGENTS.md](AGENTS.md) for the product and code map. Use [Development](docs/DEVELOPMENT.md) for setup, environment files, verified commands, and current verification gaps.
 
 # Contributing Guide
 

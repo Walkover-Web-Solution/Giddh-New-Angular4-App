@@ -11,7 +11,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    SimpleChanges,
+    type SimpleChanges,
     TemplateRef,
     ViewChild,
 } from '@angular/core';
@@ -22,6 +22,7 @@ import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
+import { appendUncheckedReportSelections, type ReportSelectionNode, type UncheckedReportSelection } from '../../../../report-selection';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -73,7 +74,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds account details */
     public accountDetails: any;
     /** List of check groups accounts */
-    private listOfCheckGroupsAccounts: any[] = [];
+    private listOfCheckGroupsAccounts: UncheckedReportSelection[] = [];
     /** Holds images folder path */
     public imgPath: string = "";
 
@@ -275,31 +276,9 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
         }, 400);
     }
 
-    /**
-     * Recursive function to extract checked accounts/groups and store it in listOfCheckGroupsAccounts.
-     * It loops through the groupAccountDetails array and checks if the account/group is checked.
-     * If checked, it adds the account/group to listOfCheckGroupsAccounts with checked set to false.
-     * Then it recursively calls itself on the childGroups and accounts of the group.
-     * @param groupAccountDetails array of account/group objects
-     * @param entityType type of entity, either 'group' or 'account'
-     * @memberof TrialBalanceGridComponent
-     */
-    private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        (Array.isArray(groupAccountDetails) ? groupAccountDetails : []).forEach(groupAccount => {
-            if (groupAccount.checked) {
-                this.listOfCheckGroupsAccounts.push({
-                    uniqueName: groupAccount.uniqueName,
-                    entityType,
-                    checked: false
-                });
-            }
-            if (groupAccount.childGroups?.length) {
-                this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
-            }
-            if (groupAccount.accounts?.length) {
-                this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
-            }
-        });
+    /** Appends checked nodes to the pending uncheck request without changing the report. */
+    private extractCheckedAccountsGroups(groupAccountDetails: readonly ReportSelectionNode[], entityType: 'group' | 'account'): void {
+        appendUncheckedReportSelections(groupAccountDetails, entityType, this.listOfCheckGroupsAccounts);
     }
 
     /**

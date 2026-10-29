@@ -1113,24 +1113,7 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
             this.markFormInvalidAndFocus();
             return;
         }
-        let mappedVariants = this.selection.selected.map(item => (
-            item?.variant?.uniqueName
-        ));
-        this.adjustInventoryCreateEditForm.value.variantUniqueNames = mappedVariants;
-
-        let toDate;
-        if (typeof this.adjustInventoryCreateEditForm.get('date')?.value === 'object') {
-            toDate = dayjs(this.adjustInventoryCreateEditForm.get('date')?.value).format(GIDDH_DATE_FORMAT);
-        } else {
-            toDate = this.adjustInventoryCreateEditForm.get('date')?.value
-        }
-        this.adjustInventoryCreateEditForm.value.date = toDate;
-        let adjustFormValue;
-        adjustFormValue = this.cleanObject(this.adjustInventoryCreateEditForm.value);
-        let reqObj = {
-            formValue: adjustFormValue,
-            branchUniqueName: this.generalService.currentBranchUniqueName
-        }
+        const reqObj = this.prepareInventoryAdjustmentRequest();
         this.apiCallInProgress = true;
         this.componentStore.updateInventoryAdjustment(reqObj);
     }
@@ -1153,27 +1136,28 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
             this.markFormInvalidAndFocus();
             return;
         }
-        let mappedVariants = this.selection.selected.map(item => (
-            item?.variant?.uniqueName
-        ));
+        const reqObj = this.prepareInventoryAdjustmentRequest();
+        this.apiCallInProgress = true;
+        this.componentStore.createInventoryAdjustment(reqObj);
+    }
+
+    /** Builds the shared request for single-item inventory adjustment creation and editing. */
+    private prepareInventoryAdjustmentRequest() {
+        const mappedVariants = this.selection.selected.map(item => item?.variant?.uniqueName);
         this.adjustInventoryCreateEditForm.value.variantUniqueNames = mappedVariants;
 
         let toDate;
         if (typeof this.adjustInventoryCreateEditForm.get('date')?.value === 'object') {
             toDate = dayjs(this.adjustInventoryCreateEditForm.get('date')?.value).format(GIDDH_DATE_FORMAT);
         } else {
-            toDate = this.adjustInventoryCreateEditForm.get('date')?.value
+            toDate = this.adjustInventoryCreateEditForm.get('date')?.value;
         }
         this.adjustInventoryCreateEditForm.value.date = toDate;
-        let adjustFormValue;
-        adjustFormValue = this.cleanObject(this.adjustInventoryCreateEditForm.value);
-
-        let reqObj = {
+        const adjustFormValue = this.cleanObject(this.adjustInventoryCreateEditForm.value);
+        return {
             formValue: adjustFormValue,
             branchUniqueName: this.generalService.currentBranchUniqueName
-        }
-        this.apiCallInProgress = true;
-        this.componentStore.createInventoryAdjustment(reqObj);
+        };
     }
 
     /**
@@ -1466,14 +1450,8 @@ export class AdjustInventoryComponent implements OnInit, OnDestroy {
         return `${this.adjustmentItems[itemIndex]?.selection.isSelected(row) ? 'deselect' : 'select'} row ${row + 1}`;
     }
 
-    /**
-     * This will be use for clean request object
-     *
-     * @param {*} updatedData
-     * @return {*}  {void}
-     * @memberof AdjustInventoryComponent
-     */
-    public cleanObject(updatedData: any): void {
+    /** Removes display-only fields in place and returns the same request. */
+    public cleanObject(updatedData: Record<string, unknown>): Record<string, unknown> {
         delete updatedData?.adjustmentMethodName;
         delete updatedData?.expenseAccountName;
         delete updatedData?.reasonName;

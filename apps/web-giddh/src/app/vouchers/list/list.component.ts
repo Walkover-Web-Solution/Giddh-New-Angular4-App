@@ -1231,6 +1231,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     item.grandTotal = typeof item.grandTotal === 'number'
                         ? { amountForAccount: item.grandTotal }
                         : item.grandTotal;
+                    item = this.generalService.addToolTipText(this.voucherType, this.company.baseCurrency, item, this.localeData, this.commonLocaleData, this.company.giddhBalanceDecimalPlaces);
                 }
 
                 if (item.balanceStatus) {

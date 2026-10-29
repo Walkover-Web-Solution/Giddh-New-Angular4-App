@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { API_BULK_FETCH_LIMIT, IOption } from '../../app.constant';
 import { AppState } from 'apps/web-giddh/src/app/store';

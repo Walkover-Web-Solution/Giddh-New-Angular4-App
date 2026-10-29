@@ -1,8 +1,6 @@
 import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from './../store/roots';
 import { Injectable } from '@angular/core';
-import { CompanyResponse } from '../models/api-models/Company';
-import { find, findIndex } from '../lodash-optimized';
 
 export interface IScope {
     name: string;
@@ -26,26 +24,27 @@ export class PermissionDataService {
     private createdBy: CompanyData;
 
     constructor(private store: Store<AppState>) {
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies: CompanyResponse[], uniqueName) => {
-            let currentCompany = companies.find((company) => company?.uniqueName === uniqueName);
-            this.getCompany = currentCompany;
-            this.store.pipe(select(state => state.session.companyUser)).subscribe(response => {
-                if (response && response.userEntityRoles && response.userEntityRoles.length) {
-                    let superAdminIndx = response.userEntityRoles.findIndex((role) => {
-                        return (role.entity.entity === 'COMPANY' && role.role?.uniqueName === 'super_admin');
-                    });
-                    let companyEntityIndx = superAdminIndx !== -1 ? superAdminIndx : null;
-                    if (!companyEntityIndx) {
-                        companyEntityIndx = response.userEntityRoles.findIndex((role) => {
-                            return (role.entity.entity === 'COMPANY');
-                        });
-                    }
-                    companyEntityIndx = companyEntityIndx !== -1 ? companyEntityIndx : 0;
-                    this.isUserSuperAdmin = superAdminIndx !== -1 ? true : false;
-                    this.getData = response.userEntityRoles[companyEntityIndx].role?.scopes;
-                }
-            });
-        }))).subscribe();
+        this.store.pipe(select(createSelector(
+            (state: AppState) => state.session.companies,
+            (state: AppState) => state.session.companyUniqueName,
+            (state: AppState) => state.session.companyUser,
+            (companies, uniqueName, companyUser) => ({
+                company: companies.find(company => company?.uniqueName === uniqueName),
+                companyUser
+            })
+        ))).subscribe(({ company, companyUser }) => {
+            this.getCompany = company;
+            if (companyUser && companyUser.userEntityRoles && companyUser.userEntityRoles.length) {
+                const superAdminIndex = companyUser.userEntityRoles.findIndex(role =>
+                    role.entity.entity === 'COMPANY' && role.role?.uniqueName === 'super_admin'
+                );
+                const companyRoleIndex = superAdminIndex !== -1 ? superAdminIndex :
+                    companyUser.userEntityRoles.findIndex(role => role.entity.entity === 'COMPANY');
+                const selectedRoleIndex = companyRoleIndex !== -1 ? companyRoleIndex : 0;
+                this.isUserSuperAdmin = superAdminIndex !== -1;
+                this.getData = companyUser.userEntityRoles[selectedRoleIndex].role?.scopes;
+            }
+        });
     }
 
     private _isUserSuperAdmin: boolean = false;

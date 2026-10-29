@@ -592,6 +592,8 @@
     "document_status": "दस्तावेज़ स्थिति",
     "linked_invoice_no": "लिंक्ड इनवॉइस संख्या",
     "linked_bill_no": "लिंक्ड बिल संख्या",
+    "linked_challan_no": "लिंक्ड चालान संख्या",
+    "linked_receipt_note_no": "लिंक्ड रसीद नोट संख्या",
     "inventory_document_status": {
         "open": "ओपन",
         "closed": "क्लोज्ड",

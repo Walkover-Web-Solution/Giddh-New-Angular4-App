@@ -1,0 +1,6 @@
+---
+description: Load the shared Giddh agent entry point before repository work.
+alwaysApply: true
+---
+
+Read [AGENTS.md](../../AGENTS.md) before changing this repository. Follow its reading order and task workflow; keep the existing Angular/CSS rules in force.

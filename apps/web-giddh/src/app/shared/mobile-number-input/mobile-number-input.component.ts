@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter, forwardRef, OnInit, OnDestroy, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, OnInit, OnDestroy, OnChanges, type SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, Validators, AbstractControl, ValidationErrors, NG_VALIDATORS, Validator } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, Validators, AbstractControl, type ValidationErrors, NG_VALIDATORS, Validator } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule, MatSelect } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';

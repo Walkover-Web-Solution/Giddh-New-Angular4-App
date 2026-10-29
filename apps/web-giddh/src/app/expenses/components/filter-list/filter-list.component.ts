@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, type SimpleChanges } from '@angular/core';
 import { ExpenseResults } from '../../../models/api-models/Expences';
 import { map } from '../../../lodash-optimized';
 

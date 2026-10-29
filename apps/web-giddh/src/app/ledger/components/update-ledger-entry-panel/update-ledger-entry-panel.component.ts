@@ -11,7 +11,7 @@ import {
     Output,
     Renderer2,
     signal,
-    SimpleChanges,
+    type SimpleChanges,
     TemplateRef,
     ViewChild,
 } from '@angular/core';
