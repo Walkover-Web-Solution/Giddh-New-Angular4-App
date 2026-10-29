@@ -335,9 +335,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
                     }
 
                     this.taxList.push({ label: res.taxes[key]?.label, value: res.taxes[key]?.value });
-                    this.changeDetectorRef.detectChanges();
                 });
                 this.taxListSource$ = observableOf(this.taxList);
+                this.changeDetectorRef.detectChanges();
             } else {
                 this.store.dispatch(this.settingsTaxesActions.getTaxList(countryCode));
             }
