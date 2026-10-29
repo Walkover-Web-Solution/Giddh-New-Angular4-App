@@ -41,6 +41,7 @@ let mainHash = '';
 let mainBundleFile = '';
 const mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
 
+<<<<<<< Updated upstream
 // CSP for the web app HTML document (not API JSON). Restricts script origins to self + known vendors.
 const contentSecurityPolicy = [
     "default-src 'self'",
@@ -58,6 +59,13 @@ const contentSecurityPolicy = [
     "upgrade-insecure-requests"
 ].join('; ');
 
+=======
+<<<<<<< Updated upstream
+=======
+const contentSecurityPolicy = require('./content-security-policy');
+
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 // PHP script to prepend to index.html
 const phpScript = `<?php
 
