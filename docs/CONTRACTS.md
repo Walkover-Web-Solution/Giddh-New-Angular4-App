@@ -55,7 +55,7 @@ Do not rename storage keys or clear saved state as a refactoring shortcut. Defin
 
 ## Analytics, diagnostics and desktop messages
 
-Web entry HTML installs Google Tag Manager: [index.prod.html](../apps/web-giddh/src/index.prod.html) and [index.test.html](../apps/web-giddh/src/index.test.html) use different containers. Their tag/event definitions are outside this checkout; preserve loading and establish event/exposure requirements before changing measured flows. No approved event schema or experiment-assignment contract was established here.
+Web entry HTML installs Google Tag Manager: [index.prod.html](../apps/web-giddh/src/index.prod.html) and [index.test.html](../apps/web-giddh/src/index.test.html) use different containers. Their tag/event definitions are outside this checkout; preserve loading and establish event/exposure requirements before changing measured flows. Experiment assignment and exposure/conversion events go through the middleware snippet described in [experiments](EXPERIMENTS.md#recording-through-the-middleware); no other event schema was established here.
 
 [Angular21CompatibilityErrorHandler](../apps/web-giddh/src/app/angular21-compatibility.ts) sends UI exception payloads containing user/company context, page and stack to the API outside excluded local domains; `GiddhErrorHandler.logApiError` sends API-error diagnostics. Compatibility code also suppresses selected errors and reloads on chunk failures, so a quiet console alone is insufficient verification.
 
