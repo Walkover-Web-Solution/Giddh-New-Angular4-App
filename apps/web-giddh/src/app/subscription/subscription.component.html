@@ -58,57 +58,242 @@
             <mat-tab [label]="localeData?.mobile_number?.tab_heading">
                 <div class="wrap-tab-content- p-3">
                     <div class="p-3 clear-both mt-1">
-                        <form class="row" name="mobileForm" novalidate>
-                            <div class="col-lg-3 pr-1">
-                                <input-field
-                                    [label]="localeData?.mobile_number?.add_edit_mobile_number"
-                                    [name]="'phoneNumber'"
-                                    class="max-width-350"
-                                    [allowDecimalDigitsOnly]="true"
-                                    [maxlength]="10"
-                                    [type]="'text'"
-                                    [placeholder]="localeData?.mobile_number?.verification_code_placeholder"
-                                    [(ngModel)]="phoneNumber"
-                                ></input-field>
-                                <p class="mt-2">
-                                    <strong>{{ commonLocaleData?.app_note }}:</strong>
-                                    {{ localeData?.mobile_number?.mobile_number_format }}
-                                </p>
-                            </div>
-                            <div class="col-lg-4 pl-1">
-                                <button
-                                    matButton="filled"
-                                    class="ml-2 margin-top"
-                                    [ladda]="isAddNewMobileNoInProcess$ | async"
-                                    (click)="addNumber(phoneNumber)"
-                                >
-                                    {{ commonLocaleData?.app_add }}
-                                </button>
-                            </div>
-                        </form>
-                        <div class="row mt-1 align-items-center" *ngIf="showVerificationBox">
-                            <div class="col-lg-3 pr-1">
-                                <div class="mt-1">
+                        <div class="sky-blue-bg p-3 mb-4 border-radius-4 d-flex column-gap-2 align-items-start" role="note">
+                            <i class="icon-info font-size-16 text-primary mt-1" aria-hidden="true"></i>
+                            <p class="mb-0 text-black">
+                                <strong>{{ commonLocaleData?.app_note }}:</strong>
+                                {{ localeData?.mobile_number?.email_auth_key_note }}
+                            </p>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="d-grid align-items-center column-gap-3 row-gap-05 mb-4 grid-cols-fixed-fluid grid-stack-small-desktop">
+                            <div class="grid-col-1 grid-row-1">
+                                @if (isEditingEmail) {
                                     <input-field
-                                        [label]="localeData?.mobile_number?.verification_code_label"
-                                        class="max-width-350"
-                                        [type]="'text'"
-                                        [placeholder]="localeData?.mobile_number?.verification_code_placeholder"
-                                        [(ngModel)]="oneTimePassword"
+                                        [name]="'registeredEmail'"
+                                        [type]="'email'"
+                                        [label]="localeData?.mobile_number?.registered_email_address"
+                                        [placeholder]="localeData?.mobile_number?.email_placeholder"
+                                        [(ngModel)]="email"
+                                        (ngModelChange)="onEmailInputChange()"
                                     ></input-field>
-                                </div>
+                                } @else {
+                                    <div class="d-flex flex-column justify-content-center min-h-50">
+                                        <p class="font-size-12 text-light line-height-16 mb-1">
+                                            {{ localeData?.mobile_number?.registered_email_address }}
+                                        </p>
+                                        <p class="font-size-15 line-height-20 word-break-break-all mb-0">{{ email }}</p>
+                                    </div>
+                                }
                             </div>
-                            <div class="col-lg-4 pl-1 pt-2">
-                                <button
-                                    matButton="filled"
-                                    class="ml-2 mt-2"
-                                    [ladda]="isVerifyAddNewMobileNoInProcess$ | async"
-                                    (click)="verifyNumber()"
-                                >
-                                    {{ localeData?.mobile_number?.verify }}
-                                </button>
+                            <div class="grid-col-2 grid-row-1 d-flex align-items-center min-h-50">
+                                @if (!isEditingEmail) {
+                                    <button
+                                        type="button"
+                                        matButton="outlined"
+                                        (click)="enableEmailEdit()"
+                                        [attr.aria-label]="
+                                            commonLocaleData?.app_edit + ' ' + localeData?.mobile_number?.registered_email_address
+                                        "
+                                    >
+                                        <i class="icon-edit-pencil mr-1" aria-hidden="true"></i>
+                                        {{ commonLocaleData?.app_edit }}
+                                    </button>
+                                }
+                                @if (isEditingEmail && isEmailChanged() && !isEmailVerified && !showEmailOtp) {
+                                    <button type="button" matButton="filled" [disabled]="emailSendOtpInProgress" (click)="sendEmailOtp()">
+                                        @if (emailSendOtpInProgress) {
+                                            <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                                        } @else {
+                                            {{ localeData?.mobile_number?.send_otp }}
+                                        }
+                                    </button>
+                                }
+                                @if (showEmailOtp && !isEmailVerified) {
+                                    <div class="d-flex align-items-center column-gap-1 row-gap-1 flex-wrap w-100">
+                                        <input-field
+                                            class="min-w-150 max-w-150 flex-shrink-0"
+                                            [name]="'emailOtp'"
+                                            [type]="'tel'"
+                                            [floatLabel]="'never'"
+                                            [placeholder]="localeData?.mobile_number?.enter_otp"
+                                            [(ngModel)]="emailOtp"
+                                        ></input-field>
+                                        <button
+                                            type="button"
+                                            matButton="filled"
+                                            [disabled]="emailVerifyOtpInProgress || emailResendOtpInProgress"
+                                            (click)="verifyEmailOtp()"
+                                        >
+                                            @if (emailVerifyOtpInProgress) {
+                                                <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                                            } @else {
+                                                {{ localeData?.mobile_number?.verify_email }}
+                                            }
+                                        </button>
+                                        <button
+                                            type="button"
+                                            matButton="outlined"
+                                            [disabled]="emailResendOtpInProgress || emailVerifyOtpInProgress"
+                                            (click)="resendEmailOtp()"
+                                        >
+                                            {{ localeData?.mobile_number?.resend_otp }}
+                                        </button>
+                                    </div>
+                                }
+                                @if (isEmailVerified) {
+                                    <p class="mb-0 text-green d-flex align-items-center column-gap-1">
+                                        <i class="icon-tick" aria-hidden="true"></i>
+                                        {{ localeData?.mobile_number?.email_verified }}
+                                    </p>
+                                }
+                            </div>
+                            @if (isEditingEmail) {
+                                <p class="grid-col-1 grid-row-2 font-size-12 text-light line-height-20 mb-0">
+                                    {{ localeData?.mobile_number?.email_format }}
+                                </p>
+                            }
+                            <div class="grid-col-2 grid-row-2 font-size-12 text-light line-height-20">
+                                @if (showEmailOtp && !isEmailVerified) {
+                                    <p class="mb-0">
+                                        {{ localeData?.mobile_number?.otp_sent_to }}
+                                        <strong>{{ email }}</strong>
+                                    </p>
+                                }
                             </div>
                         </div>
+
+                        <!-- Mobile -->
+                        <div class="d-grid align-items-center column-gap-3 row-gap-05 mb-4 grid-cols-fixed-fluid grid-stack-small-desktop">
+                            <div class="grid-col-1 grid-row-1">
+                                @if (isEditingMobile) {
+                                    <mobile-number-input
+                                        [formControl]="mobileControl"
+                                        [label]="localeData?.mobile_number?.registered_mobile_number"
+                                        [placeholder]="localeData?.mobile_number?.mobile_placeholder"
+                                        [required]="false"
+                                        [useImageFlags]="true"
+                                    ></mobile-number-input>
+                                } @else {
+                                    <div class="d-flex flex-column justify-content-center min-h-50">
+                                        <p class="font-size-12 text-light line-height-16 mb-1">
+                                            {{ localeData?.mobile_number?.registered_mobile_number }}
+                                        </p>
+                                        <p class="font-size-15 line-height-20 word-break-break-all mb-0">
+                                            {{ originalMobile ? '+' + originalMobile : '' }}
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+                            <div class="grid-col-2 grid-row-1 d-flex align-items-center min-h-50">
+                                @if (!isEditingMobile) {
+                                    <button
+                                        type="button"
+                                        matButton="outlined"
+                                        (click)="enableMobileEdit()"
+                                        [attr.aria-label]="
+                                            commonLocaleData?.app_edit + ' ' + localeData?.mobile_number?.registered_mobile_number
+                                        "
+                                    >
+                                        <i class="icon-edit-pencil mr-1" aria-hidden="true"></i>
+                                        {{ commonLocaleData?.app_edit }}
+                                    </button>
+                                }
+                                @if (isEditingMobile && isMobileChanged() && !isMobileVerified && !showMobileOtp) {
+                                    <button type="button" matButton="filled" [disabled]="mobileSendOtpInProgress" (click)="sendMobileOtp()">
+                                        @if (mobileSendOtpInProgress) {
+                                            <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                                        } @else {
+                                            {{ localeData?.mobile_number?.send_otp }}
+                                        }
+                                    </button>
+                                }
+                                @if (showMobileOtp && !isMobileVerified) {
+                                    <div class="d-flex align-items-center column-gap-1 row-gap-1 flex-wrap w-100">
+                                        <input-field
+                                            class="min-w-150 max-w-150 flex-shrink-0"
+                                            [name]="'mobileOtp'"
+                                            [type]="'tel'"
+                                            [floatLabel]="'never'"
+                                            [placeholder]="localeData?.mobile_number?.enter_otp"
+                                            [(ngModel)]="mobileOtp"
+                                        ></input-field>
+                                        <button
+                                            type="button"
+                                            matButton="filled"
+                                            [disabled]="mobileVerifyOtpInProgress || mobileResendOtpInProgress"
+                                            (click)="verifyMobileOtp()"
+                                        >
+                                            @if (mobileVerifyOtpInProgress) {
+                                                <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                                            } @else {
+                                                {{ localeData?.mobile_number?.verify_mobile }}
+                                            }
+                                        </button>
+                                    </div>
+                                }
+                                @if (isMobileVerified) {
+                                    <p class="mb-0 text-green d-flex align-items-center column-gap-1">
+                                        <i class="icon-tick" aria-hidden="true"></i>
+                                        {{ localeData?.mobile_number?.mobile_verified }}
+                                    </p>
+                                }
+                            </div>
+                            @if (isEditingMobile) {
+                                <p class="grid-col-1 grid-row-2 font-size-12 text-light line-height-20 mb-0">
+                                    {{ localeData?.mobile_number?.mobile_number_format }}
+                                </p>
+                            }
+                            <div class="grid-col-2 grid-row-2 font-size-12 text-light line-height-20">
+                                @if (showMobileOtp && !isMobileVerified) {
+                                    <p class="mb-1">
+                                        {{ localeData?.mobile_number?.otp_sent_to }}
+                                        <strong>+{{ getCurrentMobileDigits() }}</strong>
+                                    </p>
+                                    @if (otpResendChannels?.length) {
+                                        <p class="mb-0 d-flex flex-wrap align-items-center">
+                                            <span class="mr-1">{{ localeData?.mobile_number?.resend_on }}</span>
+                                            @for (channel of otpResendChannels; track channel.value; let last = $last) {
+                                                <button
+                                                    type="button"
+                                                    class="p-0 border-none bg-transparent text-primary font-weight-semibold text-uppercase"
+                                                    [class.cursor-pointer]="!(mobileResendOtpInProgress || mobileVerifyOtpInProgress)"
+                                                    [class.cursor-not-allowed]="mobileResendOtpInProgress || mobileVerifyOtpInProgress"
+                                                    [class.opacity-50]="mobileResendOtpInProgress || mobileVerifyOtpInProgress"
+                                                    [disabled]="mobileResendOtpInProgress || mobileVerifyOtpInProgress"
+                                                    (click)="resendMobileOtp(channel.value)"
+                                                >
+                                                    {{ channel.name }}
+                                                </button>
+                                                @if (!last) {
+                                                    <span class="mx-1">{{ localeData?.mobile_number?.resend_or }}</span>
+                                                }
+                                            }
+                                        </p>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        @if (isEditingEmail || isEditingMobile) {
+                            <div class="d-flex justify-content-start border-top pt-3 mb-4">
+                                <button
+                                    type="button"
+                                    matButton="filled"
+                                    class="min-width-160"
+                                    [disabled]="isSavingContact"
+                                    (click)="saveContactChanges()"
+                                >
+                                    @if (isSavingContact) {
+                                        <mat-progress-spinner diameter="20" color="primary" mode="indeterminate"></mat-progress-spinner>
+                                    } @else {
+                                        {{ localeData?.mobile_number?.save_changes }}
+                                    }
+                                </button>
+                            </div>
+                        }
+
                         <section class="row mobile-tab">
                             <div class="col-md-12 adjust-width pull-left">
                                 <div class="row">
@@ -210,13 +395,14 @@
                         </section>
 
                         <div class="mt-4">
-                            <!--two way auth-->
                             <p class="section-head">
                                 <mat-slide-toggle [(ngModel)]="twoWayAuth" name="twoWayAuth" color="primary" (change)="changeTwoWayAuth()">
                                     {{ localeData?.mobile_number?.two_way_auth_label }}
                                 </mat-slide-toggle>
                             </p>
-                            <p class="grey" *ngIf="twoWayAuth">{{ localeData?.mobile_number?.two_way_auth_content }}</p>
+                            @if (twoWayAuth) {
+                                <p class="grey">{{ localeData?.mobile_number?.two_way_auth_content }}</p>
+                            }
                         </div>
                     </div>
                 </div>
