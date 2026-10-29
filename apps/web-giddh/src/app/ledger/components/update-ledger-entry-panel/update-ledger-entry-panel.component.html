@@ -1860,9 +1860,7 @@
                                                         decimalDigitsDirective
                                                         [(ngModel)]="item.adjustmentAmount.amountForAccount"
                                                         [readonly]="true"
-                                                        [label]="
-                                                            `${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`
-                                                        "
+                                                        [label]="`${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`"
                                                     ></input-field>
                                                     <input-field
                                                         [readonly]="isEinvoiceGenerated"
@@ -1877,9 +1875,7 @@
                                                         (blur)="adjustedInvoiceAmountChange()"
                                                         *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
                                                         [(ngModel)]="item.adjustmentAmount.amountForAccount"
-                                                        [label]="
-                                                            `${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`
-                                                        "
+                                                        [label]="`${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`"
                                                     ></input-field>
                                                 </div>
                                             </div>
@@ -1956,13 +1952,13 @@
                                                     </div>
                                                 </td>
                                                 <td
-                                                    class="pr-2 reference-invoice"
+                                                    class="pr-2 d-flex align-items-start! no-wrap"
                                                     *ngIf="
                                                         vm.selectedLedger?.voucher?.shortCode == 'credit note' ||
                                                         vm.selectedLedger?.voucher?.shortCode == 'debit note'
                                                     "
                                                 >
-                                                    <div class="form-group mb-3">
+                                                    <div class="form-group mb-3 flex-grow-1">
                                                         <reactive-dropdown-field
                                                             [label]="commonLocaleData?.app_reference_invoice"
                                                             *ngIf="voucherApiVersion === 2"
@@ -2012,18 +2008,11 @@
                                                             </ng-template>
                                                         </reactive-dropdown-field>
                                                     </div>
-                                                </td>
-                                                <td
-                                                    *ngIf="
-                                                        (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
-                                                            vm.selectedLedger?.voucher?.shortCode === 'debit note') &&
-                                                        selectedInvoice &&
-                                                        !isEinvoiceGenerated
-                                                    "
-                                                    class="cursor-pointer remove-invoice pr-4 hidden-xs"
-                                                    (click)="removeSelectedInvoice()"
-                                                >
-                                                    <div class="mt-2">
+                                                    <div
+                                                        *ngIf="selectedInvoice && !isEinvoiceGenerated"
+                                                        class="d-flex align-items-center mb-3 ml-2 cursor-pointer hidden-xs icon-font-22"
+                                                        (click)="removeSelectedInvoice()"
+                                                    >
                                                         <span class="remove-invoice-icon"><i class="icon-trash"></i></span>
                                                     </div>
                                                 </td>
