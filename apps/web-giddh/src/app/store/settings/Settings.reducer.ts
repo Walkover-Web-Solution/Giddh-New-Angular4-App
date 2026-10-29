@@ -466,7 +466,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
 
         case SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE:
-        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE:
             let saveautoCollectRes: BaseResponse<any, any> = action.payload;
             if (saveautoCollectRes?.status === 'success') {
                 newState.integration.autoCollect = saveautoCollectRes.request;

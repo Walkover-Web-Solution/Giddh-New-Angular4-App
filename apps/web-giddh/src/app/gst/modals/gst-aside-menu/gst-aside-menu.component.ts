@@ -1,5 +1,5 @@
 // tslint:disable:variable-name
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Signal, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, type Signal, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';

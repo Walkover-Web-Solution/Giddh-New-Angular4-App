@@ -267,6 +267,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.initializeNewForm();
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
@@ -303,7 +304,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.showBankDetail = true;
         }
 
-        this.initializeNewForm();
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.activeGroupUniqueName && response.uniqueName !== this.activeGroupUniqueName) {
@@ -1387,28 +1387,32 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public showBankDetailsValidation(element: any, type: any) {
+       const classList = element?.textField?.nativeElement?.classList;
+           if (!classList) {
+            return;
+           }
         if (type === 'bankAccountNo') {
             if (this.selectedCountryCode === 'IN') {
-                if (element && element.value && element.value.length < 9) {
+                if (element?.value && element.value.length < 9) {
                     this._toaster.errorToast(this.commonLocaleData?.app_invalid_bank_account_number);
-                    element.classList.add('error-box');
+                    classList.add('error-box');
                 } else {
-                    element.classList.remove('error-box');
+                    classList.remove('error-box');
                 }
             } else {
-                if (element && element.value && element.value.length < 23) {
+                if (element?.value && element.value.length < 23) {
                     this._toaster.errorToast(this.commonLocaleData?.app_invalid_iban);
-                    element.classList.add('error-box');
+                    classList.add('error-box');
                 } else {
-                    element.classList.remove('error-box');
+                    classList.remove('error-box');
                 }
             }
         } else if (type === 'swiftCode') {
-            if (element && element.value && element.value.length < 8) {
+            if (element?.value && element.value.length < 8) {
                 this._toaster.errorToast(this.commonLocaleData?.app_invalid_swift_code);
-                element.classList.add('error-box');
+                classList.add('error-box');
             } else {
-                element.classList.remove('error-box');
+                classList.remove('error-box');
             }
         }
     }

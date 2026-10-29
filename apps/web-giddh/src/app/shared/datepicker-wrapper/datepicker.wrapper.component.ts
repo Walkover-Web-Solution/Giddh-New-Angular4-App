@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, type SimpleChanges } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from '../../lodash-optimized';
 type Dayjs = any;

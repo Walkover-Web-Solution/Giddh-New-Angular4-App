@@ -1,6 +1,6 @@
 import { StockReportActions } from './inventory/stocks-report.actions';
 import { VerifyMobileActions } from './verify-mobile.actions';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { type ModuleWithProviders, NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { CompanyActions } from './company.actions';
 import { LoginActions } from './login.action';

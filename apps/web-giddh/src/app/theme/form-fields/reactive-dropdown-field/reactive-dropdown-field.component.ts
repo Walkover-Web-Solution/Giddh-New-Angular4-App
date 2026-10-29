@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, effect, ElementRef, EventEmitter, HostListener, Input, input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, untracked, ViewChild, forwardRef, inject, signal } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, effect, ElementRef, EventEmitter, HostListener, Input, input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, TemplateRef, untracked, ViewChild, forwardRef, inject, signal } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil, take, filter } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
@@ -798,7 +798,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
         this.focusInputField();
         setTimeout(() => {
-            this.handleDropdownPanelOperation('open');
+               this.handleDropdownPanelOperation('open');
         }, 200);
     }
 
@@ -807,19 +807,23 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      *
      * @memberof ReactiveDropdownFieldComponent
      */
-    public focusInputField(): void {
-        if (this.trigger) {
-            // Temporarily disable autocomplete to prevent dropdown from opening
-            this.trigger.autocompleteDisabled = true;
-            this.selectField?.nativeElement?.focus();
-            // Re-enable autocomplete after a short delay
-            setTimeout(() => {
-                this.trigger.autocompleteDisabled = false;
-            }, 100);
-        } else {
-            this.selectField?.nativeElement?.focus();
-        }
+public focusInputField(): void {
+    if (this.trigger) {
+        // Temporarily disable autocomplete to prevent dropdown from opening
+        this.trigger.autocompleteDisabled = true;
+        this.selectField?.nativeElement?.focus();
+        if (this.trigger?.panelOpen) {
+                this.trigger.updatePosition();
+            }
+            
+        // Re-enable autocomplete after a short delay
+        setTimeout(() => {
+            this.trigger.autocompleteDisabled = false;
+        }, 100);
+    } else {
+        this.selectField?.nativeElement?.focus();
     }
+}
 
     /**
      * Set value of Label from options using control value

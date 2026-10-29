@@ -227,17 +227,17 @@
                     </mat-menu>
                 </div>
             </div>
-            <div class="action-button" [ngClass]="{ 'text-xl-right': isUpdtCase }">
+            <div class="flex-lg-fill" [ngClass]="{ 'text-xl-right': isUpdtCase }">
                 <button matButton="filled" [ladda]="createPermissionInProcess$ | async" [disabled]="isUserRestricted" class="mr-2">
                     <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
                     <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
                 </button>
-                <button *ngIf="isUpdtCase" (click)="closeDialog.emit(false)" matButton="outlined" type="button">
+                <button *ngIf="isUpdtCase || isOpenedInModal" (click)="closeDialog.emit(false)" matButton="outlined" type="button">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>
         </div>
-        <div class="ml-auto" *ngIf="isSuperAdminCompany">
+        <div class="ml-auto" *ngIf="isSuperAdminCompany && !isOpenedInModal">
             <button
                 matButton="filled"
                 type="button"

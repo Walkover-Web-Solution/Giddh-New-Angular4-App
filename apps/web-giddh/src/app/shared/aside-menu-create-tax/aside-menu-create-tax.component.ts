@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
@@ -335,9 +335,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterView
                     }
 
                     this.taxList.push({ label: res.taxes[key]?.label, value: res.taxes[key]?.value });
-                    this.changeDetectorRef.detectChanges();
                 });
                 this.taxListSource$ = observableOf(this.taxList);
+                this.changeDetectorRef.detectChanges();
             } else {
                 this.store.dispatch(this.settingsTaxesActions.getTaxList(countryCode));
             }

@@ -165,6 +165,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 ],
                 warehouseBalance: [
                     {
+                        rowId: "warehouse-row-0",
+                        forceClear: false,
                         warehouse: {
                             name: undefined,
                             uniqueName: undefined
@@ -202,6 +204,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public inlineEditCustomField: number = 0;
     /** List of warehouses */
     public warehouses: any[] = [];
+    /** Counter for stable Other-tab warehouse row ids used by `@for` track. */
+    private nextWarehouseRowId: number = 0;
     /** Holds stock unit name */
     public stockUnitName: string = "";
     /** Holds stock group name */
@@ -850,6 +854,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 ],
                 warehouseBalance: [
                     {
+                        rowId: this.createWarehouseRowId(),
+                        forceClear: false,
                         warehouse: {
                             name: undefined,
                             uniqueName: undefined
@@ -909,6 +915,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 ],
                 warehouseBalance: [
                     {
+                        rowId: this.createWarehouseRowId(),
+                        forceClear: false,
                         warehouse: {
                             name: undefined,
                             uniqueName: undefined
@@ -1233,7 +1241,18 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     }
                     this.toaster.showSnackBar("success", this.localeData?.stock_create_successfully);
                     if (this.addStock) {
-                        this.closeAsideEvent.emit(DataOperationEnum.CREATE);
+                        this.closeAsideEvent.emit({
+                            operation: DataOperationEnum.CREATE,
+                            type: "stock",
+                            uniqueName: response.body?.uniqueName,
+                            name: response.body?.name,
+                            hsnNumber: response.body?.hsnNumber,
+                            sacNumber: response.body?.sacNumber,
+                            variants: response.body?.variants,
+                            salesAccountUniqueNames: request?.salesAccountUniqueNames,
+                            purchaseAccountUniqueNames: request?.purchaseAccountUniqueNames,
+                            fixedAssetsAccountUniqueNames: request?.fixedAssetsAccountUniqueNames,
+                        });
                     } else {
                         this.getVariantCustomFields();
                         if (this.groupList?.length) {
@@ -1998,9 +2017,11 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public getBatchAvailabilityOptions(batch: any, warehouseUniqueName: string = ""): IOption[] {
         const warehouseKey = String(warehouseUniqueName ?? "").trim();
-        const options = warehouseKey
-            ? (this.batchAvailabilityByWarehouse[warehouseKey] ?? [])
-            : this.allBatchAvailabilityOptions;
+        // No warehouse selected → empty list (do not fall back to default/all warehouses).
+        if (!warehouseKey) {
+            return [];
+        }
+        const options = this.batchAvailabilityByWarehouse[warehouseKey] ?? [];
         const currentValue = String(batch?.batchNumber ?? "").trim();
         return options.filter(option => {
             const optionValue = String(option?.value ?? "").trim();
@@ -2262,6 +2283,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         }
         if (!Array.isArray(variant.warehouseBalance) || !variant.warehouseBalance.length) {
             variant.warehouseBalance = [{
+                rowId: this.createWarehouseRowId(),
+                forceClear: false,
                 warehouse: { name: undefined, uniqueName: undefined },
                 stockUnit: {
                     name: this.stockUnitName,
@@ -2274,6 +2297,12 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             }];
         }
         variant.warehouseBalance.forEach(warehouse => {
+            if (!warehouse.rowId) {
+                warehouse.rowId = this.createWarehouseRowId();
+            }
+            if (warehouse.forceClear === undefined) {
+                warehouse.forceClear = false;
+            }
             if (!Array.isArray(warehouse.batches)) {
                 warehouse.batches = [];
             }
@@ -2356,6 +2385,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             : undefined;
         const showBatch = this.batchTrackingEnabled;
         return {
+            rowId: this.createWarehouseRowId(),
+            forceClear: false,
             warehouse: {
                 name: warehouseMeta?.name,
                 uniqueName: warehouseMeta?.uniqueName
@@ -2369,6 +2400,18 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             isShowBatch: showBatch,
             batches: showBatch ? [this.createEmptyVariantBatch()] : []
         };
+    }
+
+    /**
+     * Stable id for warehouse `@for` track so removing a row does not reuse another row's DOM.
+     *
+     * @private
+     * @return {*}  {string}
+     * @memberof StockCreateEditComponent
+     */
+    private createWarehouseRowId(): string {
+        this.nextWarehouseRowId += 1;
+        return `warehouse-row-${this.nextWarehouseRowId}`;
     }
 
     public createEmptyVariantBatch(): any {
@@ -2547,6 +2590,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             const unit = stockUnit;
             variant.warehouseBalance = (result.warehouseBalance ?? []).map(row => ({
                 ...row,
+                rowId: row?.rowId || this.createWarehouseRowId(),
+                forceClear: false,
                 stockUnit: row?.stockUnit?.uniqueName ? row.stockUnit : { ...unit },
                 isShowBatch: this.batchTrackingEnabled ? row?.isShowBatch !== false : false,
                 isUserAdded: true
@@ -2644,14 +2689,17 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             return;
         }
         row.warehouse = {
-            name: undefined,
-            uniqueName: undefined
+            name: null,
+            uniqueName: null
         };
         row.openingQuantity = 0;
         row.openingAmount = 0;
         row.batches = this.batchTrackingEnabled && row.isShowBatch !== false
             ? [this.createEmptyVariantBatch()]
             : [];
+        // reactive-dropdown-field keeps an internal selected value; labelValue alone does not clear it.
+        // Options are rebuilt each CD, so setLabelValue would restore the old label without forceClear.
+        row.forceClear = !row.forceClear;
         this.updateBatchAvailabilityOptions();
         this.changeDetection.detectChanges();
     }
@@ -3212,6 +3260,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 const hasBatchData = mappedBatches.length > 0;
                 return {
                     ...warehouse,
+                    rowId: warehouse?.rowId || this.createWarehouseRowId(),
+                    forceClear: false,
                     stockUnit: warehouse?.stockUnit?.uniqueName ? warehouse.stockUnit : { ...stockUnit },
                     // Visibility is also gated by batchTrackingEnabled in the template.
                     isShowBatch: hasBatchData,
@@ -3223,6 +3273,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             variant.warehouseBalance = meaningfulWarehouses;
         } else {
             variant.warehouseBalance = [{
+                rowId: this.createWarehouseRowId(),
+                forceClear: false,
                 warehouse: {
                     name: undefined,
                     uniqueName: undefined
@@ -3443,6 +3495,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     ],
                     warehouseBalance: [
                         {
+                            rowId: this.createWarehouseRowId(),
+                            forceClear: false,
                             warehouse: {
                                 name: undefined,
                                 uniqueName: undefined

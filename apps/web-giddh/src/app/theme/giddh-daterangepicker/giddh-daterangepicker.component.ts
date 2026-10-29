@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, type SimpleChanges, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { MatDatepickerInputEvent, MatDatepicker } from '@angular/material/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';

@@ -1,6 +1,6 @@
 # Electron Branch-Based Environment Configuration
 
-This document explains how to automatically configure Electron builds based on your current Git branch, ensuring you always use the correct environment credentials.
+This is historical context for the branch-detection scripts. Reviewed 2026-10-23: the npm aliases below are absent from current package.json, and the release workflows use their own environment selection. Use [Development](DEVELOPMENT.md#release-and-recovery) for current command sources and confirm the target environment before a desktop release.
 
 ## 🎯 Overview
 
@@ -219,4 +219,4 @@ After running the build, verify the configuration:
 - Environment detection runs every time you build
 - Branch switching automatically changes the environment on next build
 
-This system ensures you never accidentally use wrong credentials when building Electron for different environments!
+Branch detection alone does not verify credential correctness. Check the generated configuration and the built application against the approved release environment.

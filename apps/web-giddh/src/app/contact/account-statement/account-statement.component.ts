@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, Input, SimpleChanges } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, Input, type SimpleChanges } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';

@@ -13,7 +13,7 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { GroupResponse, GroupsTaxHierarchyResponse } from '../../../../models/api-models/Group';
 import { AppState } from '../../../../store';
 import { Store, select } from '@ngrx/store';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';

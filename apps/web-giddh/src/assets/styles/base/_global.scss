@@ -2576,9 +2576,10 @@ ul.sub-list {
         max-width: 1120px !important;
         width: 100% !important;
 
-        .calendly-inline-widget object {
+        .calendly-inline-widget iframe {
             width: 100% !important;
             height: 646px !important;
+            border: 0;
         }
     }
 }
@@ -5969,6 +5970,11 @@ hamburger-menu {
 .mat-dialog-lg {
     width: 1024px !important;
     max-width: 80vw !important;
+}
+
+.mat-dialog-xl {
+    width: 1250px !important;
+    max-width: 90vw !important;
 }
 
 .custom-cdk-overlay-wrapper {

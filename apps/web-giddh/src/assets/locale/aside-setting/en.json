@@ -130,6 +130,11 @@
             "/pages/user-details/auth-key",
             "/pages/user-details/session"
           ]
+        },
+        {
+          "label": "Manage User (Permission)",
+          "link": "/pages/settings/permission",
+          "icon": "<i class='icon-permission1'></i>"
         }
       ],
       [
