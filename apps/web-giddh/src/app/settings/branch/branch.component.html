@@ -135,7 +135,6 @@
                                                             <div *ngFor="let address of branch?.addresses" class="linked-add">
                                                                 <ng-container *ngIf="address">
                                                                     <span
-                                                                        class="cursor-pointer"
                                                                         cdkOverlayOrigin
                                                                         #addressTemplate="cdkOverlayOrigin"
                                                                         (mouseenter)="
@@ -149,9 +148,8 @@
                                                                             class="cursor-pointer icon-no-selected mr-1"
                                                                         ></i>
                                                                         <i
-                                                                            (click)="setDefault(address, branch, 'address')"
                                                                             *ngIf="address?.isDefault"
-                                                                            class="cursor-pointer icon-favorite-selected mr-1"
+                                                                            class="icon-favorite-selected mr-1"
                                                                         ></i>
                                                                         {{ address?.name }}
                                                                     </span>
@@ -159,7 +157,11 @@
                                                                         cdkConnectedOverlay
                                                                         [cdkConnectedOverlayOrigin]="addressTemplate"
                                                                         [cdkConnectedOverlayOpen]="
-                                                                            isAddressInfoOpen === address?.uniqueName + branch.uniqueName
+                                                                            isAddressInfoOpen === address?.uniqueName + branch.uniqueNam &&
+                                                                            (address?.address ||
+                                                                                address?.stateCode ||
+                                                                                (address?.taxType && address?.taxNumber) ||
+                                                                                address?.pincode)
                                                                         "
                                                                         [cdkConnectedOverlayPositions]="[
                                                                             {
@@ -210,12 +212,8 @@
                                                                         *ngIf="!warehouse?.isDefault"
                                                                         class="cursor-pointer icon-no-selected mr-1"
                                                                     ></i>
-                                                                    <i
-                                                                        (click)="setDefault(warehouse, branch, 'warehouse')"
-                                                                        *ngIf="warehouse?.isDefault"
-                                                                        class="cursor-pointer icon-favorite-selected mr-1"
-                                                                    ></i>
-                                                                    <label class="cursor-pointer">{{ warehouse?.name }}</label>
+                                                                    <i *ngIf="warehouse?.isDefault" class="icon-favorite-selected mr-1"></i>
+                                                                    <label>{{ warehouse?.name }}</label>
                                                                 </ng-container>
                                                             </div>
                                                         </div>
