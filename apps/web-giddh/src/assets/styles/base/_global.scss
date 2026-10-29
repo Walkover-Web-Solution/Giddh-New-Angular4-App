@@ -2576,9 +2576,10 @@ ul.sub-list {
         max-width: 1120px !important;
         width: 100% !important;
 
-        .calendly-inline-widget object {
+        .calendly-inline-widget iframe {
             width: 100% !important;
             height: 646px !important;
+            border: 0;
         }
     }
 }
