@@ -28,7 +28,7 @@ on:
         options:
           - preview
           - promote
-        default: promote
+        default: preview
       version:
         description: "Version to promote (required for promote), e.g. 1.2.3"
         required: false
