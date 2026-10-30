@@ -1,5 +1,7 @@
 # Author Name: Divyanshu Shrivastava
 # Date: 16th January 2026
+# Updated: 29th October 2026 - workflow_dispatch preview + promote (same-binary) without new branches
+# Updated: 29th October 2026 - books-production push auto-starts prod preview (does not update latest)
 name: macOS DMG (build → signed → notarize → S3 upload)
 
 on:
@@ -9,25 +11,48 @@ on:
     branches:
       - "test-electron-build-gh-action"
       - "prod-electron-build-gh-action"
+      - "books-production"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Build environment (test → test-electron branch; prod → prod-electron or books-production)"
+        required: true
+        type: choice
+        options:
+          - test
+          - prod
+      action:
+        description: "preview = build/sign/upload without updating latest; promote = copy versioned build to latest"
+        required: true
+        type: choice
+        options:
+          - preview
+          - promote
+        default: preview
+      version:
+        description: "Version to promote (required for promote), e.g. 1.2.3"
+        required: false
+        type: string
 
 permissions:
   contents: write # needed to push version changes back to repository
   id-token: write # needed only if you use AWS OIDC (role-to-assume)
 
 concurrency:
-  group: macos-release-${{ github.ref_name }}
+  group: macos-release-${{ github.ref_name }}-${{ github.event.inputs.action || 'push' }}
   cancel-in-progress: false
 
 jobs:
   build_upload:
     runs-on: macos-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: |
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'preview') ||
+      (github.event_name != 'workflow_dispatch' && !contains(github.event.head_commit.message, '[skip ci]'))
 
     env:
       RELEASE_TAG: ${{ github.ref_name }}
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      UPLOAD_LATEST: "true"
       # Angular electron build OOMs on default Node heap (~2GB)
       NODE_OPTIONS: "--max-old-space-size=8192"
 
@@ -43,25 +68,115 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Detect build environment from branch
+      - name: Detect build environment
         shell: bash
         run: |
           branch="${{ github.ref_name }}"
+          event_name="${{ github.event_name }}"
           echo "Branch: $branch"
-          
-          if [ "$branch" = "prod-electron-build-gh-action" ]; then
-            echo "BUILD_ENV=prod" >> $GITHUB_ENV
-            echo "S3_PATH_PREFIX=prod" >> $GITHUB_ENV
+          echo "Event: $event_name"
+
+          set_preview_mode() {
+            echo "WORKFLOW_MODE=preview" >> $GITHUB_ENV
+            echo "UPLOAD_LATEST=false" >> $GITHUB_ENV
+            echo "UPLOAD_PREVIEW=true" >> $GITHUB_ENV
+          }
+
+          set_release_mode() {
+            echo "WORKFLOW_MODE=release" >> $GITHUB_ENV
+            echo "UPLOAD_LATEST=true" >> $GITHUB_ENV
+            echo "UPLOAD_PREVIEW=false" >> $GITHUB_ENV
+          }
+
+          if [ "$event_name" = "workflow_dispatch" ]; then
+            build_env="${{ github.event.inputs.environment }}"
+            set_preview_mode
+            echo "Dispatch preview for environment: $build_env"
+
+            if [ "$build_env" = "prod" ]; then
+              case "$branch" in
+                prod-electron-build-gh-action|books-production) ;;
+                *)
+                  echo "::error::Dispatch environment 'prod' must run from prod-electron-build-gh-action or books-production (current: $branch)"
+                  exit 1
+                  ;;
+              esac
+            else
+              if [ "$branch" != "test-electron-build-gh-action" ]; then
+                echo "::error::Dispatch environment 'test' must run from test-electron-build-gh-action (current: $branch)"
+                exit 1
+              fi
+            fi
+          elif [ "$branch" = "books-production" ]; then
+            # Web prod deploy branch → auto Electron prod preview only (never touches public latest)
+            build_env="prod"
+            set_preview_mode
+            echo "books-production merge → prod preview (latest NOT updated)"
+          elif [ "$branch" = "prod-electron-build-gh-action" ]; then
+            build_env="prod"
+            set_release_mode
+          else
+            build_env="test"
+            set_release_mode
+          fi
+
+          echo "BUILD_ENV=$build_env" >> $GITHUB_ENV
+          echo "S3_PATH_PREFIX=$build_env" >> $GITHUB_ENV
+
+          if [ "$build_env" = "prod" ]; then
             echo "LATEST_ZIP_NAME=giddh.zip" >> $GITHUB_ENV
             echo "LATEST_DMG_NAME=giddh-setup.dmg" >> $GITHUB_ENV
             echo "✅ Production build"
           else
-            echo "BUILD_ENV=test" >> $GITHUB_ENV
-            echo "S3_PATH_PREFIX=test" >> $GITHUB_ENV
             echo "LATEST_ZIP_NAME=giddh-test.zip" >> $GITHUB_ENV
             echo "LATEST_DMG_NAME=giddh-test-setup.dmg" >> $GITHUB_ENV
             echo "✅ Test build"
           fi
+
+      - name: Compute Electron source fingerprint
+        shell: bash
+        run: |
+          fingerprint="${{ github.sha }}"
+          echo "ELECTRON_SOURCE_FINGERPRINT=$fingerprint" >> $GITHUB_ENV
+          echo "ELECTRON_SOURCE_FINGERPRINT=$fingerprint"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Resolve next app version from S3 feeds
+        shell: bash
+        env:
+          S3_BUCKET: ${{ env.S3_BUCKET }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+          ELECTRON_SOURCE_FINGERPRINT: ${{ env.ELECTRON_SOURCE_FINGERPRINT }}
+          PACKAGE_JSON_PATH: apps/electron-giddh/src/package.json
+        run: |
+          node scripts/fetch-next-version.js "${{ env.S3_PATH_PREFIX }}"
+          VERSION=$(node -p "require('./apps/electron-giddh/src/package.json').version")
+          echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$VERSION"
+
+      - name: Reserve shared release-meta.json
+        shell: bash
+        env:
+          PACKAGE_VERSION: ${{ env.PACKAGE_VERSION }}
+          S3_PATH_PREFIX: ${{ env.S3_PATH_PREFIX }}
+          ELECTRON_SOURCE_FINGERPRINT: ${{ env.ELECTRON_SOURCE_FINGERPRINT }}
+          S3_BUCKET: ${{ env.S3_BUCKET }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          node scripts/electron-release-meta.js reserve --platform mac --out artifacts/release-meta.json
+          aws s3 cp artifacts/release-meta.json "s3://${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/release-meta.json" \
+            --content-type "application/json" \
+            --metadata "version=${{ env.PACKAGE_VERSION }},platform=macos,status=in_progress"
+          echo "✅ Reserved release-meta.json for ${{ env.PACKAGE_VERSION }}"
 
       # APPLE_CERTIFICATE_BASE64 is a single .p12 containing both
       # Developer ID Application + Developer ID Installer certificates.
@@ -263,8 +378,12 @@ jobs:
       - name: Extract version and find build artifacts
         shell: bash
         run: |
-          PACKAGE_VERSION=$(node -p "require('./dist/apps/web-giddh/package.json').version")
-          echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+          if [ -z "${{ env.PACKAGE_VERSION }}" ]; then
+            PACKAGE_VERSION=$(node -p "require('./apps/electron-giddh/src/package.json').version")
+            echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+          else
+            PACKAGE_VERSION="${{ env.PACKAGE_VERSION }}"
+          fi
           echo "Package version: $PACKAGE_VERSION"
 
           ZIP_FILE=$(find dist/apps/electrongiddh-packages -name "*.zip" -type f | head -n 1)
@@ -290,14 +409,6 @@ jobs:
           echo "VERSIONED_DMG_NAME=$(basename "$DMG_FILE")" >> $GITHUB_ENV
           echo "✅ Artifacts located"
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
       - name: Upload ZIP and DMG to S3
         shell: bash
         run: |
@@ -307,7 +418,7 @@ jobs:
           DMG_FILE="${{ env.UNSIGNED_DMG }}"
           PREFIX="${{ env.S3_PATH_PREFIX }}"
           
-          echo "📤 Uploading to S3 (${{ env.BUILD_ENV }})..."
+          echo "📤 Uploading to S3 (${{ env.BUILD_ENV }}, mode=${{ env.WORKFLOW_MODE }})..."
           
           aws s3 cp "$ZIP_FILE" "s3://$BUCKET/$PREFIX/mac/$VERSION/${{ env.VERSIONED_ZIP_NAME }}" \
             --content-type "application/zip" \
@@ -335,6 +446,20 @@ jobs:
             echo "✅ Uploaded: $PREFIX/mac/latest/${{ env.LATEST_DMG_NAME }}"
           fi
 
+          if [ "${{ env.UPLOAD_PREVIEW }}" = "true" ]; then
+            aws s3 cp "$ZIP_FILE" "s3://$BUCKET/$PREFIX/mac/preview/${{ env.LATEST_ZIP_NAME }}" \
+              --content-type "application/zip" \
+              --cache-control "no-cache, no-store, must-revalidate" \
+              --metadata "version=$VERSION,platform=macos,arch=universal,signed=true,channel=preview"
+            echo "✅ Uploaded: $PREFIX/mac/preview/${{ env.LATEST_ZIP_NAME }}"
+
+            aws s3 cp "$DMG_FILE" "s3://$BUCKET/$PREFIX/mac/preview/${{ env.LATEST_DMG_NAME }}" \
+              --content-type "application/x-apple-diskimage" \
+              --cache-control "no-cache, no-store, must-revalidate" \
+              --metadata "version=$VERSION,platform=macos,arch=universal,signed=true,channel=preview"
+            echo "✅ Uploaded: $PREFIX/mac/preview/${{ env.LATEST_DMG_NAME }}"
+          fi
+
       - name: Upload latest-mac.yml to S3
         if: env.LATEST_MAC_YML != ''
         shell: bash
@@ -351,36 +476,59 @@ jobs:
             --cache-control "no-cache, no-store, must-revalidate" \
             --metadata "version=$VERSION,platform=macos"
           echo "✅ Uploaded: $PREFIX/mac/$VERSION/latest-mac.yml"
+
+          YML_CONTENT=$(cat "$YML_FILE")
+          if [ "${{ env.BUILD_ENV }}" = "prod" ]; then
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip/giddh.zip/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh.zip|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh.zip|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-setup.dmg/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-setup.dmg|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-setup.dmg|g')
+          else
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip/giddh-test.zip/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh-test.zip|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh-test.zip|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-test-setup.dmg/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-test-setup.dmg|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-test-setup.dmg|g')
+          fi
+          MODIFIED_YML="/tmp/latest-mac-modified.yml"
+          echo "$YML_CONTENT" > "$MODIFIED_YML"
           
           if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
-            YML_CONTENT=$(cat "$YML_FILE")
-            
-            # Replace versioned filenames with environment-specific fixed names
-            if [ "${{ env.BUILD_ENV }}" = "prod" ]; then
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip/giddh.zip/g')
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh.zip|g')
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh.zip|g')
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-setup.dmg/g')
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-setup.dmg|g')
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-setup.dmg|g')
-            else
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip/giddh-test.zip/g')
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh-test.zip|g')
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh-test.zip|g')
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-test-setup.dmg/g')
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-test-setup.dmg|g')
-              YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-test-setup.dmg|g')
-            fi
-            
-            MODIFIED_YML="/tmp/latest-mac-modified.yml"
-            echo "$YML_CONTENT" > "$MODIFIED_YML"
-            
             aws s3 cp "$MODIFIED_YML" "s3://$BUCKET/$PREFIX/mac/latest/latest-mac.yml" \
               --content-type "text/yaml" \
               --cache-control "no-cache, no-store, must-revalidate" \
               --metadata "version=$VERSION,platform=macos"
             echo "✅ Uploaded: $PREFIX/mac/latest/latest-mac.yml"
           fi
+
+          if [ "${{ env.UPLOAD_PREVIEW }}" = "true" ]; then
+            aws s3 cp "$MODIFIED_YML" "s3://$BUCKET/$PREFIX/mac/preview/latest-mac.yml" \
+              --content-type "text/yaml" \
+              --cache-control "no-cache, no-store, must-revalidate" \
+              --metadata "version=$VERSION,platform=macos,channel=preview"
+            echo "✅ Uploaded: $PREFIX/mac/preview/latest-mac.yml"
+          fi
+
+      - name: Mark macOS platform completed in release-meta.json
+        shell: bash
+        env:
+          PACKAGE_VERSION: ${{ env.PACKAGE_VERSION }}
+          S3_PATH_PREFIX: ${{ env.S3_PATH_PREFIX }}
+          ELECTRON_SOURCE_FINGERPRINT: ${{ env.ELECTRON_SOURCE_FINGERPRINT }}
+          S3_BUCKET: ${{ env.S3_BUCKET }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+        run: |
+          mkdir -p artifacts
+          aws s3 cp "s3://${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/release-meta.json" artifacts/release-meta.json
+          export EXISTING_META_PATH=artifacts/release-meta.json
+          node scripts/electron-release-meta.js complete --platform mac --in artifacts/release-meta.json --out artifacts/release-meta.json
+          aws s3 cp artifacts/release-meta.json "s3://${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/release-meta.json" \
+            --content-type "application/json" \
+            --metadata "version=${{ env.PACKAGE_VERSION }},platform=macos,status=completed"
+          echo "✅ Updated release-meta.json (mac completed)"
 
       - name: Build Summary
         if: always()
@@ -389,16 +537,163 @@ jobs:
           echo "========================================="
           echo "macOS BUILD SUMMARY (${{ env.BUILD_ENV }})"
           echo "========================================="
+          echo "Mode: ${{ env.WORKFLOW_MODE }}"
           echo "Version: ${{ env.PACKAGE_VERSION }}"
+          echo "Source fingerprint: ${{ env.ELECTRON_SOURCE_FINGERPRINT }}"
           echo "Environment: ${{ env.BUILD_ENV }}"
+          echo "Upload latest: ${{ env.UPLOAD_LATEST }}"
           echo "S3 Path: ${{ env.S3_PATH_PREFIX }}/mac/"
           echo "Architecture: Universal (Intel + Apple Silicon)"
           echo "Signing: Developer ID + Notarization"
           echo "========================================="
-          echo "Versioned:"
+          echo "Versioned (use this for developer QA):"
           echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_ZIP_NAME }}"
           echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_DMG_NAME }}"
-          echo "Latest:"
+          if [ "${{ env.UPLOAD_PREVIEW }}" = "true" ]; then
+            echo "Preview (stable QA URL, does not affect public latest):"
+            echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/preview/${{ env.LATEST_ZIP_NAME }}"
+            echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/preview/${{ env.LATEST_DMG_NAME }}"
+          fi
+          if [ "${{ env.UPLOAD_LATEST }}" = "true" ]; then
+            echo "Latest (public / auto-update):"
+            echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/latest/${{ env.LATEST_ZIP_NAME }}"
+            echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/latest/${{ env.LATEST_DMG_NAME }}"
+          else
+            echo "Latest: NOT updated (preview mode). Promote with action=promote and version=${{ env.PACKAGE_VERSION }}"
+          fi
+          echo "=========================================="
+
+  promote_to_latest:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'promote'
+
+    env:
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+
+    steps:
+      - name: Validate promote inputs
+        shell: bash
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          BUILD_ENV="${{ github.event.inputs.environment }}"
+          BRANCH="${{ github.ref_name }}"
+
+          if [ -z "$VERSION" ]; then
+            echo "::error::version input is required for promote (e.g. 1.2.3)"
+            exit 1
+          fi
+
+          if [ "$BUILD_ENV" = "prod" ]; then
+            case "$BRANCH" in
+              prod-electron-build-gh-action|books-production) ;;
+              *)
+                echo "::error::Promote environment 'prod' must run from prod-electron-build-gh-action or books-production (current: $BRANCH)"
+                exit 1
+                ;;
+            esac
+          else
+            if [ "$BRANCH" != "test-electron-build-gh-action" ]; then
+              echo "::error::Promote environment 'test' must run from test-electron-build-gh-action (current: $BRANCH)"
+              exit 1
+            fi
+          fi
+
+          if [ "$BUILD_ENV" = "prod" ]; then
+            LATEST_ZIP_NAME="giddh.zip"
+            LATEST_DMG_NAME="giddh-setup.dmg"
+            VERSIONED_ZIP_NAME="giddh-setup-${VERSION}.zip"
+            VERSIONED_DMG_NAME="giddh-setup-${VERSION}.dmg"
+          else
+            LATEST_ZIP_NAME="giddh-test.zip"
+            LATEST_DMG_NAME="giddh-test-setup.dmg"
+            VERSIONED_ZIP_NAME="giddh-test-setup-${VERSION}.zip"
+            VERSIONED_DMG_NAME="giddh-test-setup-${VERSION}.dmg"
+          fi
+
+          {
+            echo "BUILD_ENV=$BUILD_ENV"
+            echo "S3_PATH_PREFIX=$BUILD_ENV"
+            echo "PACKAGE_VERSION=$VERSION"
+            echo "LATEST_ZIP_NAME=$LATEST_ZIP_NAME"
+            echo "LATEST_DMG_NAME=$LATEST_DMG_NAME"
+            echo "VERSIONED_ZIP_NAME=$VERSIONED_ZIP_NAME"
+            echo "VERSIONED_DMG_NAME=$VERSIONED_DMG_NAME"
+          } >> "$GITHUB_ENV"
+
+          echo "Promoting $BUILD_ENV macOS $VERSION → latest (same binary)"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Promote versioned artifacts to latest
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ env.PACKAGE_VERSION }}"
+          BUCKET="${{ env.S3_BUCKET }}"
+          PREFIX="${{ env.S3_PATH_PREFIX }}"
+          SRC="s3://$BUCKET/$PREFIX/mac/$VERSION"
+          DEST="s3://$BUCKET/$PREFIX/mac/latest"
+
+          echo "📥 Copying ZIP and DMG to latest"
+          aws s3 cp "$SRC/${{ env.VERSIONED_ZIP_NAME }}" "$DEST/${{ env.LATEST_ZIP_NAME }}" \
+            --content-type "application/zip" \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --metadata "version=$VERSION,platform=macos,arch=universal,signed=true,promoted=true"
+
+          aws s3 cp "$SRC/${{ env.VERSIONED_DMG_NAME }}" "$DEST/${{ env.LATEST_DMG_NAME }}" \
+            --content-type "application/x-apple-diskimage" \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --metadata "version=$VERSION,platform=macos,arch=universal,signed=true,promoted=true"
+
+          echo "📥 Fetching versioned latest-mac.yml for rewrite"
+          mkdir -p artifacts/promote
+          aws s3 cp "$SRC/latest-mac.yml" artifacts/promote/latest-mac.yml
+
+          YML_CONTENT=$(cat artifacts/promote/latest-mac.yml)
+          if [ "${{ env.BUILD_ENV }}" = "prod" ]; then
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip/giddh.zip/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh.zip|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh.zip|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-setup.dmg/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-setup.dmg|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-setup.dmg|g')
+          else
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip/giddh-test.zip/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|path: giddh-test.zip|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.zip|url: giddh-test.zip|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg/giddh-test-setup.dmg/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|path: giddh-test-setup.dmg|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.dmg|url: giddh-test-setup.dmg|g')
+          fi
+          printf '%s' "$YML_CONTENT" > artifacts/promote/latest-mac-modified.yml
+
+          aws s3 cp artifacts/promote/latest-mac-modified.yml "$DEST/latest-mac.yml" \
+            --content-type "text/yaml" \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --metadata "version=$VERSION,platform=macos,promoted=true"
+          echo "✅ Promoted $PREFIX/mac/$VERSION → $PREFIX/mac/latest"
+
+      - name: Promote Summary
+        if: always()
+        shell: bash
+        run: |
+          echo "========================================="
+          echo "macOS PROMOTE SUMMARY (${{ env.BUILD_ENV }})"
+          echo "========================================="
+          echo "Mode: promote (same binary, no rebuild)"
+          echo "Version: ${{ env.PACKAGE_VERSION }}"
+          echo "Environment: ${{ env.BUILD_ENV }}"
+          echo "Source:"
+          echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_ZIP_NAME }}"
+          echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_DMG_NAME }}"
+          echo "Latest (public / auto-update):"
           echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/latest/${{ env.LATEST_ZIP_NAME }}"
           echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/latest/${{ env.LATEST_DMG_NAME }}"
           echo "=========================================="
