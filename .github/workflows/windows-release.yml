@@ -1,8 +1,7 @@
 # Author Name: Divyanshu Shrivastava
 # Date: 14th January 2026
 # Updated: 28th January 2026 - eSigner cloud signing for installer AND app executable (critical for auto-updates)
-# Updated: 29th October 2026 - workflow_dispatch preview + promote (same-binary) without new branches
-# Updated: 29th October 2026 - books-production push auto-starts prod preview (does not update latest)
+# Updated: 29th October 2026 - preview build then Environment approval before copy to latest/
 name: Windows EXE (build → eSigner signing → S3 upload)
 
 on:
@@ -22,55 +21,41 @@ on:
         options:
           - test
           - prod
-      action:
-        description: "ONLY for this workflow: choose preview. For promote use workflow 'Windows Promote to Latest' instead."
-        required: true
-        type: choice
-        options:
-          - preview
-          - promote
-        default: preview
-      version:
-        description: "Only if action=promote here (prefer Windows Promote to Latest). e.g. 11.0.5"
-        required: false
-        type: string
+        default: test
 
 permissions:
   contents: write
   id-token: write
 
 concurrency:
-  group: windows-release-${{ github.ref_name }}-${{ github.event.inputs.action || 'push' }}
+  group: windows-release-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
   show_trigger:
     runs-on: ubuntu-latest
     steps:
-      - name: Show how this run was started
+      - name: Show flow
         shell: bash
         run: |
+          echo "Flow: 1) build → preview/  2) wait for Environment approval  3) copy preview/ → latest/"
           echo "event_name=${{ github.event_name }}"
           echo "ref=${{ github.ref_name }}"
-          echo "inputs.action=${{ github.event.inputs.action }}"
-          echo "inputs.environment=${{ github.event.inputs.environment }}"
-          echo "inputs.version=${{ github.event.inputs.version }}"
-          if [ "${{ github.event_name }}" = "push" ]; then
-            echo "This is a PUSH → preview build only. promote_to_latest is skipped."
-            echo "To promote: Actions → 'Windows Promote to Latest' → Run workflow."
-          elif [ "${{ github.event.inputs.action }}" = "promote" ]; then
-            echo "action=promote → promote_to_latest should run; build_sign_upload skipped."
-          else
-            echo "action=preview (or empty) → build_sign_upload runs; promote_to_latest skipped."
-            echo "To promote: Actions → 'Windows Promote to Latest' → Run workflow."
-          fi
+          echo "After preview succeeds, open this run and Approve the waiting promote_to_latest job."
+          echo "Required GitHub Environments (Settings → Environments): electron-promote-test, electron-promote-prod"
+          echo "Add Required reviewers on those environments so promote does not run automatically."
 
   build_sign_upload:
     runs-on: windows-latest
     needs: show_trigger
     if: |
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'preview') ||
+      github.event_name == 'workflow_dispatch' ||
       (github.event_name != 'workflow_dispatch' && !contains(github.event.head_commit.message, '[skip ci]'))
+    outputs:
+      build_env: ${{ steps.export_outputs.outputs.build_env }}
+      package_version: ${{ steps.export_outputs.outputs.package_version }}
+      installer_name: ${{ steps.export_outputs.outputs.installer_name }}
+      versioned_exe_name: ${{ steps.export_outputs.outputs.versioned_exe_name }}
 
     env:
       RELEASE_TAG: ${{ github.ref_name }}
@@ -109,13 +94,11 @@ jobs:
             "UPLOAD_PREVIEW=false" | Out-File -FilePath $env:GITHUB_ENV -Append
           }
 
-          # Default for all builds = preview (versioned + preview/).
-          # Public latest/ is updated only by workflow_dispatch action=promote.
+          # Always preview first. latest/ is updated only after Environment approval on promote_to_latest.
           if ($eventName -eq "workflow_dispatch") {
             $buildEnv = "${{ github.event.inputs.environment }}"
-            $dispatchAction = "${{ github.event.inputs.action }}"
             Set-PreviewMode
-            Write-Host "Dispatch action=$dispatchAction for environment: $buildEnv"
+            Write-Host "Dispatch preview for environment: $buildEnv"
 
             if ($buildEnv -eq "prod") {
               $allowed = @("prod-electron-build-gh-action", "books-production")
@@ -128,12 +111,11 @@ jobs:
           } elseif ($branch -eq "books-production" -or $branch -eq "prod-electron-build-gh-action") {
             $buildEnv = "prod"
             Set-PreviewMode
-            Write-Host "$branch → prod preview (latest NOT updated; use action=promote)"
+            Write-Host "$branch → prod preview (latest after Environment approval)"
           } else {
-            # test-electron-build-gh-action, tags, other
             $buildEnv = "test"
             Set-PreviewMode
-            Write-Host "$branch → test preview (latest NOT updated; use action=promote)"
+            Write-Host "$branch → test preview (latest after Environment approval)"
           }
 
           "BUILD_ENV=$buildEnv" | Out-File -FilePath $env:GITHUB_ENV -Append
@@ -619,69 +601,38 @@ jobs:
             Write-Host "Preview (stable QA URL, does not affect public latest):"
             Write-Host "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/preview/${{ env.INSTALLER_NAME }}"
           }
-          if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
-            Write-Host "Latest (public / auto-update):"
-            Write-Host "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/latest/${{ env.INSTALLER_NAME }}"
-          } else {
-            Write-Host "Latest: NOT updated (preview mode). Promote with action=promote and version=${{ env.PACKAGE_VERSION }}"
-          }
+          Write-Host "Latest: waiting for Environment approval on promote_to_latest (copies preview/ → latest/)"
           Write-Host "=========================================="
 
+      - name: Export job outputs for promote
+        id: export_outputs
+        shell: pwsh
+        run: |
+          "build_env=${{ env.BUILD_ENV }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "package_version=${{ env.PACKAGE_VERSION }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "installer_name=${{ env.INSTALLER_NAME }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "versioned_exe_name=${{ env.VERSIONED_EXE_NAME }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+  # Waits for GitHub Environment approval, then copies preview/ → latest/ (same binary).
+  # Configure Required reviewers on environments: electron-promote-test, electron-promote-prod
   promote_to_latest:
     runs-on: ubuntu-latest
-    needs: show_trigger
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'promote'
+    needs: build_sign_upload
+    if: always() && needs.build_sign_upload.result == 'success'
+    environment:
+      name: electron-promote-${{ needs.build_sign_upload.outputs.build_env }}
+      url: https://s3-${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.S3_BUCKET }}/${{ needs.build_sign_upload.outputs.build_env }}/windows/preview/${{ needs.build_sign_upload.outputs.installer_name }}
 
     env:
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
+      BUILD_ENV: ${{ needs.build_sign_upload.outputs.build_env }}
+      S3_PATH_PREFIX: ${{ needs.build_sign_upload.outputs.build_env }}
+      PACKAGE_VERSION: ${{ needs.build_sign_upload.outputs.package_version }}
+      INSTALLER_NAME: ${{ needs.build_sign_upload.outputs.installer_name }}
+      VERSIONED_EXE_NAME: ${{ needs.build_sign_upload.outputs.versioned_exe_name }}
 
     steps:
-      - name: Validate promote inputs
-        shell: bash
-        run: |
-          VERSION="${{ github.event.inputs.version }}"
-          BUILD_ENV="${{ github.event.inputs.environment }}"
-          BRANCH="${{ github.ref_name }}"
-
-          if [ -z "$VERSION" ]; then
-            echo "::error::version input is required for promote (e.g. 1.2.3)"
-            exit 1
-          fi
-
-          if [ "$BUILD_ENV" = "prod" ]; then
-            case "$BRANCH" in
-              prod-electron-build-gh-action|books-production) ;;
-              *)
-                echo "::error::Promote environment 'prod' must run from prod-electron-build-gh-action or books-production (current: $BRANCH)"
-                exit 1
-                ;;
-            esac
-          else
-            if [ "$BRANCH" != "test-electron-build-gh-action" ]; then
-              echo "::error::Promote environment 'test' must run from test-electron-build-gh-action (current: $BRANCH)"
-              exit 1
-            fi
-          fi
-
-          if [ "$BUILD_ENV" = "prod" ]; then
-            INSTALLER_NAME="giddh-setup.exe"
-            VERSIONED_EXE_NAME="giddh-setup-${VERSION}.exe"
-          else
-            INSTALLER_NAME="giddh-test-setup.exe"
-            VERSIONED_EXE_NAME="giddh-test-setup-${VERSION}.exe"
-          fi
-
-          {
-            echo "BUILD_ENV=$BUILD_ENV"
-            echo "S3_PATH_PREFIX=$BUILD_ENV"
-            echo "PACKAGE_VERSION=$VERSION"
-            echo "INSTALLER_NAME=$INSTALLER_NAME"
-            echo "VERSIONED_EXE_NAME=$VERSIONED_EXE_NAME"
-          } >> "$GITHUB_ENV"
-
-          echo "Promoting $BUILD_ENV Windows $VERSION → latest (same binary)"
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -690,7 +641,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Promote versioned artifacts to latest
+      - name: Copy preview artifacts to latest
         shell: bash
         run: |
           set -euo pipefail
@@ -698,35 +649,21 @@ jobs:
           BUCKET="${{ env.S3_BUCKET }}"
           PREFIX="${{ env.S3_PATH_PREFIX }}"
           INSTALLER_NAME="${{ env.INSTALLER_NAME }}"
-          VERSIONED_EXE_NAME="${{ env.VERSIONED_EXE_NAME }}"
-          SRC="s3://$BUCKET/$PREFIX/windows/$VERSION"
+          PREVIEW="s3://$BUCKET/$PREFIX/windows/preview"
           DEST="s3://$BUCKET/$PREFIX/windows/latest"
 
-          echo "📥 Copying installer $VERSIONED_EXE_NAME → $INSTALLER_NAME"
-          aws s3 cp "$SRC/$VERSIONED_EXE_NAME" "$DEST/$INSTALLER_NAME" \
+          echo "Approved promote for version $VERSION"
+          echo "📥 Copying $PREVIEW/$INSTALLER_NAME → $DEST/$INSTALLER_NAME"
+          aws s3 cp "$PREVIEW/$INSTALLER_NAME" "$DEST/$INSTALLER_NAME" \
             --content-type "application/x-msdownload" \
             --metadata "version=$VERSION,platform=windows,arch=x64,promoted=true"
 
-          echo "📥 Fetching versioned latest.yml for rewrite"
-          mkdir -p artifacts/promote
-          aws s3 cp "$SRC/latest.yml" artifacts/promote/latest.yml
-
-          YML_CONTENT=$(cat artifacts/promote/latest.yml)
-          if [ "${{ env.BUILD_ENV }}" = "prod" ]; then
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe/giddh-setup.exe/g')
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe|path: giddh-setup.exe|g')
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe|url: giddh-setup.exe|g')
-          else
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe/giddh-test-setup.exe/g')
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe|path: giddh-test-setup.exe|g')
-            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe|url: giddh-test-setup.exe|g')
-          fi
-          printf '%s' "$YML_CONTENT" > artifacts/promote/latest-modified.yml
-
-          aws s3 cp artifacts/promote/latest-modified.yml "$DEST/latest.yml" \
+          echo "📥 Copying preview latest.yml → latest/latest.yml"
+          aws s3 cp "$PREVIEW/latest.yml" "$DEST/latest.yml" \
             --content-type "text/yaml" \
             --metadata "version=$VERSION,platform=windows,promoted=true"
-          echo "✅ Promoted $PREFIX/windows/$VERSION → $PREFIX/windows/latest"
+
+          echo "✅ Copied $PREFIX/windows/preview → $PREFIX/windows/latest"
 
       - name: Promote Summary
         if: always()
@@ -735,11 +672,10 @@ jobs:
           echo "========================================="
           echo "WINDOWS PROMOTE SUMMARY (${{ env.BUILD_ENV }})"
           echo "========================================="
-          echo "Mode: promote (same binary, no rebuild)"
+          echo "Mode: approved copy preview → latest (same binary)"
           echo "Version: ${{ env.PACKAGE_VERSION }}"
-          echo "Environment: ${{ env.BUILD_ENV }}"
-          echo "Source:"
-          echo "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_EXE_NAME }}"
-          echo "Latest (public / auto-update):"
+          echo "Preview:"
+          echo "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/preview/${{ env.INSTALLER_NAME }}"
+          echo "Latest:"
           echo "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/latest/${{ env.INSTALLER_NAME }}"
           echo "=========================================="

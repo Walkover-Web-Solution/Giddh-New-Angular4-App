@@ -57,23 +57,30 @@ This document explains how Giddh's Electron desktop application is built and dis
 5. GitHub Action will automatically build and upload to S3
 6. Download production build from: **[https://giddh.com/](https://giddh.com/#:~:text=Desktop%20Apps)** (Desktop Apps section)
 
-### Developer Preview Then Promote (recommended before public latest)
+### Developer Preview Then Approve → Latest
 
-Do **not** create a third permanent Electron branch. For **production**, a merge/push to `books-production` (web prod deploy branch) automatically starts Windows + macOS Electron **preview** builds — public `latest/` is not updated until you promote (or push `prod-electron-build-gh-action`).
+```text
+Push / build  →  preview/     (automatic)
+QA the preview EXE/DMG
+Approve on GitHub Actions    (Environment gate)
+              →  latest/     (copies same files from preview/)
+```
 
-You can also use `test-electron-build-gh-action` / `prod-electron-build-gh-action` / `books-production` and run the workflow manually.
+**One-time GitHub setup (required):**
 
-1. Put the desired code on the matching electron branch and bump `apps/electron-giddh/src/package.json` version (same as above). You can commit with `[skip ci]` if you only want a manual preview and not an automatic release push.
-2. In GitHub Actions, open **Windows EXE** and/or **macOS DMG** → **Run workflow**:
-   - Use workflow from: the matching electron branch
-   - `environment`: `test` or `prod`
-   - `action`: `preview`
-3. Install from the job summary **Versioned** or **Preview** S3 URL (not the website Desktop Apps / `latest` link). Preview does **not** overwrite public `latest/`.
-4. When QA is OK, **Run workflow** again on the same branch:
-   - `environment`: same as preview
-   - `action`: `promote`
-   - `version`: the version you previewed (e.g. `1.2.3`)
-5. Promote copies the **same** signed S3 artifacts into `{test|prod}/…/latest/` — no rebuild.
+1. Repo → **Settings** → **Environments**
+2. Create `electron-promote-test` and `electron-promote-prod`
+3. On each environment enable **Required reviewers** (add yourself / release owners)
+
+Without Required reviewers, promote runs immediately after build (not wanted).
+
+**Day-to-day:**
+
+1. Push to `test-electron-build-gh-action` (or prod / `books-production`)
+2. Wait for **build** job to finish → install from `…/preview/…`
+3. Open the same Actions run → job **promote_to_latest** shows **Waiting for approval**
+4. Click **Review deployments** → **Approve**
+5. Job copies `preview/` → `latest/` (same binary, no rebuild)
 
 ---
 
@@ -87,13 +94,11 @@ You can also use `test-electron-build-gh-action` / `prod-electron-build-gh-actio
   - `books-production` → Prod preview (`prod/…/preview/`)
   - Public `latest/` is updated only by manual **action = promote**.
 
-### Manual Triggers
-- **Windows EXE / macOS DMG** → `action: preview` (or git push) → versioned + `preview/` (does **not** update `latest/`)
-- **Windows Promote to Latest** / **macOS Promote to Latest** → enter `environment` + `version` → copies that version to `latest/` (same binary)
+### Triggers
+- **Push** / **Run workflow** on Windows EXE or macOS DMG → build to `preview/`, then wait for Environment approval to copy to `latest/`
+- Environments: `electron-promote-test`, `electron-promote-prod` (Required reviewers)
 
-Prefer the dedicated **Promote to Latest** workflows. Do not use “Re-run” on a preview/push run to promote.
-
-Dispatch branch rules:
+Dispatch branch rules when using **Run workflow**:
 - `test` → `test-electron-build-gh-action`
 - `prod` → `prod-electron-build-gh-action` or `books-production`
 
