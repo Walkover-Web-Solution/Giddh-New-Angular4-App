@@ -81,10 +81,11 @@ You can also use `test-electron-build-gh-action` / `prod-electron-build-gh-actio
 
 ### Automated Triggers
 - **Git Tags**: Any tag matching `v*.*.*` (e.g., `v1.2.3`)
-- **Branch Push**: 
-  - `test-electron-build-gh-action` → Test **release** (versioned + `latest`)
-  - `prod-electron-build-gh-action` → Production **release** (versioned + `latest`)
-  - `books-production` → Production **preview only** (versioned + `preview/`; does **not** update `latest/`). Use this when web prod deploys so Electron QA can start from the same merge.
+- **Branch Push** (always **preview**; does **not** update `latest/`):
+  - `test-electron-build-gh-action` → Test preview (`test/…/preview/`)
+  - `prod-electron-build-gh-action` → Prod preview (`prod/…/preview/`)
+  - `books-production` → Prod preview (`prod/…/preview/`)
+  - Public `latest/` is updated only by manual **action = promote**.
 
 ### Manual Triggers (`workflow_dispatch`)
 - `action: preview` → full build/sign/upload to versioned + `preview/` paths; does **not** update `latest/`
@@ -103,29 +104,12 @@ Add `[skip ci]` to commit message to bypass automatic push builds.
 
 ### Windows & macOS Logic
 ```
-Push branch: books-production
-  → BUILD_ENV=prod (web prod deploy branch)
-  → preview only: UPLOAD_LATEST=false, UPLOAD_PREVIEW=true
-  → Product Name: "Giddh"
-  → Installer: giddh-setup.exe / giddh-setup.dmg under prod/…/preview/
-
-Push branch: prod-electron-build-gh-action
-  → BUILD_ENV=prod
-  → release: UPLOAD_LATEST=true
-  → Product Name: "Giddh"
-  → Installer: giddh-setup.exe / Giddh.dmg
-
-Push branch: test-electron-build-gh-action (or others)
-  → BUILD_ENV=test
-  → release: UPLOAD_LATEST=true
-  → Product Name: "Giddh-Test"
-  → Installer: giddh-test-setup.exe / Giddh-Test.dmg
-
-workflow_dispatch preview (inputs.environment)
-  → same BUILD_ENV / product names as above
+Push / workflow_dispatch action=preview (default)
   → UPLOAD_LATEST=false, UPLOAD_PREVIEW=true
+  → test-electron / tags → BUILD_ENV=test → test/…/preview/
+  → prod-electron / books-production → BUILD_ENV=prod → prod/…/preview/
 
-workflow_dispatch promote
+workflow_dispatch action=promote
   → no rebuild; copies {env}/{platform}/{version}/ → {env}/{platform}/latest/
 ```
 

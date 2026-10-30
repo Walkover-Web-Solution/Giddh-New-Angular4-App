@@ -88,10 +88,13 @@ jobs:
             echo "UPLOAD_PREVIEW=false" >> $GITHUB_ENV
           }
 
+          # Default for all builds = preview (versioned + preview/).
+          # Public latest/ is updated only by workflow_dispatch action=promote.
           if [ "$event_name" = "workflow_dispatch" ]; then
             build_env="${{ github.event.inputs.environment }}"
+            dispatch_action="${{ github.event.inputs.action }}"
             set_preview_mode
-            echo "Dispatch preview for environment: $build_env"
+            echo "Dispatch action=$dispatch_action for environment: $build_env"
 
             if [ "$build_env" = "prod" ]; then
               case "$branch" in
@@ -107,17 +110,15 @@ jobs:
                 exit 1
               fi
             fi
-          elif [ "$branch" = "books-production" ]; then
-            # Web prod deploy branch → auto Electron prod preview only (never touches public latest)
+          elif [ "$branch" = "books-production" ] || [ "$branch" = "prod-electron-build-gh-action" ]; then
             build_env="prod"
             set_preview_mode
-            echo "books-production merge → prod preview (latest NOT updated)"
-          elif [ "$branch" = "prod-electron-build-gh-action" ]; then
-            build_env="prod"
-            set_release_mode
+            echo "$branch → prod preview (latest NOT updated; use action=promote)"
           else
+            # test-electron-build-gh-action, tags, other
             build_env="test"
-            set_release_mode
+            set_preview_mode
+            echo "$branch → test preview (latest NOT updated; use action=promote)"
           fi
 
           echo "BUILD_ENV=$build_env" >> $GITHUB_ENV
