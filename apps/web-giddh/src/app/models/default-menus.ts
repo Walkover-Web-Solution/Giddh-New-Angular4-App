@@ -92,7 +92,6 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 }, hasTabs: true },
     { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 }, hasTabs: false },
     { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 }, hasTabs: true },
-    { type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details/auth-key', additional: { tab: 'api', tabIndex: 0 }, hasTabs: true },
     { type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details/mobile-number', additional: { tab: 'profile', tabIndex: 1 }, hasTabs: true },
     { type: 'MENU', name: 'User-Details > Session', uniqueName: '/pages/user-details/session', additional: { tab: 'session', tabIndex: 2 }, hasTabs: true },
     { type: 'MENU', name: 'User-Details > Subscriptions', uniqueName: '/pages/user-details/subscription', additional: { tab: 'subscription', tabIndex: 3, isPlanPage: true }, hasTabs: true },

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../store';
@@ -8,7 +8,6 @@ import { ToasterService } from '../services/toaster.service';
 import { CompanyResponse } from '../models/api-models/Company';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { ClipboardService } from 'ngx-clipboard';
 import { LoginActions } from '../actions/login.action';
 import { SessionActions } from '../actions/session.action';
 import { cloneDeep } from '../lodash-optimized';
@@ -18,7 +17,6 @@ import * as duration from 'dayjs/plugin/duration';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
-import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 
 dayjs.extend(duration)
@@ -30,9 +28,6 @@ dayjs.extend(duration)
     standalone:false
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
-    /** True If Auth key copied and used toggle Copy text */
-    public isCopied: boolean = false;
-    public userAuthKey: string = '';
     public twoWayAuth: boolean = false;
     public phoneNumber: string = '';
     public oneTimePassword: string = '';
@@ -67,7 +62,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public userSessionId: any = null;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
-    public apiPostmanDocUrl: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -78,7 +72,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** Holds Active Tab Index */
     public activeTabIndex: number = 0;
     /** Holds Tab Name */
-    private tabName = ['auth-key', 'mobile-number', 'session', 'subscription'];
+    private tabName = ['mobile-number', 'session', 'subscription'];
     /** Holds True if API calling in progress in old subscription page */
     public isSubscriptionLoading: boolean = false;
     /** Holds subscription id */
@@ -97,11 +91,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private generalActions: GeneralActions,
         private changeDetectionRef: ChangeDetectorRef,
         private dialog: MatDialog,
-        private generalService: GeneralService,
-        private clipboardService: ClipboardService,
-        @Inject(ServiceConfig) private serviceConfig: IServiceConfigArgs
+        private generalService: GeneralService
     ) {
-        this.apiPostmanDocUrl = this.serviceConfig.API_DOC_URL;
         this.contactNo$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
                 return appState.session.user.user.contactNo;
@@ -125,19 +116,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 return appState.session.user.user.authenticateTwoWay;
             }
         }), takeUntil(this.destroyed$));
-    }
-
-    /**
-     * Copy Authkey to Clipboard
-     *
-     * @memberof SubscriptionComponent
-     */
-    public toggleIsCopied(): void {
-        this.isCopied = true;
-        this.clipboardService.copyFromContent(this.userAuthKey);
-        setTimeout(() => {
-            this.isCopied = false;
-        }, 3000);
     }
 
     public ngOnInit() {
@@ -166,8 +144,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                     this.activeTabIndex = 1;
                 } else if (params && params.tabIndex == "2") {
                     this.activeTabIndex = 2;
-                } else if (params && params.tabIndex == "3") {
-                    this.activeTabIndex = 3;
                 }
                 this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
             }
@@ -186,13 +162,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             this.twoWayAuth = (response) ? true : false;
         });
         this.store.dispatch(this.loginAction.FetchUserDetails());
-        this.loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            if (a?.status === 'success') {
-                this.userAuthKey = a?.body?.authKey;
-            } else {
-                this.toasty.errorToast(a?.message, a?.status);
-            }
-        });
         this.store.pipe(select(appState => appState.subscriptions.companies), takeUntil(this.destroyed$))
             .subscribe(appState => this.companies = appState);
         this.store.pipe(select(appState => appState.subscriptions.companyTransactions), takeUntil(this.destroyed$))
@@ -278,16 +247,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.toasty.successToast(res.body);
             } else {
                 this.toasty.errorToast(res?.message);
-            }
-        });
-    }
-
-    public regenerateKey() {
-        this.loginService.RegenerateAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            if (a?.status === 'success') {
-                this.userAuthKey = a.body?.authKey;
-            } else {
-                this.toasty.errorToast(a?.message, a?.status);
             }
         });
     }
