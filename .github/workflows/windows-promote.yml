@@ -1,0 +1,135 @@
+# Promote an already-built Windows installer from versioned S3 path to public latest/.
+# Use this AFTER preview QA. Do not use "Re-run" on a preview/push run.
+name: Windows Promote to Latest
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to promote (test or prod)"
+        required: true
+        type: choice
+        options:
+          - test
+          - prod
+        default: test
+      version:
+        description: "Version folder to promote (required), e.g. 11.0.5"
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+
+concurrency:
+  group: windows-promote-${{ inputs.environment }}-${{ inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  promote_to_latest:
+    runs-on: ubuntu-latest
+    env:
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+
+    steps:
+      - name: Validate branch and inputs
+        shell: bash
+        run: |
+          VERSION="${{ inputs.version }}"
+          BUILD_ENV="${{ inputs.environment }}"
+          BRANCH="${{ github.ref_name }}"
+
+          if [ -z "$VERSION" ]; then
+            echo "::error::version is required (e.g. 11.0.5)"
+            exit 1
+          fi
+
+          if [ "$BUILD_ENV" = "prod" ]; then
+            case "$BRANCH" in
+              prod-electron-build-gh-action|books-production) ;;
+              *)
+                echo "::error::Prod promote must run from prod-electron-build-gh-action or books-production (current: $BRANCH)"
+                exit 1
+                ;;
+            esac
+            INSTALLER_NAME="giddh-setup.exe"
+            VERSIONED_EXE_NAME="giddh-setup-${VERSION}.exe"
+          else
+            if [ "$BRANCH" != "test-electron-build-gh-action" ]; then
+              echo "::error::Test promote must run from test-electron-build-gh-action (current: $BRANCH)"
+              exit 1
+            fi
+            INSTALLER_NAME="giddh-test-setup.exe"
+            VERSIONED_EXE_NAME="giddh-test-setup-${VERSION}.exe"
+          fi
+
+          {
+            echo "BUILD_ENV=$BUILD_ENV"
+            echo "S3_PATH_PREFIX=$BUILD_ENV"
+            echo "PACKAGE_VERSION=$VERSION"
+            echo "INSTALLER_NAME=$INSTALLER_NAME"
+            echo "VERSIONED_EXE_NAME=$VERSIONED_EXE_NAME"
+          } >> "$GITHUB_ENV"
+
+          echo "Promoting $BUILD_ENV Windows $VERSION → latest (same binary)"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Promote versioned artifacts to latest
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ env.PACKAGE_VERSION }}"
+          BUCKET="${{ env.S3_BUCKET }}"
+          PREFIX="${{ env.S3_PATH_PREFIX }}"
+          INSTALLER_NAME="${{ env.INSTALLER_NAME }}"
+          VERSIONED_EXE_NAME="${{ env.VERSIONED_EXE_NAME }}"
+          SRC="s3://$BUCKET/$PREFIX/windows/$VERSION"
+          DEST="s3://$BUCKET/$PREFIX/windows/latest"
+
+          echo "📥 Copying installer $VERSIONED_EXE_NAME → $INSTALLER_NAME"
+          aws s3 cp "$SRC/$VERSIONED_EXE_NAME" "$DEST/$INSTALLER_NAME" \
+            --content-type "application/x-msdownload" \
+            --metadata "version=$VERSION,platform=windows,arch=x64,promoted=true"
+
+          echo "📥 Fetching versioned latest.yml for rewrite"
+          mkdir -p artifacts/promote
+          aws s3 cp "$SRC/latest.yml" artifacts/promote/latest.yml
+
+          YML_CONTENT=$(cat artifacts/promote/latest.yml)
+          if [ "${{ env.BUILD_ENV }}" = "prod" ]; then
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe/giddh-setup.exe/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe|path: giddh-setup.exe|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe|url: giddh-setup.exe|g')
+          else
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's/giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe/giddh-test-setup.exe/g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|path: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe|path: giddh-test-setup.exe|g')
+            YML_CONTENT=$(echo "$YML_CONTENT" | sed -E 's|url: giddh-test-setup-[0-9]+\.[0-9]+\.[0-9]+\.exe|url: giddh-test-setup.exe|g')
+          fi
+          printf '%s' "$YML_CONTENT" > artifacts/promote/latest-modified.yml
+
+          aws s3 cp artifacts/promote/latest-modified.yml "$DEST/latest.yml" \
+            --content-type "text/yaml" \
+            --metadata "version=$VERSION,platform=windows,promoted=true"
+          echo "✅ Promoted $PREFIX/windows/$VERSION → $PREFIX/windows/latest"
+
+      - name: Promote Summary
+        if: always()
+        shell: bash
+        run: |
+          echo "========================================="
+          echo "WINDOWS PROMOTE SUMMARY (${{ env.BUILD_ENV }})"
+          echo "========================================="
+          echo "Version: ${{ env.PACKAGE_VERSION }}"
+          echo "Source:"
+          echo "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_EXE_NAME }}"
+          echo "Latest:"
+          echo "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/latest/${{ env.INSTALLER_NAME }}"
+          echo "=========================================="

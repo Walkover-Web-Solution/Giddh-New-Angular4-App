@@ -87,9 +87,11 @@ You can also use `test-electron-build-gh-action` / `prod-electron-build-gh-actio
   - `books-production` → Prod preview (`prod/…/preview/`)
   - Public `latest/` is updated only by manual **action = promote**.
 
-### Manual Triggers (`workflow_dispatch`)
-- `action: preview` → full build/sign/upload to versioned + `preview/` paths; does **not** update `latest/`
-- `action: promote` → S3 copy of an existing versioned build to `latest/` (same binary; requires `version`)
+### Manual Triggers
+- **Windows EXE / macOS DMG** → `action: preview` (or git push) → versioned + `preview/` (does **not** update `latest/`)
+- **Windows Promote to Latest** / **macOS Promote to Latest** → enter `environment` + `version` → copies that version to `latest/` (same binary)
+
+Prefer the dedicated **Promote to Latest** workflows. Do not use “Re-run” on a preview/push run to promote.
 
 Dispatch branch rules:
 - `test` → `test-electron-build-gh-action`
