@@ -65,7 +65,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             }
         }
 
-        if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
+        if ((this.generalService.currentOrganizationType === OrganizationType.Branch || this.generalService.currentOrganizationType === OrganizationType.Company) && request && request.urlWithParams) {
             request = this.addBranchUniqueName(request);
         }
         request = this.addLanguage(request);
@@ -256,6 +256,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
      */
     private addBranchUniqueName(request: HttpRequest<any>): HttpRequest<any> {
         if (!request.params.has('branchUniqueName') && !request.url.includes('branchUniqueName') && !request.url.includes('.json')) {
+            console.log("inside",this.generalService.currentBranchUniqueName);
             request = request.clone({
                 params: request.params.append('branchUniqueName', encodeURIComponent(this.generalService.currentBranchUniqueName))
             });
