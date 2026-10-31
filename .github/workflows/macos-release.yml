@@ -617,17 +617,21 @@ jobs:
 
           echo "Approved promote for version $VERSION"
           echo "📥 Copying preview ZIP/DMG/yml → latest/"
+          # --copy-props none: IAM user lacks s3:GetObjectTagging (default S3→S3 cp copies tags)
           aws s3 cp "$PREVIEW/${{ env.LATEST_ZIP_NAME }}" "$DEST/${{ env.LATEST_ZIP_NAME }}" \
+            --copy-props none \
             --content-type "application/zip" \
             --cache-control "no-cache, no-store, must-revalidate" \
             --metadata "version=$VERSION,platform=macos,arch=universal,signed=true,promoted=true"
 
           aws s3 cp "$PREVIEW/${{ env.LATEST_DMG_NAME }}" "$DEST/${{ env.LATEST_DMG_NAME }}" \
+            --copy-props none \
             --content-type "application/x-apple-diskimage" \
             --cache-control "no-cache, no-store, must-revalidate" \
             --metadata "version=$VERSION,platform=macos,arch=universal,signed=true,promoted=true"
 
           aws s3 cp "$PREVIEW/latest-mac.yml" "$DEST/latest-mac.yml" \
+            --copy-props none \
             --content-type "text/yaml" \
             --cache-control "no-cache, no-store, must-revalidate" \
             --metadata "version=$VERSION,platform=macos,promoted=true"

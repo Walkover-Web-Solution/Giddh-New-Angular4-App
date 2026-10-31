@@ -95,7 +95,9 @@ jobs:
           DEST="s3://$BUCKET/$PREFIX/windows/latest"
 
           echo "📥 Copying installer $VERSIONED_EXE_NAME → $INSTALLER_NAME"
+          # --copy-props none: IAM user lacks s3:GetObjectTagging (default S3→S3 cp copies tags)
           aws s3 cp "$SRC/$VERSIONED_EXE_NAME" "$DEST/$INSTALLER_NAME" \
+            --copy-props none \
             --content-type "application/x-msdownload" \
             --metadata "version=$VERSION,platform=windows,arch=x64,promoted=true"
 
