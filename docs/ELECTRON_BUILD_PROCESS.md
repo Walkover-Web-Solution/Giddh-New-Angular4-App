@@ -57,18 +57,48 @@ This document explains how Giddh's Electron desktop application is built and dis
 5. GitHub Action will automatically build and upload to S3
 6. Download production build from: **[https://giddh.com/](https://giddh.com/#:~:text=Desktop%20Apps)** (Desktop Apps section)
 
+### Developer Preview Then Promote → Latest
+
+```text
+Push / build  →  preview/                         (always)
+test build    →  promote preview/ → latest/       (automatic; PROMOTE_TO_LATEST ignored)
+prod build    →  promote only if PROMOTE_TO_LATEST=true
+```
+
+**One-time GitHub setup (required for prod safety):**
+
+1. Repo → **Settings** → **Secrets and variables** → **Actions** → **Variables**
+2. Create `PROMOTE_TO_LATEST` with value `false`
+3. Optional: Environments `electron-promote-test` / `electron-promote-prod` with Required reviewers for an extra Approve step
+
+**Day-to-day:**
+
+1. Test pushes (`test-electron-build-gh-action`): build → preview → latest (no variable needed)
+2. Prod: keep `PROMOTE_TO_LATEST=false` for preview-only; set `true` only when publishing prod latest/
+3. After prod `latest/` is updated, set `PROMOTE_TO_LATEST` back to `false`
+
 ---
 
 ## Trigger Mechanisms
 
 ### Automated Triggers
 - **Git Tags**: Any tag matching `v*.*.*` (e.g., `v1.2.3`)
-- **Branch Push**: 
-  - `test-electron-build-gh-action` → Test builds
-  - `prod-electron-build-gh-action` → Production builds
+- **Branch Push** (always **preview**):
+  - `test-electron-build-gh-action` → Test preview (`test/…/preview/`)
+  - `prod-electron-build-gh-action` → Prod preview (`prod/…/preview/`)
+  - `books-production` → Prod preview (`prod/…/preview/`)
+  - Test `latest/` updates after every successful test build
+  - Prod `latest/` updates only when `PROMOTE_TO_LATEST=true`
+
+### Triggers
+- **Push** / **Run workflow** → build to `preview/`; test always promotes; prod promotes only if `vars.PROMOTE_TO_LATEST == 'true'`
+
+Dispatch branch rules when using **Run workflow**:
+- `test` → `test-electron-build-gh-action`
+- `prod` → `prod-electron-build-gh-action` or `books-production`
 
 ### Skip CI
-Add `[skip ci]` to commit message to bypass builds.
+Add `[skip ci]` to commit message to bypass automatic push builds.
 
 ---
 
@@ -76,17 +106,13 @@ Add `[skip ci]` to commit message to bypass builds.
 
 ### Windows & macOS Logic
 ```
-Branch: prod-electron-build-gh-action
-  → BUILD_ENV=prod
-  → S3_PATH_PREFIX=prod
-  → Product Name: "Giddh"
-  → Installer: giddh-setup.exe / Giddh.dmg
+Push / workflow_dispatch action=preview (default)
+  → UPLOAD_LATEST=false, UPLOAD_PREVIEW=true
+  → test-electron / tags → BUILD_ENV=test → test/…/preview/
+  → prod-electron / books-production → BUILD_ENV=prod → prod/…/preview/
 
-Branch: test-electron-build-gh-action (or others)
-  → BUILD_ENV=test
-  → S3_PATH_PREFIX=test
-  → Product Name: "Giddh-Test"
-  → Installer: giddh-test-setup.exe / Giddh-Test.dmg
+workflow_dispatch action=promote
+  → no rebuild; copies {env}/{platform}/{version}/ → {env}/{platform}/latest/
 ```
 
 ---
@@ -137,16 +163,18 @@ electron-builder (--win nsis)
 ### 3. Upload Phase
 ```
 AWS S3 Structure:
-s3://BUCKET/prod/windows/VERSION/giddh-setup.exe
-s3://BUCKET/prod/windows/latest/giddh-setup.exe
+s3://BUCKET/prod/windows/VERSION/giddh-setup-VERSION.exe
+s3://BUCKET/prod/windows/latest/giddh-setup.exe          # release push or promote
+s3://BUCKET/prod/windows/preview/giddh-setup.exe         # preview only
 
-s3://BUCKET/test/windows/VERSION/giddh-test-setup.exe
-s3://BUCKET/test/windows/latest/giddh-test-setup.exe
+s3://BUCKET/test/windows/VERSION/giddh-test-setup-VERSION.exe
+s3://BUCKET/test/windows/latest/giddh-test-setup.exe     # release push or promote
+s3://BUCKET/test/windows/preview/giddh-test-setup.exe    # preview only
 ```
 
 **Files Uploaded**:
 - Signed installer (`.exe`)
-- `latest.yml` (auto-update metadata)
+- `latest.yml` (auto-update metadata; also under `preview/` for preview runs)
 
 ---
 
@@ -181,16 +209,18 @@ Renamed to:
 ### 3. Upload Phase
 ```
 AWS S3 Structure:
-s3://BUCKET/prod/mac/VERSION/Giddh.dmg
-s3://BUCKET/prod/mac/latest/Giddh.dmg
+s3://BUCKET/prod/mac/VERSION/giddh-setup-VERSION.{zip,dmg}
+s3://BUCKET/prod/mac/latest/{giddh.zip,giddh-setup.dmg}           # release push or promote
+s3://BUCKET/prod/mac/preview/{giddh.zip,giddh-setup.dmg}          # preview only
 
-s3://BUCKET/test/mac/VERSION/Giddh-Test.dmg
-s3://BUCKET/test/mac/latest/Giddh-Test.dmg
+s3://BUCKET/test/mac/VERSION/giddh-test-setup-VERSION.{zip,dmg}
+s3://BUCKET/test/mac/latest/{giddh-test.zip,giddh-test-setup.dmg} # release push or promote
+s3://BUCKET/test/mac/preview/{giddh-test.zip,giddh-test-setup.dmg}# preview only
 ```
 
 **Files Uploaded**:
-- DMG installer
-- `latest-mac.yml` (auto-update metadata)
+- ZIP + DMG installers
+- `latest-mac.yml` (auto-update metadata; also under `preview/` for preview runs)
 
 ---
 
