@@ -57,30 +57,25 @@ This document explains how Giddh's Electron desktop application is built and dis
 5. GitHub Action will automatically build and upload to S3
 6. Download production build from: **[https://giddh.com/](https://giddh.com/#:~:text=Desktop%20Apps)** (Desktop Apps section)
 
-### Developer Preview Then Approve → Latest
+### Developer Preview Then Promote → Latest
 
 ```text
-Push / build  →  preview/     (automatic)
-QA the preview EXE/DMG
-Approve on GitHub Actions    (Environment gate)
-              →  latest/     (copies same files from preview/)
+Push / build  →  preview/                    (always)
+PROMOTE_TO_LATEST=false  →  promote skipped  (safe default)
+PROMOTE_TO_LATEST=true   →  copy preview/ → latest/
 ```
 
 **One-time GitHub setup (required):**
 
-1. Repo → **Settings** → **Environments**
-2. Create `electron-promote-test` and `electron-promote-prod`
-3. On each environment enable **Required reviewers** (add yourself / release owners)
-
-Without Required reviewers, promote runs immediately after build (not wanted).
+1. Repo → **Settings** → **Secrets and variables** → **Actions** → **Variables**
+2. Create `PROMOTE_TO_LATEST` with value `false`
+3. Optional: Environments `electron-promote-test` / `electron-promote-prod` with Required reviewers for an extra Approve step
 
 **Day-to-day:**
 
-1. Push to `test-electron-build-gh-action` (or prod / `books-production`)
-2. Wait for **build** job to finish → install from `…/preview/…`
-3. Open the same Actions run → job **promote_to_latest** shows **Waiting for approval**
-4. Click **Review deployments** → **Approve**
-5. Job copies `preview/` → `latest/` (same binary, no rebuild)
+1. Keep `PROMOTE_TO_LATEST=false` for normal pushes → build goes to `preview/` only
+2. When ready to publish: set `PROMOTE_TO_LATEST=true`, then push (or re-run after build already filled preview)
+3. After `latest/` is updated, set `PROMOTE_TO_LATEST` back to `false`
 
 ---
 
@@ -88,15 +83,14 @@ Without Required reviewers, promote runs immediately after build (not wanted).
 
 ### Automated Triggers
 - **Git Tags**: Any tag matching `v*.*.*` (e.g., `v1.2.3`)
-- **Branch Push** (always **preview**; does **not** update `latest/`):
+- **Branch Push** (always **preview**):
   - `test-electron-build-gh-action` → Test preview (`test/…/preview/`)
   - `prod-electron-build-gh-action` → Prod preview (`prod/…/preview/`)
   - `books-production` → Prod preview (`prod/…/preview/`)
-  - Public `latest/` is updated only by manual **action = promote**.
+  - Public `latest/` updates only when `PROMOTE_TO_LATEST=true`
 
 ### Triggers
-- **Push** / **Run workflow** on Windows EXE or macOS DMG → build to `preview/`, then wait for Environment approval to copy to `latest/`
-- Environments: `electron-promote-test`, `electron-promote-prod` (Required reviewers)
+- **Push** / **Run workflow** → build to `preview/`; `promote_to_latest` runs only if `vars.PROMOTE_TO_LATEST == 'true'`
 
 Dispatch branch rules when using **Run workflow**:
 - `test` → `test-electron-build-gh-action`

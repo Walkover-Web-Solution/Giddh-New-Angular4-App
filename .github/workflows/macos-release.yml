@@ -38,12 +38,12 @@ jobs:
       - name: Show flow
         shell: bash
         run: |
-          echo "Flow: 1) build → preview/  2) wait for Environment approval  3) copy preview/ → latest/"
+          echo "Flow: 1) build → preview/  2) promote_to_latest only if vars.PROMOTE_TO_LATEST=true  3) copy preview/ → latest/"
           echo "event_name=${{ github.event_name }}"
           echo "ref=${{ github.ref_name }}"
-          echo "After preview succeeds, open this run and Approve the waiting promote_to_latest job."
-          echo "Required GitHub Environments (Settings → Environments): electron-promote-test, electron-promote-prod"
-          echo "Add Required reviewers on those environments so promote does not run automatically."
+          echo "PROMOTE_TO_LATEST=${{ vars.PROMOTE_TO_LATEST }}"
+          echo "Safety: Settings → Secrets and variables → Actions → Variables → PROMOTE_TO_LATEST"
+          echo "Set true only when you want this run to update latest/; keep false for preview-only builds."
 
   build_upload:
     runs-on: macos-latest
@@ -562,7 +562,7 @@ jobs:
             echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/preview/${{ env.LATEST_ZIP_NAME }}"
             echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/preview/${{ env.LATEST_DMG_NAME }}"
           fi
-          echo "Latest: waiting for Environment approval on promote_to_latest (copies preview/ → latest/)"
+          echo "Latest: promote_to_latest runs only when vars.PROMOTE_TO_LATEST=true (copies preview/ → latest/)"
           echo "=========================================="
 
       - name: Export job outputs for promote
@@ -578,12 +578,16 @@ jobs:
             echo "versioned_dmg_name=${{ env.VERSIONED_DMG_NAME }}"
           } >> "$GITHUB_OUTPUT"
 
-  # Waits for GitHub Environment approval, then copies preview/ → latest/ (same binary).
-  # Configure Required reviewers on environments: electron-promote-test, electron-promote-prod
+  # Copies preview/ → latest/ only when repo variable PROMOTE_TO_LATEST=true (safety gate).
+  # Settings → Secrets and variables → Actions → Variables → PROMOTE_TO_LATEST = true|false
+  # Optional: Environment Required reviewers on electron-promote-test / electron-promote-prod
   promote_to_latest:
     runs-on: ubuntu-latest
     needs: build_upload
-    if: always() && needs.build_upload.result == 'success'
+    if: >
+      always() &&
+      needs.build_upload.result == 'success' &&
+      vars.PROMOTE_TO_LATEST == 'true'
     # Do not use secrets in environment.url (invalidates the whole workflow at startup).
     environment: electron-promote-${{ needs.build_upload.outputs.build_env }}
 
