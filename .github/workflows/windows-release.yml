@@ -1,6 +1,7 @@
 # Author Name: Divyanshu Shrivastava
 # Date: 14th January 2026
 # Updated: 28th January 2026 - eSigner cloud signing for installer AND app executable (critical for auto-updates)
+# Updated: 29th October 2026 - preview build then Environment approval before copy to latest/
 name: Windows EXE (build → eSigner signing → S3 upload)
 
 on:
@@ -10,25 +11,56 @@ on:
     branches:
       - "test-electron-build-gh-action"
       - "prod-electron-build-gh-action"
+      - "books-production"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Build environment (test → test-electron branch; prod → prod-electron or books-production)"
+        required: true
+        type: choice
+        options:
+          - test
+          - prod
+        default: test
 
 permissions:
   contents: write
   id-token: write
+  deployments: write
 
 concurrency:
   group: windows-release-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
+  show_trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show flow
+        shell: bash
+        run: |
+          echo "Flow: 1) build → preview/  2) promote preview/ → latest/"
+          echo "event_name=${{ github.event_name }}"
+          echo "ref=${{ github.ref_name }}"
+          echo "PROMOTE_TO_LATEST=${{ vars.PROMOTE_TO_LATEST }} (prod only; test always promotes)"
+          echo "Prod safety: set PROMOTE_TO_LATEST=true only when publishing prod latest/; keep false otherwise."
+
   build_sign_upload:
     runs-on: windows-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    needs: show_trigger
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name != 'workflow_dispatch' && !contains(github.event.head_commit.message, '[skip ci]'))
+    outputs:
+      build_env: ${{ steps.export_outputs.outputs.build_env }}
+      package_version: ${{ steps.export_outputs.outputs.package_version }}
+      installer_name: ${{ steps.export_outputs.outputs.installer_name }}
+      versioned_exe_name: ${{ steps.export_outputs.outputs.versioned_exe_name }}
 
     env:
       RELEASE_TAG: ${{ github.ref_name }}
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      UPLOAD_LATEST: "true"
 
     steps:
       - name: Checkout
@@ -42,23 +74,105 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Detect build environment from branch
+      - name: Detect build environment
         shell: pwsh
         run: |
           $branch = "${{ github.ref_name }}"
+          $eventName = "${{ github.event_name }}"
           Write-Host "Branch: $branch"
-          
-          if ($branch -eq "prod-electron-build-gh-action") {
-            "BUILD_ENV=prod" | Out-File -FilePath $env:GITHUB_ENV -Append
-            "S3_PATH_PREFIX=prod" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Event: $eventName"
+
+          function Set-PreviewMode {
+            "WORKFLOW_MODE=preview" | Out-File -FilePath $env:GITHUB_ENV -Append
+            "UPLOAD_LATEST=false" | Out-File -FilePath $env:GITHUB_ENV -Append
+            "UPLOAD_PREVIEW=true" | Out-File -FilePath $env:GITHUB_ENV -Append
+          }
+
+          function Set-ReleaseMode {
+            "WORKFLOW_MODE=release" | Out-File -FilePath $env:GITHUB_ENV -Append
+            "UPLOAD_LATEST=true" | Out-File -FilePath $env:GITHUB_ENV -Append
+            "UPLOAD_PREVIEW=false" | Out-File -FilePath $env:GITHUB_ENV -Append
+          }
+
+          # Always preview first. latest/ is updated only after Environment approval on promote_to_latest.
+          if ($eventName -eq "workflow_dispatch") {
+            $buildEnv = "${{ github.event.inputs.environment }}"
+            Set-PreviewMode
+            Write-Host "Dispatch preview for environment: $buildEnv"
+
+            if ($buildEnv -eq "prod") {
+              $allowed = @("prod-electron-build-gh-action", "books-production")
+            } else {
+              $allowed = @("test-electron-build-gh-action")
+            }
+            if ($allowed -notcontains $branch) {
+              throw "Dispatch environment '$buildEnv' must run from branch: $($allowed -join ', ') (current: $branch)"
+            }
+          } elseif ($branch -eq "books-production" -or $branch -eq "prod-electron-build-gh-action") {
+            $buildEnv = "prod"
+            Set-PreviewMode
+            Write-Host "$branch → prod preview (latest after Environment approval)"
+          } else {
+            $buildEnv = "test"
+            Set-PreviewMode
+            Write-Host "$branch → test preview (latest after Environment approval)"
+          }
+
+          "BUILD_ENV=$buildEnv" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "S3_PATH_PREFIX=$buildEnv" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+          if ($buildEnv -eq "prod") {
             "INSTALLER_NAME=giddh-setup.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
             Write-Host "✅ Production build"
           } else {
-            "BUILD_ENV=test" | Out-File -FilePath $env:GITHUB_ENV -Append
-            "S3_PATH_PREFIX=test" | Out-File -FilePath $env:GITHUB_ENV -Append
             "INSTALLER_NAME=giddh-test-setup.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
             Write-Host "✅ Test build"
           }
+
+      - name: Compute Electron source fingerprint
+        shell: pwsh
+        run: |
+          $fingerprint = "${{ github.sha }}"
+          "ELECTRON_SOURCE_FINGERPRINT=$fingerprint" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "ELECTRON_SOURCE_FINGERPRINT=$fingerprint"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Resolve next app version from S3 feeds
+        shell: pwsh
+        env:
+          S3_BUCKET: ${{ env.S3_BUCKET }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+          ELECTRON_SOURCE_FINGERPRINT: ${{ env.ELECTRON_SOURCE_FINGERPRINT }}
+          PACKAGE_JSON_PATH: apps/electron-giddh/src/package.json
+        run: |
+          node scripts/fetch-next-version.js ${{ env.S3_PATH_PREFIX }}
+          $version = (Get-Content "apps/electron-giddh/src/package.json" -Raw | ConvertFrom-Json).version
+          "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "PACKAGE_VERSION=$version"
+
+      - name: Reserve shared release-meta.json
+        shell: pwsh
+        env:
+          PACKAGE_VERSION: ${{ env.PACKAGE_VERSION }}
+          S3_PATH_PREFIX: ${{ env.S3_PATH_PREFIX }}
+          ELECTRON_SOURCE_FINGERPRINT: ${{ env.ELECTRON_SOURCE_FINGERPRINT }}
+          S3_BUCKET: ${{ env.S3_BUCKET }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          node scripts/electron-release-meta.js reserve --platform windows --out artifacts/release-meta.json
+          aws s3 cp artifacts/release-meta.json "s3://${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/release-meta.json" `
+            --content-type "application/json" `
+            --metadata "version=${{ env.PACKAGE_VERSION }},platform=windows,status=in_progress"
+          Write-Host "✅ Reserved release-meta.json for ${{ env.PACKAGE_VERSION }}"
 
       - name: Install deps
         run: npm install
@@ -133,8 +247,14 @@ jobs:
             throw "❌ FATAL: icon.ico missing!"
           }
           Write-Host "  ✅ Icon files verified"
+
+          # Shared electron-builder.json references ./notarize.js (mac afterSign).
+          # Copy it here so config load succeeds; notarize.js no-ops on Windows.
+          Write-Host "📦 Copying Electron afterSign stub..."
+          Copy-Item "$env:GITHUB_WORKSPACE/electron-sign/notarize.js" "notarize.js" -Force
+          Write-Host "  ✅ notarize.js copied"
           
-          Write-Host "� Setting artifact name for ${{ env.BUILD_ENV }} build..."
+          Write-Host "📝 Setting artifact name for ${{ env.BUILD_ENV }} build..."
           $configPath = "./../../../electron-sign/electron-builder.json"
           $config = Get-Content $configPath -Raw | ConvertFrom-Json
           
@@ -148,14 +268,18 @@ jobs:
           
           $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
           
-          Write-Host "� Building Windows app (dir target)..."
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --dir
+          Write-Host "🔨 Building Windows app (dir target)..."
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --dir --publish never
           cd ../../../
           
           Write-Host "🔍 Verifying app executable..."
-          $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "Giddh.exe" -Recurse | Where-Object { $_.Directory.Name -eq "win-unpacked" } | Select-Object -First 1
+          $exeName = if ("${{ env.BUILD_ENV }}" -eq "prod") { "Giddh.exe" } else { "Giddh-Test.exe" }
+          $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter $exeName -Recurse | Where-Object { $_.Directory.Name -eq "win-unpacked" } | Select-Object -First 1
+          if (-not $appExe) {
+              $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse | Where-Object { $_.Directory.Name -eq "win-unpacked" } | Select-Object -First 1
+          }
           if ($appExe) {
-              Write-Host "  ✅ App executable found"
+              Write-Host "  ✅ App executable found: $($appExe.Name)"
               try {
                   Add-Type -AssemblyName System.Drawing
                   $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($appExe.FullName)
@@ -174,15 +298,24 @@ jobs:
       - name: Find artifacts and prepare for signing
         shell: pwsh
         run: |
-          $packageJson = Get-Content "package.json" | ConvertFrom-Json
-          $version = $packageJson.version
-          "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+          $version = "${{ env.PACKAGE_VERSION }}"
+          if (-not $version) {
+            $version = (Get-Content "apps/electron-giddh/src/package.json" -Raw | ConvertFrom-Json).version
+            "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+          }
           Write-Host "Package version: $version"
           
           # Find app executable in win-unpacked (CRITICAL for auto-updates)
-          $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "Giddh.exe" -Recurse |
+          $exeName = if ("${{ env.BUILD_ENV }}" -eq "prod") { "Giddh.exe" } else { "Giddh-Test.exe" }
+          $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter $exeName -Recurse |
             Where-Object { $_.Directory.Name -eq "win-unpacked" } |
             Select-Object -First 1
+
+          if (-not $appExe) {
+            $appExe = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse |
+              Where-Object { $_.Directory.Name -eq "win-unpacked" } |
+              Select-Object -First 1
+          }
           
           if (-not $appExe) {
             throw "App executable not found in win-unpacked. This is required for auto-updates!"
@@ -190,6 +323,7 @@ jobs:
           
           Write-Host "Found unsigned app executable: $($appExe.FullName)"
           "APP_EXE_PATH=$($appExe.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "APP_EXE_NAME=$($appExe.Name)" | Out-File -FilePath $env:GITHUB_ENV -Append
           
 
       - name: Create signing output directories
@@ -215,7 +349,10 @@ jobs:
       - name: Copy signed EXE back and build installer
         shell: pwsh
         run: |
-          $signedAppExe = Get-ChildItem -Path "artifacts/signed-app" -Filter "Giddh.exe" | Select-Object -First 1
+          $signedAppExe = Get-ChildItem -Path "artifacts/signed-app" -Filter "${{ env.APP_EXE_NAME }}" | Select-Object -First 1
+          if (-not $signedAppExe) {
+            $signedAppExe = Get-ChildItem -Path "artifacts/signed-app" -Filter "*.exe" | Select-Object -First 1
+          }
           if (-not $signedAppExe) {
             throw "Signed app executable not found"
           }
@@ -257,8 +394,13 @@ jobs:
           }
           
           $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+
+          # Ensure afterSign hook file exists for shared config load
+          if (!(Test-Path "notarize.js")) {
+            Copy-Item "$env:GITHUB_WORKSPACE/electron-sign/notarize.js" "notarize.js" -Force
+          }
           
-          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win nsis
+          npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win nsis --publish never
           cd ../../../
           
           $installer = Get-ChildItem -Path "dist/apps/electrongiddh-packages" -Filter "*.exe" -Recurse |
@@ -347,14 +489,6 @@ jobs:
             throw "latest.yml not found"
           }
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
       - name: Upload installer to S3
         shell: pwsh
         run: |
@@ -363,7 +497,7 @@ jobs:
           $INSTALLER_FILE = "${{ env.FINAL_INSTALLER }}"
           $PREFIX = "${{ env.S3_PATH_PREFIX }}"
           
-          Write-Host "📤 Uploading to S3 (${{ env.BUILD_ENV }})..."
+          Write-Host "📤 Uploading to S3 (${{ env.BUILD_ENV }}, mode=${{ env.WORKFLOW_MODE }})..."
           
           aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/$PREFIX/windows/$VERSION/${{ env.VERSIONED_EXE_NAME }}" `
             --content-type "application/x-msdownload" `
@@ -375,6 +509,13 @@ jobs:
               --content-type "application/x-msdownload" `
               --metadata "version=$VERSION,platform=windows,arch=x64"
             Write-Host "✅ Uploaded: $PREFIX/windows/latest/${{ env.INSTALLER_NAME }}"
+          }
+
+          if ("${{ env.UPLOAD_PREVIEW }}" -eq "true") {
+            aws s3 cp "$INSTALLER_FILE" "s3://$BUCKET/$PREFIX/windows/preview/${{ env.INSTALLER_NAME }}" `
+              --content-type "application/x-msdownload" `
+              --metadata "version=$VERSION,platform=windows,arch=x64,channel=preview"
+            Write-Host "✅ Uploaded: $PREFIX/windows/preview/${{ env.INSTALLER_NAME }}"
           }
 
       - name: Upload latest.yml to S3
@@ -393,30 +534,52 @@ jobs:
               --content-type "text/yaml" `
               --metadata "version=$VERSION,platform=windows"
             Write-Host "✅ Uploaded: $PREFIX/windows/$VERSION/latest.yml"
+
+            $ymlContent = Get-Content $YML_FILE -Raw
+            if ("${{ env.BUILD_ENV }}" -eq "prod") {
+              $ymlContent = $ymlContent -replace 'giddh-setup-\d+\.\d+\.\d+\.exe', 'giddh-setup.exe'
+              $ymlContent = $ymlContent -replace 'path: giddh-setup-\d+\.\d+\.\d+\.exe', 'path: giddh-setup.exe'
+              $ymlContent = $ymlContent -replace 'url: giddh-setup-\d+\.\d+\.\d+\.exe', 'url: giddh-setup.exe'
+            } else {
+              $ymlContent = $ymlContent -replace 'giddh-test-setup-\d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
+              $ymlContent = $ymlContent -replace 'path: giddh-test-setup-\d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
+              $ymlContent = $ymlContent -replace 'url: giddh-test-setup-\d+\.\d+\.\d+\.exe', 'url: giddh-test-setup.exe'
+            }
+            $modifiedYml = "artifacts/final/latest-modified.yml"
+            $ymlContent | Set-Content $modifiedYml -NoNewline
             
             if ("${{ env.UPLOAD_LATEST }}" -eq "true") {
-              $ymlContent = Get-Content $YML_FILE -Raw
-              
-              # Replace versioned filenames with environment-specific fixed name
-              if ("${{ env.BUILD_ENV }}" -eq "prod") {
-                $ymlContent = $ymlContent -replace 'giddh-setup-\d+\.\d+\.\d+\.exe', 'giddh-setup.exe'
-                $ymlContent = $ymlContent -replace 'path: giddh-setup-\d+\.\d+\.\d+\.exe', 'path: giddh-setup.exe'
-                $ymlContent = $ymlContent -replace 'url: giddh-setup-\d+\.\d+\.\d+\.exe', 'url: giddh-setup.exe'
-              } else {
-                $ymlContent = $ymlContent -replace 'giddh-test-setup-\d+\.\d+\.\d+\.exe', 'giddh-test-setup.exe'
-                $ymlContent = $ymlContent -replace 'path: giddh-test-setup-\d+\.\d+\.\d+\.exe', 'path: giddh-test-setup.exe'
-                $ymlContent = $ymlContent -replace 'url: giddh-test-setup-\d+\.\d+\.\d+\.exe', 'url: giddh-test-setup.exe'
-              }
-              
-              $modifiedYml = "artifacts/final/latest-modified.yml"
-              $ymlContent | Set-Content $modifiedYml -NoNewline
-              
               aws s3 cp "$modifiedYml" "s3://$BUCKET/$PREFIX/windows/latest/latest.yml" `
                 --content-type "text/yaml" `
                 --metadata "version=$VERSION,platform=windows"
               Write-Host "✅ Uploaded: $PREFIX/windows/latest/latest.yml"
             }
+
+            if ("${{ env.UPLOAD_PREVIEW }}" -eq "true") {
+              aws s3 cp "$modifiedYml" "s3://$BUCKET/$PREFIX/windows/preview/latest.yml" `
+                --content-type "text/yaml" `
+                --metadata "version=$VERSION,platform=windows,channel=preview"
+              Write-Host "✅ Uploaded: $PREFIX/windows/preview/latest.yml"
+            }
           }
+
+      - name: Mark Windows platform completed in release-meta.json
+        shell: pwsh
+        env:
+          PACKAGE_VERSION: ${{ env.PACKAGE_VERSION }}
+          S3_PATH_PREFIX: ${{ env.S3_PATH_PREFIX }}
+          ELECTRON_SOURCE_FINGERPRINT: ${{ env.ELECTRON_SOURCE_FINGERPRINT }}
+          S3_BUCKET: ${{ env.S3_BUCKET }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          aws s3 cp "s3://${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/release-meta.json" artifacts/release-meta.json
+          $env:EXISTING_META_PATH = "artifacts/release-meta.json"
+          node scripts/electron-release-meta.js complete --platform windows --in artifacts/release-meta.json --out artifacts/release-meta.json
+          aws s3 cp artifacts/release-meta.json "s3://${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/release-meta.json" `
+            --content-type "application/json" `
+            --metadata "version=${{ env.PACKAGE_VERSION }},platform=windows,status=completed"
+          Write-Host "✅ Updated release-meta.json (windows completed)"
 
       - name: Build Summary
         if: always()
@@ -425,12 +588,101 @@ jobs:
           Write-Host "========================================="
           Write-Host "WINDOWS BUILD SUMMARY (${{ env.BUILD_ENV }})"
           Write-Host "========================================="
+          Write-Host "Mode: ${{ env.WORKFLOW_MODE }}"
           Write-Host "Version: ${{ env.PACKAGE_VERSION }}"
+          Write-Host "Source fingerprint: ${{ env.ELECTRON_SOURCE_FINGERPRINT }}"
           Write-Host "Environment: ${{ env.BUILD_ENV }}"
+          Write-Host "Upload latest: ${{ env.UPLOAD_LATEST }}"
           Write-Host "S3 Path: ${{ env.S3_PATH_PREFIX }}/windows/"
           Write-Host "========================================="
-          Write-Host "Versioned:"
+          Write-Host "Versioned (use this for developer QA):"
           Write-Host "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/${{ env.PACKAGE_VERSION }}/${{ env.VERSIONED_EXE_NAME }}"
-          Write-Host "Latest:"
-          Write-Host "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/latest/${{ env.INSTALLER_NAME }}"
+          if ("${{ env.UPLOAD_PREVIEW }}" -eq "true") {
+            Write-Host "Preview (stable QA URL, does not affect public latest):"
+            Write-Host "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/preview/${{ env.INSTALLER_NAME }}"
+          }
+          Write-Host "Latest: test always promotes; prod only when vars.PROMOTE_TO_LATEST=true"
           Write-Host "=========================================="
+
+      - name: Export job outputs for promote
+        id: export_outputs
+        shell: pwsh
+        run: |
+          "build_env=${{ env.BUILD_ENV }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "package_version=${{ env.PACKAGE_VERSION }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "installer_name=${{ env.INSTALLER_NAME }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "versioned_exe_name=${{ env.VERSIONED_EXE_NAME }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+  # Copies preview/ → latest/.
+  # test: always runs after successful build (PROMOTE_TO_LATEST ignored).
+  # prod: only when repo variable PROMOTE_TO_LATEST=true (Settings → Actions → Variables).
+  # Optional: Environment Required reviewers on electron-promote-test / electron-promote-prod
+  promote_to_latest:
+    runs-on: ubuntu-latest
+    needs: build_sign_upload
+    if: >
+      always() &&
+      needs.build_sign_upload.result == 'success' &&
+      (needs.build_sign_upload.outputs.build_env != 'prod' || vars.PROMOTE_TO_LATEST == 'true')
+    # Do not use secrets in environment.url (invalidates the whole workflow at startup).
+    environment: electron-promote-${{ needs.build_sign_upload.outputs.build_env }}
+
+    env:
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      BUILD_ENV: ${{ needs.build_sign_upload.outputs.build_env }}
+      S3_PATH_PREFIX: ${{ needs.build_sign_upload.outputs.build_env }}
+      PACKAGE_VERSION: ${{ needs.build_sign_upload.outputs.package_version }}
+      INSTALLER_NAME: ${{ needs.build_sign_upload.outputs.installer_name }}
+      VERSIONED_EXE_NAME: ${{ needs.build_sign_upload.outputs.versioned_exe_name }}
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Copy preview artifacts to latest
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ env.PACKAGE_VERSION }}"
+          BUCKET="${{ env.S3_BUCKET }}"
+          PREFIX="${{ env.S3_PATH_PREFIX }}"
+          INSTALLER_NAME="${{ env.INSTALLER_NAME }}"
+          PREVIEW="s3://$BUCKET/$PREFIX/windows/preview"
+          DEST="s3://$BUCKET/$PREFIX/windows/latest"
+
+          echo "Approved promote for version $VERSION"
+          echo "📥 Copying $PREVIEW/$INSTALLER_NAME → $DEST/$INSTALLER_NAME"
+          # --copy-props none: IAM user lacks s3:GetObjectTagging (default S3→S3 cp copies tags)
+          aws s3 cp "$PREVIEW/$INSTALLER_NAME" "$DEST/$INSTALLER_NAME" \
+            --copy-props none \
+            --content-type "application/x-msdownload" \
+            --metadata "version=$VERSION,platform=windows,arch=x64,promoted=true"
+
+          echo "📥 Copying preview latest.yml → latest/latest.yml"
+          aws s3 cp "$PREVIEW/latest.yml" "$DEST/latest.yml" \
+            --copy-props none \
+            --content-type "text/yaml" \
+            --metadata "version=$VERSION,platform=windows,promoted=true"
+
+          echo "✅ Copied $PREFIX/windows/preview → $PREFIX/windows/latest"
+
+      - name: Promote Summary
+        if: always()
+        shell: bash
+        run: |
+          echo "========================================="
+          echo "WINDOWS PROMOTE SUMMARY (${{ env.BUILD_ENV }})"
+          echo "========================================="
+          echo "Mode: approved copy preview → latest (same binary)"
+          echo "Version: ${{ env.PACKAGE_VERSION }}"
+          echo "Preview:"
+          echo "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/preview/${{ env.INSTALLER_NAME }}"
+          echo "Latest:"
+          echo "  https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/windows/latest/${{ env.INSTALLER_NAME }}"
+          echo "=========================================="
