@@ -42,6 +42,7 @@ import { SelectMultipleFieldsComponent } from '../../../theme/form-fields/select
 import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
 import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
 import { CompanyActions } from '../../../actions/company.actions';
+import { CommonActions } from '../../../actions/common.actions';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
@@ -51,6 +52,7 @@ import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.compon
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
 import { BatchSelectDialogResult, VoucherSelectedBatch } from '../../../models/interfaces/batch-report.interface';
+import { CountryRequest } from '../../../models/api-models/Common';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -275,6 +277,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isUnitOpen: boolean = false;
     /** Active company from session. */
     public activeCompany: any;
+    /** European Union country alpha2 codes (used for UK company tax-column override). */
+    public europeanCountryList: string[] = [];
+    /** True after EU country list load has been requested once. */
+    private europeanCountryListRequested: boolean = false;
     /** True when inventory settings have batch management enabled. */
     public batchTrackingEnabled: boolean = false;
     /** Stores the stock variants */
@@ -327,6 +333,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private commonService: CommonService,
         private settingsTaxesAction: SettingsTaxesActions,
         private companyActions: CompanyActions,
+        private commonActions: CommonActions,
         private salesPersonStore: SalesPersonComponentStore
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
@@ -405,6 +412,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
+            if (this.isUkCompany) {
+                this.loadEuropeanCountryList();
+            }
         });
         this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
             if (settings) {
@@ -656,6 +666,180 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
+     * Show/Hide tax control based on voucher type, party country and party type
+     * (aligned with vouchers create `showTaxColumn`).
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public get showTaxColumn(): boolean {
+        const voucherType = this.blankLedger?.voucherType;
+
+        if (voucherType === 'rcpt' || voucherType === 'pay') {
+            return false;
+        }
+
+        const party = this.getPartyAccountDetails();
+
+        if (this.isUkCompany && this.europeanCountryList?.includes(party.countryCode)) {
+            return true;
+        }
+
+        if (this.blankLedger?.touristSchemeApplicable) {
+            return true;
+        }
+
+        let accountPartyType = '';
+        party.addresses?.forEach((address) => {
+            if (address?.isDefault) {
+                accountPartyType = address.partyType?.toLowerCase() ?? '';
+            }
+        });
+
+        const isSalesLikeVoucher =
+            voucherType === 'sal' ||
+            voucherType === 'credit note' ||
+            voucherType === VoucherTypeEnum.proforma ||
+            voucherType === VoucherTypeEnum.generateProforma ||
+            voucherType === VoucherTypeEnum.estimate ||
+            voucherType === VoucherTypeEnum.generateEstimate;
+
+        const isExportOrSpecialParty =
+            (Boolean(party.countryCode) &&
+                this.activeCompany?.countryV2?.alpha2CountryCode !== party.countryCode) ||
+            accountPartyType === 'sez' ||
+            accountPartyType === 'deemed export';
+
+        if (isSalesLikeVoucher && !this.activeCompany?.withPay && isExportOrSpecialParty) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * True when tax control should be visible in the entry panel UI.
+     * Advance receipt still shows tax even when `showTaxColumn` is false (receipt voucher).
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public get shouldShowTaxControl(): boolean {
+        return (
+            (this.showTaxColumn || this.shouldShowAdvanceReceiptMandatoryFields) &&
+            (!!this.currentTxn?.selectedAccount || this.shouldShowAdvanceReceiptMandatoryFields)
+        );
+    }
+
+    /**
+     * True if tax should be added into entry total.
+     *
+     * @readonly
+     * @private
+     * @type {boolean}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private get shouldApplyTaxToTotal(): boolean {
+        return this.showTaxColumn || this.shouldShowAdvanceReceiptMandatoryFields;
+    }
+
+    /**
+     * True if active company is United Kingdom.
+     *
+     * @readonly
+     * @private
+     * @type {boolean}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private get isUkCompany(): boolean {
+        return (
+            this.activeCompany?.country === 'United Kingdom' ||
+            this.activeCompany?.countryV2?.countryName === 'United Kingdom'
+        );
+    }
+
+    /**
+     * Resolves party (sundry debtor/creditor) country and addresses for tax-column visibility.
+     *
+     * @private
+     * @returns {{ countryCode?: string; addresses?: any[] }}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private getPartyAccountDetails(): { countryCode?: string; addresses?: any[] } {
+        const selected = this.currentTxn?.selectedAccount;
+        const active = this.activeAccount;
+
+        const isPartyAccount = (account: any): boolean => {
+            if (!account?.parentGroups?.length) {
+                return false;
+            }
+            const groups = account.parentGroups.map((group: any) => group?.uniqueName ?? group);
+            return groups.includes('sundrydebtors') || groups.includes('sundrycreditors');
+        };
+
+        if (isPartyAccount(selected)) {
+            return {
+                countryCode: selected.country?.countryCode ?? selected.countryCode,
+                addresses: selected.addresses
+            };
+        }
+
+        if (isPartyAccount(active)) {
+            return {
+                countryCode: active.country?.countryCode,
+                addresses: active.addresses
+            };
+        }
+
+        return {
+            countryCode: selected?.country?.countryCode ?? selected?.countryCode,
+            addresses: selected?.addresses
+        };
+    }
+
+    /**
+     * Loads European Union country codes when company is UK.
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private loadEuropeanCountryList(): void {
+        if (this.europeanCountryListRequested) {
+            return;
+        }
+        this.europeanCountryListRequested = true;
+
+        this.store.pipe(
+            select(state => state.common.countries),
+            take(1)
+        ).subscribe((countries) => {
+            if (countries?.length) {
+                this.europeanCountryList = countries
+                    .filter((country: any) => country.europeanUnionCountry)
+                    .map((country: any) => country.alpha2CountryCode);
+                return;
+            }
+
+            const countryRequest = new CountryRequest();
+            countryRequest.formName = '';
+            this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+
+            this.store.pipe(
+                select(state => state.common.countries),
+                filter((list) => !!list?.length),
+                take(1),
+                takeUntil(this.destroyed$)
+            ).subscribe((countryList) => {
+                this.europeanCountryList = countryList
+                    .filter((country: any) => country.europeanUnionCountry)
+                    .map((country: any) => country.alpha2CountryCode);
+            });
+        });
+    }
+
+    /**
      * Calculates the total amount
      *
      * @memberof NewLedgerEntryPanelComponent
@@ -665,6 +849,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.currentTxn.amount) {
 
                 const isExportValid = this.checkIfExportIsValid();
+                const excludeTaxFromTotal = this.isRcmEntry || isExportValid || !this.shouldApplyTaxToTotal;
 
                 if (this.isAdvanceReceipt) {
                     this.currentTxn.taxInclusiveAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
@@ -677,8 +862,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
                     const convertedTotal = (this.currentTxn.convertedAmount - this.currentTxn.convertedDiscount) || 0;
                     this.totalForTax = total;
-                    const taxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.tax;
-                    const convertedTaxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.convertedTax;
+                    const taxApplied = excludeTaxFromTotal ? 0 : this.currentTxn.tax;
+                    const convertedTaxApplied = excludeTaxFromTotal ? 0 : this.currentTxn.convertedTax;
                     this.currentTxn.total = giddhRoundOff((total + (isNaN(taxApplied) ? 0 : taxApplied)), this.giddhBalanceDecimalPlaces);
                     this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + (isNaN(convertedTaxApplied) ? 0 : convertedTaxApplied)), this.giddhBalanceDecimalPlaces);
                 }
@@ -843,7 +1028,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public saveLedger() {
         this.hideAllDropdown();
-        if ((this.isRcmEntry) && !this.validateTaxes()) {
+        if (this.isRcmEntry && this.shouldShowTaxControl && !this.validateTaxes()) {
             this.showRcmEntryError = true;
             return;
         }
@@ -1619,6 +1804,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public touristSchemeApplicableToggle(): void {
         this.blankLedger.passportNumber = '';
+        this.calculateTax();
+        this.cdRef.detectChanges();
     }
 
     /**
@@ -2144,7 +2331,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             fixDiscount = this.discountControl.getTotalFixedDiscount();
         }
         let taxTotal = 0;
-        if (this.taxControl) {
+        if (this.shouldApplyTaxToTotal && this.taxControl) {
             taxTotal = this.taxControl.calculateSum();
         }
 
@@ -2159,6 +2346,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private calculateTaxValue(): void {
+        if (!this.shouldApplyTaxToTotal) {
+            this.currentTxn.tax = 0;
+            this.currentTxn.convertedTax = 0;
+            this.currentTxn.taxesVm = [];
+            this.currentTxn.taxes = [];
+            return;
+        }
+
         let totalPercentage: number;
         totalPercentage = this.taxControl?.calculateSum();
         if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn?.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds && !this.salesTaxInclusive && !this.purchaseTaxInclusive && !this.fixedAssetTaxInclusive) {
