@@ -60,12 +60,12 @@ This document explains how Giddh's Electron desktop application is built and dis
 ### Developer Preview Then Promote → Latest
 
 ```text
-Push / build  →  preview/                    (always)
-PROMOTE_TO_LATEST=false  →  promote skipped  (safe default)
-PROMOTE_TO_LATEST=true   →  copy preview/ → latest/
+Push / build  →  preview/                         (always)
+test build    →  promote preview/ → latest/       (automatic; PROMOTE_TO_LATEST ignored)
+prod build    →  promote only if PROMOTE_TO_LATEST=true
 ```
 
-**One-time GitHub setup (required):**
+**One-time GitHub setup (required for prod safety):**
 
 1. Repo → **Settings** → **Secrets and variables** → **Actions** → **Variables**
 2. Create `PROMOTE_TO_LATEST` with value `false`
@@ -73,9 +73,9 @@ PROMOTE_TO_LATEST=true   →  copy preview/ → latest/
 
 **Day-to-day:**
 
-1. Keep `PROMOTE_TO_LATEST=false` for normal pushes → build goes to `preview/` only
-2. When ready to publish: set `PROMOTE_TO_LATEST=true`, then push (or re-run after build already filled preview)
-3. After `latest/` is updated, set `PROMOTE_TO_LATEST` back to `false`
+1. Test pushes (`test-electron-build-gh-action`): build → preview → latest (no variable needed)
+2. Prod: keep `PROMOTE_TO_LATEST=false` for preview-only; set `true` only when publishing prod latest/
+3. After prod `latest/` is updated, set `PROMOTE_TO_LATEST` back to `false`
 
 ---
 
@@ -87,10 +87,11 @@ PROMOTE_TO_LATEST=true   →  copy preview/ → latest/
   - `test-electron-build-gh-action` → Test preview (`test/…/preview/`)
   - `prod-electron-build-gh-action` → Prod preview (`prod/…/preview/`)
   - `books-production` → Prod preview (`prod/…/preview/`)
-  - Public `latest/` updates only when `PROMOTE_TO_LATEST=true`
+  - Test `latest/` updates after every successful test build
+  - Prod `latest/` updates only when `PROMOTE_TO_LATEST=true`
 
 ### Triggers
-- **Push** / **Run workflow** → build to `preview/`; `promote_to_latest` runs only if `vars.PROMOTE_TO_LATEST == 'true'`
+- **Push** / **Run workflow** → build to `preview/`; test always promotes; prod promotes only if `vars.PROMOTE_TO_LATEST == 'true'`
 
 Dispatch branch rules when using **Run workflow**:
 - `test` → `test-electron-build-gh-action`

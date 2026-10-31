@@ -38,12 +38,11 @@ jobs:
       - name: Show flow
         shell: bash
         run: |
-          echo "Flow: 1) build → preview/  2) promote_to_latest only if vars.PROMOTE_TO_LATEST=true  3) copy preview/ → latest/"
+          echo "Flow: 1) build → preview/  2) promote preview/ → latest/"
           echo "event_name=${{ github.event_name }}"
           echo "ref=${{ github.ref_name }}"
-          echo "PROMOTE_TO_LATEST=${{ vars.PROMOTE_TO_LATEST }}"
-          echo "Safety: Settings → Secrets and variables → Actions → Variables → PROMOTE_TO_LATEST"
-          echo "Set true only when you want this run to update latest/; keep false for preview-only builds."
+          echo "PROMOTE_TO_LATEST=${{ vars.PROMOTE_TO_LATEST }} (prod only; test always promotes)"
+          echo "Prod safety: set PROMOTE_TO_LATEST=true only when publishing prod latest/; keep false otherwise."
 
   build_upload:
     runs-on: macos-latest
@@ -562,7 +561,7 @@ jobs:
             echo "  ZIP: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/preview/${{ env.LATEST_ZIP_NAME }}"
             echo "  DMG: https://s3-${{ env.AWS_REGION }}.amazonaws.com/${{ env.S3_BUCKET }}/${{ env.S3_PATH_PREFIX }}/mac/preview/${{ env.LATEST_DMG_NAME }}"
           fi
-          echo "Latest: promote_to_latest runs only when vars.PROMOTE_TO_LATEST=true (copies preview/ → latest/)"
+          echo "Latest: test always promotes; prod only when vars.PROMOTE_TO_LATEST=true"
           echo "=========================================="
 
       - name: Export job outputs for promote
@@ -578,8 +577,9 @@ jobs:
             echo "versioned_dmg_name=${{ env.VERSIONED_DMG_NAME }}"
           } >> "$GITHUB_OUTPUT"
 
-  # Copies preview/ → latest/ only when repo variable PROMOTE_TO_LATEST=true (safety gate).
-  # Settings → Secrets and variables → Actions → Variables → PROMOTE_TO_LATEST = true|false
+  # Copies preview/ → latest/.
+  # test: always runs after successful build (PROMOTE_TO_LATEST ignored).
+  # prod: only when repo variable PROMOTE_TO_LATEST=true (Settings → Actions → Variables).
   # Optional: Environment Required reviewers on electron-promote-test / electron-promote-prod
   promote_to_latest:
     runs-on: ubuntu-latest
@@ -587,7 +587,7 @@ jobs:
     if: >
       always() &&
       needs.build_upload.result == 'success' &&
-      vars.PROMOTE_TO_LATEST == 'true'
+      (needs.build_upload.outputs.build_env != 'prod' || vars.PROMOTE_TO_LATEST == 'true')
     # Do not use secrets in environment.url (invalidates the whole workflow at startup).
     environment: electron-promote-${{ needs.build_upload.outputs.build_env }}
 
