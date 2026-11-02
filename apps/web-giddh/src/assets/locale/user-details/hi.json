@@ -1,11 +1,4 @@
 {
-	"auth_key": {
-		"tab_heading": "ऑथ-की",
-		"main_auth_key": "मुख्य ऑथ-की",
-		"regenerate_auth_key": "मुख्य ऑथ-की  को फिर से बनाना",
-		"documentation": "प्रलेखन",
-		"copied": "कॉपी किया गया..."
-	},
 	"mobile_number": {
 		"tab_heading": "मोबाइल नंबर",
 		"add_edit_mobile_number": "मोबाइल नंबर जोड़ें/संपादित करें",

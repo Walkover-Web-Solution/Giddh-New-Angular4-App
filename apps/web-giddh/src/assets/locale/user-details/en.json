@@ -1,11 +1,4 @@
 {
-    "auth_key": {
-        "tab_heading": "Auth Key",
-        "main_auth_key": "Main Auth-key",
-        "regenerate_auth_key": "Regenerate Auth Key",
-        "documentation": "Documentation",
-        "copied": "Copied..."
-    },
     "mobile_number": {
         "tab_heading": "Mobile Number",
         "add_edit_mobile_number": "Add/Edit Mobile Number",

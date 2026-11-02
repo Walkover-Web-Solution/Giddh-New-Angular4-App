@@ -342,7 +342,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.router.url.includes("/pages/user-details/subscription/view-subscription") ||
                     this.router.url.includes("/pages/user-details/subscription/add-extra-transaction") ||
                     this.router.url.includes("/pages/user-details/mobile-number") ||
-                    this.router.url.includes("/pages/user-details/auth-key") ||
                     this.router.url.includes("/pages/user-details/session") ||
                     this.router.url.includes("/pages/user-details/subscription/wallet") ||
                     this.router.url.includes("/pages/user-details/subscription/activate-subscription") ||
@@ -1291,7 +1290,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.router.navigate(['/pages', 'user-details'], {
                 queryParams: {
                     tab: 'subscriptions',
-                    tabIndex: 3,
+                    tabIndex: 2,
                     showPlans: true
                 }
             });
