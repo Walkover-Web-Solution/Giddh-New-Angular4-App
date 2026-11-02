@@ -125,7 +125,7 @@ export class LedgerService {
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        if(this.generalService.currentOrganizationType === OrganizationType.Company && model?.branchUniqueName && model?.branchUniqueName !== this.companyUniqueName) {
+        if (this.generalService.currentOrganizationType === OrganizationType.Company && model?.branchUniqueName && model?.branchUniqueName !== this.companyUniqueName) {
            url = this.generalService.addBranchUniqueName(url, model.branchUniqueName);
         }
         return this.http.post(this.config.apiUrl + url, model).pipe(
@@ -751,7 +751,7 @@ export class LedgerService {
         let url = this.config.apiUrl + LEDGER_API.ACCOUNT_SEARCH_PREDICTION
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
-             if(this.generalService.currentOrganizationType === OrganizationType.Company && branchUniqueName && branchUniqueName !== this.companyUniqueName) {
+        if (this.generalService.currentOrganizationType === OrganizationType.Company && branchUniqueName && branchUniqueName !== this.companyUniqueName) {
              url = this.generalService.addBranchUniqueName(url, branchUniqueName);
              }
         return this.http.post(url, model).pipe(map((res) => {
