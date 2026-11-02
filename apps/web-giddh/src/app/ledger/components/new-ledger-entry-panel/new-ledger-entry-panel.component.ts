@@ -811,31 +811,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         this.europeanCountryListRequested = true;
 
+        // Same pattern as vouchers create `getCountryList`: keep listening until
+        // countries are in store, then map EU alpha2 codes for tax-column override.
         this.store.pipe(
             select(state => state.common.countries),
-            take(1)
+            takeUntil(this.destroyed$)
         ).subscribe((countries) => {
-            if (countries?.length) {
-                this.europeanCountryList = countries
-                    .filter((country: any) => country.europeanUnionCountry)
-                    .map((country: any) => country.alpha2CountryCode);
+            if (!countries) {
+                const countryRequest = new CountryRequest();
+                countryRequest.formName = '';
+                this.store.dispatch(this.commonActions.GetCountry(countryRequest));
                 return;
             }
 
-            const countryRequest = new CountryRequest();
-            countryRequest.formName = '';
-            this.store.dispatch(this.commonActions.GetCountry(countryRequest));
-
-            this.store.pipe(
-                select(state => state.common.countries),
-                filter((list) => !!list?.length),
-                take(1),
-                takeUntil(this.destroyed$)
-            ).subscribe((countryList) => {
-                this.europeanCountryList = countryList
-                    .filter((country: any) => country.europeanUnionCountry)
-                    .map((country: any) => country.alpha2CountryCode);
-            });
+            this.europeanCountryList = countries
+                .filter((country: any) => country.europeanUnionCountry)
+                .map((country: any) => country.alpha2CountryCode);
+            this.cdRef.detectChanges();
         });
     }
 
