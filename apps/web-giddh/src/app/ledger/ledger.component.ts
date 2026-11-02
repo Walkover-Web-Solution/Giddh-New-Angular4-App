@@ -1277,7 +1277,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
 
-            let getRequest = { accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page,branchUniqueName:this.trxRequest.branchUniqueName }
+            let getRequest = { accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page, branchUniqueName:this.trxRequest.branchUniqueName }
             this.ledgerService.GetBankTransactionsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.isBankTransactionLoading = false;
                 if (res?.status === 'success') {
@@ -1556,6 +1556,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
         if (blankTransactionObj && blankTransactionObj?.transactions && blankTransactionObj?.transactions.length > 0) {
+            blankTransactionObj.branchUniqueName= this.generalService.currentBranchUniqueName;
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
@@ -2992,6 +2993,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.generalService.currentBranchUniqueName = selectedEntity?.value;
         this.trxRequest.branchUniqueName = selectedEntity?.value;
         this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;
+        this.getBankTransactions();
         if (this.isAdvanceSearchImplemented) {
             this.getAdvanceSearchTxn();
         } else {
