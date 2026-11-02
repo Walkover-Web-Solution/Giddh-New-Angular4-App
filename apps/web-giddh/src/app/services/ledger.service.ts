@@ -15,6 +15,7 @@ import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { cloneDeep, concat, forEach, get } from '../lodash-optimized';
+import { OrganizationType } from '../models/user-login-state';
 
 @Injectable({
     providedIn: 'root'
@@ -44,6 +45,9 @@ export class LedgerService {
         url = url?.replace(':from', getRequest.from);
         url = url?.replace(':page', getRequest.page);
         url = url?.replace(':count', getRequest.count);
+        if (this.generalService.currentOrganizationType === OrganizationType.Company && getRequest.branchUniqueName && getRequest.branchUniqueName !== this.companyUniqueName) {
+            url = this.generalService.addBranchUniqueName(url, getRequest.branchUniqueName);
+        }
 
         return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<IELedgerResponse[], string> = res;
@@ -120,6 +124,9 @@ export class LedgerService {
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        if(this.generalService.currentOrganizationType === OrganizationType.Company && model?.branchUniqueName && model?.branchUniqueName !== this.companyUniqueName) {
+           url = this.generalService.addBranchUniqueName(url, model.branchUniqueName);
         }
         return this.http.post(this.config.apiUrl + url, model).pipe(
             map((res) => {
@@ -739,11 +746,14 @@ export class LedgerService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof LedgerService
      */
-    public getAccountSearchPrediction(accountUniqueName: any, model: any): Observable<BaseResponse<any, any>> {
+    public getAccountSearchPrediction(accountUniqueName: any, model: any,branchUniqueName): Observable<BaseResponse<any, any>> {
+            this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.ACCOUNT_SEARCH_PREDICTION
-            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
-
+             if(this.generalService.currentOrganizationType === OrganizationType.Company && branchUniqueName && branchUniqueName !== this.companyUniqueName) {
+             url = this.generalService.addBranchUniqueName(url, branchUniqueName);
+             }
         return this.http.post(url, model).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             return data;

@@ -1265,6 +1265,17 @@ export class GeneralService {
     }
 
     /**
+     * Adds branch unique name to request's URL
+     *
+     * @param {string} url API URL
+     * @param {string} branchUniqueName Branch unique name
+     * @memberof GeneralService
+     */
+    public addBranchUniqueName(url: string, branchUniqueName: string): string {
+        return this.appendQueryParam(url, 'branchUniqueName', branchUniqueName);
+    }
+
+    /**
      * This will remove special characters and spaces from amount
      *
      * @param {string} amount
