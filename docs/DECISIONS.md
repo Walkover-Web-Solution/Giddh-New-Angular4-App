@@ -1,5 +1,9 @@
 # Decisions and evidence
 
+## 2026-11-02 — Partner Google auth reuses signup-with-google
+
+For partner bridge login, keep the existing `GET v2/signup-with-google` path and add optional `redirect_url` instead of inventing a parallel Google auth endpoint. Login and signup screens forward the query into `AuthenticationService.LoginWithGoogle`; partner success returns `{ refresh_token, redirect_url }` with no session, the effect redirects with `refresh_token` on the query, and the session reducer ignores that body so the user is not treated as logged in. Session exchange stays with the partner (`POST v2/exchange-refresh-token` per partner guide); this checkout does not add that API constant or teach `/token-verify` to consume `refresh_token`. Source: staged partner Google auth work on `giddh-2.0`; backend shape remains an [open question](OPEN_QUESTIONS.md).
+
 ## 2026-10-23 — One maintained agent map
 
 Use [AGENTS.md](../AGENTS.md) as the entry point and keep each subject in its linked document. Existing CSS, signing, white-label, and DSC references remain available. They contain useful context; known drift is called out rather than silently presenting old guidance as verified. Source: Pushpendra's preparation brief and repository inspection at `970543b`.

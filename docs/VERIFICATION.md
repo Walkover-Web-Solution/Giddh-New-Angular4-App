@@ -28,7 +28,7 @@ No templates, styles, public routes, persisted shapes, analytics tags or SEO mar
 
 ## Limits and handoff
 
-Pushpendra chose local checks and fixtures. Successful authenticated accounting writes, company/branch switching in a live session, payment settlement, tax filing, provider OAuth, DSC/native-host signing and packaged Electron journeys remain unverified. Source traces do not establish backend authorization or transaction guarantees. Accessibility and every-screen visual equivalence were not certified.
+Pushpendra chose local checks and fixtures. Successful authenticated accounting writes, company/branch switching in a live session, payment settlement, tax filing, provider OAuth, DSC/native-host signing and packaged Electron journeys remain unverified. Partner Google bridge mode (`?redirect_url=` → bridge token redirect) is documented from source only; live partner callback and `exchange-refresh-token` behavior are unverified. Source traces do not establish backend authorization or transaction guarantees. Accessibility and every-screen visual equivalence were not certified.
 
 The original fresh-agent handoff navigated from AGENTS/docs, traced voucher saving, permissions and storage, and independently ran focused/type checks. Cursor and Claude adapters point to that same map; separate sessions in those applications were not launched.
 

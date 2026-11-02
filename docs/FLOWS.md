@@ -11,7 +11,19 @@
 
 **Failure/recovery:** login and OTP errors display their API message. An invalid/expired session dispatches logout; the user signs in again. Desktop Google login crosses `authenticate` → `take-your-gmail-token` in the [main process](../apps/electron-giddh/src/index.ts) and [preload](../apps/electron-giddh/src/preload.js). Exercise that path separately from browser login.
 
-**Verify when changed:** valid and rejected login, two-way authentication, no-company redirect, return URL, expired session and logout.
+### Partner Google login / signup (bridge token)
+
+When `/login` or `/signup` is opened with `?redirect_url=<absolute-https-url>`:
+
+1. [LoginComponent](../apps/web-giddh/src/app/login/login.component.ts) / [SignupComponent](../apps/web-giddh/src/app/signup/signup.component.ts) read `redirect_url` from the query and pass it with the Google access token.
+2. Google still yields an access token in the UI (GIS or Electron OAuth).
+3. [AuthenticationService.LoginWithGoogle](../apps/web-giddh/src/app/services/authentication.service.ts) uses the existing `GET v2/signup-with-google` with `Access-Token`, appending `?redirect_url=` when partner mode is active.
+4. On success with `{ refresh_token, redirect_url }` (no session), [LoginActions.signupWithGoogleResponse](../apps/web-giddh/src/app/actions/login.action.ts) navigates to the response `redirect_url` with `refresh_token` in the query via `buildPartnerRedirectWithRefreshToken`. The session reducer does not store that body as a logged-in user.
+5. Session exchange is outside this client path: the partner (expected `POST /v2/exchange-refresh-token` with `{ refresh_token }`) continues with a normal `session.id` / `Session-Id`. Existing `/token-verify` still handles `token` / `request` only; it does not consume `refresh_token` or call exchange.
+
+Without `redirect_url`, Google auth keeps the existing session response on the same endpoint. Backend support for `redirect_url` / exchange is unverified; see [Contracts](CONTRACTS.md) and [Open questions](OPEN_QUESTIONS.md).
+
+**Verify when changed:** valid and rejected login, two-way authentication, no-company redirect, return URL, expired session and logout. Partner mode: login vs signup with `redirect_url`, redirect appends `refresh_token` without creating a local session, missing/expired/reused bridge token on the partner side, and unchanged Google login when `redirect_url` is omitted.
 
 ## 2. Switch company or branch without mixing books
 

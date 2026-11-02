@@ -491,6 +491,10 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
             let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
             if (data?.status === 'success') {
+                // Partner bridge response has no session; do not treat it as a logged-in user.
+                if (data.body?.refresh_token && data.body?.redirect_url && !data.body?.session) {
+                    return state;
+                }
                 return Object.assign({}, state, {
                     user: data.body
                 });
