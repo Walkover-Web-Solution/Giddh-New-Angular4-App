@@ -7,7 +7,8 @@ Reviewed 2026-10-23. Original baseline: `giddh-2.0` at `970543b`; expanded revie
 | Check | Observed result |
 | --- | --- |
 | Install with lifecycle scripts disabled | Passed; native desktop installation was not exercised. |
-| `npm run check:ai` | Documentation links and 119 Node regression tests pass. |
+| `npm run check:ai` | Documentation links and 119 Node regression tests pass. On 2026-11-02 at `0fafd2a861` plus the status tracker: 13 documents and 124 tests pass. |
+| `npm run status:check` | 2026-11-02: passes when STATUS.md changes with code; fails after a code-only edit; five focused tests cover the pass, fail, `[no status]` and missing-header cases in temporary repositories. |
 | `npm run check:types` | Whole web application passes after credential-free environment generation. |
 | `npm run build` | Passes. Baseline's 124 missing-runtime-export errors were resolved with type-only imports in 107 files; each symbol was verified as an interface or type alias. |
 | Electron main-process TypeScript | `tsc --noEmit -p apps/electron-giddh/tsconfig.json` passes. |
@@ -32,4 +33,4 @@ Pushpendra chose local checks and fixtures. Successful authenticated accounting 
 
 The original fresh-agent handoff navigated from AGENTS/docs, traced voucher saving, permissions and storage, and independently ran focused/type checks. Cursor and Claude adapters point to that same map; separate sessions in those applications were not launched.
 
-[CI](../.github/workflows/ai-foundation.yml) now runs documentation, focused tests, type checking, the local web build and fixture browser checks on pull requests. It saves browser evidence and has no deployment step.
+[CI](../.github/workflows/ai-foundation.yml) now runs documentation, focused tests, type checking, the local web build and fixture browser checks on pull requests. It saves browser evidence and has no deployment step. A separate [status workflow](../.github/workflows/status-check.yml) runs `npm run status:check` with full history.

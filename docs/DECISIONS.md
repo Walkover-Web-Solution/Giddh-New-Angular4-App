@@ -19,3 +19,7 @@ Add focused tests and a lightweight local-link check without weakening or replac
 ## 2026-10-23 — Refactor from whole-codebase evidence
 
 Review every area, then change boundaries whose behavior can be characterized. Share repeated feature logic, delegate identical API operations to existing owners, and remove only unreachable reducer cases. Keep ambiguous payments, tenant configuration and desktop callback changes as findings in [REVIEW](REVIEW.md). The user chose local checks and fixtures; no live-accounting verification is claimed.
+
+## 2026-11-02 — Track plan progress in STATUS.md
+
+Keep a scorecard in [STATUS.md](../STATUS.md) and require it to change with code via `npm run status:check` on pull requests. A status of ✅ requires evidence that real people use it; built but unverified work stays 🟡. The plan placeholder in the request was not filled in, and the brief itself is not checked in, so the first scorecard scores the brief as recorded in these docs. Replace the plan reference when an approved plan document exists.
