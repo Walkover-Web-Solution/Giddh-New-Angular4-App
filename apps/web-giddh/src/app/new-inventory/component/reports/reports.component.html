@@ -461,7 +461,11 @@
                             </ng-container>
                             <ng-container matColumnDef="opening_amount">
                                 <th
-                                    class="group-column text-right opening-column border-left-none border-bottom-none"
+                                    class="group-column text-right border-left-none border-bottom-none"
+                                    [ngClass]="{
+                                        'opening-column': !displayedColumns?.includes('opening_quantity'),
+                                        'opening-column-group': displayedColumns?.includes('opening_quantity'),
+                                    }"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
@@ -520,7 +524,11 @@
                             </ng-container>
                             <ng-container matColumnDef="inward_amount">
                                 <th
-                                    class="group-column text-right inward-column border-left-none border-bottom-none"
+                                    class="group-column text-right border-left-none border-bottom-none"
+                                    [ngClass]="{
+                                        'inward-column': !displayedColumns?.includes('inward_quantity'),
+                                        'inward-column-group': displayedColumns?.includes('inward_quantity'),
+                                    }"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
@@ -579,7 +587,11 @@
                             </ng-container>
                             <ng-container matColumnDef="outward_amount">
                                 <th
-                                    class="group-column text-right outward-column border-left-none border-bottom-none"
+                                    class="group-column text-right border-left-none border-bottom-none"
+                                    [ngClass]="{
+                                        'outward-column': !displayedColumns?.includes('outward_quantity'),
+                                        'outward-column-group': displayedColumns?.includes('outward_quantity'),
+                                    }"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
@@ -638,7 +650,11 @@
                             </ng-container>
                             <ng-container matColumnDef="closing_amount">
                                 <th
-                                    class="group-column text-right closing-column border-left-none border-bottom-none border-right-none"
+                                    class="group-column text-right border-left-none border-bottom-none border-right-none"
+                                    [ngClass]="{
+                                        'closing-column': !displayedColumns?.includes('closing_quantity'),
+                                        'closing-column-group': displayedColumns?.includes('closing_quantity'),
+                                    }"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
