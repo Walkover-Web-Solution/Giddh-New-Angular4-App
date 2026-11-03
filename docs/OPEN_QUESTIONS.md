@@ -12,7 +12,7 @@ These are known limits, not instructions to stop independent work. Ask only when
 | Does `GET /v2/signup-with-google?redirect_url=` return `{ refresh_token, redirect_url }`, and is `POST /v2/exchange-refresh-token` live for partners? | Partner Google auth in [Flows](FLOWS.md) / [Contracts](CONTRACTS.md) | Backend confirmation. FE only adds optional `redirect_url` on the existing Google GET and redirects with `refresh_token`; exchange is not in `LOGIN_API`, and `/token-verify` does not consume `refresh_token`. |
 | Which environment configuration is authoritative for generated TS and HTML, and which client-exposed credentials can be removed? | [Environment setup](DEVELOPMENT.md#environment-and-preview) | Frontend/backend owner review of both generators and OAuth/provider contracts. |
 | Does the existing app meet its accessibility requirement, and are phone layouts supported? | [Design](DESIGN.md) | Working preview, AXE/keyboard evidence, and product/design-owner confirmation. |
-| What service will own experiment assignment, exposure, evaluation, and rollback? | [Experiments](EXPERIMENTS.md) | Approved infrastructure and contracts before any experiment launch. |
+| Who approves each middleware experiment's hypothesis, guardrails, and rollback, and is browser-level assignment acceptable for company/branch-scoped flows? | [Experiments](EXPERIMENTS.md) | Owner-defined experiment in the middleware with the launch record that page requires. |
 
 The repository retains broad Electron, tenant, and dynamically loaded asset paths. This preparation has not established that any whole feature, dependency, or asset is unused; none was deleted on that assumption.
 
