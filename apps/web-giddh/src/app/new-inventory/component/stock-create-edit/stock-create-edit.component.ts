@@ -1249,9 +1249,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                             hsnNumber: response.body?.hsnNumber,
                             sacNumber: response.body?.sacNumber,
                             variants: response.body?.variants,
-                            salesAccountUniqueNames: request?.salesAccountUniqueNames,
-                            purchaseAccountUniqueNames: request?.purchaseAccountUniqueNames,
-                            fixedAssetsAccountUniqueNames: request?.fixedAssetsAccountUniqueNames,
+                            salesAccountUniqueNames: response.body.salesAccountUniqueNames,
+                            purchaseAccountUniqueNames: response.body.purchaseAccountUniqueNames,
+                            fixedAssetsAccountUniqueNames: response.body.fixedAssetsAccountUniqueNames,
                         });
                     } else {
                         this.getVariantCustomFields();
