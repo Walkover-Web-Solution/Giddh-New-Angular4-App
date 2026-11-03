@@ -2,6 +2,13 @@
 
 Giddh is an accounting workspace with shared web and Electron frontend code. Start with [vision](docs/VISION.md) and [architecture](docs/ARCHITECTURE.md). Then read only the context your change needs:
 
+<!-- middleware:guidance:start -->
+## Guidance for this kind of repository
+
+Kept by the middleware (version 046fbf2131b2). Read these before changing anything here:
+- [docs/guidance/product-ui.md](docs/guidance/product-ui.md)
+<!-- middleware:guidance:end -->
+
 | Task | Read next |
 | --- | --- |
 | Change a user journey | [Flows](docs/FLOWS.md), [contracts](docs/CONTRACTS.md) |
