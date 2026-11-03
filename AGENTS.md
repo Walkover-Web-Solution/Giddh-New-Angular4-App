@@ -16,6 +16,7 @@ Kept by the middleware (version 046fbf2131b2). Read these before changing anythi
 | Run, test, or prepare a release | [Development](docs/DEVELOPMENT.md), [verification](docs/VERIFICATION.md), [review findings](docs/REVIEW.md) |
 | Propose a UI experiment | [Experiments](docs/EXPERIMENTS.md) |
 | Understand a tradeoff or missing fact | [Decisions](docs/DECISIONS.md), [open questions](docs/OPEN_QUESTIONS.md) |
+| See what is built, proven or blocked | [Status](STATUS.md) |
 
 ## Essential boundaries
 
@@ -26,6 +27,7 @@ Kept by the middleware (version 046fbf2131b2). Read these before changing anythi
 - Preserve unrelated staged, unstaged, and untracked work. Use a separate checkout when needed; do not auto-stash, reset, clean, or commit another person's edits.
 - Before deleting code, dependencies, or assets, check registration, dynamic imports, routes, flags, styles, build configuration, and external consumers. Keep uncertain candidates.
 - Never commit credentials or generated environment files. Local configuration can contact a production UK API; use an approved sandbox for data-changing checks.
+- Every change to a feature, screen, rule, table or decision updates [STATUS.md](STATUS.md) in the same change: the affected row, a change-log line, and the "Reviewed up to commit" hash. If a teammate's code change skipped it, update it for them. `npm run status:check` enforces this on PRs; use `[no status]` in a commit message only for changes that affect no tracked item.
 - Follow the existing [contribution and release instructions](README.md#contributing-guide), with the [documented pipeline discrepancies](docs/DEVELOPMENT.md#release-and-recovery) resolved before release. Do not merge or deploy without authorization.
 
 ## Commands
@@ -36,6 +38,7 @@ From the repository root, after [setup](docs/DEVELOPMENT.md#setup-and-local-chec
 npm run check:ai
 npm run check:types
 npm run build
+npm run status:check
 ```
 
 Focused checks, type checking, the local web build and fixture browser checks pass. Existing `npm test` and `npm run lint` still have known failures; [verification](docs/VERIFICATION.md) states exactly what is and is not covered. A docs check proves links resolve, not that every claim is true.

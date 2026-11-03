@@ -1,0 +1,24 @@
+name: Status tracker check
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  status-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.1'
+      - name: Require STATUS.md updates for code changes
+        run: npm run status:check
+        env:
+          STATUS_BASE: ${{ github.base_ref }}
