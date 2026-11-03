@@ -1379,7 +1379,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private getAccountSearchPredictionData(requestModel: any[], bankTransactions: any): void {
         this.isHideBankLedgerPopup = true;
-        this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel,this.trxRequest.branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel, this.trxRequest.branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 let mappedTransactions = response?.body?.filter(transaction => transaction?.account !== undefined && transaction?.account !== null);
                 if (mappedTransactions?.length > 0) {
