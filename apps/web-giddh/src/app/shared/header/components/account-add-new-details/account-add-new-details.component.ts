@@ -450,7 +450,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         });
                         if (!setValue) {
                             let data = { name: response?.attentionTo, email: response?.email, contactNo: response.mobileNo, default: true };
-                            this.addNewPortalUser(data);
+                            this.addNewPortalUser(data);Pledger
                         }
                     }
                     this.changeDetectorRef.detectChanges();
