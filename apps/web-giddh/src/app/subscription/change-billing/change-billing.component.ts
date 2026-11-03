@@ -203,15 +203,26 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      * @memberof ChangeBillingComponent
      */
     public setFormValues(data: any): void {
-        this.changeBillingForm.controls['billingName'].setValue(data.billingName);
-        this.changeBillingForm.controls['companyName'].setValue(data.companyName);
-        this.changeBillingForm.controls['email'].setValue(data.email);
-        this.changeBillingForm.controls['pincode'].setValue(data.pincode);
-        this.changeBillingForm.controls['mobileNumber'].setValue(data.mobileNumber);
-        this.changeBillingForm.controls['taxNumber'].setValue(data.taxNumber);
-        this.changeBillingForm.controls['country'].setValue(data.country);
-        this.changeBillingForm.controls['state'].setValue(data.state);
-        this.changeBillingForm.controls['address'].setValue(data?.address);
+        const country = data?.country ?? { name: '', code: '' };
+        const region = data?.state ?? data?.county ?? { name: '', code: '' };
+
+        this.changeBillingForm.patchValue({
+            billingName: data?.billingName ?? '',
+            companyName: data?.companyName ?? '',
+            email: data?.email ?? '',
+            pincode: data?.pincode ?? '',
+            mobileNumber: data?.mobileNumber ?? '',
+            taxNumber: data?.taxNumber ?? '',
+            address: data?.address ?? '',
+            country: {
+                name: country.name ?? '',
+                code: country.code ?? '',
+            },
+            state: {
+                name: region.name ?? '',
+                code: region.code ?? '',
+            },
+        });
         this.changeBillingForm.markAsPristine();
         this.changeDetection.detectChanges();
     }
@@ -374,7 +385,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 code: event.value
             });
             this.changeBillingForm.get('taxNumber')?.setValue('');
-            this.changeBillingForm.get('state')?.setValue(null);
+            this.changeBillingForm.get('state')?.patchValue({ name: '', code: '' });
             this.selectedState = "";
             this.selectedStateCode = "";
             this.disabledState = false;

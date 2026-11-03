@@ -249,10 +249,14 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     private loadGstReport(gstNumber: string): void {
-        if (gstNumber) {
-            this.activeCompanyGstNumber = gstNumber;
+        // On company switch store clears GSTIN; do not reuse previous company's GSTIN
+        if (!gstNumber) {
+            this.activeCompanyGstNumber = '';
+            return;
         }
-        
+
+        this.activeCompanyGstNumber = gstNumber;
+
         if (!this.currentPeriod.from || !this.currentPeriod.to) {
             return;
         }

@@ -1,4 +1,4 @@
-import { GstOverViewRequest, GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
+import { GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
 import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Router } from '@angular/router';
@@ -7,7 +7,6 @@ import { ReconcileActionState } from '../../../../../store/gst-reconcile/GstReco
 import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReport } from '../../../../constants/gst.constant';
-import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/gst-reconcile.actions';
 import { cloneDeep, sortBy } from '../../../../../lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
@@ -54,7 +53,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     /** Holds table displayed columns name */
     public displayedColumns: string[] = ['description', 'total_transactions', 'taxable_amount', 'igst', 'cgst', 'sgst', 'cess'];
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private route: Router, private gstAction: GstReconcileActions) {
+    constructor(@Inject(ServiceConfig) private serviceConfig, private store: Store<AppState>, private route: Router) {
         this.imgPath = this.serviceConfig.IMG_PATH;
         this.gstr1OverviewData$ = this.store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
         this.gstr2OverviewData$ = this.store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
@@ -78,16 +77,6 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
             }
         });
 
-        
-        this.store.pipe(select(state => state.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$)).subscribe(response => {
-            if (!response && (this.selectedGst === GstReport.Gstr1 || this.selectedGst === GstReport.Gstr2)) {
-                let request: GstOverViewRequest = new GstOverViewRequest();
-                request.from = this.currentPeriod.from;
-                request.to = this.currentPeriod.to;
-                request.gstin = this.activeCompanyGstNumber;
-                this.store.dispatch(this.gstAction.GetOverView(this.selectedGst, request));
-            }
-        });
     }
 
     /**
