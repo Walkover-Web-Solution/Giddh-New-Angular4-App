@@ -775,7 +775,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                     this.trxRequest.branchUniqueName = this.currentBranch?.uniqueName;
                     this.advanceSearchRequest.branchUniqueName = this.currentBranch?.uniqueName;
-                     this.generalService.currentBranchUniqueName = this.currentBranch?.uniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch || this.currentOrganizationType === OrganizationType.Company ||
                         (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
                         // Add the blank transaction only if it is branch mode or company with single branch
@@ -1556,7 +1555,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
         if (blankTransactionObj && blankTransactionObj?.transactions && blankTransactionObj?.transactions.length > 0) {
-            blankTransactionObj.branchUniqueName= this.generalService.currentBranchUniqueName;
+            blankTransactionObj.branchUniqueName= this.trxRequest.branchUniqueName;
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
@@ -2008,7 +2007,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (eWayBillResponse && Object.keys(eWayBillResponse).length > 0) {
                 model.ewayBillDetails = eWayBillResponse;
             }
-            model.branchUniqueName= this.generalService.currentBranchUniqueName;
+            model.branchUniqueName= this.trxRequest.branchUniqueName;
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(model, this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
@@ -2990,7 +2989,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public handleBranchChange(selectedEntity: any): void {
         this.isBranchTransactionSelected = !(selectedEntity?.isCompany);
         this.currentBranch.name = selectedEntity.label;
-        this.generalService.currentBranchUniqueName = selectedEntity?.value;
         this.trxRequest.branchUniqueName = selectedEntity?.value;
         this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;
         this.getBankTransactions();
