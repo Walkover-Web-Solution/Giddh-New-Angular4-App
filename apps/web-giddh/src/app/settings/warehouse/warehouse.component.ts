@@ -466,7 +466,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             commonLocaleData: this.commonLocaleData
         };
         this.dialog.open(ShareEntityModalComponent, {
-            panelClass: 'mat-dialog-xl',
+            width: '1225px',
             disableClose: true,
             data: dialogData
         });
