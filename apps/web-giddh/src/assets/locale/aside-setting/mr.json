@@ -128,11 +128,6 @@
           "linked_pages": [
             "/pages/user-details/session"
           ]
-        },
-        {
-          "label": "वापरकर्ता व्यवस्थापित करा (परवानगी)",
-          "link": "/pages/settings/permission",
-          "icon": "<i class='icon-permission1'></i>"
         }
       ],
       [

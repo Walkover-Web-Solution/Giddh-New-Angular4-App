@@ -17,7 +17,6 @@ import { GeneralService } from '../../../services/general.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { cloneDeep, forEach, isEmpty, isNull } from '../../../lodash-optimized';
 import { RestrictedModules } from '../../../app.constant';
-import { OrganizationType } from '../../../models/user-login-state';
 // some local const
 const DATE_RANGE = 'daterange';
 const PAST_PERIOD = 'pastperiod';
@@ -40,10 +39,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      * as the radio button doesn't work in ngx-bootstrap modal
      */
     @Input() public isOpenedInModal: boolean;
-    /** Optional entity override (company | branch | warehouse) when form is reused outside org-mode default */
-    @Input() public entityType: string;
-    /** Optional entity unique name override when form is reused for branch/warehouse share */
-    @Input() public entityUniqueName: string;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -124,9 +119,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         } else {
             this.initAcForm();
         }
-        // reset form after create (page or share modal); skip reset on update modal
+        // reset form
         this.createPermissionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value && !this.isUpdtCase) {
+            if (value && !this.isOpenedInModal) {
                 this.permissionForm.reset();
                 this.initAcForm();
             }
@@ -229,8 +224,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public initAcForm(data?: ShareRequestForm): void {
-        const permissionEntity = this.getPermissionEntity();
-
         if (data) {
             let fromDate = null;
             let toDate = null;
@@ -242,8 +235,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this.permissionForm = this._fb.group({
                 uniqueName: [data.uniqueName],
                 emailId: [data.emailId, Validators.compose([Validators.required, Validators.maxLength(150), Validators.pattern(this.giddhEmailRegex)])],
-                entity: [data.entity || permissionEntity.entity],
-                entityUniqueName: [data.entityUniqueName || permissionEntity.entityUniqueName],
+                entity: ['company'],
                 roleUniqueName: [data.roleUniqueName, [Validators.required]],
                 periodOptions: this.getPeriodFromData(data),
                 from: [fromDate],
@@ -276,8 +268,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         } else {
             this.permissionForm = this._fb.group({
                 emailId: [null, Validators.compose([Validators.required, Validators.maxLength(150), Validators.pattern(this.giddhEmailRegex)])],
-                entity: [permissionEntity.entity],
-                entityUniqueName: [permissionEntity.entityUniqueName],
+                entity: ['company'],
                 roleUniqueName: [null, [Validators.required]],
                 periodOptions: [DATE_RANGE],
                 from: [null],
@@ -296,32 +287,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this.selectedIPRange = this.localeData?.cidr_range;
             this.permissionRoleClear$ = observableOf({ status: true });
         }
-    }
-
-    /**
-     * Resolves permission entity from inputs or current organization mode
-     *
-     * @private
-     * @returns {{ entity: string; entityUniqueName: string }}
-     * @memberof SettingPermissionFormComponent
-     */
-    private getPermissionEntity(): { entity: string; entityUniqueName: string } {
-        if (this.entityType && this.entityUniqueName) {
-            return {
-                entity: this.entityType,
-                entityUniqueName: this.entityUniqueName
-            };
-        }
-        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
-            return {
-                entity: 'branch',
-                entityUniqueName: this.generalService.currentBranchUniqueName
-            };
-        }
-        return {
-            entity: 'company',
-            entityUniqueName: this.generalService.companyUniqueName
-        };
     }
 
     public initRangeForm(val?: any): UntypedFormGroup {
@@ -422,10 +387,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             form.period = null;
             form.duration = null;
         }
-
-        const permissionEntity = this.getPermissionEntity();
-        form.entity = permissionEntity.entity;
-        form.entityUniqueName = permissionEntity.entityUniqueName;
 
         obj.action = (this.isUpdtCase) ? 'update' : 'create';
         this.dateRangePickerValue = [];
