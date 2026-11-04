@@ -686,12 +686,12 @@
                             </ng-container>
                             <ng-container *ngIf="newCustomFieldsColumns?.length">
                                 <ng-container *ngFor="let column of newCustomFieldsColumns" [matColumnDef]="column?.value">
-                                    <th class="report-th-column" mat-header-cell *matHeaderCellDef>
+                                    <th class="report-th-column border-right-none border-bottom-none" mat-header-cell *matHeaderCellDef>
                                         {{ column?.label }}
                                     </th>
                                     <td
                                         [data-title]="column?.label"
-                                        class="word-wrap cursor-pointer report-td-column"
+                                        class="word-wrap cursor-pointer report-td-column border-right-none"
                                         mat-cell
                                         *matCellDef="let element"
                                     >
