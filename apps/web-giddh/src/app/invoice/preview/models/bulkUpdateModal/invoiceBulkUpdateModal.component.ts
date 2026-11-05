@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, ViewChild, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, type SimpleChanges, ViewChild, OnDestroy, TemplateRef } from '@angular/core';
 import { IOption } from '../../../../app.constant';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { select, Store } from '@ngrx/store';

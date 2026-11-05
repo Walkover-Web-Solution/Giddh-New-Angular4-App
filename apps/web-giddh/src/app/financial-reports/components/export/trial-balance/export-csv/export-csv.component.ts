@@ -107,8 +107,12 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
 
     public downloadCSV(value: string) {
         this.showCsvDownloadOptions = false;
-        // Use company from global storage so CSV header has the current address
-        this.dataFormatter = new DataFormatter(this.exportData, this.generalService.activeCompany, this.recType, this.generalService);
+        // Company metadata from activeCompany; address from csvExportAddresses (company or branch)
+        const companyForCsv: CompanyResponse = {
+            ...this.generalService.activeCompany,
+            addresses: this.generalService.csvExportAddresses
+        };
+        this.dataFormatter = new DataFormatter(this.exportData, companyForCsv, this.recType, this.generalService);
         let csv = '';
         let name = '';
         let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);

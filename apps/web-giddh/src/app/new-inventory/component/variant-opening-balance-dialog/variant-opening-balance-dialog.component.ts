@@ -82,6 +82,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
     public isApplySubmitted: boolean = false;
     /** Company-level batch tracking; when false, warehouse UI only (batches kept in data, not shown). */
     public batchTrackingEnabled: boolean = false;
+    /** Counter for stable warehouse row ids used by `@for` track. */
+    private nextWarehouseRowId: number = 0;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public dialogData: VariantOpeningBalanceDialogData,
@@ -233,8 +235,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             return;
         }
         row.warehouse = {
-            name: undefined,
-            uniqueName: undefined
+            name: null,
+            uniqueName: null
         };
         row.openingQuantity = 0;
         row.openingAmount = 0;
@@ -243,6 +245,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
         } else {
             row.batches = [];
         }
+        // reactive-dropdown-field keeps an internal selected value; labelValue alone does not clear it.
+        row.forceClear = !row.forceClear;
         this.syncSelectedBatchNumbers();
         this.cdr.detectChanges();
     }
@@ -476,9 +480,11 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
      */
     public getBatchAvailabilityOptions(batch: any, warehouseUniqueName: string = ""): IOption[] {
         const warehouseKey = String(warehouseUniqueName ?? "").trim();
-        const options = warehouseKey
-            ? (this.batchAvailabilityByWarehouse[warehouseKey] ?? [])
-            : this.allBatchAvailabilityOptions;
+        // No warehouse selected → empty list (do not fall back to default/all warehouses).
+        if (!warehouseKey) {
+            return [];
+        }
+        const options = this.batchAvailabilityByWarehouse[warehouseKey] ?? [];
         const currentValue = String(batch?.batchNumber ?? "").trim();
         return options.filter(option => {
             const optionValue = String(option?.value ?? "").trim();
@@ -662,7 +668,12 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             return;
         }
         this.dialogRef.close({
-            warehouseBalance: cloneDeep(this.warehouseBalance)
+            warehouseBalance: cloneDeep(this.warehouseBalance).map(row => {
+                const payload = { ...row };
+                delete payload.rowId;
+                delete payload.forceClear;
+                return payload;
+            })
         });
     }
 
@@ -689,6 +700,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
                     .filter(batch => this.hasBatchContent(batch));
                 const hasBatchData = batches.length > 0;
                 return {
+                    rowId: this.createWarehouseRowId(),
+                    forceClear: false,
                     warehouse: {
                         name: row?.warehouse?.name,
                         uniqueName: warehouseUniqueName
@@ -712,6 +725,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
      */
     private createEmptyWarehouseRow(): any {
         return {
+            rowId: this.createWarehouseRowId(),
+            forceClear: false,
             warehouse: {
                 name: undefined,
                 uniqueName: undefined
@@ -722,6 +737,18 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             isShowBatch: this.batchTrackingEnabled,
             batches: this.batchTrackingEnabled ? [this.createEmptyBatch()] : []
         };
+    }
+
+    /**
+     * Stable id for warehouse `@for` track so removing a row does not reuse another row's DOM.
+     *
+     * @private
+     * @return {*}  {string}
+     * @memberof VariantOpeningBalanceDialogComponent
+     */
+    private createWarehouseRowId(): string {
+        this.nextWarehouseRowId += 1;
+        return `warehouse-row-${this.nextWarehouseRowId}`;
     }
 
     /**

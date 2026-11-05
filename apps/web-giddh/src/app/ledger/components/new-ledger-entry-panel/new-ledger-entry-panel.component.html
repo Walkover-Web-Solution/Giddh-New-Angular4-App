@@ -586,7 +586,7 @@
                                             blankLedger.voucherType !== 'rcpt' &&
                                             blankLedger.voucherType !== 'advance-receipt'
                                         "
-                                        class="hidden-xs adjust-label pr-0"
+                                        class="hidden-xs"
                                     >
                                         <mat-checkbox
                                             color="primary"
@@ -601,7 +601,7 @@
                                             {{ localeData?.adjust_voucher | replace: '[VOUCHER_TYPE]' : currentVoucherLabel }}
                                         </span>
                                     </td>
-                                    <td *ngIf="blankLedger.voucherType == 'rcpt' && !shouldShowAdvanceReceipt" class="pt-2 hidden-xs">
+                                    <td *ngIf="blankLedger.voucherType == 'rcpt' && !shouldShowAdvanceReceipt" class="hidden-xs">
                                         <mat-checkbox
                                             color="primary"
                                             [disabled]="isReadOnly"
@@ -612,10 +612,7 @@
                                         ></mat-checkbox>
                                         {{ localeData?.adjust_receipt }}
                                     </td>
-                                    <td
-                                        *ngIf="blankLedger.voucherType == 'advance-receipt' && shouldShowAdvanceReceipt"
-                                        class="pt-2 hidden-xs"
-                                    >
+                                    <td *ngIf="blankLedger.voucherType == 'advance-receipt' && shouldShowAdvanceReceipt" class="hidden-xs">
                                         <mat-checkbox
                                             color="primary"
                                             [disabled]="isReadOnly"

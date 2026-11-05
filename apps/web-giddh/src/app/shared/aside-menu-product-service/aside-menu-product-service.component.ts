@@ -12,6 +12,7 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { GeneralService } from '../../services/general.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
+import { DataOperationEnum } from '../Enums/common.enum';
 
 @Component({
     selector: 'aside-menu-product-service',
@@ -20,7 +21,7 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
     standalone: false
 })
 export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
-    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     @Input() public selectedVoucherType: string;
     /* This will hold branch transfer mode input  */
     @Input() public inputData: string = '';
@@ -82,7 +83,14 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
             if (response?.status === "success") {
                 this.toasterService.successToast(this.commonLocaleData?.app_account_created);
                 this.accountTemplateRef?.close();
-                this.closeAsideEvent.emit();
+                this.closeAsideEvent.emit({
+                    operation: DataOperationEnum.CREATE,
+                    type: "account",
+                    uniqueName: response.body?.uniqueName,
+                    name: response.body?.name,
+                    hsnNumber: response.body?.hsnNumber,
+                    sacNumber: response.body?.sacNumber,
+                });
             } else {
                 this.toasterService.errorToast(response?.message);
             }
@@ -135,7 +143,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
                     this.hideFirstStep = false;
                     this.isAddStockOpen = false;
                     this.isAddServiceOpen = false;
-                    this.closeAsideEvent.emit();
+                    this.closeAsideEvent.emit(event);
                 }
             });
         } else {
@@ -144,7 +152,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
             this.hideFirstStep = false;
             this.isAddStockOpen = false;
             this.isAddServiceOpen = false;
-            this.closeAsideEvent.emit();
+            this.closeAsideEvent.emit(event);
         }
     }
 

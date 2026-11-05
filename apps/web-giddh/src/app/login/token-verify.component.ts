@@ -18,6 +18,8 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     public token: string;
     /** Holds the request param from the url */
     public request: any;
+    /** Partner callback from website (?redirect_url=); sent on signup-with-google when present. */
+    public partnerRedirectUrl: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if user is connected with internet */
@@ -82,6 +84,7 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
      */
     public processLogin(): void {
         this.generalService.storeUtmParameters(this.route.snapshot.queryParams);
+        this.partnerRedirectUrl = this.route.snapshot.queryParams['redirect_url'] || '';
         if (this.route.snapshot.queryParams['token']) {
             this.token = this.route.snapshot.queryParams['token'];
             this.verifyToken();
@@ -102,11 +105,18 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Verifies the Gmail token
+     * Verifies the Google token. Forwards website redirect_url onto signup-with-google when present.
      *
      * @memberof TokenVerifyComponent
      */
     public verifyToken(): void {
+        if (this.partnerRedirectUrl) {
+            this.store.dispatch(this.loginAction.signupWithGoogle({
+                accessToken: this.token,
+                redirectUrl: this.partnerRedirectUrl
+            }));
+            return;
+        }
         this.store.dispatch(this.loginAction.signupWithGoogle(this.token));
     }
 

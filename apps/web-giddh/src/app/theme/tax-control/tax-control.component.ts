@@ -8,7 +8,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    SimpleChanges,
+    type SimpleChanges,
     ViewChild,
     ChangeDetectorRef
 } from '@angular/core';

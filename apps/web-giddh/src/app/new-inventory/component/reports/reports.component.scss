@@ -90,7 +90,22 @@ td {
         content: $label;
         position: absolute;
         top: -50px;
-        right: 0;
+        right: 22px;
+        transform: translateY(50%);
+    }
+}
+
+// Spans the label across this column and its sibling quantity column so it reads as one parent header centered over both.
+@mixin column-header-group($label) {
+    overflow: visible !important;
+
+    &::before {
+        content: $label;
+        position: absolute;
+        top: -50px;
+        left: -100%;
+        width: 200%;
+        text-align: center;
         transform: translateY(50%);
     }
 }
@@ -99,14 +114,30 @@ td {
     @include column-header('Opening Stock');
 }
 
+.opening-column-group {
+    @include column-header-group('Opening Stock');
+}
+
 .inward-column {
     @include column-header('Inwards');
+}
+
+.inward-column-group {
+    @include column-header-group('Inwards');
 }
 
 .outward-column {
     @include column-header('Outward');
 }
 
+.outward-column-group {
+    @include column-header-group('Outward');
+}
+
 .closing-column {
     @include column-header('Closing Stock');
+}
+
+.closing-column-group {
+    @include column-header-group('Closing Stock');
 }

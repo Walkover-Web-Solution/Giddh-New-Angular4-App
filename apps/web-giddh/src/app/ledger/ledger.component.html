@@ -3024,7 +3024,7 @@
                 <ledger-aside-pane
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
-                    (closeAsideEvent)="ledgerAsidePaneDialogRef?.close()"
+                    (closeAsideEvent)="closeLedgerAsidePaneDialog($event)"
                 ></ledger-aside-pane>
             </ng-template>
             <!-- aside menu section -->
@@ -3108,7 +3108,14 @@
                     "
                     (dynamicSearchedQuery)="isAccountSearchData = true; onSearchQueryChanged($event)"
                     (onClear)="selectAccount($event, txn, true, true)"
-                    (createOption)="openLedgerAsidePaneDialog()"
+                    (createOption)="
+                        openLedgerAsidePaneDialog(
+                            txn,
+                            isBankTransaction,
+                            isLedgerEntry,
+                            cr ? transactionType.Credit : transactionType.Debit
+                        )
+                    "
                     [showOptionDivider]="true"
                     [showMatLabel]="false"
                     [showCaretIcon]="false"

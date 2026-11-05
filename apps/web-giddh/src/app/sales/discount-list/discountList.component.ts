@@ -1,6 +1,6 @@
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, ViewChild } from '@angular/core';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 
