@@ -119,7 +119,7 @@ export class AuthenticationService {
 
     /**
      * Google auth via existing GET v2/signup-with-google.
-     * Optional redirectUrl adds ?redirect_url= for partner bridge-token mode.
+     * Optional redirectUrl (from website ?redirect_url=) adds ?redirect_url= for partner bridge-token mode.
      */
     public LoginWithGoogle(token: string, redirectUrl?: string) {
         let args: any = { headers: {} };
