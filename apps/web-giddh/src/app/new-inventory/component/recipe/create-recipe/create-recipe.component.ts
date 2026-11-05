@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, type SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
 import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';

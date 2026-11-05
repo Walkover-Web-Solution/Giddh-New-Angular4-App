@@ -10,7 +10,7 @@ import {
     OnInit,
     Output,
     QueryList,
-    SimpleChanges,
+    type SimpleChanges,
     ViewChild,
     ViewChildren,
     ChangeDetectorRef,

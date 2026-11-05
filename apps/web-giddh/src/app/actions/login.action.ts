@@ -1,6 +1,8 @@
 import { CompanyResponse, ICurrencyResponse, Organization, StateDetailsResponse } from '../models/api-models/Company';
 import { Action, Store, select } from '@ngrx/store';
 import {
+    GoogleAuthRequest,
+    PartnerGoogleAuthResponse,
     SignupwithEmaillModel,
     SignupWithMobile,
     UserDetails,
@@ -101,9 +103,13 @@ export class LoginActions {
     public signupWithGoogle$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST),
-            switchMap((action: CustomActions) =>
-                this.auth.LoginWithGoogle(action.payload)
-            ),
+            switchMap((action: CustomActions) => {
+                const payload = action.payload as string | GoogleAuthRequest;
+                if (typeof payload === 'string') {
+                    return this.auth.LoginWithGoogle(payload);
+                }
+                return this.auth.LoginWithGoogle(payload.accessToken, payload.redirectUrl);
+            }),
             map(response => {
                 return this.signupWithGoogleResponse(response);
             })));
@@ -112,19 +118,28 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE),
             map((action: CustomActions) => {
-                let response: BaseResponse<VerifyEmailResponseModel, string> = action?.payload;
+                let response: BaseResponse<VerifyEmailResponseModel | PartnerGoogleAuthResponse, string> = action?.payload;
                 if (response) {
                     if (response.status === 'error') {
                         this._toaster.errorToast(action.payload.message, action.payload.code);
                         return { type: 'EmptyAction' };
                     }
-                    if (response.body && response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
+                    const partnerBody = response.body as PartnerGoogleAuthResponse;
+                    if (partnerBody?.refresh_token && partnerBody?.redirect_url) {
+                        window.location.href = this.auth.buildPartnerRedirectWithRefreshToken(
+                            partnerBody.redirect_url,
+                            partnerBody.refresh_token
+                        );
+                        return { type: 'EmptyAction' };
+                    }
+                    const sessionBody = response.body as VerifyEmailResponseModel;
+                    if (sessionBody && sessionBody.statusCode === 'AUTHENTICATE_TWO_WAY') {
                         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
                         return {
                             type: 'EmptyAction'
                         };
                     } else {
-                        return this.LoginSuccess(response, true);
+                        return this.LoginSuccess(response as BaseResponse<VerifyEmailResponseModel, string>, true);
                     }
                 } else {
                     return {
@@ -752,14 +767,14 @@ export class LoginActions {
         };
     }
 
-    public signupWithGoogle(value: string): CustomActions {
+    public signupWithGoogle(value: string | GoogleAuthRequest): CustomActions {
         return {
             type: LoginActions.SIGNUP_WITH_GOOGLE_REQUEST,
             payload: value
         };
     }
 
-    public signupWithGoogleResponse(value: BaseResponse<VerifyEmailResponseModel, string>): CustomActions {
+    public signupWithGoogleResponse(value: BaseResponse<VerifyEmailResponseModel | PartnerGoogleAuthResponse, string>): CustomActions {
         return {
             type: LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE,
             payload: value

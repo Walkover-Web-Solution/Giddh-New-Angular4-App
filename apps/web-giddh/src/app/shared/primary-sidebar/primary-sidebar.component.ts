@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, signal, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, signal, type SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { firstValueFrom, Observable, ReplaySubject, Subscription } from 'rxjs';

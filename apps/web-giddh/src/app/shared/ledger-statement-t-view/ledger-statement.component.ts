@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, Input, OnDestroy, OnInit, SimpleChanges, TemplateRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Inject, Input, OnDestroy, OnInit, type SimpleChanges, TemplateRef } from "@angular/core";
 import { Store, select } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { AppState } from '../../store';

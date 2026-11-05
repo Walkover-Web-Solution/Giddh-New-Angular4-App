@@ -1,42 +1,36 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+// Both renderer APIs use the same channel policy.
+const sendChannels = [
+  'open-url',
+  'authenticate',
+  'authenticate-send-email',
+  'take-server-environment',
+  'has-unsaved-changes',
+  'log.error'
+];
+const receiveChannels = ['take-your-gmail-token', 'maybeUrlChanged'];
+
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('electronAPI', {
   // IPC communication methods
   send: (channel, data) => {
-    // Whitelist channels for security
-    const validChannels = [
-      'open-url',
-      'authenticate',
-      'authenticate-send-email',
-      'take-server-environment',
-      'has-unsaved-changes',
-      'log.error'
-    ];
-    if (validChannels.includes(channel)) {
+    if (sendChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
     }
   },
 
   // Listen for messages from main process
   on: (channel, func) => {
-    const validChannels = [
-      'take-your-gmail-token',
-      'maybeUrlChanged'
-    ];
-    if (validChannels.includes(channel)) {
+    if (receiveChannels.includes(channel)) {
       ipcRenderer.on(channel, (event, ...args) => func(...args));
     }
   },
 
   // Listen for messages from main process (once only)
   once: (channel, func) => {
-    const validChannels = [
-      'take-your-gmail-token',
-      'maybeUrlChanged'
-    ];
-    if (validChannels.includes(channel)) {
+    if (receiveChannels.includes(channel)) {
       ipcRenderer.once(channel, (event, ...args) => {
         console.log('Preload: electronAPI once event received:', channel, 'args:', args);
         func(...args);
@@ -62,33 +56,17 @@ contextBridge.exposeInMainWorld('require', (module) => {
     return {
       ipcRenderer: {
         send: (channel, data) => {
-          const validChannels = [
-            'open-url',
-            'authenticate',
-            'authenticate-send-email',
-            'take-server-environment',
-            'has-unsaved-changes',
-            'log.error'
-          ];
-          if (validChannels.includes(channel)) {
+          if (sendChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
           }
         },
         on: (channel, func) => {
-          const validChannels = [
-            'take-your-gmail-token',
-            'maybeUrlChanged'
-          ];
-          if (validChannels.includes(channel)) {
+          if (receiveChannels.includes(channel)) {
             ipcRenderer.on(channel, (event, ...args) => func(...args));
           }
         },
         once: (channel, func) => {
-          const validChannels = [
-            'take-your-gmail-token',
-            'maybeUrlChanged'
-          ];
-          if (validChannels.includes(channel)) {
+          if (receiveChannels.includes(channel)) {
             ipcRenderer.once(channel, (event, ...args) => {
               console.log('Preload: IPC once event received:', channel, 'args:', args);
               func(event, ...args);

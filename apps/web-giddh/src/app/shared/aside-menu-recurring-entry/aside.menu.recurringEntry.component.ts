@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges } from '@angular/core';
 import { IOption } from '../../app.constant';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';

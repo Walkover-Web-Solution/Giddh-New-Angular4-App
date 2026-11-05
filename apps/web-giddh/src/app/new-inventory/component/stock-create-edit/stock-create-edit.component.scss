@@ -822,28 +822,36 @@ table.stock-table {
     padding: 4px 0 8px;
 }
 
-.stock-batch-fields {
-    grid-template-columns: repeat(6, minmax(110px, 1fr)) minmax(90px, auto) 36px;
-    align-items: end;
-    column-gap: 8px;
-    min-width: 920px;
+.stock-batch-card {
+    background-color: transparent;
+    border-color: var(--border-color);
+}
+
+.stock-batch-row-top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(90px, auto) 40px;
+}
+
+.stock-batch-row-bottom {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 
     giddh-datepicker {
         display: block;
         width: 100%;
+        min-width: 0;
     }
 }
 
 .stock-batch-archive {
     min-height: 36px;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .stock-batch-remove {
     width: 36px;
     height: 36px;
     padding: 0;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
+    justify-self: end;
 }
 
 .add-new-text-container {
@@ -851,6 +859,18 @@ table.stock-table {
 }
 
 .stock-opening-balance-section {
+    .opening-balance-header {
+        .opening-balance-heading {
+            flex: 1 1 280px;
+            min-width: 0;
+        }
+
+        .opening-balance-summary {
+            flex: 0 0 auto;
+            margin-left: auto;
+        }
+    }
+
     .warehouse-card {
         background-color: var(--table-background-color);
     }
@@ -871,5 +891,14 @@ table.stock-table {
     .batch-list {
         background-color: transparent;
         border-color: var(--border-color);
+        overflow-x: auto;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    .stock-batch-row-top,
+    .stock-batch-row-bottom {
+        grid-template-columns: 1fr;
     }
 }

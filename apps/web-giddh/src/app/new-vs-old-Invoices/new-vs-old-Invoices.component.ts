@@ -14,7 +14,7 @@ import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
-import { ASIDE_PANE_CONFIG, AppThemeClassEnum, GetBifurcationType, IOption, isSelectedAllOption } from '../app.constant';
+import { ASIDE_PANE_CONFIG, AppThemeClassEnum, GetBifurcationType, type IOption, isSelectedAllOption } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 import { find, slice } from '../lodash-optimized';
 import { SalesPersonComponentStore } from '../shared/sales-person/utility/sales-person.store';

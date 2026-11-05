@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren, NgZone, input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, type SimpleChanges, ViewChildren, NgZone, input } from "@angular/core";
 import { Angular21ChangeDetectionService } from "../../../../services/angular21-change-detection.service";
 import { select, Store } from "@ngrx/store";
 import { AccountsAction } from "apps/web-giddh/src/app/actions/accounts.actions";
