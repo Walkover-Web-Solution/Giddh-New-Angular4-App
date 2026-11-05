@@ -6,10 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <giddh-page-loader
-        *ngIf="!isLoadMore && isLookupVouchersInProgress"
-        [cssClass]="'no-data'"
-    ></giddh-page-loader>
+    <giddh-page-loader *ngIf="!isLoadMore && isLookupVouchersInProgress" [cssClass]="'no-data'"></giddh-page-loader>
     <div
         class="invoice-preview-wrapper"
         *ngIf="isLoadMore || !isLookupVouchersInProgress"
@@ -158,7 +155,7 @@
                                     [matTooltip]="commonLocaleData?.app_send_email"
                                     [matTooltipPosition]="'above'"
                                     (click)="openEmailSendDialog()"
-                                    >
+                                >
                                     <i class="icon-envelope"></i>
                                 </button>
                             }

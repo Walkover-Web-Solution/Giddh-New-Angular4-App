@@ -12,7 +12,10 @@
         <mat-dialog-content class="dialog-body max-height-65vh" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
                 <div class="mb-3">
-                    <p class="mb-1 text-primary font-weight-semibold font-size-14"><i class="icon-info text-primary font-size-12"></i> {{ commonLocaleData?.app_note }}</p>
+                    <p class="mb-1 text-primary font-weight-semibold font-size-14">
+                        <i class="icon-info text-primary font-size-12"></i>
+                        {{ commonLocaleData?.app_note }}
+                    </p>
                     <ul class="mb-0 pl-3 ml-1 light-gray font-size-12 line-height-20 list-style-disc">
                         <li class="mb-1">{{ commonLocaleData?.app_export_file_name_change_note }}</li>
                         <li>{{ localeData?.csv_semicolon_separator_note }}</li>
@@ -65,7 +68,11 @@
                             name="emailTypeSelected"
                             [(ngModel)]="emailTypeSelected"
                         >
-                            <mat-radio-button id="detailed" (change)="handleReportTypeChange($event); fileType = 'CSV'" [value]="emailTypeDetail">
+                            <mat-radio-button
+                                id="detailed"
+                                (change)="handleReportTypeChange($event); fileType = 'CSV'"
+                                [value]="emailTypeDetail"
+                            >
                                 {{ localeData?.ledger }}
                             </mat-radio-button>
                             <mat-radio-button

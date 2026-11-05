@@ -30,7 +30,7 @@
                 *ngFor="let batch of selectedBatches"
                 class="status-chip status-chip-primary d-inline-flex align-items-center border-radius-8 font-size-12 font-weight-medium white-space-nowrap theme-primary-light text-primary"
             >
-                {{ (batch?.batchNumber || batch?.name) + " · " + batch?.quantity }}
+                {{ (batch?.batchNumber || batch?.name) + ' · ' + batch?.quantity }}
             </span>
         </ng-container>
         <button

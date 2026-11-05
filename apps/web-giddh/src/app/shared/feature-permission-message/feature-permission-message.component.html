@@ -2,7 +2,10 @@
     class="feature-permission-message d-flex flex-column align-items-center justify-content-center text-center mx-auto max-w-500"
     role="status"
 >
-    <div class="feature-permission-message__icon-wrap d-flex align-items-center justify-content-center position-relative mb-3" aria-hidden="true">
+    <div
+        class="feature-permission-message__icon-wrap d-flex align-items-center justify-content-center position-relative mb-3"
+        aria-hidden="true"
+    >
         <i [class]="'feature-permission-message__icon text-primary ' + iconClass()"></i>
         @if (showBadge() && badgeIconClass()) {
             <span class="feature-permission-message__badge d-flex align-items-center justify-content-center border-radius-circle">
@@ -16,10 +19,7 @@
     </h2>
 
     @if (description()) {
-        <p
-            class="feature-permission-message__description text-light font-size-14 mb-3"
-            [innerHTML]="description()"
-        ></p>
+        <p class="feature-permission-message__description text-light font-size-14 mb-3" [innerHTML]="description()"></p>
     }
 
     <a

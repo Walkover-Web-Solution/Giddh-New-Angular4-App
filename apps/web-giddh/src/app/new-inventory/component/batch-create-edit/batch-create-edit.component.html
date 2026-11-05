@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'inventory/batch'"
-    (commonLocaleData)="commonLocaleData.set($event)"
-    (localeData)="localeData.set($event)"
->
+<div appTranslate [file]="'inventory/batch'" (commonLocaleData)="commonLocaleData.set($event)" (localeData)="localeData.set($event)">
     <div cdkFocusInitial class="dialog-header">
         <span>{{ isUpdateMode() ? localeData()?.edit_batch : localeData()?.create_batch }}</span>
     </div>
@@ -11,13 +6,7 @@
         @if (isLoading()) {
             <giddh-page-loader></giddh-page-loader>
         }
-        <form
-            [class.d-none]="isLoading()"
-            autocomplete="off"
-            novalidate
-            name="batchForm"
-            [formGroup]="batchForm"
-        >
+        <form [class.d-none]="isLoading()" autocomplete="off" novalidate name="batchForm" [formGroup]="batchForm">
             <div class="row">
                 <div class="col-12 mt-3">
                     <input-field
@@ -67,7 +56,9 @@
                         (selectedOption)="selectVariant($event)"
                         (onClear)="selectVariant(null)"
                         [required]="!!batchForm.get('stockUniqueName')?.value"
-                        [showError]="isFormSubmitted() && !batchForm.get('variantUniqueName')?.value && !!batchForm.get('stockUniqueName')?.value"
+                        [showError]="
+                            isFormSubmitted() && !batchForm.get('variantUniqueName')?.value && !!batchForm.get('stockUniqueName')?.value
+                        "
                     ></reactive-dropdown-field>
                 </div>
                 <div class="col-12 mt-3">
