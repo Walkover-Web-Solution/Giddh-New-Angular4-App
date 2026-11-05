@@ -252,6 +252,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public createSubscriptionSuccess: any;
     /** Request object for generate order id */
     public generateOrderIdRequest: any
+    /** Create-subscription body used only to retry Razorpay checkout. Not merged into the payment update. */
+    private razorpayCreateRequest: unknown;
     // Add retry count for Razorpay payment failures
     public razorpayRetryCount: number = 0;
     public maxRazorpayRetryCount: number = 3;
@@ -1985,6 +1987,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionRequest = request;
                 this.componentStore.getChangePlanDetails(request);
             } else {
+                this.razorpayCreateRequest = request;
                 this.componentStore.createSubscription(request);
             }
         }, 100);
@@ -2158,89 +2161,157 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public initializePayment(request: any, type: string): void {
-        const that = this;
-        // On any alert (error) from Razorpay, close all popups and retry
-        window.alert = (msg: string) => {
-            that.razorpay?.close();
-            that.closeWindow(); // close any external window, e.g. PayPal
-            that.handleRazorpayFailure(type);
-        };
-        // Override window.open to detect blocked Popup and trigger retry
-        const origWindowOpen = window.open.bind(window);
-        window.open = (...args: any[]) => {
-            const win = origWindowOpen(...args);
-            if (!win) {
-                that.handleRazorpayFailure(type);
-            }
-            return win;
-        };
-        let options = {
+        if (!window['Razorpay'] || !this.razorpayKey || !request?.razorpayOrderId) {
+            this.reportRazorpayFailure(this.localeData?.razorpay_error_message);
+            return;
+        }
+
+        const isRecurring = this.isChangePlan
+            ? (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY')
+            : (request?.duration === 'MONTHLY' || request?.duration === 'DAILY');
+        const options: Record<string, unknown> = {
             key: this.razorpayKey,
-            handler: function (res) {
-                that.updateSubscriptionPayment(res, false, request);
-                that.razorpayRetryCount = 0;
+            handler: (response: unknown) => {
+                this.razorpayRetryCount = 0;
+                this.updateSubscriptionPayment(response, false, request);
             },
             order_id: request.razorpayOrderId,
+            modal: {
+                ondismiss: () => {
+                    this.razorpayRetryCount = 0;
+                }
+            },
             theme: {
                 color: '#F37254'
             },
             amount: request.dueAmount,
             currency: request.planDetails?.currency?.code || this.activeCompany?.baseCurrency,
             name: this.serviceConfig.BRAND_NAME,
-            description: this.serviceConfig.LEGAL_NAME,
-        };
-        const razorpayRecurringSubscriptionConfig = {
-            key: this.razorpayKey,
-            order_id: request.razorpayOrderId,
-            customer_id: request.razorpayCustomerId,
-            recurring: "1",
-            handler: (response: any) => {
-                that.updateSubscriptionPayment(response, false, request);
-                that.razorpayRetryCount = 0;
-            },
-            theme: {
-                "color": "#F37254",
-            },
-            amount: request.dueAmount,
-            currency: request.planDetails?.currency?.code || this.activeCompany?.baseCurrency,
-            name: this.serviceConfig.BRAND_NAME,
             description: this.serviceConfig.LEGAL_NAME
         };
+        if (isRecurring && request?.region?.code !== 'GBR') {
+            options['customer_id'] = request.razorpayCustomerId;
+            options['recurring'] = '1';
+        }
 
+        // Razorpay checkout reports its own failures with window.alert, including a
+        // "Connection refused" message. Replacing alert or window.open made that
+        // failure retry subscription creation without the saved request.
         try {
-            const isChangePlan = this.isChangePlan ? (
-                this.firstStepForm.get('duration')?.value === 'MONTHLY' 
-                || this.firstStepForm.get('duration')?.value === 'DAILY')
-                : (request?.duration === 'MONTHLY' || request?.duration === 'DAILY');
-            this.razorpay = new window['Razorpay']((isChangePlan && request?.region?.code !== 'GBR')
-                ? razorpayRecurringSubscriptionConfig : options);
-            setTimeout(() => { this.razorpay?.open(); }, 100);
-        } catch { }
+            this.razorpay = new window['Razorpay'](options);
+            this.razorpay.on?.('payment.failed', (failure: unknown) => {
+                this.handleRazorpayFailure(type, this.razorpayFailureDescription(failure));
+            });
+            setTimeout(() => {
+                try {
+                    const opened: unknown = this.razorpay?.open();
+                    if (opened && typeof (opened as Promise<unknown>).then === 'function') {
+                        (opened as Promise<unknown>).catch((error: unknown) => {
+                            this.handleRazorpayFailure(type, this.errorMessage(error));
+                        });
+                    }
+                } catch (error) {
+                    this.handleRazorpayFailure(type, this.errorMessage(error));
+                }
+            }, 100);
+        } catch (error) {
+            this.handleRazorpayFailure(type, this.errorMessage(error));
+        }
     }
 
     /**
-     * Handles a Razorpay payment failure: closes popup, retries up to max count.
+     * Handles a Razorpay payment failure. A refused gateway connection is shown
+     * once. Other checkout failures retry with the request that opened checkout.
      *
      * @private
-     * @param {*} request
      * @param {string} type
+     * @param {string} [description]
      * @memberof BuyPlanComponent
      */
-    private handleRazorpayFailure(type: string): void {
+    private handleRazorpayFailure(type: string, description?: string): void {
         this.razorpay?.close();
-        if (this.razorpayRetryCount < this.maxRazorpayRetryCount) {
+        const retryRequest = type === 'generateOrderId'
+            ? this.generateOrderIdRequest
+            : type === 'changePlan'
+                ? this.subscriptionRequest
+                : this.razorpayCreateRequest;
+        const canRetry = !this.isConnectionRefused(description)
+            && !this.isAdvancePayment
+            && retryRequest
+            && this.razorpayRetryCount < this.maxRazorpayRetryCount;
+        if (canRetry) {
             this.razorpayRetryCount++;
             setTimeout(() => {
                 if (type === 'generateOrderId') {
-                    this.componentStore.generateOrderBySubscriptionId(this.generateOrderIdRequest);
+                    this.componentStore.generateOrderBySubscriptionId(retryRequest);
                 } else if (type === 'changePlan') {
-                    this.componentStore.getChangePlanDetails(this.subscriptionRequest);
+                    this.componentStore.getChangePlanDetails(retryRequest);
                 } else {
-                    this.componentStore.createSubscription(this.subscriptionRequest);
+                    this.componentStore.createSubscription(retryRequest);
                 }
             }, 3000);
-        } else {
-            this.toasterService.showSnackBar('error', this.localeData?.razorpay_error_message);
+            return;
+        }
+        this.razorpayRetryCount = 0;
+        const message = !this.isConnectionRefused(description) && description
+            ? description
+            : this.localeData?.razorpay_error_message;
+        this.reportRazorpayFailure(message);
+    }
+
+    /**
+     * Reads Razorpay's payment.failed description.
+     *
+     * @private
+     * @param {unknown} failure
+     * @returns {string | undefined}
+     * @memberof BuyPlanComponent
+     */
+    private razorpayFailureDescription(failure: unknown): string | undefined {
+        if (!failure || typeof failure !== 'object' || !('error' in failure)) {
+            return undefined;
+        }
+        const error = (failure as { error?: { description?: unknown } }).error;
+        return typeof error?.description === 'string' ? error.description : undefined;
+    }
+
+    /**
+     * Whether the checkout failure is a refused connection.
+     *
+     * @private
+     * @param {string} [message]
+     * @returns {boolean}
+     * @memberof BuyPlanComponent
+     */
+    private isConnectionRefused(message?: string): boolean {
+        return typeof message === 'string' && /connection refused/i.test(message);
+    }
+
+    /**
+     * Reads an error message from a thrown checkout failure.
+     *
+     * @private
+     * @param {unknown} error
+     * @returns {string | undefined}
+     * @memberof BuyPlanComponent
+     */
+    private errorMessage(error: unknown): string | undefined {
+        if (error instanceof Error) {
+            return error.message;
+        }
+        return typeof error === 'string' ? error : undefined;
+    }
+
+    /**
+     * Shows a Razorpay checkout failure without throwing.
+     *
+     * @private
+     * @param {string} [message]
+     * @memberof BuyPlanComponent
+     */
+    private reportRazorpayFailure(message?: string): void {
+        if (message) {
+            this.toasterService.showSnackBar('error', message);
         }
     }
 

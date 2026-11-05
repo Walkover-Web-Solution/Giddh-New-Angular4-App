@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-02 · **Reviewed up to commit:** `0fafd2a861`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-05 · **Reviewed up to commit:** `dd256bef5f`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -103,7 +103,9 @@ Feature work merged after the brief, not scored against it:
 | CSP allows blob sources for frames | 🟡 | `37b2314ec9`, `399d2ba3d7`. |
 | Ledger and permissions route paths restored | 🟡 | `66a7606b04` fixed misspelled `leondger`/`permissis` paths in [app.routes.ts](apps/web-giddh/src/app/app.routes.ts). |
 | Living status tracker and `status:check` | 🟡 | [Script](scripts/status-check.mjs) and focused tests pass; CI workflow not yet seen on a teammate's PR. |
+| Razorpay subscription checkout failure | 🟡 | Buy-plan no longer replaces `window.alert` / `window.open` or retries a refused Razorpay connection. Not verified against a live Razorpay order. |
 
 ## Change log
 
+- 2026-11-05 · Cursor agent · Razorpay subscription pay shows a checkout failure instead of an uncaught connection-refused exception · Reviewed up to `dd256bef5f`
 - 2026-11-02 · Cursor agent · Created STATUS.md, `npm run status:check` and its PR workflow · Initial scorecard; tracker 🟡

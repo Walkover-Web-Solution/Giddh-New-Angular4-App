@@ -372,10 +372,45 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         };
         try {
             this.razorpay = new window['Razorpay'](options);
+            this.razorpay.on?.('payment.failed', (failure: unknown) => {
+                const description = failure && typeof failure === 'object' && 'error' in failure
+                    ? (failure as { error?: { description?: unknown } }).error?.description
+                    : undefined;
+                this.reportCheckoutFailure(typeof description === 'string' ? description : undefined);
+            });
             setTimeout(() => {
-                this.razorpay?.open();
+                try {
+                    const opened: unknown = this.razorpay?.open();
+                    if (opened && typeof (opened as Promise<unknown>).then === 'function') {
+                        (opened as Promise<unknown>).catch((exception: unknown) => {
+                            this.reportCheckoutFailure(exception);
+                        });
+                    }
+                } catch (exception) {
+                    this.reportCheckoutFailure(exception);
+                }
             }, 100);
-        } catch (exception) { }
+        } catch (exception) {
+            this.reportCheckoutFailure(exception);
+        }
+    }
+
+    /**
+     * Shows a Razorpay checkout failure from the older billing pay path.
+     *
+     * @private
+     * @param {unknown} exception
+     * @memberof BillingDetailComponent
+     */
+    private reportCheckoutFailure(exception: unknown): void {
+        const message = exception instanceof Error
+            ? exception.message
+            : typeof exception === 'string'
+                ? exception
+                : this.commonLocaleData?.app_something_went_wrong;
+        if (typeof message === 'string' && message.length > 0) {
+            this.toasty.errorToast(message);
+        }
     }
 
     public reFillForm(): void {
