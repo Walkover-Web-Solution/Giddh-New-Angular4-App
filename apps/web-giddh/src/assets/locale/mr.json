@@ -762,6 +762,7 @@
     "app_invalid_contact_too_short": "खुप लहान",
     "app_invalid_contact_too_long": "खूप लांब",
     "app_attachment_not_allowed": "संलग्नक अपलोड करण्यासाठी, शाखेत जा",
+    "app_html_script_not_allowed": "HTML/Script ला परवानगी नाही",
     "app_entry_no": "प्रवेश क्र.",
     "app_special_note": "टीप: व्हाउचर काही तपशील अपडेट केले जाऊ शकत नाहीत कारण त्यासाठी ई-इनव्हॉइस तयार केले जाते.",
     "app_inventory_types": {

@@ -32,6 +32,7 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { RejectHtmlScriptDirective } from '../shared/helpers/reject-html-script.directive';
 
 @NgModule({
     declarations: [
@@ -70,7 +71,8 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
         MatMenuModule,
         FormFieldsModule,
         MatFormFieldModule,
-        GiddhDatePipe
+        GiddhDatePipe,
+        RejectHtmlScriptDirective
     ],
     exports: [
         ExpensesComponent,

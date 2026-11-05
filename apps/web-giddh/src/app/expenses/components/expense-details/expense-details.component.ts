@@ -20,6 +20,8 @@ import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
 import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
+import { containsHtmlOrScript } from '../../../shared/helpers/html-script-validation';
+import { HtmlScriptErrorStateMatcher } from '../../../shared/helpers/reject-html-script.directive';
 
 @Component({
     selector: 'app-expense-details',
@@ -66,8 +68,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public accountType: string;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
-    public comment: string = '';
     public accountEntryPettyCash: PettyCashResonse;
+    /** Marks the description invalid as soon as it contains HTML or script. */
+    public readonly htmlScriptErrorState = new HtmlScriptErrorStateMatcher();
     public companyTaxesList: TaxResponse[] = [];
     public debtorsAccountsOptions: IOption[] = [];
     public creditorsAccountsOptions: IOption[] = [];
@@ -198,7 +201,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.companyUniqueName = null;
         this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
-        this.comment = res?.description;
         let imgs = res?.attachedFileUniqueNames;
         let imgPrefix = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/';
         this.imageURL = [];
@@ -281,6 +283,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public showApproveConfirmPopup(ref: TemplateRef<any>): void {
+        if (this.descriptionRejectsHtmlOrScript()) {
+            this.toaster.showSnackBar("error", this.commonLocaleData?.app_html_script_not_allowed);
+            return;
+        }
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
             this.showEntryAgainstRequired = true;
             return;
@@ -315,6 +321,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public approveEntry(): void {
+        if (this.descriptionRejectsHtmlOrScript()) {
+            this.toaster.showSnackBar("error", this.commonLocaleData?.app_html_script_not_allowed);
+            this.approveEntryRequestInProcess = false;
+            return;
+        }
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
             this.showEntryAgainstRequired = true;
             this.hideApproveConfirmPopup(false);
@@ -934,5 +945,21 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public openLedgerAsidePaneDialog(): void {
         this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
+    }
+
+    /**
+     * True when the top petty-cash description contains HTML or script.
+     */
+    public get pettyCashDescriptionInvalid(): boolean {
+        return containsHtmlOrScript(this.accountEntryPettyCash?.description);
+    }
+
+    /**
+     * True when either visible description contains HTML or script.
+     * The top field writes the entry description the ledger panel saves.
+     */
+    private descriptionRejectsHtmlOrScript(): boolean {
+        return this.pettyCashDescriptionInvalid
+            || containsHtmlOrScript(this.updateLedgerComponentInstance?.vm?.selectedLedger?.description);
     }
 }
