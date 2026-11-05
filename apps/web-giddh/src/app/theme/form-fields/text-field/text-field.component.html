@@ -11,6 +11,8 @@
         [(ngModel)]="ngModel"
         (ngModelChange)="handleChange()"
         (input)="handleInput()"
+        (focus)="handleFocus($event)"
+        (blur)="handleBlur($event)"
         [maxlength]="maxlength"
         [readonly]="readonly"
         [ngClass]="{ 'error-box': showError }"
@@ -23,6 +25,8 @@
         #textField
         (keydown.enter)="$event.preventDefault()"
         [autocomplete]="autocomplete"
+        [attr.lang]="lang"
+        [attr.dir]="direction"
     />
     <input
         matInput
@@ -36,6 +40,8 @@
         [(ngModel)]="ngModel"
         (ngModelChange)="handleChange()"
         (input)="handleInput()"
+        (focus)="handleFocus($event)"
+        (blur)="handleBlur($event)"
         [readonly]="readonly"
         [ngClass]="{ 'error-box': showError }"
         [attr.pattern]="pattern"
@@ -48,6 +54,8 @@
         #textField
         (keydown.enter)="$event.preventDefault()"
         [autocomplete]="autocomplete"
+        [attr.lang]="lang"
+        [attr.dir]="direction"
     />
     <input
         matInput
@@ -61,6 +69,8 @@
         [(ngModel)]="ngModel"
         (ngModelChange)="handleChange()"
         (input)="handleInput()"
+        (focus)="handleFocus($event)"
+        (blur)="handleBlur($event)"
         [readonly]="readonly"
         [ngClass]="{ 'error-box': showError }"
         [attr.pattern]="pattern"
@@ -73,6 +83,8 @@
         #textField
         (keydown.enter)="$event.preventDefault()"
         [autocomplete]="autocomplete"
+        [attr.lang]="lang"
+        [attr.dir]="direction"
     />
     <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
 </div>

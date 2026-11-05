@@ -124,24 +124,64 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     public getVersionMessage(isPurchaseOrder: boolean, change: any): string {
         let message = "";
         let revisionField = this.generalService.getRevisionField(change.type);
+        const formattedValue = this.formatRevisionValue(change.newValue ?? change.oldValue);
 
         if (change.optType === "CREATE") {
             if (isPurchaseOrder) {
                 let poCreated = this.inputData?.localeData?.po_created;
-                poCreated = poCreated?.replace("[VALUE]", change.newValue);
+                poCreated = poCreated?.replace("[VALUE]", formattedValue);
                 message += poCreated;
             } else {
                 let voucherCreated = this.inputData?.localeData?.voucher_created;
-                voucherCreated = voucherCreated?.replace("[VALUE]", ((change.newValue) ? change.newValue : change.oldValue));
+                voucherCreated = voucherCreated?.replace("[VALUE]", formattedValue);
                 message += voucherCreated;
             }
         } else {
             let valueChanged = this.inputData?.localeData?.value_changed;
-            valueChanged = valueChanged?.replace("[FIELD]", revisionField)?.replace("[VALUE]", change.newValue);
+            valueChanged = valueChanged?.replace("[FIELD]", revisionField)?.replace("[VALUE]", formattedValue);
             message += valueChanged;
         }
 
         return message;
+    }
+
+    /**
+     * Formats revision change values for display (handles line-item objects)
+     *
+     * @private
+     * @param {*} value
+     * @return {*}  {string}
+     * @memberof HistoryDialogComponent
+     */
+    private formatRevisionValue(value: unknown): string {
+        if (value === null || value === undefined) {
+            return "";
+        }
+
+        if (typeof value !== "object") {
+            return String(value);
+        }
+
+        const lineValue = value as {
+            stockName?: string;
+            variantName?: string;
+            quantity?: string | number;
+        };
+
+        if (lineValue.stockName) {
+            let formatted = lineValue.stockName;
+            if (lineValue.variantName && lineValue.variantName !== lineValue.stockName) {
+                formatted += ` (${lineValue.variantName})`;
+            }
+            if (lineValue.quantity !== undefined && lineValue.quantity !== null && lineValue.quantity !== "") {
+                formatted += ` x ${lineValue.quantity}`;
+            }
+            return formatted;
+        }
+
+        return Object.values(value as Record<string, unknown>)
+            .filter((entry) => entry !== null && entry !== undefined && typeof entry !== "object")
+            .join(", ");
     }
 
     /**

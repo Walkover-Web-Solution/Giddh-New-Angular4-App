@@ -1,5 +1,7 @@
 import { Component, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import * as dayjs from 'dayjs';
 @Component({
@@ -32,8 +34,31 @@ export class NewInventoryComponent implements OnDestroy {
     /* Selected range label */
     public selectedRangeLabel: any = "";
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    /* True if current route is inventory settings page */
+    public isSettingsPage: boolean = false;
 
-    constructor() { }
+    constructor(private router: Router) {
+        this.isSettingsPage = this.checkIsSettingsPage(this.router.url);
+
+        this.router.events.pipe(
+            filter(event => event instanceof NavigationEnd),
+            takeUntil(this.destroyed$)
+        ).subscribe((event: NavigationEnd) => {
+            this.isSettingsPage = this.checkIsSettingsPage(event.urlAfterRedirects);
+        });
+    }
+
+    /**
+     * Returns true if the given url belongs to inventory settings page
+     *
+     * @private
+     * @param {string} url
+     * @returns {boolean}
+     * @memberof NewInventoryComponent
+     */
+    private checkIsSettingsPage(url: string): boolean {
+        return url?.split("?")[0]?.split("#")[0]?.endsWith("/pages/inventory/v2/setting");
+    }
 
     /* show/hide funcation search input field */
     public searhcGroup() {

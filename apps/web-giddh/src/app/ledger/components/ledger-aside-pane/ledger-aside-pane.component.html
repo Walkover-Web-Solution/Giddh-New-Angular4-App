@@ -44,7 +44,7 @@
         </ng-container>
 
         <ng-container *ngIf="isAddStockOpen && voucherApiVersion === 2">
-            <stock-create-edit [addStock]="true" [stockType]="stockType" (closeAsideEvent)="backButtonPressed()"></stock-create-edit>
+            <stock-create-edit [addStock]="true" [stockType]="stockType" (closeAsideEvent)="onStockCreateClose($event)"></stock-create-edit>
         </ng-container>
     </mat-dialog-content>
 </section>

@@ -5,6 +5,11 @@
         <button
             class="ml-auto"
             matButton="filled"
+            matBadgeColor="warn"
+            [matBadge]="templateSaveErrorCount"
+            [matBadgeHidden]="!templateSaveErrorCount"
+            [matTooltip]="templateSaveErrorTooltip"
+            [matTooltipPosition]="'left'"
             (click)="templateData?.mode === templateModeEnum.Create ? createTemplate() : updateTemplate()"
         >
             {{ templateData?.mode === templateModeEnum.Create ? localeData?.create_template : localeData?.update_template }}

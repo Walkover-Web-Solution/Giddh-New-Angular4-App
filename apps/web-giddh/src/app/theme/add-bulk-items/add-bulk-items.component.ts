@@ -5,7 +5,7 @@ import { cloneDeep } from "../../lodash-optimized";
 import { SearchService } from "../../services/search.service";
 import { Observable, ReplaySubject, debounceTime, of, takeUntil, BehaviorSubject } from "rxjs";
 import { OptionInterface } from "../../models/api-models/Voucher";
-import { SearchType } from "../../vouchers/utility/vouchers.const";
+import { SearchType, VoucherTypeEnum } from "../../vouchers/utility/vouchers.const";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { SalesAddBulkStockItems } from "../../models/api-models/Sales";
 import { ToasterService } from "../../services/toaster.service";
@@ -315,6 +315,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         }
 
         let stockSearchRequest = this.vouchersUtilityService.getSearchRequestObject(this.inputData.voucherType, query, page, SearchType.ITEM);
+        if (this.inputData.voucherType === VoucherTypeEnum.deliveryChallan || this.inputData.voucherType === VoucherTypeEnum.receiptNote) {
+            stockSearchRequest.onlyStock = true;
+        }
         this.stockSearchRequest = cloneDeep(stockSearchRequest);
         this.stockSearchRequest.isLoading = true;
 
@@ -387,21 +390,19 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public loadDetails(item: SalesAddBulkStockItems, requestObject: any, index: number): void {
         this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
-                // Take taxes of parent group and stock's own taxes
-                const taxes = data.body.taxes || [];
-                if (data.body.stock) {
-                    taxes.push(...data.body.stock.taxes);
-                }
-
-                // directly assign additional property
+                // Keep account and stock taxes separate (same shape as particular selection)
+                // so fetchTaxesOnPriority can apply stock → stock-group → account → account-group order.
                 item.additional = {
                     ...item.additional,
                     label: item.additional?.name,
                     value: item?.uniqueName,
-                    taxes: taxes,
+                    taxes: data.body.taxes || [],
+                    groupTaxes: data.body.groupTaxes || [],
                     category: data.body.category,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
+                    hsnNumber: data.body.hsnNumber,
+                    sacNumber: data.body.sacNumber,
                     stock: data.body.stock,
                     combinedUniqueName: data.body.stock?.variant ? `${item.uniqueName}#${data.body.stock.variant?.uniqueName}` : '',
                     skuCode: data.body.stock?.skuCode,

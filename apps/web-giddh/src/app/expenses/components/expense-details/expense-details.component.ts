@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';

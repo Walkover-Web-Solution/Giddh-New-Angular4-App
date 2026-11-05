@@ -35,6 +35,8 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   public readonly templateModeEnum = TemplateModeEnum;
   /* This will hold the value if Gst Composition will show/hide */
   public showGstComposition: boolean = false;
+  /** Maximum allowed characters for footer message1 value and secondaryValue */
+  private readonly message1MaxLength: number = 200;
 
   constructor(
     public dialog: MatDialog,
@@ -67,10 +69,73 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * Closes the dialog.
-  *
-  * @memberof TemplateEditDialogComponent
-  */
+   * Number of Note 1 fields that exceed the strict 200 character limit.
+   * Strict length applies only when notes are not shown on the last page.
+   *
+   * @readonly
+   * @type {number}
+   * @memberof TemplateEditDialogComponent
+   */
+  public get message1CharacterLimitErrorCount(): number {
+    const footerData = this.customTemplate?.sections?.['footer']?.data;
+    if (footerData?.['showNotesAtLastPage']?.display || !footerData?.['message1']?.display) {
+      return 0;
+    }
+    const message1 = footerData?.['message1'];
+    let errorCount = 0;
+    if (this.isCharacterLimitExceeded(message1?.value)) {
+      errorCount++;
+    }
+    if (this.customTemplate?.enableSecondaryLanguage && this.isCharacterLimitExceeded(message1?.secondaryValue)) {
+      errorCount++;
+    }
+    return errorCount;
+  }
+
+  /**
+   * True when the template name is empty.
+   *
+   * @readonly
+   * @type {boolean}
+   * @memberof TemplateEditDialogComponent
+   */
+  public get isTemplateNameMissing(): boolean {
+    return !this.customTemplate?.name?.trim();
+  }
+
+  /**
+   * Total validation errors shown on the save button badge (name + Note 1).
+   *
+   * @readonly
+   * @type {number}
+   * @memberof TemplateEditDialogComponent
+   */
+  public get templateSaveErrorCount(): number {
+    return (this.isTemplateNameMissing ? 1 : 0) + this.message1CharacterLimitErrorCount;
+  }
+
+  /**
+   * Tooltip listing the current save-blocking errors.
+   *
+   * @readonly
+   * @type {string}
+   * @memberof TemplateEditDialogComponent
+   */
+  public get templateSaveErrorTooltip(): string {
+    const errors: string[] = [];
+    if (this.isTemplateNameMissing) {
+      errors.push(this.localeData?.please_enter_template_name);
+    } else if (this.message1CharacterLimitErrorCount) {
+      errors.push(this.localeData?.message1_character_limit_exceeded);
+    }
+    return errors.join(', ');
+  }
+
+  /**
+   * Closes the dialog.
+   *
+   * @memberof TemplateEditDialogComponent
+   */
   public closeDialog(): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       panelClass: ['mat-dialog-sm'],
@@ -100,6 +165,10 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     let copiedTemplate = cloneDeep(data);
     if (!data.name) {
       this.toasty.errorToast(this.localeData?.please_enter_template_name);
+      return;
+    }
+    if (this.message1CharacterLimitErrorCount) {
+      this.toasty.errorToast(this.localeData?.message1_character_limit_exceeded);
       return;
     }
 
@@ -211,6 +280,11 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
       this.toasty.errorToast(this.localeData?.please_enter_template_name);
       return;
     }
+    if (this.message1CharacterLimitErrorCount) {
+      this.toasty.errorToast(this.localeData?.message1_character_limit_exceeded);
+      return;
+    }
+
     data.updatedAt = null;
     data.updatedBy = null;
     if (data?.sections?.header?.data?.['address']) {
@@ -255,6 +329,18 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Checks whether the given string exceeds the Note 1 character limit.
+   *
+   * @private
+   * @param {string} value Field value
+   * @returns {boolean} True if the value is over the limit
+   * @memberof TemplateEditDialogComponent
+   */
+  private isCharacterLimitExceeded(value: string): boolean {
+    return (value?.length || 0) > this.message1MaxLength;
+  }
+
+  /**
    * ensureMessage1 method
    *
    * @private
@@ -266,6 +352,8 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     if (msg1 && (!msg1?.display || !msg1?.label)) {
       msg1.display = false;
       msg1.label = msg1.label || '';
+      data.message1 = data.message1 || '';
+      data.secondaryMessage1 = data.secondaryMessage1 || '';
     }
   }
 

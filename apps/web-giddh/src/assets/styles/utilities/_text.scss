@@ -29,6 +29,8 @@
 @include transform-scale-utilities();
 // Generate text-decoration utility classes
 @include text-decoration-utilities();
+// Generate list-style utility classes
+@include list-style-utilities();
 // Generate border-radius utility classes
 @include border-radius-utilities();
 // Generate z-index utility classes

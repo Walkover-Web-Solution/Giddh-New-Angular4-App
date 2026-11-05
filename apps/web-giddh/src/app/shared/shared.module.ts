@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { Injector, type ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';

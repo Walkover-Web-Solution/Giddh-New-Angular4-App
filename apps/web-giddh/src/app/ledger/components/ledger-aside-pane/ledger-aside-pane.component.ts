@@ -1,4 +1,4 @@
-import { takeUntil } from 'rxjs/operators';
+import { filter, skip, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
@@ -7,6 +7,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AccountsAction } from '../../../actions/accounts.actions';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { GeneralService } from '../../../services/general.service';
+import { DataOperationEnum } from '../../../shared/Enums/common.enum';
 
 @Component({
     selector: 'ledger-aside-pane',
@@ -20,7 +21,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     public isAddStockOpen: boolean = false;
     public isAddAccountOpen: boolean = false;
     public hideFirstScreen: boolean = false;
@@ -57,10 +58,23 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.createAccountIsSuccess$.subscribe(s => {
-            if (s) {
-                this.backButtonPressed();
-            }
+        this.createAccountIsSuccess$.pipe(
+            skip(1),
+            filter(success => !!success),
+            takeUntil(this.destroyed$)
+        ).subscribe(() => {
+            this.store.pipe(select(state => state.groupwithaccounts.newlyCreatedAccount), take(1)).subscribe(account => {
+                if (account?.uniqueName) {
+                    this.closeAsideEvent.emit({
+                        operation: DataOperationEnum.CREATE,
+                        type: 'account',
+                        uniqueName: account.uniqueName,
+                        name: account.name,
+                    });
+                } else {
+                    this.backButtonPressed();
+                }
+            });
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.hasUnsavedChanges), takeUntil(this.destroyed$)).subscribe(response => {
@@ -104,11 +118,25 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *This will use for close aside pane
+     * Handles stock create/edit close. On create success, closes aside with created stock data.
      *
-     * @param {*} [e]
+     * @param {*} [event]
      * @memberof LedgerAsidePaneComponent
      */
+    public onStockCreateClose(event?: any): void {
+        if (event?.operation === DataOperationEnum.CREATE && event?.uniqueName) {
+            this.closeAsideEvent.emit(event);
+            return;
+        }
+        this.backButtonPressed();
+    }
+
+    /**
+    *This will use for close aside pane
+    *
+    * @param {*} [e]
+    * @memberof LedgerAsidePaneComponent
+    */
     public closeAsidePane(e?: any) {
         if (this.hasUnsavedChanges && this.isAddAccountOpen) {
             this.confirmPageLeave(() => {

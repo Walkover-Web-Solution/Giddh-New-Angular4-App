@@ -36,6 +36,9 @@
     "third_interval": "Third interval",
     "last_interval": "Last interval",
     "aging_dropdown_error": "4th column must be less than 5th and 5th must be less than 6th",
+    "aging_range_error_min": "[INTERVAL] must be greater than [MIN]",
+    "aging_range_error_max": "[INTERVAL] must be less than [MAX]",
+    "aging_range_error_between": "[INTERVAL] must be greater than [MIN] and less than [MAX]",
     "customer_category_options": {
         "opening_balance": "Opening Balance",
         "sales": "Sales",

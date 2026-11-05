@@ -117,6 +117,8 @@ export class SearchService {
                 const delimiter = index === 0 ? '?' : '&';
                 if (key === 'branchUniqueName') {
                     params[key] = params[key] === companyUniqueName ? '' : params[key];
+                } else if (key === 'customerUniqueName') {
+                    params[key] = encodeURIComponent(params[key]);
                 }
                 contextPath += `${delimiter}${key}=${params[key]}`
             });

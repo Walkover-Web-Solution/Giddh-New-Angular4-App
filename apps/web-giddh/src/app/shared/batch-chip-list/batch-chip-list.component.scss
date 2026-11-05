@@ -1,0 +1,20 @@
+.batch-chip-list-compact .status-chip {
+    padding: 2px 8px;
+    max-width: 148px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.status-chip {
+    padding: 4px 10px;
+    line-height: 1.3;
+    border: 1px solid transparent;
+}
+
+.status-chip-primary {
+    border-color: var(--color-blue);
+}
+
+.status-chip-warning {
+    border-color: var(--color-orange);
+}

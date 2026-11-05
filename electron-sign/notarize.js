@@ -1,31 +1,36 @@
-// See: https://medium.com/@TwitterArchiveEraser/notarize-electron-apps-7a5f988406db
-
 const fs = require('fs');
 const path = require('path');
-const electronNotarize = require('@electron/notarize');
+const { notarize } = require('@electron/notarize');
+
 module.exports = async function (params) {
-    // Only notarize the app on Mac OS only.
     if (process.platform !== 'darwin') {
         return;
     }
-    // Same appId in electron-builder.
-    const appId = 'com.giddh.prod'; // something like 'com.app_name.io'
+
+    const appleId = process.env.APPLE_ID || process.env.NOTARIZE_EMAIL;
+    const appleIdPassword = process.env.APPLE_APP_SPECIFIC_PASSWORD || process.env.NOTARIZE_PASS;
+    const teamId = process.env.APPLE_TEAM_ID || 'F3U6Z5L2EJ';
+
+    if (!appleId || !appleIdPassword || !teamId) {
+        console.warn('⚠️ Skipping notarization — APPLE_ID / APPLE_APP_SPECIFIC_PASSWORD / APPLE_TEAM_ID not set.');
+        return;
+    }
+
+    const appId = 'com.giddh.prod';
     const appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`);
 
     if (!fs.existsSync(appPath)) {
         throw new Error(`Cannot find application at: ${appPath}`);
     }
 
-    try {
-        await electronNotarize.notarize({
-            appBundleId: appId,
-            appPath: appPath,
-            appleId: process.env.NOTARIZE_EMAIL, // enter Credential to generate mac's electron build
-            appleIdPassword: process.env.NOTARIZE_PASS,
-            tool: 'notarytool',
-            teamId: "F3U6Z5L2EJ"
-        });
-    } catch (error) {
-        console.error(error);
-    }
+    console.log(`🍎 Notarizing ${appPath}...`);
+    await notarize({
+        appBundleId: appId,
+        appPath,
+        appleId,
+        appleIdPassword,
+        teamId,
+        tool: 'notarytool',
+    });
+    console.log('✅ Notarization complete');
 };

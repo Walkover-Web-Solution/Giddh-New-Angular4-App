@@ -1,3 +1,4 @@
+import { A11yModule } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -71,6 +72,8 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
 import { CommonTaxComponent } from '../shared/common-tax/common-tax.component';
 import { CommonDiscountComponent } from '../shared/common-discount/common-discount.component';
 import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.component';
+import { BatchSelectDialogComponent } from '../vouchers/batch-select-dialog/batch-select-dialog.component';
+import { BatchChipListComponent } from '../shared/batch-chip-list/batch-chip-list.component';
 
 @NgModule({
     declarations: [
@@ -93,6 +96,7 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
     ],
     providers: [SalesPersonService],
     imports: [
+        A11yModule,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
@@ -159,7 +163,9 @@ import { GoToBranchComponent } from '../shared/go-to-branch/go-to-branch.compone
         GiddhNumberFormatModule,
         KeyboardShortutModule,
         GiddhDatePipe,
-        GoToBranchComponent
+        GoToBranchComponent,
+        BatchSelectDialogComponent,
+        BatchChipListComponent
     ]
 })
 export class LedgerModule {

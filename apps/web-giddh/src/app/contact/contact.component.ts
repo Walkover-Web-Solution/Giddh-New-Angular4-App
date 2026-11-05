@@ -32,7 +32,7 @@ import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT, BREAKPOINT_SCREEN_SIZE, Configuration } from "../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, type IOption, PAGINATION_LIMIT, BREAKPOINT_SCREEN_SIZE, Configuration } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import {
     ContactAdvanceSearchCommonModal,
@@ -1137,11 +1137,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Save CSV File with data from Table
+     * Save XLSX file with data from Table
      *
      * @memberof ContactComponent
      */
-    public downloadCSV() {
+    public downloadXlsx() {
         if (this.moduleType === ContactsModule.customer) {
             this.groupUniqueName = "sundrydebtors";
         } else {
@@ -1153,6 +1153,10 @@ export class ContactComponent implements OnInit, OnDestroy {
                 subject: this.messageBody.subject,
                 message: this.messageBody.msg,
                 accounts: this.selectedCheckedContacts,
+                includeMobileNumber: true,
+                includeState: true,
+                includeTaxNumber: true,
+                includeEmailId: true
             },
             params: {
                 from: this.fromDate,
@@ -1164,11 +1168,11 @@ export class ContactComponent implements OnInit, OnDestroy {
             branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""),
         };
 
-        this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.companyServices.downloadXlsx(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.searchLoader$ = observableOf(false);
             if (res?.status === "success") {
-                let blobData = this.generalService.base64ToBlob(res?.body, "text/csv", 512);
-                return saveAs(blobData, `${this.groupUniqueName}.csv`);
+                let blobData = this.generalService.base64ToBlob(res?.body, "text/xlsx", 512);
+                return saveAs(blobData, `${this.groupUniqueName}.xlsx`);
             }
         });
 

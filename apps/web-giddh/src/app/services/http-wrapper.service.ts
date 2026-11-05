@@ -1,10 +1,9 @@
-import { finalize, tap } from "rxjs/operators";
+import { finalize } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { LoaderService } from "../loader/loader.service";
 import { GeneralService } from "./general.service";
-import { get, keys, map } from '../lodash-optimized';
 
 @Injectable({
     providedIn: 'root'
@@ -25,27 +24,15 @@ export class HttpWrapperService {
     ): Observable<any> => {
         options = this.prepareOptions(options);
         options.params = params;
-        return this.http.get(url, options).pipe(
-            finalize(() => {
-                this.hideLoader();
-            })
-        );
+        return this.withLoaderCleanup(this.http.get(url, options));
     };
     public post = (url: string, body: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
-        return this.http.post(url, body, options).pipe(
-            finalize(() => {
-                this.hideLoader();
-            })
-        );
+        return this.withLoaderCleanup(this.http.post(url, body, options));
     };
     public put = (url: string, body: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
-        return this.http.put(url, body, options).pipe(
-            finalize(() => {
-                this.hideLoader();
-            })
-        );
+        return this.withLoaderCleanup(this.http.put(url, body, options));
     };
     public delete = (
         url: string,
@@ -54,11 +41,7 @@ export class HttpWrapperService {
     ): Observable<any> => {
         options = this.prepareOptions(options);
         options.search = this.objectToParams(params);
-        return this.http.delete(url, options).pipe(
-            finalize(() => {
-                this.hideLoader();
-            })
-        );
+        return this.withLoaderCleanup(this.http.delete(url, options));
     };
 
     public deleteWithBody = (url: string, request: any): Observable<any> => {
@@ -69,20 +52,12 @@ export class HttpWrapperService {
         options.headers = new HttpHeaders(options.headers);
         options.body = request;
         this.showLoader();
-        return this.http.delete(url, options).pipe(
-            finalize(() => {
-                this.hideLoader();
-            })
-        );
+        return this.withLoaderCleanup(this.http.delete(url, options));
     };
 
     public patch = (url: string, body: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
-        return this.http.patch(url, body, options).pipe(
-            finalize(() => {
-                this.hideLoader();
-            })
-        );
+        return this.withLoaderCleanup(this.http.patch(url, body, options));
     };
 
     public prepareOptions(options: any): any {
@@ -139,6 +114,10 @@ export class HttpWrapperService {
                 return `${value}=${objectValue}`;
             })
             .join("&");
+    }
+
+    private withLoaderCleanup<T>(request: Observable<T>): Observable<T> {
+        return request.pipe(finalize(() => this.hideLoader()));
     }
 
     private showLoader(): void {

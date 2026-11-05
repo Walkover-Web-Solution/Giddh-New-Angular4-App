@@ -256,6 +256,21 @@
             "title": "Warehouse Opening Balance",
             "description": "Stock opening balance by warehouse",
             "icon": "warehouse-opening-balance.svg"
+        },
+        "INVENTORY_PRODUCT_STOCK_AGING": {
+            "title": "Product Aging",
+            "description": "Amount Due in previous days & upcoming",
+            "icon": "icon-aging-report-new"
+        },
+        "INVENTORY_SERVICE_STOCK_AGING": {
+            "title": "Service Aging",
+            "description": "Amount Due in previous days & upcoming",
+            "icon": "icon-aging-report-new"
+        },
+        "INVENTORY_FIXEDASSETS_STOCK_AGING": {
+            "title": "Fixed Asset Aging",
+            "description": "Amount Due in previous days & upcoming",
+            "icon": "icon-aging-report-new"
         }
     }
 }

@@ -26,8 +26,9 @@
                 (resetFilters)="resetFilter()"
                 [searchPage]="reportType"
                 (isLoading)="isLoading = $event"
-                (selectedColumns)="getCustomiseHeaderColumns($event)"
-                (selectedDynamicColumns)="dynamicColumnsSubject$.next($event)"
+                (selectedColumns)="onSelectedColumns($event)"
+                (selectedDynamicColumns)="onSelectedDynamicColumns($event)"
+                (reportNatureChange)="onReportNatureChange($event)"
             ></report-filters>
         </div>
         <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">
@@ -324,15 +325,15 @@
                             (matSortChange)="sortChange($event)"
                             [matSortActive]="stockReportRequest?.sortBy"
                             [matSortDirection]="stockReportRequest?.sort"
-                            class="table giddh-table on-mobile-view"
+                            class="table on-mobile-view table-bordered table-border-collapse border-bottom"
                         >
                             <ng-container matColumnDef="group_name">
-                                <th class="report-th-column" mat-header-cell *matHeaderCellDef>
+                                <th class="report-th-column border-bottom-none border-left-none" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.group_name }}
                                 </th>
                                 <td
                                     [data-title]="localeData?.reports?.group_name"
-                                    class="text-left word-wrap cursor-pointer report-td-column"
+                                    class="text-left word-wrap cursor-pointer report-td-column border-left-none"
                                     mat-cell
                                     *matCellDef="let element"
                                     (click)="getReportsByReportType(element)"
@@ -348,12 +349,12 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="stock_name">
-                                <th class="report-th-column" mat-header-cell *matHeaderCellDef>
+                                <th class="report-th-column border-bottom-none border-left-none" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.stock_name }}
                                 </th>
                                 <td
                                     [data-title]="localeData?.reports?.stock_name"
-                                    class="text-left word-wrap cursor-pointer report-td-column"
+                                    class="text-left word-wrap cursor-pointer report-td-column border-left-none"
                                     mat-cell
                                     *matCellDef="let element"
                                     (click)="getReportsByReportType(element)"
@@ -371,12 +372,12 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="variant_name">
-                                <th class="report-th-column" mat-header-cell *matHeaderCellDef>
+                                <th class="report-th-column border-bottom-none border-left-none" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.variant_name }}
                                 </th>
                                 <td
                                     [data-title]="localeData?.reports?.variant_name"
-                                    class="text-left word-wrap cursor-pointer report-td-column"
+                                    class="text-left word-wrap cursor-pointer report-td-column border-left-none"
                                     mat-cell
                                     *matCellDef="let element"
                                     (click)="getReportsByReportType(element)"
@@ -394,7 +395,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="unit_name">
-                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef>
+                                <th class="group-column text-right border-bottom-none" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.unit_name }}
                                 </th>
                                 <td
@@ -406,9 +407,30 @@
                                     <span class="report-quantity">{{ element?.stockUnit?.code ?? '-' }}</span>
                                 </td>
                             </ng-container>
+                            <ng-container matColumnDef="batch" *ngIf="reportType !== 'GROUP'">
+                                <th class="report-th-column text-center border-bottom-none" mat-header-cell *matHeaderCellDef>
+                                    {{ localeData?.reports?.batch }}
+                                </th>
+                                <td
+                                    [data-title]="localeData?.reports?.batch"
+                                    class="text-center word-wrap report-td-column"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                >
+                                    <a
+                                        *ngIf="getBatchCount(element) > 0"
+                                        href="javascript:void(0)"
+                                        class="text-primary cursor-pointer"
+                                        (click)="openBatchReport(element, $event)"
+                                    >
+                                        {{ getBatchDisplay(element) }}
+                                    </a>
+                                    <span *ngIf="getBatchCount(element) <= 0">-</span>
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="opening_quantity">
                                 <th
-                                    class="group-column text-right"
+                                    class="group-column text-right border-right-none border-bottom-none"
                                     [ngClass]="{ 'opening-column': !displayedColumns?.includes('opening_amount') }"
                                     mat-header-cell
                                     *matHeaderCellDef
@@ -417,7 +439,7 @@
                                     {{ localeData?.reports?.qty }}
                                 </th>
                                 <td
-                                    class="text-right"
+                                    class="text-right border-right-none"
                                     [data-title]="localeData?.reports?.qty"
                                     mat-cell
                                     *matCellDef="let element"
@@ -438,12 +460,21 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="opening_amount">
-                                <th class="group-column text-right opening-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right border-left-none border-bottom-none"
+                                    [ngClass]="{
+                                        'opening-column': !displayedColumns?.includes('opening_quantity'),
+                                        'opening-column-group': displayedColumns?.includes('opening_quantity'),
+                                    }"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
                                     [data-title]="localeData?.reports?.value"
-                                    class="text-right"
+                                    class="text-right border-left-none"
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
@@ -466,7 +497,7 @@
                             </ng-container>
                             <ng-container matColumnDef="inward_quantity">
                                 <th
-                                    class="inward-column text-right"
+                                    class="inward-column text-right border-right-none border-bottom-none"
                                     [ngClass]="{ 'inward-column': !displayedColumns?.includes('inward_amount') }"
                                     mat-header-cell
                                     *matHeaderCellDef
@@ -475,7 +506,7 @@
                                     {{ localeData?.reports?.qty }}
                                 </th>
                                 <td
-                                    class="text-right"
+                                    class="text-right border-right-none"
                                     [data-title]="localeData?.reports?.qty"
                                     mat-cell
                                     *matCellDef="let element"
@@ -492,12 +523,21 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="inward_amount">
-                                <th class="group-column text-right inward-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right border-left-none border-bottom-none"
+                                    [ngClass]="{
+                                        'inward-column': !displayedColumns?.includes('inward_quantity'),
+                                        'inward-column-group': displayedColumns?.includes('inward_quantity'),
+                                    }"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
                                     [data-title]="localeData?.reports?.value"
-                                    class="text-right"
+                                    class="text-right border-left-none"
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
@@ -520,7 +560,7 @@
                             </ng-container>
                             <ng-container matColumnDef="outward_quantity">
                                 <th
-                                    class="group-column text-right"
+                                    class="group-column text-right border-right-none border-bottom-none"
                                     [ngClass]="{ 'outward-column': !displayedColumns?.includes('outward_amount') }"
                                     mat-header-cell
                                     *matHeaderCellDef
@@ -529,7 +569,7 @@
                                     {{ localeData?.reports?.qty }}
                                 </th>
                                 <td
-                                    class="text-right"
+                                    class="text-right border-right-none"
                                     [data-title]="localeData?.reports?.qty"
                                     mat-cell
                                     *matCellDef="let element"
@@ -546,12 +586,21 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="outward_amount">
-                                <th class="group-column text-right outward-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right border-left-none border-bottom-none"
+                                    [ngClass]="{
+                                        'outward-column': !displayedColumns?.includes('outward_quantity'),
+                                        'outward-column-group': displayedColumns?.includes('outward_quantity'),
+                                    }"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
                                     [data-title]="localeData?.reports?.value"
-                                    class="text-right"
+                                    class="text-right border-left-none"
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
@@ -574,7 +623,7 @@
                             </ng-container>
                             <ng-container matColumnDef="closing_quantity">
                                 <th
-                                    class="group-column text-right"
+                                    class="group-column text-right border-right-none border-bottom-none"
                                     [ngClass]="{ 'closing-column': !displayedColumns?.includes('closing_amount') }"
                                     mat-header-cell
                                     *matHeaderCellDef
@@ -583,7 +632,7 @@
                                     {{ localeData?.reports?.qty }}
                                 </th>
                                 <td
-                                    class="text-right"
+                                    class="text-right border-right-none"
                                     [data-title]="localeData?.reports?.qty"
                                     mat-cell
                                     *matCellDef="let element"
@@ -600,12 +649,21 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="closing_amount">
-                                <th class="group-column text-right closing-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right border-left-none border-bottom-none border-right-none"
+                                    [ngClass]="{
+                                        'closing-column': !displayedColumns?.includes('closing_quantity'),
+                                        'closing-column-group': displayedColumns?.includes('closing_quantity'),
+                                    }"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
                                     [data-title]="localeData?.reports?.value"
-                                    class="text-right"
+                                    class="text-right border-left-none border-right-none"
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
@@ -628,12 +686,12 @@
                             </ng-container>
                             <ng-container *ngIf="newCustomFieldsColumns?.length">
                                 <ng-container *ngFor="let column of newCustomFieldsColumns" [matColumnDef]="column?.value">
-                                    <th class="report-th-column" mat-header-cell *matHeaderCellDef>
+                                    <th class="report-th-column border-right-none border-bottom-none" mat-header-cell *matHeaderCellDef>
                                         {{ column?.label }}
                                     </th>
                                     <td
                                         [data-title]="column?.label"
-                                        class="word-wrap cursor-pointer report-td-column"
+                                        class="word-wrap cursor-pointer report-td-column border-right-none"
                                         mat-cell
                                         *matCellDef="let element"
                                     >

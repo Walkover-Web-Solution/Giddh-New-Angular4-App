@@ -1,10 +1,10 @@
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
-import { EMAIL_VALIDATION_REGEX, IOption, MOBILE_REGEX_PATTERN } from "../../../app.constant";
+import { EMAIL_VALIDATION_REGEX, IOption, MOBILE_REGEX_PATTERN, SELECTED_ALL_OPTION } from "../../../app.constant";
 import { cloneDeep } from "../../../lodash-optimized";
 
 @Component({
@@ -72,6 +72,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public required: boolean = false;
     /** Hide selected options from dropdown list */
     @Input() public hideSelectedOptions: boolean = true;
+    /** When true, shows an All option that selects every item and writes [SELECTED_ALL_OPTION] */
+    @Input() public showAllOption: boolean = false;
+    /** Custom label for the All option */
+    @Input() public allOptionLabel: string = "";
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -104,6 +108,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public value: any[] = [];
     /** Holds last search value */
     public lastSearchString: string = null;
+    /** Sentinel written when All is selected */
+    public readonly allOptionValue: string = SELECTED_ALL_OPTION;
+    /** Whether the All option is active */
+    public isAllSelected: boolean = false;
     /** Returns true if suffix or prefix is not empty string */
     private get isSuffixPrefixUsed(): boolean {
         return Boolean(this.chipPrefix || this.chipSuffix);
@@ -140,11 +148,13 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public writeValue(value: any): void {
+        const wasAllSelected = this.isAllSelected;
         if (value !== undefined && value !== null) {
             this.value = value;
         } else {
             this.value = [];
         }
+        this.syncAllSelectionFromValue(wasAllSelected);
         this.onChange(value);
     }
 
@@ -156,19 +166,34 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
-            // Apply filtering when options change to respect hideSelectedOptions
+            if (this.isAllSelected && !this.hasRealOptions()) {
+                this.clearAllSelectionState();
+                this.writeValue([]);
+                this.emitList();
+                return;
+            }
             if (!this.enableDynamicSearch) {
                 this.filterOptions(this.lastSearchString || "");
             } else {
-                // For dynamic search, filter options to hide selected ones
                 this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(changes.options.currentValue));
             }
         }
+        if (changes.showAllOption && !changes.showAllOption.firstChange) {
+            if (!this.enableDynamicSearch && this.options) {
+                this.filterOptions(this.lastSearchString || "");
+            } else if (this.enableDynamicSearch && this.options) {
+                this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(this.options));
+            }
+        }
         if (changes?.selectedValues && changes.selectedValues.currentValue) {
-            if (typeof changes.selectedValues.currentValue === "string") {
-                this.chipList = cloneDeep(changes.selectedValues.currentValue?.split(","));
+            const nextSelected = typeof changes.selectedValues.currentValue === "string"
+                ? changes.selectedValues.currentValue.split(",")
+                : cloneDeep(changes.selectedValues.currentValue);
+            if (this.showAllOption && this.hasRealOptions() && (this.isAllSentinel(nextSelected) || this.isAllLabelList(nextSelected))) {
+                this.applyAllChipState();
             } else {
-                this.chipList = cloneDeep(changes.selectedValues.currentValue);
+                this.isAllSelected = false;
+                this.chipList = nextSelected;
             }
             // Refresh filtered options when selected values change
             if (!this.enableDynamicSearch && this.options) {
@@ -213,6 +238,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     private filterOptions(search: string): void {
         let filteredOptions: IOption[] = [];
         this.options?.forEach(option => {
+            if (!option || option?.value === this.allOptionValue) {
+                return;
+            }
             const matchesSearch = typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1;
             let value = option?.value;
             let label = option?.label;
@@ -220,14 +248,14 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                 value = this.chipPrefix + option?.value + this.chipSuffix;
                 label = this.chipPrefix + option?.label + this.chipSuffix;
             }
-            const isNotSelected = !this.hideSelectedOptions || !(this.selectedValues?.includes(value) || this.selectedValues?.includes(label));
+            const isNotSelected = !this.hideSelectedOptions || !this.isOptionCoveredBySelection(option, value, label);
 
             if (matchesSearch && isNotSelected) {
                 filteredOptions.push({ label: option.label, value: option?.value, additional: option });
             }
         });
 
-        this.fieldFilteredOptions$ = of(filteredOptions);
+        this.fieldFilteredOptions$ = of(this.prependAllOption(filteredOptions));
         this.changeDetection.detectChanges();
     }
 
@@ -238,22 +266,37 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public selectOption(option: any): void {
-        if (this.lastSearchString?.length) {
+        // Capture before clearing: dynamic search options are a subset, so selecting
+        // the only visible match must not promote to All.
+        const wasSearching = this.hasActiveSearch();
+        if (wasSearching) {
+            this.lastSearchString = "";
             this.searchFormControl.setValue("");
         }
+        const selectedValue = option?.option?.value?.value;
+        if (this.showAllOption && selectedValue === this.allOptionValue) {
+            this.selectAllOptions();
+            return;
+        }
+        if (this.isAllSelectionActive()) {
+            this.clearAllSelectionState();
+        }
         const selectOptionValue = option?.option?.value?.label;
-        this.writeValue([...this.value, option?.option?.value?.value]);
+        this.writeValue([...this.value, selectedValue]);
         if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue + this.chipSuffix)) {
-            this.chipListUniqueName.push(option.option.value.value);
+            this.chipListUniqueName.push(selectedValue);
             if (!this.isSuffixPrefixUsed) {
                  if (Array.isArray(this.selectedValues)) {
-                     this.selectedValues.push(option.option.value.value);
+                     this.selectedValues.push(selectedValue);
                 } else if (typeof this.selectedValues === 'string') {
                     this.selectedValues = cloneDeep((this.selectedValues as string).split(","));
                 }
             }
             this.chipList.push(this.chipPrefix + selectOptionValue + this.chipSuffix);
-            // This will refresh filtered options and hide the selected item from dropdown
+            if (this.showAllOption && this.shouldAutoPromoteToAll(wasSearching)) {
+                this.selectAllOptions();
+                return;
+            }
             this.emitList();
         }
     }
@@ -266,6 +309,14 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public removeOption(index: number): void {
         if (index >= 0) {
+            if (this.isAllSelected) {
+                this.isAllSelected = false;
+                this.chipList = [];
+                this.chipListUniqueName = [];
+                this.writeValue([]);
+                this.emitList();
+                return;
+            }
             this.chipListUniqueName.splice(index, 1);
             this.chipList.splice(index, 1);
             this.value.splice(index, 1);
@@ -299,6 +350,12 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public addChip(event: any): void {
         const input = event?.input;
+        if (this.isAllSelected) {
+            if (input) {
+                input.value = '';
+            }
+            return;
+        }
         if (this.allowAddChip) {
             const value = event?.value?.trim();
             if (value && (!this.validations?.length || (this.validations?.includes("email") && this.validateEmail(value)) || (this.validations?.includes("mobile") && this.validateMobile(value))) && !this.chipList.includes(value)) {
@@ -345,19 +402,232 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     private getFilteredOptionsForDynamicSearch(options: any[]): IOption[] {
-        if (!this.hideSelectedOptions || !options) {
-            return cloneDeep(options) || [];
+        if (!options) {
+            return this.prependAllOption([]);
+        }
+        if (!this.hideSelectedOptions) {
+            return this.prependAllOption(cloneDeep(options));
         }
 
-        return options.filter(option => {
+        const filtered = options.filter(option => {
+            if (!option || option?.value === this.allOptionValue) {
+                return false;
+            }
             let value = option?.value;
             let label = option?.label;
             if (this.isSuffixPrefixUsed) {
                 value = this.chipPrefix + option?.value + this.chipSuffix;
                 label = this.chipPrefix + option?.label + this.chipSuffix;
             }
-            return !(this.selectedValues?.includes(value) || this.selectedValues?.includes(label));
+            return !this.isOptionCoveredBySelection(option, value, label);
         });
+        return this.prependAllOption(filtered);
+    }
+
+    /**
+     * Selects every option and writes [SELECTED_ALL_OPTION] for the parent.
+     *
+     * @private
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private selectAllOptions(): void {
+        this.applyAllChipState();
+        this.writeValue([this.allOptionValue]);
+        this.emitList();
+    }
+
+    /**
+     * Shows a single All chip and marks All as selected.
+     *
+     * @private
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private applyAllChipState(): void {
+        this.isAllSelected = true;
+        this.chipList = [this.getAllLabel()];
+        this.chipListUniqueName = [this.allOptionValue];
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Syncs All chip state from the control value after writeValue.
+     *
+     * @private
+     * @param {boolean} wasAllSelected Previous All state before the write.
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private syncAllSelectionFromValue(wasAllSelected: boolean): void {
+        this.isAllSelected = this.showAllOption && this.hasRealOptions() && this.isAllSentinel(this.value);
+        if (this.isAllSelected) {
+            this.applyAllChipState();
+        } else if (wasAllSelected) {
+            this.chipList = [];
+            this.chipListUniqueName = [];
+        }
+    }
+
+    /**
+     * True when the control value is exactly [SELECTED_ALL_OPTION].
+     *
+     * @private
+     * @param {any[]} value
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private isAllSentinel(value: any[]): boolean {
+        return Array.isArray(value) && value.length === 1 && value[0] === this.allOptionValue;
+    }
+
+    /**
+     * True when the chip list is only the All label.
+     *
+     * @private
+     * @param {any[]} list
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private isAllLabelList(list: any[]): boolean {
+        return Array.isArray(list) && list.length === 1 && list[0] === this.getAllLabel();
+    }
+
+    /**
+     * True when All is the current selection (chip, unique name, or control value).
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private isAllSelectionActive(): boolean {
+        return this.isAllSelected || this.isAllSentinel(this.value) || this.isAllSentinel(this.chipListUniqueName) || this.isAllLabelList(this.chipList);
+    }
+
+    /**
+     * Clears All so an individual option can replace it.
+     *
+     * @private
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private clearAllSelectionState(): void {
+        this.isAllSelected = false;
+        this.chipList = [];
+        this.chipListUniqueName = [];
+        this.value = [];
+        if (Array.isArray(this.selectedValues)) {
+            this.selectedValues.splice(0);
+        }
+    }
+
+    /**
+     * Label shown for the All chip and All dropdown option.
+     *
+     * @private
+     * @returns {string}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private getAllLabel(): string {
+        return this.allOptionLabel || this.commonLocaleData?.app_all || "All";
+    }
+
+    /**
+     * True when the search box has a non-empty term.
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private hasSearchTerm(): boolean {
+        const search = this.searchFormControl?.value;
+        return typeof search === "string" && !!search.trim();
+    }
+
+    /**
+     * True when a search is active (input value or last applied search string).
+     * lastSearchString matters because the input may already be cleared on select
+     * while the debounced valueChanges has not yet updated it.
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private hasActiveSearch(): boolean {
+        return this.hasSearchTerm() || !!this.lastSearchString?.trim();
+    }
+
+    /**
+     * Prepends the All option when it should be visible in the panel.
+     * All must stay hidden while searching so a filtered subset is not treated as the full list.
+     *
+     * @private
+     * @param {IOption[]} options
+     * @returns {IOption[]}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private prependAllOption(options: IOption[]): IOption[] {
+        if (!this.showAllOption || this.hasActiveSearch() || !this.hasRealOptions()) {
+            return options ?? [];
+        }
+        return [{ label: this.getAllLabel(), value: this.allOptionValue }, ...(options ?? [])];
+    }
+
+    /**
+     * True when the source list has at least one real option (not the All sentinel).
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private hasRealOptions(): boolean {
+        return (this.options ?? []).some(option => option?.value !== undefined && option?.value !== null && option?.value !== this.allOptionValue);
+    }
+
+    /**
+     * True when an option is already covered by the current selection (including All).
+     *
+     * @private
+     * @param {*} option
+     * @param {*} value
+     * @param {*} label
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private isOptionCoveredBySelection(option: any, value: any, label: any): boolean {
+        if (option?.value === this.allOptionValue) {
+            return false;
+        }
+        return this.selectedValues?.includes(value) || this.selectedValues?.includes(label);
+    }
+
+    /**
+     * True when every real option is already selected as an individual chip.
+     * Uses the current options input — for dynamic search that may be a page/search subset.
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private areAllRealOptionsSelected(): boolean {
+        const allValues = (this.options ?? [])
+            .map(option => option?.value)
+            .filter(value => value !== undefined && value !== null && value !== this.allOptionValue);
+        return allValues.length > 0 && allValues.every(value => this.value?.includes(value));
+    }
+
+    /**
+     * Whether selecting the latest chip should collapse into the All sentinel.
+     * Base: every real option in the source list is selected.
+     * Corner: during dynamic search, options is only the search result set — selecting
+     * the single match must stay as that chip, not All. Explicit All clicks are separate.
+     *
+     * @private
+     * @param {boolean} wasSearching Whether a search was active when the option was chosen.
+     * @returns {boolean}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private shouldAutoPromoteToAll(wasSearching: boolean): boolean {
+        if (this.enableDynamicSearch && wasSearching) {
+            return false;
+        }
+        return this.areAllRealOptionsSelected();
     }
 
     /**

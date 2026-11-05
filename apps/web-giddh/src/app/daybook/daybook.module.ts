@@ -27,8 +27,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LedgerModule } from '../ledger/ledger.module';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
@@ -63,8 +61,6 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
         MatSlideToggleModule,
         LedgerModule,
         WatchVideoModule,
-        NgxMatSelectSearchModule,
-        MatSelectModule,
         MatMenuModule,
         FormFieldsModule,
         GiddhDatePipe

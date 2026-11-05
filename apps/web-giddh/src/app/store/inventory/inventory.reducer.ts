@@ -1,5 +1,6 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
 import { CreateStockRequest, GroupStockReportResponse, INameUniqueName, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockMappedUnitResponse, StockReportResponse, StocksResponse, StockUnitRequest } from '../../models/api-models/Inventory';
+import { InventorySettingsResponse } from '../../models/api-models/InventorySettings';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groups-with-stocks.interface';
 import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -64,6 +65,8 @@ export interface InventoryState {
     getStocksInProgress: boolean;
     stocksTotalPages: number;
     bulkStock:any;
+    /** Company inventory settings used across voucher/inventory screens. */
+    inventorySettings: InventorySettingsResponse | null;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -134,7 +137,8 @@ const initialState: InventoryState = {
     isGetManufactureStockInProgress: false,
     getStocksInProgress: false,
     stocksTotalPages: 0,
-    bulkStock: null
+    bulkStock: null,
+    inventorySettings: null
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -559,6 +563,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             return Object.assign({}, state, { activeStock: null, activeStockUniqueName: null });
         case InventoryActionsConst.ResetInventoryState:
             return Object.assign({}, state, initialState);
+        case InventoryActionsConst.SetInventorySettings:
+            return Object.assign({}, state, { inventorySettings: action.payload });
         case InventoryActionsConst.MoveStock:
             return Object.assign({}, state, { moveStockSuccess: false });
         case InventoryActionsConst.MoveStockResponse:

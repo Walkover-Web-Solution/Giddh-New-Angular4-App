@@ -2,7 +2,7 @@ import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, EventEmitter, Output, TemplateRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, type SimpleChanges, ViewChild, EventEmitter, Output, TemplateRef } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../shared/helpers';

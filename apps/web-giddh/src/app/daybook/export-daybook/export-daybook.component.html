@@ -3,6 +3,7 @@
         <span>{{ commonLocaleData?.export_daybook }}</span>
     </div>
     <mat-dialog-content class="dialog-body" id="export-body">
+        <p class="mb-3">{{ commonLocaleData?.app_note }}: {{ localeData?.csv_semicolon_separator_note }}</p>
         <form name="addShareEmailForm" class="export-daybook" novalidate autocomplete="off">
             <div class="pb-4 clear-both">
                 <label class="w100 d-sm-inline-flex d-flex">{{ localeData?.type }}</label>

@@ -11,6 +11,7 @@ import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angula
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { TemplateRef } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, KeyCodesEnum, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
@@ -106,6 +107,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     public showAppleLogin: boolean = false;
     /* Hold logo source */
     public brandLogoUrl: string = '';
+    /** Partner callback URL from query (?redirect_url=). When set, Google auth uses partner bridge-token mode. */
+    public partnerRedirectUrl: string = '';
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,
@@ -120,7 +123,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private commonAction: CommonActions,
         private generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private route: ActivatedRoute
     ) {
         // Use relative paths for assets to avoid port/domain issues in Electron
         this.urlPath = Configuration.isElectron ? "" : "";
@@ -177,6 +181,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.generateRandomBanner();
+        this.partnerRedirectUrl = this.route.snapshot.queryParams['redirect_url'] || '';
         this.mobileVerifyForm = this._fb.group({
             country: ["India", [Validators.required]],
             mobileNumber: ["", [Validators.required]],
@@ -220,7 +225,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     if (!res && user) {
                         switch (user.provider) {
                             case "GOOGLE": {
-                                this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+                                this.dispatchGoogleAuth(user.token);
                                 break;
                             }
                             default: {
@@ -373,7 +378,7 @@ export class LoginComponent implements OnInit, OnDestroy {
      */
     public showTwoWayAuthModal() {
         this.twoWayAuthDialogRef = this.dialog.open(this.twoWayAuthTemplate, {
-            panelClass: 'mat-dialog-md',
+            panelClass: 'mat-dialog-sm',
             disableClose: true
         });
 
@@ -429,7 +434,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
                         // Handle successful response
                         if (arg && arg.access_token) {
-                            this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                            this.dispatchGoogleAuth(arg.access_token);
                         } else {
                             this.toaster.errorToast('Google authentication failed - invalid token format');
                         }
@@ -453,6 +458,20 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    /**
+     * Dispatches Google auth. Optional redirect_url query enables partner bridge-token mode.
+     */
+    private dispatchGoogleAuth(accessToken: string): void {
+        if (this.partnerRedirectUrl) {
+            this.store.dispatch(this.loginAction.signupWithGoogle({
+                accessToken,
+                redirectUrl: this.partnerRedirectUrl
+            }));
+            return;
+        }
+        this.store.dispatch(this.loginAction.signupWithGoogle(accessToken));
     }
 
     public ngOnDestroy() {

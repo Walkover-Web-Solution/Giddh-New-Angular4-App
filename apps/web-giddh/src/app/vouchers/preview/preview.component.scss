@@ -27,6 +27,30 @@
     height: calc(100vh - (var(--header-height) + 30px));
 
     .preview-list {
+        .mat-grid-wrapper {
+            position: relative;
+            flex: 1;
+            min-height: calc(100vh - 185px);
+
+            .list-loader-overlay {
+                position: absolute;
+                inset: 0;
+                z-index: 2;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                ::ng-deep .loader-main {
+                    margin-top: 0;
+                    margin-bottom: 0;
+                }
+
+                ::ng-deep .spinner2 {
+                    margin: 0;
+                }
+            }
+        }
+
         .list-viewport {
             height: calc(100vh - 185px);
         }

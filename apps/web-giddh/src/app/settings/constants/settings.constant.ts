@@ -51,6 +51,7 @@ export interface OrganizationProfile {
     showAccountUniqueName?: boolean;
     autoGenerateNote?: boolean;
     currencyDisplayFormat?: CurrencyDisplayFormat;
+    batchTrackingEnabled?: boolean;
 }
 
 /** PDF currency display format options */

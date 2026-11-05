@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { NgForm } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { GenerateEwayBill, IEwayBillTransporter, IAllTransporterDetails, IEwayBillfilter } from '../../../models/api-models/Invoice';
+import { GenerateEwayBill, IEwayBillfilter } from '../../../models/api-models/Invoice';
 import { IOption } from '../../../app.constant';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
@@ -15,9 +14,9 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
-import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGINATION_LIMIT } from '../../../app.constant';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
+import { ManageTransporterComponent } from '../../../shared/manage-transporter/manage-transporter.component';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -26,16 +25,10 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
     standalone:false
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds eWayBillCredentialsTemplate reference */
     @ViewChild('eWayBillCredentialsTemplate', { static: true }) public eWayBillCredentialsTemplate: TemplateRef<any>;
     /** Holds generateInvForm reference */
     @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
-    /** Holds generateTransporterForm reference */
-    @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
-    /** Transporter template reference */
-    @ViewChild('transporterTemplate', { static: true }) public transporterTemplate: TemplateRef<any>;
     /** Transporter dialog reference */
     public transporterDialogRef: MatDialogRef<any>;
 
@@ -44,20 +37,11 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public generateBill: any[] = [];
     public isEwaybillGenerateInProcess$: Observable<boolean>;
     public isEwaybillGeneratedSuccessfully$: Observable<boolean>;
-    public isGenarateTransporterInProcess$: Observable<boolean>;
-    public isGenarateTransporterSuccessfully$: Observable<boolean>;
-    public updateTransporterInProcess$: Observable<boolean>;
-    public updateTransporterSuccess$: Observable<boolean>;
     public isUserAddedSuccessfully$: Observable<boolean>;
     public isLoggedInUserEwayBill$: Observable<boolean>;
     public transporterDropdown$: Observable<IOption[]>;
     public keydownClassAdded: boolean = false;
-    public transportEditMode: boolean = false;
-    public transporterList$: Observable<IEwayBillTransporter[]>;
-    public transporterListDetails$: Observable<IAllTransporterDetails>;
-    public transporterListDetails: IAllTransporterDetails;
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
-    public currenTransporterId: string;
     public isUserlogedIn: boolean;
     public showClear: boolean = false;
     public generateEwayBillform: GenerateEwayBill = {
@@ -77,10 +61,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         docType: null,
         toGstIn: null,
         uniqueName: null
-    };
-    public generateNewTransporter: IEwayBillTransporter = {
-        transporterId: null,
-        transporterName: null
     };
     public selectedInvoices: any[] = [];
     public supplyType: any = [{}];
@@ -109,10 +89,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     private eWayBillCredentialsDialogRef: MatDialogRef<any>;
     /** Dialog reference for invoice remove confirmation */
     private invoiceRemoveConfirmationDialogRef: MatDialogRef<any>;
-    /** Data source for transporter table */
-    public transporterDataSource = new MatTableDataSource<IEwayBillTransporter>();
-    /** Displayed columns for transporter table */
-    public displayedColumns: string[] = ['transporterName', 'transporterId', 'actions'];
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
@@ -120,12 +96,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         private dialog: MatDialog) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
-        this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
-        this.updateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.updateTransporterInProcess), takeUntil(this.destroyed$));
-        this.updateTransporterSuccess$ = this.store.pipe(select(p => p.ewaybillstate.updateTransporterSuccess), takeUntil(this.destroyed$));
-        this.isGenarateTransporterSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInSuccess), takeUntil(this.destroyed$));
-        this.transporterListDetails$ = this.store.pipe(select(p => p.ewaybillstate.TransporterListDetails), takeUntil(this.destroyed$));
-        this.transporterList$ = this.store.pipe(select(p => p.ewaybillstate.TransporterList), takeUntil(this.destroyed$));
         this.isLoggedInUserEwayBill$ = this.store.pipe(select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess), takeUntil(this.destroyed$));
         this.isUserAddedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
         this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : '';
@@ -170,15 +140,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
 
-        this.transporterListDetails$.subscribe(op => {
-            this.transporterListDetails = op;
-        });
-
-        this.transporterList$.subscribe(transporters => {
-            if (transporters) {
-                this.transporterDataSource.data = transporters;
-            }
-        });
         this.store.pipe(select(state => state.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
                 let transporterDropdown = null;
@@ -205,21 +166,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.generateEwayBillForm.reset();
             }
         });
-        this.updateTransporterSuccess$.subscribe(s => {
-            if (s) {
-                this.generateNewTransporterForm.reset();
-            }
-        });
-
-        this.store.pipe(select(state => state.ewaybillstate.isAddnewTransporterInSuccess), takeUntil(this.destroyed$)).subscribe(p => {
-            if (p) {
-                this.clearTransportForm();
-            }
-        });
-    }
-
-    public clearTransportForm() {
-        this.generateNewTransporter.transporterId = this.generateNewTransporter.transporterName = null;
     }
 
     // generate Eway
@@ -281,50 +227,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public openTransporterDialog(): void {
-        this.transporterDialogRef = this.dialog.open(this.transporterTemplate, ASIDE_PANE_CONFIG);
-        if (this.generateNewTransporterForm) {
-            this.generateNewTransporterForm.reset();
-        }
-        this.transportEditMode = false;
-    }
-
-    public generateTransporter(generateTransporterForm: NgForm) {
-        this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm?.value));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.detectChanges();
-    }
-
-    public updateTransporter(generateTransporterForm: NgForm) {
-        this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm?.value));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.transportEditMode = false;
-        this.detectChanges();
+        this.transporterDialogRef = this.dialog.open(ManageTransporterComponent, ASIDE_PANE_CONFIG);
     }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    public editTransporter(trans: any) {
-        this.seTransporterDetail(trans);
-        this.transportEditMode = true;
-    }
-
-    public seTransporterDetail(trans) {
-        if (trans !== undefined && trans) {
-            this.generateNewTransporter.transporterId = trans.transporterId;
-            this.generateNewTransporter.transporterName = trans.transporterName;
-            this.currenTransporterId = trans.transporterId;
-        }
-        this.detectChanges();
-    }
-
-    public deleteTransporter(trans: IEwayBillTransporter) {
-        this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.openTransporterDialog();
-        this.detectChanges();
     }
 
     /**
@@ -356,36 +264,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (!this._cdRef['destroyed']) {
             this._cdRef.detectChanges();
         }
-    }
-
-    /**
-     * Handles pagination events and updates API parameters
-     *
-     * @param {PageEvent} event - Contains pagination details
-     * @memberof EWayBillCreateComponent
-     */
-    public handlePageEvent(event: PageEvent): void {
-        // For transporter list, we always use event.pageIndex + 1 since page size is fixed at 1
-        if (this.transporterFilterRequest.count !== event.pageSize) {
-            this.transporterFilterRequest.page = 1;
-        } else {
-            this.transporterFilterRequest.page = event.pageIndex + 1;
-        }
-        this.transporterFilterRequest.count = event.pageSize;
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.detectChanges();
-    }
-
-    /**
-     * Handles sorting events and updates API parameters
-     *
-     * @param {any} event - Contains sorting details
-     * @memberof EWayBillCreateComponent
-     */
-    public sortChange(event: any): void {
-        this.transporterFilterRequest.sort = event?.direction;
-        this.transporterFilterRequest.sortBy = event?.active;
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
 
     public selectedModeOfTrans(mode: string) {

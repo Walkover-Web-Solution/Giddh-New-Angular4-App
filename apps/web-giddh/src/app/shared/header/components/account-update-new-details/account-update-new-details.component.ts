@@ -61,7 +61,7 @@ import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/b
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
-import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
+import { AccountingGroupEnum, CountryNames, FIXED_TOP_LEVEL_ACCOUNTING_GROUPS } from '../../../Enums/common.enum';
 import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
 import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.constant';
@@ -143,6 +143,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public formFields: any[] = [];
     /** Flag indicating whether the entered GSTIN number is valid. */
     public isGstValid: boolean = true;
+    /** Flag indicating whether the entered bank account/IBAN/SWIFT code length is valid. */
+    public isBankDetailsValid: boolean = true;
     /** Holds active selected Tab Label */
     public selectedTabLabel: string = '';
     public moveAccountSuccess$: Observable<boolean>;
@@ -239,8 +241,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public portalIndex: number;
     /** Stores the voucher API version of company */
     public voucherApiVersion: number;
-    /** This will hold is portal default */
-    public isPortalDefault: boolean;
     /** True if current currency is not company currency */
     public isForeignCurrency: boolean = false;
     /** Hold all temporary save bulk balance data */
@@ -513,14 +513,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 const users = this.addAccountForm.get('portalDomain') as FormArray;
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
-                    if (user) {
-                        if (!this.isPortalDefault) {
-                            user?.get('name').setValue(response?.attentionTo);
-                            user?.get('email').setValue(response?.email);
-                            user?.get('contactNo').setValue(response?.mobileNo);
-                            user?.get('default').setValue(true);
-                        }
-                    } else {
+                    if (!user) {
                         let setValue = false;
                         let matchedEmail = users.value.filter(user => user.email === response.email);
                         if (matchedEmail?.length) {
@@ -897,6 +890,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             control.get('swiftCode')?.patchValue(null);
             control.get('ifsc')?.patchValue("");
         }
+        this.isBankDetailsValid = true;
     }
 
     /**
@@ -1117,8 +1111,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
         this.checkNameFieldValidation();
-
-        if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
+        
+        if (this.addAccountForm.invalid || !this.isGstValid  || this.isMobileNumberInvalid || !this.isBankDetailsValid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
             this.navigateToFirstErrorTab();
             return;
@@ -1786,23 +1780,32 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (element && element.value && element.value.length < 9) {
                     this._toaster.errorToast(this.commonLocaleData?.app_invalid_bank_account_number);
                     element?.classList?.add('error-box');
+                    this.isBankDetailsValid = false;
+                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(true));
                 } else {
                     element?.classList?.remove('error-box');
+                    this.isBankDetailsValid = true;
                 }
             } else {
                 if (element && element.value && element.value.length < 23) {
                     this._toaster.errorToast(this.commonLocaleData?.app_invalid_iban);
                     element?.classList?.add('error-box');
+                    this.isBankDetailsValid = false;
+                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(true));
                 } else {
                     element?.classList?.remove('error-box');
+                    this.isBankDetailsValid = true;
                 }
             }
         } else if (type === 'swiftCode') {
             if (element && element.value && element.value.length < 8) {
                 this._toaster.errorToast(this.commonLocaleData?.app_invalid_swift_code);
                 element?.classList?.add('error-box');
+                this.isBankDetailsValid = false;
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(true));
             } else {
                 element?.classList?.remove('error-box');
+                this.isBankDetailsValid = true;
             }
         }
     }
@@ -1973,6 +1976,27 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
+     * Map searchable groups to dropdown options, excluding fixed groups.
+     *
+     * @private
+     * @param {*} results Group search API results
+     * @return {*}  {IOption[]}
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private filterMovableGroups(results: any[]): any[] {
+        return (Array.isArray(results) ? results : [])
+            .filter(result => !FIXED_TOP_LEVEL_ACCOUNTING_GROUPS.includes(result?.uniqueName));
+    }
+
+    private toMovableGroupOptions(results: any[]): IOption[] {
+        return this.filterMovableGroups(results).map(result => ({
+            value: result?.uniqueName,
+            label: `${result?.name}`,
+            additional: result?.parentGroups
+        }));
+    }
+
+    /**
      * Search query change handler for group
      *
      * @param {string} query Search query
@@ -1993,13 +2017,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             this.groupService.searchGroups(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
-                    const searchResults = data.body.results.map(result => {
-                        return {
-                            value: result?.uniqueName,
-                            label: `${result?.name}`,
-                            additional: result?.parentGroups
-                        }
-                    }) || [];
+                    const searchResults = this.toMovableGroupOptions(data.body.results);
+                    const movableResults = this.filterMovableGroups(data.body.results);
                     if (page === 1) {
                         this.flatGroupsOptions = searchResults;
                     } else {
@@ -2010,8 +2029,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    this.changeDetectorRef.detectChanges();
                     if (successCallback) {
-                        successCallback(data.body.results);
+                        successCallback(movableResults);
                     }
                 }
             });
@@ -2061,13 +2081,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.groupsSearchResultsPaginationData.page + 1,
                 (response) => {
                     if (!this.groupsSearchResultsPaginationData.query) {
-                        const results = response.map(result => {
-                            return {
-                                value: result?.uniqueName,
-                                label: `${result?.name}`,
-                                additional: result?.parentGroups
-                            }
-                        }) || [];
+                        const results = this.toMovableGroupOptions(response);
                         this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
@@ -2084,13 +2098,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     private loadDefaultGroupsSuggestions(): void {
         this.onGroupSearchQueryChanged('', 1, (response) => {
-            this.defaultGroupSuggestions = response.map(result => {
-                return {
-                    value: result?.uniqueName,
-                    label: `${result?.name}`,
-                    additional: result?.parentGroups
-                }
-            }) || [];
+            this.defaultGroupSuggestions = this.toMovableGroupOptions(response);
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
             this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
             this.flatGroupsOptions = [...this.defaultGroupSuggestions];
@@ -2334,13 +2342,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         .pipe(takeUntil(this.destroyed$))
                         .subscribe((response) => {
                             if (response?.body?.length && response?.status === 'success') {
-                                this.isPortalDefault = false;
                                 let mappings = this.addAccountForm.get('portalDomain') as FormArray;
                                 mappings.clear();
                                 response.body?.forEach((item) => {
-                                    if (item && (item.name || item.email) && item.default) {
-                                        this.isPortalDefault = true;
-                                    }
                                     this.addNewPortalUser(item);
                                 });
                             } else {
@@ -2704,11 +2708,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     private navigateToFirstErrorTab(): void {
-        const tabControlMap: { controlNames: string[]; index: number }[] = [
+        const tabControlMap: { controlNames: string[]; index: number}[] = [
             { controlNames: ['addresses'], index: 0 },
             { controlNames: ['attentionTo', 'mobileNo', 'email'], index: 1 },
             { controlNames: ['portalDomain'], index: 2 },
-            { controlNames: ['accountBankDetails'], index: 3 },
+            { controlNames: ['accountBankDetails'], index: 2},
             { controlNames: ['uniqueName', 'closingBalanceTriggerAmount', 'hsnOrSac', 'hsnNumber', 'sacNumber'], index: 4 },
             { controlNames: ['customFields'], index: 5 },
         ];

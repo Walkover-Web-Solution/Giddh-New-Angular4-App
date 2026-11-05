@@ -11,7 +11,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    SimpleChanges,
+    type SimpleChanges,
     ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
@@ -19,15 +19,19 @@ import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Se
 import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
+import { appendUncheckedReportSelections, type ReportSelectionNode, type UncheckedReportSelection } from '../../../../report-selection';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { each } from '../../../../../lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+
+dayjs.extend(customParseFormat);
 
 @Component({
 selector: 'balance-sheet-grid',
@@ -66,9 +70,25 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     /** True, when expand all button is toggled while search is enabled */
     public isExpandToggledDuringSearch: boolean;
     /** List of check groups accounts */
-    private listOfCheckGroupsAccounts: any[] = [];
+    private listOfCheckGroupsAccounts: UncheckedReportSelection[] = [];
     /** Holds images folder path */
     public imgPath: string = "";
+
+    /**
+     * Filter from-date minus one day, for the opening "As of" column.
+     *
+     * @readonly
+     * @type {string}
+     * @memberof BalanceSheetGridComponent
+     */
+    public get previousFromDate(): string {
+        const from = this.bsData?.dates?.from;
+        if (!from || from === 'Invalid date') {
+            return '';
+        }
+        const parsed = dayjs(from, GIDDH_DATE_FORMAT, true);
+        return parsed.isValid() ? parsed.subtract(1, 'day').format(GIDDH_DATE_FORMAT) : from;
+    }
 
     constructor(
         private cd: ChangeDetectorRef,
@@ -222,31 +242,9 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
         }, 400);
     }
 
-    /**
-     * Recursive function to extract checked accounts/groups and store it in listOfCheckGroupsAccounts.
-     * It loops through the groupAccountDetails array and checks if the account/group is checked.
-     * If checked, it adds the account/group to listOfCheckGroupsAccounts with checked set to false.
-     * Then it recursively calls itself on the childGroups and accounts of the group.
-     * @param groupAccountDetails array of account/group objects
-     * @param entityType type of entity, either 'group' or 'account'
-     * @memberof BalanceSheetGridComponent
-     */
-    private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        (Array.isArray(groupAccountDetails) ? groupAccountDetails : []).forEach(groupAccount => {
-            if (groupAccount.checked) {
-                this.listOfCheckGroupsAccounts.push({
-                    uniqueName: groupAccount.uniqueName,
-                    entityType,
-                    checked: false
-                });
-            }
-            if (groupAccount.childGroups?.length) {
-                this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
-            }
-            if (groupAccount.accounts?.length) {
-                this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
-            }
-        });
+    /** Appends checked nodes to the pending uncheck request without changing the report. */
+    private extractCheckedAccountsGroups(groupAccountDetails: readonly ReportSelectionNode[], entityType: 'group' | 'account'): void {
+        appendUncheckedReportSelections(groupAccountDetails, entityType, this.listOfCheckGroupsAccounts);
     }
 
     /**

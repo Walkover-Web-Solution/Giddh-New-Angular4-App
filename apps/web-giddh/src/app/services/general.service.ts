@@ -10,13 +10,13 @@ import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eve
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
-import { CompanyCreateRequest, CompanyResponse } from '../models/api-models/Company';
+import { Addresses, CompanyCreateRequest, CompanyResponse } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, GIDDH_ONLY_ROUTES, GiddhUiDomain, IOption, MOBILE_NUMBER_SELF_URL, GiddhRegion, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, GIDDH_ONLY_ROUTES, GiddhUiDomain, IOption, MOBILE_NUMBER_SELF_URL, GiddhRegion, RTL_COUNTRY_CODES, RTL_CURRENCY_CODES, RTL_LANGUAGE_CODES, RTL_SCRIPT_SUBTAGS, SUPPORTED_OPERATING_SYSTEMS, TextDirection, WeekdaysEnum } from '../app.constant';
 import { RecurringWeekday } from '../models/enums/recurring-voucher.enum';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -30,6 +30,7 @@ import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
 import { Configuration, INTERNAL_EMAILS_DOMAINS } from '../app.constant';
+import { normalizeSelectedAllRequest } from '../shared/helpers/selected-all';
 import { cloneDeep, find,orderBy } from '../lodash-optimized';
 import { ToasterService } from './toaster.service';
 import { AbstractControl } from '@angular/forms';
@@ -67,6 +68,8 @@ export class GeneralService {
     public voucherApiVersion: number;
     /** Stores the active company object, used for company-level fallbacks such as postal code label resolution */
     public activeCompany: CompanyResponse;
+    /** Organization addresses for TB/PL/BS CSV header only (company or branch); do not mutate activeCompany.addresses */
+    public csvExportAddresses: Addresses[] = [];
 
     get user(): UserDetails {
         return this._user;
@@ -133,8 +136,22 @@ export class GeneralService {
         private toasterService: ToasterService,
         private uiSettingsService: UiSettingsService
     ) {
-        const isGiddhDomain = this.config?.IS_GIDDH_DOMAIN ?? [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION].map(url => new URL(url).hostname).includes(window.location.hostname);
-        this.isGiddhDomain.set(isGiddhDomain);
+        this.isGiddhDomain.set(Boolean(this.config?.IS_GIDDH_DOMAIN) || this.resolveIsGiddhDomainFromLocation());
+    }
+
+    /**
+     * Fallback when ServiceConfig is missing or Electron reports an empty hostname.
+     */
+    private resolveIsGiddhDomainFromLocation(): boolean {
+        const hostname = window.location.hostname;
+        // Electron uses file:// so hostname is ''
+        if (Configuration.isElectron || !hostname) {
+            return true;
+        }
+
+        const giddhHostnames = [GiddhUiDomain.LOCAL, GiddhUiDomain.TEST, GiddhUiDomain.PRODUCTION]
+            .map(url => new URL(url).hostname);
+        return giddhHostnames.includes(hostname);
     }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -149,6 +166,19 @@ export class GeneralService {
             }
         });
         return url;
+    }
+
+    /**
+     * Replaces selected-all sentinel arrays with empty arrays and collects
+     * their field names in a root-level `selectAllFields` array.
+     *
+     * @param node Request object or nested request object
+     * @param createCopy When true, transforms and returns a deep clone without changing the original object
+     * @returns The transformed request object
+     * @memberof GeneralService
+     */
+    public replaceSelectedAllOptions<T>(node: T, createCopy: boolean = false): T {
+        return normalizeSelectedAllRequest(createCopy ? cloneDeep(node) : node);
     }
 
     public setIsMobileView(isMobileView: boolean) {
@@ -191,29 +221,54 @@ export class GeneralService {
 
     storeUtmParameters(routerParams: any): void {
         if (routerParams['utm_source']) {
-            localStorage.setItem('utm_source', routerParams['utm_source']);
+            localStorage.setItem('utm_source', decodeURIComponent(routerParams['utm_source']));
         }
         if (routerParams['utm_medium']) {
-            localStorage.setItem('utm_medium', routerParams['utm_medium']);
+            localStorage.setItem('utm_medium', decodeURIComponent(routerParams['utm_medium']));
         }
         if (routerParams['utm_campaign']) {
-            localStorage.setItem('utm_campaign', routerParams['utm_campaign']);
+            localStorage.setItem('utm_campaign', decodeURIComponent(routerParams['utm_campaign']));
         }
         if (routerParams['utm_term']) {
-            localStorage.setItem('utm_term', routerParams['utm_term']);
+            localStorage.setItem('utm_term', decodeURIComponent(routerParams['utm_term']));
         }
         if (routerParams['utm_content']) {
-            localStorage.setItem('utm_content', routerParams['utm_content']);
+            localStorage.setItem('utm_content', decodeURIComponent(routerParams['utm_content']));
         }
         if (routerParams['region']) {
-            localStorage.setItem('region', routerParams['region']);
+            localStorage.setItem('region', decodeURIComponent(routerParams['region']));
+        }
+        if (routerParams['ref']) {
+            localStorage.setItem('ref', decodeURIComponent(routerParams['ref']));
+        }
+        if (routerParams['source']) {
+            localStorage.setItem('source', decodeURIComponent(routerParams['source']));
         }
     }
 
     getUtmParameter(param: string): string {
-        if (localStorage.getItem(param)) {
-            return localStorage.getItem(param);
-        } else {
+        const localValue = localStorage.getItem(param);
+        if (localValue) {
+            return localValue;
+        }
+
+        try {
+            const cookieValue = this.getRawCookieValue('giddh_query');
+            if (!cookieValue) {
+                console.warn(`[getUtmParameter] No localStorage or giddh_query cookie for "${param}"`);
+                return "";
+            }
+
+            const giddhQuery = JSON.parse(decodeURIComponent(cookieValue)) as Record<string, unknown>;
+            const queryValue = giddhQuery?.[param];
+            if (typeof queryValue === 'string' || typeof queryValue === 'number') {
+                return String(queryValue);
+            }
+
+            console.warn(`[getUtmParameter] giddh_query cookie has no "${param}"`, giddhQuery);
+            return "";
+        } catch (error) {
+            console.error(`[getUtmParameter] Failed to read "${param}" from giddh_query cookie`, error);
             return "";
         }
     }
@@ -225,6 +280,11 @@ export class GeneralService {
         localStorage.removeItem("utm_term");
         localStorage.removeItem("utm_content");
         localStorage.removeItem("region");
+        localStorage.removeItem("ref");
+        localStorage.removeItem("source");
+
+        // Remove giddh_query cookie
+        this.setCookie('giddh_query', null, 0);
     }
 
     getLastElement(array) {
@@ -687,11 +747,22 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getCookieValue(name: any): any {
+        const cookieValue = this.getRawCookieValue(name);
+        return cookieValue ? cookieValue.toUpperCase() : null;
+    }
+
+    /**
+     * Returns the raw cookie value without transforming case.
+     *
+     * @param {string} name Cookie name
+     * @returns {(string | null)} Raw cookie value or null when missing
+     * @memberof GeneralService
+     */
+    public getRawCookieValue(name: string): string | null {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) {
-            const cookieValue = parts.pop().split(';').shift();
-            return cookieValue.toUpperCase();
+            return parts.pop()?.split(';').shift() ?? null;
         }
         return null;
     }
@@ -856,13 +927,60 @@ export class GeneralService {
      *  @memberof GeneralService
      */
     public isRtlCurrency(currencyCode: string): boolean {
-        const rtlCurrencyCodes = ['AED'];
-
-        if (rtlCurrencyCodes?.indexOf(currencyCode) > -1) {
+        if (RTL_CURRENCY_CODES?.indexOf(currencyCode) > -1) {
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * This will return true if the given language/locale code is written right-to-left
+     *
+     * @param {string} languageCode Language code, e.g. 'ar', 'ur', 'pa-Arab'
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isRtlLanguage(languageCode: string): boolean {
+        const code = languageCode?.toLowerCase()?.trim();
+        if (!code) {
+            return false;
+        }
+        const parts = code.split(/[-_]/);
+        if (RTL_LANGUAGE_CODES?.indexOf(parts[0]) > -1) {
+            return true;
+        }
+        return parts.slice(1).some(part => RTL_SCRIPT_SUBTAGS?.indexOf(part) > -1);
+    }
+
+    /**
+     * This will return true if the given alpha-2 country code uses a right-to-left script
+     *
+     * @param {string} countryCode Alpha-2 country code, e.g. 'AE'
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isRtlCountry(countryCode: string): boolean {
+        return RTL_COUNTRY_CODES?.indexOf(countryCode?.toUpperCase()) > -1;
+    }
+
+    /**
+     * This will return the text direction of the given language code, falls back
+     * to the country code when no language code is provided
+     *
+     * @param {string} languageCode Language code, e.g. 'ar'
+     * @param {string} [countryCode] Alpha-2 country code, e.g. 'AE'
+     * @returns {TextDirection} 'rtl' when right-to-left else 'ltr'
+     * @memberof GeneralService
+     */
+    public getTextDirection(languageCode: string, countryCode?: string): TextDirection {
+        if (this.isRtlLanguage(languageCode)) {
+            return TextDirection.RTL;
+        }
+        if (!languageCode && this.isRtlCountry(countryCode)) {
+            return TextDirection.RTL;
+        }
+        return TextDirection.LTR;
     }
 
     /**
@@ -1202,7 +1320,7 @@ export class GeneralService {
                 balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
                 balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
             }
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment, VoucherTypeEnum.purchaseOrder]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.deliveryChallan, VoucherTypeEnum.receiptNote]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
@@ -1219,12 +1337,19 @@ export class GeneralService {
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
             let balanceDueTooltipText;
-            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
-                const gainLossText = localeData?.exchange_gain_loss_label?.
-                    replace("[BASE_CURRENCY]", baseCurrency)?.
-                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
-                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss);
-                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
+            if (item.gainLoss) {
+                const profitType = item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss;
+                const gainLossAmount = Math.abs(item.gainLoss);
+                const buildGainLossTooltip = (amount: number): string => {
+                    const gainLossText = localeData?.exchange_gain_loss_label?.
+                        replace("[BASE_CURRENCY]", baseCurrency)?.
+                        replace("[AMOUNT]", String(amount ?? 0))?.
+                        replace('[PROFIT_TYPE]', profitType);
+                    // Locale label already ends with ": ", so do not add another colon.
+                    return `${gainLossText ?? ""}${gainLossAmount}`;
+                };
+                grandTotalTooltipText = buildGainLossTooltip(grandTotalAmountForCompany);
+                balanceDueTooltipText = buildGainLossTooltip(balanceDueAmountForCompany);
             } else {
                 balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
             }
@@ -1804,13 +1929,16 @@ export class GeneralService {
     public getOperatingSystem(): SUPPORTED_OPERATING_SYSTEMS {
         const platform = window.navigator.userAgent.toLowerCase(),
             macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i,
-            windowsPlatforms = /(win32|win64|windows|wince)/i;
+            windowsPlatforms = /(win32|win64|windows|wince)/i,
+            linuxPlatforms = /(linux|ubuntu|debian|fedora|redhat)/i;
         let operatingSystem = null;
 
         if (macosPlatforms.test(platform)) {
             operatingSystem = SUPPORTED_OPERATING_SYSTEMS.MacOS;
         } else if (windowsPlatforms.test(platform)) {
             operatingSystem = SUPPORTED_OPERATING_SYSTEMS.Windows;
+        } else if (linuxPlatforms.test(platform)) {
+            operatingSystem = SUPPORTED_OPERATING_SYSTEMS.Linux;
         }
 
         return operatingSystem;
@@ -2356,10 +2484,6 @@ export class GeneralService {
         const basePath = this.router.url.split('?')[0];
         const forcedParams: Record<string, any> = {};
 
-        this.debugLog('[getCurrentPath] router.url:', this.router.url);
-        this.debugLog('[getCurrentPath] basePath:', basePath);
-        this.debugLog('[getCurrentPath] currentUrlParams:', currentUrlParams);
-
         if (currentUrlParams?.required) {
             const requiredKeys: string[] = currentUrlParams.required.split(',');
             requiredKeys.forEach(key => {
@@ -2377,10 +2501,6 @@ export class GeneralService {
         const scopedPath = Object.keys(forcedParams).length
             ? `${basePath}?${Object.entries(forcedParams).map(([k, v]) => `${k}=${v}`).join('&')}`
             : basePath;
-
-        this.debugLog('[getCurrentPath] forcedParams:', forcedParams);
-        this.debugLog('[getCurrentPath] scopedPath:', scopedPath);
-        this.debugLog('[getCurrentPath] replaceOnly:', replaceOnly);
 
         return { path: scopedPath, queryParams: replaceOnly ? forcedParams : currentUrlParams };
     }

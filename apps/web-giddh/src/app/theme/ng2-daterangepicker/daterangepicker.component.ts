@@ -10,7 +10,7 @@ import {
     OnChanges,
     OnDestroy,
     Output,
-    SimpleChanges,
+    type SimpleChanges,
 } from '@angular/core';
 
 import { DaterangepickerConfig } from './config.service';

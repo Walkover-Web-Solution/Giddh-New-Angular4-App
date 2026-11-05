@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { BatchChipListComponent } from '../../../shared/batch-chip-list/batch-chip-list.component';
+import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
 
 @NgModule({
     imports: [
@@ -28,7 +30,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         FormsModule,
         MatTooltipModule,
         MatExpansionModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        BatchChipListComponent,
+        BatchSelectDialogComponent
     ],
     exports: [
         CreateRecipeComponent,

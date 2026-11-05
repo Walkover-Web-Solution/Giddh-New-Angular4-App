@@ -268,17 +268,43 @@ export class UpdateLedgerVm {
             return 0;
         }), this.giddhBalanceDecimalPlaces);
 
-        this.selectedLedger?.transactions?.forEach((entry) => {
-            if (entry.particular.uniqueName === 'roundoff') {
-                entry.amount = giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
-                entry.convertedAmount = this.calculateConversionRate(entry.amount);
-            }
-        });
+        const transactions = this.selectedLedger?.transactions;
+        const hasPrimaryTxn = transactions?.some((tr) =>
+            !!tr?.particular?.uniqueName &&
+            tr.particular.uniqueName !== 'roundoff' &&
+            !tr.isTax &&
+            !tr.isDiscount
+        );
+        const hasRoundOffTxn = transactions?.some((tr) => tr.particular?.uniqueName === 'roundoff');
 
-        if (this.entryTotal.drTotal > this.entryTotal.crTotal) {
-            this.entryTotal.drTotal += giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
-        } else {
-            this.entryTotal.crTotal += giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
+        // Apply derived round-off only when the API entry includes a round-off line.
+        if (hasPrimaryTxn && hasRoundOffTxn) {
+            const calculatedRoundOff = giddhRoundOff(Math.round(this.grandTotal) - this.grandTotal, this.giddhBalanceDecimalPlaces);
+
+            transactions?.forEach((entry) => {
+                if (entry.particular?.uniqueName === 'roundoff') {
+                    entry.amount = calculatedRoundOff;
+                    entry.convertedAmount = this.calculateConversionRate(entry.amount);
+                }
+            });
+
+            if (this.entryTotal.drTotal > this.entryTotal.crTotal) {
+                this.entryTotal.drTotal = giddhRoundOff(this.entryTotal.drTotal + calculatedRoundOff, this.giddhBalanceDecimalPlaces);
+            } else {
+                this.entryTotal.crTotal = giddhRoundOff(this.entryTotal.crTotal + calculatedRoundOff, this.giddhBalanceDecimalPlaces);
+            }
+        } else if (!hasPrimaryTxn) {
+            // Round Off-only JV: keep API amount in Dr/Cr totals.
+            transactions?.forEach((entry) => {
+                if (entry.particular?.uniqueName === 'roundoff') {
+                    const amount = Number(entry.amount) || 0;
+                    if (entry.type === 'DEBIT') {
+                        this.entryTotal.drTotal = giddhRoundOff(this.entryTotal.drTotal + amount, this.giddhBalanceDecimalPlaces);
+                    } else if (entry.type === 'CREDIT') {
+                        this.entryTotal.crTotal = giddhRoundOff(this.entryTotal.crTotal + amount, this.giddhBalanceDecimalPlaces);
+                    }
+                }
+            });
         }
 
         this.convertedEntryTotal = {
@@ -407,7 +433,7 @@ export class UpdateLedgerVm {
         this.selectedLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
         this.selectedLedger.otherTaxesSum = giddhRoundOff((this.selectedLedger.tdsTcsTaxesSum), this.giddhBalanceDecimalPlaces);
 
-        if ((this.showNewEntryPanel || this.isAdvanceReceipt) && this.selectedLedger.voucher.shortCode !== 'jr') {
+        if (this.shouldShowTaxDiscountPanel()) {
             // Refresh the per-row amount of the other-tax (TDS / TCS) transaction
             this.rebuildOtherTaxTransactions();
         }
@@ -615,8 +641,20 @@ export class UpdateLedgerVm {
         this.generateCompoundTotal();
     }
 
+    /**
+     * True when the amount / discount / tax panel is shown
+     * (same condition as the update-ledger template).
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof UpdateLedgerVm
+     */
+    private shouldShowTaxDiscountPanel(): boolean {
+        return (this.showNewEntryPanel || this.isAdvanceReceipt) && this.selectedLedger?.voucher?.shortCode !== 'jr';
+    }
+
     private rebuildOtherTaxTransactions(): void {
-        if (!this.selectedLedger?.transactions?.length) {
+        if (!this.shouldShowTaxDiscountPanel() || !this.selectedLedger?.transactions?.length) {
             return;
         }
 
@@ -692,7 +730,7 @@ export class UpdateLedgerVm {
         // Source of truth: CommonTaxComponent; fall back to this.selectedTaxes before view init.
         const selectedTaxes: any[] = this.taxComponent?.selectedTaxes?.() || this.selectedTaxes;
 
-        if (!this.selectedLedger?.transactions?.length) {
+        if (!this.shouldShowTaxDiscountPanel() || !this.selectedLedger?.transactions?.length) {
             return;
         }
 

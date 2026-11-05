@@ -30,6 +30,8 @@ export class SocketNewCompanyRequest {
     public utm_term: string;
     public utm_content: string;
     public BusinessNature: string;
+    public ref: string;
+    public source: any;
 }
 
 export class StateDetailsRequest {

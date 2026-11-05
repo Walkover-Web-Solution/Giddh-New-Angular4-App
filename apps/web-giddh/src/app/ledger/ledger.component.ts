@@ -15,11 +15,11 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { LoaderService } from '../loader/loader.service';
-import { clone, cloneDeep, filter, find, map as lodashMap, uniq, uniqBy } from '../lodash-optimized';
+import { clone, cloneDeep, filter, find, map as lodashMap, orderBy, uniq, uniqBy } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, LedgerType, TransactionType, LedgerResponse } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, type TLedgerView, LedgerViewEnum, type LedgerType, TransactionType, LedgerResponse } from '../models/api-models/Ledger';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
@@ -64,7 +64,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
 import { LedgerDropdownTypeEnum } from '../models/api-models/Ledger';
-import { AccountingGroupEnum } from '../shared/Enums/common.enum';
+import { AccountingGroupEnum, DataOperationEnum } from '../shared/Enums/common.enum';
 import { IOption } from '../app.constant';
 import { SettingsDiscountService } from '../services/settings.discount.service';
 
@@ -299,6 +299,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private isHideBankLedgerPopup: boolean = false;
     /** Ledger aside pan modal */
     public ledgerAsidePaneDialogRef: any;
+    /** Context of the transaction from which create aside was opened */
+    private ledgerAsideCreateContext: {
+        txn: TransactionVM;
+        isBankTransaction: boolean;
+        isLedgerEntry: boolean;
+        transactionType?: string;
+    };
+    /** Pending create-aside selection applied after dialog close (blank txn may be recreated) */
+    private pendingCreatedLedgerParticular: {
+        selectedOption: IOption;
+        txnId: string;
+        txnType: string;
+        isBankTransaction: boolean;
+        isLedgerEntry: boolean;
+        transactionType?: string;
+    };
     /** Total pages for reference vouchers */
     public referenceVouchersTotalPages: number = 1;
     /** Returns true if account is selected else false */
@@ -540,7 +556,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.trxRequest.q = '';
         }
         this.ledgerComponentStore.getLedgerBalance({
-            payload: this.advanceSearchRequest.dataToSend, trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
+            payload: this.generalService.replaceSelectedAllOptions(this.advanceSearchRequest.dataToSend, true),
+            trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
         });
     }
 
@@ -1927,10 +1944,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(ExportLedgerComponent, {
             data: {
                 accountUniqueName: this.lc.accountUnq,
-                advanceSearchRequest: this.advanceSearchRequest,
+                advanceSearchRequest: { ...this.advanceSearchRequest, isAdvanceSearchImplemented: this.isAdvanceSearchImplemented },
                 selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName })),
                 currencyTogglerModel: this.currencyTogglerModel,
-                isLedgerAccountAllowsMultiCurrency: this.isLedgerAccountAllowsMultiCurrency
+                isLedgerAccountAllowsMultiCurrency: this.isLedgerAccountAllowsMultiCurrency,
+                searchText: this.searchText
             },
             role: 'alertdialog',
             panelClass: ['mat-dialog-md'],
@@ -2608,9 +2626,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Open ledger aside pane
      *
+     * @param {TransactionVM} [txn]
+     * @param {boolean} [isBankTransaction]
+     * @param {boolean} [isLedgerEntry]
+     * @param {string} [transactionType]
      * @memberof LedgerComponent
      */
-    public openLedgerAsidePaneDialog(): void {
+    public openLedgerAsidePaneDialog(
+        txn?: TransactionVM,
+        isBankTransaction?: boolean,
+        isLedgerEntry?: boolean,
+        transactionType?: string
+    ): void {
+        this.ledgerAsideCreateContext = txn
+            ? {
+                txn,
+                isBankTransaction: !!isBankTransaction,
+                isLedgerEntry: !!isLedgerEntry,
+                transactionType,
+            }
+            : undefined;
+
         this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
 
         this.ledgerAsidePaneDialogRef.afterClosed().subscribe(() => {
@@ -2618,7 +2654,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                 }
+                const pending = this.pendingCreatedLedgerParticular;
+                this.pendingCreatedLedgerParticular = undefined;
                 this.ledgerAsidePaneDialogRef = undefined;
+                this.ledgerAsideCreateContext = undefined;
+
+                if (pending) {
+                    this.applyCreatedLedgerParticular(pending);
+                    return;
+                }
+
                 if (this.ledgerView === LedgerViewEnum.StatementView) {
                     this.focusDebitCreditDropdowns(null);
                 }
@@ -2626,6 +2671,173 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         this.cdRf.detectChanges();
+    }
+
+    /**
+     * Closes ledger aside pane and selects newly created stock/account like list selection.
+     *
+     * @param {*} [response]
+     * @memberof LedgerComponent
+     */
+    public closeLedgerAsidePaneDialog(response?: any): void {
+        if (response?.operation === DataOperationEnum.CREATE && response?.uniqueName) {
+            this.queueNewlyCreatedLedgerParticular(response);
+        }
+        this.ledgerAsidePaneDialogRef?.close();
+    }
+
+    /**
+     * Queues newly created stock/account selection until create-aside dialog closes.
+     * Blank ledger rows can be recreated while the aside is open, so apply against the live txn after close.
+     *
+     * @private
+     * @param {*} createdItem
+     * @memberof LedgerComponent
+     */
+    private queueNewlyCreatedLedgerParticular(createdItem: any): void {
+        const contextTxn = this.ledgerAsideCreateContext?.txn;
+        if (!contextTxn || !createdItem?.uniqueName) {
+            return;
+        }
+
+        const selectedOption = this.buildLedgerSelectAccountOption(createdItem);
+        if (!selectedOption?.value) {
+            return;
+        }
+
+        this.pendingCreatedLedgerParticular = {
+            selectedOption,
+            txnId: contextTxn.id,
+            txnType: contextTxn.type,
+            isBankTransaction: this.ledgerAsideCreateContext.isBankTransaction,
+            isLedgerEntry: this.ledgerAsideCreateContext.isLedgerEntry,
+            transactionType: this.ledgerAsideCreateContext.transactionType,
+        };
+    }
+
+    /**
+     * Applies queued create-aside selection on the current blank-ledger txn and opens entry panel.
+     *
+     * @private
+     * @param {*} pending
+     * @memberof LedgerComponent
+     */
+    private applyCreatedLedgerParticular(pending: {
+        selectedOption: IOption;
+        txnId: string;
+        txnType: string;
+        isBankTransaction: boolean;
+        isLedgerEntry: boolean;
+        transactionType?: string;
+    }): void {
+        const txn = this.findLiveBlankTxn(pending.txnId, pending.txnType);
+        if (!txn || !pending.selectedOption?.value) {
+            return;
+        }
+
+        const alreadyPresent = this.searchResults?.some((item) => item.value === pending.selectedOption.value);
+        if (!alreadyPresent) {
+            this.searchResults = [pending.selectedOption, ...(this.searchResults || [])];
+        }
+
+        txn.particular = pending.selectedOption.value;
+        txn.selectedAccount = {
+            ...pending.selectedOption.additional,
+            label: pending.selectedOption.label,
+            name: pending.selectedOption.label,
+            value: pending.selectedOption.value,
+        };
+        this.isTotalChanged = false;
+        this.addBrowserConfirmation();
+        this.selectAccount(
+            pending.selectedOption,
+            txn,
+            false,
+            pending.isBankTransaction,
+            true,
+            pending.transactionType
+        );
+        if (pending.isLedgerEntry) {
+            this.showNewLedgerEntryPopup(txn);
+        }
+        this.cdRf.detectChanges();
+    }
+
+    /**
+     * Finds the blank-ledger txn currently rendered for create-aside selection.
+     *
+     * @private
+     * @param {string} txnId
+     * @param {string} txnType
+     * @return {*}  {TransactionVM}
+     * @memberof LedgerComponent
+     */
+    private findLiveBlankTxn(txnId: string, txnType: string): TransactionVM {
+        const transactions = this.lc.blankLedger?.transactions || [];
+        return (
+            transactions.find((item) => item.id === txnId) ||
+            transactions.find((item) => item.type === txnType && !item.particular) ||
+            transactions.find((item) => item.type === txnType)
+        );
+    }
+
+    /**
+     * Builds ledger dropdown option in the same shape used by account search results.
+     *
+     * @private
+     * @param {*} createdItem
+     * @return {*}  {IOption}
+     * @memberof LedgerComponent
+     */
+    private buildLedgerSelectAccountOption(createdItem: any): IOption {
+        if (createdItem?.type === 'stock') {
+            const accountUniqueName = this.getLinkedAccountUniqueNameForCreatedStock(createdItem);
+            if (!accountUniqueName) {
+                return null;
+            }
+
+            return {
+                value: `${accountUniqueName}#${createdItem.uniqueName}`,
+                label: `${accountUniqueName} (${createdItem.name})`,
+                additional: {
+                    name: accountUniqueName,
+                    uniqueName: accountUniqueName,
+                    hsnNumber: createdItem.hsnNumber,
+                    sacNumber: createdItem.sacNumber,
+                    stock: {
+                        name: createdItem.name,
+                        uniqueName: createdItem.uniqueName,
+                    },
+                },
+            };
+        }
+
+        return {
+            value: createdItem.uniqueName,
+            label: createdItem.name,
+            additional: {
+                name: createdItem.name,
+                uniqueName: createdItem.uniqueName,
+                hsnNumber: createdItem.hsnNumber,
+                sacNumber: createdItem.sacNumber,
+            },
+        };
+    }
+
+    /**
+     * Resolves linked account unique name for a newly created stock.
+     *
+     * @private
+     * @param {*} createdStock
+     * @return {*}  {string}
+     * @memberof LedgerComponent
+     */
+    private getLinkedAccountUniqueNameForCreatedStock(createdStock: any): string {
+        return (
+            createdStock?.salesAccountUniqueNames?.[0] ||
+            createdStock?.purchaseAccountUniqueNames?.[0] ||
+            createdStock?.fixedAssetsAccountUniqueNames?.[0]
+        );
     }
 
     public toggleOtherTaxesAsidePane(updateLedgerModalVm: any): void {
@@ -3175,8 +3387,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                     if (data[0]?.ledgerView) {
                         this.ledgerView = data[0].ledgerView;
-                        if (this.currentOrganizationType === OrganizationType.Branch ||
-                            (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+                        // Only seed empty blank rows — never wipe an in-progress entry (e.g. after create-account).
+                        if ((this.currentOrganizationType === OrganizationType.Branch ||
+                            (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) &&
+                            !this.lc.blankLedger?.transactions?.length) {
                             this.setBlankLedgerTransactions();
                         }
                     }
@@ -3504,6 +3718,71 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Entry date for tax applicability (aligned with common-tax date input).
+     */
+    private normalizeLedgerDateForTax(date: unknown) {
+        if (!date) {
+            return null;
+        }
+        if (typeof date === "string") {
+            return dayjs(date, GIDDH_DATE_FORMAT);
+        }
+        return dayjs(date);
+    }
+
+    /**
+     * Whether a company tax applies on the ledger entry date (same rules as common-tax).
+     */
+    private isTaxUniqueNameValidForLedgerEntryDate(taxUniqueName: string, entryDate: unknown): boolean {
+        const companyTax = this.companyTaxesList?.find((tax) => tax.uniqueName === taxUniqueName);
+        if (!companyTax?.taxDetail?.length) {
+            return true;
+        }
+
+        const normalizedDate = this.normalizeLedgerDateForTax(entryDate);
+        if (!normalizedDate?.isValid()) {
+            return true;
+        }
+
+        const taxDetailsDesc = orderBy(
+            companyTax.taxDetail,
+            (detail: { date: string }) => dayjs(detail.date, GIDDH_DATE_FORMAT),
+            "desc"
+        );
+        const exactMatch = taxDetailsDesc.find((detail) =>
+            dayjs(detail.date, GIDDH_DATE_FORMAT).isSame(normalizedDate, "day")
+        );
+        if (exactMatch) {
+            return true;
+        }
+
+        const applicableBeforeEntryDate = taxDetailsDesc.find((detail) =>
+            dayjs(detail.date, GIDDH_DATE_FORMAT).isBefore(normalizedDate, "day")
+        );
+        return !!applicableBeforeEntryDate;
+    }
+
+    /**
+     * Splits stock tax unique names: TCS/TDS unchanged; GST filtered by entry date.
+     */
+    private resolveStockTaxUniqueNamesForLedger(
+        taxUniqueNames: string[] | undefined,
+        entryDate: unknown
+    ): { applicableTaxUniqueNames: string[]; otherTaxUniqueNames: string[] } {
+        const names = taxUniqueNames ?? [];
+
+        const otherTaxUniqueNames = this.companyTaxesList
+            .filter((tax) => names.includes(tax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(tax.taxType))
+            .map((tax) => tax.uniqueName);
+
+        const applicableTaxUniqueNames = names
+            .filter((uniqueName) => !otherTaxUniqueNames.includes(uniqueName))
+            .filter((uniqueName) => this.isTaxUniqueNameValidForLedgerEntryDate(uniqueName, entryDate));
+
+        return { applicableTaxUniqueNames, otherTaxUniqueNames };
+    }
+
+    /**
      * Load details of the selected account
      *
      * @private
@@ -3547,27 +3826,35 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const prioritizedApplicableTaxes = applicableTaxesExcludingOtherTaxes.length ? applicableTaxesExcludingOtherTaxes : accountOtherApplicableTaxes;
 
                 if (!isSundryDebtorCreditorGroup) {
-                    const stockGroupTax: string[] = [];
+                    const entryDateForTax = this.lc.blankLedger?.entryDate;
+
+                    const stockGroupTaxesResolved = this.resolveStockTaxUniqueNamesForLedger(
+                        data.body?.stock?.groupTaxes,
+                        entryDateForTax
+                    );
+                    const stockGroupTax = stockGroupTaxesResolved.otherTaxUniqueNames;
                     if (data.body?.stock?.groupTaxes) {
-                        stockGroupTax.push(...this.companyTaxesList.filter(otherTax =>
-                            data.body.stock?.groupTaxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
-                        ).map(tax => tax.uniqueName));
-                        data.body.stock.groupTaxes = data.body.stock?.groupTaxes.filter(tax => !stockGroupTax.includes(tax));
+                        data.body.stock.groupTaxes = stockGroupTaxesResolved.applicableTaxUniqueNames;
                     }
-                    const stockTax: string[] = [];
+
+                    const stockLineTaxesResolved = this.resolveStockTaxUniqueNamesForLedger(
+                        data.body?.stock?.taxes,
+                        entryDateForTax
+                    );
+                    const stockTax = stockLineTaxesResolved.otherTaxUniqueNames;
                     if (data.body?.stock?.taxes) {
-                        stockTax.push(...this.companyTaxesList.filter(otherTax =>
-                            data.body.stock?.taxes?.includes(otherTax.uniqueName) && TCS_TDS_TAXES_TYPES.includes(otherTax.taxType)
-                        ).map(tax => tax.uniqueName));
-                        data.body.stock.taxes = data.body.stock?.taxes.filter(tax => !stockTax.includes(tax));
+                        data.body.stock.taxes = stockLineTaxesResolved.applicableTaxUniqueNames;
                     }
-                    
+
                     // Take taxes of parent group and stock's own taxes
                     taxes = this.generalService.fetchTaxesOnPriority(
                         data.body.stock?.taxes ?? [],
                         data.body.stock?.groupTaxes ?? [],
-                        data.body.taxes ?? [],
-                        data.body.groupTaxes ?? []);
+                        this.resolveStockTaxUniqueNamesForLedger(data.body.taxes ?? [],
+                        entryDateForTax).applicableTaxUniqueNames ?? [],
+                        this.resolveStockTaxUniqueNamesForLedger(data.body.groupTaxes ?? [],
+                        entryDateForTax).applicableTaxUniqueNames ?? []);
+                        
                         const isSundryDebtorCreditorAccount = data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryCreditors) || data.body.oppositeAccount?.parentGroups?.includes(AccountingGroupEnum.SundryDebtors);
                         if (data.body.oppositeAccount && (isSundryDebtorCreditorAccount || stockGroupTax.length || stockTax.length)) {
                             const stockAccountOtherTax = this.generalService.fetchTaxesOnPriority(
@@ -3684,7 +3971,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     value: event?.value,
                     isHilighted: true,
                     applicableTaxes: txn.duplicateEntry ? [] : taxes,
-                    otherTax: otherTax,
+                    otherTax: txn?.duplicateEntry ? txn.selectedAccount?.otherTax : otherTax,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
                     email: data.body.emails,
@@ -3697,14 +3984,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
-                this.lc.blankLedger.otherTaxModal = {
-                    ...this.lc.blankLedger.otherTaxModal,
-                    appliedOtherTax: {
-                        name: otherTax?.appliedOtherTax?.name,
-                        uniqueName: otherTax?.appliedOtherTax?.uniqueName
-                    }
-                };
-                this.lc.blankLedger.isOtherTaxesApplicable = !!otherTax?.appliedOtherTax?.uniqueName;
+                if (!txn?.duplicateEntry) {
+                    this.lc.blankLedger.otherTaxModal = {
+                        ...this.lc.blankLedger.otherTaxModal,
+                        appliedOtherTax: {
+                            name: otherTax?.appliedOtherTax?.name,
+                            uniqueName: otherTax?.appliedOtherTax?.uniqueName
+                        }
+                    };
+                    this.lc.blankLedger.isOtherTaxesApplicable = !!otherTax?.appliedOtherTax?.uniqueName;
+                }
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
@@ -3726,7 +4015,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (txn?.selectedAccount?.stock) {
                     const stock = txn?.inventory?.stock;
                     if (txn?.duplicateEntry) {
-                        const unitRate = stock.unitRates.find(unitRate => unitRate.stockUnitUniqueName === txn?.inventory?.unit?.uniqueName) || stock.unitRates[0];
+                        const unitRate = stock.unitRates?.find(unitRate => unitRate.stockUnitUniqueName === txn?.inventory?.unit?.uniqueName) || stock.unitRates?.[0];
                         const defaultUnit = {
                             stockUnitCode: unitRate.stockUnitCode,
                             code: unitRate.stockUnitCode,
@@ -3772,6 +4061,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                 }
                 if (stockName && stockUniqueName) {
+                    const existingBatches = txn.duplicateEntry && Array.isArray(txn.inventory?.batches) ? txn.inventory.batches : [];
                     txn.inventory = {
                         stock: {
                             name: stockName,
@@ -3787,7 +4077,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             code: unitCode,
                             rate: rate,
                             stockUnitUniqueName: stockUnitUniqueName
-                        }
+                        },
+                        batches: existingBatches
                     };
                 } else {
                     delete txn.inventory;
@@ -3804,7 +4095,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse.salesPerson?.name || this.lc.blankLedger.salesPersonName || '';
                     }
                 }
-                this.preparePreAppliedDiscounts(txn);
+                if (!txn?.duplicateEntry) { 
+                    this.preparePreAppliedDiscounts(txn);
+                }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
                 txn.showOtherTax = this.showOtherTax(txn);
@@ -4311,6 +4604,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             otherTaxesModal.tcsCalculationMethod = res.tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
             this.lc.blankLedger.otherTaxModal = otherTaxesModal;
             this.lc.blankLedger.isOtherTaxesApplicable = true;
+            this.lc.blankLedger.transactions[txnIndex].selectedAccount.otherTax = otherTaxesModal;
         }
 
         this.selectAccount(

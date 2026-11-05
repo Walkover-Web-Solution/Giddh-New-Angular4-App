@@ -5,6 +5,7 @@ import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angula
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateRef } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
 import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
@@ -86,6 +87,8 @@ export class SignupComponent implements OnInit, OnDestroy {
     public brandLogoUrl: string = '';
     /** Holds images folder path */
     public imgPath: string = "";
+    /** Partner callback URL from query (?redirect_url=). When set, Google auth uses partner bridge-token mode. */
+    public partnerRedirectUrl: string = '';
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,
@@ -100,7 +103,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig,
         private dialog: MatDialog,
-        private environmentService: EnvironmentService
+        private environmentService: EnvironmentService,
+        private route: ActivatedRoute
     ) {
         this.urlPath = this.environmentService.isElectron ? "" : (this.serviceConfig.AppUrl || this.environmentService.appUrl) + this.environmentService.appFolder;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -153,6 +157,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.urlPath = this.environmentService.isElectron ? "" : "";
         this.brandLogoUrl = this.serviceConfig.LOGOS.light;
         this.generateRandomBanner();
+        this.partnerRedirectUrl = this.route.snapshot.queryParams['redirect_url'] || '';
         this.mobileVerifyForm = this._fb.group({
             country: ["India", [Validators.required]],
             mobileNumber: ["", [Validators.required]],
@@ -183,7 +188,7 @@ export class SignupComponent implements OnInit, OnDestroy {
                     if (!res && user) {
                         switch (user.provider) {
                             case "GOOGLE": {
-                                this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+                                this.dispatchGoogleAuth(user.token);
                                 break;
                             }
                             default: {
@@ -309,7 +314,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     public showTwoWayAuthModal() {
         this.twoWayAuthDialogRef = this.dialog.open(this.twoWayAuthTemplate, {
-            panelClass: 'mat-dialog-md',
+            panelClass: 'mat-dialog-sm',
             disableClose: true
         });
     }
@@ -389,7 +394,7 @@ export class SignupComponent implements OnInit, OnDestroy {
                             // Handle successful response
                             if (arg && arg.access_token) {
 
-                                this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                                this.dispatchGoogleAuth(arg.access_token);
                             } else {
 
                                 this.toaster.errorToast('Google authentication failed - invalid token format');
@@ -417,6 +422,20 @@ export class SignupComponent implements OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    /**
+     * Dispatches Google auth. Optional redirect_url query enables partner bridge-token mode.
+     */
+    private dispatchGoogleAuth(accessToken: string): void {
+        if (this.partnerRedirectUrl) {
+            this.store.dispatch(this.loginAction.signupWithGoogle({
+                accessToken,
+                redirectUrl: this.partnerRedirectUrl
+            }));
+            return;
+        }
+        this.store.dispatch(this.loginAction.signupWithGoogle(accessToken));
     }
 
     public ngOnDestroy() {

@@ -9,6 +9,8 @@ import { InventoryService } from "apps/web-giddh/src/app/services/inventory.serv
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { BaseResponse } from "apps/web-giddh/src/app/models/api-models/BaseResponse";
 import { GroupService } from "apps/web-giddh/src/app/services/group.service";
+import { VoucherService } from "apps/web-giddh/src/app/services/voucher.service";
+import { VouchersUtilityService } from "apps/web-giddh/src/app/vouchers/utility/vouchers.utility.service";
 
 export interface AdjustInventoryState {
     expensesAccountList: any;
@@ -25,6 +27,8 @@ export interface AdjustInventoryState {
     updateAdjustInventoryIsSuccess: boolean;
     createReasonInProgress: boolean;
     createReasonIsSuccess: boolean;
+    businessDocumentDetails: any;
+    businessDocumentInProgress: boolean;
 }
 
 export const DEFAULT_ADJUSTINVENTORY_STATE: AdjustInventoryState = {
@@ -41,7 +45,9 @@ export const DEFAULT_ADJUSTINVENTORY_STATE: AdjustInventoryState = {
     updateAdjustInventoryIsSuccess: false,
     createReasonInProgress: null,
     stockGroupClosingBalance: null,
-    createReasonIsSuccess: null
+    createReasonIsSuccess: null,
+    businessDocumentDetails: null,
+    businessDocumentInProgress: false
 };
 
 @Injectable({
@@ -53,7 +59,9 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         private toaster: ToasterService,
         private inventoryService: InventoryService,
         private groupService: GroupService,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private voucherService: VoucherService,
+        private vouchersUtilityService: VouchersUtilityService
     ) {
         super(DEFAULT_ADJUSTINVENTORY_STATE);
     }
@@ -74,6 +82,8 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     public createAdjustInventoryInProgress$ = this.select((state) => state.createAdjustInventoryInProgress);
     public createReasonIsSuccess$ = this.select((state) => state.createReasonIsSuccess);
     public isLoading$ = this.select((state) => state.isLoading);
+    public businessDocumentDetails$ = this.select((state) => state.businessDocumentDetails);
+    public businessDocumentInProgress$ = this.select((state) => state.businessDocumentInProgress);
 
     /**
      * This will be use for get expenses accounts
@@ -448,6 +458,48 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         );
     });
 
+
+    /**
+     * Gets delivery challan / receipt note details for inventory adjustment prefill
+     *
+     * @memberof AdjustInventoryComponentStore
+     */
+    readonly getBusinessDocumentDetails = this.effect((data: Observable<{ voucherType: string, voucherUniqueName: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ businessDocumentInProgress: true, businessDocumentDetails: null });
+                return this.voucherService.getInventoryVoucherDetails(req.voucherType, req.voucherUniqueName).pipe(
+                    tap(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.body) {
+                                const voucherDetails = this.vouchersUtilityService.formatInventoryVoucherDetails(res.body);
+                                return this.patchState({
+                                    businessDocumentDetails: voucherDetails ?? {},
+                                    businessDocumentInProgress: false
+                                });
+                            } else {
+                                if (res?.message) {
+                                    this.toaster.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    businessDocumentDetails: null,
+                                    businessDocumentInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                businessDocumentDetails: null,
+                                businessDocumentInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 
     /**
      * Lifecycle hook for component destroy

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, type SimpleChanges, ViewChild } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import * as dayjs from 'dayjs';

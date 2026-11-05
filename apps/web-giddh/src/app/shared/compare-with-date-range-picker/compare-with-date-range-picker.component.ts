@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -14,7 +14,7 @@ import { TextFieldComponent } from '../../theme/form-fields/text-field/text-fiel
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 
 type compareType = 'month' | 'quarter' | 'year' | 'period' | null;
-enum CompareTypeEnum {
+export enum CompareTypeEnum {
   month = 'month',
   quarter = 'quarter',
   year = 'year',

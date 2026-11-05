@@ -256,6 +256,21 @@
             "title": "गोदाम शुरुआती बैलेंस",
             "description": "गोदाम के अनुसार स्टॉक शुरुआती बैलेंस",
             "icon": "warehouse-opening-balance.svg"
+        },
+        "INVENTORY_PRODUCT_STOCK_AGING": {
+            "title": "उत्पाद एजिंग",
+            "description": "पिछले और आगामी दिनों में देय राशि",
+            "icon": "icon-aging-report-new"
+        },
+        "INVENTORY_SERVICE_STOCK_AGING": {
+            "title": "सेवा एजिंग",
+            "description": "पिछले और आगामी दिनों में देय राशि",
+            "icon": "icon-aging-report-new"
+        },
+        "INVENTORY_FIXEDASSETS_STOCK_AGING": {
+            "title": "स्थायी संपत्ति एजिंग",
+            "description": "पिछले और आगामी दिनों में देय राशि",
+            "icon": "icon-aging-report-new"
         }
     }
 }

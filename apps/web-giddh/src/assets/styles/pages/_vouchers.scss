@@ -130,6 +130,44 @@
     }
 }
 
+.pending-business-document-panel {
+    min-width: 420px !important;
+
+    .mat-mdc-option {
+        height: auto !important;
+        min-height: 56px;
+        line-height: normal !important;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .pending-bd-preview-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid var(--color-silver);
+        background: var(--color-white);
+        color: var(--text-primary-color);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .pending-bd-preview-btn:focus-visible {
+        outline: 2px solid var(--color-border-focus);
+        outline-offset: 2px;
+    }
+
+    .mdc-list-item__primary-text,
+    .mat-mdc-option-text {
+        width: 100%;
+        white-space: normal;
+    }
+}
+
 .options-line-value {
     padding: 10px;
     vertical-align: middle;

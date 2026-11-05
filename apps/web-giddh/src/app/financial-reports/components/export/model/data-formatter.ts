@@ -1,10 +1,37 @@
-import { CompanyResponse } from "apps/web-giddh/src/app/models/api-models/Company";
+import { Addresses, CompanyResponse } from "apps/web-giddh/src/app/models/api-models/Company";
 import { Account, ChildGroup, ClosingBalance } from "apps/web-giddh/src/app/models/api-models/Search";
 import { RecTypePipe } from "apps/web-giddh/src/app/shared/helpers/pipes/recType/recType.pipe";
 import { Total } from "../trial-balance/export-csv/export-csv.component";
 import { forEach, keys, slice } from '../../../../lodash-optimized';
 import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 
+/**
+ * Picks the default address from organization address details
+ * (company addresses or branch-linked addresses — same shape).
+ */
+export function getDefaultAddress(addresses: Addresses[] | undefined): Addresses | undefined {
+    if (!addresses?.length) {
+        return undefined;
+    }
+    if (addresses.length === 1) {
+        return addresses[0];
+    }
+    return addresses.find(address => address.isDefault);
+}
+
+export function buildTrialBalanceCsvHeader(
+    selectedCompany: CompanyResponse,
+    localeData,
+    fromDate: string,
+    toDate: string
+): string {
+    const defaultAddress = getDefaultAddress(selectedCompany?.addresses);
+    const address = defaultAddress?.address ?? '';
+    const location = defaultAddress?.stateName || defaultAddress?.county?.name || '';
+    const pincode = defaultAddress?.pincode ?? '';
+
+    return `${selectedCompany?.name ?? ''}\r\n"${address}"\r\n${location}${pincode ? '-' : ''}${pincode}\r\n${localeData?.csv.trial_balance.trial_balance} ${fromDate ?? ''} ${localeData?.csv.trial_balance.to} ${toDate ?? ''}\r\n`;
+}
 
 export interface IFormatable {
     setHeader(selectedCompany: CompanyResponse);
@@ -32,7 +59,7 @@ export class DataFormatter {
         csv = '';
         row = '';
         title = '' + ',' + localeData?.csv.trial_balance.opening_balance + ',' + localeData?.csv.trial_balance.debit + ',' + localeData?.csv.trial_balance.credit + ',' + localeData?.csv.trial_balance.closing_balance + '\n';
-        header = `${this.selectedCompany?.name ?? ''}\r\n"${this.selectedCompany?.address ?? ''}"\r\n${this.selectedCompany?.city ?? ''}${this.selectedCompany?.pincode ? '-' : ''}${this.selectedCompany?.pincode ?? ''}\r\n${localeData?.csv.trial_balance.trial_balance} ${fromDate ?? ''} ${localeData?.csv.trial_balance.to} ${toDate ?? ''}\r\n`;
+        header = buildTrialBalanceCsvHeader(this.selectedCompany, localeData, fromDate, toDate);
         csv += `${header}\r\n${title}`;
 
         (Array.isArray(this.exportData) ? this.exportData : []).forEach(obj => {

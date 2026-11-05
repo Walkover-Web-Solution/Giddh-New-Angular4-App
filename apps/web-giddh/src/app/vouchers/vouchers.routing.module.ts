@@ -6,6 +6,7 @@ import { VouchersPreviewComponent } from "./preview/preview.component";
 import { VoucherCreateComponent } from "./create/create.component";
 import { PageLeaveConfirmationGuard } from "../decorators/page-leave-confirmation-guard";
 import { RecurringPreviewComponent } from "./recurring-preview/recurring-preview.component";
+import { PendingReconciliationComponent } from "./pending-reconciliation/pending-reconciliation.component";
 
 const routes: Routes = [
     {
@@ -28,6 +29,10 @@ const routes: Routes = [
             {
                 path: "preview/:voucherType/:module",
                 component: VoucherListComponent
+            },
+            {
+                path: "reconciliation/:voucherType",
+                component: PendingReconciliationComponent
             },
             {
                 path: ":voucherType/create",
