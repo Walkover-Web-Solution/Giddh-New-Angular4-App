@@ -775,7 +775,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                     this.trxRequest.branchUniqueName = this.currentBranch?.uniqueName;
                     this.advanceSearchRequest.branchUniqueName = this.currentBranch?.uniqueName;
-                    if (this.currentOrganizationType === OrganizationType.Branch ||
+                    if (this.currentOrganizationType === OrganizationType.Branch || this.currentOrganizationType === OrganizationType.Company ||
                         (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
                         // Add the blank transaction only if it is branch mode or company with single branch
                         this.setBlankLedgerTransactions();
@@ -1276,7 +1276,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
 
-            let getRequest = { accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page }
+            let getRequest = { accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page, branchUniqueName:this.trxRequest.branchUniqueName }
             this.ledgerService.GetBankTransactionsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.isBankTransactionLoading = false;
                 if (res?.status === 'success') {
@@ -1379,7 +1379,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private getAccountSearchPredictionData(requestModel: any[], bankTransactions: any): void {
         this.isHideBankLedgerPopup = true;
-        this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel, this.trxRequest.branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 let mappedTransactions = response?.body?.filter(transaction => transaction?.account !== undefined && transaction?.account !== null);
                 if (mappedTransactions?.length > 0) {
@@ -1555,6 +1555,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
         if (blankTransactionObj && blankTransactionObj?.transactions && blankTransactionObj?.transactions.length > 0) {
+            blankTransactionObj.branchUniqueName= this.trxRequest.branchUniqueName;
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
@@ -1621,7 +1622,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
                 this.createLedgerBalance();
             }
-
+            
             const fromDate = this.advanceSearchRequest?.dataToSend?.bsRangeValue?.[0] && dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).isValid()
                 ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT)
                 : this.trxRequest.from;
@@ -1629,7 +1630,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             const toDate = this.advanceSearchRequest?.dataToSend?.bsRangeValue?.[1] && dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).isValid()
                 ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT)
                 : this.trxRequest.to;
-
+                
             this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: fromDate, to: toDate }));
         }
     }
@@ -1768,7 +1769,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public resetBlankTransaction(): void {
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         this.lc.blankLedger = this.lc.getBlankLedger();
-        if (this.currentOrganizationType === OrganizationType.Branch || (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+        if (this.currentOrganizationType === OrganizationType.Branch || this.currentOrganizationType === OrganizationType.Company || (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
             this.setBlankLedgerTransactions();
         } else {
             this.lc.blankLedger.transactions = [];
@@ -2006,6 +2007,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (eWayBillResponse && Object.keys(eWayBillResponse).length > 0) {
                 model.ewayBillDetails = eWayBillResponse;
             }
+            model.branchUniqueName= this.trxRequest.branchUniqueName;
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(model, this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
@@ -2909,7 +2911,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             },
             accountUniqueName: this.accountUniqueName
         });
-        if (this.currentOrganizationType === OrganizationType.Branch ||
+        if (this.currentOrganizationType === OrganizationType.Branch || this.currentOrganizationType === OrganizationType.Company ||
             (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
             this.setBlankLedgerTransactions();
         }
@@ -2989,6 +2991,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.trxRequest.branchUniqueName = selectedEntity?.value;
         this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;
+        this.getBankTransactions();
         if (this.isAdvanceSearchImplemented) {
             this.getAdvanceSearchTxn();
         } else {
