@@ -41,6 +41,8 @@ Only a singleton sentinel array means All; an empty or mixed selection remains u
 
 Changing a company, role, subscription or route can affect both visibility and API context. Keep session identifiers and credentials out of documentation, fixtures and logs added by future changes.
 
+Subscription purchase still uses the existing `v2/subscription`, change-plan, and generate-order calls. The browser opens Razorpay Checkout with the order id from that response. It does not call Razorpay's secret API. A checkout failure whose message is "Connection refused" is shown to the user and is not turned into another create call. Backend reachability of Razorpay is not verified here.
+
 ## Saved state
 
 | Location | Current owner and contents |

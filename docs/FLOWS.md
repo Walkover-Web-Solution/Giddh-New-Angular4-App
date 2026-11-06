@@ -8,6 +8,7 @@
 2. [LoginActions](../apps/web-giddh/src/app/actions/login.action.ts) handles responses. A two-way-auth response requires the OTP step; a verified login continues to `loginSuccess$`.
 3. `loginSuccess$` fetches company list and saved state. `finalThingTodo` loads the company user, sets logged-in state and prefers `returnUrl`, then the recent saved page or home.
 4. With no companies, the user goes to subscriptions or buy-plan according to `hasSubscriptionPermission`. [NeedsAuthentication](../apps/web-giddh/src/app/decorators/needsAuthentication.ts) sends signed-out users to login with a return URL.
+5. Buying a plan posts the existing subscription create, change-plan, or generate-order call, then opens Razorpay checkout with the returned order id. Checkout does not replace `window.alert` or `window.open`. A refused gateway connection is shown once with the subscription error text and does not create another subscription. Other Razorpay checkout failures retry with the request that opened checkout. The older [billing-details](../apps/web-giddh/src/app/billing-details/billing-details.component.ts) pay path reports checkout failures the same way and does not select a payment provider.
 
 **Failure/recovery:** login and OTP errors display their API message. An invalid/expired session dispatches logout; the user signs in again. Desktop Google login crosses `authenticate` → `take-your-gmail-token` in the [main process](../apps/electron-giddh/src/index.ts) and [preload](../apps/electron-giddh/src/preload.js). Exercise that path separately from browser login.
 
