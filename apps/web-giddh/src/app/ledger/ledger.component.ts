@@ -2127,6 +2127,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         document.querySelector('body').classList.remove('ledger-body');
         this.store.dispatch(this.ledgerActions.ResetLedger());
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.forceClear$.next(null);
         this.destroyed$.next(true);
         this.destroyed$.complete();
