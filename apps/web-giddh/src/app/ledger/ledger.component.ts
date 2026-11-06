@@ -2991,6 +2991,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.trxRequest.branchUniqueName = selectedEntity?.value;
         this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 ,branchUniqueName: selectedEntity?.value}));
         this.getBankTransactions();
         if (this.isAdvanceSearchImplemented) {
             this.getAdvanceSearchTxn();
