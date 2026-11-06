@@ -74,6 +74,8 @@ import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
 import { BatchSelectDialogResult, VoucherSelectedBatch } from '../../../models/interfaces/batch-report.interface';
+import { containsHtmlOrScript } from '../../../shared/helpers/html-script-validation';
+import { HtmlScriptErrorStateMatcher } from '../../../shared/helpers/reject-html-script.directive';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -91,6 +93,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Instance of RCM checkbox */
     @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     public vm: UpdateLedgerVm;
+    /** Marks the description invalid as soon as it contains HTML or script. */
+    public readonly htmlScriptErrorState = new HtmlScriptErrorStateMatcher();
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -931,7 +935,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.selectedWarehouseName = name;
     }
 
+    /**
+     * True when the ledger description contains HTML or script.
+     */
+    public get ledgerDescriptionHasHtmlOrScript(): boolean {
+        return containsHtmlOrScript(this.vm.selectedLedger?.description);
+    }
+
     public saveLedgerTransaction() {
+        if (containsHtmlOrScript(this.vm.selectedLedger?.description)) {
+            this.toaster.showSnackBar("error", this.commonLocaleData?.app_html_script_not_allowed);
+            this.loaderService.hide();
+            return;
+        }
         this.openAndCloseDiscountDropdown(false);
         this.openAndCloseTaxDropdown(false);
         // due to date picker of Tx entry date format need to change

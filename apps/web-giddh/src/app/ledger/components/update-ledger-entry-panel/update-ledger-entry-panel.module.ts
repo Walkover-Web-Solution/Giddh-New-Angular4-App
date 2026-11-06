@@ -35,6 +35,7 @@ import { CommonDiscountComponent } from '../../../shared/common-discount/common-
 import { GiddhDatePipe } from '../../../shared/pipes/giddh-date.pipe';
 import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
 import { BatchChipListComponent } from '../../../shared/batch-chip-list/batch-chip-list.component';
+import { RejectHtmlScriptDirective } from '../../../shared/helpers/reject-html-script.directive';
 
 @NgModule({
     declarations: [
@@ -79,7 +80,8 @@ import { BatchChipListComponent } from '../../../shared/batch-chip-list/batch-ch
         CommonDiscountComponent,
         GiddhDatePipe,
         BatchSelectDialogComponent,
-        BatchChipListComponent
+        BatchChipListComponent,
+        RejectHtmlScriptDirective
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })

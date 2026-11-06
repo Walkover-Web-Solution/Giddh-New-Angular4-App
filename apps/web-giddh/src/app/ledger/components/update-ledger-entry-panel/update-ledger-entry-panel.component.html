@@ -1756,10 +1756,19 @@
                                             id="update-ledger-description"
                                             rows="3"
                                             [(ngModel)]="vm.selectedLedger.description"
+                                            rejectHtmlScript
+                                            [errorStateMatcher]="htmlScriptErrorState"
                                             class="form-control border"
                                             [placeholder]="commonLocaleData?.app_description"
+                                            [attr.aria-invalid]="ledgerDescriptionHasHtmlOrScript"
+                                            [attr.aria-describedby]="ledgerDescriptionHasHtmlOrScript ? 'update-ledger-description-error' : null"
                                         ></textarea>
                                     </mat-form-field>
+                                    @if (ledgerDescriptionHasHtmlOrScript) {
+                                        <p id="update-ledger-description-error" class="text-red font-size-12 mb-0 mt-1" role="alert">
+                                            {{ commonLocaleData?.app_html_script_not_allowed }}
+                                        </p>
+                                    }
                                 </div>
                             </div>
 
