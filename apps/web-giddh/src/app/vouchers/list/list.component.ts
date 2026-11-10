@@ -1937,6 +1937,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                 this.componentStore.getPurchaseOrders({ request: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true) });
             } else {
+                if(this.advanceFilters?.q && this.advanceFilters?.q?.length > 100) {
+                   this.toasterService.showSnackBar("error", "Search text cannot be greater than 100 characters");
+                   return;
+                }
                 this.componentStore.getPreviousVouchers({ model: this.generalService.replaceSelectedAllOptions(this.advanceFilters, true), type: this.voucherType });
             }
         }
