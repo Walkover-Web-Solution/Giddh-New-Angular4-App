@@ -6,7 +6,7 @@
  */
 const contentSecurityPolicyDirectives = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://www.google.com https://*.g.doubleclick.net https://checkout.razorpay.com https://*.razorpay.com https://js.stripe.com https://*.stripe.com https://accounts.google.com https://verify.msg91.com https://control.msg91.com https://cdn.headwayapp.co https://cdn.plaid.com",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://www.google.com https://*.g.doubleclick.net https://checkout.razorpay.com https://*.razorpay.com https://js.stripe.com https://*.stripe.com https://accounts.google.com https://verify.msg91.com https://control.msg91.com https://cdn.headwayapp.co https://cdn.plaid.com https://cdn-cookieyes.com https://www.clarity.ms https://*.clarity.ms https://static.cloudflareinsights.com https://blacksea.msg91.com https://connect.facebook.net https://cdn.logr-in.com https://bzrcdn.openai.com",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.headwayapp.co https://www.googletagmanager.com https://tagmanager.google.com",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data: https://fonts.gstatic.com",
