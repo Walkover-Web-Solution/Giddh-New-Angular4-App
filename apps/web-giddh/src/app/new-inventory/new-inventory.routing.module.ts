@@ -106,6 +106,10 @@ const routes: Routes = [
         loadChildren: () => import('./component/manufacturing/manufacturing.module').then(module => module.ManufacturingModule)
     },
     {
+        path: "job-work",
+        loadChildren: () => import('./component/job-work/job-work.module').then(module => module.JobWorkModule)
+    },
+    {
         path: "branch-transfer",
         loadChildren: () => import('./component/branch-transfer/branch-transfer.module').then(module => module.BranchTransferModule)
     },
