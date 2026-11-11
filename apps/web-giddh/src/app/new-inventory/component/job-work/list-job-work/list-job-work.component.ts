@@ -178,7 +178,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.changeDetectionRef.detectChanges();
     }
 
-    public dateSelectedCallback(event?: { startDate?: dayjs.Dayjs | string; endDate?: dayjs.Dayjs | string; selectedLabel?: string }): void {
+    public dateSelectedCallback(event?: { startDate?: string | ReturnType<typeof dayjs>; endDate?: string | ReturnType<typeof dayjs>; selectedLabel?: string }): void {
         if (event?.startDate && event?.endDate) {
             this.filtersRestoredActive = false;
             this.selectedRangeLabel = event?.selectedLabel || '';
