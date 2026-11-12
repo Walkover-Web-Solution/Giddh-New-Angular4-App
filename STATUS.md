@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-12 · **Reviewed up to commit:** `68a7a32f40`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-12 · **Reviewed up to commit:** `be9923db2d`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -100,13 +100,14 @@ Feature work merged after the brief, not scored against it:
 | Stock create/edit warehouse handling | 🟡 | `28f1a838f4`. |
 | Financial report CSV organization address | 🟡 | `171cf5a36a`. |
 | Ledger create-aside selections | 🟡 | `a6daf2902f`. |
-| CSP allows blob sources for frames | 🟡 | `37b2314ec9`, `399d2ba3d7`. |
+| CSP HTTP header + frame-ancestors on web app | 🟡 | Restored PHP `Content-Security-Policy` / `X-Frame-Options` in [postbuild.js](tools/web/postbuild.js) after merge drop; policy still in [content-security-policy.js](tools/web/content-security-policy.js) + index meta. Deploy needed to prove live. |
 | Ledger and permissions route paths restored | 🟡 | `66a7606b04` fixed misspelled `leondger`/`permissis` paths in [app.routes.ts](apps/web-giddh/src/app/app.routes.ts). |
 | Living status tracker and `status:check` | 🟡 | [Script](scripts/status-check.mjs) and focused tests pass; CI workflow not yet seen on a teammate's PR. |
 | Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2`. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. Create Delivery Challan No. uses pending-report DC list by jobworker. List has column search, Advance Filter, filter restore, company/consolidated branch dropdown + `go-to-branch`, status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create payload includes `stockUnitUniqueName`. Record Return / Mark Scrap / Make Adjustment load order GET and post filled items/scraps/expenses. View Linked Challan renders challan GET array. Export / Revert / Preview UI deferred. Backend guarantees still unverified. |
 
 ## Change log
 
+- 2026-11-12 · Restore CSP HTTP headers · Re-add PHP CSP + X-Frame-Options in postbuild for VAPT Clickjacking/CSP open items · CSP 🟡
 - 2026-11-12 · Delivery Challan No. dropdown · Pending DC list from `business-documents/pending-report` by jobworker · Job Work 🟡
 - 2026-11-12 · Keep Job Work list Action column in company/consolidated mode · Job Work 🟡
 - 2026-11-12 · Fix Job Work create company-mode check · Match Manufacturing create: not Branch + branches length >= 2 · Job Work 🟡

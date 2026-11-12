@@ -47,6 +47,12 @@ const contentSecurityPolicy = require('./content-security-policy');
 const phpScript = `<?php
 
 /* -------------------------------------------------
+ * 0. Security headers for HTML document responses
+ * ------------------------------------------------- */
+header("Content-Security-Policy: ${contentSecurityPolicy}");
+header("X-Frame-Options: SAMEORIGIN");
+
+/* -------------------------------------------------
  * 1. Instance metadata endpoint
  * ------------------------------------------------- */
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
