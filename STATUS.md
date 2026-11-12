@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-12 · **Reviewed up to commit:** `ddbcd61878`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-12 · **Reviewed up to commit:** `895e3a3bf6`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -103,10 +103,16 @@ Feature work merged after the brief, not scored against it:
 | CSP allows blob sources for frames | 🟡 | `37b2314ec9`, `399d2ba3d7`. |
 | Ledger and permissions route paths restored | 🟡 | `66a7606b04` fixed misspelled `leondger`/`permissis` paths in [app.routes.ts](apps/web-giddh/src/app/app.routes.ts). |
 | Living status tracker and `status:check` | 🟡 | [Script](scripts/status-check.mjs) and focused tests pass; CI workflow not yet seen on a teammate's PR. |
-| Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2`. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. List has column search, Advance Filter, filter restore, `go-to-branch`, status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create payload includes `stockUnitUniqueName`. Record Return / Mark Scrap / Make Adjustment load order GET and post filled items/scraps/expenses. View Linked Challan renders challan GET array. Export / Revert / Preview UI deferred. Backend guarantees still unverified. |
+| Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2`. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. List has column search, Advance Filter, filter restore, company/consolidated branch dropdown + `go-to-branch`, status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create payload includes `stockUnitUniqueName`. Record Return / Mark Scrap / Make Adjustment load order GET and post filled items/scraps/expenses. View Linked Challan renders challan GET array. Export / Revert / Preview UI deferred. Backend guarantees still unverified. |
 
 ## Change log
 
+- 2026-11-12 · Keep filled column search boxes open when toggling another search icon · Job Work 🟡
+- 2026-11-12 · Show Job Work list paginator only when totalItems > pageSizeOptions[0] · Job Work 🟡
+- 2026-11-12 · Hide Job Work list Action column in company/consolidated mode · Job Work 🟡
+- 2026-11-12 · Job Work list branch dropdown · Company/consolidated mode branch filter like Manufacturing report · Job Work 🟡
+- 2026-11-12 · Fix Job Work list company-mode check · Match Manufacturing: Company org + branches length > 2 · Job Work 🟡
+- 2026-11-12 · Trim Job Work SCSS · Drop utility-duplicated styles; keep feature-only rules · Job Work 🟡
 - 2026-11-12 · View Linked Challan mat-table · Keep meta as grid; convert documentItems only to mat-table · Job Work 🟡
 - 2026-11-12 · Record Return confirm copy · Use question text instead of menu label in confirmation dialog · Job Work 🟡
 - 2026-11-12 · Fix Make Adjustment action payload · GET order then map expenses + increaseAssetValue/claimItc into ADJUST · Job Work 🟡

@@ -123,7 +123,16 @@ export class JobWorkService {
      * @memberof JobWorkService
      */
     public list(model: JobWorkListRequest): Observable<BaseResponse<any, JobWorkListRequest>> {
-        return this.http.post(this.buildUrl(JOB_WORK_API.LIST), model).pipe(
+        let url = this.buildUrl(JOB_WORK_API.LIST);
+        // Company/consolidated mode: prefer selected branch from request (Manufacturing pattern).
+        if (model.branchUniqueName && model.branchUniqueName !== this.generalService.companyUniqueName) {
+            const encodedBranch = encodeURIComponent(model.branchUniqueName);
+            if (!url.includes(`branchUniqueName=${encodedBranch}`)) {
+                const separator = url.includes('?') ? '&' : '?';
+                url = `${url}${separator}branchUniqueName=${encodedBranch}`;
+            }
+        }
+        return this.http.post(url, model).pipe(
             map((res) => {
                 const data: BaseResponse<any, JobWorkListRequest> = res;
                 data.request = model;

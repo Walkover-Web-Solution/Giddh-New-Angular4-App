@@ -10,11 +10,9 @@
     }
 }
 
-/* Reuse Manufacturing create class names; keep only feature-scoped copies of those styles. */
+/* Feature-only / manufacturing-aligned layout; prefer utilities in the template. */
 #create-job-work {
     .job-work-wrapper {
-        padding: 15px;
-
         .row {
             margin-left: unset;
             margin-right: unset;
@@ -22,23 +20,6 @@
 
         .max-width-stock {
             max-width: 1400px;
-        }
-
-        .job-work-batch-cell {
-            min-height: 20px;
-        }
-
-        .job-work-claim-itc-box {
-            border: 1px solid var(--color-common-secondary-border, var(--color-border-light));
-            border-radius: 4px;
-        }
-
-        .job-work-unavailable-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 999px;
-            background: var(--color-light-gray);
-            color: var(--color-dark-gray);
         }
 
         .job-work-expense-info {
@@ -49,10 +30,6 @@
 
             p {
                 margin: 0;
-            }
-
-            strong {
-                font-weight: 600;
             }
 
             &.job-work-expense-warning {
@@ -82,19 +59,7 @@
             }
         }
 
-        .form-fields {
-            .gap-between {
-                gap: 1rem;
-            }
-        }
-
-        .field-max-width {
-            max-width: 241px;
-        }
-
         .custom-card {
-            padding: 12px 15px;
-            border-radius: var(--mat-border-radius-4);
             min-width: 280px;
 
             &.bg-green {
@@ -111,21 +76,9 @@
                 background-color: var(--color-border-light);
                 color: var(--text-primary-color);
             }
-
-            .card-head-text {
-                font-size: var(--font-size-12);
-                color: var(--color-dark-gray);
-            }
-
-            .card-text {
-                font-size: var(--font-size-16);
-                font-weight: 500;
-            }
         }
 
         .total-cost-card {
-            padding: 15px 0;
-
             &-head {
                 padding: 12px 19px;
                 background-color: var(--color-dark-gray);
@@ -133,8 +86,6 @@
             }
 
             &-body {
-                font-weight: 600;
-                padding: 10px 0;
                 border: 1px solid var(--border-color);
                 border-top: 0;
             }
@@ -181,15 +132,6 @@
 
                 tfoot {
                     border-top: 1px solid var(--border-color);
-
-                    tr td {
-                        font-weight: 100;
-                    }
-                }
-
-                .field-m-width {
-                    max-width: 100%;
-                    width: 100%;
                 }
 
                 .table-name {
@@ -242,10 +184,6 @@
     #create-job-work .job-work-wrapper .custom-card {
         min-width: 200px;
     }
-
-    .responsive-width {
-        padding-left: 0;
-    }
 }
 
 @media screen and (max-width: 1280px) {
@@ -257,6 +195,5 @@
 @media screen and (max-width: 1080px) {
     #create-job-work .job-work-wrapper .custom-card {
         min-width: 120px;
-        padding: 12px;
     }
 }
