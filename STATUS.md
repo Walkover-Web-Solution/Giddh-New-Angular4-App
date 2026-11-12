@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-11 · **Reviewed up to commit:** `6266b805bb`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-12 · **Reviewed up to commit:** `ddbcd61878`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -103,10 +103,18 @@ Feature work merged after the brief, not scored against it:
 | CSP allows blob sources for frames | 🟡 | `37b2314ec9`, `399d2ba3d7`. |
 | Ledger and permissions route paths restored | 🟡 | `66a7606b04` fixed misspelled `leondger`/`permissis` paths in [app.routes.ts](apps/web-giddh/src/app/app.routes.ts). |
 | Living status tracker and `status:check` | 🟡 | [Script](scripts/status-check.mjs) and focused tests pass; CI workflow not yet seen on a teammate's PR. |
-| Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2`. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. List has column search, Advance Filter, filter restore, `go-to-branch`, status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create payload includes `stockUnitUniqueName`. Export / Revert / Preview&Record Return deferred. Backend guarantees still unverified. |
+| Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2`. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. List has column search, Advance Filter, filter restore, `go-to-branch`, status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create payload includes `stockUnitUniqueName`. Record Return / Mark Scrap / Make Adjustment load order GET and post filled items/scraps/expenses. View Linked Challan renders challan GET array. Export / Revert / Preview UI deferred. Backend guarantees still unverified. |
 
 ## Change log
 
+- 2026-11-12 · View Linked Challan mat-table · Keep meta as grid; convert documentItems only to mat-table · Job Work 🟡
+- 2026-11-12 · Record Return confirm copy · Use question text instead of menu label in confirmation dialog · Job Work 🟡
+- 2026-11-12 · Fix Make Adjustment action payload · GET order then map expenses + increaseAssetValue/claimItc into ADJUST · Job Work 🟡
+- 2026-11-12 · Fix Mark Scrap action payload · GET order then map SCRAP/`jobWorkDetails.scraps` + warehouse into MARK_SCRAP · Job Work 🟡
+- 2026-11-12 · View Linked Challan polish · Remove header cross; keep Close button · Job Work 🟡
+- 2026-11-12 · Polish View Linked Challan dialog · Compact meta grid, status badge, auto-height body, bordered items table · Job Work 🟡
+- 2026-11-12 · View Linked Challan UI · Replace raw JSON dump with challan header + documentItems table from GET body array · Job Work 🟡
+- 2026-11-12 · Fix Record Return action payload · GET order then map `documentItems` OUTPUT/INPUT (stock/variant/qty/batches) + warehouse into RETURN · Job Work 🟡
 - 2026-11-11 · Cherry-pick Job Work onto test · Inventory Job Work create/list/report + batch support; STATUS folded into Beyond the plan · Job Work 🟡
 - 2026-11-11: Prod readiness pass — preserve edit stock/unit options after search, send `stockUnitUniqueName`, tighten GSTIN/date/warehouse validation, restore list filters without date overwrite, bind list to `body.items`, scrap rate/unit seeding, mobile-number-input on create.
 - 2026-11-07: Added Job Work create batch support (finished inbound, raw outbound, scrap inbound) via shared BatchChipList / BatchSelectDialog when inventory batch management is enabled.
