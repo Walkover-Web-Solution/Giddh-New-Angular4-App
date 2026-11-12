@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-02 · **Reviewed up to commit:** `0fafd2a861`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-11 · **Reviewed up to commit:** `6266b805bb`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -103,7 +103,14 @@ Feature work merged after the brief, not scored against it:
 | CSP allows blob sources for frames | 🟡 | `37b2314ec9`, `399d2ba3d7`. |
 | Ledger and permissions route paths restored | 🟡 | `66a7606b04` fixed misspelled `leondger`/`permissis` paths in [app.routes.ts](apps/web-giddh/src/app/app.routes.ts). |
 | Living status tracker and `status:check` | 🟡 | [Script](scripts/status-check.mjs) and focused tests pass; CI workflow not yet seen on a teammate's PR. |
+| Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2`. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. List has column search, Advance Filter, filter restore, `go-to-branch`, status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create payload includes `stockUnitUniqueName`. Export / Revert / Preview&Record Return deferred. Backend guarantees still unverified. |
 
 ## Change log
 
+- 2026-11-11 · Cherry-pick Job Work onto test · Inventory Job Work create/list/report + batch support; STATUS folded into Beyond the plan · Job Work 🟡
+- 2026-11-11: Prod readiness pass — preserve edit stock/unit options after search, send `stockUnitUniqueName`, tighten GSTIN/date/warehouse validation, restore list filters without date overwrite, bind list to `body.items`, scrap rate/unit seeding, mobile-number-input on create.
+- 2026-11-07: Added Job Work create batch support (finished inbound, raw outbound, scrap inbound) via shared BatchChipList / BatchSelectDialog when inventory batch management is enabled.
+- 2026-11-07: Migrated Job Work create to Angular 21 (`inject`, `signal`/`computed`, `toSignal`, `DestroyRef`/`takeUntilDestroyed`).
+- 2026-11-07: Aligned Job Work create layout with Manufacturing (same card/table/button patterns; dropped one-off valuation/table classes).
+- 2026-11-06: Added Inventory > Job Work module (create, edit, list/report + supported actions), `JobWorkService`, locales, and sidebar entry. Commit baseline `c91a081f830c7a6317d5d2f7475f468a55bc050e`.
 - 2026-11-02 · Cursor agent · Created STATUS.md, `npm run status:check` and its PR workflow · Initial scorecard; tracker 🟡
