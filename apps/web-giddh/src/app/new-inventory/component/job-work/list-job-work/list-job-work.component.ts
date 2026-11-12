@@ -176,12 +176,12 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
                         name: branch?.name,
                         parentBranch: branch?.parentBranch
                     }));
-                    this.currentCompanyBranches.unshift({
-                        label: this.activeCompany?.name || '',
-                        name: this.activeCompany?.name || '',
-                        value: this.activeCompany?.uniqueName || '',
-                        isCompany: true
-                    });
+                    // this.currentCompanyBranches.unshift({
+                    //     label: this.activeCompany?.name || '',
+                    //     name: this.activeCompany?.name || '',
+                    //     value: this.activeCompany?.uniqueName || '',
+                    //     isCompany: true
+                    // });
                     // Same as Manufacturing list: company mode only when org is Company and multi-branch.
                     this.isCompany = this.currentOrganizationType === OrganizationType.Company
                         && this.currentCompanyBranches.length > 2;
