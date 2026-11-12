@@ -398,15 +398,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.showOutputStockSearch = false;
         this.filtersRestoredActive = false;
         this.jobWorkListState.clear();
-        if ((this.isCompany || this.isConsolidatedBranch) && this.currentBranch?.uniqueName) {
-            this.handleBranchChange({
-                label: this.currentBranch.name,
-                value: this.currentBranch.uniqueName
-            });
-            return;
-        }
-        this.searchRequest.branchUniqueName = '';
-        this.selectedBranchName = '';
+        // Keep the selected branch; do not reset the dropdown to company/options[0].
         this.getReport();
     }
 
@@ -1065,15 +1057,11 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     }
 
     private updateShowClearFilter(): void {
-        const hasBranchFilter = (this.isCompany || this.isConsolidatedBranch)
-            && !!this.searchRequest.branchUniqueName
-            && this.searchRequest.branchUniqueName !== this.activeCompany?.uniqueName;
         this.showClearFilter = !!(
             this.searchRequest.status ||
             this.searchRequest.jobWorkType ||
             this.searchRequest.accountUniqueName ||
             this.searchRequest.warehouseUniqueName ||
-            hasBranchFilter ||
             this.searchRequest.q ||
             this.searchRequest.onlyOverdue ||
             this.searchRequest.onlyItcClaimed ||

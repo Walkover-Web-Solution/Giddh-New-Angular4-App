@@ -11,7 +11,8 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { ASIDE_PANE_CONFIG, IOption } from 'apps/web-giddh/src/app/app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
+import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import {
     JobWorkBatch,
     JobWorkExpenseLine,
@@ -56,6 +57,7 @@ type JobWorkBatchSource = 'finished' | 'raw' | 'scrap';
 export class CreateJobWorkComponent implements OnInit {
     private readonly store = inject(Store<AppState>);
     private readonly warehouseAction = inject(WarehouseActions);
+    private readonly settingsBranchAction = inject(SettingsBranchActions);
     private readonly companyActions = inject(CompanyActions);
     private readonly commonActions = inject(CommonActions);
     private readonly inventoryService = inject(InventoryService);
@@ -90,8 +92,11 @@ export class CreateJobWorkComponent implements OnInit {
     readonly isLoading = signal(false);
     /** True while loading an existing order for edit. */
     readonly isLoadingDetails = signal(false);
-    /** Company (HO) organization mode. */
-    readonly isCompany = signal(this.generalService.currentOrganizationType === OrganizationType.Company);
+    /**
+     * True when org is not Branch and company has 2+ branches
+     * (same as Manufacturing create).
+     */
+    readonly isCompany = signal(false);
     /** Order unique name when editing. */
     readonly orderUniqueName = signal('');
     /** Company decimal places for amount rounding. */
@@ -257,6 +262,25 @@ export class CreateJobWorkComponent implements OnInit {
             || {}
         ) as { fromJobWorkList?: boolean };
         this.showBackToList.set(!!navigationState.fromJobWorkList);
+
+        // Same as Manufacturing create: company mode only when multi-branch.
+        this.store.pipe(
+            select(state => state.settings.branches),
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(response => {
+            if (response?.length) {
+                this.isCompany.set(
+                    this.generalService.currentOrganizationType !== OrganizationType.Branch
+                    && response.length >= 2
+                );
+            } else if (this.generalService.companyUniqueName) {
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({
+                    from: '',
+                    to: '',
+                    hierarchyType: BranchHierarchyType.Flatten
+                }));
+            }
+        });
 
         this.store.pipe(
             select(state => state.settings?.profile),
