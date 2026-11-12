@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-12 · **Reviewed up to commit:** `d82068f9ff`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-12 · **Reviewed up to commit:** `473a8a716a`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -107,6 +107,7 @@ Feature work merged after the brief, not scored against it:
 
 ## Change log
 
+- 2026-11-12 · Keep Job Work list Action column in company/consolidated mode · Job Work 🟡
 - 2026-11-12 · Fix Job Work create company-mode check · Match Manufacturing create: not Branch + branches length >= 2 · Job Work 🟡
 - 2026-11-12 · Clear filters keeps selected branch · Do not reset branch dropdown to company/options[0] · Job Work 🟡
 - 2026-11-12 · Keep filled column search boxes open when toggling another search icon · Job Work 🟡

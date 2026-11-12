@@ -44,7 +44,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
 
     public localeData: Record<string, string> = {};
     public commonLocaleData: Record<string, string> = {};
-    private readonly allDisplayedColumns: string[] = [
+    public displayedColumns: string[] = [
         'date',
         'jobWorkNo',
         'jobworker',
@@ -57,8 +57,6 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         'status',
         'action'
     ];
-    /** Visible table columns; action hidden in company/consolidated mode. */
-    public displayedColumns: string[] = [...this.allDisplayedColumns];
     /** Linked challan document-item columns (View Linked Challan dialog). */
     public linkedChallanItemColumns: string[] = [
         'type',
@@ -157,7 +155,6 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = !!response.isBranchConsolidated;
-                this.updateDisplayedColumns();
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -185,7 +182,6 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
                     // Same as Manufacturing list: company mode only when org is Company and multi-branch.
                     this.isCompany = this.currentOrganizationType === OrganizationType.Company
                         && this.currentCompanyBranches.length > 2;
-                    this.updateDisplayedColumns();
 
                     if (!this.currentBranch?.uniqueName) {
                         if (this.currentOrganizationType === OrganizationType.Branch) {
@@ -1069,18 +1065,6 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             this.columnSearchForm?.controls?.jobworker?.value ||
             this.columnSearchForm?.controls?.outputStock?.value
         );
-    }
-
-    /**
-     * Hides Action column in company/consolidated mode (branch mode keeps it).
-     *
-     * @private
-     * @memberof ListJobWorkComponent
-     */
-    private updateDisplayedColumns(): void {
-        this.displayedColumns = (this.isCompany || this.isConsolidatedBranch)
-            ? this.allDisplayedColumns.filter(column => column !== 'action')
-            : [...this.allDisplayedColumns];
     }
 
     /**
