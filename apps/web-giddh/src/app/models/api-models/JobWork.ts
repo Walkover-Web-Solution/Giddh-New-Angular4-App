@@ -128,6 +128,34 @@ export interface JobWorkActionRequest {
     expenses?: JobWorkExpenseLine[];
 }
 
+/** Linked delivery challan returned by job-work challan GET. */
+export interface JobWorkLinkedChallan {
+    id?: number;
+    uniqueName?: string;
+    documentNo?: string;
+    documentType?: string;
+    documentDate?: string;
+    status?: string;
+    stockPosted?: boolean;
+    isActive?: boolean;
+    quantity?: number;
+    warehouse?: {
+        name?: string;
+        uniqueName?: string;
+    };
+    documentItems?: Array<{
+        id?: number;
+        lineRole?: string;
+        stock?: { name?: string; uniqueName?: string };
+        variant?: { name?: string; uniqueName?: string };
+        batch?: { name?: string; uniqueName?: string };
+        batches?: JobWorkBatch[];
+        quantity?: number;
+        rate?: number;
+        amount?: number;
+    }>;
+}
+
 export class JobWorkFormModel implements JobWorkOrderRequest {
     jobWorkType: JobWorkType = 'SEND';
     date = '';

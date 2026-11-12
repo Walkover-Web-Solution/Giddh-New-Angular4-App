@@ -6,7 +6,15 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
-import { JobWorkListRequest } from 'apps/web-giddh/src/app/models/api-models/JobWork';
+import {
+    JobWorkActionRequest,
+    JobWorkBatch,
+    JobWorkExpenseLine,
+    JobWorkLinkedChallan,
+    JobWorkListRequest,
+    JobWorkScrapLine,
+    ScrapRetainedBy
+} from 'apps/web-giddh/src/app/models/api-models/JobWork';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { JobWorkService } from 'apps/web-giddh/src/app/services/job-work.service';
@@ -47,6 +55,16 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         'status',
         'action'
     ];
+    /** Linked challan document-item columns (View Linked Challan dialog). */
+    public linkedChallanItemColumns: string[] = [
+        'type',
+        'stock',
+        'variant',
+        'batch',
+        'quantity',
+        'rate',
+        'amount'
+    ];
     public dataSource: any[] = [];
     public selectedDateRange: any;
     public selectedDateRangeUi = '';
@@ -83,7 +101,8 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         goodsWithJobworker: 0,
         overdueReturns: 0
     };
-    public challanDetails: unknown;
+    /** Linked delivery challans shown in View Linked Challan dialog. */
+    public linkedChallans: JobWorkLinkedChallan[] = [];
     public columnSearchForm: FormGroup;
     public showJobWorkNoSearch = false;
     public showJobworkerSearch = false;
@@ -399,7 +418,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             width: '585px',
             data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData.record_return,
+                body: this.localeData.confirm_record_return,
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no
             }
@@ -408,24 +427,294 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             if (!action) {
                 return;
             }
-            this.jobWorkService.action({
-                action: 'RETURN',
+            // List row lacks stock/variant/batches; load order GET then build RETURN items.
+            this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
+                if (orderResponse?.status !== 'success' || !orderResponse.body) {
+                    this.toasterService.errorToast(orderResponse?.message);
+                    return;
+                }
+                const body = orderResponse.body as Record<string, unknown>;
+                const items = this.buildReturnActionItems(body);
+                if (!items.length) {
+                    this.toasterService.errorToast(this.localeData.return_items_missing);
+                    return;
+                }
+                const payload: JobWorkActionRequest = {
+                    action: 'RETURN',
+                    uniqueName,
+                    date: dayjs().format(GIDDH_DATE_FORMAT),
+                    warehouseUniqueName: this.getWarehouseUniqueNameFromOrder(body, row),
+                    isFinal: false,
+                    items
+                };
+                this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                    if (response?.status === 'success') {
+                        this.toasterService.successToast(this.localeData.return_recorded);
+                        this.getReport();
+                    } else {
+                        this.toasterService.errorToast(response?.message);
+                    }
+                });
+            });
+        });
+    }
+
+    /**
+     * Builds RETURN action `items` from order GET `documentItems` (OUTPUT + INPUT).
+     *
+     * @private
+     * @param {Record<string, unknown>} body
+     * @returns {NonNullable<JobWorkActionRequest['items']>}
+     * @memberof ListJobWorkComponent
+     */
+    private buildReturnActionItems(body: Record<string, unknown>): NonNullable<JobWorkActionRequest['items']> {
+        const documentItems = (body['documentItems'] as Array<Record<string, unknown>>) || [];
+        return documentItems
+            .filter(item => item['lineRole'] === 'OUTPUT' || item['lineRole'] === 'INPUT')
+            .map(item => this.mapDocumentItemToReturnActionItem(item))
+            .filter(item => !!item.stockUniqueName);
+    }
+
+    /**
+     * Maps one GET `documentItems` row into a RETURN action line.
+     *
+     * @private
+     * @param {Record<string, unknown>} item
+     * @returns {NonNullable<JobWorkActionRequest['items']>[number]}
+     * @memberof ListJobWorkComponent
+     */
+    private mapDocumentItemToReturnActionItem(
+        item: Record<string, unknown>
+    ): NonNullable<JobWorkActionRequest['items']>[number] {
+        const stock = item['stock'] as { uniqueName?: string } | undefined;
+        const variant = item['variant'] as { uniqueName?: string } | undefined;
+        return {
+            lineRole: item['lineRole'] as 'OUTPUT' | 'INPUT',
+            stockUniqueName: stock?.uniqueName || (item['stockUniqueName'] as string) || '',
+            variantUniqueName: variant?.uniqueName || (item['variantUniqueName'] as string) || '',
+            quantity: Number(item['quantity']) || 0,
+            batches: this.mapActionBatches(item['batches'])
+        };
+    }
+
+    /**
+     * Resolves warehouse uniqueName from order GET body, then list row fallback.
+     *
+     * @private
+     * @param {Record<string, unknown>} body
+     * @param {*} row
+     * @returns {string}
+     * @memberof ListJobWorkComponent
+     */
+    private getWarehouseUniqueNameFromOrder(body: Record<string, unknown>, row: any): string {
+        const warehouse = body['warehouse'] as { uniqueName?: string } | undefined;
+        return warehouse?.uniqueName
+            || (body['warehouseUniqueName'] as string)
+            || row?.warehouse?.uniqueName
+            || row?.warehouseUniqueName
+            || '';
+    }
+
+    /**
+     * Maps API batches for action payloads.
+     *
+     * @private
+     * @param {unknown} batches
+     * @returns {JobWorkBatch[]}
+     * @memberof ListJobWorkComponent
+     */
+    private mapActionBatches(batches: unknown): JobWorkBatch[] {
+        if (!Array.isArray(batches)) {
+            return [];
+        }
+        return batches.map((batch: Record<string, unknown>) => ({
+            uniqueName: (batch['uniqueName'] as string) || '',
+            name: (batch['name'] as string) || '',
+            quantity: Number(batch['quantity']) || 0
+        }));
+    }
+
+    /**
+     * Builds MARK_SCRAP `scraps` from order GET (`documentItems` SCRAP, else `jobWorkDetails.scraps`).
+     *
+     * @private
+     * @param {Record<string, unknown>} body
+     * @returns {JobWorkScrapLine[]}
+     * @memberof ListJobWorkComponent
+     */
+    private buildMarkScrapActionItems(body: Record<string, unknown>): JobWorkScrapLine[] {
+        const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
+        const defaultRetainedBy = (details['scrapRetainedBy'] as ScrapRetainedBy)
+            || (body['scrapRetainedBy'] as ScrapRetainedBy)
+            || 'COMPANY';
+        const detailScraps = (details['scraps'] as Array<Record<string, unknown>>) || [];
+        const documentItems = (body['documentItems'] as Array<Record<string, unknown>>) || [];
+        const scrapItems = documentItems.filter(item => item['lineRole'] === 'SCRAP');
+
+        if (scrapItems.length) {
+            return scrapItems
+                .map(item => this.mapDocumentItemToScrapActionItem(item, detailScraps, defaultRetainedBy))
+                .filter(item => !!item.stockUniqueName);
+        }
+
+        return detailScraps
+            .map(row => this.mapDetailScrapToScrapActionItem(row, defaultRetainedBy))
+            .filter(item => !!item.stockUniqueName);
+    }
+
+    /**
+     * Maps a SCRAP `documentItems` row into MARK_SCRAP scrap payload.
+     *
+     * @private
+     * @param {Record<string, unknown>} item
+     * @param {Array<Record<string, unknown>>} detailScraps
+     * @param {ScrapRetainedBy} defaultRetainedBy
+     * @returns {JobWorkScrapLine}
+     * @memberof ListJobWorkComponent
+     */
+    private mapDocumentItemToScrapActionItem(
+        item: Record<string, unknown>,
+        detailScraps: Array<Record<string, unknown>>,
+        defaultRetainedBy: ScrapRetainedBy
+    ): JobWorkScrapLine {
+        const stock = item['stock'] as { uniqueName?: string } | undefined;
+        const variant = item['variant'] as { uniqueName?: string } | undefined;
+        const stockUniqueName = stock?.uniqueName || (item['stockUniqueName'] as string) || '';
+        const variantUniqueName = variant?.uniqueName || (item['variantUniqueName'] as string) || '';
+        const detailScrap = detailScraps.find(row => {
+            const detailStock = (row['stockUniqueName'] as string) || '';
+            const detailVariant = (row['variantUniqueName'] as string) || '';
+            if (detailStock !== stockUniqueName) {
+                return false;
+            }
+            if (detailVariant && variantUniqueName) {
+                return detailVariant === variantUniqueName;
+            }
+            return !detailVariant && !variantUniqueName;
+        });
+
+        return {
+            stockUniqueName,
+            variantUniqueName,
+            quantity: Number(item['quantity']) || Number(detailScrap?.['quantity']) || 0,
+            batches: this.mapActionBatches(item['batches'] ?? detailScrap?.['batches']),
+            retainedBy: (item['retainedBy'] as ScrapRetainedBy)
+                || (detailScrap?.['retainedBy'] as ScrapRetainedBy)
+                || defaultRetainedBy
+        };
+    }
+
+    /**
+     * Maps a flat `jobWorkDetails.scraps` row into MARK_SCRAP scrap payload.
+     *
+     * @private
+     * @param {Record<string, unknown>} row
+     * @param {ScrapRetainedBy} defaultRetainedBy
+     * @returns {JobWorkScrapLine}
+     * @memberof ListJobWorkComponent
+     */
+    private mapDetailScrapToScrapActionItem(
+        row: Record<string, unknown>,
+        defaultRetainedBy: ScrapRetainedBy
+    ): JobWorkScrapLine {
+        return {
+            stockUniqueName: (row['stockUniqueName'] as string) || '',
+            variantUniqueName: (row['variantUniqueName'] as string) || '',
+            quantity: Number(row['quantity']) || 0,
+            batches: this.mapActionBatches(row['batches']),
+            retainedBy: (row['retainedBy'] as ScrapRetainedBy) || defaultRetainedBy
+        };
+    }
+
+    public viewLinkedChallan(row: any): void {
+        const uniqueName = this.getRowUniqueName(row);
+        if (!uniqueName) {
+            return;
+        }
+        this.jobWorkService.getChallan(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response?.status === 'success') {
+                this.linkedChallans = this.normalizeLinkedChallans(response.body);
+                this.dialog.open(this.challanDialog, {
+                    width: '760px',
+                    maxWidth: '95vw',
+                    autoFocus: false,
+                    panelClass: 'linked-challan-dialog-panel'
+                });
+                this.changeDetectionRef.detectChanges();
+            } else {
+                this.toasterService.errorToast(response?.message);
+            }
+        });
+    }
+
+    /**
+     * Normalizes challan GET body to an array (API returns `body: JobWorkLinkedChallan[]`).
+     *
+     * @private
+     * @param {unknown} body
+     * @returns {JobWorkLinkedChallan[]}
+     * @memberof ListJobWorkComponent
+     */
+    private normalizeLinkedChallans(body: unknown): JobWorkLinkedChallan[] {
+        if (Array.isArray(body)) {
+            return body as JobWorkLinkedChallan[];
+        }
+        if (body && typeof body === 'object') {
+            return [body as JobWorkLinkedChallan];
+        }
+        return [];
+    }
+
+    /**
+     * Formats batch labels for a challan line.
+     *
+     * @param {JobWorkLinkedChallan['documentItems'][number]} item
+     * @returns {string}
+     * @memberof ListJobWorkComponent
+     */
+    public getChallanItemBatchesLabel(
+        item: NonNullable<JobWorkLinkedChallan['documentItems']>[number]
+    ): string {
+        if (Array.isArray(item?.batches) && item.batches.length) {
+            return item.batches
+                .map(batch => {
+                    const name = batch?.name || batch?.uniqueName || '';
+                    const quantity = batch?.quantity;
+                    return quantity != null ? `${name} (${quantity})` : name;
+                })
+                .filter(Boolean)
+                .join(', ');
+        }
+        return item?.batch?.name || item?.batch?.uniqueName || '—';
+    }
+
+    public markScrap(row: any): void {
+        const uniqueName = this.getRowUniqueName(row);
+        if (!uniqueName) {
+            return;
+        }
+        // List row lacks scrap lines/warehouse; load order GET then build MARK_SCRAP scraps.
+        this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
+            if (orderResponse?.status !== 'success' || !orderResponse.body) {
+                this.toasterService.errorToast(orderResponse?.message);
+                return;
+            }
+            const body = orderResponse.body as Record<string, unknown>;
+            const scraps = this.buildMarkScrapActionItems(body);
+            if (!scraps.length) {
+                this.toasterService.errorToast(this.localeData.scrap_items_missing);
+                return;
+            }
+            const payload: JobWorkActionRequest = {
+                action: 'MARK_SCRAP',
                 uniqueName,
                 date: dayjs().format(GIDDH_DATE_FORMAT),
-                warehouseUniqueName: row.warehouseUniqueName || '',
-                isFinal: false,
-                items: [
-                    {
-                        lineRole: 'OUTPUT',
-                        stockUniqueName: row.finishedStockUniqueName || row.outputStockUniqueName || row.stockUniqueName || '',
-                        variantUniqueName: row.finishedVariantUniqueName || '',
-                        quantity: Number(row.remainingQuantity || row.quantity || 0),
-                        batches: []
-                    }
-                ]
-            }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+                warehouseUniqueName: this.getWarehouseUniqueNameFromOrder(body, row),
+                scraps
+            };
+            this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response?.status === 'success') {
-                    this.toasterService.successToast(this.localeData.return_recorded);
+                    this.toasterService.successToast(this.localeData.scrap_marked);
                     this.getReport();
                 } else {
                     this.toasterService.errorToast(response?.message);
@@ -434,62 +723,87 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         });
     }
 
-    public viewLinkedChallan(row: any): void {
-        const uniqueName = this.getRowUniqueName(row);
-        if (!uniqueName) {
-            return;
-        }
-        this.jobWorkService.getChallan(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response?.status === 'success') {
-                this.challanDetails = response.body;
-                this.dialog.open(this.challanDialog, { width: '640px' });
-                this.changeDetectionRef.detectChanges();
-            } else {
-                this.toasterService.errorToast(response?.message);
-            }
-        });
-    }
-
-    public markScrap(row: any): void {
-        const uniqueName = this.getRowUniqueName(row);
-        if (!uniqueName) {
-            return;
-        }
-        this.jobWorkService.action({
-            action: 'MARK_SCRAP',
-            uniqueName,
-            date: dayjs().format(GIDDH_DATE_FORMAT),
-            warehouseUniqueName: row.warehouseUniqueName || '',
-            scraps: []
-        }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response?.status === 'success') {
-                this.toasterService.successToast(this.localeData.scrap_marked);
-                this.getReport();
-            } else {
-                this.toasterService.errorToast(response?.message);
-            }
-        });
-    }
-
     public makeAdjustment(row: any): void {
         const uniqueName = this.getRowUniqueName(row);
         if (!uniqueName) {
             return;
         }
-        this.jobWorkService.action({
-            action: 'ADJUST',
-            uniqueName,
-            increaseAssetValue: row.increaseAssetValue !== false,
-            claimItc: !!row.claimItc,
-            expenses: row.expenses || []
-        }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response?.status === 'success') {
-                this.toasterService.successToast(this.localeData.adjustment_saved);
-                this.getReport();
-            } else {
-                this.toasterService.errorToast(response?.message);
+        // List row lacks expenses/flags; load order GET then build ADJUST payload.
+        this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
+            if (orderResponse?.status !== 'success' || !orderResponse.body) {
+                this.toasterService.errorToast(orderResponse?.message);
+                return;
             }
+            const body = orderResponse.body as Record<string, unknown>;
+            const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
+            const increaseAssetValue = (details['increaseAssetValue'] ?? body['increaseAssetValue'] ?? row?.increaseAssetValue) !== false;
+            const claimItcValue = details['claimItc'] ?? body['claimItc'] ?? row?.claimItc;
+            const claimItc = claimItcValue === undefined || claimItcValue === null
+                ? increaseAssetValue
+                : !!claimItcValue;
+            const expenses = this.buildAdjustActionExpenses(body);
+            if (!expenses.length) {
+                this.toasterService.errorToast(this.localeData.expense_items_missing);
+                return;
+            }
+            const payload: JobWorkActionRequest = {
+                action: 'ADJUST',
+                uniqueName,
+                increaseAssetValue,
+                claimItc,
+                expenses
+            };
+            this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                if (response?.status === 'success') {
+                    this.toasterService.successToast(this.localeData.adjustment_saved);
+                    this.getReport();
+                } else {
+                    this.toasterService.errorToast(response?.message);
+                }
+            });
         });
+    }
+
+    /**
+     * Builds ADJUST action `expenses` from order GET (`jobWorkDetails.expenses` or root `expenses`).
+     *
+     * @private
+     * @param {Record<string, unknown>} body
+     * @returns {JobWorkExpenseLine[]}
+     * @memberof ListJobWorkComponent
+     */
+    private buildAdjustActionExpenses(body: Record<string, unknown>): JobWorkExpenseLine[] {
+        const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
+        const detailExpenses = (details['expenses'] as Array<Record<string, unknown>>) || [];
+        const rootExpenses = (body['expenses'] as Array<Record<string, unknown>>) || [];
+        const source = detailExpenses.length ? detailExpenses : rootExpenses;
+        return source
+            .map(row => this.mapExpenseToAdjustActionItem(row))
+            .filter(row => !!row.fromAccountUniqueName && !!row.toAccountUniqueName && !!row.amount);
+    }
+
+    /**
+     * Maps one expense API row into ADJUST action expense payload.
+     *
+     * @private
+     * @param {Record<string, unknown>} row
+     * @returns {JobWorkExpenseLine}
+     * @memberof ListJobWorkComponent
+     */
+    private mapExpenseToAdjustActionItem(row: Record<string, unknown>): JobWorkExpenseLine {
+        const fromAccount = row['fromAccount'] as { uniqueName?: string } | undefined;
+        const toAccount = row['toAccount'] as { uniqueName?: string } | undefined;
+        return {
+            fromAccountUniqueName: fromAccount?.uniqueName
+                || (row['fromAccountUniqueName'] as string)
+                || '',
+            toAccountUniqueName: toAccount?.uniqueName
+                || (row['toAccountUniqueName'] as string)
+                || '',
+            tax: (row['tax'] as string) || '',
+            amount: Number(row['amount']) || 0,
+            taxAmount: Number(row['taxAmount']) || 0
+        };
     }
 
     public printJobWork(row: any): void {
@@ -497,11 +811,17 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         if (!uniqueName) {
             return;
         }
-        this.jobWorkService.action({ action: 'PRINT', uniqueName }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.jobWorkService.action({ action: 'PRINT', uniqueName }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === 'success') {
-                this.challanDetails = response.body;
-                this.dialog.open(this.challanDialog, { width: '640px' });
-                this.changeDetectionRef.detectChanges();
+                const body = response.body as string | { fileUrl?: string; downloadUrl?: string; url?: string } | null;
+                const fileUrl = typeof body === 'string'
+                    ? body
+                    : (body?.fileUrl || body?.downloadUrl || body?.url || '');
+                if (fileUrl) {
+                    window.open(fileUrl, '_blank');
+                } else {
+                    this.toasterService.successToast(this.commonLocaleData?.app_success);
+                }
             } else {
                 this.toasterService.errorToast(response?.message);
             }
@@ -587,7 +907,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         if (normalized === 'PARTIALLY_RECEIVED') {
             return 'status-partial';
         }
-        if (normalized === 'IN_TRANSIT' || normalized === 'DISPATCHED') {
+        if (normalized === 'IN_TRANSIT' || normalized === 'DISPATCHED' || normalized === 'SHIPPED') {
             return 'status-transit';
         }
         if (normalized === 'IN_PROCESS') {

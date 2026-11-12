@@ -332,11 +332,98 @@
 </mat-menu>
 
 <ng-template #challanDialog>
-    <div class="p-3">
-        <h3 class="mb-2">{{ localeData?.view_linked_challan }}</h3>
-        <pre class="challan-json">{{ challanDetails | json }}</pre>
-        <div class="d-flex justify-content-end">
-            <button mat-stroked-button type="button" mat-dialog-close>{{ commonLocaleData?.app_close }}</button>
+    <div class="linked-challan-dialog">
+        <div class="dialog-header">
+            <span>{{ localeData?.view_linked_challan }}</span>
+        </div>
+        <mat-dialog-content class="dialog-body linked-challan-dialog-body">
+            @if (!linkedChallans?.length) {
+                <p class="mb-0 text-light">{{ localeData?.no_linked_challan }}</p>
+            } @else {
+                @for (challan of linkedChallans; track challan.uniqueName || challan.documentNo || $index; let last = $last) {
+                    <div class="linked-challan-block" [class.mb-3]="!last">
+                        <div class="linked-challan-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">{{ localeData?.challan_no }}</span>
+                                <span class="meta-value">{{ displayValue(challan.documentNo) }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">{{ commonLocaleData?.app_date }}</span>
+                                <span class="meta-value">{{ displayValue(challan.documentDate) }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">{{ commonLocaleData?.app_status }}</span>
+                                <span class="status-badge" [class]="statusClass(challan.status)">
+                                    {{ displayValue(challan.status) }}
+                                </span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">{{ commonLocaleData?.app_warehouse }}</span>
+                                <span class="meta-value">{{ displayValue(challan.warehouse?.name) }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">{{ commonLocaleData?.app_quantity }}</span>
+                                <span class="meta-value">{{ displayValue(challan.quantity) }}</span>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table mat-table [dataSource]="challan.documentItems || []" class="w-100 linked-challan-items-table">
+                                <ng-container matColumnDef="type">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.type }}</th>
+                                    <td mat-cell *matCellDef="let item">{{ displayValue(item.lineRole) }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="stock">
+                                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_stock }}</th>
+                                    <td mat-cell *matCellDef="let item">{{ displayValue(item.stock?.name) }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="variant">
+                                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_variant }}</th>
+                                    <td mat-cell *matCellDef="let item">{{ displayValue(item.variant?.name) }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="batch">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.batch }}</th>
+                                    <td mat-cell *matCellDef="let item">{{ getChallanItemBatchesLabel(item) }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="quantity">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ commonLocaleData?.app_quantity }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let item" class="text-right">
+                                        {{ displayValue(item.quantity) }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="rate">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ commonLocaleData?.app_rate }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let item" class="text-right">
+                                        {{ displayValue(item.rate) }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="amount">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ commonLocaleData?.app_amount }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let item" class="text-right">
+                                        {{ displayValue(item.amount) }}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="linkedChallanItemColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: linkedChallanItemColumns"></tr>
+                            </table>
+                            @if (!(challan.documentItems || []).length) {
+                                <p class="mb-0 mt-2 text-center text-light">
+                                    {{ commonLocaleData?.app_no_result_found }}
+                                </p>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </mat-dialog-content>
+        <div class="linked-challan-footer">
+            <button matButton="outlined" type="button" mat-dialog-close>{{ commonLocaleData?.app_close }}</button>
         </div>
     </div>
 </ng-template>
