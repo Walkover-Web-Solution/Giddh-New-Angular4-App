@@ -29,7 +29,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'All Giddh Items', uniqueName: '/pages/giddh-all-items', hasTabs: false },
     // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
     { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', hasTabs: true },
-    // { type: 'MENU', name: 'Inventory > Jobwork', uniqueName: '/pages/inventory/jobwork' },
+    { type: 'MENU', name: 'Inventory > Job Work', uniqueName: '/pages/inventory/v2/job-work/list' },
     { type: 'MENU', name: 'Inventory > Manufacturing', uniqueName: '/pages/inventory/manufacturing', hasTabs: true },
     { type: 'MENU', name: 'Inventory > Report', uniqueName: '/pages/inventory/report', hasTabs: true },
 
