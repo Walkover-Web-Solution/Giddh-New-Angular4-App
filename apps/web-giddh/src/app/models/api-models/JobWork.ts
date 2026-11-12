@@ -96,6 +96,8 @@ export interface JobWorkListRequest {
     to: string;
     accountUniqueName?: string;
     warehouseUniqueName?: string;
+    /** Selected branch in company/consolidated mode (same as Manufacturing list). */
+    branchUniqueName?: string;
     q?: string;
     jobWorkType?: JobWorkType | '';
     status?: string;

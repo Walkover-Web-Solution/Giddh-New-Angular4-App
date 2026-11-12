@@ -1,7 +1,7 @@
 <div appTranslate [file]="'inventory/job-work'" (commonLocaleData)="setCommonLocaleData($event)" (localeData)="localeDataFn($event)">
     <section id="create-job-work" class="clear-both">
         <hamburger-menu></hamburger-menu>
-        <div class="job-work-wrapper">
+        <div class="job-work-wrapper p-3">
             @if (isLoadingDetails()) {
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             } @else {
@@ -45,21 +45,21 @@
                                         </div>
                                     }
                                     <div class="col responsive-width">
-                                        <div class="custom-card bg-green">
-                                            <p class="card-head-text">{{ localeData()?.total_cost }}</p>
-                                            <p class="card-text">{{ totals().outputValue }}</p>
+                                        <div class="custom-card bg-green border-radius-4 p-2">
+                                            <p class="mb-0 font-size-12 light-gray">{{ localeData()?.total_cost }}</p>
+                                            <p class="mb-0 font-size-16 font-weight-medium">{{ totals().outputValue }}</p>
                                         </div>
                                     </div>
                                     <div class="col responsive-width">
-                                        <div class="custom-card bg-expense">
-                                            <p class="card-head-text">{{ localeData()?.total_job_work_expense }}</p>
-                                            <p class="card-text">{{ totals().expenseAmount }}</p>
+                                        <div class="custom-card bg-expense border-radius-4 p-2">
+                                            <p class="mb-0 font-size-12 light-gray">{{ localeData()?.total_job_work_expense }}</p>
+                                            <p class="mb-0 font-size-16 font-weight-medium">{{ totals().expenseAmount }}</p>
                                         </div>
                                     </div>
                                     <div class="col responsive-width">
-                                        <div class="custom-card bg-vivid-gamboge">
-                                            <p class="card-head-text">{{ localeData()?.item_cost }}</p>
-                                            <p class="card-text">{{ totals().costPerItem }}</p>
+                                        <div class="custom-card bg-vivid-gamboge border-radius-4 p-2">
+                                            <p class="mb-0 font-size-12 light-gray">{{ localeData()?.item_cost }}</p>
+                                            <p class="mb-0 font-size-16 font-weight-medium">{{ totals().costPerItem }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                     <div class="row max-width-stock">
                         <div class="col-3">
                             <div class="form-fields w-100">
-                                <div class="d-flex flex-column flex-wrap gap-between w-100">
+                                <div class="d-flex flex-column flex-wrap row-gap-15 w-100">
                                     <p class="section-head">{{ localeData()?.finished_stock }}</p>
                                     <div>
                                         <reactive-dropdown-field
@@ -114,7 +114,7 @@
                                             [matSuffix]="' ' + (form().finishedStock.stockUnitCode || '')"
                                         ></input-field>
                                         @if (batchTrackingEnabled() && form().finishedStock.stockUniqueName) {
-                                            <div class="mt-1 job-work-batch-cell">
+                                            <div class="mt-1">
                                                 @if (getJobWorkBatches(form().finishedStock.batches)?.length) {
                                                     <batch-chip-list
                                                         [batches]="form().finishedStock.batches"
@@ -180,11 +180,11 @@
                                         </div>
                                     }
 
-                                    <div class="total-cost-card w-100">
+                                    <div class="total-cost-card w-100 py-2">
                                         <div class="total-cost-card-head font-size-15">
                                             {{ localeData()?.output_stock_valuation }}
                                         </div>
-                                        <div class="total-cost-card-body font-size-14">
+                                        <div class="total-cost-card-body font-size-14 font-weight-semibold py-2">
                                             <div class="d-flex justify-content-between px-3 py-1">
                                                 <span>{{ localeData()?.raw_stock_sent_value }}</span>
                                                 <span>{{ totals().rawAmount }}</span>
@@ -532,7 +532,7 @@
                                             </div>
                                         }
                                         @if (form().increaseAssetValue) {
-                                            <div class="job-work-claim-itc-box mb-3 mx-2 p-2">
+                                            <div class="border border-radius-4 mb-3 mx-2 p-2">
                                                 <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-1 mb-2">
                                                     <mat-checkbox
                                                         color="primary"
@@ -544,7 +544,7 @@
                                                         {{ localeData()?.claim_itc }}
                                                     </mat-checkbox>
                                                     @if (form().jobworkerType === 'UNREGISTERED') {
-                                                        <span class="job-work-unavailable-badge font-size-12">
+                                                        <span class="font-size-12 bg-grey border-radius-4 px-2 py-1 light-gray">
                                                             {{ localeData()?.unavailable }}
                                                         </span>
                                                     }

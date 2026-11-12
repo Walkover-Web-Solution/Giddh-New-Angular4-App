@@ -7,6 +7,7 @@ export interface JobWorkListFilterSnapshot {
     selectedStatusLabel: string;
     selectedTypeLabel: string;
     selectedWarehouseName: string;
+    selectedBranchName: string;
     selectedDateRangeUi: string;
     selectedRangeLabel: string;
     columnSearch: {
@@ -39,6 +40,7 @@ export class JobWorkListStateService {
             selectedStatusLabel: snapshot.selectedStatusLabel,
             selectedTypeLabel: snapshot.selectedTypeLabel,
             selectedWarehouseName: snapshot.selectedWarehouseName,
+            selectedBranchName: snapshot.selectedBranchName,
             selectedDateRangeUi: snapshot.selectedDateRangeUi,
             selectedRangeLabel: snapshot.selectedRangeLabel,
             columnSearch: { ...snapshot.columnSearch }
@@ -58,6 +60,7 @@ export class JobWorkListStateService {
                 selectedStatusLabel: this.snapshot.selectedStatusLabel,
                 selectedTypeLabel: this.snapshot.selectedTypeLabel,
                 selectedWarehouseName: this.snapshot.selectedWarehouseName,
+                selectedBranchName: this.snapshot.selectedBranchName,
                 selectedDateRangeUi: this.snapshot.selectedDateRangeUi,
                 selectedRangeLabel: this.snapshot.selectedRangeLabel,
                 columnSearch: { ...this.snapshot.columnSearch }

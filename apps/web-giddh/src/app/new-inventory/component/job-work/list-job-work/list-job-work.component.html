@@ -1,7 +1,7 @@
 <div appTranslate [file]="'inventory/job-work'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeDataFn($event)">
     <section id="list-job-work" class="clear-both">
         <hamburger-menu></hamburger-menu>
-        <div class="job-work-list-wrapper">
+        <div class="job-work-list-wrapper p-3">
             <div class="d-flex flex-wrap align-items-center row-gap-2 column-gap-2 mb-3 w-100">
                 <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-2">
                     <div
@@ -22,8 +22,20 @@
                         />
                     </div>
 
+                    @if (isCompany || isConsolidatedBranch) {
+                        <reactive-dropdown-field
+                            class="max-width-250"
+                            [name]="'branch'"
+                            [placeholder]="commonLocaleData?.app_select_branch"
+                            [options]="currentCompanyBranches"
+                            [labelValue]="selectedBranchName"
+                            [(ngModel)]="currentBranch.uniqueName"
+                            (selectedOption)="handleBranchChange($event)"
+                        ></reactive-dropdown-field>
+                    }
+
                     <reactive-dropdown-field
-                        class="max-width-230"
+                        class="max-width-250"
                         [name]="'statusFilter'"
                         [placeholder]="localeData?.status"
                         [options]="statusOptions"
@@ -32,7 +44,7 @@
                     ></reactive-dropdown-field>
 
                     <reactive-dropdown-field
-                        class="max-width-230"
+                        class="max-width-250"
                         [name]="'typeFilter'"
                         [placeholder]="localeData?.type"
                         [options]="typeOptions"
@@ -48,17 +60,17 @@
                 </div>
 
                 <div class="d-flex flex-wrap column-gap-2 row-gap-2 align-items-center ml-auto">
-                    <div class="summary-card">
-                        <p>{{ localeData?.total_job_work_expense }}</p>
-                        <strong>{{ summary.totalCharges }}</strong>
+                    <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
+                        <p class="mb-1 font-size-12 light-gray">{{ localeData?.total_job_work_expense }}</p>
+                        <strong class="font-size-15">{{ summary.totalCharges }}</strong>
                     </div>
-                    <div class="summary-card">
-                        <p>{{ localeData?.goods_with_jobworker }}</p>
-                        <strong>{{ summary.goodsWithJobworker }}</strong>
+                    <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
+                        <p class="mb-1 font-size-12 light-gray">{{ localeData?.goods_with_jobworker }}</p>
+                        <strong class="font-size-15">{{ summary.goodsWithJobworker }}</strong>
                     </div>
-                    <div class="summary-card">
-                        <p>{{ localeData?.overdue_returns }}</p>
-                        <strong>{{ summary.overdueReturns }}</strong>
+                    <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
+                        <p class="mb-1 font-size-12 light-gray">{{ localeData?.overdue_returns }}</p>
+                        <strong class="font-size-15">{{ summary.overdueReturns }}</strong>
                     </div>
                     @if (!isCompany && !isConsolidatedBranch) {
                         <button type="button" matButton="filled" (click)="goToCreate()">
@@ -86,8 +98,8 @@
             } @else if (!shouldShowTable) {
                 <no-data [secondaryMessageClass]="'p-0'" [primaryMessageClass]="'no-data mt-custom-100'"></no-data>
             } @else {
-                <div class="list-table-wrapper table-responsive mobile-card-wrapper table-header-sticky overflow-visible">
-                    <table mat-table [dataSource]="dataSource" class="w-100 job-work-table on-mobile-view">
+                <div class="border-top table-responsive mobile-card-wrapper table-header-sticky overflow-visible">
+                    <table mat-table [dataSource]="dataSource" class="w-100 on-mobile-view">
                         <ng-container matColumnDef="date">
                             <th mat-header-cell *matHeaderCellDef>{{ localeData?.job_work_date }}</th>
                             <td mat-cell *matCellDef="let row">{{ displayValue(row.documentDate || row.date || row.jobWorkDate) }}</td>
@@ -237,13 +249,15 @@
                     <no-data [secondaryMessageClass]="'p-0'" [primaryMessageClass]="'no-data mt-custom-100'"></no-data>
                 }
 
-                <mat-paginator
-                    [length]="totalItems"
-                    [pageIndex]="currentPage - 1"
-                    [pageSize]="searchRequest.count"
-                    [pageSizeOptions]="pageSizeOptions"
-                    (page)="handlePageEvent($event)"
-                ></mat-paginator>
+                @if (totalItems > pageSizeOptions[0] && !isReportLoading) {
+                    <mat-paginator
+                        [length]="totalItems"
+                        [pageIndex]="currentPage - 1"
+                        [pageSize]="searchRequest.count"
+                        [pageSizeOptions]="pageSizeOptions"
+                        (page)="handlePageEvent($event)"
+                    ></mat-paginator>
+                }
             }
         </div>
     </section>
@@ -342,33 +356,45 @@
             } @else {
                 @for (challan of linkedChallans; track challan.uniqueName || challan.documentNo || $index; let last = $last) {
                     <div class="linked-challan-block" [class.mb-3]="!last">
-                        <div class="linked-challan-meta">
-                            <div class="meta-item">
-                                <span class="meta-label">{{ localeData?.challan_no }}</span>
-                                <span class="meta-value">{{ displayValue(challan.documentNo) }}</span>
+                        <div class="linked-challan-meta column-gap-2 row-gap-1 mb-3 pb-2 border-bottom">
+                            <div class="d-flex flex-column row-gap-05 min-width-0">
+                                <span class="font-size-12 light-gray">{{ localeData?.challan_no }}</span>
+                                <span class="font-size-14 font-weight-semibold word-break-break-word">
+                                    {{ displayValue(challan.documentNo) }}
+                                </span>
                             </div>
-                            <div class="meta-item">
-                                <span class="meta-label">{{ commonLocaleData?.app_date }}</span>
-                                <span class="meta-value">{{ displayValue(challan.documentDate) }}</span>
+                            <div class="d-flex flex-column row-gap-05 min-width-0">
+                                <span class="font-size-12 light-gray">{{ commonLocaleData?.app_date }}</span>
+                                <span class="font-size-14 font-weight-semibold word-break-break-word">
+                                    {{ displayValue(challan.documentDate) }}
+                                </span>
                             </div>
-                            <div class="meta-item">
-                                <span class="meta-label">{{ commonLocaleData?.app_status }}</span>
+                            <div class="d-flex flex-column row-gap-05 min-width-0">
+                                <span class="font-size-12 light-gray">{{ commonLocaleData?.app_status }}</span>
                                 <span class="status-badge" [class]="statusClass(challan.status)">
                                     {{ displayValue(challan.status) }}
                                 </span>
                             </div>
-                            <div class="meta-item">
-                                <span class="meta-label">{{ commonLocaleData?.app_warehouse }}</span>
-                                <span class="meta-value">{{ displayValue(challan.warehouse?.name) }}</span>
+                            <div class="d-flex flex-column row-gap-05 min-width-0">
+                                <span class="font-size-12 light-gray">{{ commonLocaleData?.app_warehouse }}</span>
+                                <span class="font-size-14 font-weight-semibold word-break-break-word">
+                                    {{ displayValue(challan.warehouse?.name) }}
+                                </span>
                             </div>
-                            <div class="meta-item">
-                                <span class="meta-label">{{ commonLocaleData?.app_quantity }}</span>
-                                <span class="meta-value">{{ displayValue(challan.quantity) }}</span>
+                            <div class="d-flex flex-column row-gap-05 min-width-0">
+                                <span class="font-size-12 light-gray">{{ commonLocaleData?.app_quantity }}</span>
+                                <span class="font-size-14 font-weight-semibold word-break-break-word">
+                                    {{ displayValue(challan.quantity) }}
+                                </span>
                             </div>
                         </div>
 
                         <div class="table-responsive">
-                            <table mat-table [dataSource]="challan.documentItems || []" class="w-100 linked-challan-items-table">
+                            <table
+                                mat-table
+                                [dataSource]="challan.documentItems || []"
+                                class="w-100 linked-challan-items-table border border-radius-4 bg-table-background-color"
+                            >
                                 <ng-container matColumnDef="type">
                                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.type }}</th>
                                     <td mat-cell *matCellDef="let item">{{ displayValue(item.lineRole) }}</td>
@@ -422,7 +448,7 @@
                 }
             }
         </mat-dialog-content>
-        <div class="linked-challan-footer">
+        <div class="d-flex justify-content-end p-2 border-top">
             <button matButton="outlined" type="button" mat-dialog-close>{{ commonLocaleData?.app_close }}</button>
         </div>
     </div>

@@ -5,7 +5,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import {
     JobWorkActionRequest,
     JobWorkBatch,
@@ -23,6 +24,7 @@ import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/acti
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
@@ -42,7 +44,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
 
     public localeData: Record<string, string> = {};
     public commonLocaleData: Record<string, string> = {};
-    public displayedColumns: string[] = [
+    private readonly allDisplayedColumns: string[] = [
         'date',
         'jobWorkNo',
         'jobworker',
@@ -55,6 +57,8 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         'status',
         'action'
     ];
+    /** Visible table columns; action hidden in company/consolidated mode. */
+    public displayedColumns: string[] = [...this.allDisplayedColumns];
     /** Linked challan document-item columns (View Linked Challan dialog). */
     public linkedChallanItemColumns: string[] = [
         'type',
@@ -90,8 +94,19 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     public totalPages = 1;
     public currentPage = 1;
     public isReportLoading = false;
+    /** True when org is Company and has more than one branch (same as Manufacturing list). */
     public isCompany = false;
     public isConsolidatedBranch = false;
+    /** Active organization type from session. */
+    public currentOrganizationType: OrganizationType;
+    /** Company + branch options used to decide company mode. */
+    public currentCompanyBranches: Array<{ label: string; value: string; name?: string; parentBranch?: unknown; isCompany?: boolean }> = [];
+    /** Currently selected branch for company/consolidated filters. */
+    public currentBranch: { name?: string; alias?: string; uniqueName?: string } = {};
+    /** Selected branch label shown in dropdown. */
+    public selectedBranchName = '';
+    /** Active company from session. */
+    public activeCompany: { name?: string; uniqueName?: string; nameAlias?: string } | null = null;
     public statusOptions: Array<{ label: string; value: string }> = [];
     public typeOptions: Array<{ label: string; value: string }> = [];
     public selectedStatusLabel = '';
@@ -126,6 +141,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         private readonly dialog: MatDialog,
         private readonly formBuilder: FormBuilder,
         private readonly warehouseAction: WarehouseActions,
+        private readonly settingsBranchAction: SettingsBranchActions,
         private readonly jobWorkListState: JobWorkListStateService
     ) {
         this.columnSearchForm = this.formBuilder.group({
@@ -136,10 +152,70 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
+
         this.store.pipe(select(state => state.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            this.isConsolidatedBranch = !!response?.isBranchConsolidated;
-            this.changeDetectionRef.detectChanges();
+            if (response) {
+                this.isConsolidatedBranch = !!response.isBranchConsolidated;
+                this.updateDisplayedColumns();
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (!activeCompany || this.activeCompany) {
+                return;
+            }
+            this.activeCompany = activeCompany;
+
+            this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.length) {
+                    this.currentCompanyBranches = response.map(branch => ({
+                        label: branch?.name,
+                        value: branch?.uniqueName,
+                        name: branch?.name,
+                        parentBranch: branch?.parentBranch
+                    }));
+                    this.currentCompanyBranches.unshift({
+                        label: this.activeCompany?.name || '',
+                        name: this.activeCompany?.name || '',
+                        value: this.activeCompany?.uniqueName || '',
+                        isCompany: true
+                    });
+                    // Same as Manufacturing list: company mode only when org is Company and multi-branch.
+                    this.isCompany = this.currentOrganizationType === OrganizationType.Company
+                        && this.currentCompanyBranches.length > 2;
+                    this.updateDisplayedColumns();
+
+                    if (!this.currentBranch?.uniqueName) {
+                        if (this.currentOrganizationType === OrganizationType.Branch) {
+                            const currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                            this.currentBranch = cloneDeep(
+                                response.find(branch => branch?.uniqueName === currentBranchUniqueName)
+                            ) || this.currentBranch;
+                            this.selectedBranchName = this.currentBranch?.name || '';
+                            this.searchRequest.branchUniqueName = this.currentBranch?.uniqueName || '';
+                        } else {
+                            this.currentBranch = {
+                                name: this.activeCompany?.name || '',
+                                alias: this.activeCompany?.nameAlias || '',
+                                uniqueName: this.activeCompany?.uniqueName || ''
+                            };
+                            this.handleBranchChange({
+                                label: this.currentBranch.name,
+                                value: this.currentBranch.uniqueName
+                            });
+                        }
+                    }
+                    this.changeDetectionRef.detectChanges();
+                } else if (this.generalService.companyUniqueName) {
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({
+                        from: '',
+                        to: '',
+                        hierarchyType: BranchHierarchyType.Flatten
+                    }));
+                }
+            });
         });
 
         this.getWarehouses();
@@ -322,13 +398,57 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.showOutputStockSearch = false;
         this.filtersRestoredActive = false;
         this.jobWorkListState.clear();
+        if ((this.isCompany || this.isConsolidatedBranch) && this.currentBranch?.uniqueName) {
+            this.handleBranchChange({
+                label: this.currentBranch.name,
+                value: this.currentBranch.uniqueName
+            });
+            return;
+        }
+        this.searchRequest.branchUniqueName = '';
+        this.selectedBranchName = '';
+        this.getReport();
+    }
+
+    /**
+     * Branch change callback (company/consolidated mode).
+     *
+     * @param {{ label?: string; value?: string }} selectedEntity
+     * @memberof ListJobWorkComponent
+     */
+    public handleBranchChange(selectedEntity: { label?: string; value?: string }): void {
+        this.currentBranch = {
+            ...this.currentBranch,
+            name: selectedEntity?.label || '',
+            uniqueName: selectedEntity?.value || ''
+        };
+        this.selectedBranchName = selectedEntity?.label || '';
+        this.searchRequest.branchUniqueName = selectedEntity?.value || '';
+        this.searchRequest.warehouseUniqueName = '';
+        this.selectedWarehouseName = '';
+        this.searchRequest.page = 1;
         this.getReport();
     }
 
     public toggleSearch(fieldName: string): void {
-        this.showJobWorkNoSearch = fieldName === 'jobWorkNo';
-        this.showJobworkerSearch = fieldName === 'jobworker';
-        this.showOutputStockSearch = fieldName === 'outputStock';
+        if (fieldName === 'jobWorkNo') {
+            this.showJobWorkNoSearch = true;
+        } else if (fieldName === 'jobworker') {
+            this.showJobworkerSearch = true;
+        } else if (fieldName === 'outputStock') {
+            this.showOutputStockSearch = true;
+        }
+
+        // Keep other search boxes open when they still have a search value.
+        if (fieldName !== 'jobWorkNo' && !this.columnSearchForm?.controls?.jobWorkNo?.value) {
+            this.showJobWorkNoSearch = false;
+        }
+        if (fieldName !== 'jobworker' && !this.columnSearchForm?.controls?.jobworker?.value) {
+            this.showJobworkerSearch = false;
+        }
+        if (fieldName !== 'outputStock' && !this.columnSearchForm?.controls?.outputStock?.value) {
+            this.showOutputStockSearch = false;
+        }
         this.changeDetectionRef.detectChanges();
     }
 
@@ -945,11 +1065,15 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     }
 
     private updateShowClearFilter(): void {
+        const hasBranchFilter = (this.isCompany || this.isConsolidatedBranch)
+            && !!this.searchRequest.branchUniqueName
+            && this.searchRequest.branchUniqueName !== this.activeCompany?.uniqueName;
         this.showClearFilter = !!(
             this.searchRequest.status ||
             this.searchRequest.jobWorkType ||
             this.searchRequest.accountUniqueName ||
             this.searchRequest.warehouseUniqueName ||
+            hasBranchFilter ||
             this.searchRequest.q ||
             this.searchRequest.onlyOverdue ||
             this.searchRequest.onlyItcClaimed ||
@@ -957,6 +1081,18 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             this.columnSearchForm?.controls?.jobworker?.value ||
             this.columnSearchForm?.controls?.outputStock?.value
         );
+    }
+
+    /**
+     * Hides Action column in company/consolidated mode (branch mode keeps it).
+     *
+     * @private
+     * @memberof ListJobWorkComponent
+     */
+    private updateDisplayedColumns(): void {
+        this.displayedColumns = (this.isCompany || this.isConsolidatedBranch)
+            ? this.allDisplayedColumns.filter(column => column !== 'action')
+            : [...this.allDisplayedColumns];
     }
 
     /**
@@ -976,6 +1112,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             selectedStatusLabel: this.selectedStatusLabel,
             selectedTypeLabel: this.selectedTypeLabel,
             selectedWarehouseName: this.selectedWarehouseName,
+            selectedBranchName: this.selectedBranchName,
             selectedDateRangeUi: this.selectedDateRangeUi,
             selectedRangeLabel: this.selectedRangeLabel,
             columnSearch: {
@@ -1002,6 +1139,14 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.selectedStatusLabel = snapshot.selectedStatusLabel;
         this.selectedTypeLabel = snapshot.selectedTypeLabel;
         this.selectedWarehouseName = snapshot.selectedWarehouseName;
+        this.selectedBranchName = snapshot.selectedBranchName || '';
+        if (snapshot.searchRequest.branchUniqueName) {
+            this.currentBranch = {
+                ...this.currentBranch,
+                uniqueName: snapshot.searchRequest.branchUniqueName,
+                name: snapshot.selectedBranchName || this.currentBranch?.name
+            };
+        }
         this.selectedDateRangeUi = snapshot.selectedDateRangeUi;
         this.selectedRangeLabel = snapshot.selectedRangeLabel;
         this.advanceOnlyOverdue = !!snapshot.searchRequest.onlyOverdue;
