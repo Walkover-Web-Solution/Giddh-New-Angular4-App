@@ -14,6 +14,8 @@
     "registered": "पंजीकृत",
     "unregistered": "अपंजीकृत",
     "delivery_challan_unique_name": "डिलीवरी चालान यूनिक नाम",
+    "delivery_challan_no": "डिलीवरी चालान नंबर",
+    "select_delivery_challan": "डिलीवरी चालान चुनें",
     "challan_date": "चालान तिथि",
     "expected_return_date": "अपेक्षित वापसी तिथि",
     "process": "प्रक्रिया / कार्य की प्रकृति",

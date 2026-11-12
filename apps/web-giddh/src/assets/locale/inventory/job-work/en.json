@@ -14,6 +14,8 @@
     "registered": "Registered",
     "unregistered": "Unregistered",
     "delivery_challan_unique_name": "Delivery Challan Unique Name",
+    "delivery_challan_no": "Delivery Challan No.",
+    "select_delivery_challan": "Select Delivery Challan",
     "challan_date": "Challan Date",
     "expected_return_date": "Expected Return Date",
     "process": "Process / Nature of Work",

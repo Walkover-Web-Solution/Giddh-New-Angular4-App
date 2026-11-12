@@ -263,13 +263,16 @@
                                         ></reactive-dropdown-field>
                                     </div>
                                     <div class="col-6 mb-3">
-                                        <input-field
-                                            [type]="'text'"
+                                        <reactive-dropdown-field
                                             [name]="'deliveryChallanUniqueName'"
-                                            [label]="localeData()?.delivery_challan_unique_name"
+                                            [label]="localeData()?.delivery_challan_no"
+                                            [placeholder]="localeData()?.select_delivery_challan"
+                                            [options]="deliveryChallanOptions()"
+                                            [labelValue]="selectedDeliveryChallanLabel()"
                                             [(ngModel)]="form().deliveryChallanUniqueName"
+                                            (selectedOption)="onDeliveryChallanSelected($event)"
                                             [readonly]="isReadOnly()"
-                                        ></input-field>
+                                        ></reactive-dropdown-field>
                                     </div>
                                     <div class="col-6 mb-3">
                                         <giddh-datepicker

@@ -11,7 +11,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import {
     JobWorkBatch,
@@ -34,6 +34,7 @@ import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { VoucherService } from 'apps/web-giddh/src/app/services/voucher.service';
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
@@ -65,6 +66,7 @@ export class CreateJobWorkComponent implements OnInit {
     private readonly ledgerService = inject(LedgerService);
     private readonly searchService = inject(SearchService);
     private readonly jobWorkService = inject(JobWorkService);
+    private readonly voucherService = inject(VoucherService);
     private readonly toasterService = inject(ToasterService);
     private readonly generalService = inject(GeneralService);
     private readonly route = inject(ActivatedRoute);
@@ -84,6 +86,10 @@ export class CreateJobWorkComponent implements OnInit {
     readonly warehouses = signal<IOption[]>([]);
     /** Jobworker account options. */
     readonly jobworkerAccounts = signal<IOption[]>([]);
+    /** Pending delivery challan options for the selected jobworker. */
+    readonly deliveryChallanOptions = signal<IOption[]>([]);
+    /** Selected delivery challan number shown in the dropdown. */
+    readonly selectedDeliveryChallanLabel = signal('');
     /** Expense "from" account options. */
     readonly fromAccounts = signal<IOption[]>([]);
     /** Expense "to" account options. */
@@ -113,6 +119,8 @@ export class CreateJobWorkComponent implements OnInit {
     private readonly jobworkerPage = signal(1);
     private readonly jobworkerTotalPages = signal(1);
     private readonly jobworkerQuery = signal('');
+    /** Universal date range used for pending delivery challan list. */
+    private universalDateRange: { from: string; to: string } | null = null;
     /** Tracks in-flight stock searches per line to allow parallel loads. */
     private readonly stockSearchInFlight = new WeakSet<object>();
 
@@ -342,7 +350,17 @@ export class CreateJobWorkComponent implements OnInit {
             select(state => state.session.applicationDate),
             takeUntilDestroyed(this.destroyRef)
         ).subscribe(dateObj => {
-            if (dateObj && !this.orderUniqueName() && !this.form().date) {
+            if (!dateObj) {
+                return;
+            }
+            this.universalDateRange = {
+                from: dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT),
+                to: dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT)
+            };
+            if (this.form().accountUniqueName) {
+                this.loadDeliveryChallans(this.form().accountUniqueName);
+            }
+            if (!this.orderUniqueName() && !this.form().date) {
                 const today = dateObj[1] ? dayjs(dateObj[1]) : dayjs();
                 this.commitForm(current => {
                     current.date = today.format(GIDDH_DATE_FORMAT);
@@ -1207,11 +1225,88 @@ export class CreateJobWorkComponent implements OnInit {
         this.commitForm(current => {
             current.accountUniqueName = event?.value || '';
             current.accountName = event?.label || '';
+            current.deliveryChallanUniqueName = '';
             const additional = event?.additional as { gstIn?: string };
             if (additional?.gstIn) {
                 current.gstin = additional.gstIn;
                 current.jobworkerType = 'REGISTERED';
             }
+        });
+        this.selectedDeliveryChallanLabel.set('');
+        this.loadDeliveryChallans(event?.value || '');
+    }
+
+    /**
+     * Handles delivery challan selection from pending-report list.
+     *
+     * @param {IOption} event
+     * @memberof CreateJobWorkComponent
+     */
+    onDeliveryChallanSelected(event: IOption): void {
+        this.selectedDeliveryChallanLabel.set(event?.label || '');
+        this.commitForm(current => {
+            current.deliveryChallanUniqueName = event?.value || '';
+            const challanDate = (event?.additional as { date?: string })?.date;
+            if (challanDate) {
+                current.challanDate = this.formatDate(challanDate);
+            }
+        });
+    }
+
+    /**
+     * Loads pending delivery challans for the selected jobworker
+     * via `business-documents/pending-report` (NOT_INVOICED + DC).
+     *
+     * @param {string} [accountUniqueName]
+     * @memberof CreateJobWorkComponent
+     */
+    loadDeliveryChallans(accountUniqueName?: string): void {
+        const account = accountUniqueName || this.form().accountUniqueName;
+        if (!account || !this.universalDateRange) {
+            this.deliveryChallanOptions.set([]);
+            return;
+        }
+
+        this.voucherService.getPendingBusinessDocumentsByAccounts(
+            {
+                from: this.universalDateRange.from,
+                to: this.universalDateRange.to,
+                page: 1,
+                count: API_BULK_FETCH_LIMIT,
+                sort: '',
+                sortBy: ''
+            },
+            {
+                reportType: 'NOT_INVOICED',
+                documentType: 'DC',
+                accountUniqueNames: [account]
+            }
+        ).pipe(take(1)).subscribe(response => {
+            if (response?.status !== 'success') {
+                this.deliveryChallanOptions.set([]);
+                return;
+            }
+
+            const results = Array.isArray(response.body?.results)
+                ? response.body.results
+                : (Array.isArray(response.body) ? response.body : []);
+            let options: IOption[] = results
+                .map((item: { number?: string; uniqueName?: string; date?: string }) => ({
+                    label: item?.number || item?.uniqueName || '',
+                    value: item?.uniqueName || '',
+                    additional: item
+                }))
+                .filter(option => !!option.value);
+
+            const selectedUniqueName = this.form().deliveryChallanUniqueName;
+            if (selectedUniqueName) {
+                options = this.ensureSelectedOption(
+                    options,
+                    selectedUniqueName,
+                    this.selectedDeliveryChallanLabel() || selectedUniqueName
+                );
+            }
+            this.deliveryChallanOptions.set(options);
         });
     }
 
@@ -1708,7 +1803,11 @@ export class CreateJobWorkComponent implements OnInit {
         const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
         const account = (body['account'] || body['jobworker']) as { uniqueName?: string; name?: string } | undefined;
         const warehouse = body['warehouse'] as { uniqueName?: string; name?: string } | undefined;
-        const linkedChallans = body['linkedChallans'] as Array<{ uniqueName?: string }> | undefined;
+        const linkedChallans = body['linkedChallans'] as Array<{
+            uniqueName?: string;
+            number?: string;
+            documentNo?: string;
+        }> | undefined;
         const documentItems = (body['documentItems'] as Array<Record<string, unknown>>) || [];
         const outputItem = documentItems.find(item => item['lineRole'] === 'OUTPUT');
         const inputItems = documentItems.filter(item => item['lineRole'] === 'INPUT');
@@ -1747,6 +1846,11 @@ export class CreateJobWorkComponent implements OnInit {
             || (body['deliveryChallanUniqueName'] as string)
             || linkedChallans?.[0]?.uniqueName
             || '';
+        this.selectedDeliveryChallanLabel.set(
+            linkedChallans?.[0]?.number
+            || linkedChallans?.[0]?.documentNo
+            || next.deliveryChallanUniqueName
+        );
         next.challanDate = this.formatDate(
             (details['challanDate'] as string) || (body['challanDate'] as string) || documentDate
         );
@@ -1809,6 +1913,9 @@ export class CreateJobWorkComponent implements OnInit {
                     account
                 )
             );
+            this.loadDeliveryChallans(next.accountUniqueName);
+        } else {
+            this.deliveryChallanOptions.set([]);
         }
 
         this.fromAccounts.set(this.ensureExpenseAccountOptions(this.fromAccounts(), 'from'));
