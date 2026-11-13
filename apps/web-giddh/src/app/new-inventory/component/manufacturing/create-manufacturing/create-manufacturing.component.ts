@@ -606,6 +606,9 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitUniqueName = response.body.manufacturingDetails[0].manufacturingUnitUniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingDetails[0].manufacturingQuantity;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = response.body.manufacturingDetails[0].manufacturingQuantity;
+                this.manufacturingObject.manufacturingDetails[0].batches = this.normalizeManufacturingBatches(
+                    response.body.manufacturingDetails[0].batches
+                );
 
                 response.body.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                     let amount = linkedStock.rate * linkedStock.quantity;
@@ -880,30 +883,40 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             let byProducts = [];
 
             manufacturingDetail.linkedStocks?.forEach(linkedStock => {
-                linkedStocks.push({
+                const row: any = {
                     stockUniqueName: linkedStock.stockUniqueName,
                     stockUnitUniqueName: linkedStock.stockUnitUniqueName,
                     quantity: Number(linkedStock.quantity),
                     variant: {
                         uniqueName: linkedStock.variant?.uniqueName
                     }
-                });
+                };
+                const batches = this.mapBatchesForPayload(linkedStock.batches);
+                if (batches?.length) {
+                    row.batches = batches;
+                }
+                linkedStocks.push(row);
             });
 
             manufacturingDetail.byProducts?.forEach(linkedStock => {
                 if (linkedStock.selectedStock.value) {
-                    byProducts.push({
+                    const row: any = {
                         stockUniqueName: linkedStock.stockUniqueName,
                         stockUnitUniqueName: linkedStock.stockUnitUniqueName,
                         quantity: Number(linkedStock.quantity),
                         variant: {
                             uniqueName: linkedStock.variant?.uniqueName
                         }
-                    });
+                    };
+                    const batches = this.mapBatchesForPayload(linkedStock.batches);
+                    if (batches?.length) {
+                        row.batches = batches;
+                    }
+                    byProducts.push(row);
                 }
             });
 
-            recipeObject.manufacturingDetails.push({
+            const finished: any = {
                 manufacturingQuantity: Number(manufacturingDetail.manufacturingQuantity),
                 manufacturingUnitUniqueName: manufacturingDetail.manufacturingUnitUniqueName,
                 variant: {
@@ -911,7 +924,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 },
                 linkedStocks: linkedStocks,
                 byProducts: byProducts
-            });
+            };
+            const finishedBatches = this.mapBatchesForPayload(manufacturingDetail.batches);
+            if (finishedBatches?.length) {
+                finished.batches = finishedBatches;
+            }
+            recipeObject.manufacturingDetails.push(finished);
         });
 
 
@@ -1523,7 +1541,9 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.manufacturingObject.manufacturingDetails[0].variant.uniqueName = response.body.variant.uniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = Number(response.body.manufacturingQuantity);
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = Number(response.body.manufacturingQuantity);
-                this.manufacturingObject.manufacturingDetails[0].batches = this.normalizeManufacturingBatches(response.body.batches);
+                this.manufacturingObject.manufacturingDetails[0].batches = this.normalizeManufacturingBatches(
+                    response.body.batches ?? response.body.manufacturingDetails?.[0]?.batches
+                );
                 this.increaseExpenseAmount = response.body.increaseAssetValue;
 
                 this.selectedInventoryType = response.body.inventoryType;

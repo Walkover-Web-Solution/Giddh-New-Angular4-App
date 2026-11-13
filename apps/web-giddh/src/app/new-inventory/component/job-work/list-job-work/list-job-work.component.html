@@ -1,0 +1,455 @@
+<div appTranslate [file]="'inventory/job-work'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeDataFn($event)">
+    <section id="list-job-work" class="clear-both">
+        <hamburger-menu></hamburger-menu>
+        <div class="job-work-list-wrapper p-3">
+            <div class="d-flex flex-wrap align-items-center row-gap-2 column-gap-2 mb-3 w-100">
+                <div class="d-flex flex-wrap align-items-center column-gap-2 row-gap-2">
+                    <div
+                        class="custom-datepicker custom-new-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
+                        [attr.aria-label]="localeData?.job_work_date"
+                    >
+                        <input
+                            type="text"
+                            name="selectedDateRange"
+                            readonly
+                            [value]="selectedDateRangeUi"
+                            class="giddh-datepicker date-range-picker"
+                        />
+                    </div>
+
+                    @if (isCompany || isConsolidatedBranch) {
+                        <reactive-dropdown-field
+                            class="max-width-250"
+                            [name]="'branch'"
+                            [placeholder]="commonLocaleData?.app_select_branch"
+                            [options]="currentCompanyBranches"
+                            [labelValue]="selectedBranchName"
+                            [(ngModel)]="currentBranch.uniqueName"
+                            (selectedOption)="handleBranchChange($event)"
+                        ></reactive-dropdown-field>
+                    }
+
+                    <reactive-dropdown-field
+                        class="max-width-250"
+                        [name]="'statusFilter'"
+                        [placeholder]="localeData?.status"
+                        [options]="statusOptions"
+                        [labelValue]="selectedStatusLabel"
+                        (selectedOption)="onStatusChange($event)"
+                    ></reactive-dropdown-field>
+
+                    <reactive-dropdown-field
+                        class="max-width-250"
+                        [name]="'typeFilter'"
+                        [placeholder]="localeData?.type"
+                        [options]="typeOptions"
+                        [labelValue]="selectedTypeLabel"
+                        (selectedOption)="onTypeChange($event)"
+                    ></reactive-dropdown-field>
+
+                    @if (showClearFilter) {
+                        <button type="button" matButton="outlined" (click)="clearFilters()">
+                            {{ commonLocaleData?.app_clear }}
+                        </button>
+                    }
+                </div>
+
+                <div class="d-flex flex-wrap column-gap-2 row-gap-2 align-items-center ml-auto">
+                    <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
+                        <p class="mb-1 font-size-12 light-gray">{{ localeData?.total_job_work_expense }}</p>
+                        <strong class="font-size-15">{{ summary.totalCharges }}</strong>
+                    </div>
+                    <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
+                        <p class="mb-1 font-size-12 light-gray">{{ localeData?.goods_with_jobworker }}</p>
+                        <strong class="font-size-15">{{ summary.goodsWithJobworker }}</strong>
+                    </div>
+                    <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
+                        <p class="mb-1 font-size-12 light-gray">{{ localeData?.overdue_returns }}</p>
+                        <strong class="font-size-15">{{ summary.overdueReturns }}</strong>
+                    </div>
+                    @if (!isCompany && !isConsolidatedBranch) {
+                        <button type="button" matButton="filled" (click)="goToCreate()">
+                            {{ commonLocaleData?.app_create_new }}
+                        </button>
+                    }
+                    <button type="button" matButton="outlined" (click)="openAdvanceFilterDialog()">
+                        {{ commonLocaleData?.app_filter }}
+                        <span class="icon-advance-filter" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+
+            @if (isCompany || isConsolidatedBranch) {
+                <go-to-branch
+                    [title]="isCompany ? commonLocaleData?.app_you_in_company_mode : commonLocaleData?.app_you_in_consolidate_mode"
+                    [message]="localeData?.info_message"
+                    [buttonLabel]="commonLocaleData?.switch_to_branch"
+                    [cssClass]="'mb-3 border-radius-8'"
+                ></go-to-branch>
+            }
+
+            @if (isReportLoading && !shouldShowTable) {
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+            } @else if (!shouldShowTable) {
+                <no-data [secondaryMessageClass]="'p-0'" [primaryMessageClass]="'no-data mt-custom-100'"></no-data>
+            } @else {
+                <div class="border-top table-responsive mobile-card-wrapper table-header-sticky overflow-visible">
+                    <table mat-table [dataSource]="dataSource" class="w-100 on-mobile-view">
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.job_work_date }}</th>
+                            <td mat-cell *matCellDef="let row">{{ displayValue(row.documentDate || row.date || row.jobWorkDate) }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="jobWorkNo">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                class="td-search-box"
+                                #searchJobWorkNoContainer
+                                (clickOutside)="handleClickOutside($event, searchJobWorkNoContainer, 'jobWorkNo')"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        searchTemplate;
+                                        context: {
+                                            $implicit: showJobWorkNoSearch,
+                                            fieldName: 'jobWorkNo',
+                                            formControl: columnSearchForm.controls['jobWorkNo'],
+                                            title: localeData?.job_work_no,
+                                        }
+                                    "
+                                ></ng-container>
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <a href="javascript:void(0);" class="text-primary" (click)="goToEdit(row)">
+                                    {{ row.documentNo || row.jobWorkNumber || row.voucherNumber || row.uniqueName }}
+                                </a>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="jobworker">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                class="td-search-box"
+                                #searchJobworkerContainer
+                                (clickOutside)="handleClickOutside($event, searchJobworkerContainer, 'jobworker')"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        searchTemplate;
+                                        context: {
+                                            $implicit: showJobworkerSearch,
+                                            fieldName: 'jobworker',
+                                            formControl: columnSearchForm.controls['jobworker'],
+                                            title: localeData?.jobworker_name,
+                                        }
+                                    "
+                                ></ng-container>
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                {{ row.jobworker?.name || row.accountName || row.jobworkerName || row.account?.name }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.type }}</th>
+                            <td mat-cell *matCellDef="let row">{{ row.jobWorkType || row.type }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="outputStock">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                class="td-search-box"
+                                #searchOutputStockContainer
+                                (clickOutside)="handleClickOutside($event, searchOutputStockContainer, 'outputStock')"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        searchTemplate;
+                                        context: {
+                                            $implicit: showOutputStockSearch,
+                                            fieldName: 'outputStock',
+                                            formControl: columnSearchForm.controls['outputStock'],
+                                            title: localeData?.output_stock,
+                                        }
+                                    "
+                                ></ng-container>
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                {{ row.outputStock?.name || row.outputStockName || row.finishedStockName || row.stockName }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="qty">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_quantity }}</th>
+                            <td mat-cell *matCellDef="let row">{{ row.outputQuantity ?? row.quantity }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="charges">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.charges }}</th>
+                            <td mat-cell *matCellDef="let row">{{ displayValue(row.charges ?? row.totalCharges ?? row.expenseAmount) }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="itc">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.itc }}</th>
+                            <td mat-cell *matCellDef="let row">{{ getItcLabel(row) }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="returnDue">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.return_due }}</th>
+                            <td mat-cell *matCellDef="let row" [class.text-danger]="row.isOverdue">
+                                {{ displayValue(row.expectedReturnDate || row.returnDue) }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.status }}</th>
+                            <td mat-cell *matCellDef="let row">
+                                <span class="status-badge" [class]="statusClass(row.status)">{{ row.status }}</span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
+                            <td mat-cell *matCellDef="let row">
+                                <button
+                                    mat-icon-button
+                                    type="button"
+                                    [matMenuTriggerFor]="rowMenu"
+                                    [attr.aria-label]="commonLocaleData?.app_action"
+                                >
+                                    <i class="icon-dots-three-vertical font-size-16"></i>
+                                </button>
+                                <mat-menu #rowMenu="matMenu">
+                                    <button mat-menu-item type="button" (click)="goToEdit(row)">{{ commonLocaleData?.app_view }}</button>
+                                    <button mat-menu-item type="button" (click)="recordReturn(row)">{{ localeData?.record_return }}</button>
+                                    <button mat-menu-item type="button" (click)="viewLinkedChallan(row)">
+                                        {{ localeData?.view_linked_challan }}
+                                    </button>
+                                    <button mat-menu-item type="button" (click)="markScrap(row)">{{ localeData?.mark_scrap }}</button>
+                                    <button mat-menu-item type="button" (click)="makeAdjustment(row)">
+                                        {{ localeData?.make_adjustment }}
+                                    </button>
+                                    <button mat-menu-item type="button" (click)="printJobWork(row)">
+                                        {{ localeData?.print_download }}
+                                    </button>
+                                    <button mat-menu-item type="button" class="text-danger" (click)="cancelJobWork(row)">
+                                        {{ localeData?.cancel_job_work }}
+                                    </button>
+                                    <button mat-menu-item type="button" class="text-danger" (click)="deleteJobWork(row)">
+                                        {{ localeData?.delete_job_work }}
+                                    </button>
+                                </mat-menu>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                </div>
+
+                @if (!isReportLoading && !dataSource?.length) {
+                    <no-data [secondaryMessageClass]="'p-0'" [primaryMessageClass]="'no-data mt-custom-100'"></no-data>
+                }
+
+                @if (totalItems > pageSizeOptions[0] && !isReportLoading) {
+                    <mat-paginator
+                        [length]="totalItems"
+                        [pageIndex]="currentPage - 1"
+                        [pageSize]="searchRequest.count"
+                        [pageSizeOptions]="pageSizeOptions"
+                        (page)="handlePageEvent($event)"
+                    ></mat-paginator>
+                }
+            }
+        </div>
+    </section>
+</div>
+
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div class="search-table">
+        <div [hidden]="show">
+            <i class="icon-search pr-1" (click)="toggleSearch(fieldName)" role="button" [attr.aria-label]="getSearchFieldText(title)"></i>
+            <span>{{ title }}</span>
+        </div>
+        <div class="input-container" [hidden]="!show">
+            <text-field
+                [type]="'text'"
+                [placeholder]="getSearchFieldText(title)"
+                [cssClass]="'form-control border'"
+                [formControl]="formControl"
+                [autoFocus]="show"
+            ></text-field>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #advanceFilterDialog>
+    <div class="advance-search-dialog">
+        <div class="dialog-header">
+            <span>{{ localeData?.advance_filter || commonLocaleData?.app_advanced_filter }}</span>
+            <button type="button" mat-icon-button mat-dialog-close [attr.aria-label]="commonLocaleData?.app_close">
+                <i class="icon-cross" aria-hidden="true"></i>
+            </button>
+        </div>
+        <mat-dialog-content class="dialog-body">
+            <div class="d-flex flex-column row-gap-2">
+                <reactive-dropdown-field
+                    [name]="'advanceWarehouse'"
+                    [label]="commonLocaleData?.app_warehouse"
+                    [placeholder]="commonLocaleData?.app_select_warehouse"
+                    [options]="warehouses"
+                    [labelValue]="selectedWarehouseName"
+                    (selectedOption)="onAdvanceWarehouseSelected($event)"
+                ></reactive-dropdown-field>
+
+                <div class="d-flex flex-column row-gap-15 mt-1">
+                    <mat-slide-toggle [(ngModel)]="advanceOnlyOverdue" color="primary" name="onlyOverdue">
+                        {{ localeData?.only_overdue }}
+                    </mat-slide-toggle>
+
+                    <mat-slide-toggle [(ngModel)]="advanceOnlyItcClaimed" color="primary" name="onlyItcClaimed">
+                        {{ localeData?.only_itc_claimed }}
+                    </mat-slide-toggle>
+                </div>
+
+                <div class="d-flex justify-content-end column-gap-1 mt-3">
+                    <button type="button" matButton="filled" mat-dialog-close (click)="applyAdvanceFilter()">
+                        {{ commonLocaleData?.app_search }}
+                    </button>
+                    <button type="button" matButton="outlined" mat-dialog-close>
+                        {{ commonLocaleData?.app_cancel }}
+                    </button>
+                </div>
+            </div>
+        </mat-dialog-content>
+    </div>
+</ng-template>
+
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="universalDatepickerTrigger?.closeMenu()"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>
+
+<ng-template #challanDialog>
+    <div class="linked-challan-dialog">
+        <div class="dialog-header">
+            <span>{{ localeData?.view_linked_challan }}</span>
+        </div>
+        <mat-dialog-content class="dialog-body linked-challan-dialog-body">
+            @if (!linkedChallans?.length) {
+                <p class="mb-0 text-light">{{ localeData?.no_linked_challan }}</p>
+            } @else {
+                @for (challan of linkedChallans; track challan.uniqueName || challan.documentNo || $index; let last = $last) {
+                    <div class="linked-challan-block" [class.mb-3]="!last">
+                        <div class="linked-challan-meta column-gap-2 row-gap-1 mb-3 pb-2 border-bottom">
+                            <div class="d-flex flex-column row-gap-05 min-width-0">
+                                <span class="font-size-12 light-gray">{{ localeData?.challan_no }}</span>
+                                <span class="font-size-14 font-weight-semibold word-break-break-word">
+                                    {{ displayValue(challan.documentNo) }}
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column row-gap-05 min-width-0">
+                                <span class="font-size-12 light-gray">{{ commonLocaleData?.app_date }}</span>
+                                <span class="font-size-14 font-weight-semibold word-break-break-word">
+                                    {{ displayValue(challan.documentDate) }}
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column row-gap-05 min-width-0">
+                                <span class="font-size-12 light-gray">{{ commonLocaleData?.app_status }}</span>
+                                <span class="status-badge" [class]="statusClass(challan.status)">
+                                    {{ displayValue(challan.status) }}
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column row-gap-05 min-width-0">
+                                <span class="font-size-12 light-gray">{{ commonLocaleData?.app_warehouse }}</span>
+                                <span class="font-size-14 font-weight-semibold word-break-break-word">
+                                    {{ displayValue(challan.warehouse?.name) }}
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column row-gap-05 min-width-0">
+                                <span class="font-size-12 light-gray">{{ commonLocaleData?.app_quantity }}</span>
+                                <span class="font-size-14 font-weight-semibold word-break-break-word">
+                                    {{ displayValue(challan.quantity) }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table
+                                mat-table
+                                [dataSource]="challan.documentItems || []"
+                                class="w-100 linked-challan-items-table border border-radius-4 bg-table-background-color"
+                            >
+                                <ng-container matColumnDef="type">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.type }}</th>
+                                    <td mat-cell *matCellDef="let item">{{ displayValue(item.lineRole) }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="stock">
+                                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_stock }}</th>
+                                    <td mat-cell *matCellDef="let item">{{ displayValue(item.stock?.name) }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="variant">
+                                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_variant }}</th>
+                                    <td mat-cell *matCellDef="let item">{{ displayValue(item.variant?.name) }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="batch">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.batch }}</th>
+                                    <td mat-cell *matCellDef="let item">{{ getChallanItemBatchesLabel(item) }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="quantity">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ commonLocaleData?.app_quantity }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let item" class="text-right">
+                                        {{ displayValue(item.quantity) }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="rate">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ commonLocaleData?.app_rate }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let item" class="text-right">
+                                        {{ displayValue(item.rate) }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="amount">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ commonLocaleData?.app_amount }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let item" class="text-right">
+                                        {{ displayValue(item.amount) }}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="linkedChallanItemColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: linkedChallanItemColumns"></tr>
+                            </table>
+                            @if (!(challan.documentItems || []).length) {
+                                <p class="mb-0 mt-2 text-center text-light">
+                                    {{ commonLocaleData?.app_no_result_found }}
+                                </p>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </mat-dialog-content>
+        <div class="d-flex justify-content-end p-2 border-top">
+            <button matButton="outlined" type="button" mat-dialog-close>{{ commonLocaleData?.app_close }}</button>
+        </div>
+    </div>
+</ng-template>

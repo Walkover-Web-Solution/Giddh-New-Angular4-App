@@ -10,7 +10,13 @@ phases:
       - node .codebuild-memory-config.js
       - rm -rf node_modules
       - npm cache clean --force
-      - npm install --force
+      # npm 10.x on Node 20 crashes with edgesOut during peer resolution; 11.6+ has the arborist fix
+      - echo "Upgrading npm to fix arborist edgesOut crash..."
+      - npm install -g npm@11.6.0 || sudo npm install -g npm@11.6.0
+      - hash -r
+      - echo "NPM version after upgrade:" && npm --version
+      - echo "Installing dependencies..."
+      - npm install --no-audit --no-fund
   build:
     commands:
       - echo "Starting build process for branch: $BRANCH"

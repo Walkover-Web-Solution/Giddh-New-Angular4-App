@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
 import { MatTabGroup, MatTabChangeEvent } from '@angular/material/tabs';
 import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { CompanyResponse } from '../models/api-models/Company';
-import { AppState } from '../store';
+import { OrganizationType } from '../models/user-login-state';
+import { GeneralService } from '../services/general.service';
+import { SettingsProfileService } from '../services/settings.profile.service';
 import { environment } from '../../environments/environment.generated';
 
 @Component({
@@ -41,14 +42,10 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(
-        private store: Store<AppState>,
         private route: ActivatedRoute,
-        private router: Router) {
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.selectedCompany = activeCompany;
-            }
-        });
+        private router: Router,
+        private settingsProfileService: SettingsProfileService,
+        private generalService: GeneralService) {
     }
 
     public ngOnInit() {
@@ -58,6 +55,15 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
             this.CanNewTBLoadOnThisEnv = false;
         }
 
+        // Company profile for report metadata; CSV addresses stored separately (do not mutate company addresses)
+        this.settingsProfileService.GetProfileInfo().pipe(take(1), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.status === 'success' && response.body) {
+                this.generalService.activeCompany = response.body;
+                this.selectedCompany = response.body;
+                this.loadOrganizationAddressesForCsvExport(response.body.addresses);
+            }
+        });
+
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
                 this.activeTab = val.tab;
@@ -66,6 +72,27 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
                 this.selectTab(Number(val.tabIndex));
             }
         });
+    }
+
+    /**
+     * Loads address details into csvExportAddresses only:
+     * company mode → company addresses; branch mode → branch-linked addresses.
+     *
+     * @private
+     * @param {any[]} [companyAddresses] Addresses from company profile (company mode)
+     * @memberof FinancialReportsComponent
+     */
+    private loadOrganizationAddressesForCsvExport(companyAddresses?: any[]): void {
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+            this.settingsProfileService.getBranchInfo().pipe(take(1), takeUntil(this.destroyed$)).subscribe((response: any) => {
+                if (response?.status === 'success' && response.body?.addresses) {
+                    this.generalService.csvExportAddresses = response.body.addresses;
+                }
+            });
+            return;
+        }
+
+        this.generalService.csvExportAddresses = companyAddresses ?? [];
     }
 
     /**

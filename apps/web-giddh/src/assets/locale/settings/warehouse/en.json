@@ -19,5 +19,8 @@
     "confirm_archive_title": "Are you sure you want to archive the warehouse?",
     "confirm_unarchive_title": "Are you sure you want to unarchive the warehouse?",
     "archive_notallowed": "Default warehouse can't be archived.",
-    "address_created": "Address created successfully"
+    "address_created": "Address created successfully",
+    "share_warehouse": "Share Warehouse",
+    "share_with": "Share with",
+    "permission_role_name": "Select Role"
 }

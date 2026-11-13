@@ -44,5 +44,8 @@
     "hierarchy_view": "Hierarchy view",
     "parent_branch": "Parent Branch",
     "select_parent_branch": "Select Parent Branch",
-    "consolidated": "Consolidated"
+    "consolidated": "Consolidated",
+    "share_branch": "Share Branch",
+    "share_with": "Share with",
+    "permission_role_name": "Select Role"
 }

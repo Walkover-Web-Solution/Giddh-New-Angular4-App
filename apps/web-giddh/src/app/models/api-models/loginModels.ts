@@ -2,6 +2,19 @@ export class VerifyEmailModel {
     public email: string;
     public verificationCode: string;
 }
+
+/** Request payload for Google auth; optional redirectUrl enables partner bridge-token mode. */
+export interface GoogleAuthRequest {
+    accessToken: string;
+    /** Absolute partner callback URL. When set, API returns a bridge token instead of a session. */
+    redirectUrl?: string;
+}
+
+/** Partner-mode success body (no session until exchange). */
+export interface PartnerGoogleAuthResponse {
+    refresh_token: string;
+    redirect_url: string;
+}
 export class SignupwithEmaillModel {
     public email: string;
     public retryCount: number;

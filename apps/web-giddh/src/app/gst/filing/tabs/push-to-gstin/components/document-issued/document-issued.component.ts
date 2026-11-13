@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, type SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { DocIssueSummary, DocIssueSummaryDetailsDocs } from '../../../../../../models/api-models/GstReconcile';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';

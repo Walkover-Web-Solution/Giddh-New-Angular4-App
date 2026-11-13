@@ -1707,7 +1707,7 @@
                                                                                 (selectedOption)="selectStock($event, entryIndex)"
                                                                                 (dynamicSearchedQuery)="searchStock($event, 1, entryIndex)"
                                                                                 (onClear)="selectStock($event, entryIndex, true)"
-                                                                                (createOption)="toggleStockAsidePane()"
+                                                                                (createOption)="toggleStockAsidePane($event, entryIndex)"
                                                                                 [openDropdown]="
                                                                                     shouldOpenDropdown(
                                                                                         entryIndex,
@@ -3960,7 +3960,7 @@
     <aside-menu-product-service
         [selectedVoucherType]="voucherType"
         [includeSearchedGroup]="true"
-        (closeAsideEvent)="closeAsideMenuProductServiceModal()"
+        (closeAsideEvent)="closeAsideMenuProductServiceModal($event)"
     ></aside-menu-product-service>
 </ng-template>
 

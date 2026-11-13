@@ -577,13 +577,16 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.showCreateButtons = false;
         this.createUpdateStock = false;
 
-        if (!event || event == DataOperationEnum.CREATE) {
+        const isCreate = !event || event === DataOperationEnum.CREATE || event?.operation === DataOperationEnum.CREATE;
+        const isDelete = event === DataOperationEnum.DELETE || event?.operation === DataOperationEnum.DELETE;
+
+        if (isCreate) {
             this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
         } else {
             this.resetCurrentStockAndGroup();
             this.createBreadcrumbs();
         }
-        if (event == DataOperationEnum.CREATE || event == DataOperationEnum.DELETE) {
+        if (isCreate || isDelete) {
             this.activeIndex = Math.max(this.activeIndex - 1, 0);
         }
     }

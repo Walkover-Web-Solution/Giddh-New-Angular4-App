@@ -1,0 +1,62 @@
+/* Feature-only styles; prefer Giddh/Bootstrap utilities in the template. */
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: var(--font-size-12);
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+
+    &.status-open {
+        background: var(--theme-primary-light);
+        color: var(--color-blue);
+    }
+
+    &.status-transit,
+    &.status-process {
+        background: var(--color-warm-orange-light);
+        color: var(--color-orange);
+    }
+
+    &.status-partial {
+        background: var(--color-orange-light);
+        color: var(--color-orange);
+    }
+
+    &.status-overdue {
+        background: var(--color-danger-light);
+        color: var(--color-danger, #e54556);
+    }
+
+    &.status-completed {
+        background: var(--color-success-light);
+        color: var(--color-green, #36b283);
+    }
+
+    &.status-cancelled {
+        background: var(--color-light-gray);
+        color: var(--color-dark-gray);
+    }
+}
+
+.linked-challan-dialog {
+    /* Override shared .dialog-body full-height so the modal stays compact. */
+    .linked-challan-dialog-body {
+        height: auto !important;
+        max-height: 60vh;
+        padding: 16px !important;
+    }
+
+    .linked-challan-meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .linked-challan-items-table {
+        th.mat-mdc-header-cell {
+            background: var(--color-light-gray);
+        }
+    }
+}

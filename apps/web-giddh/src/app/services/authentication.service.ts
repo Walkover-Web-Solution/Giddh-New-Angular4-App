@@ -12,6 +12,7 @@ import { GMAIL_API, LOGIN_API } from './apiurls/login.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import {
     AuthKeyResponse,
+    PartnerGoogleAuthResponse,
     SignupWithMobile,
     UpdateUserContactRequest,
     UpdateUserContactResponse,
@@ -118,20 +119,37 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
-    public LoginWithGoogle(token: string) {
+    /**
+     * Google auth via existing GET v2/signup-with-google.
+     * Optional redirectUrl adds ?redirect_url= for partner bridge-token mode.
+     */
+    public LoginWithGoogle(token: string, redirectUrl?: string) {
         let args: any = { headers: {} };
         args.headers['cache-control'] = 'no-cache';
         args.headers['Content-Type'] = 'application/json';
         args.headers['Accept'] = 'application/json';
         args.headers['Access-Token'] = token;
         args.headers = new HttpHeaders(args.headers);
-        return this.httpClient.get(this.config.apiUrl + LOGIN_API.LOGIN_WITH_GOOGLE, {
+        let url = this.config.apiUrl + LOGIN_API.LOGIN_WITH_GOOGLE;
+        if (redirectUrl) {
+            url += `?redirect_url=${encodeURIComponent(redirectUrl)}`;
+        }
+        return this.httpClient.get(url, {
             headers: args.headers,
             responseType: 'json'
         }).pipe(map((res) => {
-            let data: BaseResponse<VerifyEmailResponseModel, string> = res as BaseResponse<VerifyEmailResponseModel, string>;
+            let data: BaseResponse<VerifyEmailResponseModel | PartnerGoogleAuthResponse, string> = res as BaseResponse<VerifyEmailResponseModel | PartnerGoogleAuthResponse, string>;
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, string>(e, args)));
+        }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel | PartnerGoogleAuthResponse, string>(e, args)));
+    }
+
+    /**
+     * Appends refresh_token to the partner redirect URL (uses & when query already exists).
+     */
+    public buildPartnerRedirectWithRefreshToken(redirectUrl: string, refreshToken: string): string {
+        const url = new URL(redirectUrl);
+        url.searchParams.set('refresh_token', refreshToken);
+        return url.href;
     }
 
     public SetSettings(model): Observable<BaseResponse<string, string>> {
@@ -158,18 +176,6 @@ export class AuthenticationService {
             }), catchError((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, '')));
     }
 
-    public GetAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
-        let uniqueName = (this.generalService.user) ? this.generalService.user?.uniqueName : "";
-
-        return this.http.get(this.config.apiUrl + LOGIN_API.GET_AUTH_KEY
-            ?.replace(':uniqueName', uniqueName)).pipe(map((res) => {
-                let data: BaseResponse<AuthKeyResponse, string> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')));
-    }
-
     /**
      * Updates logged-in user email and/or mobile after MSG91 OTP verification.
      * Send only the fields being changed.
@@ -192,18 +198,6 @@ export class AuthenticationService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<UpdateUserContactResponse, UpdateUserContactRequest>(e, model))
         );
-    }
-
-    public RegenerateAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
-        let userEmail = (this.generalService.user) ? this.generalService.user.email : "";
-
-        return this.http.put(this.config.apiUrl + LOGIN_API.REGENERATE_AUTH_KEY
-            ?.replace(':userEmail', userEmail), {}).pipe(map((res) => {
-                let data: BaseResponse<AuthKeyResponse, string> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, '')));
     }
 
     public ReportInvalidJSON(model): Observable<BaseResponse<AuthKeyResponse, string>> {

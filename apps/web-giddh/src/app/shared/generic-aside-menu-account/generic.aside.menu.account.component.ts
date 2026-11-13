@@ -1,6 +1,6 @@
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountRequestV2, AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';

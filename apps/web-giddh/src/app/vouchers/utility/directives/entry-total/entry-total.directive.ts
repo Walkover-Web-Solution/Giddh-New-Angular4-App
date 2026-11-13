@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
+import { Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, type SimpleChanges } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { AppState } from "../../../../store";

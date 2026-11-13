@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, AfterContentInit, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef, signal } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, AfterContentInit, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges, TemplateRef, ViewChild, forwardRef, signal } from "@angular/core";
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatSelect } from "@angular/material/select";
 import { fromEvent, merge, ReplaySubject, Subject, Subscription, timer } from "rxjs";

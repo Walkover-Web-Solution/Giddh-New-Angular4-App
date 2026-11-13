@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, type SimpleChanges } from '@angular/core';
 import { BehaviorSubject, combineLatest, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil, pairwise, filter } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';

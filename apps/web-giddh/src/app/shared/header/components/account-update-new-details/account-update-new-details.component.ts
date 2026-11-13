@@ -143,6 +143,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public formFields: any[] = [];
     /** Flag indicating whether the entered GSTIN number is valid. */
     public isGstValid: boolean = true;
+    /** Flag indicating whether the entered bank account/IBAN/SWIFT code length is valid. */
+    public isBankDetailsValid: boolean = true;
     /** Holds active selected Tab Label */
     public selectedTabLabel: string = '';
     public moveAccountSuccess$: Observable<boolean>;
@@ -888,6 +890,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             control.get('swiftCode')?.patchValue(null);
             control.get('ifsc')?.patchValue("");
         }
+        this.isBankDetailsValid = true;
     }
 
     /**
@@ -1108,8 +1111,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
         this.checkNameFieldValidation();
-
-        if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
+        
+        if (this.addAccountForm.invalid || !this.isGstValid  || this.isMobileNumberInvalid || !this.isBankDetailsValid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
             this.navigateToFirstErrorTab();
             return;
@@ -1777,23 +1780,32 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (element && element.value && element.value.length < 9) {
                     this._toaster.errorToast(this.commonLocaleData?.app_invalid_bank_account_number);
                     element?.classList?.add('error-box');
+                    this.isBankDetailsValid = false;
+                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(true));
                 } else {
                     element?.classList?.remove('error-box');
+                    this.isBankDetailsValid = true;
                 }
             } else {
                 if (element && element.value && element.value.length < 23) {
                     this._toaster.errorToast(this.commonLocaleData?.app_invalid_iban);
                     element?.classList?.add('error-box');
+                    this.isBankDetailsValid = false;
+                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(true));
                 } else {
                     element?.classList?.remove('error-box');
+                    this.isBankDetailsValid = true;
                 }
             }
         } else if (type === 'swiftCode') {
             if (element && element.value && element.value.length < 8) {
                 this._toaster.errorToast(this.commonLocaleData?.app_invalid_swift_code);
                 element?.classList?.add('error-box');
+                this.isBankDetailsValid = false;
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(true));
             } else {
                 element?.classList?.remove('error-box');
+                this.isBankDetailsValid = true;
             }
         }
     }
@@ -2696,11 +2708,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     private navigateToFirstErrorTab(): void {
-        const tabControlMap: { controlNames: string[]; index: number }[] = [
+        const tabControlMap: { controlNames: string[]; index: number}[] = [
             { controlNames: ['addresses'], index: 0 },
             { controlNames: ['attentionTo', 'mobileNo', 'email'], index: 1 },
             { controlNames: ['portalDomain'], index: 2 },
-            { controlNames: ['accountBankDetails'], index: 3 },
+            { controlNames: ['accountBankDetails'], index: 2},
             { controlNames: ['uniqueName', 'closingBalanceTriggerAmount', 'hsnOrSac', 'hsnNumber', 'sacNumber'], index: 4 },
             { controlNames: ['customFields'], index: 5 },
         ];

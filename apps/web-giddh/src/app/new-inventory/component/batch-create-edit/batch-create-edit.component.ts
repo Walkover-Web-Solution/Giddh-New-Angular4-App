@@ -267,14 +267,20 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
             return;
         }
         const formValue = this.batchForm.value;
+        const manufacturingDate = this.formatDate(formValue.manufacturingDate);
+        const expiryDate = this.formatDate(formValue.expiryDate);
         const payload: BatchSaveRequest = {
             batchNumber: formValue.batchNumber,
             name: formValue.name,
             openingQuantity: this.parseOptionalNumber(formValue.openingQuantity),
-            openingAmount: this.parseOptionalNumber(String(formValue.openingAmount ?? "").replace(/,/g, "")),
-            manufacturingDate: this.formatDate(formValue.manufacturingDate),
-            expiryDate: this.formatDate(formValue.expiryDate)
+            openingAmount: this.parseOptionalNumber(String(formValue.openingAmount ?? "").replace(/,/g, ""))
         };
+        if (manufacturingDate) {
+            payload.manufacturingDate = manufacturingDate;
+        }
+        if (expiryDate) {
+            payload.expiryDate = expiryDate;
+        }
         if (formValue.stockUniqueName) {
             payload.stock = { uniqueName: formValue.stockUniqueName };
         }
@@ -489,13 +495,8 @@ export class BatchCreateEditComponent implements OnInit, OnDestroy {
     }
 
     private formatDate(value: any): string {
-        if (!value) {
-            return "";
-        }
-        if (typeof value === "object") {
-            return dayjs(value).format(GIDDH_DATE_FORMAT);
-        }
-        return value;
+        const parsed = this.toDayjs(value);
+        return parsed ? parsed.format(GIDDH_DATE_FORMAT) : "";
     }
 
     /**

@@ -1,44 +1,49 @@
 <div
     *ngIf="selectedBatches.length"
-    class="d-flex align-items-start text-left"
+    class="d-flex align-items-start text-left w-100"
     [class.batch-chip-list-compact]="compact"
     [class.flex-column]="!compact"
     [class.row-gap-05]="!compact"
-    (click)="$event.stopPropagation()"
+    [class.cursor-pointer]="compact && showEdit"
+    [attr.role]="compact && showEdit ? 'button' : null"
+    [attr.tabindex]="compact && showEdit ? 0 : null"
+    [attr.aria-label]="compact && showEdit ? commonLocaleData?.app_edit || 'Edit' : null"
+    (click)="onContainerClick($event)"
+    (keydown.enter)="onContainerKeydown($event)"
+    (keydown.space)="onContainerKeydown($event)"
 >
-    <div
-        class="d-flex align-items-center column-gap-05"
-        [class.flex-wrap]="!compact"
-        [class.row-gap-05]="!compact"
-        [class.flex-nowrap]="compact"
-    >
+    <div class="d-flex align-items-center flex-wrap column-gap-05 row-gap-05 w-100 batch-chip-list-items">
         <span
             *ngIf="selectedBatches.length > 1"
-            class="status-chip status-chip-primary d-inline-flex align-items-center column-gap-05 border-radius-8 font-size-12 font-weight-medium white-space-nowrap theme-primary-light text-primary"
+            class="status-chip status-chip-primary d-inline-flex align-items-center column-gap-05 border-radius-8 font-size-12 font-weight-medium theme-primary-light text-primary"
+            [class.white-space-nowrap]="!compact"
         >
             <i class="icon-tick font-size-12"></i>
             {{ countLabel }}
         </span>
         <span
             *ngIf="negativeCount > 0"
-            class="status-chip status-chip-warning d-inline-flex align-items-center border-radius-8 font-size-12 font-weight-medium white-space-nowrap bg-warning text-orange"
+            class="status-chip status-chip-warning d-inline-flex align-items-center border-radius-8 font-size-12 font-weight-medium bg-warning text-orange"
+            [class.white-space-nowrap]="!compact"
         >
             {{ negativeLabel }}
         </span>
         <ng-container *ngIf="!compact || selectedBatches.length === 1">
             <span
                 *ngFor="let batch of selectedBatches"
-                class="status-chip status-chip-primary d-inline-flex align-items-center border-radius-8 font-size-12 font-weight-medium white-space-nowrap theme-primary-light text-primary"
+                class="status-chip status-chip-primary d-inline-flex align-items-center border-radius-8 font-size-12 font-weight-medium theme-primary-light text-primary"
+                [class.white-space-nowrap]="!compact"
             >
-                {{ (batch?.batchNumber || batch?.name) + " · " + batch?.quantity }}
+                {{ (batch?.batchNumber || batch?.name) + ' · ' + batch?.quantity }}
             </span>
         </ng-container>
         <button
             *ngIf="showEdit"
             type="button"
-            class="bg-transparent border-none p-0 d-inline-flex align-items-center column-gap-05 text-primary font-size-12 cursor-pointer"
-            (click)="edit.emit($event)"
-            (keydown.enter)="$event.preventDefault(); edit.emit($event)"
+            class="bg-transparent border-none p-0 d-inline-flex align-items-center column-gap-05 text-primary font-size-12 cursor-pointer flex-shrink-0"
+            [attr.aria-label]="commonLocaleData?.app_edit || 'Edit'"
+            (click)="onEditClick($event)"
+            (keydown.enter)="$event.preventDefault(); onEditClick($event)"
         >
             <i class="icon-edit font-size-12"></i>
             {{ commonLocaleData?.app_edit }}

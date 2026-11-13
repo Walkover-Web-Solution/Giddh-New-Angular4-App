@@ -207,10 +207,16 @@ export class BatchReportComponent implements OnInit, OnDestroy {
             this.cdr.detectChanges();
         });
         this.store.pipe(select(state => state.inventory.inventorySettings), takeUntil(this.destroyed$)).subscribe(settings => {
-            this.inventoryViaBusinessDocument = !!settings?.voucherAutomation?.inventoryViaBusinessDocument;
+            const enabled = !!settings?.voucherAutomation?.inventoryViaBusinessDocument;
+            const wasEnabled = this.inventoryViaBusinessDocument;
+            this.inventoryViaBusinessDocument = enabled;
+            if (!enabled) {
+                this.setReportNature(ReportNature.Books, false);
+            } else if (!wasEnabled) {
+                this.getReportNature();
+            }
             this.cdr.detectChanges();
         });
-        this.getReportNature();
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.applicationFromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);

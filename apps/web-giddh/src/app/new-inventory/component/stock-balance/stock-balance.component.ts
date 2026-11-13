@@ -873,7 +873,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     batchNumber: batch.batchNumber ?? batch.name ?? "",
                     quantity,
                     openingQuantity: quantity,
-                    openingAmount: Number(batch.openingAmount) || 0
+                    openingAmount: Number(batch.openingAmount) || 0,
+                    archive: !!batch.archive,
+                    archiveOnly: !!batch.archive
                 };
                 if (batch.uniqueName) {
                     mapped.uniqueName = batch.uniqueName;
@@ -914,7 +916,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                 expiryDate: batch?.expiryDate,
                 manufacturingDate: batch?.manufacturingDate,
                 warehouse: batch?.warehouse,
-                openingAmount: Number(batch?.openingAmount) || 0
+                openingAmount: Number(batch?.openingAmount) || 0,
+                archive: !!batch?.archive,
+                archiveOnly: !!batch?.archive
             } as VoucherSelectedBatch);
             return list;
         }, []);

@@ -138,7 +138,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
     /** Subject for dynamic columns changes */
     private dynamicColumnsSubject$ = new Subject<any>();
     /** Currently selected report nature */
-    public selectedReportNature: ReportNature = ReportNature.Inventory;
+    public selectedReportNature: ReportNature = ReportNature.Books;
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -203,6 +203,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
             if (settings) {
                 const wasEnabled = this.batchTrackingEnabled;
                 this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
+                if (!settings?.voucherAutomation?.inventoryViaBusinessDocument) {
+                    this.selectedReportNature = ReportNature.Books;
+                }
                 if (wasEnabled !== this.batchTrackingEnabled && this.displayedColumns?.length) {
                     this.displayedColumns = this.withBatchColumn(this.displayedColumns);
                     this.changeDetection.detectChanges();

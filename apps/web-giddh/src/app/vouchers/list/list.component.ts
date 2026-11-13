@@ -1231,6 +1231,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     item.grandTotal = typeof item.grandTotal === 'number'
                         ? { amountForAccount: item.grandTotal }
                         : item.grandTotal;
+                    item = this.generalService.addToolTipText(this.voucherType, this.company.baseCurrency, item, this.localeData, this.commonLocaleData, this.company.giddhBalanceDecimalPlaces);
                 }
 
                 if (item.balanceStatus) {
@@ -2071,12 +2072,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             ? [
                 { label: documentStatus.received, value: 'RECEIVED' },
                 { label: documentStatus.completed, value: 'COMPLETED' },
-                { label: documentStatus.cancelled, value: 'CANCELLED' }
+                { label: documentStatus.cancelled, value: 'CANCELLED' },
+                { label: documentStatus.returned, value: 'FULL_RETURN' },
+                { label: documentStatus.partially_returned, value: 'PARTIAL_RETURN' },
+                { label: documentStatus.partially_adjusted, value: 'PARTIALLY_ADJUSTED' },
+                { label: documentStatus.fully_adjusted, value: 'FULLY_ADJUSTED' }
             ]
             : [
                 { label: documentStatus.shipped, value: 'SHIPPED' },
                 { label: documentStatus.delivered, value: 'DELIVERED' },
-                { label: documentStatus.cancelled, value: 'CANCELLED' }
+                { label: documentStatus.cancelled, value: 'CANCELLED' },
+                { label: documentStatus.returned, value: 'FULL_RETURN' },
+                { label: documentStatus.partially_returned, value: 'PARTIAL_RETURN' },
+                { label: documentStatus.partially_adjusted, value: 'PARTIALLY_ADJUSTED' },
+                { label: documentStatus.fully_adjusted, value: 'FULLY_ADJUSTED' }
             ];
 
         const invoiceStatus = this.localeData?.inventory_invoice_status || {};

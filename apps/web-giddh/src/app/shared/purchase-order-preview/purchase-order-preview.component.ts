@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy, ElementRef, signal } from '@angular/core';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -22,7 +22,7 @@ export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
     /* Output emitter (boolean) */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter();
     /* This will hold if api request is pending */
-    public isLoading: boolean = false;
+    public isLoading = signal<boolean>(false);
     /* This will hold if pdf preview loaded */
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
@@ -30,7 +30,7 @@ export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /** PDF file url created with blob */
-    public sanitizedPdfFileUrl: any = '';
+    public sanitizedPdfFileUrl = signal<any>('');
     /** PDF src */
     public pdfFileURL: any = '';
     /* This will hold local JSON data */
@@ -72,7 +72,7 @@ export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderPreviewModalComponent
      */
     public getPdf(): void {
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.pdfPreviewHasError = false;
         this.pdfPreviewLoaded = false;
         let getRequest = { companyUniqueName: this.purchaseOrderCompanyUniqueName, accountUniqueName: this.purchaseOrderAccountUniqueName, poUniqueName: this.purchaseOrderUniqueName };
@@ -83,12 +83,12 @@ export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
                 const file = new Blob([blob], { type: 'application/pdf' });
                 URL.revokeObjectURL(this.pdfFileURL);
                 this.pdfFileURL = URL.createObjectURL(file);
-                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                this.sanitizedPdfFileUrl.set(this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL));
                 this.pdfPreviewLoaded = true;
             } else {
                 this.pdfPreviewHasError = true;
             }
-            this.isLoading = false;
+            this.isLoading.set(false);
         });
     }
 

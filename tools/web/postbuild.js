@@ -41,8 +41,16 @@ let mainHash = '';
 let mainBundleFile = '';
 const mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
 
+const contentSecurityPolicy = require('./content-security-policy');
+
 // PHP script to prepend to index.html
 const phpScript = `<?php
+
+/* -------------------------------------------------
+ * 0. Security headers for HTML document responses
+ * ------------------------------------------------- */
+header("Content-Security-Policy: ${contentSecurityPolicy}");
+header("X-Frame-Options: SAMEORIGIN");
 
 /* -------------------------------------------------
  * 1. Instance metadata endpoint

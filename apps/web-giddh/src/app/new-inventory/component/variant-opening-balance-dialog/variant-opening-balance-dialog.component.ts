@@ -82,6 +82,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
     public isApplySubmitted: boolean = false;
     /** Company-level batch tracking; when false, warehouse UI only (batches kept in data, not shown). */
     public batchTrackingEnabled: boolean = false;
+    /** Counter for stable warehouse row ids used by `@for` track. */
+    private nextWarehouseRowId: number = 0;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public dialogData: VariantOpeningBalanceDialogData,
@@ -233,8 +235,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             return;
         }
         row.warehouse = {
-            name: undefined,
-            uniqueName: undefined
+            name: null,
+            uniqueName: null
         };
         row.openingQuantity = 0;
         row.openingAmount = 0;
@@ -243,6 +245,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
         } else {
             row.batches = [];
         }
+        // reactive-dropdown-field keeps an internal selected value; labelValue alone does not clear it.
+        row.forceClear = !row.forceClear;
         this.syncSelectedBatchNumbers();
         this.cdr.detectChanges();
     }
@@ -476,9 +480,11 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
      */
     public getBatchAvailabilityOptions(batch: any, warehouseUniqueName: string = ""): IOption[] {
         const warehouseKey = String(warehouseUniqueName ?? "").trim();
-        const options = warehouseKey
-            ? (this.batchAvailabilityByWarehouse[warehouseKey] ?? [])
-            : this.allBatchAvailabilityOptions;
+        // No warehouse selected → empty list (do not fall back to default/all warehouses).
+        if (!warehouseKey) {
+            return [];
+        }
+        const options = this.batchAvailabilityByWarehouse[warehouseKey] ?? [];
         const currentValue = String(batch?.batchNumber ?? "").trim();
         return options.filter(option => {
             const optionValue = String(option?.value ?? "").trim();
@@ -595,7 +601,34 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
      * @memberof VariantOpeningBalanceDialogComponent
      */
     public isBatchNameRequired(batch: any): boolean {
+        if (!!batch?.archive) {
+            return false;
+        }
         return Number(batch?.openingQuantity) > 0 || Number(batch?.openingAmount) > 0;
+    }
+
+    /**
+     * True when batch fields (except archive toggle) should be read-only.
+     *
+     * @param {*} batch Batch row
+     * @param {*} [warehouseRow] Warehouse balance row
+     * @return {*}  {boolean}
+     * @memberof VariantOpeningBalanceDialogComponent
+     */
+    public isBatchFieldsDisabled(batch: any, warehouseRow?: any): boolean {
+        return this.isWarehouseArchived(warehouseRow) || !!batch?.archive;
+    }
+
+    /**
+     * Refresh view after archive toggle so field disabled state updates.
+     *
+     * @memberof VariantOpeningBalanceDialogComponent
+     */
+    public onBatchArchiveChange(batch: any): void {
+        if (batch) {
+            batch.archiveOnly = !!batch.archive;
+        }
+        this.cdr.detectChanges();
     }
 
     /**
@@ -635,7 +668,12 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             return;
         }
         this.dialogRef.close({
-            warehouseBalance: cloneDeep(this.warehouseBalance)
+            warehouseBalance: cloneDeep(this.warehouseBalance).map(row => {
+                const payload = { ...row };
+                delete payload.rowId;
+                delete payload.forceClear;
+                return payload;
+            })
         });
     }
 
@@ -662,6 +700,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
                     .filter(batch => this.hasBatchContent(batch));
                 const hasBatchData = batches.length > 0;
                 return {
+                    rowId: this.createWarehouseRowId(),
+                    forceClear: false,
                     warehouse: {
                         name: row?.warehouse?.name,
                         uniqueName: warehouseUniqueName
@@ -685,6 +725,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
      */
     private createEmptyWarehouseRow(): any {
         return {
+            rowId: this.createWarehouseRowId(),
+            forceClear: false,
             warehouse: {
                 name: undefined,
                 uniqueName: undefined
@@ -695,6 +737,18 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             isShowBatch: this.batchTrackingEnabled,
             batches: this.batchTrackingEnabled ? [this.createEmptyBatch()] : []
         };
+    }
+
+    /**
+     * Stable id for warehouse `@for` track so removing a row does not reuse another row's DOM.
+     *
+     * @private
+     * @return {*}  {string}
+     * @memberof VariantOpeningBalanceDialogComponent
+     */
+    private createWarehouseRowId(): string {
+        this.nextWarehouseRowId += 1;
+        return `warehouse-row-${this.nextWarehouseRowId}`;
     }
 
     /**
@@ -712,7 +766,9 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             manufacturingDate: null,
             expiryDate: null,
             openingQuantity: null,
-            openingAmount: null
+            openingAmount: null,
+            archive: false,
+            archiveOnly: false
         };
     }
 
@@ -733,6 +789,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
             expiryDate: this.parseBatchDate(batch?.expiryDate),
             openingQuantity: batch?.openingQuantity ?? null,
             openingAmount: batch?.openingAmount ?? null,
+            archive: !!batch?.archive,
+            archiveOnly: !!batch?.archive,
             warehouseUniqueName: batch?.warehouse?.uniqueName
                 || batch?.warehouseUniqueName
                 || warehouseUniqueName
@@ -798,6 +856,8 @@ export class VariantOpeningBalanceDialogComponent implements OnDestroy {
         batch.openingAmount = !batch.openingAmount && item.openingAmount ? item.openingAmount : batch.openingAmount;
         batch.uniqueName = !batch.uniqueName && item.uniqueName ? item.uniqueName : batch.uniqueName;
         batch.warehouseUniqueName = item?.warehouse?.uniqueName || warehouseUniqueName || batch.warehouseUniqueName;
+        batch.archive = !!item.archive;
+        batch.archiveOnly = !!item.archive;
     }
 
     /**
