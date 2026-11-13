@@ -152,7 +152,9 @@ $sar-age-badge-radius: 12px;
 
             th:first-child,
             td:first-child {
-                box-shadow: inset 1px 0 0 var(--border-color), inset -1px 0 0 var(--border-color);
+                box-shadow:
+                    inset 1px 0 0 var(--border-color),
+                    inset -1px 0 0 var(--border-color);
             }
         }
     }

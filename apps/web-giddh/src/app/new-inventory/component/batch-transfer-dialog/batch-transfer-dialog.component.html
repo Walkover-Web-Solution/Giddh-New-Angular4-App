@@ -41,7 +41,7 @@
                             [label]="commonLocaleData?.app_warehouse"
                             [placeholder]="commonLocaleData?.app_select_warehouse"
                             [ngModel]="warehouseLabel"
-                            [ngModelOptions]="{standalone: true}"
+                            [ngModelOptions]="{ standalone: true }"
                             [readonly]="true"
                             [required]="true"
                             [showError]="isFormSubmitted && !transferForm.get('warehouseUniqueName')?.value"

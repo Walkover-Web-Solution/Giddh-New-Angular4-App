@@ -37,9 +37,7 @@
                                     formControlName="transporterName"
                                     [required]="true"
                                     [autoFocus]="true"
-                                    [showError]="
-                                        isFormSubmitted && transporterForm?.controls?.transporterName?.invalid
-                                    "
+                                    [showError]="isFormSubmitted && transporterForm?.controls?.transporterName?.invalid"
                                 ></input-field>
                                 @if (
                                     (isFormSubmitted || transporterForm?.controls?.transporterName?.dirty) &&
@@ -78,11 +76,7 @@
                                 <button
                                     matButton="filled"
                                     type="submit"
-                                    [disabled]="
-                                        (saveInProgress$ | async) ||
-                                        (updateInProgress$ | async) ||
-                                        transporterForm?.invalid
-                                    "
+                                    [disabled]="(saveInProgress$ | async) || (updateInProgress$ | async) || transporterForm?.invalid"
                                 >
                                     {{ isEditMode ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
                                 </button>
