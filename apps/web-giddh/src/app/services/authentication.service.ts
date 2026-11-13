@@ -14,6 +14,8 @@ import {
     AuthKeyResponse,
     PartnerGoogleAuthResponse,
     SignupWithMobile,
+    UpdateUserContactRequest,
+    UpdateUserContactResponse,
     UserDetails,
     VerifyEmailModel,
     VerifyEmailResponseModel,
@@ -172,6 +174,30 @@ export class AuthenticationService {
                 data.queryString = {};
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, '')));
+    }
+
+    /**
+     * Updates logged-in user email and/or mobile after MSG91 OTP verification.
+     * Send only the fields being changed.
+     *
+     * @param {UpdateUserContactRequest} model Contact fields with MSG91 access tokens
+     * @returns {Observable<BaseResponse<UpdateUserContactResponse, UpdateUserContactRequest>>}
+     * @memberof AuthenticationService
+     */
+    public updateUserContact(model: UpdateUserContactRequest): Observable<BaseResponse<UpdateUserContactResponse, UpdateUserContactRequest>> {
+        const userUniqueName = this.generalService.user?.uniqueName ?? '';
+
+        return this.http.post(
+            this.config.apiUrl + LOGIN_API.UPDATE_CONTACT?.replace(':userUniqueName', encodeURIComponent(userUniqueName)),
+            model
+        ).pipe(
+            map((res) => {
+                const data: BaseResponse<UpdateUserContactResponse, UpdateUserContactRequest> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<UpdateUserContactResponse, UpdateUserContactRequest>(e, model))
+        );
     }
 
     public ReportInvalidJSON(model): Observable<BaseResponse<AuthKeyResponse, string>> {

@@ -51,3 +51,5 @@
 @include min-width-utilities();
 // Generate max-width utility classes
 @include max-width-utilities();
+// Generate grid column, row, and template utilities
+@include grid-placement-utilities();
