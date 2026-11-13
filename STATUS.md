@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-12 · **Reviewed up to commit:** `be9923db2d`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-13 · **Reviewed up to commit:** `3599668ea0`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -104,9 +104,11 @@ Feature work merged after the brief, not scored against it:
 | Ledger and permissions route paths restored | 🟡 | `66a7606b04` fixed misspelled `leondger`/`permissis` paths in [app.routes.ts](apps/web-giddh/src/app/app.routes.ts). |
 | Living status tracker and `status:check` | 🟡 | [Script](scripts/status-check.mjs) and focused tests pass; CI workflow not yet seen on a teammate's PR. |
 | Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2`. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. Create Delivery Challan No. uses pending-report DC list by jobworker. List has column search, Advance Filter, filter restore, company/consolidated branch dropdown + `go-to-branch`, status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create payload includes `stockUnitUniqueName`. Record Return / Mark Scrap / Make Adjustment load order GET and post filled items/scraps/expenses. View Linked Challan renders challan GET array. Export / Revert / Preview UI deferred. Backend guarantees still unverified. |
+| Voucher preview keyboard print (Ctrl/Cmd+P) | ✅ | `preview.component.ts` intercepts the shortcut, calls `printInvoice()` on the PDF iframe; merged in #17178; follow-up hardens editable-field guard and formatting. Dashboard redirect after print not reproduced in RCA. |
 
 ## Change log
 
+- 2026-11-13 · Voucher preview Ctrl/Cmd+P · Route shortcut to `printInvoice()` instead of browser print; skip when focus is in an editable field · Voucher preview print ✅
 - 2026-11-13 · Resolve CSP merge conflict · Merge OTP/hCaptcha allowlist with CookieYes/Clarity/Facebook/OpenAI CDN · CSP 🟡
 - 2026-11-12 · Allow MSG91 phone utils in CSP · Add cdnjs.cloudflare.com + *.msg91.com so OTP mobile validation works · CSP 🟡
 - 2026-11-12 · Allow hCaptcha in CSP · MSG91 OTP login needs hcaptcha.com in script/style/frame-src · CSP 🟡

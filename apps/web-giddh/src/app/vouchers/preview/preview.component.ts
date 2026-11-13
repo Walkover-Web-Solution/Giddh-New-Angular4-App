@@ -220,17 +220,26 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     private skipNextSearchEmit: string | null = null;
     /** True when get-all is triggered from user search input */
     private isUserSearchRequest: boolean = false;
-     /** Handles Ctrl + P / Cmd + P keyboard shortcut to print the current invoice */
-    @HostListener('window:keydown', ['$event'])
+    /** Handles Ctrl + P / Cmd + P keyboard shortcut to print the current voucher PDF. */
+    @HostListener('document:keydown', ['$event'])
     handleKeyboardEvent(event: KeyboardEvent): void {
-        if (
-            (event.metaKey || event.ctrlKey) &&
-            event.key.toLowerCase() === 'p'
-        ) {
-            event.preventDefault();
-            event.stopPropagation();
-            this.printInvoice();
+        if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'p') {
+            return;
         }
+        if (this.isPrintShortcutBlocked(event.target)) {
+            return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        this.printInvoice();
+    }
+
+    private isPrintShortcutBlocked(target: EventTarget | null): boolean {
+        if (!(target instanceof HTMLElement)) {
+            return false;
+        }
+        const tagName = target.tagName;
+        return tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT' || target.isContentEditable;
     }
 
     constructor(
@@ -1895,33 +1904,33 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public printInvoice(): void {
-    if (this.isVoucherDownloading || this.isVoucherDownloadError) {
-        return;
-    }
-    if (this.pdfContainer) {
-        const iframeWindow = this.pdfContainer?.nativeElement?.contentWindow;
-        if (iframeWindow) {
-            setTimeout(() => {
-                iframeWindow.print();
-                window.focus();
-            }, 200);
+        if (this.isVoucherDownloading || this.isVoucherDownloadError) {
+            return;
         }
-    } else if (this.attachedDocumentPreview) {
-        const windowWidth = window.innerWidth 
-             || document.documentElement.clientWidth 
-             || document.body.clientWidth 
-             || 0;
-        const left = (windowWidth / 2) - 450;
-        const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
-        if (printWindow) {
-            printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
-            printWindow.document?.close();
-            printWindow?.focus();
-            printWindow?.print();
-            printWindow?.close();
+        if (this.pdfContainer) {
+            const iframeWindow = this.pdfContainer?.nativeElement?.contentWindow;
+            if (iframeWindow) {
+                setTimeout(() => {
+                    iframeWindow.print();
+                    window.focus();
+                }, 200);
+            }
+        } else if (this.attachedDocumentPreview) {
+            const windowWidth = window.innerWidth
+                || document.documentElement.clientWidth
+                || document.body.clientWidth
+                || 0;
+            const left = (windowWidth / 2) - 450;
+            const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
+            if (printWindow) {
+                printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
+                printWindow.document?.close();
+                printWindow?.focus();
+                printWindow?.print();
+                printWindow?.close();
+            }
         }
     }
-}
 
     /**
      * This will use for thermal print
