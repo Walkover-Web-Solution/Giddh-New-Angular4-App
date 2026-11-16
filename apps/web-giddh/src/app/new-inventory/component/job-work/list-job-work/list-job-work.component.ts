@@ -538,10 +538,6 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             // List row includes documentItems / warehouse from list API.
             const body = row as Record<string, unknown>;
             const items = this.buildReturnActionItems(body);
-            if (!items.length) {
-                this.toasterService.errorToast(this.localeData.return_items_missing);
-                return;
-            }
             const payload: JobWorkActionRequest = {
                 action: 'RETURN',
                 uniqueName,
@@ -798,10 +794,6 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         // List row includes scrap lines / warehouse from list API.
         const body = row as Record<string, unknown>;
         const scraps = this.buildMarkScrapActionItems(body);
-        if (!scraps.length) {
-            this.toasterService.errorToast(this.localeData.scrap_items_missing);
-            return;
-        }
         const payload: JobWorkActionRequest = {
             action: 'MARK_SCRAP',
             uniqueName,
@@ -833,10 +825,6 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             ? increaseAssetValue
             : !!claimItcValue;
         const expenses = this.buildAdjustActionExpenses(body);
-        if (!expenses.length) {
-            this.toasterService.errorToast(this.localeData.expense_items_missing);
-            return;
-        }
         const payload: JobWorkActionRequest = {
             action: 'ADJUST',
             uniqueName,
