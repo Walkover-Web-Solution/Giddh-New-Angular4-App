@@ -12,9 +12,9 @@ import { FeedbackService } from '../feedback.service';
 export class FeedbackFloatingButtonComponent {
     public readonly feedbackService = inject(FeedbackService);
 
-    /** True if floating button should be shown (signed-in user AND no sidebar present/visible) */
+    /** True if floating button should be shown (configured, signed-in user AND no sidebar present/visible) */
     public readonly showFloatingButton = computed(() => {
-        return this.feedbackService.isLoggedIn() && !this.feedbackService.isSidebarVisible();
+        return this.feedbackService.isConfigured() && this.feedbackService.isLoggedIn() && !this.feedbackService.isSidebarVisible();
     });
 
     /**

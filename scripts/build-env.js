@@ -86,8 +86,8 @@ const envConfig = {
     TWITTER_SECRET_KEY: env.TWITTER_SECRET_KEY || '',
     LINKEDIN_CLIENT_ID: env.LINKEDIN_CLIENT_ID || '',
     LINKEDIN_SECRET_KEY: env.LINKEDIN_SECRET_KEY || '',
-    stewardFeedbackUrl: env.STEWARD_FEEDBACK_URL || 'https://steward.embarko.app/api/v1/feedback',
-    stewardFeedbackKey: env.STEWARD_FEEDBACK_KEY || 'pk_0afaeb4cd6941a797bc88a0ab76c8ac05578'
+    stewardFeedbackUrl: env.STEWARD_FEEDBACK_URL || '',
+    stewardFeedbackKey: env.STEWARD_FEEDBACK_KEY || ''
 };
 // Generate TypeScript environment file content - Angular 21 standard approach
 const envFileContent = `/* tslint:disable */

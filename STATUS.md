@@ -104,10 +104,11 @@ Feature work merged after the brief, not scored against it:
 | Ledger and permissions route paths restored | 🟡 | `66a7606b04` fixed misspelled `leondger`/`permissis` paths in [app.routes.ts](apps/web-giddh/src/app/app.routes.ts). |
 | Living status tracker and `status:check` | 🟡 | [Script](scripts/status-check.mjs) and focused tests pass; CI workflow not yet seen on a teammate's PR. |
 | Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2`. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. Create Delivery Challan No. uses pending-report DC list by jobworker. List has column search, Advance Filter, filter restore, company/consolidated branch dropdown + `go-to-branch`, status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create payload includes `stockUnitUniqueName`. Record Return / Mark Scrap / Make Adjustment load order GET and post filled items/scraps/expenses. View Linked Challan renders challan GET array. Export / Revert / Preview UI deferred. Backend guarantees still unverified. |
-| Native Steward feedback widget | ✅ | Native in-panel feedback form for signed-in users, accessible via sidebar bottom item and floating button fallback where there is no sidebar; posts session, page, and version meta to Steward endpoint without third-party scripts. |
+| Native Steward feedback widget | ✅ | Native in-panel feedback form for signed-in users, accessible via sidebar bottom item and floating button fallback where there is no sidebar; config loaded from STEWARD_FEEDBACK_URL/KEY environment variables at build time (hidden when omitted); posts session, page, and version meta to Steward endpoint without third-party scripts. |
 
 ## Change log
 
+- 2026-11-16 · Steward feedback env vars · Inject Steward URL/key from environment variables without code defaults, hide entry points when missing · Feedback ✅
 - 2026-11-16 · Native Steward feedback widget · Add native in-panel feedback form and sidebar/floating button entry points posting to Steward · Feedback ✅
 
 - 2026-11-13 · Resolve CSP merge conflict · Merge OTP/hCaptcha allowlist with CookieYes/Clarity/Facebook/OpenAI CDN · CSP 🟡

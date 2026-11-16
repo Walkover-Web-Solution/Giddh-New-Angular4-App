@@ -412,6 +412,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public openFeedbackDialog(): void {
+        if (!this.feedbackService.isConfigured()) {
+            return;
+        }
         this.feedbackService.openFeedbackDialog();
     }
 

@@ -46,6 +46,9 @@ export class FeedbackService {
     /** True if signed-in user session is active */
     public readonly isLoggedIn = signal<boolean>(false);
 
+    /** True if Steward feedback URL and key are both configured */
+    public readonly isConfigured = signal<boolean>(Boolean(environment.stewardFeedbackUrl && environment.stewardFeedbackKey));
+
     /** Tracks whether primary sidebar is present in current layout */
     public readonly sidebarPresent = signal<boolean>(false);
 
@@ -94,7 +97,11 @@ export class FeedbackService {
     /**
      * Opens the native feedback dialog
      */
-    public openFeedbackDialog(): MatDialogRef<FeedbackDialogComponent> {
+    public openFeedbackDialog(): MatDialogRef<FeedbackDialogComponent> | null {
+        if (!this.isConfigured()) {
+            return null;
+        }
+
         if (this.dialogRef) {
             return this.dialogRef;
         }

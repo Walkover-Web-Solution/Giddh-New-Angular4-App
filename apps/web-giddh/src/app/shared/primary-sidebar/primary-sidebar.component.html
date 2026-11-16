@@ -289,7 +289,7 @@
                 </div>
             </div>
         </div>
-        <div class="sidebar-feedback-item" *ngIf="feedbackService.isLoggedIn()">
+        <div class="sidebar-feedback-item" *ngIf="feedbackService.isConfigured() && feedbackService.isLoggedIn()">
             <div class="main-item-wrapper">
                 <a
                     href="javascript:void(0);"
