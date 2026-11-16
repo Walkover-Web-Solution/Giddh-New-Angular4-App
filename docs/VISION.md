@@ -6,7 +6,7 @@ The likely users are people responsible for a business's books: owners, accounta
 
 ## Approved development direction
 
-Pushpendra's preparation brief, 2026-10-23, establishes this working model: humans provide vision, problems, priorities, and feedback; AI understands the product, implements changes, verifies them, and maintains the knowledge the next agent needs.
+Pushpendra's preparation brief, 2026-10-23, establishes this working model: humans provide vision, problems, priorities, and feedback; AI understands the product, implements changes, verifies them, and maintains the knowledge the next agent needs. Native in-panel feedback collection for signed-in users (via a native dialog without third-party scripts) directly supports this model by capturing user feedback and support requests from active sessions.
 
 The intended experience is concrete: a fresh agent can trace an invoice request from a screen to its API, identify the affected permissions, and find the checks without reconstructing an old conversation.
 
