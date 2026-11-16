@@ -1,0 +1,15 @@
+@if (showFloatingButton()) {
+    <div class="feedback-floating-wrapper">
+        <button
+            type="button"
+            class="feedback-floating-btn d-inline-flex align-items-center column-gap-1"
+            (click)="openFeedback()"
+            aria-label="Send Feedback"
+            matTooltip="Send Feedback"
+            matTooltipPosition="left"
+        >
+            <i class="icon-chat2 font-size-18"></i>
+            <span class="font-size-14 font-weight-semibold">Feedback</span>
+        </button>
+    </div>
+}

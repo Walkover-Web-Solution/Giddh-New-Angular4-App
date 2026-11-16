@@ -1,0 +1,72 @@
+<section class="feedback-dialog-container">
+    <div cdkFocusInitial class="dialog-header">
+        <span class="font-size-16 font-weight-semibold">Feedback</span>
+        <button matIconButton aria-label="Close" type="button" (click)="closeDialog()">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+
+    <div mat-dialog-content class="dialog-body p-3">
+        @if (success()) {
+            <div class="feedback-success-state text-center py-4">
+                <i class="icon-success text-success font-size-36 mb-2 d-inline-block"></i>
+                <h3 class="font-size-18 font-weight-semibold mb-2">Thanks, we got it</h3>
+                <p class="font-size-14 text-muted mb-0">We appreciate your feedback to help us improve Giddh.</p>
+            </div>
+        } @else {
+            <div class="feedback-form-state">
+                <p class="font-size-14 text-muted mb-3">
+                    Have feedback, a feature request, or an issue to report? Let us know below.
+                </p>
+
+                @if (errorMessage()) {
+                    <div class="alert alert-danger font-size-14 py-2 px-3 mb-3 d-flex align-items-center" role="alert">
+                        <i class="icon-traingle-info mr-2 font-size-16"></i>
+                        <span>{{ errorMessage() }}</span>
+                    </div>
+                }
+
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Your feedback</mat-label>
+                    <textarea
+                        matInput
+                        rows="5"
+                        [ngModel]="feedbackText()"
+                        (ngModelChange)="feedbackText.set($event)"
+                        placeholder="Tell us what you think or what you need..."
+                        [disabled]="loading()"
+                        required
+                    ></textarea>
+                </mat-form-field>
+            </div>
+        }
+    </div>
+
+    <div mat-dialog-actions class="d-flex justify-content-end p-3 pt-0 column-gap-2">
+        @if (success()) {
+            <button matButton="filled" color="primary" type="button" (click)="closeDialog()">
+                Close
+            </button>
+        } @else {
+            <button matButton="outlined" type="button" [disabled]="loading()" (click)="closeDialog()">
+                Cancel
+            </button>
+            <button
+                matButton="filled"
+                color="primary"
+                type="button"
+                [disabled]="loading() || !feedbackText().trim()"
+                (click)="sendFeedback()"
+            >
+                @if (loading()) {
+                    <span class="d-inline-flex align-items-center column-gap-1">
+                        <mat-spinner diameter="16"></mat-spinner>
+                        <span>Sending...</span>
+                    </span>
+                } @else {
+                    <span>Send</span>
+                }
+            </button>
+        }
+    </div>
+</section>
