@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, signal, type SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, HostListener, inject, Input, OnChanges, OnDestroy, OnInit, QueryList, signal, type SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { firstValueFrom, Observable, ReplaySubject, Subscription } from 'rxjs';
@@ -22,6 +22,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ArrayDataSource } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
+import { FeedbackService } from '../feedback/feedback.service';
 
 @Component({
     selector: 'primary-sidebar',
@@ -32,6 +33,8 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
 })
 
 export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
+    /** Feedback service for native in-panel feedback widget */
+    public readonly feedbackService = inject(FeedbackService);
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** update IndexDb flags observable **/
@@ -239,6 +242,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnInit(): void {
+        this.feedbackService.setSidebarPresent(true);
 
         /**Subscribe to queryParams */
         this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams: any) => {
@@ -397,8 +401,18 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnDestroy(): void {
+        this.feedbackService.setSidebarPresent(false);
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Opens native Steward feedback dialog
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public openFeedbackDialog(): void {
+        this.feedbackService.openFeedbackDialog();
     }
 
     /**

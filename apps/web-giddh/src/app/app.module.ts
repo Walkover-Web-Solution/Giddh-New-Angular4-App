@@ -39,6 +39,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
+import { FeedbackFloatingButtonComponent } from './shared/feedback/feedback-floating-button/feedback-floating-button.component';
 // Debug: Log all environment variables to verify they're loaded correctly
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
@@ -503,6 +504,7 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         MatButtonModule,
         LoaderModule,
         PageModule,
+        FeedbackFloatingButtonComponent,
         ...CONDITIONAL_IMPORTS
     ],
     providers: [
