@@ -123,6 +123,14 @@ export class CreateJobWorkComponent implements OnInit {
     private universalDateRange: { from: string; to: string } | null = null;
     /** Tracks in-flight stock searches per line to allow parallel loads. */
     private readonly stockSearchInFlight = new WeakSet<object>();
+    /** Cached default (empty-query) stock options shared across finished/raw/scrap. */
+    private defaultStockOptions: NonNullable<JobWorkStockLine['stocks']> = [];
+    /** Total pages for the cached default stock list. */
+    private defaultStocksTotalPages = 1;
+    /** True after the default stock list has been loaded once. */
+    private defaultStocksLoaded = false;
+    /** True while the default stock list request is in flight. */
+    private defaultStocksInFlight = false;
 
     private readonly isConsolidatedBranch = toSignal(
         this.store.pipe(
@@ -384,7 +392,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.searchJobworkers('');
         this.searchFromAccounts('');
         this.searchToAccounts('');
-        this.getStocks(this.form().finishedStock, 1, '');
+        this.loadDefaultStocks();
         this.touchForm();
     }
 
@@ -570,7 +578,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.commitForm(current => {
             current.rawStocks = [...current.rawStocks, row];
         });
-        this.getStocks(row, 1, '');
+        this.applyDefaultStocksToLine(row);
     }
 
     /**
@@ -590,7 +598,7 @@ export class CreateJobWorkComponent implements OnInit {
             }
         });
         if (replacement) {
-            this.getStocks(replacement, 1, '');
+            this.applyDefaultStocksToLine(replacement);
         }
     }
 
@@ -631,7 +639,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.commitForm(current => {
             current.scraps = [...current.scraps, row];
         });
-        this.getStocks(row, 1, '');
+        this.applyDefaultStocksToLine(row);
     }
 
     /**
@@ -651,12 +659,180 @@ export class CreateJobWorkComponent implements OnInit {
             }
         });
         if (replacement) {
-            this.getStocks(replacement, 1, '');
+            this.applyDefaultStocksToLine(replacement);
         }
     }
 
     /**
-     * Searches stocks via stocks/v2 (same as Manufacturing).
+     * Loads default stocks once and assigns the same options to finished/raw/scrap.
+     * Field-specific searches still call `getStocks` for that line only.
+     *
+     * @memberof CreateJobWorkComponent
+     */
+    loadDefaultStocks(): void {
+        if (this.defaultStocksLoaded) {
+            this.assignDefaultStocksToAllLines();
+            return;
+        }
+        if (this.defaultStocksInFlight) {
+            return;
+        }
+        this.defaultStocksInFlight = true;
+        this.inventoryService.getStocksV2({ inventoryType: '', page: 1, q: '' }).pipe(
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
+            next: (response) => {
+                this.defaultStocksInFlight = false;
+                if (response?.status === 'success' && response?.body?.results?.length) {
+                    this.defaultStockOptions = this.mapStockResults(response.body.results);
+                    this.defaultStocksTotalPages = response.body.totalPages || 1;
+                } else {
+                    this.defaultStockOptions = [];
+                    this.defaultStocksTotalPages = 1;
+                }
+                this.defaultStocksLoaded = true;
+                this.assignDefaultStocksToAllLines();
+            },
+            error: () => {
+                this.defaultStocksInFlight = false;
+            }
+        });
+    }
+
+    /**
+     * Applies cached default stock options to every finished/raw/scrap line.
+     *
+     * @private
+     * @memberof CreateJobWorkComponent
+     */
+    private assignDefaultStocksToAllLines(): void {
+        const current = this.form();
+        this.applyDefaultStocksToLine(current.finishedStock);
+        current.rawStocks.forEach(row => this.applyDefaultStocksToLine(row));
+        current.scraps.forEach(row => this.applyDefaultStocksToLine(row));
+        this.touchForm();
+    }
+
+    /**
+     * Applies cached default stock options to one line, or loads defaults if needed.
+     *
+     * @private
+     * @param {(JobWorkStockLine | JobWorkScrapLine)} stockObject
+     * @memberof CreateJobWorkComponent
+     */
+    private applyDefaultStocksToLine(stockObject: JobWorkStockLine | JobWorkScrapLine): void {
+        if (!this.defaultStocksLoaded) {
+            this.loadDefaultStocks();
+            return;
+        }
+        this.applyStockOptions(
+            stockObject,
+            this.cloneStockOptions(this.defaultStockOptions),
+            1,
+            this.defaultStocksTotalPages,
+            ''
+        );
+        this.touchForm();
+    }
+
+    /**
+     * Maps stocks/v2 results into dropdown options.
+     *
+     * @private
+     * @param {Array<{ name?: string; uniqueName?: string; inventoryType?: string; stockUnits?: Array<{ code: string; uniqueName: string }> }>} results
+     * @returns {NonNullable<JobWorkStockLine['stocks']>}
+     * @memberof CreateJobWorkComponent
+     */
+    private mapStockResults(
+        results: Array<{
+            name?: string;
+            uniqueName?: string;
+            inventoryType?: string;
+            stockUnits?: Array<{ code: string; uniqueName: string }>;
+        }>
+    ): NonNullable<JobWorkStockLine['stocks']> {
+        return results.map(stock => {
+            const unitsList = (stock?.stockUnits || []).map(unit => ({
+                label: unit.code,
+                value: unit.uniqueName
+            }));
+            return {
+                label: stock?.name,
+                value: stock?.uniqueName,
+                additional: {
+                    stockUnitCode: unitsList[0]?.label || '',
+                    stockUnitUniqueName: unitsList[0]?.value || '',
+                    inventoryType: stock.inventoryType,
+                    // Fresh array per stock so unit dropdown never shares another stock's list.
+                    unitsList: unitsList.map(unit => ({ ...unit }))
+                }
+            };
+        });
+    }
+
+    /**
+     * Deep-clones stock options so each line owns its unitsList arrays.
+     *
+     * @private
+     * @param {NonNullable<JobWorkStockLine['stocks']>} options
+     * @returns {NonNullable<JobWorkStockLine['stocks']>}
+     * @memberof CreateJobWorkComponent
+     */
+    private cloneStockOptions(
+        options: NonNullable<JobWorkStockLine['stocks']>
+    ): NonNullable<JobWorkStockLine['stocks']> {
+        return options.map(option => {
+            const additional = option.additional as {
+                stockUnitCode?: string;
+                stockUnitUniqueName?: string;
+                inventoryType?: string;
+                unitsList?: Array<{ label: string; value: string }>;
+            } | undefined;
+            return {
+                label: option.label,
+                value: option.value,
+                additional: {
+                    stockUnitCode: additional?.stockUnitCode || '',
+                    stockUnitUniqueName: additional?.stockUnitUniqueName || '',
+                    inventoryType: additional?.inventoryType,
+                    unitsList: (additional?.unitsList || []).map(unit => ({ ...unit }))
+                }
+            };
+        });
+    }
+
+    /**
+     * Writes stock options onto a line and keeps selection/units in sync.
+     *
+     * @private
+     * @param {(JobWorkStockLine | JobWorkScrapLine)} stockObject
+     * @param {NonNullable<JobWorkStockLine['stocks']>} options
+     * @param {number} page
+     * @param {number} totalPages
+     * @param {string} q
+     * @memberof CreateJobWorkComponent
+     */
+    private applyStockOptions(
+        stockObject: JobWorkStockLine | JobWorkScrapLine,
+        options: NonNullable<JobWorkStockLine['stocks']>,
+        page: number,
+        totalPages: number,
+        q: string
+    ): void {
+        stockObject.stocksQ = q;
+        stockObject.stocksPageNumber = page;
+        stockObject.stocksTotalPages = totalPages;
+        if (page === 1) {
+            stockObject.stocks = options;
+        } else {
+            stockObject.stocks = [...(stockObject.stocks || []), ...options];
+        }
+        this.ensureSelectedStockOption(stockObject);
+        this.syncUnitsListFromStocks(stockObject);
+    }
+
+    /**
+     * Searches stocks via stocks/v2 for one line (uses shared defaults when query is empty).
      *
      * @param {(JobWorkStockLine | JobWorkScrapLine)} stockObject
      * @param {number} [page=1]
@@ -667,51 +843,33 @@ export class CreateJobWorkComponent implements OnInit {
         if (page > (stockObject.stocksTotalPages || 1) || this.stockSearchInFlight.has(stockObject) || q === undefined) {
             return;
         }
-        this.stockSearchInFlight.add(stockObject);
         if (typeof q === 'string') {
             stockObject.stocksQ = q;
         } else if (stockObject.stocksQ) {
             q = stockObject.stocksQ;
         }
+        const query = q || '';
+        if (!query && page === 1) {
+            this.applyDefaultStocksToLine(stockObject);
+            return;
+        }
+        this.stockSearchInFlight.add(stockObject);
         stockObject.stocksPageNumber = page;
-        this.inventoryService.getStocksV2({ inventoryType: '', page, q }).pipe(
+        this.inventoryService.getStocksV2({ inventoryType: '', page, q: query }).pipe(
             takeUntilDestroyed(this.destroyRef)
         ).subscribe({
             next: (response) => {
                 if (response?.status === 'success' && response?.body?.results?.length) {
-                    stockObject.stocksTotalPages = response.body.totalPages;
-                    if (page === 1) {
-                        stockObject.stocks = [];
-                    }
-                    response.body.results.forEach((stock: {
-                        name?: string;
-                        uniqueName?: string;
-                        inventoryType?: string;
-                        stockUnits?: Array<{ code: string; uniqueName: string }>;
-                    }) => {
-                        const unitsList = (stock?.stockUnits || []).map(unit => ({
-                            label: unit.code,
-                            value: unit.uniqueName
-                        }));
-                        stockObject.stocks = stockObject.stocks || [];
-                        stockObject.stocks.push({
-                            label: stock?.name,
-                            value: stock?.uniqueName,
-                            additional: {
-                                stockUnitCode: unitsList[0]?.label || '',
-                                stockUnitUniqueName: unitsList[0]?.value || '',
-                                inventoryType: stock.inventoryType,
-                                // Fresh array per stock so unit dropdown never shares another stock's list.
-                                unitsList: unitsList.map(unit => ({ ...unit }))
-                            }
-                        });
-                    });
+                    this.applyStockOptions(
+                        stockObject,
+                        this.mapStockResults(response.body.results),
+                        page,
+                        response.body.totalPages || 1,
+                        query
+                    );
                 } else if (page === 1) {
-                    stockObject.stocks = [];
-                    stockObject.stocksTotalPages = 1;
+                    this.applyStockOptions(stockObject, [], 1, 1, query);
                 }
-                this.ensureSelectedStockOption(stockObject);
-                this.syncUnitsListFromStocks(stockObject);
                 this.stockSearchInFlight.delete(stockObject);
                 this.touchForm();
             },
@@ -1180,7 +1338,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.searchService.searchAccountV2({
             q: encodeURIComponent(query || ''),
             page,
-            group: encodeURIComponent('sundrycreditors')
+            group: encodeURIComponent('sundrycreditors,sundrydebtors')
         }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
             if (!data?.body?.results) {
                 return;
@@ -1311,7 +1469,7 @@ export class CreateJobWorkComponent implements OnInit {
     }
 
     /**
-     * Searches credit/liability accounts for expense from-side.
+     * Searches liability/asset accounts for expense from-side (same groups as Manufacturing).
      *
      * @param {string} query
      * @param {number} [page=1]
@@ -1321,7 +1479,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.searchService.searchAccountV2({
             q: encodeURIComponent(query || ''),
             page,
-            group: encodeURIComponent('sundrycreditors,currentliabilities,noncurrentliabilities')
+            group: encodeURIComponent('noncurrentassets, currentassets, fixedassets, currentliabilities, noncurrentliabilities, shareholdersfunds')
         }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
             if (!data?.body?.results) {
                 return;
@@ -1340,7 +1498,7 @@ export class CreateJobWorkComponent implements OnInit {
     }
 
     /**
-     * Searches expense accounts for expense to-side.
+     * Searches expense accounts for expense to-side (same groups as Manufacturing).
      *
      * @param {string} query
      * @param {number} [page=1]
@@ -1350,7 +1508,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.searchService.searchAccountV2({
             q: encodeURIComponent(query || ''),
             page,
-            group: encodeURIComponent('operatingcost,indirectexpenses,revenuefromoperations,otherincome')
+            group: encodeURIComponent('operatingcost, indirectexpenses,revenuefromoperations,otherincome')
         }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
             if (!data?.body?.results) {
                 return;
@@ -1539,7 +1697,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.addRawStockRow();
         this.addExpenseRow();
         this.addScrapRow();
-        this.getStocks(this.form().finishedStock, 1, '');
+        this.loadDefaultStocks();
         this.touchForm();
     }
 
@@ -1921,33 +2079,29 @@ export class CreateJobWorkComponent implements OnInit {
         this.fromAccounts.set(this.ensureExpenseAccountOptions(this.fromAccounts(), 'from'));
         this.toAccounts.set(this.ensureExpenseAccountOptions(this.toAccounts(), 'to'));
 
-        this.getStocks(next.finishedStock, 1, next.finishedStock.stockName || '');
-        if (next.finishedStock.stockUniqueName) {
-            this.loadVariants(next.finishedStock);
-        }
         if (!next.rawStocks.length) {
             this.addRawStockRow();
-        } else {
-            next.rawStocks.forEach(row => {
-                this.getStocks(row, 1, row.stockName || '');
-                if (row.stockUniqueName) {
-                    this.loadVariants(row);
-                }
-            });
         }
         if (!next.expenses.length) {
             this.addExpenseRow();
         }
         if (!next.scraps.length) {
             this.addScrapRow();
-        } else {
-            next.scraps.forEach(row => {
-                this.getStocks(row, 1, row.stockName || '');
-                if (row.stockUniqueName) {
-                    this.loadVariants(row);
-                }
-            });
         }
+        this.loadDefaultStocks();
+        if (next.finishedStock.stockUniqueName) {
+            this.loadVariants(next.finishedStock);
+        }
+        next.rawStocks.forEach(row => {
+            if (row.stockUniqueName) {
+                this.loadVariants(row);
+            }
+        });
+        next.scraps.forEach(row => {
+            if (row.stockUniqueName) {
+                this.loadVariants(row);
+            }
+        });
         this.touchForm();
     }
 

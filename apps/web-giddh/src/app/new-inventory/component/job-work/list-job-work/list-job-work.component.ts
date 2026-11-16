@@ -535,40 +535,34 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             if (!action) {
                 return;
             }
-            // List row lacks stock/variant/batches; load order GET then build RETURN items.
-            this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
-                if (orderResponse?.status !== 'success' || !orderResponse.body) {
-                    this.toasterService.errorToast(orderResponse?.message);
-                    return;
+            // List row includes documentItems / warehouse from list API.
+            const body = row as Record<string, unknown>;
+            const items = this.buildReturnActionItems(body);
+            if (!items.length) {
+                this.toasterService.errorToast(this.localeData.return_items_missing);
+                return;
+            }
+            const payload: JobWorkActionRequest = {
+                action: 'RETURN',
+                uniqueName,
+                date: dayjs().format(GIDDH_DATE_FORMAT),
+                warehouseUniqueName: this.getWarehouseUniqueNameFromOrder(body, row),
+                isFinal: false,
+                items
+            };
+            this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                if (response?.status === 'success') {
+                    this.toasterService.successToast(this.localeData.return_recorded);
+                    this.getReport();
+                } else {
+                    this.toasterService.errorToast(response?.message);
                 }
-                const body = orderResponse.body as Record<string, unknown>;
-                const items = this.buildReturnActionItems(body);
-                if (!items.length) {
-                    this.toasterService.errorToast(this.localeData.return_items_missing);
-                    return;
-                }
-                const payload: JobWorkActionRequest = {
-                    action: 'RETURN',
-                    uniqueName,
-                    date: dayjs().format(GIDDH_DATE_FORMAT),
-                    warehouseUniqueName: this.getWarehouseUniqueNameFromOrder(body, row),
-                    isFinal: false,
-                    items
-                };
-                this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                    if (response?.status === 'success') {
-                        this.toasterService.successToast(this.localeData.return_recorded);
-                        this.getReport();
-                    } else {
-                        this.toasterService.errorToast(response?.message);
-                    }
-                });
             });
         });
     }
 
     /**
-     * Builds RETURN action `items` from order GET `documentItems` (OUTPUT + INPUT).
+     * Builds RETURN action `items` from list-row `documentItems` (OUTPUT + INPUT).
      *
      * @private
      * @param {Record<string, unknown>} body
@@ -584,7 +578,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Maps one GET `documentItems` row into a RETURN action line.
+     * Maps one list-row `documentItems` entry into a RETURN action line.
      *
      * @private
      * @param {Record<string, unknown>} item
@@ -606,7 +600,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Resolves warehouse uniqueName from order GET body, then list row fallback.
+     * Resolves warehouse uniqueName from list-row body, then row fallbacks.
      *
      * @private
      * @param {Record<string, unknown>} body
@@ -643,7 +637,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Builds MARK_SCRAP `scraps` from order GET (`documentItems` SCRAP, else `jobWorkDetails.scraps`).
+     * Builds MARK_SCRAP `scraps` from list row (`documentItems` SCRAP, else `jobWorkDetails.scraps`).
      *
      * @private
      * @param {Record<string, unknown>} body
@@ -801,33 +795,27 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         if (!uniqueName) {
             return;
         }
-        // List row lacks scrap lines/warehouse; load order GET then build MARK_SCRAP scraps.
-        this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
-            if (orderResponse?.status !== 'success' || !orderResponse.body) {
-                this.toasterService.errorToast(orderResponse?.message);
-                return;
+        // List row includes scrap lines / warehouse from list API.
+        const body = row as Record<string, unknown>;
+        const scraps = this.buildMarkScrapActionItems(body);
+        if (!scraps.length) {
+            this.toasterService.errorToast(this.localeData.scrap_items_missing);
+            return;
+        }
+        const payload: JobWorkActionRequest = {
+            action: 'MARK_SCRAP',
+            uniqueName,
+            date: dayjs().format(GIDDH_DATE_FORMAT),
+            warehouseUniqueName: this.getWarehouseUniqueNameFromOrder(body, row),
+            scraps
+        };
+        this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response?.status === 'success') {
+                this.toasterService.successToast(this.localeData.scrap_marked);
+                this.getReport();
+            } else {
+                this.toasterService.errorToast(response?.message);
             }
-            const body = orderResponse.body as Record<string, unknown>;
-            const scraps = this.buildMarkScrapActionItems(body);
-            if (!scraps.length) {
-                this.toasterService.errorToast(this.localeData.scrap_items_missing);
-                return;
-            }
-            const payload: JobWorkActionRequest = {
-                action: 'MARK_SCRAP',
-                uniqueName,
-                date: dayjs().format(GIDDH_DATE_FORMAT),
-                warehouseUniqueName: this.getWarehouseUniqueNameFromOrder(body, row),
-                scraps
-            };
-            this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response?.status === 'success') {
-                    this.toasterService.successToast(this.localeData.scrap_marked);
-                    this.getReport();
-                } else {
-                    this.toasterService.errorToast(response?.message);
-                }
-            });
         });
     }
 
@@ -836,44 +824,38 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         if (!uniqueName) {
             return;
         }
-        // List row lacks expenses/flags; load order GET then build ADJUST payload.
-        this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
-            if (orderResponse?.status !== 'success' || !orderResponse.body) {
-                this.toasterService.errorToast(orderResponse?.message);
-                return;
+        // List row includes expenses / flags from list API.
+        const body = row as Record<string, unknown>;
+        const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
+        const increaseAssetValue = (details['increaseAssetValue'] ?? body['increaseAssetValue'] ?? row?.increaseAssetValue) !== false;
+        const claimItcValue = details['claimItc'] ?? body['claimItc'] ?? row?.claimItc;
+        const claimItc = claimItcValue === undefined || claimItcValue === null
+            ? increaseAssetValue
+            : !!claimItcValue;
+        const expenses = this.buildAdjustActionExpenses(body);
+        if (!expenses.length) {
+            this.toasterService.errorToast(this.localeData.expense_items_missing);
+            return;
+        }
+        const payload: JobWorkActionRequest = {
+            action: 'ADJUST',
+            uniqueName,
+            increaseAssetValue,
+            claimItc,
+            expenses
+        };
+        this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response?.status === 'success') {
+                this.toasterService.successToast(this.localeData.adjustment_saved);
+                this.getReport();
+            } else {
+                this.toasterService.errorToast(response?.message);
             }
-            const body = orderResponse.body as Record<string, unknown>;
-            const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
-            const increaseAssetValue = (details['increaseAssetValue'] ?? body['increaseAssetValue'] ?? row?.increaseAssetValue) !== false;
-            const claimItcValue = details['claimItc'] ?? body['claimItc'] ?? row?.claimItc;
-            const claimItc = claimItcValue === undefined || claimItcValue === null
-                ? increaseAssetValue
-                : !!claimItcValue;
-            const expenses = this.buildAdjustActionExpenses(body);
-            if (!expenses.length) {
-                this.toasterService.errorToast(this.localeData.expense_items_missing);
-                return;
-            }
-            const payload: JobWorkActionRequest = {
-                action: 'ADJUST',
-                uniqueName,
-                increaseAssetValue,
-                claimItc,
-                expenses
-            };
-            this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response?.status === 'success') {
-                    this.toasterService.successToast(this.localeData.adjustment_saved);
-                    this.getReport();
-                } else {
-                    this.toasterService.errorToast(response?.message);
-                }
-            });
         });
     }
 
     /**
-     * Builds ADJUST action `expenses` from order GET (`jobWorkDetails.expenses` or root `expenses`).
+     * Builds ADJUST action `expenses` from list row (`jobWorkDetails.expenses` or root `expenses`).
      *
      * @private
      * @param {Record<string, unknown>} body
