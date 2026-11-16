@@ -19,6 +19,12 @@ test('environment files expose stewardFeedbackUrl and stewardFeedbackKey with pu
     assert.match(buildEnvContent, /pk_0afaeb4cd6941a797bc88a0ab76c8ac05578/, 'default key matches exact public key');
 
     const generatedPath = path.resolve(__dirname, '../../apps/web-giddh/src/environments/environment.generated.ts');
+    if (!existsSync(generatedPath)) {
+        require('node:child_process').execSync('node scripts/build-env.js local', {
+            cwd: path.resolve(__dirname, '../..'),
+            stdio: 'ignore'
+        });
+    }
     assert.ok(existsSync(generatedPath), 'environment.generated.ts exists');
     const generatedContent = readFileSync(generatedPath, 'utf8');
     assert.match(generatedContent, /stewardFeedbackUrl:\s*['"]https:\/\/steward\.embarko\.app\/api\/v1\/feedback['"]/, 'generated environment has correct URL');
