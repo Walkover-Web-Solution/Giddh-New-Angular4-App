@@ -85,7 +85,9 @@ const envConfig = {
     TWITTER_CLIENT_ID: env.TWITTER_CLIENT_ID || '',
     TWITTER_SECRET_KEY: env.TWITTER_SECRET_KEY || '',
     LINKEDIN_CLIENT_ID: env.LINKEDIN_CLIENT_ID || '',
-    LINKEDIN_SECRET_KEY: env.LINKEDIN_SECRET_KEY || ''
+    LINKEDIN_SECRET_KEY: env.LINKEDIN_SECRET_KEY || '',
+    stewardFeedbackUrl: env.STEWARD_FEEDBACK_URL || 'https://steward.embarko.app/api/v1/feedback',
+    stewardFeedbackKey: env.STEWARD_FEEDBACK_KEY || 'pk_0afaeb4cd6941a797bc88a0ab76c8ac05578'
 };
 // Generate TypeScript environment file content - Angular 21 standard approach
 const envFileContent = `/* tslint:disable */
@@ -114,6 +116,9 @@ export const environment: Environment = {
     STAGING_ENV: ${envConfig.STAGING_ENV},
     LOCAL_ENV: ${envConfig.LOCAL_ENV},
     TEST_ENV: ${envConfig.TEST_ENV},
+    stewardFeedbackUrl: '${envConfig.stewardFeedbackUrl}',
+    stewardFeedbackKey: '${envConfig.stewardFeedbackKey}',
+    appVersion: '${envConfig.VERSION}',
     /** Angular debug tools in the dev console
      * https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md
      * @param modRef
@@ -135,6 +140,8 @@ export const environment: Environment = {
 (window as any).AppUrl = environment.AppUrl;
 (window as any).ApiUrl = environment.ApiUrl;
 (window as any).isElectron = environment.isElectron;
+(window as any).stewardFeedbackUrl = environment.stewardFeedbackUrl;
+(window as any).stewardFeedbackKey = environment.stewardFeedbackKey;
 `;
 // Write the generated environment file
 const outputPath = path.resolve(__dirname, '../apps/web-giddh/src/environments/environment.generated.ts');
