@@ -57,7 +57,17 @@ The user selects a certificate and supplies a PIN. New/changed PINs re-read the 
 
 **Verify when changed:** missing bridge, unplugged token, wrong and remembered PIN, prepare/finish failures and successful download using a supported device. A frontend-only check cannot establish device or server signing behavior.
 
-## 5. Filter a list or export with All selected
+## 5. Create or update job work (inventory)
+
+1. Inventory sidebar opens **Job Work > Create New** at `/pages/inventory/v2/job-work/create` (edit: `/pages/inventory/v2/job-work/edit/:uniqueName`). Branch mode is required for create/edit, same pattern as Manufacturing.
+2. Stock pickers call `InventoryService.getStocksV2` (`company/:companyUniqueName/stocks/v2`), variants via `LedgerService.loadStockVariants`, rates via `ManufacturingService.getRateForStockV2`.
+3. When company batch management is enabled, create selects batches for finished (inbound), raw (outbound), and scrap (inbound) lines using the shared Manufacturing/voucher BatchSelectDialog; batches clear on stock/variant change and map to `{ uniqueName, quantity }` on save.
+4. [JobWorkService](../apps/web-giddh/src/app/services/job-work.service.ts) posts create to `v2/company/:companyUniqueName/job-work-orders` or puts update to `.../job-work-orders/:orderUniqueName`, appending `branchUniqueName` when needed. Empty `deliveryChallanUniqueName` means auto-send on a new JOBWORK_DC.
+5. Report at `/pages/inventory/v2/job-work/list` posts filters to `.../job-work-orders/list` (`from`/`to`, status, type, warehouse, free-text `q`, `onlyOverdue`, `onlyItcClaimed`). Column search on Job Work No / Jobworker / Output Stock maps into `q` and keeps the table visible while searching. Company/consolidated mode shows `go-to-branch`. Advance Filter dialog covers warehouse, overdue, and ITC-claimed. Row actions call `.../job-work-orders/action` for RETURN, MARK_SCRAP, ADJUST, PRINT, CANCEL, DELETE. Export, Revert/Undo, and Preview & Record Return are out of scope for this client pass.
+
+**Verify when changed:** create with auto DC, create linking an existing DC uniqueName, open list View/edit and confirm warehouse, jobworker, finished/raw/scrap stocks, units, batches and dates populate from GET `documentItems`/`jobWorkDetails`, list filters by date/status/type/column search/advance filter, and each supported action against a sandbox company.
+
+## 6. Filter a list or export with All selected
 
 [VoucherListComponent.getAllVouchers](../apps/web-giddh/src/app/vouchers/list/list.component.ts) normalizes a copy of advanced filters before passing them to the relevant [VoucherComponentStore](../apps/web-giddh/src/app/vouchers/utility/vouchers.store.ts) effect and service. [DaybookComponent.getDaybook / hideExportDaybookModal](../apps/web-giddh/src/app/daybook/daybook.component.ts) uses the same wrapper for listing and export. The precise wire behavior has one home in [Select All contracts](CONTRACTS.md#select-all-filters).
 

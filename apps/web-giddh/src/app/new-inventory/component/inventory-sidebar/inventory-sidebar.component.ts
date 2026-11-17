@@ -290,6 +290,14 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
                     ],
                 },
                 {
+                    name: this.localeData?.sidebar?.job_work,
+                    icons: 'manufacturing.svg',
+                    children: [
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', link: '/pages/inventory/v2/job-work/create', onlyBranchMode: true },
+                        { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/job-work/list' }
+                    ],
+                },
+                {
                     name: this.localeData?.sidebar?.custom_price,
                     icons: 'stock.svg',
                     children: [
