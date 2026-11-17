@@ -19,7 +19,7 @@ export class BatchChipListComponent {
     @Input() public commonLocaleData: any = {};
     /** False hides the Edit action. */
     @Input() public showEdit: boolean = true;
-    /** True uses a single-line chip + Edit layout for tables. */
+    /** True uses a single-line chip layout for tables; chip click opens edit and edit shows icon only. */
     @Input() public compact: boolean = false;
     /** True for bills / inbound stock; skips the negative-stock chip. */
     @Input() public isInbound: boolean = false;
@@ -34,6 +34,41 @@ export class BatchChipListComponent {
      */
     public get selectedBatches(): VoucherSelectedBatch[] {
         return Array.isArray(this.batches) ? this.batches : [];
+    }
+
+    /**
+     * Handles chip-list click. In compact mode, opens edit when allowed.
+     *
+     * @param {Event} event
+     * @memberof BatchChipListComponent
+     */
+    public onContainerClick(event: Event): void {
+        event.stopPropagation();
+        if (this.compact && this.showEdit) {
+            this.edit.emit(event);
+        }
+    }
+
+    /**
+     * Keyboard activate for compact chip-list edit.
+     *
+     * @param {Event} event
+     * @memberof BatchChipListComponent
+     */
+    public onContainerKeydown(event: Event): void {
+        event.preventDefault();
+        this.onContainerClick(event);
+    }
+
+    /**
+     * Emits edit and stops bubbling so compact container click does not fire twice.
+     *
+     * @param {Event} event
+     * @memberof BatchChipListComponent
+     */
+    public onEditClick(event: Event): void {
+        event.stopPropagation();
+        this.edit.emit(event);
     }
 
     /**

@@ -1,8 +1,20 @@
-.batch-chip-list-compact .status-chip {
-    padding: 2px 8px;
-    max-width: 148px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.batch-chip-list-compact {
+    min-width: 0;
+    max-width: 100%;
+
+    .batch-chip-list-items {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .status-chip {
+        padding: 2px 8px;
+        max-width: 100%;
+        min-width: 0;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
 }
 
 .status-chip {

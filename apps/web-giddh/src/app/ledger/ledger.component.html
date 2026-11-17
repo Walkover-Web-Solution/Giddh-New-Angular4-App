@@ -15,18 +15,9 @@
                         : ''
                 "
             ></hamburger-menu>
-            @if (
-                !isShowLedgerColumnarReportTable &&
-                showBranchSwitcher &&
-                currentCompanyBranches?.length > 2 &&
-                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-            ) {
+            @if (!isShowLedgerColumnarReportTable && showBranchSwitcher && currentCompanyBranches?.length > 2 && isConsolidatedBranch) {
                 <go-to-branch
-                    [title]="
-                        currentOrganizationType === 'COMPANY'
-                            ? commonLocaleData?.app_you_in_company_mode
-                            : commonLocaleData?.app_you_in_consolidate_mode
-                    "
+                    [title]="commonLocaleData?.app_you_in_consolidate_mode"
                     [message]="localeData?.go_to_branch_message"
                     [buttonLabel]="commonLocaleData?.switch_to_branch"
                     [cssClass]="'pt-3'"
@@ -1245,8 +1236,7 @@
                                                                     [currentTxn]="lc.currentBlankTxn"
                                                                     [needToReCalculate]="needToReCalculate"
                                                                     [isReadOnly]="
-                                                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                                                                        currentCompanyBranches?.length > 2
+                                                                        isConsolidatedBranch && currentCompanyBranches?.length > 2
                                                                     "
                                                                     [selectedCurrency]="selectedCurrency"
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
@@ -1494,8 +1484,7 @@
                                                                     [baseCurrencyDetails]="baseCurrencyDetails"
                                                                     [foreignCurrencyDetails]="foreignCurrencyDetails"
                                                                     [isReadOnly]="
-                                                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                                                                        currentCompanyBranches?.length > 2
+                                                                        isConsolidatedBranch && currentCompanyBranches?.length > 2
                                                                     "
                                                                     [selectedCurrency]="selectedCurrency"
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
@@ -3082,7 +3071,7 @@
                     class="w-100 mat-form-field-clean"
                     [cssClass]="'bg-transparent pl-2 pr-2 ' + (isLedgerEntry ? (cr ? ' CREDIT' : ' DEBIT') : '')"
                     (keydown.enter)="$event.preventDefault()"
-                    [disabled]="(currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && currentCompanyBranches?.length > 2"
+                    [disabled]="isConsolidatedBranch && currentCompanyBranches?.length > 2"
                     [placeholder]="
                         isLedgerEntry
                             ? txn?.type === transactionType.Debit
@@ -3099,7 +3088,7 @@
                     [enableDynamicSearch]="true"
                     [isPaginationEnabled]="true"
                     (scrollEnd)="handleScrollEnd()"
-                    [readonly]="(currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && currentCompanyBranches?.length > 2"
+                    [readonly]="isConsolidatedBranch && currentCompanyBranches?.length > 2"
                     (selectedOption)="
                         isTotalChanged = false;
                         addBrowserConfirmation();

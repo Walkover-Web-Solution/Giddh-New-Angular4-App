@@ -1,0 +1,199 @@
+/* Autocomplete panel is attached to body overlay. */
+::ng-deep .job-work-unit-panel.mat-mdc-autocomplete-panel,
+::ng-deep .job-work-unit-panel {
+    min-width: 140px !important;
+    width: max-content !important;
+
+    .mat-mdc-option,
+    .option-label {
+        white-space: nowrap;
+    }
+}
+
+/* Feature-only / manufacturing-aligned layout; prefer utilities in the template. */
+#create-job-work {
+    .job-work-wrapper {
+        .row {
+            margin-left: unset;
+            margin-right: unset;
+        }
+
+        .max-width-stock {
+            max-width: 1400px;
+        }
+
+        .job-work-expense-info {
+            border-left: 4px solid var(--theme-primary-color, var(--color-blue));
+            border-radius: 4px;
+            padding: 12px 14px;
+            line-height: 1.5;
+
+            p {
+                margin: 0;
+            }
+
+            &.job-work-expense-warning {
+                background: var(--color-warm-orange-light);
+                border-left-color: var(--color-orange);
+                color: var(--color-dark-gray, #333);
+            }
+        }
+
+        .job-work-expense-row {
+            width: 100%;
+
+            .job-work-expense-account {
+                flex: 1 1 0;
+            }
+
+            .job-work-expense-field {
+                flex: 0 0 140px;
+                max-width: 140px;
+            }
+
+            .job-work-expense-row-action {
+                flex: 0 0 24px;
+                width: 24px;
+                text-align: center;
+                line-height: 1;
+            }
+        }
+
+        .custom-card {
+            min-width: 280px;
+
+            &.bg-green {
+                background-color: var(--color-green-light);
+                color: var(--color-green);
+            }
+
+            &.bg-vivid-gamboge {
+                background-color: var(--color-orange-light);
+                color: var(--color-deep-orange);
+            }
+
+            &.bg-expense {
+                background-color: var(--color-border-light);
+                color: var(--text-primary-color);
+            }
+        }
+
+        .total-cost-card {
+            &-head {
+                padding: 12px 19px;
+                background-color: var(--color-dark-gray);
+                color: var(--color-white);
+            }
+
+            &-body {
+                border: 1px solid var(--border-color);
+                border-top: 0;
+            }
+        }
+
+        .consumption-details-wrapper {
+            .mat-accordion {
+                .mat-expansion-panel {
+                    margin-bottom: 15px;
+                }
+            }
+
+            #table-raw-stock {
+                width: 100%;
+                table-layout: fixed;
+
+                th,
+                td {
+                    padding: 8px 4px;
+                    font-size: var(--font-size-15);
+                    text-align: right;
+                    vertical-align: middle;
+
+                    &:first-child,
+                    &:nth-child(2) {
+                        text-align: left;
+                    }
+                }
+
+                td {
+                    overflow: hidden;
+                }
+
+                thead {
+                    border-bottom: 1px solid var(--border-color);
+
+                    tr th {
+                        font-weight: 500;
+                        color: var(--color-dark-gray);
+                        white-space: nowrap;
+                        overflow: visible;
+                    }
+                }
+
+                tfoot {
+                    border-top: 1px solid var(--border-color);
+                }
+
+                .table-name {
+                    width: 18%;
+                }
+
+                .table-variant {
+                    width: 16%;
+                }
+
+                .table-quantity {
+                    width: 10%;
+                }
+
+                .table-batch {
+                    width: 12%;
+                    min-width: 120px;
+                    max-width: 12%;
+                    vertical-align: middle;
+                    overflow: hidden;
+                }
+
+                .table-unit {
+                    width: 10%;
+                }
+
+                .table-rate {
+                    width: 12%;
+                }
+
+                .table-amount {
+                    width: 12%;
+                }
+
+                .table-delete {
+                    width: 6%;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    #create-job-work .job-work-wrapper .custom-card {
+        min-width: 210px;
+    }
+}
+
+@media screen and (max-width: 1366px) {
+    #create-job-work .job-work-wrapper .custom-card {
+        min-width: 200px;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    #create-job-work .job-work-wrapper .custom-card {
+        min-width: 160px;
+    }
+}
+
+@media screen and (max-width: 1080px) {
+    #create-job-work .job-work-wrapper .custom-card {
+        min-width: 120px;
+    }
+}
