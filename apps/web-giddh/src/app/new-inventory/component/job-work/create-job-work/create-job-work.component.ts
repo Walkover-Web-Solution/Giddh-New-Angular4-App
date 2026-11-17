@@ -5,13 +5,21 @@ import {
     OnInit,
     computed,
     inject,
-    signal
+    signal,
+    viewChild
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
+import {
+    API_BULK_FETCH_LIMIT,
+    ASIDE_PANE_CONFIG,
+    BranchHierarchyType,
+    GIDDH_DATE_RANGE_PICKER_RANGES,
+    IOption
+} from 'apps/web-giddh/src/app/app.constant';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import {
     JobWorkBatch,
@@ -39,7 +47,7 @@ import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
 import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/action/warehouse.action';
-import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { BatchSelectDialogComponent } from 'apps/web-giddh/src/app/vouchers/batch-select-dialog/batch-select-dialog.component';
@@ -74,6 +82,9 @@ export class CreateJobWorkComponent implements OnInit {
     private readonly destroyRef = inject(DestroyRef);
     private readonly dialog = inject(MatDialog);
 
+    /** Date-range menu trigger (same pattern as Job Work list). */
+    readonly universalDatepickerTrigger = viewChild<MatMenuTrigger>('universalDatepickerTrigger');
+
     /** Page translations. */
     readonly localeData = signal<Record<string, string>>({});
     /** Shared translations. */
@@ -82,6 +93,17 @@ export class CreateJobWorkComponent implements OnInit {
     readonly form = signal(new JobWorkFormModel());
     /** Bumps when nested form fields change so computed totals re-run. */
     private readonly formTick = signal(0);
+    /** Selected date range for the header picker. */
+    readonly selectedDateRange = signal<{
+        startDate: ReturnType<typeof dayjs>;
+        endDate: ReturnType<typeof dayjs>;
+    } | null>(null);
+    /** Display text for the header date-range input. */
+    readonly selectedDateRangeUi = signal('');
+    /** Active preset label in the date-range menu. */
+    readonly selectedRangeLabel = signal('');
+    /** Preset ranges for app-datepicker-wrapper. */
+    readonly datePickerOptions = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Warehouse dropdown options. */
     readonly warehouses = signal<IOption[]>([]);
     /** Jobworker account options. */
@@ -119,8 +141,8 @@ export class CreateJobWorkComponent implements OnInit {
     private readonly jobworkerPage = signal(1);
     private readonly jobworkerTotalPages = signal(1);
     private readonly jobworkerQuery = signal('');
-    /** Universal date range used for pending delivery challan list. */
-    private universalDateRange: { from: string; to: string } | null = null;
+    /** True after the local date range has been seeded from the session universal date. */
+    private localDateRangeSeeded = false;
     /** Tracks in-flight stock searches per line to allow parallel loads. */
     private readonly stockSearchInFlight = new WeakSet<object>();
     /** Cached default (empty-query) stock options shared across finished/raw/scrap. */
@@ -178,10 +200,20 @@ export class CreateJobWorkComponent implements OnInit {
         ];
     });
 
-    /** Job work type options (send only for v1). */
-    readonly jobWorkTypeOptions = computed<IOption[]>(() => [
-        { label: this.localeData()['send_for_job_work'], value: 'SEND' }
-    ]);
+    /** Job work type options: Send and Receive. */
+    readonly jobWorkTypeOptions = computed<IOption[]>(() => {
+        const locale = this.localeData();
+        return [
+            { label: locale['send_for_job_work'], value: 'SEND' },
+            { label: locale['receive_for_job_work'], value: 'RECEIVE' }
+        ];
+    });
+
+    /** Label shown for the selected job work type. */
+    readonly selectedJobWorkTypeLabel = computed(() => {
+        const value = this.form().jobWorkType;
+        return this.jobWorkTypeOptions().find(option => option.value === value)?.label || '';
+    });
 
     /** Derived cost totals from the form. */
     readonly totals = computed(() => {
@@ -358,23 +390,21 @@ export class CreateJobWorkComponent implements OnInit {
             select(state => state.session.applicationDate),
             takeUntilDestroyed(this.destroyRef)
         ).subscribe(dateObj => {
-            if (!dateObj) {
+            // Universal date only seeds the local range once on create; later APIs use local dates.
+            if (!dateObj || this.localDateRangeSeeded || this.orderUniqueName() || this.form().date) {
                 return;
             }
-            this.universalDateRange = {
-                from: dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT),
-                to: dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT)
-            };
+            const start = dayjs(dateObj[0]);
+            const end = dayjs(dateObj[1]);
+            this.commitForm(current => {
+                current.date = start.format(GIDDH_DATE_FORMAT);
+                current.challanDate = current.date;
+                current.expectedReturnDate = end.format(GIDDH_DATE_FORMAT);
+            });
+            this.localDateRangeSeeded = true;
+            this.syncDateRangeFromForm();
             if (this.form().accountUniqueName) {
                 this.loadDeliveryChallans(this.form().accountUniqueName);
-            }
-            if (!this.orderUniqueName() && !this.form().date) {
-                const today = dateObj[1] ? dayjs(dateObj[1]) : dayjs();
-                this.commitForm(current => {
-                    current.date = today.format(GIDDH_DATE_FORMAT);
-                    current.challanDate = current.date;
-                    current.expectedReturnDate = today.add(30, 'day').format(GIDDH_DATE_FORMAT);
-                });
             }
         });
 
@@ -1406,9 +1436,98 @@ export class CreateJobWorkComponent implements OnInit {
             current.deliveryChallanUniqueName = event?.value || '';
             const challanDate = (event?.additional as { date?: string })?.date;
             if (challanDate) {
-                current.challanDate = this.formatDate(challanDate);
+                const formatted = this.formatDate(challanDate);
+                current.challanDate = formatted;
+                current.date = formatted;
             }
         });
+        this.syncDateRangeFromForm();
+    }
+
+    /**
+     * Applies the header date-range selection to date / challan / expected return.
+     *
+     * @param {{ startDate?: string | ReturnType<typeof dayjs>; endDate?: string | ReturnType<typeof dayjs>; selectedLabel?: string }} [event]
+     * @memberof CreateJobWorkComponent
+     */
+    dateSelectedCallback(event?: {
+        startDate?: string | ReturnType<typeof dayjs>;
+        endDate?: string | ReturnType<typeof dayjs>;
+        selectedLabel?: string;
+    }): void {
+        if (this.isReadOnly()) {
+            this.closeDatepicker();
+            return;
+        }
+        if (event?.startDate && event?.endDate) {
+            const start = dayjs(event.startDate);
+            const end = dayjs(event.endDate);
+            this.selectedRangeLabel.set(event.selectedLabel || '');
+            this.selectedDateRange.set({ startDate: start, endDate: end });
+            this.selectedDateRangeUi.set(
+                start.format(GIDDH_NEW_DATE_FORMAT_UI) + ' - ' + end.format(GIDDH_NEW_DATE_FORMAT_UI)
+            );
+            this.commitForm(current => {
+                current.date = start.format(GIDDH_DATE_FORMAT);
+                current.challanDate = current.date;
+                current.expectedReturnDate = end.format(GIDDH_DATE_FORMAT);
+            });
+            this.localDateRangeSeeded = true;
+            if (this.form().accountUniqueName) {
+                this.loadDeliveryChallans(this.form().accountUniqueName);
+            }
+        }
+        this.closeDatepicker();
+    }
+
+    /**
+     * Closes the header date-range menu.
+     *
+     * @memberof CreateJobWorkComponent
+     */
+    closeDatepicker(): void {
+        this.universalDatepickerTrigger()?.closeMenu();
+    }
+
+    /**
+     * Syncs the header range UI from form.date / expectedReturnDate.
+     *
+     * @private
+     * @memberof CreateJobWorkComponent
+     */
+    private syncDateRangeFromForm(): void {
+        const form = this.form();
+        const startValue = form.date || form.challanDate;
+        if (!startValue) {
+            return;
+        }
+        const start = dayjs(startValue, GIDDH_DATE_FORMAT);
+        const end = dayjs(form.expectedReturnDate || startValue, GIDDH_DATE_FORMAT);
+        if (!start.isValid() || !end.isValid()) {
+            return;
+        }
+        this.selectedDateRange.set({ startDate: start, endDate: end });
+        this.selectedDateRangeUi.set(
+            start.format(GIDDH_NEW_DATE_FORMAT_UI) + ' - ' + end.format(GIDDH_NEW_DATE_FORMAT_UI)
+        );
+        this.localDateRangeSeeded = true;
+    }
+
+    /**
+     * Local date range from the create form (not the session universal date).
+     *
+     * @private
+     * @returns {{ from: string; to: string } | null}
+     * @memberof CreateJobWorkComponent
+     */
+    private getLocalDateRange(): { from: string; to: string } | null {
+        const form = this.form();
+        const from = this.formatDate(form.date || form.challanDate);
+        const to = this.formatDate(form.expectedReturnDate || from);
+        if (!from || !to) {
+            return null;
+        }
+        return { from, to };
     }
 
     /**
@@ -1420,15 +1539,16 @@ export class CreateJobWorkComponent implements OnInit {
      */
     loadDeliveryChallans(accountUniqueName?: string): void {
         const account = accountUniqueName || this.form().accountUniqueName;
-        if (!account || !this.universalDateRange) {
+        const dateRange = this.getLocalDateRange();
+        if (!account || !dateRange) {
             this.deliveryChallanOptions.set([]);
             return;
         }
 
         this.voucherService.getPendingBusinessDocumentsByAccounts(
             {
-                from: this.universalDateRange.from,
-                to: this.universalDateRange.to,
+                from: dateRange.from,
+                to: dateRange.to,
                 page: 1,
                 count: API_BULK_FETCH_LIMIT,
                 sort: '',
@@ -1694,6 +1814,7 @@ export class CreateJobWorkComponent implements OnInit {
         next.challanDate = previous.date;
         next.expectedReturnDate = dayjs(previous.date, GIDDH_DATE_FORMAT).add(30, 'day').format(GIDDH_DATE_FORMAT);
         this.form.set(next);
+        this.syncDateRangeFromForm();
         this.addRawStockRow();
         this.addExpenseRow();
         this.addScrapRow();
@@ -2061,6 +2182,7 @@ export class CreateJobWorkComponent implements OnInit {
         }
 
         this.form.set(next);
+        this.syncDateRangeFromForm();
 
         if (next.accountUniqueName) {
             this.jobworkerAccounts.set(
