@@ -62,15 +62,27 @@
                 <div class="d-flex flex-wrap column-gap-2 row-gap-2 align-items-center ml-auto">
                     <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
                         <p class="mb-1 font-size-12 light-gray">{{ localeData?.total_job_work_expense }}</p>
-                        <strong class="font-size-15">{{ summary.totalCharges }}</strong>
+                        <strong class="font-size-15 d-block text-right">
+                            <amount-field
+                                [amount]="summary.totalCharges"
+                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
+                            ></amount-field>
+                        </strong>
                     </div>
                     <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
                         <p class="mb-1 font-size-12 light-gray">{{ localeData?.goods_with_jobworker }}</p>
-                        <strong class="font-size-15">{{ summary.goodsWithJobworker }}</strong>
+                        <strong class="font-size-15 d-block text-right">
+                            <amount-field
+                                [amount]="summary.goodsWithJobworker"
+                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
+                            ></amount-field>
+                        </strong>
                     </div>
                     <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
                         <p class="mb-1 font-size-12 light-gray">{{ localeData?.overdue_returns }}</p>
-                        <strong class="font-size-15">{{ summary.overdueReturns }}</strong>
+                        <strong class="font-size-15 d-block text-right">{{ summary.overdueReturns }}</strong>
                     </div>
                     @if (!isCompany && !isConsolidatedBranch) {
                         <button type="button" matButton="filled" (click)="goToCreate()">
@@ -118,7 +130,7 @@
                                         context: {
                                             $implicit: showJobWorkNoSearch,
                                             fieldName: 'jobWorkNo',
-                                            formControl: columnSearchForm.controls['jobWorkNo'],
+                                            formControl: jobWorkNoInput,
                                             title: localeData?.job_work_no,
                                         }
                                     "
@@ -144,7 +156,7 @@
                                         context: {
                                             $implicit: showJobworkerSearch,
                                             fieldName: 'jobworker',
-                                            formControl: columnSearchForm.controls['jobworker'],
+                                            formControl: jobworkerInput,
                                             title: localeData?.jobworker_name,
                                         }
                                     "
@@ -172,7 +184,7 @@
                                         context: {
                                             $implicit: showOutputStockSearch,
                                             fieldName: 'outputStock',
-                                            formControl: columnSearchForm.controls['outputStock'],
+                                            formControl: outputStockInput,
                                             title: localeData?.output_stock,
                                         }
                                     "
@@ -265,19 +277,21 @@
 
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div class="search-table">
-        <div [hidden]="show">
-            <i
-                class="icon-search pr-1 cursor-pointer"
-                (click)="toggleSearch(fieldName)"
+        <div class="d-flex align-items-center column-gap-1" [hidden]="show">
+            <span
+                class="cursor-pointer"
+                (click)="toggleSearch($event, fieldName)"
                 role="button"
                 [attr.aria-label]="getSearchFieldText(title)"
-            ></i>
+            >
+                <i class="icon-search icon-font-size-16" aria-hidden="true"></i>
+            </span>
             <span>{{ title }}</span>
         </div>
-        <div class="input-container" [hidden]="!show">
+        <div [hidden]="!show">
             <text-field
                 [type]="'text'"
-                [placeholder]="getSearchFieldText(title)"
+                [placeholder]="commonLocaleData?.app_search || getSearchFieldText(title)"
                 [cssClass]="'form-control border'"
                 [formControl]="formControl"
                 [autoFocus]="show"

@@ -5,6 +5,7 @@ export const JOB_WORK_API = {
     UPDATE: JOB_WORK_BASE + '/:orderUniqueName',
     GET: JOB_WORK_BASE + '/:orderUniqueName',
     LIST: JOB_WORK_BASE + '/list',
+    SUMMARY: JOB_WORK_BASE + '/summary',
     CHALLAN: JOB_WORK_BASE + '/:orderUniqueName/challan',
     RETURNS: JOB_WORK_BASE + '/:orderUniqueName/returns',
     VERSIONS: JOB_WORK_BASE + '/:orderUniqueName/versions',

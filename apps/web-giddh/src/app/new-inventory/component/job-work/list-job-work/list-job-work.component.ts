@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -108,19 +108,34 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     /** Selected branch label shown in dropdown. */
     public selectedBranchName = '';
     /** Active company from session. */
-    public activeCompany: { name?: string; uniqueName?: string; nameAlias?: string } | null = null;
+    public activeCompany: {
+        name?: string;
+        uniqueName?: string;
+        nameAlias?: string;
+        baseCurrency?: string;
+        baseCurrencySymbol?: string;
+    } | null = null;
     public statusOptions: Array<{ label: string; value: string }> = [];
     public typeOptions: Array<{ label: string; value: string }> = [];
     public selectedStatusLabel = '';
     public selectedTypeLabel = '';
-    public summary = {
-        totalCharges: 0,
-        goodsWithJobworker: 0,
-        overdueReturns: 0
+    public summary: {
+        totalCharges: number | undefined;
+        goodsWithJobworker: number | undefined;
+        overdueReturns: number | undefined;
+    } = {
+        totalCharges: undefined,
+        goodsWithJobworker: undefined,
+        overdueReturns: undefined
     };
     /** Linked delivery challans shown in View Linked Challan dialog. */
     public linkedChallans: JobWorkLinkedChallan[] = [];
-    public columnSearchForm: FormGroup;
+    /** Column search: Job Work No. (shared `q` with the other two). */
+    public jobWorkNoInput: FormControl<string | null> = new FormControl<string | null>(null);
+    /** Column search: Jobworker Name (shared `q`). */
+    public jobworkerInput: FormControl<string | null> = new FormControl<string | null>(null);
+    /** Column search: Output Stock (shared `q`). */
+    public outputStockInput: FormControl<string | null> = new FormControl<string | null>(null);
     public showJobWorkNoSearch = false;
     public showJobworkerSearch = false;
     public showOutputStockSearch = false;
@@ -164,17 +179,10 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         private readonly toasterService: ToasterService,
         private readonly router: Router,
         private readonly dialog: MatDialog,
-        private readonly formBuilder: FormBuilder,
         private readonly warehouseAction: WarehouseActions,
         private readonly settingsBranchAction: SettingsBranchActions,
         private readonly jobWorkListState: JobWorkListStateService
-    ) {
-        this.columnSearchForm = this.formBuilder.group({
-            jobWorkNo: [''],
-            jobworker: [''],
-            outputStock: ['']
-        });
-    }
+    ) {}
 
     public ngOnInit(): void {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -326,7 +334,8 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         }
         this.isReportLoading = true;
         this.updateShowClearFilter();
-        this.jobWorkService.list(this.buildListRequest()).pipe(takeUntil(this.destroyed$)).subscribe({
+        const request = this.buildListRequest();
+        this.jobWorkService.list(request).pipe(takeUntil(this.destroyed$)).subscribe({
             next: (response) => {
                 this.isReportLoading = false;
                 if (response?.status === 'success') {
@@ -335,17 +344,11 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
                         totalItems?: number;
                         totalPages?: number;
                         page?: number;
-                        totalJobWorkCharges?: number;
-                        goodsWithJobworker?: number;
-                        overdueReturns?: number;
                     };
                     this.dataSource = Array.isArray(body.items) ? body.items : [];
                     this.totalItems = body.totalItems ?? this.dataSource.length;
                     this.totalPages = body.totalPages ?? 1;
                     this.currentPage = body.page ?? this.searchRequest.page ?? 1;
-                    this.summary.totalCharges = body.totalJobWorkCharges ?? 0;
-                    this.summary.goodsWithJobworker = body.goodsWithJobworker ?? 0;
-                    this.summary.overdueReturns = body.overdueReturns ?? 0;
                 } else {
                     this.dataSource = [];
                     this.toasterService.errorToast(response?.message);
@@ -354,6 +357,32 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             },
             error: () => {
                 this.isReportLoading = false;
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+        this.loadSummary(request);
+    }
+
+    /**
+     * Loads totals cards with the same filters as the list request.
+     *
+     * @param {JobWorkListRequest} request
+     * @memberof ListJobWorkComponent
+     */
+    private loadSummary(request: JobWorkListRequest): void {
+        this.jobWorkService.summary(request).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response) => {
+                if (response?.status === 'success') {
+                    const body = response.body || {};
+                    this.summary.totalCharges = body.totalCharges;
+                    this.summary.goodsWithJobworker = body.goodsWithJobworker;
+                    this.summary.overdueReturns = body.overdueReturns;
+                } else {
+                    this.toasterService.errorToast(response?.message);
+                }
+                this.changeDetectionRef.detectChanges();
+            },
+            error: () => {
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -384,9 +413,9 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             this.showJobWorkNoSearch ||
             this.showJobworkerSearch ||
             this.showOutputStockSearch ||
-            this.columnSearchForm?.controls?.jobWorkNo?.value ||
-            this.columnSearchForm?.controls?.jobworker?.value ||
-            this.columnSearchForm?.controls?.outputStock?.value
+            this.jobWorkNoInput.value ||
+            this.jobworkerInput.value ||
+            this.outputStockInput.value
         );
         return !!(this.dataSource?.length || hasColumnSearch);
     }
@@ -450,7 +479,9 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.advanceStockOptions = [];
         this.advanceOnlyOverdue = false;
         this.advanceOnlyItcClaimed = false;
-        this.columnSearchForm.reset({ jobWorkNo: '', jobworker: '', outputStock: '' }, { emitEvent: false });
+        this.jobWorkNoInput.patchValue(null, { emitEvent: false });
+        this.jobworkerInput.patchValue(null, { emitEvent: false });
+        this.outputStockInput.patchValue(null, { emitEvent: false });
         this.showJobWorkNoSearch = false;
         this.showJobworkerSearch = false;
         this.showOutputStockSearch = false;
@@ -480,7 +511,14 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.getReport();
     }
 
-    public toggleSearch(fieldName: string): void {
+    /**
+     * Opens a column search input (voucher-list pattern).
+     *
+     * @param {*} event
+     * @param {string} fieldName
+     * @memberof ListJobWorkComponent
+     */
+    public toggleSearch(event: any, fieldName: string): void {
         if (fieldName === 'jobWorkNo') {
             this.showJobWorkNoSearch = true;
         } else if (fieldName === 'jobworker') {
@@ -488,17 +526,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         } else if (fieldName === 'outputStock') {
             this.showOutputStockSearch = true;
         }
-
-        // Keep other search boxes open when they still have a search value.
-        if (fieldName !== 'jobWorkNo' && !this.columnSearchForm?.controls?.jobWorkNo?.value) {
-            this.showJobWorkNoSearch = false;
-        }
-        if (fieldName !== 'jobworker' && !this.columnSearchForm?.controls?.jobworker?.value) {
-            this.showJobworkerSearch = false;
-        }
-        if (fieldName !== 'outputStock' && !this.columnSearchForm?.controls?.outputStock?.value) {
-            this.showOutputStockSearch = false;
-        }
+        event?.stopPropagation?.();
         this.changeDetectionRef.detectChanges();
     }
 
@@ -506,15 +534,27 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         return (this.localeData?.search_field || 'Search [FIELD]')?.replace('[FIELD]', title);
     }
 
+    /**
+     * Hides an empty column search when clicking outside it.
+     *
+     * @param {*} event
+     * @param {*} element
+     * @param {string} searchedFieldName
+     * @memberof ListJobWorkComponent
+     */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        const controlName = searchedFieldName === 'jobWorkNo'
-            ? 'jobWorkNo'
-            : searchedFieldName === 'jobworker'
-                ? 'jobworker'
-                : 'outputStock';
-        const value = this.columnSearchForm?.controls[controlName]?.value;
-        if (value !== null && value !== '') {
-            return;
+        if (searchedFieldName === 'jobWorkNo') {
+            if (this.jobWorkNoInput.value !== null && this.jobWorkNoInput.value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'jobworker') {
+            if (this.jobworkerInput.value !== null && this.jobworkerInput.value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'outputStock') {
+            if (this.outputStockInput.value !== null && this.outputStockInput.value !== '') {
+                return;
+            }
         }
         if (this.generalService.childOf(event?.target, element)) {
             return;
@@ -996,16 +1036,61 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Binds column searches like voucher list: each feeds `q` and clears the others.
+     *
+     * @memberof ListJobWorkComponent
+     */
     private bindColumnSearch(): void {
-        this.columnSearchForm.valueChanges.pipe(
+        this.jobWorkNoInput.valueChanges.pipe(
             debounceTime(700),
-            distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
+            distinctUntilChanged(),
             takeUntil(this.destroyed$)
-        ).subscribe((value: { jobWorkNo?: string; jobworker?: string; outputStock?: string }) => {
-            const q = (value?.jobWorkNo || value?.jobworker || value?.outputStock || '').trim();
-            this.searchRequest.q = q;
-            this.searchRequest.page = 1;
-            this.getReport();
+        ).subscribe((search) => {
+            if (search || search === '') {
+                this.jobworkerInput.patchValue(null, { emitEvent: false });
+                this.outputStockInput.patchValue(null, { emitEvent: false });
+                this.showJobworkerSearch = false;
+                this.showOutputStockSearch = false;
+                this.searchRequest.q = search || '';
+                this.searchRequest.page = 1;
+                this.getReport();
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+
+        this.jobworkerInput.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe((search) => {
+            if (search || search === '') {
+                this.jobWorkNoInput.patchValue(null, { emitEvent: false });
+                this.outputStockInput.patchValue(null, { emitEvent: false });
+                this.showJobWorkNoSearch = false;
+                this.showOutputStockSearch = false;
+                this.searchRequest.q = search || '';
+                this.searchRequest.page = 1;
+                this.getReport();
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+
+        this.outputStockInput.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe((search) => {
+            if (search || search === '') {
+                this.jobWorkNoInput.patchValue(null, { emitEvent: false });
+                this.jobworkerInput.patchValue(null, { emitEvent: false });
+                this.showJobWorkNoSearch = false;
+                this.showJobworkerSearch = false;
+                this.searchRequest.q = search || '';
+                this.searchRequest.page = 1;
+                this.getReport();
+                this.changeDetectionRef.detectChanges();
+            }
         });
     }
 
@@ -1019,9 +1104,9 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             this.searchRequest.q ||
             this.searchRequest.onlyOverdue ||
             this.searchRequest.onlyItcClaimed ||
-            this.columnSearchForm?.controls?.jobWorkNo?.value ||
-            this.columnSearchForm?.controls?.jobworker?.value ||
-            this.columnSearchForm?.controls?.outputStock?.value
+            this.jobWorkNoInput.value ||
+            this.jobworkerInput.value ||
+            this.outputStockInput.value
         );
     }
 
@@ -1059,11 +1144,6 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
      * @memberof ListJobWorkComponent
      */
     private buildFilterSnapshot(): JobWorkListFilterSnapshot {
-        const columnSearch = this.columnSearchForm.getRawValue() as {
-            jobWorkNo?: string;
-            jobworker?: string;
-            outputStock?: string;
-        };
         return {
             searchRequest: {
                 ...this.searchRequest,
@@ -1080,9 +1160,9 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             selectedDateRangeUi: this.selectedDateRangeUi,
             selectedRangeLabel: this.selectedRangeLabel,
             columnSearch: {
-                jobWorkNo: columnSearch?.jobWorkNo || '',
-                jobworker: columnSearch?.jobworker || '',
-                outputStock: columnSearch?.outputStock || ''
+                jobWorkNo: this.jobWorkNoInput.value || '',
+                jobworker: this.jobworkerInput.value || '',
+                outputStock: this.outputStockInput.value || ''
             }
         };
     }
@@ -1122,11 +1202,9 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.selectedRangeLabel = snapshot.selectedRangeLabel;
         this.advanceOnlyOverdue = !!snapshot.searchRequest.onlyOverdue;
         this.advanceOnlyItcClaimed = !!snapshot.searchRequest.onlyItcClaimed;
-        this.columnSearchForm.reset({
-            jobWorkNo: snapshot.columnSearch.jobWorkNo,
-            jobworker: snapshot.columnSearch.jobworker,
-            outputStock: snapshot.columnSearch.outputStock
-        }, { emitEvent: false });
+        this.jobWorkNoInput.patchValue(snapshot.columnSearch.jobWorkNo || null, { emitEvent: false });
+        this.jobworkerInput.patchValue(snapshot.columnSearch.jobworker || null, { emitEvent: false });
+        this.outputStockInput.patchValue(snapshot.columnSearch.outputStock || null, { emitEvent: false });
 
         if (snapshot.searchRequest.from && snapshot.searchRequest.to) {
             this.selectedDateRange = {
