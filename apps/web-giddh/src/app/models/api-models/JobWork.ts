@@ -72,7 +72,7 @@ export interface JobWorkOrderRequest {
     accountUniqueName: string;
     jobworkerType: JobworkerType;
     gstin?: string;
-    deliveryChallanUniqueName?: string;
+    deliveryChallanUniqueNames?: string[];
     challanDate?: string;
     expectedReturnDate?: string;
     process?: string;
@@ -94,8 +94,17 @@ export interface JobWorkOrderRequest {
 export interface JobWorkListRequest {
     from: string;
     to: string;
-    accountUniqueName?: string;
-    warehouseUniqueName?: string;
+    /** Selected jobworker accounts (Advance Filter). */
+    accountUniqueNames?: string[];
+    /** Selected warehouses (Advance Filter). */
+    warehouseUniqueNames?: string[];
+    /** Selected stocks (Advance Filter). */
+    stockUniqueNames?: string[];
+    /**
+     * Field names whose multi-select All sentinel was chosen.
+     * Those arrays are sent as [] and listed here (same as voucher list).
+     */
+    selectAllFields?: string[];
     /** Selected branch in company/consolidated mode (same as Manufacturing list). */
     branchUniqueName?: string;
     q?: string;
@@ -166,7 +175,7 @@ export class JobWorkFormModel implements JobWorkOrderRequest {
     accountUniqueName = '';
     jobworkerType: JobworkerType = 'REGISTERED';
     gstin = '';
-    deliveryChallanUniqueName = '';
+    deliveryChallanUniqueNames: string[] = [];
     challanDate = '';
     expectedReturnDate = '';
     process = '';

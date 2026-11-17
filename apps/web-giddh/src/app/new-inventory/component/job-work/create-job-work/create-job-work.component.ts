@@ -1413,7 +1413,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.commitForm(current => {
             current.accountUniqueName = event?.value || '';
             current.accountName = event?.label || '';
-            current.deliveryChallanUniqueName = '';
+            current.deliveryChallanUniqueNames = [];
             const additional = event?.additional as { gstIn?: string };
             if (additional?.gstIn) {
                 current.gstin = additional.gstIn;
@@ -1425,16 +1425,19 @@ export class CreateJobWorkComponent implements OnInit {
     }
 
     /**
-     * Handles delivery challan selection from pending-report list.
+     * Handles multi delivery challan selection from pending-report list.
      *
-     * @param {IOption} event
+     * @param {Array<string | number>} values
      * @memberof CreateJobWorkComponent
      */
-    onDeliveryChallanSelected(event: IOption): void {
-        this.selectedDeliveryChallanLabel.set(event?.label || '');
+    public onDeliveryChallanSelectionChange(values: Array<string | number>): void {
+        const selectedValues = (values || []).map(value => String(value)).filter(Boolean);
+        const options = this.deliveryChallanOptions();
+        const firstSelected = options.find(option => selectedValues.includes(String(option.value)));
+        this.selectedDeliveryChallanLabel.set(firstSelected?.label || '');
         this.commitForm(current => {
-            current.deliveryChallanUniqueName = event?.value || '';
-            const challanDate = (event?.additional as { date?: string })?.date;
+            current.deliveryChallanUniqueNames = selectedValues;
+            const challanDate = (firstSelected?.additional as { date?: string })?.date;
             if (challanDate) {
                 const formatted = this.formatDate(challanDate);
                 current.challanDate = formatted;
@@ -1576,14 +1579,14 @@ export class CreateJobWorkComponent implements OnInit {
                 }))
                 .filter(option => !!option.value);
 
-            const selectedUniqueName = this.form().deliveryChallanUniqueName;
-            if (selectedUniqueName) {
+            const selectedUniqueNames = this.form().deliveryChallanUniqueNames || [];
+            selectedUniqueNames.forEach(selectedUniqueName => {
                 options = this.ensureSelectedOption(
                     options,
                     selectedUniqueName,
                     this.selectedDeliveryChallanLabel() || selectedUniqueName
                 );
-            }
+            });
             this.deliveryChallanOptions.set(options);
         });
     }
@@ -1945,7 +1948,7 @@ export class CreateJobWorkComponent implements OnInit {
             accountUniqueName: form.accountUniqueName,
             jobworkerType: form.jobworkerType,
             gstin: form.gstin || '',
-            deliveryChallanUniqueName: form.deliveryChallanUniqueName || '',
+            deliveryChallanUniqueNames: [...(form.deliveryChallanUniqueNames || [])],
             challanDate: this.formatDate(form.challanDate),
             expectedReturnDate: this.formatDate(form.expectedReturnDate),
             process: form.process || '',
@@ -2120,15 +2123,25 @@ export class CreateJobWorkComponent implements OnInit {
             || (body['jobworkerType'] as JobworkerType)
             || 'REGISTERED';
         next.gstin = (details['gstin'] as string) || (body['gstin'] as string) || '';
-        next.deliveryChallanUniqueName =
+        const deliveryChallanUniqueNames = (details['deliveryChallanUniqueNames'] as string[])
+            || (body['deliveryChallanUniqueNames'] as string[])
+            || [];
+        const legacyDeliveryChallanUniqueName =
             (details['deliveryChallanUniqueName'] as string)
             || (body['deliveryChallanUniqueName'] as string)
-            || linkedChallans?.[0]?.uniqueName
             || '';
+        next.deliveryChallanUniqueNames = deliveryChallanUniqueNames.length
+            ? deliveryChallanUniqueNames.filter(Boolean)
+            : legacyDeliveryChallanUniqueName
+                ? [legacyDeliveryChallanUniqueName]
+                : (linkedChallans || [])
+                    .map(challan => challan?.uniqueName || '')
+                    .filter(Boolean);
         this.selectedDeliveryChallanLabel.set(
             linkedChallans?.[0]?.number
             || linkedChallans?.[0]?.documentNo
-            || next.deliveryChallanUniqueName
+            || next.deliveryChallanUniqueNames[0]
+            || ''
         );
         next.challanDate = this.formatDate(
             (details['challanDate'] as string) || (body['challanDate'] as string) || documentDate
