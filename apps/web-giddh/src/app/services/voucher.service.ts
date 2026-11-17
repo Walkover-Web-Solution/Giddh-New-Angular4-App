@@ -68,6 +68,10 @@ export class VoucherService {
      */
     public getAllProformaEstimate(request: ProformaFilter, voucherType: string): Observable<BaseResponse<ProformaResponse, ProformaFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        // Voucher V2: estimate/proforma use common invoice get-all with type
+        if (this.generalService.voucherApiVersion === 2) {
+            return this.getAllVouchers(request as InvoiceReceiptFilter, voucherType) as unknown as Observable<BaseResponse<ProformaResponse, ProformaFilter>>;
+        }
         return this.proformaService.getAll(request, voucherType);
     }
 
@@ -724,6 +728,16 @@ export class VoucherService {
      */
     public getEstimateProforma(request: any, voucherType: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        // Voucher V2: estimate/proforma details use common voucher details with type
+        if (this.generalService.voucherApiVersion === 2) {
+            const uniqueName = request.uniqueName || request.estimateNumber || request.proformaNumber;
+            const detailsRequest = {
+                invoiceNumber: uniqueName,
+                voucherType,
+                uniqueName
+            } as ReceiptVoucherDetailsRequest;
+            return this.getVoucherDetails(request.accountUniqueName, detailsRequest);
+        }
         return this.http.post(this.config.apiUrl + PROFORMA_API.base
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':vouchers', voucherType)
@@ -886,6 +900,13 @@ export class VoucherService {
      */
     public updateAction(request: ProformaUpdateActionRequest, voucherType: string): Observable<BaseResponse<string, ProformaUpdateActionRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        // Voucher V2: estimate/proforma list actions use common invoice action API
+        if (this.generalService.voucherApiVersion === 2) {
+            const uniqueName = (request as { uniqueName?: string }).uniqueName
+                || request.estimateNumber
+                || request.proformaNumber;
+            return this.actionVoucher(uniqueName, { action: request.action, voucherType: voucherType } as { action: string; amount?: number }) as unknown as Observable<BaseResponse<string, ProformaUpdateActionRequest>>;
+        }
         return this.proformaService.updateAction(request, voucherType);
     }
 
@@ -925,6 +946,17 @@ export class VoucherService {
      */
     public deleteEstimsteProformaVoucher(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        // Voucher V2: estimate/proforma delete uses common voucher delete with type
+        if (this.generalService.voucherApiVersion === 2) {
+            const uniqueName = (request as { uniqueName?: string }).uniqueName
+                || request.estimateNumber
+                || request.proformaNumber;
+            const deleteRequest = {
+                uniqueName,
+                voucherType
+            } as ReciptDeleteRequest;
+            return this.deleteReceipt(request.accountUniqueName, deleteRequest) as unknown as Observable<BaseResponse<string, ProformaGetRequest>>;
+        }
         return this.proformaService.delete(request, voucherType);
     }
 
@@ -1031,7 +1063,21 @@ export class VoucherService {
         let httpMethod: 'post' | 'get' = 'post';
         let apiParams = model;
         let responseType = (fileType === 'base64') ? {} : { responseType: 'blob' };
-        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment, VoucherTypeEnum.deliveryChallan, VoucherTypeEnum.receiptNote].includes(voucherType)) {
+        const commonDownloadVoucherTypes = [
+            VoucherTypeEnum.sales,
+            VoucherTypeEnum.creditNote,
+            VoucherTypeEnum.debitNote,
+            VoucherTypeEnum.purchase,
+            VoucherTypeEnum.receipt,
+            VoucherTypeEnum.payment,
+            VoucherTypeEnum.deliveryChallan,
+            VoucherTypeEnum.receiptNote
+        ];
+        // Voucher V2: estimate/proforma download uses common download-file with type
+        if (this.generalService.voucherApiVersion === 2) {
+            commonDownloadVoucherTypes.push(VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate);
+        }
+        if (commonDownloadVoucherTypes.includes(voucherType)) {
             if (this.generalService.voucherApiVersion === 2) {
                 apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
                     ?.replace(':fileType', fileType)
@@ -1086,6 +1132,25 @@ export class VoucherService {
 
             return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
         } else if (voucherType === VoucherTypeEnum.generateEstimate || voucherType === VoucherTypeEnum.generateProforma) {
+            // Voucher V2: estimate/proforma versions use common voucher versions API
+            if (this.generalService.voucherApiVersion === 2) {
+                let url = this.config.apiUrl + INVOICE_API.GET_ALL_VERSIONS;
+                url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+                url = url?.replace(':voucherUniqueName', getRequestObject?.voucherUniqueName
+                    || postRequestObject?.uniqueName
+                    || postRequestObject?.estimateNumber
+                    || postRequestObject?.proformaNumber);
+                url = url?.replace(':page', getRequestObject.page);
+                url = url?.replace(':count', getRequestObject.count);
+                url = this.generalService.addVoucherVersion(url, 2);
+
+                return this.http.get(url).pipe(
+                    map((res) => {
+                        let data: BaseResponse<any, string> = res;
+                        return data;
+                    }),
+                    catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+            }
             let url = this.generalService.createQueryString(this.config.apiUrl + ESTIMATES_API.getVersions, {
                 page: getRequestObject.page, count: getRequestObject.count
             });
