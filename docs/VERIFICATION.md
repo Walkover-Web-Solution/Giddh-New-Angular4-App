@@ -21,7 +21,7 @@ Build warnings remain, including the web initial bundle's 16.28 MB versus its 15
 
 ## Behavior evidence
 
-The [focused tests](../scripts/tests) characterize actual methods before and after each extraction: request verbs/URLs/payload identity, report traversal order, inventory adjustment dispatch, trigger validation and retries, HTTP completion/error/cancellation, reducer transitions, permission roles and Electron callback arguments. A differential permission check compared 192 mixed company/role transitions: public state and subscriber observations matched, while the new service retained one observer instead of accumulating observers.
+The [focused tests](../scripts/tests) characterize actual methods before and after each extraction: request verbs/URLs/payload identity, report traversal order, inventory adjustment dispatch, trigger validation and retries, HTTP completion/error/cancellation, reducer transitions, permission roles, Electron callback arguments, and the email-template editor's Backspace guard plus paste-marker cleanup. A differential permission check compared 192 mixed company/role transitions: public state and subscriber observations matched, while the new service retained one observer instead of accumulating observers.
 
 These tests use real source with mocked framework/service boundaries. They are not backend or Angular integration tests. The full compiler and [browser smoke check](../scripts/browser-smoke.cjs) provide separate wiring/rendering evidence. The browser check intercepts every external request; its rejection response is a fixture, not a real authentication result. Missing provider configuration and blocked third-party scripts remain visible in its console artifact.
 

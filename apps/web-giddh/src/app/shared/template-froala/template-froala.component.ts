@@ -5,8 +5,8 @@ import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FroalaLoaderService } from '../services/froala-loader.service';
-declare var FroalaEditor: any;
 import { DEFAULT_TRIGGER_TEMPLATE, EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
+import { guardEditorHtmlApi, normalizeEmailTemplateHtml, tributeHandlesEditorKey } from './utility/template-froala.editor';
 import { cloneDeep, isEqual } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { GeneralService } from '../../services/general.service';
@@ -77,6 +77,8 @@ export class TemplateFroalaComponent implements OnInit {
     private maxFroalaInitRetries: number = 5;
     /** Retry delay in milliseconds */
     private froalaInitRetryDelay: number = 500;
+    /** True while a keystroke is being copied into the form, so Froala must not html.set that same HTML back into the caret. */
+    private ignoreEditorSet: boolean = false;
     /** Hold to email options */
     public toEmails: any[] = [];
     /** Hold selected to email options */
@@ -208,6 +210,9 @@ export class TemplateFroalaComponent implements OnInit {
             ).subscribe(triggerDetails => {
                 if (triggerDetails) {
                     triggerDetails = {...triggerDetails, ...triggerDetails?.emailTemplate};
+                    if (typeof triggerDetails.html === 'string') {
+                        triggerDetails.html = normalizeEmailTemplateHtml(triggerDetails.html);
+                    }
                     triggerDetails['conditions'] = triggerDetails?.conditionMap;
                     this.customTriggerForm.patchValue(triggerDetails, { emitEvent: false });
                     this.selectedToEmails = this.customTriggerForm.get(EmailType.To)?.value;
@@ -300,7 +305,7 @@ export class TemplateFroalaComponent implements OnInit {
                     bcc: response.bcc ?? [],
                     replyTo: response.replyTo ?? [],
                     emailSubject: response.emailSubject ?? null,
-                    html: response.html ?? null
+                    html: typeof response.html === 'string' ? normalizeEmailTemplateHtml(response.html) : response.html
                 }, { emitEvent: false });
                 this.changesDetectionRef.detectChanges();
             }
@@ -340,11 +345,17 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private updateFormControl(): void {
-        if (this.froalaEditor) {
-            const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
-            const htmlContent = this.froalaEditor.html.get();
-            currentForm.get('html')?.patchValue(htmlContent, { emitEvent: false });
+        if (!this.froalaEditor?.html) {
+            return;
         }
+        const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
+        const htmlControl = currentForm?.get('html');
+        const htmlContent = this.froalaEditor.html.get();
+        if (!htmlControl || htmlControl.value === htmlContent) {
+            return;
+        }
+        // emitModelToViewChange: false keeps this keystroke from calling Froala html.set().
+        htmlControl.patchValue(htmlContent, { emitEvent: false, emitModelToViewChange: false });
     }
     /**
      * This will return the froala options
@@ -395,31 +406,34 @@ export class TemplateFroalaComponent implements OnInit {
             htmlAllowedTags: ['.*'],
             htmlAllowedAttrs: ['.*'],
             events: {
-                initialized: (event) => {
-                    this.froalaEditor = event.getEditor();
-                    // Add additional delay for Electron environment
-                    const setupDelay = this.isElectron ? 200 : 0;
-                    setTimeout(() => {
-                        this.setupFroalaEventHandlers();
-                        // Set initial content from form control with additional delay for Electron
-                        const contentDelay = this.isElectron ? 300 : 0;
-                        setTimeout(() => {
-                            const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
-                            const htmlValue = currentForm?.get('html')?.value;
-                            if (htmlValue) {
-                                this.froalaEditor.html.set(htmlValue);
-                            }
-                        }, contentDelay);
-                    }, setupDelay);
+                initialized: (initControls) => {
+                    const editor = initControls?.getEditor?.() ?? (initControls?.html ? initControls : null);
+                    if (!editor?.html || !editor?.events) {
+                        return;
+                    }
+                    this.froalaEditor = editor;
+                    // The Angular directive registers its own contentChanged listener before this callback.
+                    // Run first so a keystroke cannot be written back with html.set while the caret is moving.
+                    guardEditorHtmlApi(editor.html, () => this.ignoreEditorSet);
+                    editor.events.on('contentChanged', () => {
+                        this.ignoreEditorSet = true;
+                    }, true);
+                    editor.events.on('contentChanged', () => {
+                        try {
+                            this.updateFormControl();
+                        } finally {
+                            this.ignoreEditorSet = false;
+                        }
+                    });
+                    this.setupFroalaEventHandlers();
+                    editor.events.on('destroy', () => this.detachTribute(), true);
+                    this.setInitialEditorHtml();
                 },
                 blur: () => { // Handles changes made in the code view when focus is lost
                     if (this.froalaEditor?.codeView?.isActive()) {
                         this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
                         this.updateFormControl();
                     }
-                },
-                'contentChanged': () => {
-                    this.updateFormControl();
                 },
                 // Add error handling for Electron
                 'error': (error) => {
@@ -449,16 +463,34 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private setupFroalaEventHandlers(): void {
-        if (this.froalaEditor) {
-            this.froalaEditor.events.on(
-                'keydown',
-                (e) => {
-                    if ((e.which == FroalaEditor.KEYCODE.ENTER || e.which == FroalaEditor.KEYCODE.BACKSPACE) && this.froalaTribute?.isActive) {
-                        return false;
-                    }
-                }
-            );
+        if (!this.froalaEditor?.events) {
+            return;
         }
+        // Priority true runs before Froala's own keydown. Returning false then actually cancels Enter/Backspace.
+        this.froalaEditor.events.on('keydown', (event: KeyboardEvent) => {
+            if (tributeHandlesEditorKey(event.which, Boolean(this.froalaTribute?.isActive))) {
+                return false;
+            }
+        }, true);
+    }
+    /**
+     * Puts the form HTML into an empty editor once.
+     * A later html.set during Backspace replaces the live DOM and drops the keystroke.
+     *
+     * @private
+     * @memberof TemplateFroalaComponent
+     */
+    private setInitialEditorHtml(): void {
+        const htmlValue = (this.isTrigger ? this.customTriggerForm : this.emailForm)?.get('html')?.value;
+        if (typeof htmlValue !== 'string' || !htmlValue || !this.froalaEditor?.html) {
+            return;
+        }
+        const normalized = normalizeEmailTemplateHtml(htmlValue);
+        const visibleText = this.froalaEditor.el?.textContent?.replace(/\u200b/g, '').trim() ?? '';
+        if (visibleText.length > 0 || this.froalaEditor.html.get() === normalized) {
+            return;
+        }
+        this.froalaEditor.html.set(normalized);
     }
     /**
      * Retries Froala editor initialization
@@ -504,12 +536,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private initializeTribute(tributeSuggestions: any[]): void {
-        if (this.froalaTribute) {
-            this.froalaTribute.detach(this.froalaEditor.el);
-        }
-        if (this.subjectTribute) {
-            this.subjectTribute.detach(this.subjectInputField.nativeElement);
-        }
+        this.detachTribute();
         this.froalaTribute = new Tribute({
             trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
@@ -520,7 +547,7 @@ export class TemplateFroalaComponent implements OnInit {
             values: tributeSuggestions,
             selectTemplate: (item) => `${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}`
         });
-        if (this.froalaEditor) {
+        if (this.froalaEditor?.el) {
             this.froalaTribute.attach(this.froalaEditor.el);
         }
         if (this.subjectInputField && this.subjectInputField.nativeElement) {
@@ -840,8 +867,26 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('hide-chat-widget');
+        this.detachTribute();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+    /**
+     * Detaches tribute from elements that still exist.
+     * Calling detach without an element throws, and that throw lands on the next Backspace.
+     *
+     * @private
+     * @memberof TemplateFroalaComponent
+     */
+    private detachTribute(): void {
+        if (this.froalaTribute && this.froalaEditor?.el) {
+            this.froalaTribute.detach(this.froalaEditor.el);
+        }
+        this.froalaTribute = null;
+        if (this.subjectTribute && this.subjectInputField?.nativeElement) {
+            this.subjectTribute.detach(this.subjectInputField.nativeElement);
+        }
+        this.subjectTribute = null;
     }
     /**
      * Clicked inside Email section
