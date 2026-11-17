@@ -897,7 +897,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
 
         if (this.voucherType?.length) {
-            if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+            const isEstimateOrProforma = this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma;
+            // Voucher V2: estimate/proforma list uses common invoice get-all with type
+            if (isEstimateOrProforma && this.generalService.voucherApiVersion !== 2) {
                 this.componentStore.getPreviousProformaEstimates({ model: this.buildProformaEstimateRequestModel(), type: this.voucherType });
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                 this.componentStore.getPurchaseOrders({ request: cloneDeep(this.advanceFilters) });
@@ -948,7 +950,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             const fileType = "base64";
             const accountUniqueName = this.getInvoiceAccountUniqueName(this.selectedInvoice);
 
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt, VoucherTypeEnum.deliveryChallan, VoucherTypeEnum.receiptNote].includes(this.voucherType)) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt, VoucherTypeEnum.deliveryChallan, VoucherTypeEnum.receiptNote].includes(this.voucherType)
+                || (this.generalService.voucherApiVersion === 2 && [VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(this.voucherType))) {
                 getRequest = {
                     voucherType: this.voucherType,
                     uniqueName: this.selectedInvoice?.uniqueName
@@ -1122,10 +1125,11 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public sendEmail(response: any): void {
         if (response) {
-            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice || this.invoiceType.isDeliveryChallan) {
+            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice || this.invoiceType.isDeliveryChallan
+                || (this.voucherApiVersion === 2 && [VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(this.voucherType))) {
                 const voucherType = this.voucherType === VoucherTypeEnum.deliveryChallan ? 'DC' : this.voucherType;
                 this.componentStore.sendVoucherOnEmail({
-                    accountUniqueName: this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName,
+                    accountUniqueName: this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName ?? this.selectedInvoice?.customerUniqueName,
                     payload: {
                         copyTypes: response.invoiceType ?? [],
                         email: {
@@ -1318,7 +1322,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         delete this.advanceFilters.estimateNumber;
         delete this.advanceFilters.purchaseOrderNumber;
         this.isSearching = true;
-        if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+        if ((this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) && this.generalService.voucherApiVersion !== 2) {
             if (this.voucherType === VoucherTypeEnum.generateProforma) {
                 this.advanceFilters.proformaNumber = search;
             } else {
@@ -1464,7 +1468,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         let lookupRequest$: Observable<any[]>;
         const inventoryVoucherType = this.getInventoryVoucherType();
-        if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+        if ((this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) && this.generalService.voucherApiVersion !== 2) {
             const model = this.buildProformaEstimateRequestModel({
                 page: 1,
                 count: 1,
@@ -1618,9 +1622,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     item.isSelected = false;
-                    item.uniqueName = item.proformaNumber || item.estimateNumber;
-                    item.voucherNumber = item.proformaNumber || item.estimateNumber;
-                    item.voucherDate = item.proformaDate || item.estimateDate;
+                    item.uniqueName = item.uniqueName || item.proformaNumber || item.estimateNumber;
+                    item.voucherNumber = item.voucherNumber || item.proformaNumber || item.estimateNumber;
+                    item.voucherDate = item.voucherDate || item.proformaDate || item.estimateDate;
                     const accountUniqueName = item.customerUniqueName ?? item.accountUniqueName ?? item.account?.uniqueName;
                     item.account = {
                         customerName: item.customerName ?? item.account?.customerName ?? item.account?.name,
@@ -1739,7 +1743,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     } else {
                         this.poBulkAction('delete');
                     }
-                } else if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+                } else if ((this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) && this.generalService.voucherApiVersion !== 2) {
                     const payload = {
                         accountUniqueName: this.selectedInvoice.customerUniqueName
                     }
@@ -2027,6 +2031,11 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public actionEstimateProforma(action: string): void {
+        // Voucher V2: estimate/proforma actions use common invoice action API with uniqueName + type
+        if (this.generalService.voucherApiVersion === 2) {
+            this.actionVoucher(action);
+            return;
+        }
         const model = {
             accountUniqueName: this.selectedInvoice.customerUniqueName,
             action: action

@@ -88,7 +88,9 @@ export class PrintVoucherComponent implements OnInit {
         this.setLoadingState(true);
         this.isVoucherDownloadError = false;
 
-        if (!this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice) {
+        // Voucher V2: estimate/proforma use common download-file with type
+        if ((!this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice)
+            || this.generalService.voucherApiVersion === 2) {
             this.downloadVoucherType1();
         } else if (this.invoiceType.isSalesInvoice) {
             this.downloadVoucherType2();
@@ -106,7 +108,7 @@ export class PrintVoucherComponent implements OnInit {
     private downloadVoucherType1(): void {
         let getRequest = {
             voucherType: this.voucherType,
-            uniqueName: this.selectedItem.voucherUniqueName
+            uniqueName: this.selectedItem.voucherUniqueName || this.selectedItem.uniqueName
         };
 
         this.sanitizedPdfFileUrl = null;

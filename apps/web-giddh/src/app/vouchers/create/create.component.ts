@@ -2721,7 +2721,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private fetchPreviousVouchers(): void {
-        if (this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) {
+        if ((this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) && this.voucherApiVersion !== 2) {
             let filterRequest: ProformaFilter = new ProformaFilter();
             filterRequest.sortBy = this.invoiceType.isProformaInvoice ? "proformaDate" : "estimateDate";
             filterRequest.sort = "desc";
@@ -2731,7 +2731,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 model: filterRequest,
                 type: this.invoiceType.isProformaInvoice ? "proformas" : "estimates",
             });
-        } else if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) {
+        } else if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote
+            || ((this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) && this.voucherApiVersion === 2)) {
             const baseRequest: Partial<InvoiceReceiptFilter> = {
                 sortBy: "voucherDate",
                 sort: "desc",
@@ -8345,7 +8346,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     });
             }
-        } else if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+        } else if ((this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) && this.voucherApiVersion !== 2) {
             invoiceForm.type = VoucherTypeEnum.sales;
 
             if (!this.isUkAccount) {
@@ -8428,6 +8429,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     });
             }
         } else {
+            // Voucher V2: estimate/proforma create/update use common invoice APIs with type
+            if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+                invoiceForm.type = this.invoiceType.isEstimateInvoice
+                    ? VoucherTypeEnum.generateEstimate
+                    : VoucherTypeEnum.generateProforma;
+
+                if (!this.isUkAccount) {
+                    if (invoiceForm.account?.billingDetails?.state?.code) {
+                        invoiceForm.account.billingDetails.stateCode = invoiceForm.account.billingDetails.state?.code;
+                        invoiceForm.account.billingDetails.stateName = invoiceForm.account.billingDetails.state?.name;
+                    }
+
+                    if (invoiceForm.account?.shippingDetails?.state?.code) {
+                        invoiceForm.account.shippingDetails.stateCode = invoiceForm.account.shippingDetails.state?.code;
+                        invoiceForm.account.shippingDetails.stateName = invoiceForm.account.shippingDetails.state?.name;
+                    }
+                }
+            }
+
             if (this.invoiceType.isCashInvoice) {
                 invoiceForm.type = this.invoiceType.isPurchaseInvoice
                     ? "purchase"
@@ -10405,7 +10425,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         } else if (this.invoiceType.isPurchaseOrder) {
             this.componentStore.getPurchaseOrderDetails(params?.uniqueName);
-        } else if (this.invoiceType.isEstimateInvoice) {
+        } else if (this.invoiceType.isEstimateInvoice && this.voucherApiVersion !== 2) {
             this.componentStore.getEstimateProformaDetails({
                 voucherType: this.voucherType,
                 payload: {
@@ -10414,7 +10434,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     voucherType: this.voucherType,
                 },
             });
-        } else if (this.invoiceType.isProformaInvoice) {
+        } else if (this.invoiceType.isProformaInvoice && this.voucherApiVersion !== 2) {
             this.componentStore.getEstimateProformaDetails({
                 voucherType: this.voucherType,
                 payload: {
