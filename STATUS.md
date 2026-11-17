@@ -1,6 +1,10 @@
 # Status
 
+<<<<<<< HEAD
 **Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-17 · **Reviewed up to commit:** `2afa238819`
+=======
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-16 · **Reviewed up to commit:** `f01725ff67`
+>>>>>>> 9b3544d88608666be7f66d3aff81ae1dc57609f4
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -161,5 +165,4 @@ Feature work merged after the brief, not scored against it:
 - 2026-11-07: Migrated Job Work create to Angular 21 (`inject`, `signal`/`computed`, `toSignal`, `DestroyRef`/`takeUntilDestroyed`).
 - 2026-11-07: Aligned Job Work create layout with Manufacturing (same card/table/button patterns; dropped one-off valuation/table classes).
 - 2026-11-06: Added Inventory > Job Work module (create, edit, list/report + supported actions), `JobWorkService`, locales, and sidebar entry. Commit baseline `c91a081f830c7a6317d5d2f7475f468a55bc050e`.
-- 2026-11-04 · Cursor agent · Trigger email body keeps its text and styles when Backspace is used, and the editor no longer logs on each keystroke · [template-froala.component.ts](apps/web-giddh/src/app/shared/template-froala/template-froala.component.ts) · editor 🟡
 - 2026-11-02 · Cursor agent · Created STATUS.md, `npm run status:check` and its PR workflow · Initial scorecard; tracker 🟡
