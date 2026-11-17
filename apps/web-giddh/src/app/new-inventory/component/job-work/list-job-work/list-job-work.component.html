@@ -296,14 +296,41 @@
         </div>
         <mat-dialog-content class="dialog-body">
             <div class="d-flex flex-column row-gap-2">
-                <reactive-dropdown-field
+                <multi-select-dropdown
                     [name]="'advanceWarehouse'"
                     [label]="commonLocaleData?.app_warehouse"
                     [placeholder]="commonLocaleData?.app_select_warehouse"
                     [options]="warehouses"
-                    [labelValue]="selectedWarehouseName"
-                    (selectedOption)="onAdvanceWarehouseSelected($event)"
-                ></reactive-dropdown-field>
+                    [showAllOption]="true"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                    [(ngModel)]="selectedWarehouseUniqueNames"
+                ></multi-select-dropdown>
+
+                <multi-select-dropdown
+                    [name]="'advanceAccount'"
+                    [label]="localeData?.jobworker_name"
+                    [placeholder]="localeData?.select_jobworker"
+                    [options]="advanceAccountOptions"
+                    [showAllOption]="true"
+                    [enableDynamicSearch]="true"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                    [(ngModel)]="selectedAccountUniqueNames"
+                    (dynamicSearchedQuery)="searchAdvanceAccounts($event, 1)"
+                    (scrollEnd)="advanceAccountScrollEnd()"
+                ></multi-select-dropdown>
+
+                <multi-select-dropdown
+                    [name]="'advanceStock'"
+                    [label]="commonLocaleData?.app_stock"
+                    [placeholder]="commonLocaleData?.app_select_stock"
+                    [options]="advanceStockOptions"
+                    [showAllOption]="true"
+                    [enableDynamicSearch]="true"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                    [(ngModel)]="selectedStockUniqueNames"
+                    (dynamicSearchedQuery)="searchAdvanceStocks($event, 1)"
+                    (scrollEnd)="advanceStockScrollEnd()"
+                ></multi-select-dropdown>
 
                 <div class="d-flex flex-column row-gap-15 mt-1">
                     <mat-slide-toggle [(ngModel)]="advanceOnlyOverdue" color="primary" name="onlyOverdue">

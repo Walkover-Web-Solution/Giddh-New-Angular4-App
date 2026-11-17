@@ -276,16 +276,16 @@
                                         ></reactive-dropdown-field>
                                     </div>
                                     <div class="col-6 mb-3">
-                                        <reactive-dropdown-field
-                                            [name]="'deliveryChallanUniqueName'"
+                                        <multi-select-dropdown
+                                            [name]="'deliveryChallanUniqueNames'"
                                             [label]="localeData()?.delivery_challan_no"
                                             [placeholder]="localeData()?.select_delivery_challan"
                                             [options]="deliveryChallanOptions()"
-                                            [labelValue]="selectedDeliveryChallanLabel()"
-                                            [(ngModel)]="form().deliveryChallanUniqueName"
-                                            (selectedOption)="onDeliveryChallanSelected($event)"
-                                            [readonly]="isReadOnly()"
-                                        ></reactive-dropdown-field>
+                                            [noEntriesFoundLabel]="commonLocaleData()?.app_no_result_found"
+                                            [ngModel]="form().deliveryChallanUniqueNames"
+                                            (ngModelChange)="onDeliveryChallanSelectionChange($event)"
+                                            [disabled]="isReadOnly()"
+                                        ></multi-select-dropdown>
                                     </div>
                                     <div class="col-12 mb-3">
                                         <input-field

@@ -6,7 +6,9 @@ export interface JobWorkListFilterSnapshot {
     searchRequest: JobWorkListRequest;
     selectedStatusLabel: string;
     selectedTypeLabel: string;
-    selectedWarehouseName: string;
+    selectedWarehouseUniqueNames: string[];
+    selectedAccountUniqueNames: string[];
+    selectedStockUniqueNames: string[];
     selectedBranchName: string;
     selectedDateRangeUi: string;
     selectedRangeLabel: string;
@@ -36,10 +38,17 @@ export class JobWorkListStateService {
      */
     save(snapshot: JobWorkListFilterSnapshot): void {
         this.snapshot = {
-            searchRequest: { ...snapshot.searchRequest },
+            searchRequest: {
+                ...snapshot.searchRequest,
+                accountUniqueNames: [...(snapshot.searchRequest.accountUniqueNames || [])],
+                warehouseUniqueNames: [...(snapshot.searchRequest.warehouseUniqueNames || [])],
+                stockUniqueNames: [...(snapshot.searchRequest.stockUniqueNames || [])]
+            },
             selectedStatusLabel: snapshot.selectedStatusLabel,
             selectedTypeLabel: snapshot.selectedTypeLabel,
-            selectedWarehouseName: snapshot.selectedWarehouseName,
+            selectedWarehouseUniqueNames: [...(snapshot.selectedWarehouseUniqueNames || [])],
+            selectedAccountUniqueNames: [...(snapshot.selectedAccountUniqueNames || [])],
+            selectedStockUniqueNames: [...(snapshot.selectedStockUniqueNames || [])],
             selectedBranchName: snapshot.selectedBranchName,
             selectedDateRangeUi: snapshot.selectedDateRangeUi,
             selectedRangeLabel: snapshot.selectedRangeLabel,
@@ -56,10 +65,17 @@ export class JobWorkListStateService {
     get(): JobWorkListFilterSnapshot | null {
         return this.snapshot
             ? {
-                searchRequest: { ...this.snapshot.searchRequest },
+                searchRequest: {
+                    ...this.snapshot.searchRequest,
+                    accountUniqueNames: [...(this.snapshot.searchRequest.accountUniqueNames || [])],
+                    warehouseUniqueNames: [...(this.snapshot.searchRequest.warehouseUniqueNames || [])],
+                    stockUniqueNames: [...(this.snapshot.searchRequest.stockUniqueNames || [])]
+                },
                 selectedStatusLabel: this.snapshot.selectedStatusLabel,
                 selectedTypeLabel: this.snapshot.selectedTypeLabel,
-                selectedWarehouseName: this.snapshot.selectedWarehouseName,
+                selectedWarehouseUniqueNames: [...(this.snapshot.selectedWarehouseUniqueNames || [])],
+                selectedAccountUniqueNames: [...(this.snapshot.selectedAccountUniqueNames || [])],
+                selectedStockUniqueNames: [...(this.snapshot.selectedStockUniqueNames || [])],
                 selectedBranchName: this.snapshot.selectedBranchName,
                 selectedDateRangeUi: this.snapshot.selectedDateRangeUi,
                 selectedRangeLabel: this.snapshot.selectedRangeLabel,

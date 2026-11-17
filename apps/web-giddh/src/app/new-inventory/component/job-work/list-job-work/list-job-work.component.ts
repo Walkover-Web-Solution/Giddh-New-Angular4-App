@@ -6,7 +6,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import {
     JobWorkBatch,
     JobWorkLinkedChallan,
@@ -18,7 +18,9 @@ import {
 } from 'apps/web-giddh/src/app/models/interfaces/batch-report.interface';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { JobWorkService } from 'apps/web-giddh/src/app/services/job-work.service';
+import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/action/warehouse.action';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
@@ -79,8 +81,9 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         to: '',
         status: '',
         jobWorkType: '',
-        accountUniqueName: '',
-        warehouseUniqueName: '',
+        accountUniqueNames: [],
+        warehouseUniqueNames: [],
+        stockUniqueNames: [],
         q: '',
         onlyOverdue: false,
         onlyItcClaimed: false,
@@ -123,9 +126,30 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     public showOutputStockSearch = false;
     public showClearFilter = false;
     public warehouses: IOption[] = [];
-    public selectedWarehouseName = '';
+    /** Advance Filter warehouse values */
+    public selectedWarehouseUniqueNames: string[] = [];
+    /** Advance Filter jobworker account values */
+    public selectedAccountUniqueNames: string[] = [];
+    /** Advance Filter stock values */
+    public selectedStockUniqueNames: string[] = [];
+    /** Jobworker options for Advance Filter */
+    public advanceAccountOptions: IOption[] = [];
+    /** Stock options for Advance Filter */
+    public advanceStockOptions: IOption[] = [];
     public advanceOnlyOverdue = false;
     public advanceOnlyItcClaimed = false;
+    /** Jobworker account search page */
+    private advanceAccountPage = 1;
+    /** Jobworker account total pages */
+    private advanceAccountTotalPages = 1;
+    /** Jobworker account search query */
+    private advanceAccountQuery = '';
+    /** Stock search page */
+    private advanceStockPage = 1;
+    /** Stock total pages */
+    private advanceStockTotalPages = 1;
+    /** Stock search query */
+    private advanceStockQuery = '';
     private destroyed$ = new ReplaySubject<boolean>(1);
     /** Keeps restored list dates until the user picks a new range. */
     private filtersRestoredActive = false;
@@ -135,6 +159,8 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         private readonly changeDetectionRef: ChangeDetectorRef,
         private readonly generalService: GeneralService,
         private readonly jobWorkService: JobWorkService,
+        private readonly searchService: SearchService,
+        private readonly inventoryService: InventoryService,
         private readonly toasterService: ToasterService,
         private readonly router: Router,
         private readonly dialog: MatDialog,
@@ -259,6 +285,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.localeData = event || {};
         this.statusOptions = [
             { label: this.localeData.all, value: '' },
+            { label: 'Open', value: 'OPEN' },
             { label: 'Dispatched', value: 'DISPATCHED' },
             { label: 'Partially Returned', value: 'PARTIALLY_RETURNED' },
             { label: 'Completed', value: 'COMPLETED' },
@@ -299,7 +326,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         }
         this.isReportLoading = true;
         this.updateShowClearFilter();
-        this.jobWorkService.list(this.searchRequest).pipe(takeUntil(this.destroyed$)).subscribe({
+        this.jobWorkService.list(this.buildListRequest()).pipe(takeUntil(this.destroyed$)).subscribe({
             next: (response) => {
                 this.isReportLoading = false;
                 if (response?.status === 'success') {
@@ -364,35 +391,63 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         return !!(this.dataSource?.length || hasColumnSearch);
     }
 
+    /**
+     * Opens Advance Filter dialog and seeds account/stock options.
+     *
+     * @memberof ListJobWorkComponent
+     */
     public openAdvanceFilterDialog(): void {
         this.advanceOnlyOverdue = !!this.searchRequest.onlyOverdue;
         this.advanceOnlyItcClaimed = !!this.searchRequest.onlyItcClaimed;
+        this.selectedWarehouseUniqueNames = [...(this.searchRequest.warehouseUniqueNames || [])];
+        this.selectedAccountUniqueNames = [...(this.searchRequest.accountUniqueNames || [])];
+        this.selectedStockUniqueNames = [...(this.searchRequest.stockUniqueNames || [])];
+        this.searchAdvanceAccounts('', 1);
+        this.searchAdvanceStocks('', 1);
         this.dialog.open(this.advanceFilterDialog, {
             panelClass: ['mat-dialog'],
-            width: '420px',
+            width: '480px',
             autoFocus: false
         });
     }
 
+    /**
+     * Applies Advance Filter selections to the list request.
+     *
+     * @memberof ListJobWorkComponent
+     */
     public applyAdvanceFilter(): void {
+        this.searchRequest.warehouseUniqueNames = [...(this.selectedWarehouseUniqueNames || [])];
+        this.searchRequest.accountUniqueNames = [...(this.selectedAccountUniqueNames || [])];
+        this.searchRequest.stockUniqueNames = [...(this.selectedStockUniqueNames || [])];
         this.searchRequest.onlyOverdue = this.advanceOnlyOverdue;
         this.searchRequest.onlyItcClaimed = this.advanceOnlyItcClaimed;
         this.searchRequest.page = 1;
         this.getReport();
     }
 
+    /**
+     * Clears list filters while keeping the selected branch.
+     *
+     * @memberof ListJobWorkComponent
+     */
     public clearFilters(): void {
         this.searchRequest.status = '';
         this.searchRequest.jobWorkType = '';
-        this.searchRequest.accountUniqueName = '';
-        this.searchRequest.warehouseUniqueName = '';
+        this.searchRequest.accountUniqueNames = [];
+        this.searchRequest.warehouseUniqueNames = [];
+        this.searchRequest.stockUniqueNames = [];
         this.searchRequest.q = '';
         this.searchRequest.onlyOverdue = false;
         this.searchRequest.onlyItcClaimed = false;
         this.searchRequest.page = 1;
         this.selectedStatusLabel = this.localeData.all;
         this.selectedTypeLabel = this.localeData.all;
-        this.selectedWarehouseName = '';
+        this.selectedWarehouseUniqueNames = [];
+        this.selectedAccountUniqueNames = [];
+        this.selectedStockUniqueNames = [];
+        this.advanceAccountOptions = [];
+        this.advanceStockOptions = [];
         this.advanceOnlyOverdue = false;
         this.advanceOnlyItcClaimed = false;
         this.columnSearchForm.reset({ jobWorkNo: '', jobworker: '', outputStock: '' }, { emitEvent: false });
@@ -419,8 +474,8 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         };
         this.selectedBranchName = selectedEntity?.label || '';
         this.searchRequest.branchUniqueName = selectedEntity?.value || '';
-        this.searchRequest.warehouseUniqueName = '';
-        this.selectedWarehouseName = '';
+        this.searchRequest.warehouseUniqueNames = [];
+        this.selectedWarehouseUniqueNames = [];
         this.searchRequest.page = 1;
         this.getReport();
     }
@@ -474,9 +529,86 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.changeDetectionRef.detectChanges();
     }
 
-    public onAdvanceWarehouseSelected(event: IOption): void {
-        this.searchRequest.warehouseUniqueName = event?.value || '';
-        this.selectedWarehouseName = event?.label || '';
+    /**
+     * Searches jobworker accounts for Advance Filter (`account-search-v2`).
+     *
+     * @param {string} query
+     * @param {number} [page=1]
+     * @memberof ListJobWorkComponent
+     */
+    public searchAdvanceAccounts(query: string, page: number = 1): void {
+        this.advanceAccountQuery = query || '';
+        this.advanceAccountPage = page;
+        this.searchService.searchAccountV2({
+            q: encodeURIComponent(this.advanceAccountQuery),
+            page,
+            group: encodeURIComponent('sundrycreditors,sundrydebtors')
+        }).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+            if (!data?.body?.results) {
+                return;
+            }
+            const results = data.body.results.map((result: { uniqueName: string; name: string }) => ({
+                value: result.uniqueName,
+                label: `${result.name} (${result.uniqueName})`
+            }));
+            this.advanceAccountOptions = page === 1
+                ? results
+                : [...this.advanceAccountOptions, ...results];
+            this.advanceAccountTotalPages = data.body.totalPages || 1;
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * Loads next jobworker page for Advance Filter.
+     *
+     * @memberof ListJobWorkComponent
+     */
+    public advanceAccountScrollEnd(): void {
+        if (this.advanceAccountPage < this.advanceAccountTotalPages) {
+            this.searchAdvanceAccounts(this.advanceAccountQuery, this.advanceAccountPage + 1);
+        }
+    }
+
+    /**
+     * Searches stocks for Advance Filter (`stocks/v2`).
+     *
+     * @param {string} query
+     * @param {number} [page=1]
+     * @memberof ListJobWorkComponent
+     */
+    public searchAdvanceStocks(query: string, page: number = 1): void {
+        this.advanceStockQuery = query || '';
+        this.advanceStockPage = page;
+        this.inventoryService.getStocksV2({
+            inventoryType: '',
+            page,
+            q: this.advanceStockQuery
+        }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response?.status !== 'success' || !response.body?.results) {
+                return;
+            }
+            const results = response.body.results.map((stock: { uniqueName?: string; name?: string }) => ({
+                value: stock.uniqueName || '',
+                label: stock.name || stock.uniqueName || ''
+            })).filter((option: IOption) => !!option.value);
+            this.advanceStockOptions = page === 1
+                ? results
+                : [...this.advanceStockOptions, ...results];
+            this.advanceStockTotalPages = response.body.totalPages || 1;
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * Loads next stock page for Advance Filter.
+     *
+     * @memberof ListJobWorkComponent
+     */
+    public advanceStockScrollEnd(): void {
+        if (this.advanceStockPage < this.advanceStockTotalPages) {
+            this.searchAdvanceStocks(this.advanceStockQuery, this.advanceStockPage + 1);
+        }
     }
 
     public goToCreate(): void {
@@ -881,8 +1013,9 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.showClearFilter = !!(
             this.searchRequest.status ||
             this.searchRequest.jobWorkType ||
-            this.searchRequest.accountUniqueName ||
-            this.searchRequest.warehouseUniqueName ||
+            this.hasConcreteFilterValues(this.searchRequest.accountUniqueNames) ||
+            this.hasConcreteFilterValues(this.searchRequest.warehouseUniqueNames) ||
+            this.hasConcreteFilterValues(this.searchRequest.stockUniqueNames) ||
             this.searchRequest.q ||
             this.searchRequest.onlyOverdue ||
             this.searchRequest.onlyItcClaimed ||
@@ -890,6 +1023,33 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             this.columnSearchForm?.controls?.jobworker?.value ||
             this.columnSearchForm?.controls?.outputStock?.value
         );
+    }
+
+    /**
+     * Builds the list API payload. All-sentinel multi-select values become `[]`
+     * and their field names are collected in `selectAllFields`.
+     *
+     * @returns {JobWorkListRequest}
+     * @memberof ListJobWorkComponent
+     */
+    private buildListRequest(): JobWorkListRequest {
+        return this.generalService.replaceSelectedAllOptions({
+            ...this.searchRequest,
+            warehouseUniqueNames: [...(this.searchRequest.warehouseUniqueNames || [])],
+            accountUniqueNames: [...(this.searchRequest.accountUniqueNames || [])],
+            stockUniqueNames: [...(this.searchRequest.stockUniqueNames || [])]
+        }, true);
+    }
+
+    /**
+     * Returns true when the multi-select has concrete values (not empty / not All).
+     *
+     * @param {string[] | undefined} values
+     * @returns {boolean}
+     * @memberof ListJobWorkComponent
+     */
+    private hasConcreteFilterValues(values: string[] | undefined): boolean {
+        return !!values?.length && !isSelectedAllOption(values);
     }
 
     /**
@@ -905,10 +1065,17 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             outputStock?: string;
         };
         return {
-            searchRequest: { ...this.searchRequest },
+            searchRequest: {
+                ...this.searchRequest,
+                accountUniqueNames: [...(this.searchRequest.accountUniqueNames || [])],
+                warehouseUniqueNames: [...(this.searchRequest.warehouseUniqueNames || [])],
+                stockUniqueNames: [...(this.searchRequest.stockUniqueNames || [])]
+            },
             selectedStatusLabel: this.selectedStatusLabel,
             selectedTypeLabel: this.selectedTypeLabel,
-            selectedWarehouseName: this.selectedWarehouseName,
+            selectedWarehouseUniqueNames: [...(this.selectedWarehouseUniqueNames || [])],
+            selectedAccountUniqueNames: [...(this.selectedAccountUniqueNames || [])],
+            selectedStockUniqueNames: [...(this.selectedStockUniqueNames || [])],
             selectedBranchName: this.selectedBranchName,
             selectedDateRangeUi: this.selectedDateRangeUi,
             selectedRangeLabel: this.selectedRangeLabel,
@@ -932,10 +1099,17 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             return false;
         }
 
-        this.searchRequest = { ...snapshot.searchRequest };
+        this.searchRequest = {
+            ...snapshot.searchRequest,
+            accountUniqueNames: [...(snapshot.searchRequest.accountUniqueNames || [])],
+            warehouseUniqueNames: [...(snapshot.searchRequest.warehouseUniqueNames || [])],
+            stockUniqueNames: [...(snapshot.searchRequest.stockUniqueNames || [])]
+        };
         this.selectedStatusLabel = snapshot.selectedStatusLabel;
         this.selectedTypeLabel = snapshot.selectedTypeLabel;
-        this.selectedWarehouseName = snapshot.selectedWarehouseName;
+        this.selectedWarehouseUniqueNames = [...(snapshot.selectedWarehouseUniqueNames || [])];
+        this.selectedAccountUniqueNames = [...(snapshot.selectedAccountUniqueNames || [])];
+        this.selectedStockUniqueNames = [...(snapshot.selectedStockUniqueNames || [])];
         this.selectedBranchName = snapshot.selectedBranchName || '';
         if (snapshot.searchRequest.branchUniqueName) {
             this.currentBranch = {
