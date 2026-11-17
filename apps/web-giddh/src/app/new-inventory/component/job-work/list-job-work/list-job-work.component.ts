@@ -6,16 +6,16 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import {
-    JobWorkActionRequest,
     JobWorkBatch,
-    JobWorkExpenseLine,
     JobWorkLinkedChallan,
-    JobWorkListRequest,
-    JobWorkScrapLine,
-    ScrapRetainedBy
+    JobWorkListRequest
 } from 'apps/web-giddh/src/app/models/api-models/JobWork';
+import {
+    BatchSelectDialogResult,
+    VoucherSelectedBatch
+} from 'apps/web-giddh/src/app/models/interfaces/batch-report.interface';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { JobWorkService } from 'apps/web-giddh/src/app/services/job-work.service';
@@ -25,10 +25,17 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { BatchSelectDialogComponent } from 'apps/web-giddh/src/app/vouchers/batch-select-dialog/batch-select-dialog.component';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import {
+    JobWorkActionDialogComponent,
+    JobWorkActionDialogMode
+} from '../job-work-action-dialog/job-work-action-dialog.component';
 import { JobWorkListFilterSnapshot, JobWorkListStateService } from '../job-work-list-state.service';
+
+type LinkedChallanDocumentItem = NonNullable<JobWorkLinkedChallan['documentItems']>[number];
 
 @Component({
     selector: 'list-job-work',
@@ -57,17 +64,11 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         'status',
         'action'
     ];
-    /** Linked challan document-item columns (View Linked Challan dialog). */
-    public linkedChallanItemColumns: string[] = [
-        'type',
-        'stock',
-        'variant',
-        'batch',
-        'quantity',
-        'rate',
-        'amount'
-    ];
+    /** Linked challan item columns */
+    public linkedChallanItemColumns: string[] = ['type', 'item', 'batch', 'quantity', 'rate', 'amount'];
     public dataSource: any[] = [];
+    /** Batch tracking enabled */
+    public batchTrackingEnabled = false;
     public selectedDateRange: any;
     public selectedDateRangeUi = '';
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
@@ -151,6 +152,16 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
+
+        this.store.pipe(
+            select(state => state.inventory.inventorySettings),
+            takeUntil(this.destroyed$)
+        ).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
+                this.changeDetectionRef.detectChanges();
+            }
+        });
 
         this.store.pipe(select(state => state.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -248,12 +259,8 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.localeData = event || {};
         this.statusOptions = [
             { label: this.localeData.all, value: '' },
-            { label: 'Open', value: 'OPEN' },
-            { label: 'In Transit', value: 'IN_TRANSIT' },
             { label: 'Dispatched', value: 'DISPATCHED' },
-            { label: 'In Process', value: 'IN_PROCESS' },
-            { label: 'Partially Received', value: 'PARTIALLY_RECEIVED' },
-            { label: 'Overdue', value: 'OVERDUE' },
+            { label: 'Partially Returned', value: 'PARTIALLY_RETURNED' },
             { label: 'Completed', value: 'COMPLETED' },
             { label: 'Cancelled', value: 'CANCELLED' }
         ];
@@ -517,223 +524,22 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         return String(value);
     }
 
-    public recordReturn(row: any): void {
-        const uniqueName = this.getRowUniqueName(row);
-        if (!uniqueName) {
-            return;
-        }
-        const dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
-                title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData.confirm_record_return,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
-        });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(action => {
-            if (!action) {
-                return;
-            }
-            // List row lacks stock/variant/batches; load order GET then build RETURN items.
-            this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
-                if (orderResponse?.status !== 'success' || !orderResponse.body) {
-                    this.toasterService.errorToast(orderResponse?.message);
-                    return;
-                }
-                const body = orderResponse.body as Record<string, unknown>;
-                const items = this.buildReturnActionItems(body);
-                if (!items.length) {
-                    this.toasterService.errorToast(this.localeData.return_items_missing);
-                    return;
-                }
-                const payload: JobWorkActionRequest = {
-                    action: 'RETURN',
-                    uniqueName,
-                    date: dayjs().format(GIDDH_DATE_FORMAT),
-                    warehouseUniqueName: this.getWarehouseUniqueNameFromOrder(body, row),
-                    isFinal: false,
-                    items
-                };
-                this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                    if (response?.status === 'success') {
-                        this.toasterService.successToast(this.localeData.return_recorded);
-                        this.getReport();
-                    } else {
-                        this.toasterService.errorToast(response?.message);
-                    }
-                });
-            });
-        });
-    }
-
     /**
-     * Builds RETURN action `items` from order GET `documentItems` (OUTPUT + INPUT).
+     * Opens Record Return Received action dialog.
      *
-     * @private
-     * @param {Record<string, unknown>} body
-     * @returns {NonNullable<JobWorkActionRequest['items']>}
-     * @memberof ListJobWorkComponent
-     */
-    private buildReturnActionItems(body: Record<string, unknown>): NonNullable<JobWorkActionRequest['items']> {
-        const documentItems = (body['documentItems'] as Array<Record<string, unknown>>) || [];
-        return documentItems
-            .filter(item => item['lineRole'] === 'OUTPUT' || item['lineRole'] === 'INPUT')
-            .map(item => this.mapDocumentItemToReturnActionItem(item))
-            .filter(item => !!item.stockUniqueName);
-    }
-
-    /**
-     * Maps one GET `documentItems` row into a RETURN action line.
-     *
-     * @private
-     * @param {Record<string, unknown>} item
-     * @returns {NonNullable<JobWorkActionRequest['items']>[number]}
-     * @memberof ListJobWorkComponent
-     */
-    private mapDocumentItemToReturnActionItem(
-        item: Record<string, unknown>
-    ): NonNullable<JobWorkActionRequest['items']>[number] {
-        const stock = item['stock'] as { uniqueName?: string } | undefined;
-        const variant = item['variant'] as { uniqueName?: string } | undefined;
-        return {
-            lineRole: item['lineRole'] as 'OUTPUT' | 'INPUT',
-            stockUniqueName: stock?.uniqueName || (item['stockUniqueName'] as string) || '',
-            variantUniqueName: variant?.uniqueName || (item['variantUniqueName'] as string) || '',
-            quantity: Number(item['quantity']) || 0,
-            batches: this.mapActionBatches(item['batches'])
-        };
-    }
-
-    /**
-     * Resolves warehouse uniqueName from order GET body, then list row fallback.
-     *
-     * @private
-     * @param {Record<string, unknown>} body
      * @param {*} row
-     * @returns {string}
      * @memberof ListJobWorkComponent
      */
-    private getWarehouseUniqueNameFromOrder(body: Record<string, unknown>, row: any): string {
-        const warehouse = body['warehouse'] as { uniqueName?: string } | undefined;
-        return warehouse?.uniqueName
-            || (body['warehouseUniqueName'] as string)
-            || row?.warehouse?.uniqueName
-            || row?.warehouseUniqueName
-            || '';
+    public recordReturn(row: any): void {
+        this.openActionDialog('RETURN', row);
     }
 
     /**
-     * Maps API batches for action payloads.
+     * Loads and shows View Linked Challan dialog.
      *
-     * @private
-     * @param {unknown} batches
-     * @returns {JobWorkBatch[]}
+     * @param {*} row
      * @memberof ListJobWorkComponent
      */
-    private mapActionBatches(batches: unknown): JobWorkBatch[] {
-        if (!Array.isArray(batches)) {
-            return [];
-        }
-        return batches.map((batch: Record<string, unknown>) => ({
-            uniqueName: (batch['uniqueName'] as string) || '',
-            name: (batch['name'] as string) || '',
-            quantity: Number(batch['quantity']) || 0
-        }));
-    }
-
-    /**
-     * Builds MARK_SCRAP `scraps` from order GET (`documentItems` SCRAP, else `jobWorkDetails.scraps`).
-     *
-     * @private
-     * @param {Record<string, unknown>} body
-     * @returns {JobWorkScrapLine[]}
-     * @memberof ListJobWorkComponent
-     */
-    private buildMarkScrapActionItems(body: Record<string, unknown>): JobWorkScrapLine[] {
-        const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
-        const defaultRetainedBy = (details['scrapRetainedBy'] as ScrapRetainedBy)
-            || (body['scrapRetainedBy'] as ScrapRetainedBy)
-            || 'COMPANY';
-        const detailScraps = (details['scraps'] as Array<Record<string, unknown>>) || [];
-        const documentItems = (body['documentItems'] as Array<Record<string, unknown>>) || [];
-        const scrapItems = documentItems.filter(item => item['lineRole'] === 'SCRAP');
-
-        if (scrapItems.length) {
-            return scrapItems
-                .map(item => this.mapDocumentItemToScrapActionItem(item, detailScraps, defaultRetainedBy))
-                .filter(item => !!item.stockUniqueName);
-        }
-
-        return detailScraps
-            .map(row => this.mapDetailScrapToScrapActionItem(row, defaultRetainedBy))
-            .filter(item => !!item.stockUniqueName);
-    }
-
-    /**
-     * Maps a SCRAP `documentItems` row into MARK_SCRAP scrap payload.
-     *
-     * @private
-     * @param {Record<string, unknown>} item
-     * @param {Array<Record<string, unknown>>} detailScraps
-     * @param {ScrapRetainedBy} defaultRetainedBy
-     * @returns {JobWorkScrapLine}
-     * @memberof ListJobWorkComponent
-     */
-    private mapDocumentItemToScrapActionItem(
-        item: Record<string, unknown>,
-        detailScraps: Array<Record<string, unknown>>,
-        defaultRetainedBy: ScrapRetainedBy
-    ): JobWorkScrapLine {
-        const stock = item['stock'] as { uniqueName?: string } | undefined;
-        const variant = item['variant'] as { uniqueName?: string } | undefined;
-        const stockUniqueName = stock?.uniqueName || (item['stockUniqueName'] as string) || '';
-        const variantUniqueName = variant?.uniqueName || (item['variantUniqueName'] as string) || '';
-        const detailScrap = detailScraps.find(row => {
-            const detailStock = (row['stockUniqueName'] as string) || '';
-            const detailVariant = (row['variantUniqueName'] as string) || '';
-            if (detailStock !== stockUniqueName) {
-                return false;
-            }
-            if (detailVariant && variantUniqueName) {
-                return detailVariant === variantUniqueName;
-            }
-            return !detailVariant && !variantUniqueName;
-        });
-
-        return {
-            stockUniqueName,
-            variantUniqueName,
-            quantity: Number(item['quantity']) || Number(detailScrap?.['quantity']) || 0,
-            batches: this.mapActionBatches(item['batches'] ?? detailScrap?.['batches']),
-            retainedBy: (item['retainedBy'] as ScrapRetainedBy)
-                || (detailScrap?.['retainedBy'] as ScrapRetainedBy)
-                || defaultRetainedBy
-        };
-    }
-
-    /**
-     * Maps a flat `jobWorkDetails.scraps` row into MARK_SCRAP scrap payload.
-     *
-     * @private
-     * @param {Record<string, unknown>} row
-     * @param {ScrapRetainedBy} defaultRetainedBy
-     * @returns {JobWorkScrapLine}
-     * @memberof ListJobWorkComponent
-     */
-    private mapDetailScrapToScrapActionItem(
-        row: Record<string, unknown>,
-        defaultRetainedBy: ScrapRetainedBy
-    ): JobWorkScrapLine {
-        return {
-            stockUniqueName: (row['stockUniqueName'] as string) || '',
-            variantUniqueName: (row['variantUniqueName'] as string) || '',
-            quantity: Number(row['quantity']) || 0,
-            batches: this.mapActionBatches(row['batches']),
-            retainedBy: (row['retainedBy'] as ScrapRetainedBy) || defaultRetainedBy
-        };
-    }
-
     public viewLinkedChallan(row: any): void {
         const uniqueName = this.getRowUniqueName(row);
         if (!uniqueName) {
@@ -774,144 +580,163 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Formats batch labels for a challan line.
+     * Returns batches for a linked-challan line.
      *
-     * @param {JobWorkLinkedChallan['documentItems'][number]} item
+     * @param {LinkedChallanDocumentItem} item
+     * @returns {VoucherSelectedBatch[]}
+     * @memberof ListJobWorkComponent
+     */
+    public getChallanItemBatches(item: LinkedChallanDocumentItem): VoucherSelectedBatch[] {
+        if (Array.isArray(item?.batches) && item.batches.length) {
+            return item.batches as VoucherSelectedBatch[];
+        }
+        if (item?.batch?.uniqueName || item?.batch?.name) {
+            return [{
+                uniqueName: item.batch.uniqueName || '',
+                name: item.batch.name || '',
+                quantity: Number(item.quantity) || 0
+            } as VoucherSelectedBatch];
+        }
+        return [];
+    }
+
+    /**
+     * Returns unit code/name for a linked-challan line.
+     *
+     * @param {LinkedChallanDocumentItem} item
      * @returns {string}
      * @memberof ListJobWorkComponent
      */
-    public getChallanItemBatchesLabel(
-        item: NonNullable<JobWorkLinkedChallan['documentItems']>[number]
-    ): string {
-        if (Array.isArray(item?.batches) && item.batches.length) {
-            return item.batches
-                .map(batch => {
-                    const name = batch?.name || batch?.uniqueName || '';
-                    const quantity = batch?.quantity;
-                    return quantity != null ? `${name} (${quantity})` : name;
-                })
-                .filter(Boolean)
-                .join(', ');
-        }
-        return item?.batch?.name || item?.batch?.uniqueName || '—';
+    public getChallanItemUnit(item: LinkedChallanDocumentItem): string {
+        return item?.stockUnit?.code || item?.stockUnit?.name || '';
     }
 
+    /**
+     * Opens batch select for a linked-challan line using fixed document batches.
+     *
+     * @param {JobWorkLinkedChallan} challan
+     * @param {LinkedChallanDocumentItem} item
+     * @param {Event} [event]
+     * @memberof ListJobWorkComponent
+     */
+    public openLinkedChallanBatchDialog(
+        challan: JobWorkLinkedChallan,
+        item: LinkedChallanDocumentItem,
+        event?: Event
+    ): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+        const preBatches = this.toFixedChallanBatches(this.getChallanItemBatches(item));
+        if (!this.batchTrackingEnabled || !item?.stock?.uniqueName || !preBatches.length) {
+            return;
+        }
+        this.dialog.open(BatchSelectDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                stockName: item.stock?.name || item.stock?.uniqueName,
+                stockUniqueName: item.stock?.uniqueName,
+                variantUniqueName: item.variant?.uniqueName || '',
+                variantName: item.variant?.name || '',
+                hasVariants: !!item.variant?.uniqueName,
+                inventoryType: item.stock?.inventoryType || 'PRODUCT',
+                warehouseName: challan.warehouse?.name || '',
+                warehouseUniqueName: challan.warehouse?.uniqueName || '',
+                unitCode: this.getChallanItemUnit(item),
+                lineQuantity: Number(item.quantity) || 0,
+                selectedBatches: cloneDeep(preBatches),
+                fixedBatches: cloneDeep(preBatches),
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData,
+                isInbound: true
+            }
+        }).afterClosed().pipe(take(1), takeUntil(this.destroyed$)).subscribe((result?: BatchSelectDialogResult) => {
+            if (!result) {
+                return;
+            }
+            item.batches = (result.batches ?? []) as JobWorkBatch[];
+            if (result.overrideLineQuantity) {
+                item.quantity = result.allocatedQuantity;
+            }
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * Maps challan batches for fixedBatches dialog mode.
+     *
+     * @private
+     * @param {VoucherSelectedBatch[]} batches
+     * @returns {VoucherSelectedBatch[]}
+     * @memberof ListJobWorkComponent
+     */
+    private toFixedChallanBatches(batches: VoucherSelectedBatch[]): VoucherSelectedBatch[] {
+        return (batches || [])
+            .filter(batch => !!batch?.uniqueName || !!batch?.name)
+            .map(batch => {
+                const quantity = Number(batch.quantity) || 0;
+                return {
+                    ...batch,
+                    uniqueName: batch.uniqueName || '',
+                    name: batch.name || batch.batchNumber || '',
+                    batchNumber: batch.batchNumber || batch.name || '',
+                    quantity,
+                    availableQuantity: Number(batch.availableQuantity) || quantity
+                };
+            });
+    }
+
+    /**
+     * Opens Mark Scrap / Wastage action dialog.
+     *
+     * @param {*} row
+     * @memberof ListJobWorkComponent
+     */
     public markScrap(row: any): void {
-        const uniqueName = this.getRowUniqueName(row);
-        if (!uniqueName) {
-            return;
-        }
-        // List row lacks scrap lines/warehouse; load order GET then build MARK_SCRAP scraps.
-        this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
-            if (orderResponse?.status !== 'success' || !orderResponse.body) {
-                this.toasterService.errorToast(orderResponse?.message);
-                return;
-            }
-            const body = orderResponse.body as Record<string, unknown>;
-            const scraps = this.buildMarkScrapActionItems(body);
-            if (!scraps.length) {
-                this.toasterService.errorToast(this.localeData.scrap_items_missing);
-                return;
-            }
-            const payload: JobWorkActionRequest = {
-                action: 'MARK_SCRAP',
-                uniqueName,
-                date: dayjs().format(GIDDH_DATE_FORMAT),
-                warehouseUniqueName: this.getWarehouseUniqueNameFromOrder(body, row),
-                scraps
-            };
-            this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response?.status === 'success') {
-                    this.toasterService.successToast(this.localeData.scrap_marked);
-                    this.getReport();
-                } else {
-                    this.toasterService.errorToast(response?.message);
-                }
-            });
-        });
+        this.openActionDialog('MARK_SCRAP', row);
     }
 
+    /**
+     * Opens Make Adjustment action dialog.
+     *
+     * @param {*} row
+     * @memberof ListJobWorkComponent
+     */
     public makeAdjustment(row: any): void {
+        this.openActionDialog('ADJUST', row);
+    }
+
+    /**
+     * Opens the action dialog for RETURN / MARK_SCRAP / ADJUST (no confirmation modal).
+     *
+     * @private
+     * @param {JobWorkActionDialogMode} action
+     * @param {*} row
+     * @memberof ListJobWorkComponent
+     */
+    private openActionDialog(action: JobWorkActionDialogMode, row: any): void {
         const uniqueName = this.getRowUniqueName(row);
         if (!uniqueName) {
             return;
         }
-        // List row lacks expenses/flags; load order GET then build ADJUST payload.
-        this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
-            if (orderResponse?.status !== 'success' || !orderResponse.body) {
-                this.toasterService.errorToast(orderResponse?.message);
-                return;
-            }
-            const body = orderResponse.body as Record<string, unknown>;
-            const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
-            const increaseAssetValue = (details['increaseAssetValue'] ?? body['increaseAssetValue'] ?? row?.increaseAssetValue) !== false;
-            const claimItcValue = details['claimItc'] ?? body['claimItc'] ?? row?.claimItc;
-            const claimItc = claimItcValue === undefined || claimItcValue === null
-                ? increaseAssetValue
-                : !!claimItcValue;
-            const expenses = this.buildAdjustActionExpenses(body);
-            if (!expenses.length) {
-                this.toasterService.errorToast(this.localeData.expense_items_missing);
-                return;
-            }
-            const payload: JobWorkActionRequest = {
-                action: 'ADJUST',
+        const dialogRef = this.dialog.open(JobWorkActionDialogComponent, {
+            panelClass: ['job-work-action-dialog-panel'],
+            autoFocus: false,
+            disableClose: true,
+            width: '860px',
+            maxWidth: '95vw',
+            data: {
+                action,
                 uniqueName,
-                increaseAssetValue,
-                claimItc,
-                expenses
-            };
-            this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response?.status === 'success') {
-                    this.toasterService.successToast(this.localeData.adjustment_saved);
-                    this.getReport();
-                } else {
-                    this.toasterService.errorToast(response?.message);
-                }
-            });
+                row,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
         });
-    }
-
-    /**
-     * Builds ADJUST action `expenses` from order GET (`jobWorkDetails.expenses` or root `expenses`).
-     *
-     * @private
-     * @param {Record<string, unknown>} body
-     * @returns {JobWorkExpenseLine[]}
-     * @memberof ListJobWorkComponent
-     */
-    private buildAdjustActionExpenses(body: Record<string, unknown>): JobWorkExpenseLine[] {
-        const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
-        const detailExpenses = (details['expenses'] as Array<Record<string, unknown>>) || [];
-        const rootExpenses = (body['expenses'] as Array<Record<string, unknown>>) || [];
-        const source = detailExpenses.length ? detailExpenses : rootExpenses;
-        return source
-            .map(row => this.mapExpenseToAdjustActionItem(row))
-            .filter(row => !!row.fromAccountUniqueName && !!row.toAccountUniqueName && !!row.amount);
-    }
-
-    /**
-     * Maps one expense API row into ADJUST action expense payload.
-     *
-     * @private
-     * @param {Record<string, unknown>} row
-     * @returns {JobWorkExpenseLine}
-     * @memberof ListJobWorkComponent
-     */
-    private mapExpenseToAdjustActionItem(row: Record<string, unknown>): JobWorkExpenseLine {
-        const fromAccount = row['fromAccount'] as { uniqueName?: string } | undefined;
-        const toAccount = row['toAccount'] as { uniqueName?: string } | undefined;
-        return {
-            fromAccountUniqueName: fromAccount?.uniqueName
-                || (row['fromAccountUniqueName'] as string)
-                || '',
-            toAccountUniqueName: toAccount?.uniqueName
-                || (row['toAccountUniqueName'] as string)
-                || '',
-            tax: (row['tax'] as string) || '',
-            amount: Number(row['amount']) || 0,
-            taxAmount: Number(row['taxAmount']) || 0
-        };
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe((success) => {
+            if (success) {
+                this.getReport();
+            }
+        });
     }
 
     public printJobWork(row: any): void {
@@ -1012,7 +837,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         if (normalized === 'CANCELLED') {
             return 'status-cancelled';
         }
-        if (normalized === 'PARTIALLY_RECEIVED') {
+        if (normalized === 'PARTIALLY_RETURNED' || normalized === 'PARTIALLY_RECEIVED') {
             return 'status-partial';
         }
         if (normalized === 'IN_TRANSIT' || normalized === 'DISPATCHED' || normalized === 'SHIPPED') {

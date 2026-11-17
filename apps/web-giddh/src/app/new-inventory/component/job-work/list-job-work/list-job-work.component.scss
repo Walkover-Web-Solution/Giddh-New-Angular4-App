@@ -41,6 +41,14 @@
     }
 }
 
+::ng-deep .job-work-action-dialog-panel {
+    .mat-mdc-dialog-container,
+    .mdc-dialog__surface {
+        height: auto !important;
+        max-height: 90vh;
+    }
+}
+
 .linked-challan-dialog {
     /* Override shared .dialog-body full-height so the modal stays compact. */
     .linked-challan-dialog-body {
@@ -56,7 +64,9 @@
 
     .linked-challan-items-table {
         th.mat-mdc-header-cell {
-            background: var(--color-light-gray);
+            font-weight: 700;
+            background: var(--color-transparent);
+            color: var(--color-dark-gray);
         }
     }
 }

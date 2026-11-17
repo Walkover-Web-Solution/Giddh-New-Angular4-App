@@ -26,6 +26,7 @@ import { TranslateDirectiveModule } from '../../../theme/translate/translate.dir
 import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
 import { InventorySidebarModule } from '../inventory-sidebar/inventory-sidebar.module';
 import { CreateJobWorkComponent } from './create-job-work/create-job-work.component';
+import { JobWorkActionDialogComponent } from './job-work-action-dialog/job-work-action-dialog.component';
 import { JobWorkListStateService } from './job-work-list-state.service';
 import { JobWorkRoutingModule } from './job-work.routing.module';
 import { ListJobWorkComponent } from './list-job-work/list-job-work.component';
@@ -65,7 +66,8 @@ import { JobWorkMainComponent } from './main.component';
     declarations: [
         JobWorkMainComponent,
         CreateJobWorkComponent,
-        ListJobWorkComponent
+        ListJobWorkComponent,
+        JobWorkActionDialogComponent
     ],
     providers: [
         JobWorkListStateService

@@ -148,10 +148,11 @@ export interface JobWorkLinkedChallan {
     documentItems?: Array<{
         id?: number;
         lineRole?: string;
-        stock?: { name?: string; uniqueName?: string };
+        stock?: { name?: string; uniqueName?: string; inventoryType?: string };
         variant?: { name?: string; uniqueName?: string };
         batch?: { name?: string; uniqueName?: string };
         batches?: JobWorkBatch[];
+        stockUnit?: { name?: string; uniqueName?: string; code?: string };
         quantity?: number;
         rate?: number;
         amount?: number;
