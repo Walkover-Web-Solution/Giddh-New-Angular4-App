@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-16 · **Reviewed up to commit:** `f01725ff67`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-17 · **Reviewed up to commit:** `5289094d0e`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -103,11 +103,13 @@ Feature work merged after the brief, not scored against it:
 | CSP HTTP header + frame-ancestors on web app | 🟡 | PHP CSP / X-Frame-Options in [postbuild.js](tools/web/postbuild.js); merged policy in [content-security-policy.js](tools/web/content-security-policy.js) + index meta (OTP/hCaptcha + CookieYes/Clarity/Facebook/OpenAI CDN). |
 | Ledger and permissions route paths restored | 🟡 | `66a7606b04` fixed misspelled `leondger`/`permissis` paths in [app.routes.ts](apps/web-giddh/src/app/app.routes.ts). |
 | Living status tracker and `status:check` | 🟡 | [Script](scripts/status-check.mjs) and focused tests pass; CI workflow not yet seen on a teammate's PR. |
+| Company sidebar branch tab on company pick | 🟡 | After branch list loads, multi-branch companies open the Branch tab instead of switching immediately; focused checks only. |
 | Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2` once for default finished/raw/scrap options (per-field search still separate). Account-search-v2 groups: jobworker `sundrycreditors,sundrydebtors`; expense from/to match Manufacturing. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. Create Delivery Challan No. uses pending-report DC list by jobworker. List has column search, Advance Filter, filter restore, company/consolidated branch dropdown + `go-to-branch`, status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create payload includes `stockUnitUniqueName`. Record Return / Mark Scrap / Make Adjustment load order GET and post filled items/scraps/expenses. View Linked Challan renders challan GET array. Export / Revert / Preview UI deferred. Backend guarantees still unverified. |
 | Estimate/Proforma on accounting voucher V2 | 🟡 | Voucher API v2 routes estimate/proforma through common invoice APIs with `type` (`estimates`/`proformas`): get-all, balances, create/update, download-file, action, delete, details, versions. V1 keeps dedicated proforma paths. PO still separate. Backend type/response support unverified. |
 
 ## Change log
 
+- 2026-11-17 · Company sidebar branch tab · Load branches before tab switch; `showAllBranches` uses fetched counts · Company branch picker 🟡
 - 2026-11-16 · Job Work create account/stock search · Match Manufacturing from/to account groups; jobworker `sundrycreditors,sundrydebtors`; one default stocks/v2 shared across finished/raw/scrap · Job Work 🟡
 - 2026-11-16 · Job Work list actions keep order GET · Return / Scrap / Adjust reload order GET; list API cannot carry all action keys · Job Work 🟡
 - 2026-11-16 · Estimate/Proforma voucher V2 common APIs · Route list/create/update/download/action/delete/details onto invoice voucher APIs with `type`; keep V1 proforma paths · Estimate/Proforma V2 🟡
