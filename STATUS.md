@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-17 · **Reviewed up to commit:** `5298e5a7a3`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-17 · **Reviewed up to commit:** `7f49fe07c9`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -103,13 +103,37 @@ Feature work merged after the brief, not scored against it:
 | CSP HTTP header + frame-ancestors on web app | 🟡 | PHP CSP / X-Frame-Options in [postbuild.js](tools/web/postbuild.js); merged policy in [content-security-policy.js](tools/web/content-security-policy.js) + index meta (OTP/hCaptcha + CookieYes/Clarity/Facebook/OpenAI CDN). |
 | Ledger and permissions route paths restored | 🟡 | `66a7606b04` fixed misspelled `leondger`/`permissis` paths in [app.routes.ts](apps/web-giddh/src/app/app.routes.ts). |
 | Living status tracker and `status:check` | 🟡 | [Script](scripts/status-check.mjs) and focused tests pass; CI workflow not yet seen on a teammate's PR. |
-| Company sidebar branch tab on company pick | 🟡 | After branch list loads, multi-branch companies open the Branch tab instead of switching immediately; focused checks only. |
-| Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2` once for default finished/raw/scrap options (per-field search still separate). Account-search-v2 groups: jobworker `sundrycreditors,sundrydebtors`; expense from/to match Manufacturing. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. Create Delivery Challan No. uses pending-report DC list by jobworker. List has column search, Advance Filter, filter restore, company/consolidated branch dropdown + `go-to-branch`, status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create payload includes `stockUnitUniqueName`. Record Return / Mark Scrap / Make Adjustment load order GET and post filled items/scraps/expenses. View Linked Challan renders challan GET array. Export / Revert / Preview UI deferred. Backend guarantees still unverified. |
+| Trigger and voucher email template editor | 🟡 | Backspace no longer writes the editor HTML back into itself. Paste marker `id="isPasted"` is stripped from the default and loaded bodies. Focused test: [email-template-editor.test.cjs](scripts/tests/email-template-editor.test.cjs). Not exercised against a signed-in company. |
+| Inventory Job Work create/update/report | 🟡 | Client wired to `v2/.../job-work-orders`. Stock search reuses Manufacturing `stocks/v2` once for default finished/raw/scrap options (per-field search still separate). Account-search-v2 groups: jobworker `sundrycreditors,sundrydebtors`; expense from/to match Manufacturing. Batch tracking via BatchChipList / BatchSelectDialog when batch management is enabled. Edit View maps GET `documentItems`/`jobWorkDetails`. Create Delivery Challan No. uses pending-report DC list by jobworker. Create header uses date-range picker (start → date/challanDate, end → expectedReturnDate) like list; universal date only seeds that local range, and pending DC / other create calls use the local range. Job Work Type dropdown offers Send and Receive. List has column search, Advance Filter (warehouse/jobworker/stock multi-select with All option + overdue/ITC toggles), filter restore, company/consolidated branch dropdown + `go-to-branch`, status filter Open / Dispatched / Partially Returned / Completed / Cancelled (+ All), status badges including DISPATCHED, GSTIN validation, and `mobile-number-input`. Create Delivery Challan No. is multi-select (`deliveryChallanUniqueNames`). Create payload includes `stockUnitUniqueName`. Record Return / Mark Scrap / Make Adjustment open action dialogs with checkboxes, combined Stock+Variant, clickable batch chips, and outlined qty inputs then post action. View Linked Challan table matches Return (Item Stock+Variant, clickable batch chips, qty with unit, Rate/Amount). Export / Revert / Preview UI deferred. Backend guarantees still unverified. |
 | Estimate/Proforma on accounting voucher V2 | 🟡 | Voucher API v2 routes estimate/proforma through common invoice APIs with `type` (`estimates`/`proformas`): get-all, balances, create/update, download-file, action, delete, details, versions. V1 keeps dedicated proforma paths. PO still separate. Backend type/response support unverified. |
 
 ## Change log
 
-- 2026-11-17 · Company sidebar branch tab · Load branches before tab switch; `showAllBranches` uses fetched counts · Company branch picker 🟡
+- 2026-11-17 · Cursor agent · Job Work Advance Filter All uses selectAllFields (empty arrays + field names) · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work Advance Filter multi-selects support All; All maps to empty API filters · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work Advance Filter warehouse/jobworker/stock multi-select; create DC multi-select as deliveryChallanUniqueNames · Job Work 🟡
+- 2026-11-17 · Cursor agent · Resolved STATUS.md merge conflict; Job Work list status filter includes Open · Job Work 🟡
+- 2026-11-17 · Cursor agent · Slim Job Work action-dialog SCSS; theme vars only, padding/border via utilities · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work action dialog + list helpers: short var docs, public/private + JSDoc on methods · Job Work 🟡
+- 2026-11-17 · Cursor agent · View Linked Challan shows Rate and Amount columns again · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work Return/Scrap/Linked Challan batch dialog uses fixedBatches (document batches only) · Job Work 🟡
+- 2026-11-17 · Cursor agent · View Linked Challan keeps mat-table; look matches Return (item/batch/qty, no Rate/Amount) · Job Work 🟡
+- 2026-11-17 · Cursor agent · Return dialog drops Rate/Amount; Scrap drops Rate/Amount/Scrap Retained By · Job Work 🟡
+- 2026-11-17 · Cursor agent · Fix Return Qty unit suffix overlap (drop text-right on qty input) · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work action dialog table headers black/bold no fill; qty input shows unit suffix · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work Return/Scrap: row checkboxes, combined Stock+Variant, clickable batch chips · Job Work 🟡
+- 2026-11-17 · Cursor agent · Restore outlined input-field (Return Qty / Amount / ITC) in Job Work action dialogs; mark-return was input hint only · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work action dialogs match Linked Challan table (bordered grey header, Type/Stock/Variant/Batch/Qty/Rate/Amount) · Job Work 🟡
+- 2026-11-17 · Cursor agent · Replace mat-table in Job Work action dialog with plain HTML table so columns align and height fits content · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work RETURN dialog shows and posts both OUTPUT and INPUT lines · Job Work 🟡
+- 2026-11-17 · Cursor agent · Polish Job Work action dialog layout (compact card, no float labels in table, visible Cancel/Save) · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work list Return / Scrap / Adjust open action dialogs (OUTPUT / scrap / expense) instead of confirm-only · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work list status filter: Open / Dispatched / Partially Returned / Completed / Cancelled · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work list column search icon uses cursor-pointer · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work create APIs use local date range; universal date only seeds initial values · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work Type dropdown offers Send and Receive on create · Job Work 🟡
+- 2026-11-17 · Cursor agent · Job Work create uses date-range picker for date/challan/expected return · Job Work 🟡
+- 2026-11-17 · Cursor agent · Resolved STATUS.md after pull from `giddh-2.0`; kept email-template editor row with Job Work and Estimate/Proforma · tracker 🟡
 - 2026-11-16 · Job Work create account/stock search · Match Manufacturing from/to account groups; jobworker `sundrycreditors,sundrydebtors`; one default stocks/v2 shared across finished/raw/scrap · Job Work 🟡
 - 2026-11-16 · Job Work list actions keep order GET · Return / Scrap / Adjust reload order GET; list API cannot carry all action keys · Job Work 🟡
 - 2026-11-16 · Estimate/Proforma voucher V2 common APIs · Route list/create/update/download/action/delete/details onto invoice voucher APIs with `type`; keep V1 proforma paths · Estimate/Proforma V2 🟡
