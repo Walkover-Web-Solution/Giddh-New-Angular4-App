@@ -27,6 +27,8 @@ export interface StewardFeedbackMeta {
     app_version: string;
 }
 
+export const STEWARD_FEEDBACK_URL = 'https://steward.embarko.app/api/v1/feedback';
+
 export interface StewardFeedbackPayload {
     text: string;
     user: StewardFeedbackUser;
@@ -46,8 +48,8 @@ export class FeedbackService {
     /** True if signed-in user session is active */
     public readonly isLoggedIn = signal<boolean>(false);
 
-    /** True if Steward feedback URL and key are both configured */
-    public readonly isConfigured = signal<boolean>(Boolean(environment.stewardFeedbackUrl && environment.stewardFeedbackKey));
+    /** True if Steward feedback key is configured */
+    public readonly isConfigured = signal<boolean>(Boolean(environment.stewardFeedbackKey));
 
     /** Tracks whether primary sidebar is present in current layout */
     public readonly sidebarPresent = signal<boolean>(false);
@@ -151,7 +153,7 @@ export class FeedbackService {
             'X-Steward-Key': environment.stewardFeedbackKey
         });
 
-        return this.http.post<unknown>(environment.stewardFeedbackUrl, payload, {
+        return this.http.post<unknown>(STEWARD_FEEDBACK_URL, payload, {
             headers,
             observe: 'response'
         });

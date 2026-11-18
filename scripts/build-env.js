@@ -86,7 +86,6 @@ const envConfig = {
     TWITTER_SECRET_KEY: env.TWITTER_SECRET_KEY || '',
     LINKEDIN_CLIENT_ID: env.LINKEDIN_CLIENT_ID || '',
     LINKEDIN_SECRET_KEY: env.LINKEDIN_SECRET_KEY || '',
-    stewardFeedbackUrl: env.STEWARD_FEEDBACK_URL || '',
     stewardFeedbackKey: env.STEWARD_FEEDBACK_KEY || ''
 };
 // Generate TypeScript environment file content - Angular 21 standard approach
@@ -116,7 +115,6 @@ export const environment: Environment = {
     STAGING_ENV: ${envConfig.STAGING_ENV},
     LOCAL_ENV: ${envConfig.LOCAL_ENV},
     TEST_ENV: ${envConfig.TEST_ENV},
-    stewardFeedbackUrl: '${envConfig.stewardFeedbackUrl}',
     stewardFeedbackKey: '${envConfig.stewardFeedbackKey}',
     appVersion: '${envConfig.VERSION}',
     /** Angular debug tools in the dev console
@@ -140,7 +138,6 @@ export const environment: Environment = {
 (window as any).AppUrl = environment.AppUrl;
 (window as any).ApiUrl = environment.ApiUrl;
 (window as any).isElectron = environment.isElectron;
-(window as any).stewardFeedbackUrl = environment.stewardFeedbackUrl;
 (window as any).stewardFeedbackKey = environment.stewardFeedbackKey;
 `;
 // Write the generated environment file

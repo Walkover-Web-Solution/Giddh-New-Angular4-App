@@ -19,7 +19,6 @@ export interface Environment {
     STAGING_ENV: boolean;
     LOCAL_ENV: boolean;
     TEST_ENV: boolean;
-    stewardFeedbackUrl: string;
     stewardFeedbackKey: string;
     appVersion?: string;
     decorateModuleRef(modRef: NgModuleRef<any>): NgModuleRef<any>;
