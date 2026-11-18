@@ -118,6 +118,13 @@ export interface JobWorkListRequest {
     sortBy?: string;
 }
 
+/** Totals card response from `job-work-orders/summary` (same filters as list). */
+export interface JobWorkSummaryResponse {
+    totalCharges?: number;
+    goodsWithJobworker?: number;
+    overdueReturns?: number;
+}
+
 export interface JobWorkActionRequest {
     action: JobWorkActionType;
     uniqueName?: string;

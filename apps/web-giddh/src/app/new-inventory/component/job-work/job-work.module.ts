@@ -11,6 +11,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { AmountFieldComponentModule } from '../../../shared/amount-field/amount-field.module';
 import { BatchChipListComponent } from '../../../shared/batch-chip-list/batch-chip-list.component';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 import { MobileNumberInputComponent } from '../../../shared/mobile-number-input';
@@ -55,6 +56,7 @@ import { JobWorkMainComponent } from './main.component';
         TranslateDirectiveModule,
         NoDataModule,
         GiddhPageLoaderModule,
+        AmountFieldComponentModule,
         NewConfirmModalModule,
         BatchChipListComponent,
         BatchSelectDialogComponent,
