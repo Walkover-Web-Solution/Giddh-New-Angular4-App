@@ -1,34 +1,43 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import {
-    JobWorkActionRequest,
     JobWorkBatch,
-    JobWorkExpenseLine,
     JobWorkLinkedChallan,
-    JobWorkListRequest,
-    JobWorkScrapLine,
-    ScrapRetainedBy
+    JobWorkListRequest
 } from 'apps/web-giddh/src/app/models/api-models/JobWork';
+import {
+    BatchSelectDialogResult,
+    VoucherSelectedBatch
+} from 'apps/web-giddh/src/app/models/interfaces/batch-report.interface';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { JobWorkService } from 'apps/web-giddh/src/app/services/job-work.service';
+import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/action/warehouse.action';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { BatchSelectDialogComponent } from 'apps/web-giddh/src/app/vouchers/batch-select-dialog/batch-select-dialog.component';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import {
+    JobWorkActionDialogComponent,
+    JobWorkActionDialogMode
+} from '../job-work-action-dialog/job-work-action-dialog.component';
 import { JobWorkListFilterSnapshot, JobWorkListStateService } from '../job-work-list-state.service';
+
+type LinkedChallanDocumentItem = NonNullable<JobWorkLinkedChallan['documentItems']>[number];
 
 @Component({
     selector: 'list-job-work',
@@ -57,17 +66,11 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         'status',
         'action'
     ];
-    /** Linked challan document-item columns (View Linked Challan dialog). */
-    public linkedChallanItemColumns: string[] = [
-        'type',
-        'stock',
-        'variant',
-        'batch',
-        'quantity',
-        'rate',
-        'amount'
-    ];
+    /** Linked challan item columns */
+    public linkedChallanItemColumns: string[] = ['type', 'item', 'batch', 'quantity', 'rate', 'amount'];
     public dataSource: any[] = [];
+    /** Batch tracking enabled */
+    public batchTrackingEnabled = false;
     public selectedDateRange: any;
     public selectedDateRangeUi = '';
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
@@ -78,8 +81,9 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         to: '',
         status: '',
         jobWorkType: '',
-        accountUniqueName: '',
-        warehouseUniqueName: '',
+        accountUniqueNames: [],
+        warehouseUniqueNames: [],
+        stockUniqueNames: [],
         q: '',
         onlyOverdue: false,
         onlyItcClaimed: false,
@@ -104,27 +108,63 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     /** Selected branch label shown in dropdown. */
     public selectedBranchName = '';
     /** Active company from session. */
-    public activeCompany: { name?: string; uniqueName?: string; nameAlias?: string } | null = null;
+    public activeCompany: {
+        name?: string;
+        uniqueName?: string;
+        nameAlias?: string;
+        baseCurrency?: string;
+        baseCurrencySymbol?: string;
+    } | null = null;
     public statusOptions: Array<{ label: string; value: string }> = [];
     public typeOptions: Array<{ label: string; value: string }> = [];
     public selectedStatusLabel = '';
     public selectedTypeLabel = '';
-    public summary = {
-        totalCharges: 0,
-        goodsWithJobworker: 0,
-        overdueReturns: 0
+    public summary: {
+        totalCharges: number | undefined;
+        goodsWithJobworker: number | undefined;
+        overdueReturns: number | undefined;
+    } = {
+        totalCharges: undefined,
+        goodsWithJobworker: undefined,
+        overdueReturns: undefined
     };
     /** Linked delivery challans shown in View Linked Challan dialog. */
     public linkedChallans: JobWorkLinkedChallan[] = [];
-    public columnSearchForm: FormGroup;
+    /** Column search: Job Work No. (shared `q` with the other two). */
+    public jobWorkNoInput: FormControl<string | null> = new FormControl<string | null>(null);
+    /** Column search: Jobworker Name (shared `q`). */
+    public jobworkerInput: FormControl<string | null> = new FormControl<string | null>(null);
+    /** Column search: Output Stock (shared `q`). */
+    public outputStockInput: FormControl<string | null> = new FormControl<string | null>(null);
     public showJobWorkNoSearch = false;
     public showJobworkerSearch = false;
     public showOutputStockSearch = false;
     public showClearFilter = false;
     public warehouses: IOption[] = [];
-    public selectedWarehouseName = '';
+    /** Advance Filter warehouse values */
+    public selectedWarehouseUniqueNames: string[] = [];
+    /** Advance Filter jobworker account values */
+    public selectedAccountUniqueNames: string[] = [];
+    /** Advance Filter stock values */
+    public selectedStockUniqueNames: string[] = [];
+    /** Jobworker options for Advance Filter */
+    public advanceAccountOptions: IOption[] = [];
+    /** Stock options for Advance Filter */
+    public advanceStockOptions: IOption[] = [];
     public advanceOnlyOverdue = false;
     public advanceOnlyItcClaimed = false;
+    /** Jobworker account search page */
+    private advanceAccountPage = 1;
+    /** Jobworker account total pages */
+    private advanceAccountTotalPages = 1;
+    /** Jobworker account search query */
+    private advanceAccountQuery = '';
+    /** Stock search page */
+    private advanceStockPage = 1;
+    /** Stock total pages */
+    private advanceStockTotalPages = 1;
+    /** Stock search query */
+    private advanceStockQuery = '';
     private destroyed$ = new ReplaySubject<boolean>(1);
     /** Keeps restored list dates until the user picks a new range. */
     private filtersRestoredActive = false;
@@ -134,23 +174,28 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         private readonly changeDetectionRef: ChangeDetectorRef,
         private readonly generalService: GeneralService,
         private readonly jobWorkService: JobWorkService,
+        private readonly searchService: SearchService,
+        private readonly inventoryService: InventoryService,
         private readonly toasterService: ToasterService,
         private readonly router: Router,
         private readonly dialog: MatDialog,
-        private readonly formBuilder: FormBuilder,
         private readonly warehouseAction: WarehouseActions,
         private readonly settingsBranchAction: SettingsBranchActions,
         private readonly jobWorkListState: JobWorkListStateService
-    ) {
-        this.columnSearchForm = this.formBuilder.group({
-            jobWorkNo: [''],
-            jobworker: [''],
-            outputStock: ['']
-        });
-    }
+    ) {}
 
     public ngOnInit(): void {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
+
+        this.store.pipe(
+            select(state => state.inventory.inventorySettings),
+            takeUntil(this.destroyed$)
+        ).subscribe(settings => {
+            if (settings) {
+                this.batchTrackingEnabled = !!settings?.batchManagement?.enabled;
+                this.changeDetectionRef.detectChanges();
+            }
+        });
 
         this.store.pipe(select(state => state.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -249,11 +294,8 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.statusOptions = [
             { label: this.localeData.all, value: '' },
             { label: 'Open', value: 'OPEN' },
-            { label: 'In Transit', value: 'IN_TRANSIT' },
             { label: 'Dispatched', value: 'DISPATCHED' },
-            { label: 'In Process', value: 'IN_PROCESS' },
-            { label: 'Partially Received', value: 'PARTIALLY_RECEIVED' },
-            { label: 'Overdue', value: 'OVERDUE' },
+            { label: 'Partially Returned', value: 'PARTIALLY_RETURNED' },
             { label: 'Completed', value: 'COMPLETED' },
             { label: 'Cancelled', value: 'CANCELLED' }
         ];
@@ -292,7 +334,8 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         }
         this.isReportLoading = true;
         this.updateShowClearFilter();
-        this.jobWorkService.list(this.searchRequest).pipe(takeUntil(this.destroyed$)).subscribe({
+        const request = this.buildListRequest();
+        this.jobWorkService.list(request).pipe(takeUntil(this.destroyed$)).subscribe({
             next: (response) => {
                 this.isReportLoading = false;
                 if (response?.status === 'success') {
@@ -301,17 +344,11 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
                         totalItems?: number;
                         totalPages?: number;
                         page?: number;
-                        totalJobWorkCharges?: number;
-                        goodsWithJobworker?: number;
-                        overdueReturns?: number;
                     };
                     this.dataSource = Array.isArray(body.items) ? body.items : [];
                     this.totalItems = body.totalItems ?? this.dataSource.length;
                     this.totalPages = body.totalPages ?? 1;
                     this.currentPage = body.page ?? this.searchRequest.page ?? 1;
-                    this.summary.totalCharges = body.totalJobWorkCharges ?? 0;
-                    this.summary.goodsWithJobworker = body.goodsWithJobworker ?? 0;
-                    this.summary.overdueReturns = body.overdueReturns ?? 0;
                 } else {
                     this.dataSource = [];
                     this.toasterService.errorToast(response?.message);
@@ -320,6 +357,32 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             },
             error: () => {
                 this.isReportLoading = false;
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+        this.loadSummary(request);
+    }
+
+    /**
+     * Loads totals cards with the same filters as the list request.
+     *
+     * @param {JobWorkListRequest} request
+     * @memberof ListJobWorkComponent
+     */
+    private loadSummary(request: JobWorkListRequest): void {
+        this.jobWorkService.summary(request).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response) => {
+                if (response?.status === 'success') {
+                    const body = response.body || {};
+                    this.summary.totalCharges = body.totalCharges;
+                    this.summary.goodsWithJobworker = body.goodsWithJobworker;
+                    this.summary.overdueReturns = body.overdueReturns;
+                } else {
+                    this.toasterService.errorToast(response?.message);
+                }
+                this.changeDetectionRef.detectChanges();
+            },
+            error: () => {
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -350,45 +413,75 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             this.showJobWorkNoSearch ||
             this.showJobworkerSearch ||
             this.showOutputStockSearch ||
-            this.columnSearchForm?.controls?.jobWorkNo?.value ||
-            this.columnSearchForm?.controls?.jobworker?.value ||
-            this.columnSearchForm?.controls?.outputStock?.value
+            this.jobWorkNoInput.value ||
+            this.jobworkerInput.value ||
+            this.outputStockInput.value
         );
         return !!(this.dataSource?.length || hasColumnSearch);
     }
 
+    /**
+     * Opens Advance Filter dialog and seeds account/stock options.
+     *
+     * @memberof ListJobWorkComponent
+     */
     public openAdvanceFilterDialog(): void {
         this.advanceOnlyOverdue = !!this.searchRequest.onlyOverdue;
         this.advanceOnlyItcClaimed = !!this.searchRequest.onlyItcClaimed;
+        this.selectedWarehouseUniqueNames = [...(this.searchRequest.warehouseUniqueNames || [])];
+        this.selectedAccountUniqueNames = [...(this.searchRequest.accountUniqueNames || [])];
+        this.selectedStockUniqueNames = [...(this.searchRequest.stockUniqueNames || [])];
+        this.searchAdvanceAccounts('', 1);
+        this.searchAdvanceStocks('', 1);
         this.dialog.open(this.advanceFilterDialog, {
             panelClass: ['mat-dialog'],
-            width: '420px',
+            width: '480px',
             autoFocus: false
         });
     }
 
+    /**
+     * Applies Advance Filter selections to the list request.
+     *
+     * @memberof ListJobWorkComponent
+     */
     public applyAdvanceFilter(): void {
+        this.searchRequest.warehouseUniqueNames = [...(this.selectedWarehouseUniqueNames || [])];
+        this.searchRequest.accountUniqueNames = [...(this.selectedAccountUniqueNames || [])];
+        this.searchRequest.stockUniqueNames = [...(this.selectedStockUniqueNames || [])];
         this.searchRequest.onlyOverdue = this.advanceOnlyOverdue;
         this.searchRequest.onlyItcClaimed = this.advanceOnlyItcClaimed;
         this.searchRequest.page = 1;
         this.getReport();
     }
 
+    /**
+     * Clears list filters while keeping the selected branch.
+     *
+     * @memberof ListJobWorkComponent
+     */
     public clearFilters(): void {
         this.searchRequest.status = '';
         this.searchRequest.jobWorkType = '';
-        this.searchRequest.accountUniqueName = '';
-        this.searchRequest.warehouseUniqueName = '';
+        this.searchRequest.accountUniqueNames = [];
+        this.searchRequest.warehouseUniqueNames = [];
+        this.searchRequest.stockUniqueNames = [];
         this.searchRequest.q = '';
         this.searchRequest.onlyOverdue = false;
         this.searchRequest.onlyItcClaimed = false;
         this.searchRequest.page = 1;
         this.selectedStatusLabel = this.localeData.all;
         this.selectedTypeLabel = this.localeData.all;
-        this.selectedWarehouseName = '';
+        this.selectedWarehouseUniqueNames = [];
+        this.selectedAccountUniqueNames = [];
+        this.selectedStockUniqueNames = [];
+        this.advanceAccountOptions = [];
+        this.advanceStockOptions = [];
         this.advanceOnlyOverdue = false;
         this.advanceOnlyItcClaimed = false;
-        this.columnSearchForm.reset({ jobWorkNo: '', jobworker: '', outputStock: '' }, { emitEvent: false });
+        this.jobWorkNoInput.patchValue(null, { emitEvent: false });
+        this.jobworkerInput.patchValue(null, { emitEvent: false });
+        this.outputStockInput.patchValue(null, { emitEvent: false });
         this.showJobWorkNoSearch = false;
         this.showJobworkerSearch = false;
         this.showOutputStockSearch = false;
@@ -412,13 +505,20 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         };
         this.selectedBranchName = selectedEntity?.label || '';
         this.searchRequest.branchUniqueName = selectedEntity?.value || '';
-        this.searchRequest.warehouseUniqueName = '';
-        this.selectedWarehouseName = '';
+        this.searchRequest.warehouseUniqueNames = [];
+        this.selectedWarehouseUniqueNames = [];
         this.searchRequest.page = 1;
         this.getReport();
     }
 
-    public toggleSearch(fieldName: string): void {
+    /**
+     * Opens a column search input (voucher-list pattern).
+     *
+     * @param {*} event
+     * @param {string} fieldName
+     * @memberof ListJobWorkComponent
+     */
+    public toggleSearch(event: any, fieldName: string): void {
         if (fieldName === 'jobWorkNo') {
             this.showJobWorkNoSearch = true;
         } else if (fieldName === 'jobworker') {
@@ -426,17 +526,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         } else if (fieldName === 'outputStock') {
             this.showOutputStockSearch = true;
         }
-
-        // Keep other search boxes open when they still have a search value.
-        if (fieldName !== 'jobWorkNo' && !this.columnSearchForm?.controls?.jobWorkNo?.value) {
-            this.showJobWorkNoSearch = false;
-        }
-        if (fieldName !== 'jobworker' && !this.columnSearchForm?.controls?.jobworker?.value) {
-            this.showJobworkerSearch = false;
-        }
-        if (fieldName !== 'outputStock' && !this.columnSearchForm?.controls?.outputStock?.value) {
-            this.showOutputStockSearch = false;
-        }
+        event?.stopPropagation?.();
         this.changeDetectionRef.detectChanges();
     }
 
@@ -444,15 +534,27 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         return (this.localeData?.search_field || 'Search [FIELD]')?.replace('[FIELD]', title);
     }
 
+    /**
+     * Hides an empty column search when clicking outside it.
+     *
+     * @param {*} event
+     * @param {*} element
+     * @param {string} searchedFieldName
+     * @memberof ListJobWorkComponent
+     */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        const controlName = searchedFieldName === 'jobWorkNo'
-            ? 'jobWorkNo'
-            : searchedFieldName === 'jobworker'
-                ? 'jobworker'
-                : 'outputStock';
-        const value = this.columnSearchForm?.controls[controlName]?.value;
-        if (value !== null && value !== '') {
-            return;
+        if (searchedFieldName === 'jobWorkNo') {
+            if (this.jobWorkNoInput.value !== null && this.jobWorkNoInput.value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'jobworker') {
+            if (this.jobworkerInput.value !== null && this.jobworkerInput.value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'outputStock') {
+            if (this.outputStockInput.value !== null && this.outputStockInput.value !== '') {
+                return;
+            }
         }
         if (this.generalService.childOf(event?.target, element)) {
             return;
@@ -467,9 +569,86 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.changeDetectionRef.detectChanges();
     }
 
-    public onAdvanceWarehouseSelected(event: IOption): void {
-        this.searchRequest.warehouseUniqueName = event?.value || '';
-        this.selectedWarehouseName = event?.label || '';
+    /**
+     * Searches jobworker accounts for Advance Filter (`account-search-v2`).
+     *
+     * @param {string} query
+     * @param {number} [page=1]
+     * @memberof ListJobWorkComponent
+     */
+    public searchAdvanceAccounts(query: string, page: number = 1): void {
+        this.advanceAccountQuery = query || '';
+        this.advanceAccountPage = page;
+        this.searchService.searchAccountV2({
+            q: encodeURIComponent(this.advanceAccountQuery),
+            page,
+            group: encodeURIComponent('sundrycreditors,sundrydebtors')
+        }).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+            if (!data?.body?.results) {
+                return;
+            }
+            const results = data.body.results.map((result: { uniqueName: string; name: string }) => ({
+                value: result.uniqueName,
+                label: `${result.name} (${result.uniqueName})`
+            }));
+            this.advanceAccountOptions = page === 1
+                ? results
+                : [...this.advanceAccountOptions, ...results];
+            this.advanceAccountTotalPages = data.body.totalPages || 1;
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * Loads next jobworker page for Advance Filter.
+     *
+     * @memberof ListJobWorkComponent
+     */
+    public advanceAccountScrollEnd(): void {
+        if (this.advanceAccountPage < this.advanceAccountTotalPages) {
+            this.searchAdvanceAccounts(this.advanceAccountQuery, this.advanceAccountPage + 1);
+        }
+    }
+
+    /**
+     * Searches stocks for Advance Filter (`stocks/v2`).
+     *
+     * @param {string} query
+     * @param {number} [page=1]
+     * @memberof ListJobWorkComponent
+     */
+    public searchAdvanceStocks(query: string, page: number = 1): void {
+        this.advanceStockQuery = query || '';
+        this.advanceStockPage = page;
+        this.inventoryService.getStocksV2({
+            inventoryType: '',
+            page,
+            q: this.advanceStockQuery
+        }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response?.status !== 'success' || !response.body?.results) {
+                return;
+            }
+            const results = response.body.results.map((stock: { uniqueName?: string; name?: string }) => ({
+                value: stock.uniqueName || '',
+                label: stock.name || stock.uniqueName || ''
+            })).filter((option: IOption) => !!option.value);
+            this.advanceStockOptions = page === 1
+                ? results
+                : [...this.advanceStockOptions, ...results];
+            this.advanceStockTotalPages = response.body.totalPages || 1;
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * Loads next stock page for Advance Filter.
+     *
+     * @memberof ListJobWorkComponent
+     */
+    public advanceStockScrollEnd(): void {
+        if (this.advanceStockPage < this.advanceStockTotalPages) {
+            this.searchAdvanceStocks(this.advanceStockQuery, this.advanceStockPage + 1);
+        }
     }
 
     public goToCreate(): void {
@@ -517,223 +696,22 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         return String(value);
     }
 
-    public recordReturn(row: any): void {
-        const uniqueName = this.getRowUniqueName(row);
-        if (!uniqueName) {
-            return;
-        }
-        const dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
-                title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData.confirm_record_return,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
-        });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(action => {
-            if (!action) {
-                return;
-            }
-            // List row lacks stock/variant/batches; load order GET then build RETURN items.
-            this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
-                if (orderResponse?.status !== 'success' || !orderResponse.body) {
-                    this.toasterService.errorToast(orderResponse?.message);
-                    return;
-                }
-                const body = orderResponse.body as Record<string, unknown>;
-                const items = this.buildReturnActionItems(body);
-                if (!items.length) {
-                    this.toasterService.errorToast(this.localeData.return_items_missing);
-                    return;
-                }
-                const payload: JobWorkActionRequest = {
-                    action: 'RETURN',
-                    uniqueName,
-                    date: dayjs().format(GIDDH_DATE_FORMAT),
-                    warehouseUniqueName: this.getWarehouseUniqueNameFromOrder(body, row),
-                    isFinal: false,
-                    items
-                };
-                this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                    if (response?.status === 'success') {
-                        this.toasterService.successToast(this.localeData.return_recorded);
-                        this.getReport();
-                    } else {
-                        this.toasterService.errorToast(response?.message);
-                    }
-                });
-            });
-        });
-    }
-
     /**
-     * Builds RETURN action `items` from order GET `documentItems` (OUTPUT + INPUT).
+     * Opens Record Return Received action dialog.
      *
-     * @private
-     * @param {Record<string, unknown>} body
-     * @returns {NonNullable<JobWorkActionRequest['items']>}
-     * @memberof ListJobWorkComponent
-     */
-    private buildReturnActionItems(body: Record<string, unknown>): NonNullable<JobWorkActionRequest['items']> {
-        const documentItems = (body['documentItems'] as Array<Record<string, unknown>>) || [];
-        return documentItems
-            .filter(item => item['lineRole'] === 'OUTPUT' || item['lineRole'] === 'INPUT')
-            .map(item => this.mapDocumentItemToReturnActionItem(item))
-            .filter(item => !!item.stockUniqueName);
-    }
-
-    /**
-     * Maps one GET `documentItems` row into a RETURN action line.
-     *
-     * @private
-     * @param {Record<string, unknown>} item
-     * @returns {NonNullable<JobWorkActionRequest['items']>[number]}
-     * @memberof ListJobWorkComponent
-     */
-    private mapDocumentItemToReturnActionItem(
-        item: Record<string, unknown>
-    ): NonNullable<JobWorkActionRequest['items']>[number] {
-        const stock = item['stock'] as { uniqueName?: string } | undefined;
-        const variant = item['variant'] as { uniqueName?: string } | undefined;
-        return {
-            lineRole: item['lineRole'] as 'OUTPUT' | 'INPUT',
-            stockUniqueName: stock?.uniqueName || (item['stockUniqueName'] as string) || '',
-            variantUniqueName: variant?.uniqueName || (item['variantUniqueName'] as string) || '',
-            quantity: Number(item['quantity']) || 0,
-            batches: this.mapActionBatches(item['batches'])
-        };
-    }
-
-    /**
-     * Resolves warehouse uniqueName from order GET body, then list row fallback.
-     *
-     * @private
-     * @param {Record<string, unknown>} body
      * @param {*} row
-     * @returns {string}
      * @memberof ListJobWorkComponent
      */
-    private getWarehouseUniqueNameFromOrder(body: Record<string, unknown>, row: any): string {
-        const warehouse = body['warehouse'] as { uniqueName?: string } | undefined;
-        return warehouse?.uniqueName
-            || (body['warehouseUniqueName'] as string)
-            || row?.warehouse?.uniqueName
-            || row?.warehouseUniqueName
-            || '';
+    public recordReturn(row: any): void {
+        this.openActionDialog('RETURN', row);
     }
 
     /**
-     * Maps API batches for action payloads.
+     * Loads and shows View Linked Challan dialog.
      *
-     * @private
-     * @param {unknown} batches
-     * @returns {JobWorkBatch[]}
+     * @param {*} row
      * @memberof ListJobWorkComponent
      */
-    private mapActionBatches(batches: unknown): JobWorkBatch[] {
-        if (!Array.isArray(batches)) {
-            return [];
-        }
-        return batches.map((batch: Record<string, unknown>) => ({
-            uniqueName: (batch['uniqueName'] as string) || '',
-            name: (batch['name'] as string) || '',
-            quantity: Number(batch['quantity']) || 0
-        }));
-    }
-
-    /**
-     * Builds MARK_SCRAP `scraps` from order GET (`documentItems` SCRAP, else `jobWorkDetails.scraps`).
-     *
-     * @private
-     * @param {Record<string, unknown>} body
-     * @returns {JobWorkScrapLine[]}
-     * @memberof ListJobWorkComponent
-     */
-    private buildMarkScrapActionItems(body: Record<string, unknown>): JobWorkScrapLine[] {
-        const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
-        const defaultRetainedBy = (details['scrapRetainedBy'] as ScrapRetainedBy)
-            || (body['scrapRetainedBy'] as ScrapRetainedBy)
-            || 'COMPANY';
-        const detailScraps = (details['scraps'] as Array<Record<string, unknown>>) || [];
-        const documentItems = (body['documentItems'] as Array<Record<string, unknown>>) || [];
-        const scrapItems = documentItems.filter(item => item['lineRole'] === 'SCRAP');
-
-        if (scrapItems.length) {
-            return scrapItems
-                .map(item => this.mapDocumentItemToScrapActionItem(item, detailScraps, defaultRetainedBy))
-                .filter(item => !!item.stockUniqueName);
-        }
-
-        return detailScraps
-            .map(row => this.mapDetailScrapToScrapActionItem(row, defaultRetainedBy))
-            .filter(item => !!item.stockUniqueName);
-    }
-
-    /**
-     * Maps a SCRAP `documentItems` row into MARK_SCRAP scrap payload.
-     *
-     * @private
-     * @param {Record<string, unknown>} item
-     * @param {Array<Record<string, unknown>>} detailScraps
-     * @param {ScrapRetainedBy} defaultRetainedBy
-     * @returns {JobWorkScrapLine}
-     * @memberof ListJobWorkComponent
-     */
-    private mapDocumentItemToScrapActionItem(
-        item: Record<string, unknown>,
-        detailScraps: Array<Record<string, unknown>>,
-        defaultRetainedBy: ScrapRetainedBy
-    ): JobWorkScrapLine {
-        const stock = item['stock'] as { uniqueName?: string } | undefined;
-        const variant = item['variant'] as { uniqueName?: string } | undefined;
-        const stockUniqueName = stock?.uniqueName || (item['stockUniqueName'] as string) || '';
-        const variantUniqueName = variant?.uniqueName || (item['variantUniqueName'] as string) || '';
-        const detailScrap = detailScraps.find(row => {
-            const detailStock = (row['stockUniqueName'] as string) || '';
-            const detailVariant = (row['variantUniqueName'] as string) || '';
-            if (detailStock !== stockUniqueName) {
-                return false;
-            }
-            if (detailVariant && variantUniqueName) {
-                return detailVariant === variantUniqueName;
-            }
-            return !detailVariant && !variantUniqueName;
-        });
-
-        return {
-            stockUniqueName,
-            variantUniqueName,
-            quantity: Number(item['quantity']) || Number(detailScrap?.['quantity']) || 0,
-            batches: this.mapActionBatches(item['batches'] ?? detailScrap?.['batches']),
-            retainedBy: (item['retainedBy'] as ScrapRetainedBy)
-                || (detailScrap?.['retainedBy'] as ScrapRetainedBy)
-                || defaultRetainedBy
-        };
-    }
-
-    /**
-     * Maps a flat `jobWorkDetails.scraps` row into MARK_SCRAP scrap payload.
-     *
-     * @private
-     * @param {Record<string, unknown>} row
-     * @param {ScrapRetainedBy} defaultRetainedBy
-     * @returns {JobWorkScrapLine}
-     * @memberof ListJobWorkComponent
-     */
-    private mapDetailScrapToScrapActionItem(
-        row: Record<string, unknown>,
-        defaultRetainedBy: ScrapRetainedBy
-    ): JobWorkScrapLine {
-        return {
-            stockUniqueName: (row['stockUniqueName'] as string) || '',
-            variantUniqueName: (row['variantUniqueName'] as string) || '',
-            quantity: Number(row['quantity']) || 0,
-            batches: this.mapActionBatches(row['batches']),
-            retainedBy: (row['retainedBy'] as ScrapRetainedBy) || defaultRetainedBy
-        };
-    }
-
     public viewLinkedChallan(row: any): void {
         const uniqueName = this.getRowUniqueName(row);
         if (!uniqueName) {
@@ -774,144 +752,163 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Formats batch labels for a challan line.
+     * Returns batches for a linked-challan line.
      *
-     * @param {JobWorkLinkedChallan['documentItems'][number]} item
+     * @param {LinkedChallanDocumentItem} item
+     * @returns {VoucherSelectedBatch[]}
+     * @memberof ListJobWorkComponent
+     */
+    public getChallanItemBatches(item: LinkedChallanDocumentItem): VoucherSelectedBatch[] {
+        if (Array.isArray(item?.batches) && item.batches.length) {
+            return item.batches as VoucherSelectedBatch[];
+        }
+        if (item?.batch?.uniqueName || item?.batch?.name) {
+            return [{
+                uniqueName: item.batch.uniqueName || '',
+                name: item.batch.name || '',
+                quantity: Number(item.quantity) || 0
+            } as VoucherSelectedBatch];
+        }
+        return [];
+    }
+
+    /**
+     * Returns unit code/name for a linked-challan line.
+     *
+     * @param {LinkedChallanDocumentItem} item
      * @returns {string}
      * @memberof ListJobWorkComponent
      */
-    public getChallanItemBatchesLabel(
-        item: NonNullable<JobWorkLinkedChallan['documentItems']>[number]
-    ): string {
-        if (Array.isArray(item?.batches) && item.batches.length) {
-            return item.batches
-                .map(batch => {
-                    const name = batch?.name || batch?.uniqueName || '';
-                    const quantity = batch?.quantity;
-                    return quantity != null ? `${name} (${quantity})` : name;
-                })
-                .filter(Boolean)
-                .join(', ');
-        }
-        return item?.batch?.name || item?.batch?.uniqueName || '—';
+    public getChallanItemUnit(item: LinkedChallanDocumentItem): string {
+        return item?.stockUnit?.code || item?.stockUnit?.name || '';
     }
 
+    /**
+     * Opens batch select for a linked-challan line using fixed document batches.
+     *
+     * @param {JobWorkLinkedChallan} challan
+     * @param {LinkedChallanDocumentItem} item
+     * @param {Event} [event]
+     * @memberof ListJobWorkComponent
+     */
+    public openLinkedChallanBatchDialog(
+        challan: JobWorkLinkedChallan,
+        item: LinkedChallanDocumentItem,
+        event?: Event
+    ): void {
+        event?.preventDefault();
+        event?.stopPropagation();
+        const preBatches = this.toFixedChallanBatches(this.getChallanItemBatches(item));
+        if (!this.batchTrackingEnabled || !item?.stock?.uniqueName || !preBatches.length) {
+            return;
+        }
+        this.dialog.open(BatchSelectDialogComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: {
+                stockName: item.stock?.name || item.stock?.uniqueName,
+                stockUniqueName: item.stock?.uniqueName,
+                variantUniqueName: item.variant?.uniqueName || '',
+                variantName: item.variant?.name || '',
+                hasVariants: !!item.variant?.uniqueName,
+                inventoryType: item.stock?.inventoryType || 'PRODUCT',
+                warehouseName: challan.warehouse?.name || '',
+                warehouseUniqueName: challan.warehouse?.uniqueName || '',
+                unitCode: this.getChallanItemUnit(item),
+                lineQuantity: Number(item.quantity) || 0,
+                selectedBatches: cloneDeep(preBatches),
+                fixedBatches: cloneDeep(preBatches),
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData,
+                isInbound: true
+            }
+        }).afterClosed().pipe(take(1), takeUntil(this.destroyed$)).subscribe((result?: BatchSelectDialogResult) => {
+            if (!result) {
+                return;
+            }
+            item.batches = (result.batches ?? []) as JobWorkBatch[];
+            if (result.overrideLineQuantity) {
+                item.quantity = result.allocatedQuantity;
+            }
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+     * Maps challan batches for fixedBatches dialog mode.
+     *
+     * @private
+     * @param {VoucherSelectedBatch[]} batches
+     * @returns {VoucherSelectedBatch[]}
+     * @memberof ListJobWorkComponent
+     */
+    private toFixedChallanBatches(batches: VoucherSelectedBatch[]): VoucherSelectedBatch[] {
+        return (batches || [])
+            .filter(batch => !!batch?.uniqueName || !!batch?.name)
+            .map(batch => {
+                const quantity = Number(batch.quantity) || 0;
+                return {
+                    ...batch,
+                    uniqueName: batch.uniqueName || '',
+                    name: batch.name || batch.batchNumber || '',
+                    batchNumber: batch.batchNumber || batch.name || '',
+                    quantity,
+                    availableQuantity: Number(batch.availableQuantity) || quantity
+                };
+            });
+    }
+
+    /**
+     * Opens Mark Scrap / Wastage action dialog.
+     *
+     * @param {*} row
+     * @memberof ListJobWorkComponent
+     */
     public markScrap(row: any): void {
-        const uniqueName = this.getRowUniqueName(row);
-        if (!uniqueName) {
-            return;
-        }
-        // List row lacks scrap lines/warehouse; load order GET then build MARK_SCRAP scraps.
-        this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
-            if (orderResponse?.status !== 'success' || !orderResponse.body) {
-                this.toasterService.errorToast(orderResponse?.message);
-                return;
-            }
-            const body = orderResponse.body as Record<string, unknown>;
-            const scraps = this.buildMarkScrapActionItems(body);
-            if (!scraps.length) {
-                this.toasterService.errorToast(this.localeData.scrap_items_missing);
-                return;
-            }
-            const payload: JobWorkActionRequest = {
-                action: 'MARK_SCRAP',
-                uniqueName,
-                date: dayjs().format(GIDDH_DATE_FORMAT),
-                warehouseUniqueName: this.getWarehouseUniqueNameFromOrder(body, row),
-                scraps
-            };
-            this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response?.status === 'success') {
-                    this.toasterService.successToast(this.localeData.scrap_marked);
-                    this.getReport();
-                } else {
-                    this.toasterService.errorToast(response?.message);
-                }
-            });
-        });
+        this.openActionDialog('MARK_SCRAP', row);
     }
 
+    /**
+     * Opens Make Adjustment action dialog.
+     *
+     * @param {*} row
+     * @memberof ListJobWorkComponent
+     */
     public makeAdjustment(row: any): void {
+        this.openActionDialog('ADJUST', row);
+    }
+
+    /**
+     * Opens the action dialog for RETURN / MARK_SCRAP / ADJUST (no confirmation modal).
+     *
+     * @private
+     * @param {JobWorkActionDialogMode} action
+     * @param {*} row
+     * @memberof ListJobWorkComponent
+     */
+    private openActionDialog(action: JobWorkActionDialogMode, row: any): void {
         const uniqueName = this.getRowUniqueName(row);
         if (!uniqueName) {
             return;
         }
-        // List row lacks expenses/flags; load order GET then build ADJUST payload.
-        this.jobWorkService.get(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((orderResponse) => {
-            if (orderResponse?.status !== 'success' || !orderResponse.body) {
-                this.toasterService.errorToast(orderResponse?.message);
-                return;
-            }
-            const body = orderResponse.body as Record<string, unknown>;
-            const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
-            const increaseAssetValue = (details['increaseAssetValue'] ?? body['increaseAssetValue'] ?? row?.increaseAssetValue) !== false;
-            const claimItcValue = details['claimItc'] ?? body['claimItc'] ?? row?.claimItc;
-            const claimItc = claimItcValue === undefined || claimItcValue === null
-                ? increaseAssetValue
-                : !!claimItcValue;
-            const expenses = this.buildAdjustActionExpenses(body);
-            if (!expenses.length) {
-                this.toasterService.errorToast(this.localeData.expense_items_missing);
-                return;
-            }
-            const payload: JobWorkActionRequest = {
-                action: 'ADJUST',
+        const dialogRef = this.dialog.open(JobWorkActionDialogComponent, {
+            panelClass: ['job-work-action-dialog-panel'],
+            autoFocus: false,
+            disableClose: true,
+            width: '860px',
+            maxWidth: '95vw',
+            data: {
+                action,
                 uniqueName,
-                increaseAssetValue,
-                claimItc,
-                expenses
-            };
-            this.jobWorkService.action(payload).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response?.status === 'success') {
-                    this.toasterService.successToast(this.localeData.adjustment_saved);
-                    this.getReport();
-                } else {
-                    this.toasterService.errorToast(response?.message);
-                }
-            });
+                row,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
         });
-    }
-
-    /**
-     * Builds ADJUST action `expenses` from order GET (`jobWorkDetails.expenses` or root `expenses`).
-     *
-     * @private
-     * @param {Record<string, unknown>} body
-     * @returns {JobWorkExpenseLine[]}
-     * @memberof ListJobWorkComponent
-     */
-    private buildAdjustActionExpenses(body: Record<string, unknown>): JobWorkExpenseLine[] {
-        const details = (body['jobWorkDetails'] || {}) as Record<string, unknown>;
-        const detailExpenses = (details['expenses'] as Array<Record<string, unknown>>) || [];
-        const rootExpenses = (body['expenses'] as Array<Record<string, unknown>>) || [];
-        const source = detailExpenses.length ? detailExpenses : rootExpenses;
-        return source
-            .map(row => this.mapExpenseToAdjustActionItem(row))
-            .filter(row => !!row.fromAccountUniqueName && !!row.toAccountUniqueName && !!row.amount);
-    }
-
-    /**
-     * Maps one expense API row into ADJUST action expense payload.
-     *
-     * @private
-     * @param {Record<string, unknown>} row
-     * @returns {JobWorkExpenseLine}
-     * @memberof ListJobWorkComponent
-     */
-    private mapExpenseToAdjustActionItem(row: Record<string, unknown>): JobWorkExpenseLine {
-        const fromAccount = row['fromAccount'] as { uniqueName?: string } | undefined;
-        const toAccount = row['toAccount'] as { uniqueName?: string } | undefined;
-        return {
-            fromAccountUniqueName: fromAccount?.uniqueName
-                || (row['fromAccountUniqueName'] as string)
-                || '',
-            toAccountUniqueName: toAccount?.uniqueName
-                || (row['toAccountUniqueName'] as string)
-                || '',
-            tax: (row['tax'] as string) || '',
-            amount: Number(row['amount']) || 0,
-            taxAmount: Number(row['taxAmount']) || 0
-        };
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe((success) => {
+            if (success) {
+                this.getReport();
+            }
+        });
     }
 
     public printJobWork(row: any): void {
@@ -1012,7 +1009,7 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         if (normalized === 'CANCELLED') {
             return 'status-cancelled';
         }
-        if (normalized === 'PARTIALLY_RECEIVED') {
+        if (normalized === 'PARTIALLY_RETURNED' || normalized === 'PARTIALLY_RECEIVED') {
             return 'status-partial';
         }
         if (normalized === 'IN_TRANSIT' || normalized === 'DISPATCHED' || normalized === 'SHIPPED') {
@@ -1039,16 +1036,61 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Binds column searches like voucher list: each feeds `q` and clears the others.
+     *
+     * @memberof ListJobWorkComponent
+     */
     private bindColumnSearch(): void {
-        this.columnSearchForm.valueChanges.pipe(
+        this.jobWorkNoInput.valueChanges.pipe(
             debounceTime(700),
-            distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
+            distinctUntilChanged(),
             takeUntil(this.destroyed$)
-        ).subscribe((value: { jobWorkNo?: string; jobworker?: string; outputStock?: string }) => {
-            const q = (value?.jobWorkNo || value?.jobworker || value?.outputStock || '').trim();
-            this.searchRequest.q = q;
-            this.searchRequest.page = 1;
-            this.getReport();
+        ).subscribe((search) => {
+            if (search || search === '') {
+                this.jobworkerInput.patchValue(null, { emitEvent: false });
+                this.outputStockInput.patchValue(null, { emitEvent: false });
+                this.showJobworkerSearch = false;
+                this.showOutputStockSearch = false;
+                this.searchRequest.q = search || '';
+                this.searchRequest.page = 1;
+                this.getReport();
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+
+        this.jobworkerInput.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe((search) => {
+            if (search || search === '') {
+                this.jobWorkNoInput.patchValue(null, { emitEvent: false });
+                this.outputStockInput.patchValue(null, { emitEvent: false });
+                this.showJobWorkNoSearch = false;
+                this.showOutputStockSearch = false;
+                this.searchRequest.q = search || '';
+                this.searchRequest.page = 1;
+                this.getReport();
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+
+        this.outputStockInput.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe((search) => {
+            if (search || search === '') {
+                this.jobWorkNoInput.patchValue(null, { emitEvent: false });
+                this.jobworkerInput.patchValue(null, { emitEvent: false });
+                this.showJobWorkNoSearch = false;
+                this.showJobworkerSearch = false;
+                this.searchRequest.q = search || '';
+                this.searchRequest.page = 1;
+                this.getReport();
+                this.changeDetectionRef.detectChanges();
+            }
         });
     }
 
@@ -1056,15 +1098,43 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.showClearFilter = !!(
             this.searchRequest.status ||
             this.searchRequest.jobWorkType ||
-            this.searchRequest.accountUniqueName ||
-            this.searchRequest.warehouseUniqueName ||
+            this.hasConcreteFilterValues(this.searchRequest.accountUniqueNames) ||
+            this.hasConcreteFilterValues(this.searchRequest.warehouseUniqueNames) ||
+            this.hasConcreteFilterValues(this.searchRequest.stockUniqueNames) ||
             this.searchRequest.q ||
             this.searchRequest.onlyOverdue ||
             this.searchRequest.onlyItcClaimed ||
-            this.columnSearchForm?.controls?.jobWorkNo?.value ||
-            this.columnSearchForm?.controls?.jobworker?.value ||
-            this.columnSearchForm?.controls?.outputStock?.value
+            this.jobWorkNoInput.value ||
+            this.jobworkerInput.value ||
+            this.outputStockInput.value
         );
+    }
+
+    /**
+     * Builds the list API payload. All-sentinel multi-select values become `[]`
+     * and their field names are collected in `selectAllFields`.
+     *
+     * @returns {JobWorkListRequest}
+     * @memberof ListJobWorkComponent
+     */
+    private buildListRequest(): JobWorkListRequest {
+        return this.generalService.replaceSelectedAllOptions({
+            ...this.searchRequest,
+            warehouseUniqueNames: [...(this.searchRequest.warehouseUniqueNames || [])],
+            accountUniqueNames: [...(this.searchRequest.accountUniqueNames || [])],
+            stockUniqueNames: [...(this.searchRequest.stockUniqueNames || [])]
+        }, true);
+    }
+
+    /**
+     * Returns true when the multi-select has concrete values (not empty / not All).
+     *
+     * @param {string[] | undefined} values
+     * @returns {boolean}
+     * @memberof ListJobWorkComponent
+     */
+    private hasConcreteFilterValues(values: string[] | undefined): boolean {
+        return !!values?.length && !isSelectedAllOption(values);
     }
 
     /**
@@ -1074,23 +1144,25 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
      * @memberof ListJobWorkComponent
      */
     private buildFilterSnapshot(): JobWorkListFilterSnapshot {
-        const columnSearch = this.columnSearchForm.getRawValue() as {
-            jobWorkNo?: string;
-            jobworker?: string;
-            outputStock?: string;
-        };
         return {
-            searchRequest: { ...this.searchRequest },
+            searchRequest: {
+                ...this.searchRequest,
+                accountUniqueNames: [...(this.searchRequest.accountUniqueNames || [])],
+                warehouseUniqueNames: [...(this.searchRequest.warehouseUniqueNames || [])],
+                stockUniqueNames: [...(this.searchRequest.stockUniqueNames || [])]
+            },
             selectedStatusLabel: this.selectedStatusLabel,
             selectedTypeLabel: this.selectedTypeLabel,
-            selectedWarehouseName: this.selectedWarehouseName,
+            selectedWarehouseUniqueNames: [...(this.selectedWarehouseUniqueNames || [])],
+            selectedAccountUniqueNames: [...(this.selectedAccountUniqueNames || [])],
+            selectedStockUniqueNames: [...(this.selectedStockUniqueNames || [])],
             selectedBranchName: this.selectedBranchName,
             selectedDateRangeUi: this.selectedDateRangeUi,
             selectedRangeLabel: this.selectedRangeLabel,
             columnSearch: {
-                jobWorkNo: columnSearch?.jobWorkNo || '',
-                jobworker: columnSearch?.jobworker || '',
-                outputStock: columnSearch?.outputStock || ''
+                jobWorkNo: this.jobWorkNoInput.value || '',
+                jobworker: this.jobworkerInput.value || '',
+                outputStock: this.outputStockInput.value || ''
             }
         };
     }
@@ -1107,10 +1179,17 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
             return false;
         }
 
-        this.searchRequest = { ...snapshot.searchRequest };
+        this.searchRequest = {
+            ...snapshot.searchRequest,
+            accountUniqueNames: [...(snapshot.searchRequest.accountUniqueNames || [])],
+            warehouseUniqueNames: [...(snapshot.searchRequest.warehouseUniqueNames || [])],
+            stockUniqueNames: [...(snapshot.searchRequest.stockUniqueNames || [])]
+        };
         this.selectedStatusLabel = snapshot.selectedStatusLabel;
         this.selectedTypeLabel = snapshot.selectedTypeLabel;
-        this.selectedWarehouseName = snapshot.selectedWarehouseName;
+        this.selectedWarehouseUniqueNames = [...(snapshot.selectedWarehouseUniqueNames || [])];
+        this.selectedAccountUniqueNames = [...(snapshot.selectedAccountUniqueNames || [])];
+        this.selectedStockUniqueNames = [...(snapshot.selectedStockUniqueNames || [])];
         this.selectedBranchName = snapshot.selectedBranchName || '';
         if (snapshot.searchRequest.branchUniqueName) {
             this.currentBranch = {
@@ -1123,11 +1202,9 @@ export class ListJobWorkComponent implements OnInit, OnDestroy {
         this.selectedRangeLabel = snapshot.selectedRangeLabel;
         this.advanceOnlyOverdue = !!snapshot.searchRequest.onlyOverdue;
         this.advanceOnlyItcClaimed = !!snapshot.searchRequest.onlyItcClaimed;
-        this.columnSearchForm.reset({
-            jobWorkNo: snapshot.columnSearch.jobWorkNo,
-            jobworker: snapshot.columnSearch.jobworker,
-            outputStock: snapshot.columnSearch.outputStock
-        }, { emitEvent: false });
+        this.jobWorkNoInput.patchValue(snapshot.columnSearch.jobWorkNo || null, { emitEvent: false });
+        this.jobworkerInput.patchValue(snapshot.columnSearch.jobworker || null, { emitEvent: false });
+        this.outputStockInput.patchValue(snapshot.columnSearch.outputStock || null, { emitEvent: false });
 
         if (snapshot.searchRequest.from && snapshot.searchRequest.to) {
             this.selectedDateRange = {

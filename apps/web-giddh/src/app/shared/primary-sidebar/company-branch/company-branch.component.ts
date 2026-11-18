@@ -300,9 +300,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                     }
 
                     this.changeDetectorRef.detectChanges();
-                    if (!reloadBranches && this.companyBranches.branchCount > 1) {
-                        this.showAllBranches(company);
-                    }
+                    this.showAllBranches(company);
                 } else {
                     this.branchList = [];
                     company.branches = this.branchList;
@@ -317,6 +315,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             this.branchList = company?.branches;
             this.companyBranches = company;
+            this.showAllBranches(company);
         }
     }
 
@@ -326,16 +325,29 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof CompanyBranchComponent
      */
     public showAllBranches(company: any): void {
-        this.companyBranches.branchCount = company?.branchCount;
-        if (company?.branchCount > 1) {
-            setTimeout(() => {
-                this.selectedTabIndex = 1;
-            }, 20);
-        } else {
-            if (company?.uniqueName !== this.activeCompany?.uniqueName) {
-                this.changeCompany(company, '', false);
-            }
+        const branchCount = this.companyBranches?.branchCount ?? company?.branchCount;
+        const unarchivedBranchCount = this.companyBranches?.unarchivedBranchCount ?? company?.unarchivedBranchCount;
+
+        if (branchCount > 1 && unarchivedBranchCount >= 1) {
+            this.selectBranchTab();
+        } else if (company?.uniqueName !== this.activeCompany?.uniqueName) {
+            this.changeCompany(company, '', false);
         }
+    }
+
+    /**
+     * Selects the branch tab after the branch tab is rendered in the template.
+     *
+     * @private
+     * @memberof CompanyBranchComponent
+     */
+    private selectBranchTab(): void {
+        this.activeTab = 'branch';
+        this.changeDetectorRef.detectChanges();
+        setTimeout(() => {
+            this.selectedTabIndex = 1;
+            this.changeDetectorRef.detectChanges();
+        }, 0);
     }
 
     /**

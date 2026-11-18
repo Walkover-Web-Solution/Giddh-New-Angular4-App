@@ -5,13 +5,21 @@ import {
     OnInit,
     computed,
     inject,
-    signal
+    signal,
+    viewChild
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
+import {
+    API_BULK_FETCH_LIMIT,
+    ASIDE_PANE_CONFIG,
+    BranchHierarchyType,
+    GIDDH_DATE_RANGE_PICKER_RANGES,
+    IOption
+} from 'apps/web-giddh/src/app/app.constant';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import {
     JobWorkBatch,
@@ -39,7 +47,7 @@ import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
 import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/action/warehouse.action';
-import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { BatchSelectDialogComponent } from 'apps/web-giddh/src/app/vouchers/batch-select-dialog/batch-select-dialog.component';
@@ -74,6 +82,9 @@ export class CreateJobWorkComponent implements OnInit {
     private readonly destroyRef = inject(DestroyRef);
     private readonly dialog = inject(MatDialog);
 
+    /** Date-range menu trigger (same pattern as Job Work list). */
+    readonly universalDatepickerTrigger = viewChild<MatMenuTrigger>('universalDatepickerTrigger');
+
     /** Page translations. */
     readonly localeData = signal<Record<string, string>>({});
     /** Shared translations. */
@@ -82,6 +93,17 @@ export class CreateJobWorkComponent implements OnInit {
     readonly form = signal(new JobWorkFormModel());
     /** Bumps when nested form fields change so computed totals re-run. */
     private readonly formTick = signal(0);
+    /** Selected date range for the header picker. */
+    readonly selectedDateRange = signal<{
+        startDate: ReturnType<typeof dayjs>;
+        endDate: ReturnType<typeof dayjs>;
+    } | null>(null);
+    /** Display text for the header date-range input. */
+    readonly selectedDateRangeUi = signal('');
+    /** Active preset label in the date-range menu. */
+    readonly selectedRangeLabel = signal('');
+    /** Preset ranges for app-datepicker-wrapper. */
+    readonly datePickerOptions = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Warehouse dropdown options. */
     readonly warehouses = signal<IOption[]>([]);
     /** Jobworker account options. */
@@ -119,10 +141,18 @@ export class CreateJobWorkComponent implements OnInit {
     private readonly jobworkerPage = signal(1);
     private readonly jobworkerTotalPages = signal(1);
     private readonly jobworkerQuery = signal('');
-    /** Universal date range used for pending delivery challan list. */
-    private universalDateRange: { from: string; to: string } | null = null;
+    /** True after the local date range has been seeded from the session universal date. */
+    private localDateRangeSeeded = false;
     /** Tracks in-flight stock searches per line to allow parallel loads. */
     private readonly stockSearchInFlight = new WeakSet<object>();
+    /** Cached default (empty-query) stock options shared across finished/raw/scrap. */
+    private defaultStockOptions: NonNullable<JobWorkStockLine['stocks']> = [];
+    /** Total pages for the cached default stock list. */
+    private defaultStocksTotalPages = 1;
+    /** True after the default stock list has been loaded once. */
+    private defaultStocksLoaded = false;
+    /** True while the default stock list request is in flight. */
+    private defaultStocksInFlight = false;
 
     private readonly isConsolidatedBranch = toSignal(
         this.store.pipe(
@@ -170,10 +200,20 @@ export class CreateJobWorkComponent implements OnInit {
         ];
     });
 
-    /** Job work type options (send only for v1). */
-    readonly jobWorkTypeOptions = computed<IOption[]>(() => [
-        { label: this.localeData()['send_for_job_work'], value: 'SEND' }
-    ]);
+    /** Job work type options: Send and Receive. */
+    readonly jobWorkTypeOptions = computed<IOption[]>(() => {
+        const locale = this.localeData();
+        return [
+            { label: locale['send_for_job_work'], value: 'SEND' },
+            { label: locale['receive_for_job_work'], value: 'RECEIVE' }
+        ];
+    });
+
+    /** Label shown for the selected job work type. */
+    readonly selectedJobWorkTypeLabel = computed(() => {
+        const value = this.form().jobWorkType;
+        return this.jobWorkTypeOptions().find(option => option.value === value)?.label || '';
+    });
 
     /** Derived cost totals from the form. */
     readonly totals = computed(() => {
@@ -350,23 +390,21 @@ export class CreateJobWorkComponent implements OnInit {
             select(state => state.session.applicationDate),
             takeUntilDestroyed(this.destroyRef)
         ).subscribe(dateObj => {
-            if (!dateObj) {
+            // Universal date only seeds the local range once on create; later APIs use local dates.
+            if (!dateObj || this.localDateRangeSeeded || this.orderUniqueName() || this.form().date) {
                 return;
             }
-            this.universalDateRange = {
-                from: dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT),
-                to: dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT)
-            };
+            const start = dayjs(dateObj[0]);
+            const end = dayjs(dateObj[1]);
+            this.commitForm(current => {
+                current.date = start.format(GIDDH_DATE_FORMAT);
+                current.challanDate = current.date;
+                current.expectedReturnDate = end.format(GIDDH_DATE_FORMAT);
+            });
+            this.localDateRangeSeeded = true;
+            this.syncDateRangeFromForm();
             if (this.form().accountUniqueName) {
                 this.loadDeliveryChallans(this.form().accountUniqueName);
-            }
-            if (!this.orderUniqueName() && !this.form().date) {
-                const today = dateObj[1] ? dayjs(dateObj[1]) : dayjs();
-                this.commitForm(current => {
-                    current.date = today.format(GIDDH_DATE_FORMAT);
-                    current.challanDate = current.date;
-                    current.expectedReturnDate = today.add(30, 'day').format(GIDDH_DATE_FORMAT);
-                });
             }
         });
 
@@ -384,7 +422,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.searchJobworkers('');
         this.searchFromAccounts('');
         this.searchToAccounts('');
-        this.getStocks(this.form().finishedStock, 1, '');
+        this.loadDefaultStocks();
         this.touchForm();
     }
 
@@ -570,7 +608,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.commitForm(current => {
             current.rawStocks = [...current.rawStocks, row];
         });
-        this.getStocks(row, 1, '');
+        this.applyDefaultStocksToLine(row);
     }
 
     /**
@@ -590,7 +628,7 @@ export class CreateJobWorkComponent implements OnInit {
             }
         });
         if (replacement) {
-            this.getStocks(replacement, 1, '');
+            this.applyDefaultStocksToLine(replacement);
         }
     }
 
@@ -631,7 +669,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.commitForm(current => {
             current.scraps = [...current.scraps, row];
         });
-        this.getStocks(row, 1, '');
+        this.applyDefaultStocksToLine(row);
     }
 
     /**
@@ -651,12 +689,180 @@ export class CreateJobWorkComponent implements OnInit {
             }
         });
         if (replacement) {
-            this.getStocks(replacement, 1, '');
+            this.applyDefaultStocksToLine(replacement);
         }
     }
 
     /**
-     * Searches stocks via stocks/v2 (same as Manufacturing).
+     * Loads default stocks once and assigns the same options to finished/raw/scrap.
+     * Field-specific searches still call `getStocks` for that line only.
+     *
+     * @memberof CreateJobWorkComponent
+     */
+    loadDefaultStocks(): void {
+        if (this.defaultStocksLoaded) {
+            this.assignDefaultStocksToAllLines();
+            return;
+        }
+        if (this.defaultStocksInFlight) {
+            return;
+        }
+        this.defaultStocksInFlight = true;
+        this.inventoryService.getStocksV2({ inventoryType: '', page: 1, q: '' }).pipe(
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
+            next: (response) => {
+                this.defaultStocksInFlight = false;
+                if (response?.status === 'success' && response?.body?.results?.length) {
+                    this.defaultStockOptions = this.mapStockResults(response.body.results);
+                    this.defaultStocksTotalPages = response.body.totalPages || 1;
+                } else {
+                    this.defaultStockOptions = [];
+                    this.defaultStocksTotalPages = 1;
+                }
+                this.defaultStocksLoaded = true;
+                this.assignDefaultStocksToAllLines();
+            },
+            error: () => {
+                this.defaultStocksInFlight = false;
+            }
+        });
+    }
+
+    /**
+     * Applies cached default stock options to every finished/raw/scrap line.
+     *
+     * @private
+     * @memberof CreateJobWorkComponent
+     */
+    private assignDefaultStocksToAllLines(): void {
+        const current = this.form();
+        this.applyDefaultStocksToLine(current.finishedStock);
+        current.rawStocks.forEach(row => this.applyDefaultStocksToLine(row));
+        current.scraps.forEach(row => this.applyDefaultStocksToLine(row));
+        this.touchForm();
+    }
+
+    /**
+     * Applies cached default stock options to one line, or loads defaults if needed.
+     *
+     * @private
+     * @param {(JobWorkStockLine | JobWorkScrapLine)} stockObject
+     * @memberof CreateJobWorkComponent
+     */
+    private applyDefaultStocksToLine(stockObject: JobWorkStockLine | JobWorkScrapLine): void {
+        if (!this.defaultStocksLoaded) {
+            this.loadDefaultStocks();
+            return;
+        }
+        this.applyStockOptions(
+            stockObject,
+            this.cloneStockOptions(this.defaultStockOptions),
+            1,
+            this.defaultStocksTotalPages,
+            ''
+        );
+        this.touchForm();
+    }
+
+    /**
+     * Maps stocks/v2 results into dropdown options.
+     *
+     * @private
+     * @param {Array<{ name?: string; uniqueName?: string; inventoryType?: string; stockUnits?: Array<{ code: string; uniqueName: string }> }>} results
+     * @returns {NonNullable<JobWorkStockLine['stocks']>}
+     * @memberof CreateJobWorkComponent
+     */
+    private mapStockResults(
+        results: Array<{
+            name?: string;
+            uniqueName?: string;
+            inventoryType?: string;
+            stockUnits?: Array<{ code: string; uniqueName: string }>;
+        }>
+    ): NonNullable<JobWorkStockLine['stocks']> {
+        return results.map(stock => {
+            const unitsList = (stock?.stockUnits || []).map(unit => ({
+                label: unit.code,
+                value: unit.uniqueName
+            }));
+            return {
+                label: stock?.name,
+                value: stock?.uniqueName,
+                additional: {
+                    stockUnitCode: unitsList[0]?.label || '',
+                    stockUnitUniqueName: unitsList[0]?.value || '',
+                    inventoryType: stock.inventoryType,
+                    // Fresh array per stock so unit dropdown never shares another stock's list.
+                    unitsList: unitsList.map(unit => ({ ...unit }))
+                }
+            };
+        });
+    }
+
+    /**
+     * Deep-clones stock options so each line owns its unitsList arrays.
+     *
+     * @private
+     * @param {NonNullable<JobWorkStockLine['stocks']>} options
+     * @returns {NonNullable<JobWorkStockLine['stocks']>}
+     * @memberof CreateJobWorkComponent
+     */
+    private cloneStockOptions(
+        options: NonNullable<JobWorkStockLine['stocks']>
+    ): NonNullable<JobWorkStockLine['stocks']> {
+        return options.map(option => {
+            const additional = option.additional as {
+                stockUnitCode?: string;
+                stockUnitUniqueName?: string;
+                inventoryType?: string;
+                unitsList?: Array<{ label: string; value: string }>;
+            } | undefined;
+            return {
+                label: option.label,
+                value: option.value,
+                additional: {
+                    stockUnitCode: additional?.stockUnitCode || '',
+                    stockUnitUniqueName: additional?.stockUnitUniqueName || '',
+                    inventoryType: additional?.inventoryType,
+                    unitsList: (additional?.unitsList || []).map(unit => ({ ...unit }))
+                }
+            };
+        });
+    }
+
+    /**
+     * Writes stock options onto a line and keeps selection/units in sync.
+     *
+     * @private
+     * @param {(JobWorkStockLine | JobWorkScrapLine)} stockObject
+     * @param {NonNullable<JobWorkStockLine['stocks']>} options
+     * @param {number} page
+     * @param {number} totalPages
+     * @param {string} q
+     * @memberof CreateJobWorkComponent
+     */
+    private applyStockOptions(
+        stockObject: JobWorkStockLine | JobWorkScrapLine,
+        options: NonNullable<JobWorkStockLine['stocks']>,
+        page: number,
+        totalPages: number,
+        q: string
+    ): void {
+        stockObject.stocksQ = q;
+        stockObject.stocksPageNumber = page;
+        stockObject.stocksTotalPages = totalPages;
+        if (page === 1) {
+            stockObject.stocks = options;
+        } else {
+            stockObject.stocks = [...(stockObject.stocks || []), ...options];
+        }
+        this.ensureSelectedStockOption(stockObject);
+        this.syncUnitsListFromStocks(stockObject);
+    }
+
+    /**
+     * Searches stocks via stocks/v2 for one line (uses shared defaults when query is empty).
      *
      * @param {(JobWorkStockLine | JobWorkScrapLine)} stockObject
      * @param {number} [page=1]
@@ -667,51 +873,33 @@ export class CreateJobWorkComponent implements OnInit {
         if (page > (stockObject.stocksTotalPages || 1) || this.stockSearchInFlight.has(stockObject) || q === undefined) {
             return;
         }
-        this.stockSearchInFlight.add(stockObject);
         if (typeof q === 'string') {
             stockObject.stocksQ = q;
         } else if (stockObject.stocksQ) {
             q = stockObject.stocksQ;
         }
+        const query = q || '';
+        if (!query && page === 1) {
+            this.applyDefaultStocksToLine(stockObject);
+            return;
+        }
+        this.stockSearchInFlight.add(stockObject);
         stockObject.stocksPageNumber = page;
-        this.inventoryService.getStocksV2({ inventoryType: '', page, q }).pipe(
+        this.inventoryService.getStocksV2({ inventoryType: '', page, q: query }).pipe(
             takeUntilDestroyed(this.destroyRef)
         ).subscribe({
             next: (response) => {
                 if (response?.status === 'success' && response?.body?.results?.length) {
-                    stockObject.stocksTotalPages = response.body.totalPages;
-                    if (page === 1) {
-                        stockObject.stocks = [];
-                    }
-                    response.body.results.forEach((stock: {
-                        name?: string;
-                        uniqueName?: string;
-                        inventoryType?: string;
-                        stockUnits?: Array<{ code: string; uniqueName: string }>;
-                    }) => {
-                        const unitsList = (stock?.stockUnits || []).map(unit => ({
-                            label: unit.code,
-                            value: unit.uniqueName
-                        }));
-                        stockObject.stocks = stockObject.stocks || [];
-                        stockObject.stocks.push({
-                            label: stock?.name,
-                            value: stock?.uniqueName,
-                            additional: {
-                                stockUnitCode: unitsList[0]?.label || '',
-                                stockUnitUniqueName: unitsList[0]?.value || '',
-                                inventoryType: stock.inventoryType,
-                                // Fresh array per stock so unit dropdown never shares another stock's list.
-                                unitsList: unitsList.map(unit => ({ ...unit }))
-                            }
-                        });
-                    });
+                    this.applyStockOptions(
+                        stockObject,
+                        this.mapStockResults(response.body.results),
+                        page,
+                        response.body.totalPages || 1,
+                        query
+                    );
                 } else if (page === 1) {
-                    stockObject.stocks = [];
-                    stockObject.stocksTotalPages = 1;
+                    this.applyStockOptions(stockObject, [], 1, 1, query);
                 }
-                this.ensureSelectedStockOption(stockObject);
-                this.syncUnitsListFromStocks(stockObject);
                 this.stockSearchInFlight.delete(stockObject);
                 this.touchForm();
             },
@@ -1180,7 +1368,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.searchService.searchAccountV2({
             q: encodeURIComponent(query || ''),
             page,
-            group: encodeURIComponent('sundrycreditors')
+            group: encodeURIComponent('sundrycreditors,sundrydebtors')
         }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
             if (!data?.body?.results) {
                 return;
@@ -1225,7 +1413,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.commitForm(current => {
             current.accountUniqueName = event?.value || '';
             current.accountName = event?.label || '';
-            current.deliveryChallanUniqueName = '';
+            current.deliveryChallanUniqueNames = [];
             const additional = event?.additional as { gstIn?: string };
             if (additional?.gstIn) {
                 current.gstin = additional.gstIn;
@@ -1237,20 +1425,112 @@ export class CreateJobWorkComponent implements OnInit {
     }
 
     /**
-     * Handles delivery challan selection from pending-report list.
+     * Handles multi delivery challan selection from pending-report list.
      *
-     * @param {IOption} event
+     * @param {Array<string | number>} values
      * @memberof CreateJobWorkComponent
      */
-    onDeliveryChallanSelected(event: IOption): void {
-        this.selectedDeliveryChallanLabel.set(event?.label || '');
+    public onDeliveryChallanSelectionChange(values: Array<string | number>): void {
+        const selectedValues = (values || []).map(value => String(value)).filter(Boolean);
+        const options = this.deliveryChallanOptions();
+        const firstSelected = options.find(option => selectedValues.includes(String(option.value)));
+        this.selectedDeliveryChallanLabel.set(firstSelected?.label || '');
         this.commitForm(current => {
-            current.deliveryChallanUniqueName = event?.value || '';
-            const challanDate = (event?.additional as { date?: string })?.date;
+            current.deliveryChallanUniqueNames = selectedValues;
+            const challanDate = (firstSelected?.additional as { date?: string })?.date;
             if (challanDate) {
-                current.challanDate = this.formatDate(challanDate);
+                const formatted = this.formatDate(challanDate);
+                current.challanDate = formatted;
+                current.date = formatted;
             }
         });
+        this.syncDateRangeFromForm();
+    }
+
+    /**
+     * Applies the header date-range selection to date / challan / expected return.
+     *
+     * @param {{ startDate?: string | ReturnType<typeof dayjs>; endDate?: string | ReturnType<typeof dayjs>; selectedLabel?: string }} [event]
+     * @memberof CreateJobWorkComponent
+     */
+    dateSelectedCallback(event?: {
+        startDate?: string | ReturnType<typeof dayjs>;
+        endDate?: string | ReturnType<typeof dayjs>;
+        selectedLabel?: string;
+    }): void {
+        if (this.isReadOnly()) {
+            this.closeDatepicker();
+            return;
+        }
+        if (event?.startDate && event?.endDate) {
+            const start = dayjs(event.startDate);
+            const end = dayjs(event.endDate);
+            this.selectedRangeLabel.set(event.selectedLabel || '');
+            this.selectedDateRange.set({ startDate: start, endDate: end });
+            this.selectedDateRangeUi.set(
+                start.format(GIDDH_NEW_DATE_FORMAT_UI) + ' - ' + end.format(GIDDH_NEW_DATE_FORMAT_UI)
+            );
+            this.commitForm(current => {
+                current.date = start.format(GIDDH_DATE_FORMAT);
+                current.challanDate = current.date;
+                current.expectedReturnDate = end.format(GIDDH_DATE_FORMAT);
+            });
+            this.localDateRangeSeeded = true;
+            if (this.form().accountUniqueName) {
+                this.loadDeliveryChallans(this.form().accountUniqueName);
+            }
+        }
+        this.closeDatepicker();
+    }
+
+    /**
+     * Closes the header date-range menu.
+     *
+     * @memberof CreateJobWorkComponent
+     */
+    closeDatepicker(): void {
+        this.universalDatepickerTrigger()?.closeMenu();
+    }
+
+    /**
+     * Syncs the header range UI from form.date / expectedReturnDate.
+     *
+     * @private
+     * @memberof CreateJobWorkComponent
+     */
+    private syncDateRangeFromForm(): void {
+        const form = this.form();
+        const startValue = form.date || form.challanDate;
+        if (!startValue) {
+            return;
+        }
+        const start = dayjs(startValue, GIDDH_DATE_FORMAT);
+        const end = dayjs(form.expectedReturnDate || startValue, GIDDH_DATE_FORMAT);
+        if (!start.isValid() || !end.isValid()) {
+            return;
+        }
+        this.selectedDateRange.set({ startDate: start, endDate: end });
+        this.selectedDateRangeUi.set(
+            start.format(GIDDH_NEW_DATE_FORMAT_UI) + ' - ' + end.format(GIDDH_NEW_DATE_FORMAT_UI)
+        );
+        this.localDateRangeSeeded = true;
+    }
+
+    /**
+     * Local date range from the create form (not the session universal date).
+     *
+     * @private
+     * @returns {{ from: string; to: string } | null}
+     * @memberof CreateJobWorkComponent
+     */
+    private getLocalDateRange(): { from: string; to: string } | null {
+        const form = this.form();
+        const from = this.formatDate(form.date || form.challanDate);
+        const to = this.formatDate(form.expectedReturnDate || from);
+        if (!from || !to) {
+            return null;
+        }
+        return { from, to };
     }
 
     /**
@@ -1262,15 +1542,16 @@ export class CreateJobWorkComponent implements OnInit {
      */
     loadDeliveryChallans(accountUniqueName?: string): void {
         const account = accountUniqueName || this.form().accountUniqueName;
-        if (!account || !this.universalDateRange) {
+        const dateRange = this.getLocalDateRange();
+        if (!account || !dateRange) {
             this.deliveryChallanOptions.set([]);
             return;
         }
 
         this.voucherService.getPendingBusinessDocumentsByAccounts(
             {
-                from: this.universalDateRange.from,
-                to: this.universalDateRange.to,
+                from: dateRange.from,
+                to: dateRange.to,
                 page: 1,
                 count: API_BULK_FETCH_LIMIT,
                 sort: '',
@@ -1298,20 +1579,20 @@ export class CreateJobWorkComponent implements OnInit {
                 }))
                 .filter(option => !!option.value);
 
-            const selectedUniqueName = this.form().deliveryChallanUniqueName;
-            if (selectedUniqueName) {
+            const selectedUniqueNames = this.form().deliveryChallanUniqueNames || [];
+            selectedUniqueNames.forEach(selectedUniqueName => {
                 options = this.ensureSelectedOption(
                     options,
                     selectedUniqueName,
                     this.selectedDeliveryChallanLabel() || selectedUniqueName
                 );
-            }
+            });
             this.deliveryChallanOptions.set(options);
         });
     }
 
     /**
-     * Searches credit/liability accounts for expense from-side.
+     * Searches liability/asset accounts for expense from-side (same groups as Manufacturing).
      *
      * @param {string} query
      * @param {number} [page=1]
@@ -1321,7 +1602,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.searchService.searchAccountV2({
             q: encodeURIComponent(query || ''),
             page,
-            group: encodeURIComponent('sundrycreditors,currentliabilities,noncurrentliabilities')
+            group: encodeURIComponent('noncurrentassets, currentassets, fixedassets, currentliabilities, noncurrentliabilities, shareholdersfunds')
         }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
             if (!data?.body?.results) {
                 return;
@@ -1340,7 +1621,7 @@ export class CreateJobWorkComponent implements OnInit {
     }
 
     /**
-     * Searches expense accounts for expense to-side.
+     * Searches expense accounts for expense to-side (same groups as Manufacturing).
      *
      * @param {string} query
      * @param {number} [page=1]
@@ -1350,7 +1631,7 @@ export class CreateJobWorkComponent implements OnInit {
         this.searchService.searchAccountV2({
             q: encodeURIComponent(query || ''),
             page,
-            group: encodeURIComponent('operatingcost,indirectexpenses,revenuefromoperations,otherincome')
+            group: encodeURIComponent('operatingcost, indirectexpenses,revenuefromoperations,otherincome')
         }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
             if (!data?.body?.results) {
                 return;
@@ -1536,10 +1817,11 @@ export class CreateJobWorkComponent implements OnInit {
         next.challanDate = previous.date;
         next.expectedReturnDate = dayjs(previous.date, GIDDH_DATE_FORMAT).add(30, 'day').format(GIDDH_DATE_FORMAT);
         this.form.set(next);
+        this.syncDateRangeFromForm();
         this.addRawStockRow();
         this.addExpenseRow();
         this.addScrapRow();
-        this.getStocks(this.form().finishedStock, 1, '');
+        this.loadDefaultStocks();
         this.touchForm();
     }
 
@@ -1666,7 +1948,7 @@ export class CreateJobWorkComponent implements OnInit {
             accountUniqueName: form.accountUniqueName,
             jobworkerType: form.jobworkerType,
             gstin: form.gstin || '',
-            deliveryChallanUniqueName: form.deliveryChallanUniqueName || '',
+            deliveryChallanUniqueNames: [...(form.deliveryChallanUniqueNames || [])],
             challanDate: this.formatDate(form.challanDate),
             expectedReturnDate: this.formatDate(form.expectedReturnDate),
             process: form.process || '',
@@ -1841,15 +2123,25 @@ export class CreateJobWorkComponent implements OnInit {
             || (body['jobworkerType'] as JobworkerType)
             || 'REGISTERED';
         next.gstin = (details['gstin'] as string) || (body['gstin'] as string) || '';
-        next.deliveryChallanUniqueName =
+        const deliveryChallanUniqueNames = (details['deliveryChallanUniqueNames'] as string[])
+            || (body['deliveryChallanUniqueNames'] as string[])
+            || [];
+        const legacyDeliveryChallanUniqueName =
             (details['deliveryChallanUniqueName'] as string)
             || (body['deliveryChallanUniqueName'] as string)
-            || linkedChallans?.[0]?.uniqueName
             || '';
+        next.deliveryChallanUniqueNames = deliveryChallanUniqueNames.length
+            ? deliveryChallanUniqueNames.filter(Boolean)
+            : legacyDeliveryChallanUniqueName
+                ? [legacyDeliveryChallanUniqueName]
+                : (linkedChallans || [])
+                    .map(challan => challan?.uniqueName || '')
+                    .filter(Boolean);
         this.selectedDeliveryChallanLabel.set(
             linkedChallans?.[0]?.number
             || linkedChallans?.[0]?.documentNo
-            || next.deliveryChallanUniqueName
+            || next.deliveryChallanUniqueNames[0]
+            || ''
         );
         next.challanDate = this.formatDate(
             (details['challanDate'] as string) || (body['challanDate'] as string) || documentDate
@@ -1903,6 +2195,7 @@ export class CreateJobWorkComponent implements OnInit {
         }
 
         this.form.set(next);
+        this.syncDateRangeFromForm();
 
         if (next.accountUniqueName) {
             this.jobworkerAccounts.set(
@@ -1921,33 +2214,29 @@ export class CreateJobWorkComponent implements OnInit {
         this.fromAccounts.set(this.ensureExpenseAccountOptions(this.fromAccounts(), 'from'));
         this.toAccounts.set(this.ensureExpenseAccountOptions(this.toAccounts(), 'to'));
 
-        this.getStocks(next.finishedStock, 1, next.finishedStock.stockName || '');
-        if (next.finishedStock.stockUniqueName) {
-            this.loadVariants(next.finishedStock);
-        }
         if (!next.rawStocks.length) {
             this.addRawStockRow();
-        } else {
-            next.rawStocks.forEach(row => {
-                this.getStocks(row, 1, row.stockName || '');
-                if (row.stockUniqueName) {
-                    this.loadVariants(row);
-                }
-            });
         }
         if (!next.expenses.length) {
             this.addExpenseRow();
         }
         if (!next.scraps.length) {
             this.addScrapRow();
-        } else {
-            next.scraps.forEach(row => {
-                this.getStocks(row, 1, row.stockName || '');
-                if (row.stockUniqueName) {
-                    this.loadVariants(row);
-                }
-            });
         }
+        this.loadDefaultStocks();
+        if (next.finishedStock.stockUniqueName) {
+            this.loadVariants(next.finishedStock);
+        }
+        next.rawStocks.forEach(row => {
+            if (row.stockUniqueName) {
+                this.loadVariants(row);
+            }
+        });
+        next.scraps.forEach(row => {
+            if (row.stockUniqueName) {
+                this.loadVariants(row);
+            }
+        });
         this.touchForm();
     }
 

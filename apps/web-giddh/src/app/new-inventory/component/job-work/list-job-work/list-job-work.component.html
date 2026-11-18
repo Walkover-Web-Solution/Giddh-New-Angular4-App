@@ -62,15 +62,27 @@
                 <div class="d-flex flex-wrap column-gap-2 row-gap-2 align-items-center ml-auto">
                     <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
                         <p class="mb-1 font-size-12 light-gray">{{ localeData?.total_job_work_expense }}</p>
-                        <strong class="font-size-15">{{ summary.totalCharges }}</strong>
+                        <strong class="font-size-15 d-block text-right">
+                            <amount-field
+                                [amount]="summary.totalCharges"
+                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
+                            ></amount-field>
+                        </strong>
                     </div>
                     <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
                         <p class="mb-1 font-size-12 light-gray">{{ localeData?.goods_with_jobworker }}</p>
-                        <strong class="font-size-15">{{ summary.goodsWithJobworker }}</strong>
+                        <strong class="font-size-15 d-block text-right">
+                            <amount-field
+                                [amount]="summary.goodsWithJobworker"
+                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
+                            ></amount-field>
+                        </strong>
                     </div>
                     <div class="border border-radius-4 bg-table-background-color p-2 min-width-100">
                         <p class="mb-1 font-size-12 light-gray">{{ localeData?.overdue_returns }}</p>
-                        <strong class="font-size-15">{{ summary.overdueReturns }}</strong>
+                        <strong class="font-size-15 d-block text-right">{{ summary.overdueReturns }}</strong>
                     </div>
                     @if (!isCompany && !isConsolidatedBranch) {
                         <button type="button" matButton="filled" (click)="goToCreate()">
@@ -118,7 +130,7 @@
                                         context: {
                                             $implicit: showJobWorkNoSearch,
                                             fieldName: 'jobWorkNo',
-                                            formControl: columnSearchForm.controls['jobWorkNo'],
+                                            formControl: jobWorkNoInput,
                                             title: localeData?.job_work_no,
                                         }
                                     "
@@ -144,7 +156,7 @@
                                         context: {
                                             $implicit: showJobworkerSearch,
                                             fieldName: 'jobworker',
-                                            formControl: columnSearchForm.controls['jobworker'],
+                                            formControl: jobworkerInput,
                                             title: localeData?.jobworker_name,
                                         }
                                     "
@@ -172,7 +184,7 @@
                                         context: {
                                             $implicit: showOutputStockSearch,
                                             fieldName: 'outputStock',
-                                            formControl: columnSearchForm.controls['outputStock'],
+                                            formControl: outputStockInput,
                                             title: localeData?.output_stock,
                                         }
                                     "
@@ -265,14 +277,21 @@
 
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div class="search-table">
-        <div [hidden]="show">
-            <i class="icon-search pr-1" (click)="toggleSearch(fieldName)" role="button" [attr.aria-label]="getSearchFieldText(title)"></i>
+        <div class="d-flex align-items-center column-gap-1" [hidden]="show">
+            <span
+                class="cursor-pointer"
+                (click)="toggleSearch($event, fieldName)"
+                role="button"
+                [attr.aria-label]="getSearchFieldText(title)"
+            >
+                <i class="icon-search icon-font-size-16" aria-hidden="true"></i>
+            </span>
             <span>{{ title }}</span>
         </div>
-        <div class="input-container" [hidden]="!show">
+        <div [hidden]="!show">
             <text-field
                 [type]="'text'"
-                [placeholder]="getSearchFieldText(title)"
+                [placeholder]="commonLocaleData?.app_search || getSearchFieldText(title)"
                 [cssClass]="'form-control border'"
                 [formControl]="formControl"
                 [autoFocus]="show"
@@ -291,14 +310,41 @@
         </div>
         <mat-dialog-content class="dialog-body">
             <div class="d-flex flex-column row-gap-2">
-                <reactive-dropdown-field
+                <multi-select-dropdown
                     [name]="'advanceWarehouse'"
                     [label]="commonLocaleData?.app_warehouse"
                     [placeholder]="commonLocaleData?.app_select_warehouse"
                     [options]="warehouses"
-                    [labelValue]="selectedWarehouseName"
-                    (selectedOption)="onAdvanceWarehouseSelected($event)"
-                ></reactive-dropdown-field>
+                    [showAllOption]="true"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                    [(ngModel)]="selectedWarehouseUniqueNames"
+                ></multi-select-dropdown>
+
+                <multi-select-dropdown
+                    [name]="'advanceAccount'"
+                    [label]="localeData?.jobworker_name"
+                    [placeholder]="localeData?.select_jobworker"
+                    [options]="advanceAccountOptions"
+                    [showAllOption]="true"
+                    [enableDynamicSearch]="true"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                    [(ngModel)]="selectedAccountUniqueNames"
+                    (dynamicSearchedQuery)="searchAdvanceAccounts($event, 1)"
+                    (scrollEnd)="advanceAccountScrollEnd()"
+                ></multi-select-dropdown>
+
+                <multi-select-dropdown
+                    [name]="'advanceStock'"
+                    [label]="commonLocaleData?.app_stock"
+                    [placeholder]="commonLocaleData?.app_select_stock"
+                    [options]="advanceStockOptions"
+                    [showAllOption]="true"
+                    [enableDynamicSearch]="true"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                    [(ngModel)]="selectedStockUniqueNames"
+                    (dynamicSearchedQuery)="searchAdvanceStocks($event, 1)"
+                    (scrollEnd)="advanceStockScrollEnd()"
+                ></multi-select-dropdown>
 
                 <div class="d-flex flex-column row-gap-15 mt-1">
                     <mat-slide-toggle [(ngModel)]="advanceOnlyOverdue" color="primary" name="onlyOverdue">
@@ -394,29 +440,45 @@
                                 mat-table
                                 [dataSource]="challan.documentItems || []"
                                 class="w-100 linked-challan-items-table border border-radius-4 bg-table-background-color"
+                                [attr.aria-label]="localeData?.view_linked_challan"
                             >
                                 <ng-container matColumnDef="type">
                                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.type }}</th>
                                     <td mat-cell *matCellDef="let item">{{ displayValue(item.lineRole) }}</td>
                                 </ng-container>
-                                <ng-container matColumnDef="stock">
-                                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_stock }}</th>
-                                    <td mat-cell *matCellDef="let item">{{ displayValue(item.stock?.name) }}</td>
-                                </ng-container>
-                                <ng-container matColumnDef="variant">
-                                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_variant }}</th>
-                                    <td mat-cell *matCellDef="let item">{{ displayValue(item.variant?.name) }}</td>
+                                <ng-container matColumnDef="item">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.item_stock_variant }}</th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <div class="font-weight-medium">{{ displayValue(item.stock?.name) }}</div>
+                                        @if (item.variant?.name) {
+                                            <div class="font-size-12 text-light">{{ item.variant.name }}</div>
+                                        }
+                                    </td>
                                 </ng-container>
                                 <ng-container matColumnDef="batch">
                                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.batch }}</th>
-                                    <td mat-cell *matCellDef="let item">{{ getChallanItemBatchesLabel(item) }}</td>
+                                    <td mat-cell *matCellDef="let item" class="min-width-160">
+                                        @if (getChallanItemBatches(item)?.length) {
+                                            <batch-chip-list
+                                                class="d-block my-2"
+                                                [compact]="true"
+                                                [batches]="getChallanItemBatches(item)"
+                                                [isInbound]="true"
+                                                [localeData]="localeData"
+                                                [commonLocaleData]="commonLocaleData"
+                                                [showEdit]="batchTrackingEnabled"
+                                                (edit)="openLinkedChallanBatchDialog(challan, item, $event)"
+                                            ></batch-chip-list>
+                                        } @else {
+                                            <span aria-hidden="true">—</span>
+                                        }
+                                    </td>
                                 </ng-container>
                                 <ng-container matColumnDef="quantity">
-                                    <th mat-header-cell *matHeaderCellDef class="text-right">
-                                        {{ commonLocaleData?.app_quantity }}
-                                    </th>
-                                    <td mat-cell *matCellDef="let item" class="text-right">
-                                        {{ displayValue(item.quantity) }}
+                                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_quantity }}</th>
+                                    <td mat-cell *matCellDef="let item">
+                                        {{ displayValue(item.quantity)
+                                        }}{{ getChallanItemUnit(item) ? ' ' + getChallanItemUnit(item) : '' }}
                                     </td>
                                 </ng-container>
                                 <ng-container matColumnDef="rate">

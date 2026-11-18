@@ -2,7 +2,12 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { JobWorkActionRequest, JobWorkListRequest, JobWorkOrderRequest } from '../models/api-models/JobWork';
+import {
+    JobWorkActionRequest,
+    JobWorkListRequest,
+    JobWorkOrderRequest,
+    JobWorkSummaryResponse
+} from '../models/api-models/JobWork';
 import { JOB_WORK_API } from './apiurls/job-work.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
@@ -116,15 +121,16 @@ export class JobWorkService {
     }
 
     /**
-     * Lists job work orders for report.
+     * Company/consolidated mode: prefer selected branch from request (Manufacturing pattern).
      *
+     * @private
+     * @param {string} template
      * @param {JobWorkListRequest} model
-     * @returns {Observable<BaseResponse<any, JobWorkListRequest>>}
+     * @returns {string}
      * @memberof JobWorkService
      */
-    public list(model: JobWorkListRequest): Observable<BaseResponse<any, JobWorkListRequest>> {
-        let url = this.buildUrl(JOB_WORK_API.LIST);
-        // Company/consolidated mode: prefer selected branch from request (Manufacturing pattern).
+    private buildFilteredReportUrl(template: string, model: JobWorkListRequest): string {
+        let url = this.buildUrl(template);
         if (model.branchUniqueName && model.branchUniqueName !== this.generalService.companyUniqueName) {
             const encodedBranch = encodeURIComponent(model.branchUniqueName);
             if (!url.includes(`branchUniqueName=${encodedBranch}`)) {
@@ -132,13 +138,42 @@ export class JobWorkService {
                 url = `${url}${separator}branchUniqueName=${encodedBranch}`;
             }
         }
-        return this.http.post(url, model).pipe(
+        return url;
+    }
+
+    /**
+     * Lists job work orders for report.
+     *
+     * @param {JobWorkListRequest} model
+     * @returns {Observable<BaseResponse<any, JobWorkListRequest>>}
+     * @memberof JobWorkService
+     */
+    public list(model: JobWorkListRequest): Observable<BaseResponse<any, JobWorkListRequest>> {
+        return this.http.post(this.buildFilteredReportUrl(JOB_WORK_API.LIST, model), model).pipe(
             map((res) => {
                 const data: BaseResponse<any, JobWorkListRequest> = res;
                 data.request = model;
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, JobWorkListRequest>(e, model))
+        );
+    }
+
+    /**
+     * Loads list totals cards (same payload as list).
+     *
+     * @param {JobWorkListRequest} model
+     * @returns {Observable<BaseResponse<JobWorkSummaryResponse, JobWorkListRequest>>}
+     * @memberof JobWorkService
+     */
+    public summary(model: JobWorkListRequest): Observable<BaseResponse<JobWorkSummaryResponse, JobWorkListRequest>> {
+        return this.http.post(this.buildFilteredReportUrl(JOB_WORK_API.SUMMARY, model), model).pipe(
+            map((res) => {
+                const data: BaseResponse<JobWorkSummaryResponse, JobWorkListRequest> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<JobWorkSummaryResponse, JobWorkListRequest>(e, model))
         );
     }
 

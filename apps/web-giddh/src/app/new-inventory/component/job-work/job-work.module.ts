@@ -11,6 +11,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { AmountFieldComponentModule } from '../../../shared/amount-field/amount-field.module';
 import { BatchChipListComponent } from '../../../shared/batch-chip-list/batch-chip-list.component';
 import { CommonTaxComponent } from '../../../shared/common-tax/common-tax.component';
 import { MobileNumberInputComponent } from '../../../shared/mobile-number-input';
@@ -26,6 +27,7 @@ import { TranslateDirectiveModule } from '../../../theme/translate/translate.dir
 import { BatchSelectDialogComponent } from '../../../vouchers/batch-select-dialog/batch-select-dialog.component';
 import { InventorySidebarModule } from '../inventory-sidebar/inventory-sidebar.module';
 import { CreateJobWorkComponent } from './create-job-work/create-job-work.component';
+import { JobWorkActionDialogComponent } from './job-work-action-dialog/job-work-action-dialog.component';
 import { JobWorkListStateService } from './job-work-list-state.service';
 import { JobWorkRoutingModule } from './job-work.routing.module';
 import { ListJobWorkComponent } from './list-job-work/list-job-work.component';
@@ -54,6 +56,7 @@ import { JobWorkMainComponent } from './main.component';
         TranslateDirectiveModule,
         NoDataModule,
         GiddhPageLoaderModule,
+        AmountFieldComponentModule,
         NewConfirmModalModule,
         BatchChipListComponent,
         BatchSelectDialogComponent,
@@ -65,7 +68,8 @@ import { JobWorkMainComponent } from './main.component';
     declarations: [
         JobWorkMainComponent,
         CreateJobWorkComponent,
-        ListJobWorkComponent
+        ListJobWorkComponent,
+        JobWorkActionDialogComponent
     ],
     providers: [
         JobWorkListStateService
