@@ -657,6 +657,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         invoiceSettings: this.settingResponse.invoiceSettings || {},
                         proformaSettings: this.settingResponse.proformaSettings || {},
                         estimateSettings: this.settingResponse.estimateSettings || {},
+                        deliveryChallanSettings: this.settingResponse.deliveryChallanSettings || {},
+                        receiptNoteSettings: this.settingResponse.receiptNoteSettings || {},
                         companyEmailSettings: this.settingResponse.companyEmailSettings || {},
                         companyInventorySettings: this.settingResponse.companyInventorySettings || {}
                     });
@@ -1085,6 +1087,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     invoiceSettings: formValues.invoiceSettings || {},
                     proformaSettings: formValues.proformaSettings || {},
                     estimateSettings: formValues.estimateSettings || {},
+                    deliveryChallanSettings: formValues.deliveryChallanSettings || {},
+                    receiptNoteSettings: formValues.receiptNoteSettings || {},
                     companyEmailSettings: formValues.companyEmailSettings || {},
                     companyInventorySettings: formValues.companyInventorySettings || {}
                 });
@@ -4068,8 +4072,44 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             invoiceSettings: this.createInvoiceSettingsForm(),
             proformaSettings: this.createProformaSettingsForm(),
             estimateSettings: this.createEstimateSettingsForm(),
+            deliveryChallanSettings: this.createDeliveryChallanSettingsForm(),
+            receiptNoteSettings: this.createReceiptNoteSettingsForm(),
             companyEmailSettings: this.createCompanyEmailSettingsForm(),
             companyInventorySettings: this.createCompanyInventorySettingsForm()
+        });
+    }
+
+    /**
+     * Creates delivery challan settings form
+     *
+     * @return {*}  {FormGroup}
+     * @memberof VoucherListComponent
+     */
+    public createDeliveryChallanSettingsForm(): FormGroup {
+        return this.fb.group({
+            useCustomDeliveryChallanNumber: [false],
+            deliveryChallanNumberPrefix: [null],
+            initialDeliveryChallanNumber: [null],
+            branchDeliveryChallanNumberPrefix: [null],
+            autoMail: [true],
+            autoWhatsApp: [true]
+        });
+    }
+
+    /**
+     * Creates receipt note settings form
+     *
+     * @return {*}  {FormGroup}
+     * @memberof VoucherListComponent
+     */
+    public createReceiptNoteSettingsForm(): FormGroup {
+        return this.fb.group({
+            useCustomReceiptNoteNumber: [false],
+            receiptNoteNumberPrefix: [null],
+            initialReceiptNoteNumber: [null],
+            branchReceiptNoteNumberPrefix: [null],
+            autoMail: [true],
+            autoWhatsApp: [true]
         });
     }
 
@@ -4263,11 +4303,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.isEInvoiceEnabled = setting.invoiceSettings?.gstEInvoiceEnable;
                     this.setEInvoiceColumns();
                     this.settingResponse = setting;
+                    console.log('settingResponse', this.settingResponse);
                     this.settingForm.patchValue({
                         purchaseBillSettings: setting.purchaseBillSettings || {},
                         invoiceSettings: setting.invoiceSettings || {},
                         proformaSettings: setting.proformaSettings || {},
                         estimateSettings: setting.estimateSettings || {},
+                        deliveryChallanSettings: setting.deliveryChallanSettings || {},
+                        receiptNoteSettings: setting.receiptNoteSettings || {},
                         companyEmailSettings: setting.companyEmailSettings || {},
                         companyInventorySettings: setting.companyInventorySettings || {}
                     });
@@ -4355,6 +4398,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.formToSave.invoiceSettings = cloneDeep(this.settingForm.get('invoiceSettings').value);
         this.formToSave.estimateSettings = cloneDeep(this.settingForm.get('estimateSettings').value);
         this.formToSave.proformaSettings = cloneDeep(this.settingForm.get('proformaSettings').value);
+        if (this.settingResponse?.deliveryChallanSettings) {
+            this.formToSave.deliveryChallanSettings = cloneDeep(this.settingForm.get('deliveryChallanSettings').value);
+        }
+        if (this.settingResponse?.receiptNoteSettings) {
+            this.formToSave.receiptNoteSettings = cloneDeep(this.settingForm.get('receiptNoteSettings').value);
+        }
         if (this.urlVoucherType === VoucherTypeEnum.purchase) {
             this.formToSave.purchaseBillSettings = cloneDeep(this.settingForm.get('purchaseBillSettings').value);
             delete this.formToSave.purchaseBillSettings.invoiceSettings;

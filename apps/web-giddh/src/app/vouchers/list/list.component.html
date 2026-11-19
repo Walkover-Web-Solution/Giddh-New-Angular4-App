@@ -4861,6 +4861,85 @@
                                         </ng-container>
                                     </mat-tab>
                                     <!-- invoice-content-end -->
+                                    <!-- delivery-challan-content-start -->
+                                    <mat-tab *ngIf="activeTabGroup === 0 && settingResponse?.deliveryChallanSettings">
+                                        <ng-template mat-tab-label>
+                                            <div class="voucher-svg">
+                                                <svg width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M16.2426 4.00113L16.2497 2.00002H21.8924L21.8995 7.6498L19.8984 7.65687L19.8913 5.41534L15.5285 9.77819L14.1142 8.36398L18.4771 4.00113H16.2426Z"
+                                                    />
+                                                    <path
+                                                        d="M19 19.1787V9.17865H21V19.1787C21 20.2787 20.1 21.1787 19 21.1787H5C3.9 21.1787 3 20.2787 3 19.1787V5.17865C3 4.07865 3.9 3.17865 5 3.17865H15V5.17865H5V19.1787H19Z"
+                                                    />
+                                                    <path d="M7 17.1787H14V15.1787H7V17.1787Z" />
+                                                    <path d="M7 13.1787H17V11.1787H7V13.1787Z" />
+                                                </svg>
+                                            </div>
+                                            {{ commonLocaleData?.app_delivery_challan }}
+                                        </ng-template>
+                                        <ng-container formGroupName="deliveryChallanSettings">
+                                            <div class="tabs-box-content py-3">
+                                                <p class="font-size-16 border-bottom pb-2 mb-3">
+                                                    {{ commonLocaleData?.app_delivery_challan }}
+                                                </p>
+                                                <mat-slide-toggle
+                                                    aria-label="delivery challan auto mail"
+                                                    name="deliveryChallanAutoMail"
+                                                    class="disable-toggle slide-toggle d-block mb-3"
+                                                    color="primary"
+                                                    formControlName="autoMail"
+                                                >
+                                                    {{ localeData?.auto_mail_update }}
+                                                </mat-slide-toggle>
+                                                @if (generalService.isGiddhDomain()) {
+                                                    <mat-slide-toggle
+                                                        aria-label="delivery challan auto whatsapp"
+                                                        name="deliveryChallanAutoWhatsApp"
+                                                        class="disable-toggle slide-toggle d-block mb-3"
+                                                        color="primary"
+                                                        formControlName="autoWhatsApp"
+                                                    >
+                                                        {{ getWhatsappSettingLabel('delivery challan') }}
+                                                    </mat-slide-toggle>
+                                                }
+                                                <div class="mb-3 d-flex align-items-center column-gap-15">
+                                                    <mat-slide-toggle
+                                                        name="useCustomDeliveryChallanNumber"
+                                                        aria-label="custom delivery challan number"
+                                                        class="disable-toggle slide-toggle d-block"
+                                                        color="primary"
+                                                        formControlName="useCustomDeliveryChallanNumber"
+                                                    >
+                                                        {{ localeData?.custom_delivery_challan_no }}
+                                                    </mat-slide-toggle>
+                                                    @if (settingForm.get('deliveryChallanSettings.useCustomDeliveryChallanNumber')?.value) {
+                                                        <input-field
+                                                            [name]="'branchDeliveryChallanNumberPrefix'"
+                                                            [label]="localeData?.branch_prefix"
+                                                            formControlName="branchDeliveryChallanNumberPrefix"
+                                                            [type]="'text'"
+                                                        ></input-field>
+                                                        <input-field
+                                                            [name]="'deliveryChallanNumberPrefix'"
+                                                            [label]="localeData?.challan_prefix"
+                                                            formControlName="deliveryChallanNumberPrefix"
+                                                            [type]="'text'"
+                                                        ></input-field>
+                                                        <input-field
+                                                            [name]="'initialDeliveryChallanNumber'"
+                                                            [label]="localeData?.initial_no"
+                                                            formControlName="initialDeliveryChallanNumber"
+                                                            [placeholder]="'00'"
+                                                            [type]="'text'"
+                                                        ></input-field>
+                                                    }
+                                                </div>
+                                                <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </mat-tab>
+                                    <!-- delivery-challan-content-end -->
                                     <!-- receipt-content-start -->
                                     <mat-tab *ngIf="activeTabGroup === 3">
                                         <ng-template mat-tab-label>
@@ -5428,6 +5507,74 @@
                                     </div>
                                 </mat-tab>
                                 <!-- purchase-bill-content-end -->
+                                <!-- receipt-note-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 2 && settingResponse?.receiptNoteSettings">
+                                    <ng-template mat-tab-label>
+                                        <i class="icon-download1"></i>
+                                        {{ commonLocaleData?.app_receipt_note }}
+                                    </ng-template>
+                                    <ng-container formGroupName="receiptNoteSettings">
+                                        <div class="tabs-box-content py-3">
+                                            <p class="font-size-16 border-bottom pb-2 mb-3">
+                                                {{ commonLocaleData?.app_receipt_note }}
+                                            </p>
+                                            <mat-slide-toggle
+                                                aria-label="receipt note auto mail"
+                                                name="receiptNoteAutoMail"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoMail"
+                                            >
+                                                {{ localeData?.auto_mail_update }}
+                                            </mat-slide-toggle>
+                                            @if (generalService.isGiddhDomain()) {
+                                                <mat-slide-toggle
+                                                    aria-label="receipt note auto whatsapp"
+                                                    name="receiptNoteAutoWhatsApp"
+                                                    class="disable-toggle slide-toggle d-block mb-3"
+                                                    color="primary"
+                                                    formControlName="autoWhatsApp"
+                                                >
+                                                    {{ getWhatsappSettingLabel('receipt note') }}
+                                                </mat-slide-toggle>
+                                            }
+                                            <div class="mb-3 d-flex align-items-center column-gap-15">
+                                                <mat-slide-toggle
+                                                    name="useCustomReceiptNoteNumber"
+                                                    aria-label="custom receipt note number"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="useCustomReceiptNoteNumber"
+                                                >
+                                                    {{ localeData?.custom_receipt_note_no }}
+                                                </mat-slide-toggle>
+                                                @if (settingForm.get('receiptNoteSettings.useCustomReceiptNoteNumber')?.value) {
+                                                    <input-field
+                                                        [name]="'branchReceiptNoteNumberPrefix'"
+                                                        [label]="localeData?.branch_prefix"
+                                                        formControlName="branchReceiptNoteNumberPrefix"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                    <input-field
+                                                        [name]="'receiptNoteNumberPrefix'"
+                                                        [label]="localeData?.receipt_note_prefix"
+                                                        formControlName="receiptNoteNumberPrefix"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                    <input-field
+                                                        [name]="'initialReceiptNoteNumber'"
+                                                        [label]="localeData?.initial_no"
+                                                        formControlName="initialReceiptNoteNumber"
+                                                        [placeholder]="'00'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                }
+                                            </div>
+                                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                        </div>
+                                    </ng-container>
+                                </mat-tab>
+                                <!-- receipt-note-content-end -->
                                 <!-- payment-content-start -->
                                 <mat-tab *ngIf="activeTabGroup === 4">
                                     <ng-template mat-tab-label>
