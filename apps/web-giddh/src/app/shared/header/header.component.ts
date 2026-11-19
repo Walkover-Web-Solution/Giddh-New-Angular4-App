@@ -954,20 +954,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (event) {
             this.toggleSidebarPane(false, false);
             if (this.asideHelpSupportDialogRef?.id && this.dialog.getDialogById(this.asideHelpSupportDialogRef?.id)) {
-                this.asideHelpSupportDialogRef?.close();
-            } else {
-                this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
-                            width: '1000px',
-                            panelClass: 'aside-help-panel',
-                            hasBackdrop: false,
-                            position: {
-                        right: '0',
-                        top: '0'
-                    }
-                });
+                return;
             }
+            this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
+                        width: '1000px',
+                        panelClass: 'aside-help-panel',
+                        hasBackdrop: false,
+                        position: {
+                    right: '0',
+                    top: '0'
+                }
+            });
         } else {
-            this.asideHelpSupportDialogRef?.close();
+            if (this.asideHelpSupportDialogRef?.id && this.dialog.getDialogById(this.asideHelpSupportDialogRef?.id)) {
+                this.asideHelpSupportDialogRef.close();
+            }
+            this.asideHelpSupportDialogRef = undefined;
         }
     }
 
